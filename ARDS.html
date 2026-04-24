@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | ARDS</title>
+
+  <!-- PulmoCore font direction. Replace with self-hosted or approved web fonts if needed. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    #sequenceSort { visibility: hidden; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Core</span></div>
+          <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+        </div>
+      </div>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#snapshot">Snapshot</a>
+        <a href="#pathophysiology">Pathophysiology</a>
+        <a href="#diagnostics">Diagnostics</a>
+        <a href="#management">Management</a>
+        <a href="#glossary">Glossary</a>
+      </nav>
+      <div class="mobile-menu-note">Menu</div>
+    </header>
+
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">ARDS</h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Acute respiratory distress syndrome is an acute, diffuse inflammatory lung injury that causes increased alveolar-capillary permeability, noncardiogenic pulmonary edema, decreased lung compliance, severe hypoxemia, and bilateral pulmonary opacities. This module focuses on RT-level recognition, oxygenation assessment, P/F ratio interpretation, lung-protective ventilation, PEEP, proning, escalation, and board-style clinical reasoning.</p>
+        <div class="case-meta" aria-label="Module details">
+          <div><strong>Category</strong><br>Acute Hypoxemic Respiratory Failure</div>
+          <div><strong>Estimated Time</strong><br>30–40 minutes</div>
+          <div><strong>Level</strong><br>Critical Care RT Knowledge</div>
+        </div>
+      </section>
+
+      <div class="content-layout">
+        <aside class="side-nav" aria-label="Disease page quick navigation">
+          <h3>Lesson Sections</h3>
+          <a href="#objectives">Objectives</a>
+          <a href="#snapshot">Disease Snapshot</a>
+          <a href="#precheck">Quick Pre-Check</a>
+          <a href="#pathophysiology">Pathophysiology</a>
+          <a href="#triggers">Etiology</a>
+          <a href="#manifestations">Clinical Presentation</a>
+          <a href="#diagnostics">Diagnostics</a>
+          <a href="#severity">Severity + P/F Ratio</a>
+          <a href="#red-flags">Red Flags</a>
+          <a href="#management">Management</a>
+          <a href="#status">ARDS Escalation</a>
+          <a href="#rt-role">RT Role</a>
+          <a href="#case-study">Case Study</a>
+          <a href="#knowledge-check">Knowledge Check</a>
+          <a href="#faq">FAQ</a>
+          <a href="#summary">Summary</a>
+          <a href="#glossary">Glossary Deck</a>
+        </aside>
+
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives">
+            <h2>Learning Objectives</h2>
+            <p>By the end of this ARDS module, learners should be able to connect alveolar-capillary membrane injury, permeability edema, refractory hypoxemia, decreased compliance, diagnostic criteria, ventilator strategy, and escalation priorities.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how diffuse inflammatory lung injury causes permeability edema, alveolar flooding, surfactant dysfunction, atelectasis, shunt, and reduced compliance.</div>
+              <div class="example-box soft-blue"><strong>2. Differentiate ARDS from cardiogenic edema</strong><br>Compare noncardiogenic permeability edema with hydrostatic pulmonary edema using history, imaging, echo/hemodynamics, fluid status, and response to therapy.</div>
+              <div class="example-box soft-amber"><strong>3. Interpret assessment data</strong><br>Use SpO₂, ABGs, FiO₂, PEEP/CPAP level, P/F ratio, chest imaging, plateau pressure, compliance, and work of breathing to determine severity.</div>
+              <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize red flags such as refractory hypoxemia, rising oxygen/PEEP requirement, worsening compliance, high plateau pressure, shock, altered mental status, and ventilator dyssynchrony.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="snapshot">
+            <h2>Disease Snapshot</h2>
+            <p>ARDS is an acute hypoxemic respiratory failure syndrome. The primary issue is not bronchospasm; it is alveolar-capillary injury that allows protein-rich fluid to flood alveoli, collapse lung units, increase shunt, and make the lungs stiff and difficult to ventilate.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>What it is:</strong><br>Acute inflammatory lung injury with bilateral opacities and hypoxemia.</div>
+              <div class="example-box soft-teal"><strong>Primary problem:</strong><br>Alveolar flooding, collapse, shunt, and decreased compliance.</div>
+              <div class="example-box soft-teal"><strong>Classic symptoms:</strong><br>Dyspnea, tachypnea, hypoxemia, crackles, increased WOB, and escalating oxygen need.</div>
+              <div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Berlin pattern: acute timing, bilateral opacities, noncardiogenic edema, and low P/F ratio on PEEP/CPAP ≥5.</div>
+              <div class="example-box soft-teal"><strong>Acute danger:</strong><br>Refractory hypoxemia, severe P/F ratio, high plateau pressure, shock, or worsening compliance.</div>
+              <div class="example-box soft-teal"><strong>RT priority:</strong><br>Assess oxygenation, ventilation, P/F ratio, lung mechanics, PEEP response, synchrony, and escalation needs.</div>
+            </div>
+            <article class="info-card rt" style="margin-top:16px;">
+              <h3>RT Clinical Connection</h3>
+              <p>For RTs, ARDS is a lung-protection problem. The RT must balance oxygenation support with prevention of ventilator-induced lung injury by monitoring tidal volume by predicted body weight, plateau pressure, driving pressure concepts, PEEP response, and patient synchrony.</p>
+            </article>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Prep Frame</h3>
+              <p>Immediately associate ARDS with acute onset after an insult, bilateral opacities, noncardiogenic pulmonary edema, P/F ratio severity, refractory hypoxemia, low compliance, lung-protective ventilation, PEEP, and proning for severe hypoxemia.</p>
+            </article>
+          </section>
+
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check">
+            <span class="eyebrow">Quick Pre-Check</span>
+            <h2>Start with the core ARDS pattern</h2>
+            <p>Which statement best describes the core gas-exchange problem in ARDS?</p>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false">The main issue is isolated bronchospasm that fully reverses after albuterol.</button>
+              <button class="quiz-option" data-correct="true">Inflammatory injury increases alveolar-capillary permeability, causing alveolar flooding, shunt, and severe hypoxemia.</button>
+              <button class="quiz-option" data-correct="false">The pleural space fills with air, collapsing one lung without diffuse alveolar disease.</button>
+              <button class="quiz-option" data-correct="false">The diaphragm is paralyzed, causing chronic ventilatory failure without bilateral opacities.</button>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback" role="status"></div>
+          </section>
+
+          <section class="info-card" id="pathophysiology">
+            <h2>Anatomy & Pathophysiology</h2>
+            <p>ARDS begins when a direct or indirect insult triggers diffuse inflammation in the lung. The alveolar-capillary barrier becomes leaky, protein-rich fluid enters alveoli, surfactant function worsens, alveoli collapse, and gas exchange becomes dominated by shunt and V/Q mismatch.</p>
+            <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">
+              Sepsis/pneumonia/aspiration/trauma → inflammatory lung injury → leaky alveolar-capillary membrane → protein-rich edema + surfactant dysfunction → atelectasis and shunt → refractory hypoxemia + stiff lungs.
+            </div>
+            <h3 style="margin-top:22px;">What Changes During ARDS</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>ARDS Change</th><th>What Happens</th><th>Why It Matters</th></tr>
+                <tr><td>Alveolar-capillary injury</td><td>The membrane becomes leaky from inflammation.</td><td>Protein-rich fluid enters alveoli and impairs gas exchange.</td></tr>
+                <tr><td>Noncardiogenic pulmonary edema</td><td>Fluid accumulates from permeability, not primarily hydrostatic pressure.</td><td>ARDS must be distinguished from heart failure/fluid overload.</td></tr>
+                <tr><td>Surfactant dysfunction</td><td>Alveoli become unstable and collapse.</td><td>Compliance falls and opening pressures increase.</td></tr>
+                <tr><td>Intrapulmonary shunt</td><td>Blood passes alveoli that are perfused but not ventilated.</td><td>Hypoxemia may not correct easily with oxygen alone.</td></tr>
+                <tr><td>Low compliance</td><td>The lungs become stiff.</td><td>Ventilator pressures rise and lung-protective ventilation becomes essential.</td></tr></table>
+            </div>
+            <h3 style="margin-top:22px;">Oxygenation Severity Concept</h3>
+            <p>ARDS severity is commonly framed by the PaO₂/FiO₂ ratio while the patient is receiving PEEP or CPAP of at least 5 cm H₂O. Mild ARDS is P/F 201–300, moderate is 101–200, and severe is 100 or less. A falling P/F ratio means worsening oxygen transfer.</p>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Danger Sign</h3>
+              <p>A patient who requires rapidly increasing FiO₂ and PEEP while the P/F ratio remains low may be progressing to severe ARDS and needs escalation planning.</p>
+            </article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ARDS Hotspot Graphic">
+              <h3>Click the ARDS Hotspots</h3>
+              <p>Click each hotspot to reveal how that lung unit contributes to ARDS physiology.</p>
+              <div class="hotspot-demo">
+                <div class="hotspot-lung" aria-label="Simplified ARDS lung graphic with clickable hotspots">
+                  <svg viewBox="0 0 240 240" fill="none" aria-hidden="true">
+                    <path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="120" cy="116" r="14" fill="#1CA7A8"/>
+                  </svg>
+                  <button class="hotspot-btn" style="left:31%; top:34%;" data-title="Alveolar Flooding" data-text="Leaky capillaries allow protein-rich fluid into alveoli, blocking oxygen transfer.">1</button>
+                  <button class="hotspot-btn" style="left:42%; top:55%;" data-title="Surfactant Dysfunction" data-text="Inflammation disrupts surfactant, making alveoli unstable and prone to collapse.">2</button>
+                  <button class="hotspot-btn" style="right:31%; top:44%;" data-title="Shunt Physiology" data-text="Perfusion continues through poorly ventilated alveoli, causing refractory hypoxemia.">3</button>
+                  <button class="hotspot-btn" style="right:39%; bottom:20%;" data-title="Low Compliance" data-text="The lungs become stiff, increasing work of breathing and ventilator pressure risk.">4</button>
+                </div>
+                <div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div>
+              </div>
+              <div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="triggers">
+            <h2>Etiology & Risk Factors</h2>
+            <p>ARDS usually follows a direct lung injury or an indirect systemic inflammatory insult. Common causes include sepsis, pneumonia, aspiration, trauma, pancreatitis, massive transfusion, inhalation injury, and shock.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Cause or Risk Factor</th><th>Why It Matters</th><th>Teaching Focus</th></tr>
+                <tr><td>Sepsis</td><td>Most common indirect trigger; systemic inflammation injures lung capillaries.</td><td>Treat source, support perfusion, and monitor oxygenation closely.</td></tr>
+                <tr><td>Pneumonia</td><td>Direct infectious lung injury can progress to diffuse inflammation.</td><td>Monitor infiltrates, cultures, oxygen needs, and secretion burden.</td></tr>
+                <tr><td>Aspiration</td><td>Gastric contents chemically injure alveoli.</td><td>Airway protection, suctioning, and early oxygenation assessment matter.</td></tr>
+                <tr><td>Trauma/Shock</td><td>Inflammatory and perfusion injury can trigger ARDS.</td><td>Assess perfusion, lactate trend, and worsening oxygenation.</td></tr>
+                <tr><td>Massive transfusion</td><td>Transfusion-related lung injury can cause acute hypoxemia.</td><td>Trend timing, CXR, oxygenation, and hemodynamics.</td></tr>
+                <tr><td>Pancreatitis</td><td>Inflammatory mediators can indirectly injure the lung.</td><td>Watch for systemic inflammatory deterioration.</td></tr>
+              </table>
+            </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ARDS Etiology Sorting">
+              <h3>Sort the ARDS Factors</h3>
+              <p>Choose the best category for each item, then check your answers.</p>
+              <div class="sort-grid" id="riskSort">
+                <div class="sort-row" data-answer="trigger"><strong>Sepsis</strong><select aria-label="Category for cat dander"><option value="">Choose category</option><option value="trigger">Common Cause</option><option value="controller">Supportive Strategy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="controller"><strong>Low tidal volume ventilation</strong><select aria-label="Category for inhaled corticosteroid"><option value="">Choose category</option><option value="trigger">Common Cause</option><option value="controller">Supportive Strategy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="trigger"><strong>Aspiration</strong><select aria-label="Category for cold air"><option value="">Choose category</option><option value="trigger">Common Cause</option><option value="controller">Supportive Strategy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="danger"><strong>Refractory hypoxemia</strong><select aria-label="Category for silent chest"><option value="">Choose category</option><option value="trigger">Common Cause</option><option value="controller">Supportive Strategy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="controller"><strong>Prone positioning</strong><select aria-label="Category for daily control plan"><option value="">Choose category</option><option value="trigger">Common Cause</option><option value="controller">Supportive Strategy</option><option value="danger">Danger Sign</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button>
+              <div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="manifestations">
+            <h2>Clinical Presentation</h2>
+            <p>ARDS presentation usually includes acute dyspnea, tachypnea, hypoxemia, bilateral pulmonary opacities, crackles or diminished aeration, and increased work of breathing. RT assessment should focus on oxygenation response, ventilatory support needs, lung mechanics, synchrony, and signs of worsening failure.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Finding Type</th><th>What the RT May See</th></tr>
+                <tr><td>Symptoms</td><td>Acute dyspnea, tachypnea, hypoxemia, anxiety, and increasing oxygen requirement.</td></tr>
+                <tr><td>Appearance</td><td>Distress, accessory muscle use, diaphoresis, cyanosis, altered mental status, or shock.</td></tr>
+                <tr><td>Breath sounds</td><td>Crackles, decreased aeration, or coarse/diminished breath sounds depending on edema and atelectasis.</td></tr>
+                <tr><td>Oxygenation clues</td><td>Low SpO₂/PaO₂ despite supplemental oxygen; falling P/F ratio.</td></tr>
+                <tr><td>Ventilation clues</td><td>PaCO₂ may be low from tachypnea or rise with fatigue/dead space/ventilatory failure.</td></tr>
+                <tr><td>Response clues</td><td>Improvement in SpO₂, PaO₂, P/F ratio, WOB, ventilator synchrony, and pressure/compliance trends.</td></tr>
+              </table>
+            </div>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Important Teaching Point</h3>
+              <p>An ARDS patient with worsening mental status, escalating FiO₂/PEEP needs, falling blood pressure, or rising plateau pressures is not stable. These are escalation cues.</p>
+            </article>
+          </section>
+
+          <section class="info-card board" id="diagnostics">
+            <h2>Diagnostics & Assessment</h2>
+            <p>Diagnostic data helps confirm ARDS criteria, quantify oxygenation impairment, identify the precipitating cause, and rule out cardiogenic pulmonary edema or other causes of acute hypoxemia.</p>
+            <h3 style="margin-top:18px;">Berlin Criteria and Oxygenation</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Criterion/Data</th><th>ARDS Pattern</th></tr>
+                <tr><td>Timing</td><td>Within 1 week of known insult or new/worsening respiratory symptoms.</td></tr>
+                <tr><td>Imaging</td><td>Bilateral opacities not fully explained by effusions, collapse, or nodules.</td></tr>
+                <tr><td>Origin of edema</td><td>Respiratory failure not fully explained by heart failure or fluid overload.</td></tr>
+                <tr><td>P/F ratio</td><td>Mild 201–300, moderate 101–200, severe ≤100 with PEEP/CPAP ≥5 cm H₂O.</td></tr>
+                <tr><td>Lung mechanics</td><td>Reduced compliance and risk of elevated plateau/driving pressures.</td></tr></table>
+            </div>
+            <h3 style="margin-top:18px;">ABG Patterns</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Pattern</th><th>Meaning</th></tr>
+                <tr><td>Low PaO₂ on high FiO₂</td><td>Severe oxygenation failure; calculate P/F ratio.</td></tr>
+                <tr><td>Low P/F ratio</td><td>Quantifies ARDS severity and escalation risk.</td></tr>
+                <tr><td>Rising PaCO₂ with fatigue or high dead space</td><td>Possible ventilatory failure or inadequate minute ventilation.</td></tr>
+                <tr><td>Metabolic acidosis/lactate</td><td>May reflect shock/sepsis and worsens overall oxygen delivery.</td></tr></table>
+            </div>
+            <h3 style="margin-top:18px;">Chest X-ray</h3>
+            <p>Chest imaging commonly shows bilateral opacities. Imaging alone is not enough; the RT should connect it to timing, oxygenation, PEEP/CPAP level, and whether edema is likely cardiogenic or noncardiogenic.</p>
+          </section>
+
+          <section class="info-card" id="severity">
+            <h2>Severity Classification & P/F Ratio</h2>
+            <p>ARDS severity is commonly classified by the PaO₂/FiO₂ ratio while the patient is receiving PEEP or CPAP of at least 5 cm H₂O. This helps frame oxygenation impairment and escalation urgency.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>ARDS Severity</th><th>P/F Ratio Pattern</th></tr>
+                <tr><td>Mild ARDS</td><td>PaO₂/FiO₂ 201–300 with PEEP/CPAP ≥5 cm H₂O.</td></tr>
+                <tr><td>Moderate ARDS</td><td>PaO₂/FiO₂ 101–200 with PEEP/CPAP ≥5 cm H₂O.</td></tr>
+                <tr><td>Severe ARDS</td><td>PaO₂/FiO₂ ≤100 with PEEP/CPAP ≥5 cm H₂O.</td></tr>
+                <tr><td>Escalation context</td><td>Severity must be paired with trajectory, hemodynamics, ventilator pressures, and response to PEEP/proning.</td></tr>
+              </table>
+            </div>
+            <div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Mild</strong><br>P/F 201–300. Hypoxemia is present but less severe.</div>
+              <div class="example-box soft-amber"><strong>Moderate</strong><br>P/F 101–200. Escalation planning and lung-protective ventilation are central.</div>
+              <div class="example-box soft-coral"><strong>Severe</strong><br>P/F ≤100. Consider proning, paralysis when ordered, and rescue strategies.</div>
+            </div>
+            <article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="P/F Ratio Activity">
+              <h3>P/F Ratio Activity</h3>
+              <p>A patient has PaO₂ 80 mm Hg while receiving FiO₂ 0.80 on PEEP 10 cm H₂O. What ARDS severity category is this?</p>
+              <div class="quiz-options">
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Mild ARDS is P/F 201–300. This patient’s P/F is 100.">Mild</button>
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Moderate ARDS is P/F 101–200. This patient’s P/F is exactly 100.">Moderate</button>
+                <button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. 80 ÷ 0.80 = 100. A P/F ratio of 100 or less is severe ARDS when PEEP/CPAP is at least 5 cm H₂O.">Severe</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="red-flags">
+            <h2>Severity & Red Flags</h2>
+            <p>The key question is not simply “Does this patient have bilateral opacities?” The key question is whether oxygenation and lung mechanics are worsening despite appropriate support.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Red Flag</th><th>Why It Matters</th></tr>
+                <tr><td>PaO₂ remains low despite high FiO₂</td><td>Suggests refractory hypoxemia and shunt physiology.</td></tr>
+                <tr><td>P/F ratio ≤100</td><td>Severe ARDS category; escalation likely needed.</td></tr>
+                <tr><td>High plateau pressure</td><td>Increases risk of ventilator-induced lung injury.</td></tr>
+                <tr><td>Worsening compliance</td><td>Lungs are becoming stiffer and harder to ventilate safely.</td></tr>
+                <tr><td>Shock or rising lactate</td><td>Oxygen delivery is threatened even if SpO₂ looks acceptable.</td></tr>
+                <tr><td>Ventilator dyssynchrony</td><td>Can worsen pressures, oxygenation, and patient work of breathing.</td></tr></table>
+            </div>
+          </section>
+
+          <section class="info-card" id="management">
+            <h2>Management & Treatment</h2>
+            <p>ARDS management is supportive and cause-directed. The core RT priorities are oxygenation support, lung-protective ventilation, appropriate PEEP, prevention of ventilator-induced lung injury, close monitoring, and escalation when hypoxemia remains severe.</p>
+            <h3 style="margin-top:18px;">Management Strategies</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Strategy</th><th>Example</th><th>Why It Helps</th></tr>
+                <tr><td>Treat the cause</td><td>Antibiotics/source control for sepsis or pneumonia</td><td>ARDS will not resolve if the trigger continues.</td></tr>
+                <tr><td>Lung-protective ventilation</td><td>Low VT based on predicted body weight</td><td>Reduces overdistention and ventilator-induced lung injury.</td></tr>
+                <tr><td>Pressure limitation</td><td>Plateau pressure goal commonly &lt;30 cm H₂O</td><td>Limits alveolar stress and barotrauma risk.</td></tr>
+                <tr><td>PEEP optimization</td><td>PEEP/FiO₂ tables or individualized strategy</td><td>Recruits alveoli and improves oxygenation while avoiding harm.</td></tr>
+                <tr><td>Prone positioning</td><td>Severe ARDS with poor oxygenation</td><td>Improves V/Q matching and recruits dependent lung regions.</td></tr>
+                <tr><td>Rescue escalation</td><td>Paralysis, inhaled pulmonary vasodilator, ECMO referral when ordered/appropriate</td><td>Used when conventional support fails.</td></tr></table>
+            </div>
+            <h3 style="margin-top:18px;">Lung-Protective Ventilation Concept</h3>
+            <p>The ventilator should oxygenate and ventilate while protecting the lung. Board-style ARDS questions often prioritize low tidal volume by predicted body weight, plateau pressure limitation, adequate PEEP, permissive hypercapnia when appropriate, and proning for severe hypoxemia.</p>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ARDS Escalation Sequence">
+              <h3>ARDS Escalation Sequence</h3>
+              <p>Select the steps in the best general order for worsening ARDS oxygenation.</p>
+              <div class="sort-grid" id="sequenceSort">
+                <div class="sort-row" data-answer="1" data-sequence-item="Confirm ARDS criteria and severity"><strong>Confirm ARDS criteria and severity</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="2" data-sequence-item="Optimize oxygen delivery and treat cause"><strong>Optimize oxygen delivery and treat cause</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="3" data-sequence-item="Initiate lung-protective ventilation"><strong>Initiate lung-protective ventilation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="4" data-sequence-item="Optimize PEEP/FiO₂ strategy"><strong>Optimize PEEP/FiO₂ strategy</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="5" data-sequence-item="Prone if severe hypoxemia persists"><strong>Prone if severe hypoxemia persists</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="6" data-sequence-item="Escalate to rescue therapies/team consultation"><strong>Escalate to rescue therapies/team consultation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button>
+              <div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="status">
+            <h2>ARDS Escalation & Ventilator Considerations</h2>
+            <p>Severe ARDS may remain hypoxemic despite high FiO₂, PEEP, and lung-protective ventilation. These patients need early team communication, strict pressure monitoring, proning readiness, and rescue escalation planning.</p>
+            <div class="three-card-grid" style="margin-top:16px;">
+              <div class="example-box soft-coral"><strong>Watch for:</strong><br>P/F ≤100, refractory SpO₂/PaO₂, high plateau pressure, dyssynchrony, shock, worsening compliance.</div>
+              <div class="example-box soft-amber"><strong>Vent goal:</strong><br>Support oxygenation while preventing volutrauma, barotrauma, atelectrauma, and oxygen toxicity.</div>
+              <div class="example-box soft-blue"><strong>Settings concept:</strong><br>Use low VT, pressure limitation, adequate PEEP, and prone positioning when indicated.</div>
+            </div>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Pearl</h3>
+              <p>In ARDS requiring ventilation, avoid overdistention. Concepts usually include low tidal volume based on predicted body weight, plateau pressure monitoring, adequate PEEP, prone positioning for severe cases, and permissive hypercapnia when clinically appropriate and ordered.</p>
+            </article>
+          </section>
+
+          <section class="info-card rt" id="rt-role">
+            <h2>Respiratory Therapist Role</h2>
+            <p>The RT is central to ARDS assessment, ventilator management, oxygenation monitoring, proning support, patient safety, and escalation. The RT should trend SpO₂, ABGs, FiO₂, PEEP, P/F ratio, plateau pressure, driving pressure concepts, compliance, synchrony, secretions, positioning tolerance, and response to interventions.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr>
+                <tr><td>Assess oxygenation</td><td>SpO₂, ABGs, FiO₂, PEEP, P/F ratio, cyanosis.</td><td>Identifies severity and response to support.</td></tr>
+                <tr><td>Protect the lung</td><td>VT by predicted body weight, plateau pressure, compliance trends.</td><td>Reduces ventilator-induced lung injury risk.</td></tr>
+                <tr><td>Optimize support</td><td>PEEP/FiO₂ strategy, recruitment response, ventilator synchrony.</td><td>Balances oxygenation with pressure injury risk.</td></tr>
+                <tr><td>Support proning</td><td>Secure airway/tubes, monitor pressure points, reassess oxygenation.</td><td>Proning can improve oxygenation in severe ARDS.</td></tr>
+                <tr><td>Communicate escalation</td><td>Report worsening P/F ratio, high pressures, dyssynchrony, shock.</td><td>Prompts timely team intervention.</td></tr></table>
+            </div>
+          </section>
+
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided ARDS Case">
+            <span class="eyebrow">Guided Unfolding Case Study</span>
+            <h2>The Pneumonia That Became ARDS</h2>
+            <p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p>
+
+            <div class="case-stage" data-case-stage="0">
+              <h3>Stage 1: Initial Presentation</h3>
+              <p>A 62-year-old patient with pneumonia and sepsis has worsening dyspnea and increasing oxygen needs over the last 12 hours.</p>
+              <div class="case-meta"><div><strong>RR</strong><br>34/min</div><div><strong>SpO₂</strong><br>86% on NRB</div><div><strong>Breath Sounds</strong><br>Diffuse crackles</div></div>
+              <p><strong>Decision Question:</strong> What is the priority RT interpretation?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The patient has acute hypoxemic respiratory failure with a likely ARDS trigger. The RT should support oxygenation, obtain/interpret ABG data, assess imaging, and prepare escalation.">Recognize possible ARDS and prepare oxygenation/ventilatory escalation.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Anxiety may be present, but severe hypoxemia on high oxygen is not explained by anxiety alone.">Assume this is isolated anxiety because the patient is tachypneic.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Pneumonia can be the trigger, but worsening hypoxemia requires immediate oxygenation assessment and ARDS screening.">Delay ABG and imaging because pneumonia alone explains everything.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. High oxygen need supports severity; it does not rule out ARDS.">Reduce oxygen because high oxygen need rules out ARDS.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="1">
+              <h3>Stage 2: ARDS Criteria</h3>
+              <p>Chest imaging shows new bilateral opacities. Echo does not suggest primary cardiogenic pulmonary edema. ABG on FiO₂ 0.80 and PEEP 10 shows PaO₂ 80 mm Hg.</p>
+              <p><strong>Decision Question:</strong> What is the P/F ratio and severity category?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. PaO₂ 80 ÷ FiO₂ 0.80 = P/F 100. With PEEP ≥5, this meets severe ARDS oxygenation criteria.">P/F 100; severe ARDS.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. P/F 250 would be mild ARDS, but 80 divided by 0.80 equals 100.">P/F 250; mild ARDS.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. FiO₂ must be entered as a decimal. 80 ÷ 0.80 = 100, not 10.">P/F 10; not ARDS.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The P/F ratio is based on PaO₂ divided by FiO₂, not SpO₂ divided by PEEP.">Use SpO₂ divided by PEEP instead of PaO₂ divided by FiO₂.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="2">
+              <h3>Stage 3: Ventilator Strategy</h3>
+              <p>The patient is intubated. The physician asks for lung-protective ventilation. The patient is 5'4" tall and has obesity.</p>
+              <p><strong>Decision Question:</strong> Which concept matters most when setting tidal volume?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. ARDS tidal volume is based on predicted body weight, which is height/sex based, not actual body weight.">Use predicted body weight, not actual body weight.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Actual body weight can dangerously overestimate tidal volume in ARDS.">Use actual body weight because larger patients need larger tidal volumes.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. High tidal volume increases volutrauma risk in ARDS.">Use high tidal volume to normalize CO₂ as quickly as possible.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygenation goals are important, but pressure and lung protection still matter.">Ignore plateau pressure if SpO₂ improves.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="3">
+              <h3>Stage 4: Severe Hypoxemia Persists</h3>
+              <p>Despite lung-protective ventilation, optimized PEEP, and FiO₂ 0.90, oxygenation remains poor. The team discusses proning.</p>
+              <p><strong>Decision Question:</strong> What is the RT priority during prone positioning?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. During proning, RT priorities include securing the airway and circuit, monitoring oxygenation/pressures, preventing accidental extubation, and reassessing response.">Secure the airway/circuit and reassess oxygenation and pressures after turning.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Proning can improve oxygenation in severe ARDS and should not be dismissed as cosmetic positioning.">Avoid proning because it only changes comfort.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Accidental extubation is a major risk during proning; the airway must be protected.">Disconnect the ventilator during the turn without airway planning.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The RT should reassess gas exchange, pressures, synchrony, and airway security after proning.">Stop monitoring pressures once the patient is prone.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="4">
+              <h3>Case Wrap-Up</h3>
+              <div class="example-box soft-teal"><strong>RT Takeaway:</strong> ARDS care requires matching oxygenation support with lung protection: low VT by predicted body weight, pressure monitoring, appropriate PEEP, synchrony assessment, and escalation for severe hypoxemia.</div>
+              <div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> falling P/F ratio, high plateau pressure, worsening compliance, shock, or dyssynchrony should trigger urgent team communication.</div>
+            </div>
+          </section>
+
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="ARDS Knowledge Check">
+            <span class="eyebrow">Knowledge Check</span>
+            <h2>Board-Style Practice</h2>
+            <p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p>
+
+            <div class="knowledge-question" data-question-id="kq1">
+              <h3>Question 1</h3>
+              <p>A patient has acute onset hypoxemia after sepsis, bilateral opacities on chest imaging, and respiratory failure not fully explained by heart failure. What additional data best classifies ARDS severity?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. The PaO₂/FiO₂ ratio, while on PEEP or CPAP of at least 5 cm H₂O, classifies ARDS oxygenation severity.">PaO₂/FiO₂ ratio with PEEP/CPAP level.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. FEV₁/FVC is used for obstructive/restrictive spirometry patterns, not ARDS severity.">FEV₁/FVC ratio after bronchodilator.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Peak flow is an obstructive-airway monitoring tool, not an ARDS severity classifier.">Peak expiratory flow compared with personal best.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Sputum color may help infection assessment but does not classify ARDS severity.">Sputum color and cough frequency.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq2">
+              <h3>Question 2</h3>
+              <p>Which ventilator strategy is most consistent with lung-protective ventilation in ARDS?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Low tidal volume based on predicted body weight and pressure limitation reduce ventilator-induced lung injury.">Low tidal volume by predicted body weight with plateau pressure monitoring.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Large tidal volumes increase volutrauma risk.">Large tidal volume based on actual body weight.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. PEEP often supports recruitment and oxygenation in ARDS.">Zero PEEP to prevent all pressure exposure.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Normalizing PaCO₂ rapidly can require unsafe volumes/pressures; permissive hypercapnia may be used when ordered.">High minute ventilation at any pressure to normalize PaCO₂.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq3">
+              <h3>Question 3</h3>
+              <p>A patient has PaO₂ 70 mm Hg on FiO₂ 0.70 with PEEP 8 cm H₂O. What is the P/F ratio and category?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. 70 ÷ 0.70 = 100, which is severe ARDS when PEEP/CPAP is at least 5 cm H₂O.">P/F 100; severe ARDS.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. 70 ÷ 0.70 equals 100, not 200.">P/F 200; moderate ARDS.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. FiO₂ should be used as a decimal, so 0.70 is the denominator.">P/F 1; not clinically meaningful.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. PEEP is required for classification context, but it is not the denominator in the P/F calculation.">P/F 8.75; severe ARDS.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq4">
+              <h3>Question 4</h3>
+              <p>Which RT finding should be escalated immediately in a ventilated ARDS patient?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Worsening compliance and high plateau pressure suggest increasing lung stress and risk for ventilator-induced lung injury.">Rising plateau pressure with worsening compliance.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Stable oxygenation and pressures are reassuring compared with rising plateau pressure.">Stable SpO₂ with unchanged pressures.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Secretions require care, but thin secretions alone are not the most urgent ARDS escalation sign here.">Thin secretions after suctioning.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. A comfortable synchronized patient is less concerning than worsening pressures/compliance.">Improved synchrony after sedation adjustment.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div>
+          </section>
+
+          <section id="faq">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common ARDS Questions</h2></div>
+            <details class="accordion" open><summary>What is the simplest way to understand ARDS?</summary><div class="accordion-body"><p>ARDS is diffuse inflammatory lung injury that makes the alveolar-capillary membrane leaky, floods/collapses alveoli, and causes severe hypoxemia.</p></div></details>
+            <details class="accordion"><summary>How is ARDS different from cardiogenic pulmonary edema?</summary><div class="accordion-body"><p>ARDS edema is primarily from increased permeability and inflammation, while cardiogenic pulmonary edema is primarily from hydrostatic pressure related to heart failure or fluid overload.</p></div></details>
+            <details class="accordion"><summary>Why is the P/F ratio important?</summary><div class="accordion-body"><p>The P/F ratio quantifies oxygenation impairment. In the Berlin framework, mild ARDS is 201–300, moderate is 101–200, and severe is 100 or less with PEEP/CPAP at least 5 cm H₂O.</p></div></details>
+            <details class="accordion"><summary>Why use low tidal volume ventilation?</summary><div class="accordion-body"><p>ARDS lungs are stiff and heterogenous. Low tidal volume based on predicted body weight helps reduce overdistention and ventilator-induced lung injury.</p></div></details>
+            <details class="accordion"><summary>Why is PEEP used?</summary><div class="accordion-body"><p>PEEP helps keep unstable alveoli open, improves recruitment, and supports oxygenation, but excessive PEEP can overdistend lung units and impair hemodynamics.</p></div></details>
+            <details class="accordion"><summary>Why prone severe ARDS patients?</summary><div class="accordion-body"><p>Prone positioning can improve V/Q matching, recruit dependent lung regions, and improve oxygenation in severe ARDS when performed safely by a trained team.</p></div></details>
+            <details class="accordion"><summary>What does the RT monitor closely?</summary><div class="accordion-body"><p>The RT trends SpO₂, ABGs, FiO₂, PEEP, P/F ratio, plateau pressure, compliance, synchrony, hemodynamics, airway security, and response to interventions.</p></div></details>
+          </section>
+
+          <section class="info-card" id="summary">
+            <h2>Summary & Clinical Pearls</h2>
+            <p>ARDS is an acute inflammatory lung injury that causes noncardiogenic pulmonary edema, alveolar collapse/flooding, shunt physiology, low compliance, and refractory hypoxemia. RT care centers on recognizing severity, supporting oxygenation, protecting the lung during ventilation, and escalating when conventional support is not enough.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Must know:</strong><br>ARDS is acute hypoxemic respiratory failure with bilateral opacities not fully explained by heart failure/fluid overload.</div>
+              <div class="example-box soft-amber"><strong>Board pearl:</strong><br>P/F ratio categories: mild 201–300, moderate 101–200, severe ≤100 with PEEP/CPAP ≥5.</div>
+              <div class="example-box soft-blue"><strong>RT pearl:</strong><br>Trend FiO₂, PEEP, P/F ratio, plateau pressure, compliance, synchrony, and response to positioning/PEEP changes.</div>
+              <div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not chase perfect CO₂ or SpO₂ with unsafe pressures or tidal volumes. Protect the lung.</div>
+            </div>
+          </section>
+
+          <section id="glossary">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div>
+            <div class="glossary-card">
+              <h3>Searchable Glossary</h3>
+              <p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p>
+              <div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: P/F ratio, PEEP, prone, plateau pressure..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div>
+              <div class="glossary-list" id="glossaryList"></div>
+            </div>
+            <div class="glossary-card" style="margin-top:18px;">
+              <h3>Glossary Flashcard Mastery Deck</h3>
+              <p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p>
+              <div class="flashcard-shell">
+                <div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div>
+                <div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+                <div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div>
+                <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div>
+                <div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+                <div class="completed-list" id="completedList"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+
+  <script>
+    const glossaryTerms = [
+      { term: "ARDS", definition: "Acute respiratory distress syndrome is an acute diffuse inflammatory lung injury causing noncardiogenic pulmonary edema, low compliance, and severe hypoxemia.", rt: "Core ICU syndrome requiring oxygenation support and lung-protective ventilation." },
+      { term: "Alveolar-capillary membrane", definition: "The thin barrier between alveolar gas and pulmonary capillary blood.", rt: "In ARDS this barrier becomes leaky, allowing fluid into alveoli." },
+      { term: "Noncardiogenic pulmonary edema", definition: "Pulmonary edema caused by increased permeability rather than primary heart failure or fluid overload.", rt: "Key distinction in ARDS diagnosis." },
+      { term: "P/F ratio", definition: "The PaO₂ divided by the FiO₂ expressed as a decimal.", rt: "Used to classify ARDS oxygenation severity." },
+      { term: "Mild ARDS", definition: "PaO₂/FiO₂ 201–300 with PEEP or CPAP at least 5 cm H₂O.", rt: "Defines the least severe Berlin oxygenation category." },
+      { term: "Moderate ARDS", definition: "PaO₂/FiO₂ 101–200 with PEEP or CPAP at least 5 cm H₂O.", rt: "Signals significant oxygenation impairment." },
+      { term: "Severe ARDS", definition: "PaO₂/FiO₂ 100 or less with PEEP or CPAP at least 5 cm H₂O.", rt: "Often prompts proning and rescue escalation discussion." },
+      { term: "Shunt", definition: "Perfusion of lung units that are poorly ventilated or not ventilated.", rt: "Explains refractory hypoxemia in ARDS." },
+      { term: "Compliance", definition: "The ease with which the lung expands for a given pressure change.", rt: "ARDS causes low compliance and stiff lungs." },
+      { term: "Lung-protective ventilation", definition: "A ventilator strategy using low tidal volume and pressure limitation to reduce ventilator-induced lung injury.", rt: "Foundational RT management concept in ARDS." },
+      { term: "Predicted body weight", definition: "A height- and sex-based weight estimate used for ventilator tidal volume calculations.", rt: "Low VT in ARDS is based on predicted, not actual, body weight." },
+      { term: "Plateau pressure", definition: "Pressure measured during an inspiratory pause that reflects alveolar pressure under passive conditions.", rt: "Common ARDS target is less than 30 cm H₂O when possible." },
+      { term: "PEEP", definition: "Positive end-expiratory pressure that helps keep alveoli open at end exhalation.", rt: "Improves recruitment and oxygenation but must be balanced against overdistention." },
+      { term: "Prone positioning", definition: "Positioning the patient face-down to improve oxygenation and V/Q matching.", rt: "Important intervention for severe ARDS." },
+      { term: "Atelectrauma", definition: "Lung injury from repeated alveolar opening and collapse.", rt: "Adequate PEEP helps reduce this risk." },
+      { term: "Volutrauma", definition: "Lung injury from overdistention by excessive tidal volume.", rt: "Reason low tidal volume is prioritized." },
+      { term: "Barotrauma", definition: "Pressure-related lung injury such as pneumothorax.", rt: "Monitor pressures and sudden deterioration." },
+      { term: "Permissive hypercapnia", definition: "Allowing a higher PaCO₂ when necessary to maintain lung-protective ventilation.", rt: "May be accepted when ordered and clinically appropriate." },
+      { term: "Recruitment", definition: "Opening previously collapsed alveoli.", rt: "PEEP and proning may improve recruitment." },
+      { term: "ECMO", definition: "Extracorporeal membrane oxygenation that supports gas exchange outside the body.", rt: "Possible referral consideration in refractory severe ARDS." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() {
+      const activity = document.querySelector("#management .activity-card.require-complete");
+      const button = document.getElementById("checkSequenceSort");
+      const status = document.getElementById("sequenceSortStatus");
+      if (!activity || !button) return;
+
+      button.addEventListener("click", () => {
+        const rows = Array.from(activity.querySelectorAll(".sort-row"));
+        let correctCount = 0;
+
+        rows.forEach(row => {
+          const select = row.querySelector("select");
+          const correct = select.value === row.dataset.answer;
+          row.classList.toggle("correct", correct);
+          row.classList.toggle("incorrect", select.value !== "" && !correct);
+          if (correct) correctCount++;
+        });
+
+        status.textContent = `${correctCount} / ${rows.length} correct`;
+
+        if (correctCount === rows.length) {
+          status.textContent = "Sequence activity complete.";
+          status.classList.add("complete");
+          markActivityComplete(activity);
+        }
+      });
+    }
+
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+
+      const originalRows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      if (!originalRows.length) return;
+
+      let rows = [...originalRows];
+      let attempts = 0;
+
+      // Fisher-Yates shuffle. Repeat if the random result accidentally matches the original order.
+      do {
+        rows = [...originalRows];
+        for (let i = rows.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [rows[i], rows[j]] = [rows[j], rows[i]];
+        }
+        attempts++;
+      } while (
+        attempts < 12 &&
+        rows.every((row, index) => row === originalRows[index])
+      );
+
+      rows.forEach(row => container.appendChild(row));
+
+      // Reset all dropdowns so the activity always starts blank.
+      container.querySelectorAll("select").forEach(select => {
+        select.value = "";
+      });
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied
+        .filter(item => item.rank >= chosenRank)
+        .map(item => item.row);
+
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+
+        while (used.has(rank) && rank < rows.length) rank++;
+
+        if (used.has(rank)) {
+          select.value = "";
+        } else {
+          select.value = String(rank);
+          used.add(rank);
+        }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 999;
+        const bVal = Number(b.querySelector("select").value) || 999;
+
+        if (aVal !== bVal) return aVal - bVal;
+
+        return Number(a.dataset.answer) - Number(b.dataset.answer);
+      });
+
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => {
+            row.classList.remove("correct", "incorrect");
+          });
+
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    function initializeSequenceActivity() {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+
+      const container = document.getElementById("sequenceSort");
+      if (container) container.style.visibility = "visible";
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializeSequenceActivity);
+    } else {
+      initializeSequenceActivity();
+    }
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> ARDS is driven by inflammatory alveolar-capillary injury, permeability edema, shunt, and severe hypoxemia.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> ARDS is not a simple bronchospasm problem. The main issue is alveolar flooding, shunt physiology, and low compliance.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct category to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
+</html>
