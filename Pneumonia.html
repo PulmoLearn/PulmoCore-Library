@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Pneumonia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; border-bottom: 1px solid #E7F0F5; }
+    th { color: var(--core-navy); }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+    @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Core</span></div>
+          <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#snapshot">Snapshot</a>
+        <a href="#pathophysiology">Pathophysiology</a>
+        <a href="#diagnostics">Diagnostics</a>
+        <a href="#management">Management</a>
+        <a href="#glossary">Glossary</a>
+      </nav>
+      <div class="mobile-menu-note">Menu</div>
+    </header>
+
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Pneumonia</h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Pneumonia is an infection of the lung parenchyma that fills alveoli with inflammatory fluid, cells, and debris. This module focuses on RT-level recognition, oxygenation and ventilation assessment, secretion management, diagnostics, escalation, and board-style clinical reasoning.</p>
+        <div class="case-meta" aria-label="Module details">
+          <div><strong>Category</strong><br>Infectious Lung Disease</div>
+          <div><strong>Estimated Time</strong><br>30–40 minutes</div>
+          <div><strong>Level</strong><br>Core RT Knowledge</div>
+        </div>
+      </section>
+
+      <div class="content-layout">
+        <aside class="side-nav" aria-label="Disease page quick navigation">
+          <h3>Lesson Sections</h3>
+          <a href="#objectives">Objectives</a>
+          <a href="#snapshot">Disease Snapshot</a>
+          <a href="#precheck">Quick Pre-Check</a>
+          <a href="#pathophysiology">Pathophysiology</a>
+          <a href="#types">Types + Risk Factors</a>
+          <a href="#manifestations">Clinical Manifestations</a>
+          <a href="#diagnostics">Diagnostics</a>
+          <a href="#red-flags">Red Flags</a>
+          <a href="#management">Management</a>
+          <a href="#airway-clearance">Airway Clearance</a>
+          <a href="#rt-role">RT Role</a>
+          <a href="#case-study">Case Study</a>
+          <a href="#knowledge-check">Knowledge Check</a>
+          <a href="#faq">FAQ</a>
+          <a href="#summary">Summary</a>
+          <a href="#glossary">Glossary Deck</a>
+        </aside>
+
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives">
+            <h2>Learning Objectives</h2>
+            <p>By the end of this pneumonia module, learners should be able to connect alveolar infection, impaired gas exchange, diagnostic findings, respiratory support needs, secretion management, and escalation priorities.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how alveolar inflammation and consolidation create V/Q mismatch, shunt-like physiology, and hypoxemia.</div>
+              <div class="example-box soft-blue"><strong>2. Differentiate pneumonia types</strong><br>Compare community-acquired, hospital-acquired, ventilator-associated, aspiration, and opportunistic pneumonia clues.</div>
+              <div class="example-box soft-amber"><strong>3. Interpret assessment data</strong><br>Use symptoms, breath sounds, imaging, SpO₂, ABGs, sputum findings, and work of breathing to determine severity.</div>
+              <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize sepsis, refractory hypoxemia, ventilatory failure, fatigue, altered mental status, and airway protection concerns.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="snapshot">
+            <h2>Disease Snapshot</h2>
+            <p>Pneumonia is an infection and inflammatory process within the alveoli and surrounding lung tissue. The primary RT concern is impaired gas exchange caused by alveolar filling, secretion burden, reduced ventilation to affected regions, and increased work of breathing.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>What it is:</strong><br>Infection of the lung parenchyma with inflammatory alveolar filling.</div>
+              <div class="example-box soft-teal"><strong>Primary problem:</strong><br>Consolidation causes poor ventilation to perfused lung units.</div>
+              <div class="example-box soft-teal"><strong>Classic symptoms:</strong><br>Fever, cough, sputum, pleuritic pain, dyspnea, tachypnea, crackles.</div>
+              <div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Clinical infection pattern plus new infiltrate or consolidation.</div>
+              <div class="example-box soft-teal"><strong>Acute danger:</strong><br>Refractory hypoxemia, sepsis, fatigue, rising PaCO₂, altered mental status.</div>
+              <div class="example-box soft-teal"><strong>RT priority:</strong><br>Assess oxygenation, ventilation, WOB, secretion clearance, and escalation needs.</div>
+            </div>
+            <article class="info-card rt" style="margin-top:16px;">
+              <h3>RT Clinical Connection</h3>
+              <p>For RTs, pneumonia is not just an antibiotic problem. It is a gas-exchange and airway-clearance problem. The RT must determine whether the patient is oxygenating, ventilating, clearing secretions, protecting the airway, and responding to support.</p>
+            </article>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Prep Frame</h3>
+              <p>Immediately associate pneumonia with fever, cough, sputum, crackles, infiltrate/consolidation, V/Q mismatch, hypoxemia, secretion management, and escalation when oxygen needs rise or PaCO₂ increases.</p>
+            </article>
+          </section>
+
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check">
+            <span class="eyebrow">Quick Pre-Check</span>
+            <h2>Start with the core pneumonia pattern</h2>
+            <p>Which statement best describes the primary gas-exchange problem in pneumonia?</p>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false">The pleural space fills with air, causing the lung to collapse.</button>
+              <button class="quiz-option" data-correct="true">Alveoli fill with inflammatory material, creating low V/Q and shunt-like hypoxemia.</button>
+              <button class="quiz-option" data-correct="false">Airway smooth muscle contracts episodically and fully reverses with bronchodilator therapy.</button>
+              <button class="quiz-option" data-correct="false">Pulmonary arteries are blocked by thrombi, causing sudden perfusion loss.</button>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback" role="status"></div>
+          </section>
+
+          <section class="info-card" id="pathophysiology">
+            <h2>Anatomy & Pathophysiology</h2>
+            <p>Pneumonia causes inflammation in the distal airways and alveoli. Fluid, cells, organisms, and debris fill airspaces, reducing ventilation to affected lung units while perfusion may continue. This produces V/Q mismatch and shunt-like physiology.</p>
+            <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">
+              Pathogen reaches lower airway → immune response → alveolar exudate/consolidation → impaired ventilation → V/Q mismatch and shunt-like hypoxemia → increased WOB → possible respiratory failure, sepsis, or ARDS.
+            </div>
+            <h3 style="margin-top:22px;">What Changes During Pneumonia</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Pneumonia Change</th><th>What Happens</th><th>Why It Matters</th></tr>
+                <tr><td>Alveolar filling</td><td>Exudate occupies airspaces that should contain gas.</td><td>Reduces ventilation and creates hypoxemia.</td></tr>
+                <tr><td>Consolidation</td><td>Lung tissue becomes dense and poorly aerated.</td><td>Produces crackles, bronchial breath sounds, and infiltrate.</td></tr>
+                <tr><td>V/Q mismatch</td><td>Perfusion continues through poorly ventilated areas.</td><td>Creates hypoxemia that may worsen quickly.</td></tr>
+                <tr><td>Secretion burden</td><td>Sputum and mucus may be difficult to clear.</td><td>Can worsen atelectasis, obstruction, and work of breathing.</td></tr>
+                <tr><td>Systemic inflammation</td><td>Fever, tachycardia, leukocytosis, and possible sepsis.</td><td>Signals infection severity and escalation risk.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:22px;">ABG Progression Concept</h3>
+            <p>Early pneumonia may show hypoxemia with respiratory alkalosis from tachypnea. If the patient tires, PaCO₂ may rise and pH may fall. Rising PaCO₂ in a pneumonia patient with increased work of breathing is a red flag for ventilatory failure.</p>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Danger Sign</h3>
+              <p>A patient with pneumonia who becomes drowsy, hypotensive, cyanotic, or unable to maintain oxygenation despite increasing support may be progressing toward respiratory failure, sepsis, or ARDS.</p>
+            </article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Pneumonia Hotspot Graphic">
+              <h3>Click the Pneumonia Hotspots</h3>
+              <p>Click each hotspot to reveal how that structure or process contributes to pneumonia.</p>
+              <div class="hotspot-demo">
+                <div class="hotspot-lung" aria-label="Simplified pneumonia lung graphic with clickable hotspots">
+                  <svg viewBox="0 0 240 240" fill="none" aria-hidden="true">
+                    <path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/>
+                    <ellipse cx="158" cy="160" rx="35" ry="27" fill="#FDE9E9" stroke="#E85D5D" stroke-width="3"/>
+                    <circle cx="151" cy="158" r="5" fill="#E85D5D"/><circle cx="170" cy="151" r="4" fill="#E85D5D"/><circle cx="164" cy="171" r="4" fill="#E85D5D"/>
+                  </svg>
+                  <button class="hotspot-btn" style="left:59%; top:61%;" data-title="Consolidated Alveoli" data-text="Inflammatory fluid fills alveoli, reducing ventilation and causing crackles, bronchial breath sounds, and hypoxemia.">1</button>
+                  <button class="hotspot-btn" style="left:42%; top:54%;" data-title="Airway Secretions" data-text="Secretions can increase resistance, worsen atelectasis, and require cough assessment, airway clearance, or suctioning.">2</button>
+                  <button class="hotspot-btn" style="left:31%; top:35%;" data-title="V/Q Mismatch" data-text="Blood continues flowing past poorly ventilated lung units, causing low oxygen levels and possible shunt-like physiology.">3</button>
+                  <button class="hotspot-btn" style="right:24%; bottom:20%;" data-title="Escalation Risk" data-text="Worsening oxygenation, rising CO₂, fatigue, or altered mental status signals possible respiratory failure.">4</button>
+                </div>
+                <div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div>
+              </div>
+              <div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="types">
+            <h2>Types, Etiology & Risk Factors</h2>
+            <p>Board questions often identify pneumonia by the setting, aspiration risk, immune status, severity, or ventilator exposure. These clues help you anticipate likely complications and RT priorities.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Type</th><th>Common Clues</th><th>RT Clinical Concern</th></tr>
+                <tr><td>Community-acquired</td><td>Fever, cough, sputum, infiltrate outside hospital.</td><td>Hypoxemia and secretion burden.</td></tr>
+                <tr><td>Hospital-acquired</td><td>Develops during hospitalization; resistant pathogen risk.</td><td>Rapid deterioration and isolation/culture needs.</td></tr>
+                <tr><td>Ventilator-associated</td><td>New/worsening infiltrate, fever, secretions, increased ventilator requirements.</td><td>VAP prevention, suctioning, specimen collection.</td></tr>
+                <tr><td>Aspiration</td><td>Vomiting, dysphagia, altered LOC, sedation, stroke, poor airway protection.</td><td>Airway protection, suctioning, dependent-lobe infiltrates.</td></tr>
+                <tr><td>Opportunistic</td><td>Immunocompromised host, transplant, chemo, steroids, HIV.</td><td>Subtle onset with high progression risk.</td></tr>
+              </table>
+            </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Pneumonia Type Sorting">
+              <h3>Sort the Pneumonia Clues</h3>
+              <p>Choose the best pneumonia category for each clue, then check your answers.</p>
+              <div class="sort-grid" id="typeSort">
+                <div class="sort-row" data-answer="aspiration"><strong>Vomiting followed by new right lower lobe infiltrate</strong><select><option value="">Choose category</option><option value="cap">Community-acquired</option><option value="vap">Ventilator-associated</option><option value="aspiration">Aspiration</option><option value="opportunistic">Opportunistic</option></select></div>
+                <div class="sort-row" data-answer="vap"><strong>New fever, purulent secretions, and worsening oxygenation on a ventilator</strong><select><option value="">Choose category</option><option value="cap">Community-acquired</option><option value="vap">Ventilator-associated</option><option value="aspiration">Aspiration</option><option value="opportunistic">Opportunistic</option></select></div>
+                <div class="sort-row" data-answer="cap"><strong>Healthy adult develops fever, cough, sputum, and infiltrate at home</strong><select><option value="">Choose category</option><option value="cap">Community-acquired</option><option value="vap">Ventilator-associated</option><option value="aspiration">Aspiration</option><option value="opportunistic">Opportunistic</option></select></div>
+                <div class="sort-row" data-answer="opportunistic"><strong>Transplant patient with subtle dyspnea and new diffuse infiltrates</strong><select><option value="">Choose category</option><option value="cap">Community-acquired</option><option value="vap">Ventilator-associated</option><option value="aspiration">Aspiration</option><option value="opportunistic">Opportunistic</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkTypeSort" style="margin-top:12px;">Check Sorting</button>
+              <div class="activity-status" id="typeSortStatus">Complete the sorting activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="manifestations">
+            <h2>Clinical Manifestations</h2>
+            <p>Pneumonia presentation can range from mild cough to severe sepsis and respiratory failure. RT assessment should focus on oxygenation, ventilation, work of breathing, breath sounds, sputum, mental status, and response to support.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Finding Type</th><th>What the RT May See</th></tr>
+                <tr><td>Symptoms</td><td>Fever, chills, cough, sputum, dyspnea, pleuritic chest pain, fatigue.</td></tr>
+                <tr><td>Appearance</td><td>Tachypnea, accessory muscle use, anxiety, diaphoresis, cyanosis in severe cases.</td></tr>
+                <tr><td>Breath sounds</td><td>Crackles, bronchial breath sounds, diminished sounds, rhonchi, dullness to percussion.</td></tr>
+                <tr><td>Oxygenation clues</td><td>Low SpO₂, low PaO₂, increasing oxygen requirement.</td></tr>
+                <tr><td>Ventilation clues</td><td>Early low PaCO₂ from tachypnea; rising PaCO₂ with fatigue or failure.</td></tr>
+                <tr><td>Systemic clues</td><td>Fever, tachycardia, hypotension, altered mentation, poor perfusion.</td></tr>
+              </table>
+            </div>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Important Teaching Point</h3>
+              <p>Do not assume pneumonia is stable because the patient is already on oxygen. Increasing oxygen needs, worsening mentation, rising PaCO₂, hypotension, or exhaustion should trigger escalation.</p>
+            </article>
+          </section>
+
+          <section class="info-card board" id="diagnostics">
+            <h2>Diagnostics & Assessment</h2>
+            <p>Diagnostics help confirm pneumonia, evaluate severity, guide therapy, and detect respiratory failure or complications.</p>
+            <h3 style="margin-top:18px;">Common Diagnostic Data</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Diagnostic</th><th>Pneumonia Pattern</th><th>RT Relevance</th></tr>
+                <tr><td>Chest x-ray</td><td>Infiltrate or consolidation; may be lobar or diffuse.</td><td>Correlate with breath sounds and oxygenation.</td></tr>
+                <tr><td>SpO₂ / PaO₂</td><td>May be low from V/Q mismatch or shunt-like units.</td><td>Guides oxygen escalation.</td></tr>
+                <tr><td>ABG</td><td>Hypoxemia; early low PaCO₂; severe cases may show rising PaCO₂/acidemia.</td><td>Detects ventilatory failure.</td></tr>
+                <tr><td>Sputum sample</td><td>Purulent secretions; culture may identify pathogen.</td><td>RT may assist with collection or suction specimen.</td></tr>
+                <tr><td>CBC / inflammatory markers</td><td>Leukocytosis or infection pattern.</td><td>Supports infection severity, not ventilation alone.</td></tr>
+                <tr><td>Lactate / perfusion data</td><td>May be abnormal in sepsis.</td><td>Escalation clue when paired with hypotension or AMS.</td></tr>
+              </table>
+            </div>
+            <article class="quiz-card require-complete" style="margin-top:16px;" id="abg-activity" data-activity-name="Pneumonia ABG Activity">
+              <h3>ABG Activity</h3>
+              <p>A patient with pneumonia becomes somnolent. ABG: pH 7.28, PaCO₂ 58, PaO₂ 54 on 6 L/min nasal cannula. What is the best interpretation?</p>
+              <div class="quiz-options">
+                <button class="quiz-option abg-option" data-correct="true" data-feedback="Correct. Low pH with elevated PaCO₂ indicates ventilatory failure, and PaO₂ 54 despite oxygen indicates severe hypoxemia. This requires rapid escalation.">Ventilatory failure with severe hypoxemia requiring escalation.</button>
+                <button class="quiz-option abg-option" data-correct="false" data-feedback="Not quite. This is not compensated chronic respiratory acidosis; the patient is acutely acidemic and somnolent.">Compensated chronic respiratory acidosis with no urgent concern.</button>
+                <button class="quiz-option abg-option" data-correct="false" data-feedback="Not quite. Anxiety-related hyperventilation would more likely lower PaCO₂, not raise it with acidemia.">Simple hyperventilation from anxiety.</button>
+                <button class="quiz-option abg-option" data-correct="false" data-feedback="Not quite. These values show dangerous gas-exchange failure, not normal pneumonia findings.">Normal gas exchange for pneumonia.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="red-flags">
+            <h2>Severity & Red Flags</h2>
+            <p>The key question is not simply “Does this patient have pneumonia?” The key question is whether the patient is maintaining oxygenation, ventilation, perfusion, airway protection, and secretion clearance.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Red Flag</th><th>Why It Matters</th></tr>
+                <tr><td>SpO₂ remains low despite escalating oxygen</td><td>Suggests severe V/Q mismatch, shunt, ARDS, or failure of current support.</td></tr>
+                <tr><td>Rising PaCO₂ with fatigue or altered mentation</td><td>Suggests ventilatory failure.</td></tr>
+                <tr><td>Hypotension, mottling, poor perfusion</td><td>Possible sepsis or shock.</td></tr>
+                <tr><td>Inability to protect airway</td><td>High aspiration and respiratory failure risk.</td></tr>
+                <tr><td>Copious secretions with weak cough</td><td>May require suctioning or airway clearance support.</td></tr>
+                <tr><td>New confusion, drowsiness, or exhaustion</td><td>May reflect hypoxemia, hypercapnia, or sepsis.</td></tr>
+              </table>
+            </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Pneumonia Red Flag Sorting">
+              <h3>Sort the Findings</h3>
+              <p>Classify each finding as stable, concerning, or red flag.</p>
+              <div class="sort-grid" id="redFlagSort">
+                <div class="sort-row" data-answer="stable"><strong>SpO₂ 94% on 2 L/min with improving cough</strong><select><option value="">Choose category</option><option value="stable">Stable</option><option value="concerning">Concerning</option><option value="redflag">Red Flag</option></select></div>
+                <div class="sort-row" data-answer="concerning"><strong>RR 30/min with increasing accessory muscle use</strong><select><option value="">Choose category</option><option value="stable">Stable</option><option value="concerning">Concerning</option><option value="redflag">Red Flag</option></select></div>
+                <div class="sort-row" data-answer="redflag"><strong>New confusion with PaCO₂ rising to 60 mm Hg</strong><select><option value="">Choose category</option><option value="stable">Stable</option><option value="concerning">Concerning</option><option value="redflag">Red Flag</option></select></div>
+                <div class="sort-row" data-answer="redflag"><strong>Hypotension with fever and mottled skin</strong><select><option value="">Choose category</option><option value="stable">Stable</option><option value="concerning">Concerning</option><option value="redflag">Red Flag</option></select></div>
+                <div class="sort-row" data-answer="concerning"><strong>Productive cough and localized crackles</strong><select><option value="">Choose category</option><option value="stable">Stable</option><option value="concerning">Concerning</option><option value="redflag">Red Flag</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkRedFlagSort" style="margin-top:12px;">Check Sorting</button>
+              <div class="activity-status" id="redFlagSortStatus">Complete the sorting activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="management">
+            <h2>Management & Treatment</h2>
+            <p>Pneumonia management targets infection, oxygenation, ventilation, secretion clearance, hydration/nutrition support, and prevention of deterioration. RTs help determine whether the current support is enough.</p>
+            <h3 style="margin-top:18px;">Respiratory Support Options</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Need</th><th>Possible Support</th><th>RT Reasoning</th></tr>
+                <tr><td>Mild hypoxemia</td><td>Nasal cannula or simple mask</td><td>Monitor SpO₂, WOB, and response.</td></tr>
+                <tr><td>Moderate/severe hypoxemia</td><td>Venturi, nonrebreather, or HFNC depending on protocol and severity</td><td>Escalate based on oxygen requirement and WOB.</td></tr>
+                <tr><td>High WOB but protected airway</td><td>HFNC or NIV in selected patients</td><td>Assess contraindications and failure signs.</td></tr>
+                <tr><td>Ventilatory failure or airway protection failure</td><td>Intubation and mechanical ventilation</td><td>Urgent escalation when CO₂ rises, pH falls, or mental status worsens.</td></tr>
+                <tr><td>Secretion retention</td><td>Cough coaching, PEP, CPT if indicated, suctioning</td><td>Support clearance without exhausting patient.</td></tr>
+              </table>
+            </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Pneumonia Escalation Sequence">
+              <h3>Escalation Sequence</h3>
+              <p>Select the steps in the best general order for a deteriorating pneumonia patient.</p>
+              <div class="sort-grid" id="sequenceSort">
+                <div class="sort-row" data-answer="1"><strong>Rapid bedside assessment: airway, breathing, circulation, mental status, SpO₂, WOB.</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
+                <div class="sort-row" data-answer="2"><strong>Increase oxygen support and position to optimize ventilation.</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
+                <div class="sort-row" data-answer="3"><strong>Assess secretions, cough strength, breath sounds, and need for suction/clearance.</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
+                <div class="sort-row" data-answer="4"><strong>Notify provider or rapid response for red flags or failure to respond.</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
+                <div class="sort-row" data-answer="5"><strong>Prepare for HFNC, NIV, or intubation depending on airway and gas exchange.</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button>
+              <div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card rt" id="airway-clearance">
+            <h2>Airway Clearance & Prevention</h2>
+            <p>Pneumonia may increase secretions and weaken effective ventilation. RT airway-clearance decisions should be individualized based on cough strength, secretion volume, breath sounds, oxygenation, fatigue, and contraindications.</p>
+            <div class="three-card-grid" style="margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Mobilize secretions:</strong><br>Cough coaching, hydration as ordered, early mobility, and PEP therapy when appropriate.</div>
+              <div class="example-box soft-blue"><strong>Suction when needed:</strong><br>Use suctioning when the patient cannot clear secretions or an artificial airway is present.</div>
+              <div class="example-box soft-amber"><strong>Prevent VAP:</strong><br>Support oral care, head-of-bed elevation, suctioning as indicated, and ventilator bundle adherence.</div>
+            </div>
+            <article class="quiz-card require-complete" style="margin-top:16px;" id="clearance-activity" data-activity-name="Airway Clearance Activity">
+              <h3>Airway Clearance Decision</h3>
+              <p>A pneumonia patient has copious secretions, coarse rhonchi, and a weak cough. Which RT action best matches the priority?</p>
+              <div class="quiz-options">
+                <button class="quiz-option clearance-option" data-correct="true" data-feedback="Correct. A weak cough with copious secretions increases risk for airway obstruction, atelectasis, and worsening gas exchange. Assess airway clearance and consider suctioning or assisted clearance.">Assess airway clearance and consider suctioning or assisted secretion-clearance therapy.</button>
+                <button class="quiz-option clearance-option" data-correct="false" data-feedback="Not quite. Antibiotics may treat infection, but RT still must assess airway clearance and secretion retention.">Avoid secretion assessment because antibiotics are the only treatment.</button>
+                <button class="quiz-option clearance-option" data-correct="false" data-feedback="Not quite. Oxygen should not be decreased when the patient has signs of secretion-related respiratory compromise.">Decrease oxygen immediately because secretions cause false SpO₂ readings.</button>
+                <button class="quiz-option clearance-option" data-correct="false" data-feedback="Not quite. Supine positioning can worsen ventilation and secretion management.">Place the patient supine to reduce coughing.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </article>
+          </section>
+
+          <section class="info-card rt" id="rt-role">
+            <h2>Respiratory Therapist Role</h2>
+            <p>The RT is central to pneumonia assessment, oxygen delivery, ventilatory support, secretion management, specimen collection, patient education, and escalation.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr>
+                <tr><td>Assess oxygenation</td><td>SpO₂, PaO₂, oxygen device, FiO₂, cyanosis, trend.</td><td>Detects worsening V/Q mismatch or shunt-like physiology.</td></tr>
+                <tr><td>Assess ventilation</td><td>RR, pattern, PaCO₂ trend, pH, mental status, fatigue.</td><td>Detects ventilatory failure.</td></tr>
+                <tr><td>Evaluate breath sounds</td><td>Crackles, rhonchi, diminished sounds, bronchial sounds.</td><td>Supports localization and secretion assessment.</td></tr>
+                <tr><td>Support airway clearance</td><td>Cough, PEP, CPT if indicated, suctioning, humidification considerations.</td><td>Improves secretion removal and reduces obstruction risk.</td></tr>
+                <tr><td>Escalate care</td><td>Notify provider/RRT for refractory hypoxemia, rising CO₂, shock, AMS, airway protection issues.</td><td>Prevents delayed response to respiratory failure or sepsis.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided Pneumonia Case">
+            <span class="eyebrow">Guided Unfolding Case Study</span>
+            <h2>The Pneumonia Patient Who Starts to Tire</h2>
+            <p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p>
+
+            <div class="case-stage" data-case-stage="0">
+              <h3>Stage 1: Initial Presentation</h3>
+              <p>A 68-year-old patient arrives with fever, productive cough, dyspnea, and right-sided pleuritic chest pain.</p>
+              <div class="case-meta"><div><strong>RR</strong><br>28/min</div><div><strong>SpO₂</strong><br>88% room air</div><div><strong>Breath Sounds</strong><br>RLL crackles</div></div>
+              <p><strong>Decision Question:</strong> What is the RT priority first action?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Hypoxemia and tachypnea require oxygen support and immediate respiratory assessment.">Apply supplemental oxygen and assess work of breathing.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Imaging is important, but oxygenation and bedside assessment cannot wait.">Delay oxygen until chest x-ray confirms pneumonia.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Chest percussion is not the first priority before oxygenation and severity assessment.">Begin chest percussion before assessing oxygenation.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Supine positioning can worsen ventilation and aspiration risk.">Place patient supine and reassess later.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="1">
+              <h3>Stage 2: Diagnostic Data</h3>
+              <p>Chest x-ray shows right lower lobe consolidation. The patient has purulent sputum and SpO₂ improves to 92% on 4 L/min.</p>
+              <p><strong>Decision Question:</strong> Which finding best supports pneumonia physiology?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Localized crackles, consolidation, sputum, and hypoxemia fit alveolar filling and V/Q mismatch.">Localized crackles with consolidation, productive cough, and hypoxemia.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Clear breath sounds and normal oxygenation would not strongly support pneumonia physiology.">Clear breath sounds with normal oxygenation.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Slow respiratory rate without fever is not the expected pneumonia pattern.">Slow respiratory rate with no fever.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Isolated hypertension does not explain the lung pathology.">Isolated hypertension.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="2">
+              <h3>Stage 3: Deterioration</h3>
+              <p>Two hours later, the patient is more fatigued and confused. SpO₂ is 86% on 6 L/min. ABG shows pH 7.29, PaCO₂ 56, PaO₂ 52.</p>
+              <p><strong>Decision Question:</strong> What should the RT recommend now?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Refractory hypoxemia, rising PaCO₂, acidemia, fatigue, and confusion require urgent escalation.">Escalate support and prepare for advanced airway/ventilatory assistance.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The current support is failing.">Continue the same oxygen device because pneumonia improves slowly.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Pneumonia can become both an oxygenation and ventilation problem.">Stop monitoring CO₂ because pneumonia is only an oxygen problem.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oral fluids alone do not address respiratory failure risk.">Encourage oral fluids only.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="3">
+              <h3>Stage 4: Airway Protection</h3>
+              <p>The patient becomes increasingly somnolent and has a weak cough with thick secretions.</p>
+              <p><strong>Decision Question:</strong> What is the most important RT concern?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Altered mental status plus weak cough creates airway protection and secretion-clearance concerns.">Airway protection and secretion clearance are failing.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Drowsiness is not reassuring in this context.">The patient is resting comfortably and improving.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Airway and ventilation priorities are urgent.">The only issue is antibiotic selection.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Weak cough and thick secretions are very relevant to RT care.">Secretion clearance no longer matters.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="4">
+              <h3>Case Wrap-Up</h3>
+              <div class="example-box soft-teal"><strong>RT Takeaway:</strong> In pneumonia, improvement is measured by oxygenation, work of breathing, ventilation, mentation, secretion clearance, and response to respiratory support.</div>
+              <div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> refractory hypoxemia, rising PaCO₂, acidemia, hypotension, confusion, and weak airway protection require urgent escalation.</div>
+            </div>
+          </section>
+
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Pneumonia Knowledge Check">
+            <span class="eyebrow">Knowledge Check</span>
+            <h2>Board-Style Practice</h2>
+            <p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p>
+
+            <div class="knowledge-question" data-question-id="kq1">
+              <h3>Question 1</h3>
+              <p>A patient with pneumonia has fever, productive cough, right lower lobe crackles, and a new infiltrate. What pathophysiology best explains the hypoxemia?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Consolidated alveoli are poorly ventilated while perfusion continues, creating low V/Q and shunt-like hypoxemia.">Alveolar consolidation causing V/Q mismatch.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Bronchospasm may occur but is not the main pneumonia gas-exchange mechanism.">Fully reversible bronchospasm only.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pneumothorax involves air in the pleural space, not alveolar infection.">Air in the pleural space.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. A pulmonary embolism is perfusion obstruction, not pneumonia consolidation.">Sudden pulmonary artery obstruction.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq2">
+              <h3>Question 2</h3>
+              <p>Which finding is most concerning in a patient with worsening pneumonia?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Rising PaCO₂ with fatigue suggests ventilatory failure and requires escalation.">Rising PaCO₂ with increasing fatigue.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Productive cough can be expected; the trend and severity matter.">Productive cough that clears with strong coughing.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. SpO₂ 96% on low oxygen is reassuring compared with rising CO₂ and fatigue.">SpO₂ 96% on 1 L/min.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Local crackles alone are less concerning than ventilatory failure.">Localized crackles in one lobe.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq3">
+              <h3>Question 3</h3>
+              <p>Which clue most strongly suggests aspiration pneumonia?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. Vomiting and impaired airway protection followed by dependent-lobe infiltrate strongly suggest aspiration.">Vomiting followed by dependent-lobe infiltrate and hypoxemia.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Allergies alone do not strongly suggest aspiration.">Seasonal allergies with clear breath sounds.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Chronic hyperinflation points more toward obstructive disease.">Chronic hyperinflation and low FEV₁/FVC.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Sudden chest pain with clear x-ray does not fit aspiration pneumonia.">Sudden chest pain with clear x-ray.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq4">
+              <h3>Question 4</h3>
+              <p>Which intervention bundle best supports VAP prevention?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. VAP prevention includes head-of-bed elevation, oral care, suctioning as indicated, and ventilator bundle adherence.">Head-of-bed elevation, oral care, suctioning as indicated, and ventilator bundle adherence.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Frequent unnecessary circuit changes do not prevent VAP and can increase risk.">Routine ventilator circuit changes every hour.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Keeping the patient flat increases aspiration risk.">Keeping the patient flat at all times.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Oral care is an important VAP prevention practice.">Avoiding oral care to prevent coughing.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+            <div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div>
+          </section>
+
+          <section id="faq">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common Pneumonia Questions</h2></div>
+            <details class="accordion" open><summary>Why does pneumonia cause hypoxemia?</summary><div class="accordion-body"><p>Alveoli fill with inflammatory material, so affected lung regions are perfused but poorly ventilated. This creates low V/Q and shunt-like physiology.</p></div></details>
+            <details class="accordion"><summary>Is pneumonia only an oxygen problem?</summary><div class="accordion-body"><p>No. Pneumonia often starts with oxygenation impairment, but severe disease can cause fatigue, rising PaCO₂, acidemia, and ventilatory failure.</p></div></details>
+            <details class="accordion"><summary>When should the RT worry about sepsis?</summary><div class="accordion-body"><p>Hypotension, altered mental status, poor perfusion, fever, tachycardia, and worsening respiratory status may suggest sepsis and require urgent escalation.</p></div></details>
+            <details class="accordion"><summary>What makes aspiration pneumonia different?</summary><div class="accordion-body"><p>Aspiration pneumonia follows inhalation of oral or gastric contents, often from vomiting, dysphagia, altered mental status, sedation, or poor airway protection.</p></div></details>
+            <details class="accordion"><summary>What is the RT role in sputum collection?</summary><div class="accordion-body"><p>RTs may help obtain an expectorated specimen or suctioned sample when ordered, especially when the patient has an artificial airway or weak cough.</p></div></details>
+            <details class="accordion"><summary>When is airway clearance most important?</summary><div class="accordion-body"><p>When secretions are copious, cough is weak, breath sounds are coarse or diminished, atelectasis is suspected, or secretion retention is worsening gas exchange.</p></div></details>
+          </section>
+
+          <section class="info-card" id="summary">
+            <h2>Summary & Clinical Pearls</h2>
+            <p>Pneumonia is an infectious lung disease that fills alveoli with inflammatory material, causing consolidation, V/Q mismatch, shunt-like hypoxemia, secretion burden, and increased work of breathing. Severe cases may progress to sepsis, ARDS, ventilatory failure, or airway protection failure.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Must know:</strong><br>Pneumonia causes alveolar filling and impaired oxygenation.</div>
+              <div class="example-box soft-amber"><strong>Board pearl:</strong><br>Rising PaCO₂ in a tiring pneumonia patient is dangerous.</div>
+              <div class="example-box soft-blue"><strong>RT pearl:</strong><br>Assess oxygenation, ventilation, WOB, breath sounds, sputum, cough, and response to therapy.</div>
+              <div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not focus only on antibiotics; RTs must recognize respiratory failure and airway clearance needs.</div>
+            </div>
+          </section>
+
+          <section id="glossary">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div>
+            <div class="glossary-card">
+              <h3>Searchable Glossary</h3>
+              <p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p>
+              <div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: consolidation, aspiration, V/Q mismatch..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div>
+              <div class="glossary-list" id="glossaryList"></div>
+            </div>
+            <div class="glossary-card" style="margin-top:18px;">
+              <h3>Glossary Flashcard Mastery Deck</h3>
+              <p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p>
+              <div class="flashcard-shell">
+                <div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div>
+                <div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+                <div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div>
+                <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div>
+                <div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+                <div class="completed-list" id="completedList"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+
+  <script>
+    const glossaryTerms = [
+      { term: "Pneumonia", definition: "An infection of the lung parenchyma that causes inflammation and alveolar filling.", rt: "Core infectious disease pattern tied to oxygenation, ventilation, and secretion assessment." },
+      { term: "Consolidation", definition: "Alveoli filled with inflammatory fluid, cells, organisms, or debris, making lung tissue denser.", rt: "Explains crackles, bronchial breath sounds, infiltrate, and impaired gas exchange." },
+      { term: "V/Q mismatch", definition: "An imbalance between ventilation and perfusion.", rt: "Major cause of hypoxemia in pneumonia." },
+      { term: "Shunt-like physiology", definition: "Perfusion continues through lung units that are poorly ventilated or not ventilated.", rt: "Explains why oxygenation can remain difficult in severe consolidation." },
+      { term: "Hypoxemia", definition: "Low oxygen level in arterial blood.", rt: "Guides oxygen device selection and escalation." },
+      { term: "Aspiration pneumonia", definition: "Pneumonia caused by inhalation of oral or gastric contents.", rt: "Think vomiting, dysphagia, altered LOC, poor airway protection, and suction/airway risk." },
+      { term: "Ventilator-associated pneumonia", definition: "Pneumonia associated with mechanical ventilation and new or worsening respiratory findings.", rt: "Connect to VAP prevention, suctioning, oral care, and ventilator changes." },
+      { term: "Hospital-acquired pneumonia", definition: "Pneumonia that develops during hospitalization.", rt: "Often has higher resistant organism concern and deterioration risk." },
+      { term: "Community-acquired pneumonia", definition: "Pneumonia acquired outside a hospital or long-term care facility.", rt: "Common board pattern with fever, cough, sputum, and infiltrate." },
+      { term: "Opportunistic pneumonia", definition: "Pneumonia occurring in an immunocompromised host.", rt: "May present subtly but progress quickly." },
+      { term: "Sepsis", definition: "Life-threatening organ dysfunction caused by a dysregulated response to infection.", rt: "Suspect when pneumonia pairs with hypotension, AMS, poor perfusion, or lactate concern." },
+      { term: "ARDS", definition: "Acute respiratory distress syndrome involving severe inflammatory lung injury and refractory hypoxemia.", rt: "Possible severe pneumonia complication." },
+      { term: "HFNC", definition: "High-flow nasal cannula delivers heated humidified oxygen at high flows with adjustable FiO₂.", rt: "May support moderate to severe hypoxemia and reduce work of breathing." },
+      { term: "Airway clearance", definition: "Interventions that help mobilize or remove secretions.", rt: "Includes cough coaching, PEP, CPT when indicated, and suctioning." },
+      { term: "PEP therapy", definition: "Positive expiratory pressure therapy used to support secretion mobilization in selected patients.", rt: "May help with secretion clearance when appropriate." },
+      { term: "Suctioning", definition: "Mechanical removal of secretions from the airway.", rt: "Important when cough is weak, artificial airway is present, or secretions compromise ventilation." },
+      { term: "Bronchial breath sounds", definition: "Louder, harsher breath sounds heard over consolidated lung tissue.", rt: "Can support localization of pneumonia." },
+      { term: "Atelectasis", definition: "Collapse or incomplete expansion of alveoli.", rt: "Can worsen oxygenation and occur with mucus plugging or shallow breathing." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => { btn.disabled = true; if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice"); });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeSortActivity(activitySelector, buttonId, statusId) { const activity = document.querySelector(activitySelector); const button = document.getElementById(buttonId); const status = document.getElementById(statusId); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeSortActivity("#types .activity-card.require-complete", "checkTypeSort", "typeSortStatus");
+    initializeSortActivity("#red-flags .activity-card.require-complete", "checkRedFlagSort", "redFlagSortStatus");
+
+    function shuffleSequence() { const container = document.getElementById("sequenceSort"); if (!container) return; const rows = Array.from(container.querySelectorAll(":scope > .sort-row")); for (let i = rows.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [rows[i], rows[j]] = [rows[j], rows[i]]; } rows.forEach(row => container.appendChild(row)); }
+    function normalizeSequenceRanks(changedSelect) { const container = document.getElementById("sequenceSort"); const rows = Array.from(container.querySelectorAll(":scope > .sort-row")); const changedRow = changedSelect.closest(".sort-row"); const chosenRank = Number(changedSelect.value); if (!chosenRank) return; const otherRows = rows.filter(row => row !== changedRow); const occupied = otherRows.map(row => ({ row, rank: Number(row.querySelector("select").value) })).filter(item => item.rank).sort((a, b) => a.rank - b.rank); const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row); bumpedRows.forEach(row => { const select = row.querySelector("select"); const current = Number(select.value); if (current < rows.length) select.value = String(current + 1); else select.value = ""; }); const used = new Set([chosenRank]); rows.forEach(row => { if (row === changedRow) return; const select = row.querySelector("select"); let rank = Number(select.value); if (!rank) return; while (used.has(rank) && rank < rows.length) rank++; if (used.has(rank)) select.value = ""; else { select.value = String(rank); used.add(rank); } }); }
+    function reorderSequenceRows() { const container = document.getElementById("sequenceSort"); const rows = Array.from(container.querySelectorAll(":scope > .sort-row")); rows.sort((a, b) => { const aVal = Number(a.querySelector("select").value) || 99; const bVal = Number(b.querySelector("select").value) || 99; if (aVal !== bVal) return aVal - bVal; return Number(a.dataset.answer) - Number(b.dataset.answer); }); rows.forEach(row => container.appendChild(row)); }
+    function enableDynamicReorder() { const container = document.getElementById("sequenceSort"); if (!container) return; container.querySelectorAll(".order-select").forEach(select => { select.addEventListener("change", () => { container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect")); normalizeSequenceRanks(select); reorderSequenceRows(); }); }); }
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    shuffleSequence(); enableDynamicReorder(); initializeSequenceSort();
+
+    function initializeKnowledgeCheck() { const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return; const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length; document.querySelectorAll(".knowledge-option").forEach(option => { option.addEventListener("click", () => { const question = option.closest(".knowledge-question"); if (question.dataset.correctAnswered === "true") return; const feedback = question.querySelector(".quiz-feedback"); const isCorrect = option.dataset.correct === "true"; question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { question.dataset.correctAnswered = "true"; answered.add(option.dataset.question); question.querySelectorAll(".knowledge-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>"; } else { option.classList.add("incorrect-choice"); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question."; } status.textContent = `${answered.size} / ${total} questions answered correctly`; if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); } }); }); }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() { document.querySelectorAll("#precheck .quiz-option").forEach(button => { button.addEventListener("click", () => { const section = button.closest(".require-complete"); if (section.dataset.correctAnswered === "true") return; const feedback = document.getElementById("quizFeedback"); const isCorrect = button.dataset.correct === "true"; section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { section.dataset.correctAnswered = "true"; section.querySelectorAll(".quiz-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = "<strong>Correct.</strong> Pneumonia fills alveoli with inflammatory material, creating poor ventilation to perfused lung units and causing hypoxemia.<br><br><strong>You may continue.</strong>"; markActivityComplete(section); } else { button.classList.add("incorrect-choice"); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = "<strong>Not quite.</strong> Pneumonia is primarily an alveolar infection/consolidation problem that creates V/Q mismatch and shunt-like hypoxemia.<br><br><strong>Try again:</strong> Choose the correct answer to continue."; } }); }); }
+    initializePrecheck();
+
+    function initializeSingleQuestionActivity(activityId, optionClass) { const activity = document.getElementById(activityId); if (!activity) return; activity.querySelectorAll(`.${optionClass}`).forEach(button => { button.addEventListener("click", () => { if (activity.dataset.correctAnswered === "true") return; const feedback = activity.querySelector(".quiz-feedback"); const isCorrect = button.dataset.correct === "true"; activity.querySelectorAll(`.${optionClass}`).forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { activity.dataset.correctAnswered = "true"; activity.querySelectorAll(`.${optionClass}`).forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>"; markActivityComplete(activity); } else { button.classList.add("incorrect-choice"); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the best answer to continue."; } }); }); }
+    initializeSingleQuestionActivity("abg-activity", "abg-option");
+    initializeSingleQuestionActivity("clearance-activity", "clearance-option");
+  </script>
+</body>
+</html>
