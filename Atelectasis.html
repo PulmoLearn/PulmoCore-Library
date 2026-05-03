@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Atelectasis</title>
+
+  <!-- PulmoCore font direction. Replace with self-hosted or approved web fonts if needed. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Core</span></div>
+          <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#snapshot">Snapshot</a>
+        <a href="#pathophysiology">Pathophysiology</a>
+        <a href="#diagnostics">Diagnostics</a>
+        <a href="#management">Management</a>
+        <a href="#glossary">Glossary</a>
+      </nav>
+      <div class="mobile-menu-note">Menu</div>
+    </header>
+
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Atelectasis</h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Atelectasis is partial or complete collapse of alveoli or lung segments, causing reduced ventilation, decreased lung volume, impaired gas exchange, and increased work of breathing. This module focuses on RT-level recognition, prevention, diagnostics, lung expansion therapy, secretion management, and escalation when collapse contributes to hypoxemia or respiratory failure.</p>
+        <div class="case-meta" aria-label="Module details">
+          <div><strong>Category</strong><br>Restrictive / Volume-Loss Process</div>
+          <div><strong>Estimated Time</strong><br>30–40 minutes</div>
+          <div><strong>Level</strong><br>Core RT Knowledge</div>
+        </div>
+      </section>
+
+      <div class="content-layout">
+        <aside class="side-nav" aria-label="Disease page quick navigation">
+          <h3>Lesson Sections</h3>
+          <a href="#objectives">Objectives</a>
+          <a href="#snapshot">Disease Snapshot</a>
+          <a href="#precheck">Quick Pre-Check</a>
+          <a href="#pathophysiology">Pathophysiology</a>
+          <a href="#causes">Causes</a>
+          <a href="#manifestations">Clinical Manifestations</a>
+          <a href="#diagnostics">Diagnostics</a>
+          <a href="#severity">Severity + Patterns</a>
+          <a href="#red-flags">Red Flags</a>
+          <a href="#management">Management</a>
+          <a href="#escalation">Escalation</a>
+          <a href="#rt-role">RT Role</a>
+          <a href="#case-study">Case Study</a>
+          <a href="#knowledge-check">Knowledge Check</a>
+          <a href="#faq">FAQ</a>
+          <a href="#summary">Summary</a>
+          <a href="#glossary">Glossary Deck</a>
+        </aside>
+
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives">
+            <h2>Learning Objectives</h2>
+            <p>By the end of this atelectasis module, learners should be able to connect alveolar collapse, causes of low lung volume, clinical findings, imaging patterns, oxygenation changes, lung expansion therapy, and RT escalation priorities.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how alveolar collapse decreases ventilation, lung volume, compliance, and V/Q matching.</div>
+              <div class="example-box soft-blue"><strong>2. Identify causes</strong><br>Differentiate obstructive, compression, adhesive, passive, and postoperative atelectasis.</div>
+              <div class="example-box soft-amber"><strong>3. Interpret assessment data</strong><br>Use breath sounds, SpO₂, ABGs, chest x-ray, lung volume signs, and response to therapy to determine severity.</div>
+              <div class="example-box soft-coral"><strong>4. Choose RT interventions</strong><br>Select lung expansion therapy, secretion clearance, positioning, oxygen support, and escalation based on the likely cause.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="snapshot">
+            <h2>Disease Snapshot</h2>
+            <p>Atelectasis means alveoli are not fully open. Collapsed or underinflated alveoli receive little or no ventilation, while perfusion may continue. This creates V/Q mismatch or shunt-like physiology and can cause hypoxemia, especially after surgery, prolonged bedrest, mucus plugging, shallow breathing, or airway obstruction.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>What it is:</strong><br>Collapse or incomplete expansion of alveoli, segments, lobes, or an entire lung.</div>
+              <div class="example-box soft-teal"><strong>Primary problem:</strong><br>Reduced ventilation to affected lung units.</div>
+              <div class="example-box soft-teal"><strong>Classic clues:</strong><br>Low lung volumes, diminished breath sounds, hypoxemia, crackles, fever after surgery, and volume-loss signs.</div>
+              <div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Chest x-ray showing opacity plus volume loss, elevated diaphragm, fissure shift, or mediastinal shift toward collapse.</div>
+              <div class="example-box soft-teal"><strong>Acute danger:</strong><br>Large mucus plug, lobar collapse, severe hypoxemia, rising WOB, or failure to improve.</div>
+              <div class="example-box soft-teal"><strong>RT priority:</strong><br>Improve alveolar recruitment and ventilation while treating the cause of collapse.</div>
+            </div>
+            <article class="info-card rt" style="margin-top:16px;">
+              <h3>RT Clinical Connection</h3>
+              <p>For RTs, atelectasis is a volume and ventilation problem. The RT must decide whether the patient needs deep breathing, incentive spirometry, positive pressure lung expansion, airway clearance, bronchodilator support, oxygen, or urgent escalation for obstruction.</p>
+            </article>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Prep Frame</h3>
+              <p>Immediately associate atelectasis with low lung volume, decreased compliance, diminished breath sounds, postoperative shallow breathing, mucus plugs, hypoxemia from V/Q mismatch, and improvement with lung expansion or secretion clearance when appropriately selected.</p>
+            </article>
+          </section>
+
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check">
+            <span class="eyebrow">Quick Pre-Check</span>
+            <h2>Start with the core atelectasis pattern</h2>
+            <p>Which statement best describes the core problem in atelectasis?</p>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false">The pulmonary arteries are blocked by thrombi, preventing perfusion to ventilated alveoli.</button>
+              <button class="quiz-option" data-correct="true">Alveoli collapse or underinflate, reducing ventilation and gas exchange in affected lung units.</button>
+              <button class="quiz-option" data-correct="false">The airways become chronically inflamed and episodically bronchospastic with reversible obstruction.</button>
+              <button class="quiz-option" data-correct="false">The alveoli are permanently destroyed, causing nonreversible emphysema.</button>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback" role="status"></div>
+          </section>
+
+          <section class="info-card" id="pathophysiology">
+            <h2>Anatomy & Pathophysiology</h2>
+            <p>Atelectasis occurs when alveoli lose volume or fail to open. This reduces ventilated surface area, lowers compliance, increases work of breathing, and can create hypoxemia because blood may still flow past poorly ventilated alveoli.</p>
+            <img src="atelectasis-pathophysiology.png" alt="Diagram showing alveolar collapse, reduced lung volume, and V/Q mismatch in atelectasis" style="margin-top:14px; border-radius: var(--radius-lg); border:1px solid var(--soft-border); box-shadow: var(--shadow-soft);">
+            <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">
+              Shallow breathing, obstruction, compression, or surfactant loss → alveolar collapse → reduced lung volume and compliance → V/Q mismatch or shunt-like physiology → hypoxemia and increased work of breathing.
+            </div>
+            <h3 style="margin-top:22px;">What Changes During Atelectasis</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Atelectasis Change</th><th>What Happens</th><th>Why It Matters</th></tr>
+                <tr><td>Alveolar collapse</td><td>Alveoli lose volume or close.</td><td>Less surface area is available for ventilation and gas exchange.</td></tr>
+                <tr><td>Reduced compliance</td><td>Collapsed lung units are harder to inflate.</td><td>Work of breathing increases and tidal volumes may fall.</td></tr>
+                <tr><td>V/Q mismatch</td><td>Perfusion continues through poorly ventilated areas.</td><td>Hypoxemia may occur and may not fully correct if shunt is significant.</td></tr>
+                <tr><td>Volume loss</td><td>Fissures, diaphragm, or mediastinum may shift toward the collapse.</td><td>These are high-yield x-ray clues.</td></tr>
+                <tr><td>Secretion retention</td><td>Mucus may block airways or worsen collapse.</td><td>Airway clearance may be required, not just oxygen.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:22px;">Oxygenation Concept</h3>
+            <p>Oxygen may improve SpO₂, but oxygen alone does not reopen collapsed alveoli or remove a mucus plug. If the cause is poor expansion, the patient needs recruitment strategies such as deep breathing, incentive spirometry, CPAP/PEP, positioning, ambulation, or positive pressure therapy when indicated.</p>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Danger Sign</h3>
+              <p>Sudden unilateral breath sound loss with acute hypoxemia after surgery or prolonged ventilation should raise concern for mucus plug with lobar or whole-lung collapse.</p>
+            </article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Atelectasis Hotspot Graphic">
+              <h3>Click the Atelectasis Hotspots</h3>
+              <p>Click each hotspot to reveal how that structure contributes to atelectasis.</p>
+              <div class="hotspot-demo">
+                <div class="hotspot-lung" aria-label="Simplified atelectasis lung graphic with clickable hotspots">
+                  <svg viewBox="0 0 240 240" fill="none" aria-hidden="true">
+                    <path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/>
+                    <ellipse cx="75" cy="158" rx="30" ry="18" fill="#E85D5D" opacity=".55"/>
+                    <ellipse cx="162" cy="162" rx="25" ry="14" fill="#E85D5D" opacity=".35"/>
+                    <circle cx="120" cy="116" r="14" fill="#1CA7A8"/>
+                  </svg>
+                  <button class="hotspot-btn" style="left:28%; top:62%;" data-title="Collapsed Alveoli" data-text="Collapsed alveoli receive little ventilation, reducing gas exchange and lowering lung volume.">1</button>
+                  <button class="hotspot-btn" style="left:43%; top:48%;" data-title="Mucus Plug" data-text="Secretions can obstruct an airway so distal alveoli absorb gas and collapse.">2</button>
+                  <button class="hotspot-btn" style="right:27%; top:65%;" data-title="Reduced Compliance" data-text="Collapsed areas become harder to inflate, increasing work of breathing.">3</button>
+                  <button class="hotspot-btn" style="right:39%; bottom:19%;" data-title="V/Q Mismatch" data-text="Perfusion may continue through poorly ventilated regions, causing hypoxemia.">4</button>
+                </div>
+                <div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div>
+              </div>
+              <div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="causes">
+            <h2>Etiology, Causes & Risk Factors</h2>
+            <p>Atelectasis can occur when airways are blocked, the lung is compressed, surfactant is inadequate, or the patient does not take deep breaths. Postoperative atelectasis is common because pain, sedation, immobility, and shallow breathing reduce alveolar expansion.</p>
+            <img src="atelectasis-causes.png" alt="Visual showing obstructive, compression, adhesive, passive, and postoperative mechanisms of atelectasis" style="margin-top:14px; border-radius: var(--radius-lg); border:1px solid var(--soft-border); box-shadow: var(--shadow-soft);">
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Type or Cause</th><th>Why It Matters</th><th>RT Focus</th></tr>
+                <tr><td>Obstructive</td><td>Mucus plug, foreign body, or tumor blocks airflow distal to obstruction.</td><td>Airway clearance, suctioning, bronchoscopy escalation if severe.</td></tr>
+                <tr><td>Compression</td><td>Pleural effusion, pneumothorax, mass, or abdominal distention compresses lung tissue.</td><td>Support oxygenation and notify team; expansion alone may not fix external pressure.</td></tr>
+                <tr><td>Passive</td><td>Low lung volumes from shallow breathing, immobility, pain, or sedation.</td><td>Incentive spirometry, deep breathing, ambulation, positioning.</td></tr>
+                <tr><td>Adhesive</td><td>Surfactant deficiency or dysfunction promotes alveolar collapse.</td><td>Recognize high-risk patients and support recruitment as ordered.</td></tr>
+                <tr><td>Postoperative</td><td>Pain and anesthesia reduce cough, sigh breaths, and lung expansion.</td><td>Teach splinting, IS, cough, deep breathing, early mobility.</td></tr>
+              </table>
+            </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Atelectasis Cause Sorting">
+              <h3>Sort the Atelectasis Factors</h3>
+              <p>Choose the best category for each item, then check your answers.</p>
+              <div class="sort-grid" id="riskSort">
+                <div class="sort-row" data-answer="obstructive"><strong>Mucus plug after abdominal surgery</strong><select aria-label="Category for mucus plug"><option value="">Choose category</option><option value="obstructive">Obstructive Cause</option><option value="passive">Passive/Low-Volume Cause</option><option value="compression">Compression Cause</option></select></div>
+                <div class="sort-row" data-answer="passive"><strong>Shallow breathing from incisional pain</strong><select aria-label="Category for shallow breathing"><option value="">Choose category</option><option value="obstructive">Obstructive Cause</option><option value="passive">Passive/Low-Volume Cause</option><option value="compression">Compression Cause</option></select></div>
+                <div class="sort-row" data-answer="compression"><strong>Large pleural effusion</strong><select aria-label="Category for pleural effusion"><option value="">Choose category</option><option value="obstructive">Obstructive Cause</option><option value="passive">Passive/Low-Volume Cause</option><option value="compression">Compression Cause</option></select></div>
+                <div class="sort-row" data-answer="obstructive"><strong>Foreign body blocking a bronchus</strong><select aria-label="Category for foreign body"><option value="">Choose category</option><option value="obstructive">Obstructive Cause</option><option value="passive">Passive/Low-Volume Cause</option><option value="compression">Compression Cause</option></select></div>
+                <div class="sort-row" data-answer="passive"><strong>Immobility with poor deep breathing</strong><select aria-label="Category for immobility"><option value="">Choose category</option><option value="obstructive">Obstructive Cause</option><option value="passive">Passive/Low-Volume Cause</option><option value="compression">Compression Cause</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button>
+              <div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="manifestations">
+            <h2>Clinical Manifestations</h2>
+            <p>Atelectasis may be subtle or severe depending on the amount of lung involved. RT assessment should focus on breath sounds, oxygenation, work of breathing, cough effectiveness, secretion burden, fever, and risk factors such as recent surgery or immobility.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Finding Type</th><th>What the RT May See</th></tr>
+                <tr><td>Symptoms</td><td>Dyspnea, cough, chest discomfort, difficulty taking a deep breath, or mild symptoms if small area involved.</td></tr>
+                <tr><td>Appearance</td><td>Tachypnea, shallow breathing, splinting, guarded cough, postoperative discomfort.</td></tr>
+                <tr><td>Breath sounds</td><td>Diminished or absent over affected area; fine crackles may occur as alveoli reopen.</td></tr>
+                <tr><td>Oxygenation clues</td><td>Low SpO₂ or PaO₂ from V/Q mismatch or shunt-like physiology.</td></tr>
+                <tr><td>Ventilation clues</td><td>Usually normal PaCO₂ early; rising PaCO₂ suggests fatigue, severe disease, or ventilatory failure.</td></tr>
+                <tr><td>Postoperative clues</td><td>Low-grade fever, shallow breathing, poor cough, low volumes on IS.</td></tr>
+              </table>
+            </div>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Important Teaching Point</h3>
+              <p>Do not treat every opacity as pneumonia. Atelectasis often has volume-loss signs. Pneumonia is infection and consolidation; atelectasis is collapse or underinflation.</p>
+            </article>
+          </section>
+
+          <section class="info-card board" id="diagnostics">
+            <h2>Diagnostics & Assessment</h2>
+            <p>Diagnostic data helps confirm volume loss, determine extent of collapse, identify obstruction or compression, and evaluate oxygenation impact.</p>
+            <h3 style="margin-top:18px;">Chest X-ray and Imaging</h3>
+            <img src="atelectasis-xray-patterns.png" alt="Chest x-ray teaching visual showing atelectasis opacity with volume loss and mediastinal or fissure shift" style="margin-top:14px; border-radius: var(--radius-lg); border:1px solid var(--soft-border); box-shadow: var(--shadow-soft);">
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Finding</th><th>Atelectasis Pattern</th></tr>
+                <tr><td>Opacity</td><td>Collapsed region may appear denser or whiter.</td></tr>
+                <tr><td>Volume loss</td><td>Key distinguishing clue; affected area shrinks.</td></tr>
+                <tr><td>Fissure shift</td><td>Fissures may move toward the collapsed segment or lobe.</td></tr>
+                <tr><td>Elevated hemidiaphragm</td><td>Can occur on the side of lower-volume lung.</td></tr>
+                <tr><td>Mediastinal shift</td><td>Often shifts toward significant collapse; away from tension processes.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:18px;">ABG and Oxygenation Patterns</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Pattern</th><th>Meaning</th></tr>
+                <tr><td>Low PaO₂ or low SpO₂</td><td>Hypoxemia from V/Q mismatch or shunt-like physiology.</td></tr>
+                <tr><td>Normal PaCO₂ early</td><td>Ventilation may be preserved if collapse is limited.</td></tr>
+                <tr><td>Rising PaCO₂</td><td>Concerning for fatigue, extensive disease, or inadequate ventilation.</td></tr>
+                <tr><td>Poor oxygen response</td><td>May suggest shunt physiology or significant collapse requiring recruitment/cause correction.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:18px;">Bedside Assessment</h3>
+            <p>Compare breath sounds bilaterally, assess cough strength and secretion clearance, review recent surgery/anesthesia/pain control, measure IS volume trends, evaluate mobility, and reassess after lung expansion therapy.</p>
+          </section>
+
+          <section class="info-card" id="severity">
+            <h2>Severity Patterns & High-Yield Differentiation</h2>
+            <p>Severity depends on how much lung is collapsed, whether hypoxemia is present, whether the cause is reversible, and whether the patient can cough, expand lung volume, and maintain ventilation.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Pattern</th><th>Typical Clue</th><th>RT Meaning</th></tr>
+                <tr><td>Small subsegmental atelectasis</td><td>Mild hypoxemia or minimal symptoms.</td><td>Encourage expansion, mobility, cough, and reassessment.</td></tr>
+                <tr><td>Lobar atelectasis</td><td>Marked diminished sounds and x-ray volume loss.</td><td>Consider obstruction, secretion clearance, positive pressure, and escalation.</td></tr>
+                <tr><td>Compression atelectasis</td><td>Effusion, pneumothorax, or external pressure.</td><td>External cause must be treated; expansion therapy alone may fail.</td></tr>
+                <tr><td>Postoperative atelectasis</td><td>Shallow breathing, low IS volumes, pain, low-grade fever.</td><td>Prevention and early RT intervention are high-yield.</td></tr>
+              </table>
+            </div>
+            <div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Mild</strong><br>Small area, stable SpO₂, low symptoms, improves with deep breathing and mobility.</div>
+              <div class="example-box soft-amber"><strong>Moderate</strong><br>Persistent hypoxemia, poor IS volumes, secretion retention, diminished breath sounds.</div>
+              <div class="example-box soft-coral"><strong>Severe</strong><br>Lobar/whole-lung collapse, acute distress, sudden unilateral breath sound loss, or rising CO₂.</div>
+            </div>
+            <article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="Atelectasis Pattern Activity">
+              <h3>Pattern Recognition Activity</h3>
+              <p>A postoperative patient has shallow breathing, SpO₂ 89% on room air, diminished bases, and chest x-ray showing bibasilar opacities with low lung volumes. What is the most likely RT priority?</p>
+              <div class="quiz-options">
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Antibiotics may be needed for infection, but this pattern most strongly suggests low-volume atelectasis first.">Request antibiotics as the only priority.</button>
+                <button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Low lung volumes, shallow breathing, and postoperative bibasilar findings point to lung expansion therapy, cough/deep breathing, pain splinting, and mobility.">Promote lung expansion with IS/deep breathing, cough, positioning, and mobility.</button>
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Bronchodilators help bronchospasm, but atelectasis from shallow breathing needs recruitment and expansion.">Give only a bronchodilator and avoid reassessment.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="red-flags">
+            <h2>Severity & Red Flags</h2>
+            <p>The key question is not simply “Is there atelectasis?” The key question is whether collapse is causing hypoxemia, poor ventilation, or a sign of a serious airway obstruction or compression process.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Red Flag</th><th>Why It Matters</th></tr>
+                <tr><td>Sudden unilateral diminished or absent breath sounds</td><td>May indicate mucus plug, mainstem obstruction, pneumothorax, or major collapse.</td></tr>
+                <tr><td>Severe or worsening hypoxemia</td><td>Suggests significant V/Q mismatch or shunt-like physiology.</td></tr>
+                <tr><td>Rising PaCO₂ with fatigue</td><td>Suggests worsening ventilation or respiratory muscle fatigue.</td></tr>
+                <tr><td>Whole-lung or lobar collapse</td><td>May require urgent physician notification, bronchoscopy, or advanced support.</td></tr>
+                <tr><td>Failure to improve after appropriate therapy</td><td>Cause may be obstruction, compression, or another diagnosis.</td></tr>
+                <tr><td>Hemodynamic instability or tracheal deviation</td><td>Think tension pneumothorax or major mediastinal shift, not simple atelectasis.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="info-card" id="management">
+            <h2>Management & Treatment</h2>
+            <p>Atelectasis management depends on the cause. Oxygen supports hypoxemia, but the RT priority is to restore ventilation to collapsed regions when possible and prevent further collapse.</p>
+            <h3 style="margin-top:18px;">Intervention Options</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Intervention</th><th>Best Use</th><th>Why It Helps</th></tr>
+                <tr><td>Incentive spirometry</td><td>Postoperative or low-volume atelectasis prevention/treatment.</td><td>Encourages sustained maximal inspiration and alveolar recruitment.</td></tr>
+                <tr><td>Deep breathing/coughing</td><td>Shallow breathing or retained secretions.</td><td>Improves lung expansion and secretion mobilization.</td></tr>
+                <tr><td>Early mobility/ambulation</td><td>Postoperative or immobile patients.</td><td>Improves ventilation distribution and lung volumes.</td></tr>
+                <tr><td>PEP/CPAP/IPPB</td><td>Poor inspiratory effort or persistent low volumes when indicated.</td><td>Provides positive pressure to help recruit alveoli.</td></tr>
+                <tr><td>Suctioning/airway clearance</td><td>Secretion retention or mucus plugging risk.</td><td>Removes obstruction and improves distal ventilation.</td></tr>
+                <tr><td>Bronchoscopy escalation</td><td>Suspected large mucus plug or unresolved lobar collapse.</td><td>May directly remove obstructing material.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:18px;">Cause → Intervention Logic</h3>
+            <p>If the cause is shallow breathing, choose lung expansion and mobility. If the cause is mucus plugging, prioritize airway clearance and possible bronchoscopy escalation. If the cause is compression, the external pressure must be treated while oxygenation is supported.</p>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Atelectasis Treatment Sequence">
+              <h3>Postoperative Atelectasis RT Sequence</h3>
+              <p>Select the steps in the best general order for a stable postoperative patient with suspected low-volume atelectasis.</p>
+              <div class="sort-grid" id="sequenceSort">
+                <div class="sort-row" data-answer="1" data-sequence-item="Assess oxygenation, breath sounds, WOB, and surgical pain"><strong>Assess oxygenation, breath sounds, WOB, and surgical pain</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="2" data-sequence-item="Apply oxygen as needed and position upright"><strong>Apply oxygen as needed and position upright</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="3" data-sequence-item="Coach splinted cough and deep breathing"><strong>Coach splinted cough and deep breathing</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="4" data-sequence-item="Use incentive spirometry with correct technique"><strong>Use incentive spirometry with correct technique</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="5" data-sequence-item="Encourage mobility and reassess response"><strong>Encourage mobility and reassess response</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="6" data-sequence-item="Escalate if hypoxemia, obstruction, or collapse persists"><strong>Escalate if hypoxemia, obstruction, or collapse persists</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button>
+              <div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="escalation">
+            <h2>Escalation & Advanced Considerations</h2>
+            <p>Most mild postoperative atelectasis improves with lung expansion, cough, mobility, and pain control. Escalation is needed when collapse is extensive, oxygenation worsens, obstruction is suspected, or the patient cannot maintain ventilation.</p>
+            <div class="three-card-grid" style="margin-top:16px;">
+              <div class="example-box soft-coral"><strong>Watch for:</strong><br>Sudden breath sound loss, severe hypoxemia, fatigue, rising PaCO₂, persistent lobar collapse.</div>
+              <div class="example-box soft-amber"><strong>Escalate for:</strong><br>Suspected mucus plug, unresolved lobar collapse, worsening oxygen need, or poor cough clearance.</div>
+              <div class="example-box soft-blue"><strong>Support concept:</strong><br>Positive pressure may recruit alveoli, but obstruction or compression must be corrected.</div>
+            </div>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Pearl</h3>
+              <p>Atelectasis shifts structures toward volume loss. Tension pneumothorax pushes structures away. On board-style questions, this direction of shift helps separate collapse from pressure buildup.</p>
+            </article>
+          </section>
+
+          <section class="info-card rt" id="rt-role">
+            <h2>Respiratory Therapist Role</h2>
+            <p>The RT is central to atelectasis prevention, early recognition, treatment delivery, monitoring, patient coaching, and escalation. The RT should assess risk, teach lung expansion, evaluate cough and secretions, and document response.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr>
+                <tr><td>Assess ventilation</td><td>RR, pattern, tidal depth, PaCO₂ trend, fatigue.</td><td>Detects worsening ventilation or poor expansion.</td></tr>
+                <tr><td>Assess oxygenation</td><td>SpO₂, PaO₂, oxygen need, response to recruitment.</td><td>Identifies severity and treatment response.</td></tr>
+                <tr><td>Evaluate breath sounds</td><td>Diminished areas, crackles, unilateral changes.</td><td>Helps localize collapse or obstruction.</td></tr>
+                <tr><td>Coach lung expansion</td><td>IS, deep breathing, splinting, positioning, mobility.</td><td>Prevents and treats low-volume atelectasis.</td></tr>
+                <tr><td>Clear secretions</td><td>Cough technique, suctioning, PEP, airway clearance.</td><td>Addresses obstructive atelectasis from mucus.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided Atelectasis Case">
+            <span class="eyebrow">Guided Unfolding Case Study</span>
+            <h2>The Post-Op Patient Who Cannot Take a Deep Breath</h2>
+            <p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p>
+
+            <div class="case-stage" data-case-stage="0">
+              <h3>Stage 1: Initial Presentation</h3>
+              <p>A 62-year-old patient is 18 hours post abdominal surgery. They are splinting their incision, taking shallow breaths, and have new oxygen need.</p>
+              <div class="case-meta"><div><strong>RR</strong><br>24/min</div><div><strong>SpO₂</strong><br>89% on room air</div><div><strong>Breath Sounds</strong><br>Diminished bases</div></div>
+              <p><strong>Decision Question:</strong> What is the priority first RT action?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Antibiotics may be considered if infection is suspected, but this presentation first suggests low-volume postoperative atelectasis.">Recommend antibiotics as the only immediate action.</button>
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The RT should assess severity, support oxygenation as needed, position upright, and begin lung expansion coaching.">Assess severity, support oxygenation, position upright, and begin lung expansion therapy.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A bronchodilator alone does not fix shallow breathing or collapsed alveoli unless bronchospasm is present.">Give only a bronchodilator and leave.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Postoperative atelectasis can worsen. It should not be ignored.">Wait until the next day because this is expected after surgery.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="1">
+              <h3>Stage 2: Imaging Result</h3>
+              <p>Chest x-ray shows bibasilar opacities with low lung volumes. The patient’s cough is weak because of pain.</p>
+              <p><strong>Decision Question:</strong> Which finding supports atelectasis more than simple pneumonia?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Volume loss is a key atelectasis clue. Pneumonia may cause opacity, but atelectasis classically produces signs of collapse.">Low lung volumes and volume-loss pattern.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Fever alone does not distinguish pneumonia from postoperative atelectasis.">Low-grade fever alone.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Cough can occur with both conditions and is not specific enough by itself.">Cough only.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen need tells severity but does not identify the cause.">Need for supplemental oxygen only.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="2">
+              <h3>Stage 3: Treatment Coaching</h3>
+              <p>The patient performs a quick, shallow breath on the incentive spirometer and immediately exhales. The volume is far below predicted.</p>
+              <p><strong>Decision Question:</strong> What should the RT coach?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Incentive spirometry requires a slow, sustained maximal inspiration, breath hold, and controlled exhalation. Splinting helps reduce pain.">Slow sustained inspiration, short breath hold, controlled exhalation, and splinted cough.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Rapid shallow breaths do not recruit alveoli well and may worsen fatigue.">Rapid shallow breaths for one minute.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Avoiding cough increases secretion retention and may worsen atelectasis.">Avoid coughing because it always harms the incision.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bedrest can worsen low-volume atelectasis; mobility often helps when safe.">Stay flat in bed and avoid movement.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="3">
+              <h3>Stage 4: Worsening Scenario</h3>
+              <p>Later, the patient has sudden marked decrease in right-sided breath sounds, increased distress, and SpO₂ drops despite oxygen.</p>
+              <p><strong>Decision Question:</strong> What is the best interpretation?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Sudden unilateral breath sound loss with hypoxemia suggests major obstruction/collapse or pneumothorax and needs urgent reassessment and escalation.">Possible mucus plug, major collapse, or pneumothorax requiring urgent escalation.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Sudden worsening is not reassuring and should not be dismissed.">Normal expected recovery after surgery.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Incentive spirometry alone may be inadequate when major obstruction or pneumothorax is possible.">Continue only incentive spirometry and do not notify anyone.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This is not primarily an asthma pattern unless bronchospasm is present.">Classic mild asthma with no need for further assessment.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="4">
+              <h3>Case Wrap-Up</h3>
+              <div class="example-box soft-teal"><strong>RT Takeaway:</strong> Atelectasis is treated by matching the intervention to the cause: lung expansion for low-volume collapse, airway clearance for mucus obstruction, and escalation for compression or unresolved lobar collapse.</div>
+              <div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> sudden unilateral breath sound loss, severe hypoxemia, rising PaCO₂, or failure to respond means reassess immediately and escalate.</div>
+            </div>
+          </section>
+
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Atelectasis Knowledge Check">
+            <span class="eyebrow">Knowledge Check</span>
+            <h2>Board-Style Practice</h2>
+            <p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p>
+
+            <div class="knowledge-question" data-question-id="kq1">
+              <h3>Question 1</h3>
+              <p>A postoperative patient has shallow breathing, diminished bases, low IS volumes, and mild hypoxemia. Which intervention is most directly targeted to the likely cause?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Low-volume postoperative atelectasis is treated with lung expansion, cough/deep breathing, positioning, and mobility.">Incentive spirometry with coached deep breathing and early mobility.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Oxygen supports hypoxemia but does not reopen collapsed alveoli by itself.">Oxygen only with no lung expansion therapy.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Bronchodilators help bronchospasm, not simple low-volume collapse.">Bronchodilator as the only intervention.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Strict bedrest may worsen atelectasis.">Strict bedrest with no coughing.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq2">
+              <h3>Question 2</h3>
+              <p>Which chest x-ray finding most strongly supports atelectasis?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Atelectasis is collapse, so volume loss and shift toward the affected area are high-yield clues.">Opacity with volume loss and fissure or mediastinal shift toward the affected side.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Hyperinflation is more associated with obstructive air trapping.">Diffuse hyperinflation with flattened diaphragms only.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Cardiomegaly alone does not diagnose atelectasis.">Cardiomegaly without lung volume change.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Tension pneumothorax tends to push structures away from the affected side.">Mediastinal shift away from the affected side due to pressure buildup.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq3">
+              <h3>Question 3</h3>
+              <p>A ventilated patient suddenly develops absent breath sounds on the right with severe hypoxemia. A mucus plug is suspected. What is the best RT priority?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. Suspected mucus plug with acute collapse requires urgent assessment, suction/airway clearance as appropriate, and escalation for bronchoscopy if unresolved.">Urgent reassessment, airway clearance/suctioning as appropriate, and escalation if unresolved.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Ignoring sudden breath sound loss and hypoxemia is unsafe.">Wait until morning rounds.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. IS is not appropriate for an intubated patient with suspected acute obstruction.">Hand the patient an incentive spirometer.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Antibiotics do not remove an obstructing mucus plug.">Request antibiotics as the only intervention.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq4">
+              <h3>Question 4</h3>
+              <p>Why can atelectasis cause hypoxemia?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Blood may continue flowing through collapsed or poorly ventilated lung units, creating V/Q mismatch or shunt-like physiology.">Perfusion may continue through poorly ventilated or collapsed alveoli.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Atelectasis does not improve ventilation to the affected area.">Ventilation increases more than perfusion in the collapsed area.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Atelectasis is not primarily caused by permanent alveolar wall destruction.">Alveoli are permanently destroyed like emphysema.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Atelectasis is a ventilation/volume-loss problem, not primarily a pulmonary artery embolus.">Pulmonary arteries are blocked while alveoli remain fully ventilated.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div>
+          </section>
+
+          <section id="faq">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common Atelectasis Questions</h2></div>
+            <details class="accordion" open><summary>What is the simplest way to understand atelectasis?</summary><div class="accordion-body"><p>Atelectasis means alveoli or lung segments are collapsed or underinflated, so they are not ventilating effectively.</p></div></details>
+            <details class="accordion"><summary>How is atelectasis different from pneumonia?</summary><div class="accordion-body"><p>Atelectasis is collapse and volume loss. Pneumonia is infection and inflammatory consolidation. Both can look like opacities, but atelectasis often shows volume-loss signs.</p></div></details>
+            <details class="accordion"><summary>Why does surgery increase atelectasis risk?</summary><div class="accordion-body"><p>Pain, sedation, anesthesia, immobility, and weak cough reduce deep breaths and secretion clearance, allowing alveoli to collapse.</p></div></details>
+            <details class="accordion"><summary>Does oxygen fix atelectasis?</summary><div class="accordion-body"><p>Oxygen can improve hypoxemia, but it does not reopen alveoli or remove obstruction. Lung expansion and cause correction are still needed.</p></div></details>
+            <details class="accordion"><summary>When is bronchoscopy considered?</summary><div class="accordion-body"><p>Bronchoscopy may be considered when a mucus plug or obstructing material is suspected and collapse or hypoxemia does not resolve with less invasive airway clearance.</p></div></details>
+            <details class="accordion"><summary>What is the key x-ray clue?</summary><div class="accordion-body"><p>Volume loss is the key clue. Look for elevated diaphragm, fissure shift, crowding, and mediastinal shift toward the collapsed side.</p></div></details>
+            <details class="accordion"><summary>What should RTs teach after surgery?</summary><div class="accordion-body"><p>Teach splinting, slow sustained incentive spirometry, deep breathing, effective cough, upright positioning, and early mobility when safe.</p></div></details>
+          </section>
+
+          <section class="info-card" id="summary">
+            <h2>Summary & Clinical Pearls</h2>
+            <p>Atelectasis is collapse or underinflation of alveoli that reduces ventilation, decreases lung volume, lowers compliance, and causes hypoxemia through V/Q mismatch or shunt-like physiology. Treatment depends on the cause: recruit alveoli, clear secretions, correct compression, and escalate when collapse is severe or persistent.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Must know:</strong><br>Atelectasis is a volume-loss and ventilation problem.</div>
+              <div class="example-box soft-amber"><strong>Board pearl:</strong><br>Structures shift toward atelectasis because lung volume is lost.</div>
+              <div class="example-box soft-blue"><strong>RT pearl:</strong><br>Coach slow sustained inspiration, splinted cough, mobility, and reassess response.</div>
+              <div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not treat oxygen as the only therapy when alveoli are collapsed or an airway is plugged.</div>
+            </div>
+          </section>
+
+          <section id="glossary">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div>
+            <div class="glossary-card">
+              <h3>Searchable Glossary</h3>
+              <p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p>
+              <div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: atelectasis, shunt, IS, mucus plug..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div>
+              <div class="glossary-list" id="glossaryList"></div>
+            </div>
+            <div class="glossary-card" style="margin-top:18px;">
+              <h3>Glossary Flashcard Mastery Deck</h3>
+              <p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p>
+              <div class="flashcard-shell">
+                <div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div>
+                <div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+                <div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div>
+                <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div>
+                <div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+                <div class="completed-list" id="completedList"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+
+  <script>
+    const glossaryTerms = [
+      { term: "Atelectasis", definition: "Partial or complete collapse or underinflation of alveoli, a segment, a lobe, or an entire lung.", rt: "Explains low-volume hypoxemia and guides lung expansion therapy." },
+      { term: "Alveolar collapse", definition: "Loss of alveolar volume that reduces ventilation to affected lung units.", rt: "Primary pathophysiology of atelectasis." },
+      { term: "Obstructive atelectasis", definition: "Collapse caused by blockage of an airway, often from mucus plug, foreign body, or tumor.", rt: "Requires airway clearance, suctioning, or bronchoscopy escalation if severe." },
+      { term: "Compression atelectasis", definition: "Collapse caused by external pressure on lung tissue, such as pleural effusion or pneumothorax.", rt: "Expansion therapy alone may fail until the external pressure is corrected." },
+      { term: "Passive atelectasis", definition: "Low-volume collapse caused by shallow breathing, immobility, pain, or sedation.", rt: "Common postoperative target for IS, cough, deep breathing, and mobility." },
+      { term: "Adhesive atelectasis", definition: "Collapse related to surfactant deficiency or dysfunction.", rt: "Recognize when alveoli are prone to closing despite inspiratory effort." },
+      { term: "Incentive spirometry", definition: "A lung expansion technique using slow sustained maximal inspiration.", rt: "Common RT intervention for prevention and treatment of postoperative atelectasis." },
+      { term: "Splinted cough", definition: "Cough technique using pillow or hand support over an incision to reduce pain.", rt: "Improves secretion clearance after surgery." },
+      { term: "V/Q mismatch", definition: "Imbalance between ventilation and perfusion.", rt: "Atelectasis causes hypoxemia when perfusion continues through poorly ventilated areas." },
+      { term: "Shunt-like physiology", definition: "Blood passes through lung regions that receive little or no ventilation.", rt: "Explains why oxygen may not fully correct severe atelectasis." },
+      { term: "Volume loss", definition: "Radiographic shrinking of affected lung tissue.", rt: "High-yield clue that helps distinguish atelectasis from other opacities." },
+      { term: "Mediastinal shift", definition: "Movement of mediastinal structures from pressure or volume changes.", rt: "Atelectasis often pulls structures toward collapse; tension pneumothorax pushes away." },
+      { term: "Mucus plug", definition: "Thick secretions obstructing an airway.", rt: "Can cause sudden lobar or whole-lung collapse and severe hypoxemia." },
+      { term: "PEP therapy", definition: "Positive expiratory pressure therapy used to promote airway stability and secretion movement.", rt: "May support airway clearance and lung expansion in selected patients." },
+      { term: "CPAP", definition: "Continuous positive airway pressure.", rt: "May help recruit collapsed alveoli when ordered and appropriate." },
+      { term: "IPPB", definition: "Intermittent positive pressure breathing.", rt: "Can assist lung expansion when patients cannot achieve adequate inspiratory volumes." },
+      { term: "Fine crackles", definition: "Short, discontinuous breath sounds that may occur as small airways or alveoli reopen.", rt: "May be heard in dependent atelectasis." },
+      { term: "Postoperative atelectasis", definition: "Atelectasis occurring after surgery due to shallow breathing, pain, immobility, and secretion retention.", rt: "Major prevention focus for RTs." },
+      { term: "Recruitment", definition: "Reopening previously collapsed alveoli.", rt: "Goal of lung expansion therapy." },
+      { term: "Bronchoscopy", definition: "Direct visualization of airways with a scope.", rt: "May be needed to remove suspected mucus plug when less invasive measures fail." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#causes .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    shuffleSequence();
+    enableDynamicReorder();
+    initializeSequenceSort();
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> Atelectasis is collapse or underinflation of alveoli, which reduces ventilation, lung volume, compliance, and gas exchange.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> Atelectasis is primarily a volume-loss/ventilation problem caused by alveolar collapse or underinflation.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
+
+</html>
