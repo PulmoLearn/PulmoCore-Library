@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Disease Library</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h1 { font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.35rem; }
+
+    .hero-card, .info-card, .library-card, .disease-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .hero-card { padding: 28px; border-top: 10px solid var(--pulmo-teal); }
+    .hero-card p { max-width: 980px; font-size: 1.14rem; color: #243b55; }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .library-card { padding: 24px; margin-top: 22px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+    .stat-card { border-radius: 16px; padding: 16px; background: #F8FBFD; border: 1px solid var(--soft-border); }
+    .stat-card strong { display: block; font-family: var(--font-heading); font-size: 1.75rem; letter-spacing: -0.04em; }
+    .stat-card span { color: var(--slate); font-weight: 700; }
+
+    .dashboard-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; margin: 18px 0 22px; align-items: center; }
+    .dashboard-tools input, .dashboard-tools select { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; background: var(--white); color: var(--core-navy); }
+    .small-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 10px 14px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+
+    .disease-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .disease-card { padding: 20px; display: grid; gap: 14px; position: relative; overflow: hidden; border-top: 7px solid var(--pulmo-teal); }
+    .disease-card.locked { opacity: .72; }
+    .disease-header { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+    .disease-title-group { min-width: 0; }
+    .disease-category { color: var(--slate); font-size: .9rem; font-weight: 700; margin-top: 4px; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 7px 10px; font-weight: 800; font-size: .82rem; white-space: nowrap; }
+    .badge.complete { background: var(--airway-mint); color: var(--core-navy); border: 1px solid #BCEFE5; }
+    .badge.progress { background: #E6F3FF; color: var(--core-navy); border: 1px solid #CFE8FF; }
+    .badge.not-started { background: #F8FBFD; color: var(--slate); border: 1px solid var(--soft-border); }
+    .badge.locked { background: #FDE9E9; color: #7F2E2E; border: 1px solid #F2B5B5; }
+    .disease-description { color: #243b55; margin: 0; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-label { display: flex; justify-content: space-between; gap: 10px; color: var(--slate); font-weight: 800; font-size: .92rem; }
+    .progress-bar { height: 13px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .25s ease; }
+    .disease-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { border: 1px solid var(--soft-border); border-radius: 999px; padding: 6px 9px; color: var(--slate); font-size: .84rem; font-weight: 700; background: #FAFDFF; }
+    .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2px; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 46px; padding: 11px 18px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn-secondary { background: var(--white); color: var(--core-navy); border-color: var(--soft-border); }
+    .btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; transform: none; box-shadow: none; }
+
+    .complete-medallion { position: absolute; right: -34px; bottom: -34px; width: 115px; height: 115px; border-radius: 50%; background: rgba(221,247,242,.85); display: grid; place-items: start; padding: 20px 0 0 24px; color: var(--pulmo-teal-dark); font-size: 1.5rem; opacity: 0; transform: scale(.85); transition: all .25s ease; }
+    .disease-card.is-complete .complete-medallion { opacity: 1; transform: scale(1); }
+
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .example-box { border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (max-width: 1100px) {
+      .nav-links { display: none; }
+      .mobile-menu-note { display: block; }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .disease-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 780px) {
+      .top-nav { padding: 14px 16px; }
+      .brand { min-width: auto; }
+      .brand-mark { width: 48px; height: 48px; border-radius: 14px; }
+      .brand-tagline { display: none; }
+      .main-content { padding: 20px 14px 56px; }
+      .hero-card, .library-card, .info-card { padding: 18px; border-radius: 18px; }
+      .dashboard-tools { grid-template-columns: 1fr; }
+      .disease-grid, .stats-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .brand-name { font-size: 1.35rem; }
+      .mobile-menu-note { display: none; }
+      h1 { font-size: 2.15rem; }
+      h2 { font-size: 1.65rem; }
+      h3 { font-size: 1.22rem; }
+      .btn { width: 100%; }
+      .card-actions { display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Core</span></div>
+          <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+        </div>
+      </div>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#library">Disease Library</a>
+        <a href="#progress">Progress</a>
+        <a href="#recommended">Recommended Path</a>
+        <a href="#account">Account</a>
+      </nav>
+      <div class="mobile-menu-note">Dashboard</div>
+    </header>
+
+    <main class="main-content">
+      <section class="hero-card" id="progress">
+        <span class="eyebrow">Paid Learner Dashboard</span>
+        <h1>Respiratory Disease Library</h1>
+        <p>Continue your PulmoCore respiratory disease modules, track completion across the full disease library, and build board-style clinical reasoning one condition at a time.</p>
+        <div class="stats-grid" aria-label="PulmoCore progress summary">
+          <div class="stat-card"><strong id="completedCount">0</strong><span>Lessons completed</span></div>
+          <div class="stat-card"><strong id="inProgressCount">0</strong><span>In progress</span></div>
+          <div class="stat-card"><strong id="overallPercent">0%</strong><span>Overall completion</span></div>
+          <div class="stat-card"><strong id="masteryBadge">Starter</strong><span>Current badge</span></div>
+        </div>
+      </section>
+
+      <section class="info-card rt" id="recommended" style="margin-top:22px;">
+        <h2>Recommended Study Path</h2>
+        <p>Start with foundational obstructive and restrictive patterns, then move into acute respiratory failure, neonatal/pediatric conditions, neuromuscular disease, and sleep-related breathing disorders.</p>
+        <div class="stats-grid" style="grid-template-columns: repeat(3, minmax(0,1fr));">
+          <div class="example-box soft-teal"><strong>1. Core patterns</strong><br>Asthma, COPD, ARDS, Pneumonia</div>
+          <div class="example-box soft-blue"><strong>2. Special populations</strong><br>Newborn RDS, TTN, RSV, Cystic Fibrosis</div>
+          <div class="example-box soft-amber"><strong>3. Escalation thinking</strong><br>Near Drowning, ALS, Sleep Apnea, Pulmonary Embolism</div>
+        </div>
+      </section>
+
+      <section class="library-card" id="library">
+        <span class="eyebrow">Disease Library</span>
+        <h2>Your PulmoCore Modules</h2>
+        <div class="dashboard-tools" aria-label="Disease library controls">
+          <input id="searchLessons" type="search" placeholder="Search diseases: asthma, COPD, RSV..." aria-label="Search disease lessons" />
+          <select id="filterLessons" aria-label="Filter lessons by status">
+            <option value="all">All lessons</option>
+            <option value="not-started">Not started</option>
+            <option value="in-progress">In progress</option>
+            <option value="completed">Completed</option>
+          </select>
+          <button class="small-btn warn" id="demoProgress" type="button">Demo Progress</button>
+        </div>
+        <div class="disease-grid" id="diseaseGrid" aria-live="polite"></div>
+      </section>
+
+      <section class="info-card board" id="account" style="margin-top:22px;">
+        <h2>Progress System Note</h2>
+        <p>This page is ready for Supabase progress data. For testing, it reads local demo progress first. When Supabase is connected, replace the <strong>loadLearnerProgress()</strong> function with a Supabase query and keep the disease card rendering logic the same.</p>
+      </section>
+    </main>
+
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Progress Tracking · Glossary Decks</div></footer>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: "asthma", title: "Asthma", category: "Obstructive Lung Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Asthma.html", description: "Variable airflow obstruction, bronchospasm, inflammation, peak flow zones, and escalation during status asthmaticus." },
+      { id: "copd", title: "COPD", category: "Obstructive Lung Disease", time: "35–45 min", level: "Core RT Knowledge", href: "COPD.html", description: "Chronic airflow limitation, air trapping, oxygenation targets, exacerbation management, and ventilatory support concepts." },
+      { id: "ards", title: "ARDS", category: "Acute Respiratory Failure", time: "35–45 min", level: "Intermediate", href: "ARDS.html", description: "Diffuse alveolar injury, refractory hypoxemia, lung-protective ventilation, PEEP, and RT escalation priorities." },
+      { id: "pneumonia", title: "Pneumonia", category: "Infectious Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Pneumonia.html", description: "Alveolar infection, consolidation, gas exchange impairment, secretion management, oxygenation, and clinical worsening signs." },
+      { id: "rsv", title: "RSV Bronchiolitis", category: "Pediatric Respiratory Disease", time: "30–40 min", level: "Core RT Knowledge", href: "RSV.html", description: "Small airway inflammation, pediatric distress assessment, supportive care, suctioning, oxygen, and escalation red flags." },
+      { id: "newborn_rds", title: "Newborn RDS", category: "Neonatal Respiratory Disease", time: "35–45 min", level: "Intermediate", href: "Newborn_RDS.html", description: "Surfactant deficiency, decreased compliance, grunting, CPAP, surfactant therapy, and neonatal respiratory support." },
+      { id: "ttn", title: "Transient Tachypnea of the Newborn", category: "Neonatal Respiratory Disease", time: "25–35 min", level: "Core RT Knowledge", href: "TTN.html", description: "Delayed fetal lung fluid clearance, tachypnea, oxygen support, differentiation from RDS, and expected clinical course." },
+      { id: "near_drowning", title: "Near Drowning", category: "Environmental / Acute Injury", time: "30–40 min", level: "Intermediate", href: "Near_Drowning.html", description: "Aspiration injury, surfactant washout, hypoxemia, delayed pulmonary edema, and monitoring after submersion events." },
+      { id: "als", title: "ALS", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "ALS.html", description: "Respiratory muscle weakness, cough impairment, NIV, secretion clearance, and signs of ventilatory failure." },
+      { id: "sleep_apnea", title: "Sleep Apnea", category: "Sleep-Related Breathing Disorder", time: "30–40 min", level: "Core RT Knowledge", href: "Sleep_Apnea.html", description: "Upper airway obstruction, hypopnea/apnea patterns, CPAP/BiPAP concepts, oxygenation, and patient adherence support." },
+      { id: "pulmonary_embolism", title: "Pulmonary Embolism", category: "Pulmonary Vascular Disease", time: "30–40 min", level: "Intermediate", href: "Pulmonary_Embolism.html", description: "Ventilation-perfusion mismatch, dead space, hypoxemia, sudden dyspnea, diagnostic clues, and emergency priorities." },
+      { id: "cystic_fibrosis", title: "Cystic Fibrosis", category: "Genetic / Chronic Airway Disease", time: "35–45 min", level: "Intermediate", href: "Cystic_Fibrosis.html", description: "Thick secretions, chronic infection risk, airway clearance, inhaled therapies, nutrition links, and exacerbation care." }
+    ];
+
+    function loadLearnerProgress() {
+      const stored = localStorage.getItem("pulmocore_progress");
+      if (stored) return JSON.parse(stored);
+      return {
+        asthma: { percent: 0, completed: false, status: "not-started" },
+        copd: { percent: 0, completed: false, status: "not-started" },
+        ards: { percent: 0, completed: false, status: "not-started" }
+      };
+    }
+
+    function saveLearnerProgress(progress) {
+      localStorage.setItem("pulmocore_progress", JSON.stringify(progress));
+    }
+
+    function getStatus(progressItem) {
+      if (!progressItem || progressItem.percent === 0) return "not-started";
+      if (progressItem.completed || progressItem.percent >= 100) return "completed";
+      return "in-progress";
+    }
+
+    function statusLabel(status) {
+      if (status === "completed") return "✓ Complete";
+      if (status === "in-progress") return "In Progress";
+      return "Not Started";
+    }
+
+    function renderLessons() {
+      const progress = loadLearnerProgress();
+      const query = document.getElementById("searchLessons").value.trim().toLowerCase();
+      const filter = document.getElementById("filterLessons").value;
+      const grid = document.getElementById("diseaseGrid");
+
+      const filtered = lessons.filter(lesson => {
+        const item = progress[lesson.id] || { percent: 0, completed: false };
+        const status = getStatus(item);
+        const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query);
+        const matchesFilter = filter === "all" || status === filter;
+        return matchesSearch && matchesFilter;
+      });
+
+      grid.innerHTML = filtered.length ? filtered.map(lesson => {
+        const item = progress[lesson.id] || { percent: 0, completed: false };
+        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
+        const status = getStatus(item);
+        const isComplete = status === "completed";
+        const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started";
+        const buttonText = status === "not-started" ? "Start Lesson" : isComplete ? "Review Lesson" : "Continue Lesson";
+        return `
+          <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
+            <div class="disease-header">
+              <div class="disease-title-group">
+                <h3>${lesson.title}</h3>
+                <div class="disease-category">${lesson.category}</div>
+              </div>
+              <span class="badge ${badgeClass}">${statusLabel(status)}</span>
+            </div>
+            <p class="disease-description">${lesson.description}</p>
+            <div class="progress-row" aria-label="${lesson.title} progress">
+              <div class="progress-label"><span>Lesson progress</span><span>${percent}%</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
+            </div>
+            <div class="disease-meta">
+              <span class="pill">${lesson.time}</span>
+              <span class="pill">${lesson.level}</span>
+            </div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="${lesson.href}">${buttonText}</a>
+              <button class="btn btn-secondary" type="button" data-mark-complete="${lesson.id}">Mark Complete</button>
+            </div>
+            <div class="complete-medallion" aria-hidden="true">✓</div>
+          </article>
+        `;
+      }).join("") : `<div class="info-card" style="grid-column:1/-1;"><h3>No lessons match your search.</h3><p>Try clearing the search or changing the status filter.</p></div>`;
+
+      updateSummary(progress);
+      attachCardActions();
+    }
+
+    function updateSummary(progress) {
+      const total = lessons.length;
+      let completed = 0;
+      let inProgress = 0;
+      let percentSum = 0;
+
+      lessons.forEach(lesson => {
+        const item = progress[lesson.id] || { percent: 0, completed: false };
+        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
+        percentSum += percent;
+        const status = getStatus(item);
+        if (status === "completed") completed++;
+        if (status === "in-progress") inProgress++;
+      });
+
+      const overall = Math.round(percentSum / total);
+      document.getElementById("completedCount").textContent = completed;
+      document.getElementById("inProgressCount").textContent = inProgress;
+      document.getElementById("overallPercent").textContent = `${overall}%`;
+      document.getElementById("masteryBadge").textContent = completed >= total ? "Library Master" : completed >= 8 ? "Disease Pro" : completed >= 4 ? "Core Builder" : completed >= 1 ? "First Win" : "Starter";
+    }
+
+    function attachCardActions() {
+      document.querySelectorAll("[data-mark-complete]").forEach(button => {
+        button.addEventListener("click", () => {
+          const id = button.dataset.markComplete;
+          const progress = loadLearnerProgress();
+          progress[id] = { percent: 100, completed: true, status: "completed", completedAt: new Date().toISOString() };
+          saveLearnerProgress(progress);
+          renderLessons();
+        });
+      });
+    }
+
+    document.getElementById("searchLessons").addEventListener("input", renderLessons);
+    document.getElementById("filterLessons").addEventListener("change", renderLessons);
+    document.getElementById("demoProgress").addEventListener("click", () => {
+      saveLearnerProgress({
+        asthma: { percent: 100, completed: true, status: "completed", completedAt: new Date().toISOString() },
+        copd: { percent: 65, completed: false, status: "in-progress", lastSection: "management" },
+        ards: { percent: 35, completed: false, status: "in-progress", lastSection: "pathophysiology" },
+        rsv: { percent: 20, completed: false, status: "in-progress", lastSection: "snapshot" },
+        newborn_rds: { percent: 0, completed: false, status: "not-started" }
+      });
+      renderLessons();
+    });
+
+    renderLessons();
+  </script>
+</body>
+</html>
