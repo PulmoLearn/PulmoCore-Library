@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Meconium Aspiration Syndrome</title>
+
+  <!-- PulmoCore font direction. Replace with self-hosted or approved web fonts if needed. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+      </div>
+      <nav class="nav-links" aria-label="Primary navigation"><a href="#snapshot">Snapshot</a><a href="#pathophysiology">Pathophysiology</a><a href="#diagnostics">Diagnostics</a><a href="#management">Management</a><a href="#glossary">Glossary</a></nav>
+      <div class="mobile-menu-note">Menu</div>
+    </header>
+
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Meconium Aspiration Syndrome</h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Meconium aspiration syndrome (MAS) is neonatal respiratory distress caused by aspiration of meconium-stained amniotic fluid. This module focuses on RT-level recognition, pathophysiology, oxygenation and ventilation priorities, complications such as air leak and persistent pulmonary hypertension of the newborn (PPHN), and escalation decisions.</p>
+        <div class="case-meta" aria-label="Module details"><div><strong>Category</strong><br>Neonatal Respiratory Disorder</div><div><strong>Estimated Time</strong><br>30–40 minutes</div><div><strong>Level</strong><br>Core RT Knowledge</div></div>
+      </section>
+
+      <div class="content-layout">
+        <aside class="side-nav" aria-label="Disease page quick navigation">
+          <h3>Lesson Sections</h3>
+          <a href="#objectives">Objectives</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Severity + Oxygenation</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">PPHN + Ventilation</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
+        </aside>
+
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives">
+            <h2>Learning Objectives</h2>
+            <p>By the end of this MAS module, learners should be able to connect meconium exposure, airway obstruction, chemical lung injury, surfactant dysfunction, V/Q mismatch, PPHN risk, and RT management priorities.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how aspirated meconium causes obstruction, inflammation, atelectasis, hyperinflation, and hypoxemia.</div>
+              <div class="example-box soft-blue"><strong>2. Interpret neonatal assessment data</strong><br>Use work of breathing, breath sounds, SpO₂ pattern, ABGs, chest x-ray, and pre/postductal saturation differences.</div>
+              <div class="example-box soft-amber"><strong>3. Prioritize RT management</strong><br>Identify oxygenation, ventilation, CPAP, intubation, surfactant, HFOV, and inhaled nitric oxide considerations.</div>
+              <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize severe hypoxemia, PPHN, pneumothorax, apnea, acidosis, and failure to respond to initial support.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="snapshot">
+            <h2>Disease Snapshot</h2>
+            <p>MAS occurs when a newborn aspirates meconium-stained fluid into the airway. The meconium can block airways, irritate lung tissue, inactivate surfactant, and trigger pulmonary vasoconstriction. The result can be mixed atelectasis and hyperinflation, severe V/Q mismatch, hypoxemia, and PPHN.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>What it is:</strong><br>Neonatal respiratory distress after aspiration of meconium-stained amniotic fluid.</div>
+              <div class="example-box soft-teal"><strong>Primary problem:</strong><br>Airway obstruction plus inflammatory and surfactant-related lung injury.</div>
+              <div class="example-box soft-teal"><strong>Classic symptoms:</strong><br>Tachypnea, grunting, retractions, cyanosis, coarse breath sounds, barrel chest, low SpO₂.</div>
+              <div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Birth through meconium-stained fluid plus respiratory distress and patchy infiltrates/hyperinflation on CXR.</div>
+              <div class="example-box soft-teal"><strong>Acute danger:</strong><br>Refractory hypoxemia, PPHN, pneumothorax, acidosis, apnea, or shock.</div>
+              <div class="example-box soft-teal"><strong>RT priority:</strong><br>Support oxygenation/ventilation while minimizing air trapping and pressure-related injury.</div>
+            </div>
+            <article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>For RTs, MAS is not just “dirty fluid.” It is a neonatal gas exchange emergency where obstruction, atelectasis, hyperinflation, surfactant failure, and pulmonary hypertension can overlap in the same patient.</p></article>
+            <article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Immediately associate MAS with meconium-stained fluid, post-term or fetal-stress history, respiratory distress at birth, coarse/patchy CXR findings, air trapping, surfactant dysfunction, PPHN, and risk for pneumothorax.</p></article>
+          </section>
+
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check">
+            <span class="eyebrow">Quick Pre-Check</span><h2>Start with the core MAS pattern</h2>
+            <p>Which statement best describes the primary respiratory problem in meconium aspiration syndrome?</p>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false">The newborn has irreversible alveolar destruction similar to emphysema.</button>
+              <button class="quiz-option" data-correct="true">Aspirated meconium causes airway obstruction, lung inflammation, surfactant dysfunction, and hypoxemia.</button>
+              <button class="quiz-option" data-correct="false">The pleural space fills with fluid because of left-sided heart failure.</button>
+              <button class="quiz-option" data-correct="false">The main problem is adult-type chronic bronchitis from long-term smoking exposure.</button>
+            </div><div class="quiz-feedback" id="quizFeedback" role="status"></div>
+          </section>
+
+          <section class="info-card" id="pathophysiology">
+            <h2>Anatomy & Pathophysiology</h2>
+            <p>MAS begins when meconium enters the newborn airway. Thick material can partially or completely obstruct airways. Partial obstruction may create a ball-valve effect with air trapping; complete obstruction may cause atelectasis. Meconium also triggers chemical pneumonitis, impairs surfactant, decreases compliance, and can worsen pulmonary vasoconstriction.</p>
+            <img src="mas-pathophysiology.png" alt="Meconium aspiration pathophysiology showing airway obstruction, inflammation, surfactant inactivation, atelectasis, hyperinflation, and hypoxemia" style="margin-top:16px; border-radius: var(--radius-lg); border:1px solid var(--soft-border); box-shadow:var(--shadow-soft); background:#F8FBFD;">
+            <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Fetal stress/post-term risk → meconium passage → aspiration → airway obstruction + chemical pneumonitis + surfactant inactivation → atelectasis/hyperinflation → V/Q mismatch + hypoxemia → possible PPHN and air leak.</div>
+            <h3 style="margin-top:22px;">What Changes During MAS</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>MAS Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Partial obstruction</td><td>Air enters more easily than it leaves.</td><td>Causes air trapping, hyperinflation, and pneumothorax risk.</td></tr><tr><td>Complete obstruction</td><td>Ventilation beyond the obstruction is blocked.</td><td>Causes atelectasis and shunt-like physiology.</td></tr><tr><td>Chemical pneumonitis</td><td>Meconium irritates airways and alveoli.</td><td>Increases inflammation, edema, and gas exchange problems.</td></tr><tr><td>Surfactant dysfunction</td><td>Alveoli become less stable and compliance falls.</td><td>Raises pressure needs and atelectasis risk.</td></tr><tr><td>PPHN physiology</td><td>Pulmonary vascular resistance remains high.</td><td>Right-to-left shunting can cause refractory hypoxemia.</td></tr></table></div>
+            <h3 style="margin-top:22px;">ABG Progression Concept</h3><p>Mild MAS may show hypoxemia with respiratory alkalosis from tachypnea. Severe MAS can progress to respiratory acidosis when ventilation fails. Acidosis and hypoxemia worsen pulmonary vasoconstriction, which can intensify PPHN.</p>
+            <article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>A newborn with MAS who has persistent low SpO₂ despite support, worsening acidosis, asymmetric chest movement, or sudden deterioration needs rapid reassessment for PPHN, pneumothorax, equipment issues, or need for escalation.</p></article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MAS Hotspot Graphic">
+              <h3>Click the MAS Hotspots</h3><p>Click each hotspot to reveal how that mechanism contributes to MAS.</p>
+              <div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified neonatal MAS lung graphic with clickable hotspots">
+                <img src="mas-hotspot-lung.png" alt="Neonatal lung diagram for meconium aspiration syndrome hotspots" style="position:absolute; inset:10%; width:80%; opacity:.22; object-fit:contain;">
+                <svg viewBox="0 0 240 240" fill="none" aria-hidden="true"><path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/><circle cx="120" cy="116" r="14" fill="#1CA7A8"/></svg>
+                <button class="hotspot-btn" style="left:31%; top:34%;" data-title="Airway Obstruction" data-text="Meconium can block small airways. Complete blockage causes atelectasis; partial blockage can cause air trapping.">1</button>
+                <button class="hotspot-btn" style="left:42%; top:55%;" data-title="Chemical Pneumonitis" data-text="Meconium irritates lung tissue and promotes inflammation, edema, and impaired gas exchange.">2</button>
+                <button class="hotspot-btn" style="right:31%; top:44%;" data-title="Surfactant Inactivation" data-text="Impaired surfactant increases alveolar instability, atelectasis, poor compliance, and oxygen need.">3</button>
+                <button class="hotspot-btn" style="right:39%; bottom:20%;" data-title="PPHN Risk" data-text="Hypoxemia and acidosis can keep pulmonary vascular resistance high, creating right-to-left shunting.">4</button>
+              </div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="triggers"><h2>Etiology, Risk Factors & Clinical Context</h2><p>MAS is most associated with fetal stress and meconium-stained amniotic fluid, especially in term or post-term newborns. The RT should quickly connect the delivery history with current respiratory findings.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Risk Factor or Context</th><th>Why It Matters</th><th>RT Focus</th></tr><tr><td>Meconium-stained amniotic fluid</td><td>Direct aspiration risk.</td><td>Prepare for focused neonatal respiratory assessment.</td></tr><tr><td>Fetal distress</td><td>May trigger gasping and meconium passage.</td><td>Anticipate respiratory compromise at delivery.</td></tr><tr><td>Post-term gestation</td><td>Meconium passage is more likely.</td><td>Watch closely for MAS signs.</td></tr><tr><td>Thick meconium</td><td>Higher obstruction burden.</td><td>Assess air movement, oxygen need, and x-ray pattern.</td></tr><tr><td>Perinatal hypoxia/acidosis</td><td>Promotes pulmonary vasoconstriction.</td><td>Monitor for PPHN and refractory hypoxemia.</td></tr></table></div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MAS Factor Sorting"><h3>Sort the MAS Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="risk"><strong>Thick meconium-stained amniotic fluid</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="mechanism"><strong>Surfactant inactivation</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="risk"><strong>Post-term delivery</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Sudden worsening with asymmetric chest movement</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="mechanism"><strong>Ball-valve air trapping</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article>
+          </section>
+
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>MAS presentation ranges from mild tachypnea to severe respiratory failure. RT assessment should focus on work of breathing, oxygenation, ventilation, perfusion, neurologic tone, and response to support.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Delivery clues</td><td>Meconium-stained fluid, stained skin/nails/cord, fetal distress history.</td></tr><tr><td>Appearance</td><td>Tachypnea, grunting, nasal flaring, retractions, cyanosis, poor tone if severe.</td></tr><tr><td>Breath sounds</td><td>Coarse crackles/rhonchi, diminished areas, variable aeration.</td></tr><tr><td>Chest mechanics</td><td>Hyperinflation/barrel chest from air trapping or reduced expansion from atelectasis.</td></tr><tr><td>Oxygenation clues</td><td>Low SpO₂, pre/postductal saturation gradient, low PaO₂.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, acidosis, apnea, fatigue.</td></tr></table></div><img src="mas-clinical-signs.png" alt="Visual summary of MAS signs including tachypnea, grunting, retractions, cyanosis, coarse breath sounds, and hypoxemia" style="margin-top:16px; border-radius: var(--radius-lg); border:1px solid var(--soft-border); box-shadow:var(--shadow-soft); background:#F8FBFD;"><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not treat MAS as a single-mechanism disease. A newborn can have airway obstruction, collapsed alveoli, hyperinflated regions, inflammation, low compliance, and pulmonary hypertension at the same time.</p></article></section>
+
+          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic data helps determine severity, identify complications, and guide escalation. In MAS, the RT should integrate delivery history, physical assessment, oxygenation trend, ABGs, chest x-ray, and signs of PPHN.</p><h3 style="margin-top:18px;">Chest X-ray Pattern</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>MAS Pattern</th></tr><tr><td>Patchy infiltrates</td><td>Inflammatory injury and uneven aeration.</td></tr><tr><td>Hyperinflation</td><td>Air trapping from partial obstruction.</td></tr><tr><td>Atelectasis</td><td>Complete obstruction or surfactant dysfunction.</td></tr><tr><td>Air leak</td><td>Pneumothorax or pneumomediastinum may complicate severe disease.</td></tr></table></div><img src="mas-cxr-placeholder.png" alt="Chest x-ray learning placeholder showing patchy infiltrates, hyperinflation, atelectasis, and air leak concern in MAS" style="margin-top:16px; border-radius: var(--radius-lg); border:1px solid var(--soft-border); box-shadow:var(--shadow-soft); background:#F8FBFD;"><h3 style="margin-top:18px;">ABG and Oxygenation Patterns</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Pattern</th><th>Meaning</th></tr><tr><td>Low PaO₂ / low SpO₂</td><td>V/Q mismatch, shunt physiology, or PPHN.</td></tr><tr><td>Respiratory alkalosis early</td><td>Tachypnea may lower PaCO₂ initially.</td></tr><tr><td>Respiratory acidosis</td><td>Ventilatory failure, fatigue, or severe obstruction.</td></tr><tr><td>Pre/postductal SpO₂ difference</td><td>May suggest right-to-left ductal shunting with PPHN.</td></tr></table></div></section>
+
+          <section class="info-card" id="severity"><h2>Severity Classification & Oxygenation Pattern</h2><p>MAS severity is driven by oxygen need, work of breathing, ventilatory status, x-ray findings, and complications. A stable tachypneic newborn requires different support than a hypoxemic newborn with acidosis and suspected PPHN.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Severity Level</th><th>Typical Pattern</th></tr><tr><td>Mild</td><td>Tachypnea or mild distress; modest oxygen need; improving trend.</td></tr><tr><td>Moderate</td><td>Persistent distress, retractions/grunting, increasing oxygen need, abnormal CXR.</td></tr><tr><td>Severe</td><td>Marked hypoxemia, acidosis, apnea/fatigue, PPHN concern, or air leak.</td></tr></table></div><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Improving</strong><br>Lower oxygen need, less WOB, stable ventilation, better perfusion.</div><div class="example-box soft-amber"><strong>Watch Closely</strong><br>Persistent grunting/retractions, rising oxygen need, worsening x-ray.</div><div class="example-box soft-coral"><strong>Escalate</strong><br>Refractory hypoxemia, acidosis, apnea, suspected PPHN, or sudden air leak signs.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="Oxygenation Pattern Activity"><h3>Oxygenation Pattern Activity</h3><p>A newborn with MAS has SpO₂ 94% on the right hand and 84% on the lower extremity despite oxygen support. Which complication does this pattern raise concern for?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Atelectasis may worsen oxygenation, but a marked pre/postductal difference specifically raises concern for ductal shunting.">Simple isolated atelectasis only</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. A higher preductal saturation than postductal saturation may indicate right-to-left ductal shunting, which can occur with PPHN.">PPHN with right-to-left shunting</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Bronchiolitis is not the best explanation for a pre/postductal saturation split in this MAS scenario.">Bronchiolitis</button></div><div class="quiz-feedback" role="status"></div></article></section>
+
+          <section class="info-card red" id="red-flags"><h2>Severity & Red Flags</h2><p>The key question is not simply “Was meconium present?” The key question is whether the newborn can oxygenate and ventilate without worsening pulmonary vascular resistance or air leak.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Persistent hypoxemia despite support</td><td>May suggest severe V/Q mismatch, shunt, or PPHN.</td></tr><tr><td>Rising PaCO₂ or falling pH</td><td>Suggests worsening ventilation or fatigue.</td></tr><tr><td>Pre/postductal SpO₂ gradient</td><td>Supports right-to-left shunting concern.</td></tr><tr><td>Sudden deterioration or asymmetric breath sounds</td><td>Possible pneumothorax or tube/equipment problem.</td></tr><tr><td>Apnea, poor tone, bradycardia</td><td>Requires urgent neonatal resuscitation priorities.</td></tr><tr><td>High pressure needs with poor response</td><td>Escalation may be needed; monitor air leak risk.</td></tr></table></div></section>
+
+          <section class="info-card" id="management"><h2>Management & Treatment</h2><p>MAS management is supportive and escalation-based. The RT helps stabilize airway, breathing, oxygenation, ventilation, and pulmonary vascular physiology while watching for pressure-related complications.</p><h3 style="margin-top:18px;">Support Options</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Intervention</th><th>When It Helps</th><th>RT Consideration</th></tr><tr><td>Warm, position, stimulate, assess</td><td>Initial newborn stabilization.</td><td>Follow neonatal resuscitation priorities.</td></tr><tr><td>Supplemental oxygen</td><td>Hypoxemia or increased oxygen need.</td><td>Titrate to neonatal targets per protocol and avoid prolonged extremes.</td></tr><tr><td>CPAP</td><td>Spontaneously breathing newborn with distress and recruitment need.</td><td>Monitor for worsening air trapping or pneumothorax.</td></tr><tr><td>Intubation/ventilation</td><td>Severe distress, apnea, poor ventilation, acidosis, or high oxygen need.</td><td>Use lung-protective pressures and monitor air leak.</td></tr><tr><td>Surfactant</td><td>Significant surfactant dysfunction or severe oxygenation need.</td><td>May improve compliance/oxygenation in selected severe MAS.</td></tr><tr><td>HFOV/iNO/ECMO referral</td><td>Refractory hypoxemia or severe PPHN.</td><td>Escalate with NICU/neonatal team.</td></tr></table></div><h3 style="margin-top:18px;">Escalation Logic</h3><p>Escalate when oxygenation or ventilation worsens despite appropriate support, when PPHN signs appear, when acidosis develops, or when sudden deterioration suggests pneumothorax.</p>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MAS Stabilization Sequence"><h3>MAS Stabilization Sequence</h3><p>Select the steps in the best general order for a newborn with suspected MAS and respiratory distress.</p><div class="sort-grid" id="sequenceSort"><div class="sort-row" data-answer="1"><strong>Warm, position, stimulate, and rapidly assess breathing/HR</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="2"><strong>Support oxygenation and monitor pre/postductal SpO₂</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="3"><strong>Evaluate work of breathing, breath sounds, ABG, and CXR</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="4"><strong>Use CPAP or ventilation based on distress and gas exchange</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="5"><strong>Assess for complications such as PPHN or pneumothorax</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="6"><strong>Escalate to surfactant, HFOV, iNO, or ECMO referral if refractory</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div></div><button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button><div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div></article>
+          </section>
+
+          <section class="info-card red" id="status"><h2>PPHN, Air Leak & Ventilator Considerations</h2><p>Severe MAS can be complicated by PPHN and air leak. Hypoxemia and acidosis increase pulmonary vascular resistance, and positive-pressure support can worsen air trapping if obstruction is significant.</p><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-coral"><strong>Watch for PPHN:</strong><br>Refractory hypoxemia, pre/postductal split, acidosis, labile saturations.</div><div class="example-box soft-amber"><strong>Watch for air leak:</strong><br>Sudden deterioration, asymmetric breath sounds, transillumination/CXR concern.</div><div class="example-box soft-blue"><strong>Vent concept:</strong><br>Support gas exchange while avoiding excessive pressure, overdistention, and breath stacking.</div></div><article class="info-card board" style="margin-top:16px;"><h3>Board Pearl</h3><p>In severe MAS, persistent hypoxemia despite oxygen support should trigger PPHN thinking. Sudden deterioration after positive pressure should trigger pneumothorax thinking.</p></article></section>
+
+          <section class="info-card rt" id="rt-role"><h2>Respiratory Therapist Role</h2><p>The RT is central to newborn stabilization, oxygen delivery, ventilation support, monitoring, airway equipment readiness, ABG interpretation, chest x-ray correlation, and escalation communication.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr><tr><td>Assess oxygenation</td><td>SpO₂ trend, pre/postductal values, FiO₂ need, color/perfusion.</td><td>Detects hypoxemia and PPHN clues.</td></tr><tr><td>Assess ventilation</td><td>RR, apnea, PaCO₂, pH, chest movement, fatigue.</td><td>Identifies failure needing ventilatory support.</td></tr><tr><td>Evaluate breath sounds</td><td>Coarse sounds, diminished areas, asymmetry.</td><td>Guides obstruction/air leak concerns.</td></tr><tr><td>Support therapy</td><td>Oxygen, CPAP, ventilation, surfactant setup, iNO support per protocol.</td><td>Improves gas exchange while minimizing harm.</td></tr><tr><td>Communicate escalation</td><td>Report refractory hypoxemia, acidosis, air leak signs, rising pressures.</td><td>Supports timely NICU team decisions.</td></tr></table></div></section>
+
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided MAS Case"><span class="eyebrow">Guided Unfolding Case Study</span><h2>The Newborn Who Stayed Blue</h2><p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p>
+            <div class="case-stage" data-case-stage="0"><h3>Stage 1: Delivery Room Presentation</h3><p>A term newborn is delivered through thick meconium-stained amniotic fluid. The infant is tachypneic with grunting and central cyanosis.</p><div class="case-meta"><div><strong>HR</strong><br>148/min</div><div><strong>SpO₂</strong><br>78% and rising slowly</div><div><strong>Breath Sounds</strong><br>Coarse bilaterally</div></div><p><strong>Decision Question:</strong> What is the priority first action?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The newborn is symptomatic now; waiting without respiratory support risks worsening hypoxemia.">Observe without intervention because meconium alone is harmless.</button><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Focus on neonatal stabilization: assess breathing and heart rate, support oxygenation/ventilation as indicated, and monitor response.">Rapidly assess and support oxygenation/ventilation as indicated.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Feeding is not a priority in respiratory distress.">Begin oral feeding to improve energy stores.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bronchodilator alone does not address the main MAS mechanisms.">Give albuterol only and stop assessment.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div>
+            <div class="case-stage lesson-hidden" data-case-stage="1"><h3>Stage 2: Persistent Distress</h3><p>The infant remains tachypneic with retractions. CXR shows patchy infiltrates with areas of hyperinflation.</p><p><strong>Decision Question:</strong> What pathophysiology best explains mixed hyperinflation and atelectasis?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Partial obstruction can trap air while complete obstruction or surfactant dysfunction can collapse distal units.">Partial and complete airway obstruction from meconium.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Isolated pulmonary edema does not best explain the classic mixed obstructive/atelectatic MAS pattern.">Isolated cardiogenic pulmonary edema only.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Chronic smoking injury does not apply to a newborn.">Chronic smoking-related emphysema.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A pure restrictive chest wall problem would not explain meconium-related obstruction and patchy disease.">Pure restrictive chest wall disease.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div>
+            <div class="case-stage lesson-hidden" data-case-stage="2"><h3>Stage 3: Oxygenation Pattern</h3><p>Despite increasing oxygen support, the right hand SpO₂ remains 93% while the lower extremity SpO₂ is 84%. ABG shows worsening acidosis.</p><p><strong>Decision Question:</strong> What complication should the RT strongly suspect?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. A pre/postductal saturation difference with refractory hypoxemia supports PPHN/right-to-left shunt concern.">PPHN with right-to-left shunting.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Upper airway congestion does not explain the saturation split and refractory hypoxemia pattern.">Simple nasal congestion only.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Hyperventilation alone would not create a ductal saturation gradient.">Normal newborn transition with no concern.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Atelectasis may contribute to hypoxemia, but the pre/postductal split points toward shunting physiology.">Atelectasis only, with no vascular concern.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div>
+            <div class="case-stage lesson-hidden" data-case-stage="3"><h3>Stage 4: Sudden Deterioration</h3><p>After positive-pressure support, the infant suddenly has worsening SpO₂, increased distress, and decreased breath sounds on one side.</p><p><strong>Decision Question:</strong> What should the RT urgently consider?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. MAS with air trapping and positive pressure increases pneumothorax risk. Sudden unilateral change is an emergency clue.">Pneumothorax or air leak complication.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Improvement would not present as sudden hypoxemia and unilateral decreased breath sounds.">Complete resolution of MAS.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A feeding intolerance problem does not explain sudden unilateral breath sound change.">Feeding intolerance as the primary emergency.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Do not assume the monitor is wrong before reassessing the infant and equipment.">Ignore because pulse oximeters are always inaccurate.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div>
+            <div class="case-stage lesson-hidden" data-case-stage="4"><h3>Case Wrap-Up</h3><div class="example-box soft-teal"><strong>RT Takeaway:</strong> MAS requires continuous reassessment of oxygenation, ventilation, WOB, CXR pattern, pre/postductal SpO₂, and response to support.</div><div class="example-box soft-coral" style="margin-top:12px;"><strong>If the newborn worsens:</strong> think PPHN when hypoxemia is refractory and think pneumothorax when deterioration is sudden or asymmetric.</div></div>
+          </section>
+
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="MAS Knowledge Check"><span class="eyebrow">Knowledge Check</span><h2>Board-Style Practice</h2><p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p>
+            <div class="knowledge-question" data-question-id="kq1"><h3>Question 1</h3><p>A term newborn delivered through thick meconium develops tachypnea, grunting, retractions, and patchy infiltrates with hyperinflation on CXR. What diagnosis is most consistent?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Meconium exposure plus respiratory distress and patchy hyperinflation/infiltrates supports MAS.">Meconium aspiration syndrome.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. RDS is classically associated with prematurity and surfactant deficiency, not thick meconium aspiration as the key clue.">Classic premature infant RDS only.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Asthma is not the likely diagnosis in a newborn immediately after meconium-stained delivery.">Asthma exacerbation.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. COPD is a chronic adult obstructive disease, not a neonatal delivery-room diagnosis.">COPD exacerbation.</button></div><div class="quiz-feedback" role="status"></div></div>
+            <div class="knowledge-question" data-question-id="kq2"><h3>Question 2</h3><p>Which MAS mechanism increases the risk for hyperinflation and pneumothorax?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Partial obstruction can allow air in but limit exhalation, causing air trapping and air leak risk.">Ball-valve partial airway obstruction.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Complete obstruction favors atelectasis, not hyperinflation.">Complete obstruction of every airway only.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Low airway resistance would not explain air trapping.">Low airway resistance.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. A normal CXR does not explain pneumothorax risk.">Normal lung expansion without obstruction.</button></div><div class="quiz-feedback" role="status"></div></div>
+            <div class="knowledge-question" data-question-id="kq3"><h3>Question 3</h3><p>A newborn with MAS has persistent hypoxemia and a lower postductal SpO₂ than preductal SpO₂. Which complication is most concerning?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. This pattern suggests right-to-left shunting and PPHN concern.">Persistent pulmonary hypertension of the newborn.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. A simple medication side effect does not explain the pre/postductal gradient.">Medication side effect only.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Mild nasal stuffiness would not create refractory hypoxemia with a saturation split.">Mild nasal stuffiness.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. This is not reassuring when saturations remain low and split.">Normal transition with no need to notify the team.</button></div><div class="quiz-feedback" role="status"></div></div>
+            <div class="knowledge-question" data-question-id="kq4"><h3>Question 4</h3><p>During ventilatory support for severe MAS, which RT concern is most important?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. MAS can cause air trapping and uneven compliance, so monitor pressures, oxygenation, ventilation, and air leak signs.">Support gas exchange while monitoring for air trapping and air leak.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Excessive pressure can worsen air leak risk.">Use the highest pressure possible without reassessment.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Pre/postductal saturation monitoring is useful when PPHN is a concern.">Ignore preductal and postductal saturation data.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Worsening oxygenation requires immediate reassessment, not delayed review.">Delay reassessment until the end of shift.</button></div><div class="quiz-feedback" role="status"></div></div><div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div>
+          </section>
+
+          <section id="faq"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common MAS Questions</h2></div><details class="accordion" open><summary>What is the simplest way to understand MAS?</summary><div class="accordion-body"><p>MAS is neonatal respiratory distress caused by aspirated meconium that obstructs airways, irritates lung tissue, impairs surfactant, and can worsen pulmonary vascular resistance.</p></div></details><details class="accordion"><summary>Why can MAS cause both atelectasis and hyperinflation?</summary><div class="accordion-body"><p>Complete obstruction blocks ventilation and can collapse distal lung units. Partial obstruction creates a ball-valve effect that traps air and causes hyperinflation.</p></div></details><details class="accordion"><summary>Why is PPHN a major concern?</summary><div class="accordion-body"><p>Hypoxemia and acidosis can keep pulmonary vascular resistance high. Blood may shunt right-to-left and bypass oxygenation, causing refractory hypoxemia.</p></div></details><details class="accordion"><summary>What does a pre/postductal SpO₂ split suggest?</summary><div class="accordion-body"><p>When the right hand saturation is higher than lower extremity saturation, right-to-left ductal shunting and PPHN should be considered.</p></div></details><details class="accordion"><summary>Why is pneumothorax a risk?</summary><div class="accordion-body"><p>Air trapping from partial obstruction plus positive pressure can increase alveolar overdistention and air leak risk.</p></div></details><details class="accordion"><summary>Is suctioning always the answer?</summary><div class="accordion-body"><p>No. Current neonatal priorities focus on the infant’s breathing, heart rate, tone, and need for ventilation. Support oxygenation and ventilation based on clinical status and local neonatal resuscitation protocols.</p></div></details><details class="accordion"><summary>When might advanced support be considered?</summary><div class="accordion-body"><p>Severe or refractory hypoxemia, worsening acidosis, suspected PPHN, or failure of conventional support may lead to surfactant, HFOV, inhaled nitric oxide, or ECMO center consultation.</p></div></details></section>
+
+          <section class="info-card" id="summary"><h2>Summary & Clinical Pearls</h2><p>Meconium aspiration syndrome is a neonatal respiratory disorder caused by aspirated meconium-stained fluid. It produces obstruction, chemical pneumonitis, surfactant dysfunction, atelectasis, hyperinflation, V/Q mismatch, hypoxemia, and possible PPHN.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Must know:</strong><br>MAS combines obstruction, inflammation, surfactant dysfunction, and pulmonary vascular risk.</div><div class="example-box soft-amber"><strong>Board pearl:</strong><br>Pre/postductal saturation split in MAS should trigger PPHN thinking.</div><div class="example-box soft-blue"><strong>RT pearl:</strong><br>Assess WOB, SpO₂ trend, ABG, breath sound symmetry, pressure needs, and response to support.</div><div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not miss pneumothorax after sudden deterioration during positive-pressure support.</div></div></section>
+
+          <section id="glossary"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div><div class="glossary-card"><h3>Searchable Glossary</h3><p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p><div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: PPHN, surfactant, air leak..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div><div class="glossary-list" id="glossaryList"></div></div><div class="glossary-card" style="margin-top:18px;"><h3>Glossary Flashcard Mastery Deck</h3><p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p><div class="flashcard-shell"><div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div><div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div><div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div><div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div><div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div><div class="completed-list" id="completedList"></div></div></div></section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+
+  <script>
+    const glossaryTerms = [
+      { term: "Meconium Aspiration Syndrome", definition: "Respiratory distress caused when a newborn aspirates meconium-stained amniotic fluid before, during, or immediately after birth.", rt: "Helps RTs connect birth history, obstruction, surfactant dysfunction, hypoxemia, and escalation needs." },
+      { term: "Meconium", definition: "The newborn's first stool, composed of intestinal secretions, bile pigments, cells, and other fetal gut contents.", rt: "Thick meconium can obstruct neonatal airways and trigger chemical inflammation." },
+      { term: "Meconium-stained amniotic fluid", definition: "Amniotic fluid that contains meconium, often described as thin or thick depending on concentration.", rt: "Signals risk and prepares the team for focused respiratory assessment at birth." },
+      { term: "Ball-valve obstruction", definition: "Partial airway obstruction that allows air entry but limits exhalation.", rt: "Explains air trapping, hyperinflation, and pneumothorax risk in MAS." },
+      { term: "Complete airway obstruction", definition: "A blocked airway segment that prevents ventilation beyond the obstruction.", rt: "Can cause atelectasis and worsening V/Q mismatch." },
+      { term: "Chemical pneumonitis", definition: "Inflammatory lung injury caused by irritating aspirated material.", rt: "Meconium irritates airways and alveoli, worsening oxygenation and compliance." },
+      { term: "Surfactant inactivation", definition: "Reduction in surfactant function that increases alveolar surface tension and atelectasis risk.", rt: "Contributes to low compliance and higher oxygen/pressure needs." },
+      { term: "Persistent Pulmonary Hypertension of the Newborn", definition: "Failure of normal pulmonary vascular relaxation after birth, causing elevated pulmonary vascular resistance and right-to-left shunting.", rt: "A major MAS complication when hypoxemia remains severe despite support." },
+      { term: "Right-to-left shunt", definition: "Blood bypasses ventilated alveoli and enters systemic circulation without adequate oxygenation.", rt: "Explains refractory hypoxemia in PPHN associated with MAS." },
+      { term: "Preductal SpO₂", definition: "Oxygen saturation measured on the right hand, reflecting blood before the ductus arteriosus.", rt: "Comparison with postductal values helps screen for shunting/PPHN." },
+      { term: "Postductal SpO₂", definition: "Oxygen saturation measured on a lower extremity, reflecting blood after the ductus arteriosus.", rt: "A lower postductal reading can support right-to-left ductal shunting." },
+      { term: "Atelectasis", definition: "Collapse or incomplete expansion of alveoli.", rt: "Occurs when meconium blocks airways or surfactant dysfunction reduces stability." },
+      { term: "Hyperinflation", definition: "Excess air retention in the lungs due to incomplete exhalation.", rt: "Can occur from partial obstruction and increases air leak risk." },
+      { term: "Air leak syndrome", definition: "Escape of air from the alveoli into extra-alveolar spaces, such as pneumothorax or pneumomediastinum.", rt: "A serious complication when high pressures and air trapping coexist." },
+      { term: "Pneumothorax", definition: "Air in the pleural space that can impair lung expansion.", rt: "MAS patients with sudden deterioration need assessment for air leak." },
+      { term: "CPAP", definition: "Continuous positive airway pressure used to support oxygenation and alveolar recruitment in spontaneously breathing patients.", rt: "May help mild to moderate MAS but requires close monitoring for worsening distress or air leak." },
+      { term: "Mechanical ventilation", definition: "Positive pressure ventilatory support used when the newborn cannot maintain adequate oxygenation or ventilation.", rt: "Used for severe MAS, apnea, fatigue, or worsening gas exchange." },
+      { term: "HFOV", definition: "High-frequency oscillatory ventilation, a mode using very rapid small-volume oscillations around a mean airway pressure.", rt: "May be used for severe neonatal oxygenation failure while limiting large tidal pressure swings." },
+      { term: "Inhaled nitric oxide", definition: "A selective pulmonary vasodilator used to reduce pulmonary vascular resistance in appropriate neonatal PPHN cases.", rt: "Considered when MAS is complicated by severe PPHN and refractory hypoxemia." },
+      { term: "Neonatal resuscitation", definition: "Structured support at birth focused on warming, positioning, clearing the airway when needed, stimulating, ventilating, and escalating based on heart rate and breathing.", rt: "RTs support airway, ventilation, oxygen titration, and team communication." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    shuffleSequence();
+    enableDynamicReorder();
+    initializeSequenceSort();
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> MAS is driven by aspirated meconium causing airway obstruction, chemical pneumonitis, surfactant dysfunction, V/Q mismatch, and possible PPHN.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> MAS is not primarily reversible bronchospasm. Think newborn aspiration, obstruction, inflammation, atelectasis/hyperinflation, and hypoxemia risk.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
+</html>

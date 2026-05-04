@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | ALS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+        <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+      </div>
+      <nav class="nav-links" aria-label="Primary navigation"><a href="#snapshot">Snapshot</a><a href="#pathophysiology">Pathophysiology</a><a href="#diagnostics">Diagnostics</a><a href="#management">Management</a><a href="#glossary">Glossary</a></nav>
+      <div class="mobile-menu-note">Menu</div>
+    </header>
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);"><span class="eyebrow">Respiratory Disease Module</span><h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">ALS</h1><p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Amyotrophic lateral sclerosis is a progressive motor neuron disease that eventually weakens the diaphragm, intercostals, accessory muscles, bulbar muscles, and expiratory cough muscles. This module focuses on RT-level recognition of neuromuscular ventilatory failure, nocturnal hypoventilation, cough impairment, secretion clearance, NIV initiation, and escalation planning.</p><div class="case-meta" aria-label="Module details"><div><strong>Category</strong><br>Neuromuscular Respiratory Disease</div><div><strong>Estimated Time</strong><br>30–40 minutes</div><div><strong>Level</strong><br>Core RT Knowledge</div></div></section>
+      <div class="content-layout"><aside class="side-nav" aria-label="Disease page quick navigation"><h3>Lesson Sections</h3><a href="#objectives">Objectives</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Respiratory Measures</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Ventilation Planning</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a></aside>
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives"><h2>Learning Objectives</h2><p>By the end of this ALS module, learners should connect motor neuron degeneration, respiratory muscle weakness, impaired cough, hypoventilation, diagnostic trends, NIV decisions, secretion management, and escalation planning.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how motor neuron loss weakens inspiratory, expiratory, and bulbar muscles.</div><div class="example-box soft-blue"><strong>2. Interpret diagnostics</strong><br>Use FVC/SVC, MIP/NIF, MEP, peak cough flow, ABG/VBG, and overnight oximetry/capnography.</div><div class="example-box soft-amber"><strong>3. Choose RT interventions</strong><br>Match NIV, cough assist, suction, lung volume recruitment, and oxygen caution to the patient problem.</div><div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize acute infection, aspiration, secretion retention, hypercapnia, and inability to protect the airway.</div></div></section>
+          <section class="info-card" id="snapshot"><h2>Disease Snapshot</h2><p>ALS does not begin as a lung parenchymal disease. The lungs may be structurally normal, but the pump fails because respiratory muscles progressively weaken. The RT must distinguish oxygenation problems from ventilation failure and avoid treating hypoventilation with oxygen alone.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>What it is:</strong><br>Progressive upper and lower motor neuron disease.</div><div class="example-box soft-teal"><strong>Primary respiratory problem:</strong><br>Ventilatory pump failure from muscle weakness.</div><div class="example-box soft-teal"><strong>Classic symptoms:</strong><br>Orthopnea, weak cough, morning headaches, fatigue, dyspnea, sleep disruption.</div><div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Declining vital capacity and inspiratory/expiratory muscle pressures.</div><div class="example-box soft-teal"><strong>Acute danger:</strong><br>Bulbar dysfunction, aspiration, retained secretions, hypercapnia, infection.</div><div class="example-box soft-teal"><strong>RT priority:</strong><br>Assess ventilation, cough strength, secretion clearance, NIV fit/tolerance, and airway protection.</div></div><article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>In ALS, normal SpO₂ can be misleading. A patient may be retaining CO₂ before oxygen saturation falls. RT assessment should include symptoms of hypoventilation, respiratory muscle metrics, cough effectiveness, and secretion clearance.</p></article><article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Immediately associate ALS with progressive neuromuscular weakness, restrictive spirometry pattern, reduced vital capacity, weak cough, nocturnal hypoventilation, NIV support, cough assist, aspiration risk, and oxygen caution when ventilation is inadequate.</p></article></section>
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check"><span class="eyebrow">Quick Pre-Check</span><h2>Start with the core ALS respiratory pattern</h2><p>Which statement best describes the main respiratory problem in ALS?</p><div class="quiz-options"><button class="quiz-option" data-correct="false">Bronchospasm causes reversible airway narrowing that improves with albuterol.</button><button class="quiz-option" data-correct="true">Progressive respiratory muscle weakness causes hypoventilation and ineffective cough.</button><button class="quiz-option" data-correct="false">Fluid-filled alveoli cause cardiogenic pulmonary edema as the primary defect.</button><button class="quiz-option" data-correct="false">Pleural air prevents lung expansion as the central disease process.</button></div><div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
+          <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>ALS damages motor neurons that control voluntary skeletal muscles. Respiratory decline occurs when inspiratory muscles cannot generate adequate tidal volume, expiratory muscles cannot cough effectively, and bulbar weakness impairs airway protection.</p><div class="example-box soft-blue" style="margin-top:14px;"><img src="als-respiratory-muscle-pathophysiology.png" alt="Diagram showing ALS motor neuron degeneration leading to diaphragm weakness, weak cough, secretion retention, and hypoventilation"></div><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Motor neuron degeneration → diaphragm/intercostal weakness + weak expiratory muscles + bulbar dysfunction → nocturnal hypoventilation, ineffective cough, aspiration risk → hypercapnia, atelectasis, infection, ventilatory failure.</div><h3 style="margin-top:22px;">What Changes as ALS Progresses</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>ALS Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Inspiratory muscle weakness</td><td>Diaphragm and accessory muscles generate less pressure.</td><td>Causes low tidal volume, orthopnea, and hypoventilation.</td></tr><tr><td>Expiratory muscle weakness</td><td>Cough force decreases.</td><td>Secretions become harder to clear.</td></tr><tr><td>Bulbar dysfunction</td><td>Swallowing and airway protection weaken.</td><td>Aspiration and NIV intolerance risk increase.</td></tr><tr><td>Shallow breathing</td><td>Low lung volumes become common.</td><td>Atelectasis and infection risk increase.</td></tr><tr><td>Ventilatory failure</td><td>CO₂ rises as alveolar ventilation falls.</td><td>Oxygen alone does not correct the pump failure.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>New morning headaches, somnolence, confusion, or rising PaCO₂ in ALS suggests hypoventilation and should trigger urgent reassessment of ventilatory support.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ALS Hotspot Graphic"><h3>Click the ALS Respiratory Hotspots</h3><p>Click each hotspot to reveal how ALS affects respiratory function.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified ALS respiratory muscle graphic with clickable hotspots"><svg viewBox="0 0 240 240" fill="none" aria-hidden="true"><path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/><path d="M73 183c33 22 62 22 94 0" stroke="#E85D5D" stroke-width="5" stroke-linecap="round"/><circle cx="120" cy="116" r="14" fill="#1CA7A8"/></svg><button class="hotspot-btn" style="left:44%; top:18%;" data-title="Bulbar Muscles" data-text="Bulbar weakness affects speech, swallowing, secretion control, aspiration risk, and mask NIV tolerance.">1</button><button class="hotspot-btn" style="left:43%; top:47%;" data-title="Diaphragm Weakness" data-text="A weak diaphragm lowers vital capacity and causes orthopnea, nocturnal hypoventilation, and CO₂ retention.">2</button><button class="hotspot-btn" style="right:25%; top:50%;" data-title="Weak Expiratory Muscles" data-text="Expiratory weakness reduces cough force, raising secretion retention and atelectasis risk.">3</button><button class="hotspot-btn" style="right:39%; bottom:15%;" data-title="Low Lung Volumes" data-text="Shallow breathing and poor lung expansion increase atelectasis and infection risk.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
+          <section class="info-card" id="triggers"><h2>Etiology, Risk Factors & Clinical Stressors</h2><p>ALS respiratory decline is progressive, but acute deterioration often occurs when infection, aspiration, secretion retention, sedating medications, or inadequate ventilatory support overwhelms limited reserve.</p><div class="example-box soft-teal" style="margin-top:14px;"><img src="als-risk-stressors.png" alt="Visual showing ALS respiratory reserve declining with infection, aspiration, sleep hypoventilation, and retained secretions"></div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Factor</th><th>Why It Matters</th><th>Teaching Focus</th></tr><tr><td>Bulbar weakness</td><td>Increases aspiration and secretion burden.</td><td>Coordinate swallow, suction, airway protection planning.</td></tr><tr><td>Respiratory infection</td><td>Raises ventilatory demand and secretion load.</td><td>Escalate airway clearance and monitor CO₂.</td></tr><tr><td>Supine positioning</td><td>Worsens diaphragm mechanics.</td><td>Ask about orthopnea and sleep symptoms.</td></tr><tr><td>Sedatives/opioids</td><td>Can suppress respiratory drive.</td><td>Use caution and monitor ventilation.</td></tr><tr><td>Weak cough</td><td>Prevents secretion clearance.</td><td>Assess peak cough flow and cough assist need.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ALS Risk Sorting"><h3>Sort the ALS Respiratory Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="risk"><strong>Bulbar dysfunction</strong><select><option value="">Choose category</option><option value="risk">Risk/Stress Factor</option><option value="therapy">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="therapy"><strong>Mechanical insufflation-exsufflation</strong><select><option value="">Choose category</option><option value="risk">Risk/Stress Factor</option><option value="therapy">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="risk"><strong>Respiratory infection</strong><select><option value="">Choose category</option><option value="risk">Risk/Stress Factor</option><option value="therapy">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Rising PaCO₂ with somnolence</strong><select><option value="">Choose category</option><option value="risk">Risk/Stress Factor</option><option value="therapy">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="therapy"><strong>Nocturnal NIV</strong><select><option value="">Choose category</option><option value="risk">Risk/Stress Factor</option><option value="therapy">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>ALS respiratory symptoms may be subtle at first. Students should think beyond dyspnea and look for sleep-related hypoventilation, weak cough, secretion difficulty, and aspiration clues.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Sleep symptoms</td><td>Morning headaches, daytime sleepiness, nightmares, frequent awakenings.</td></tr><tr><td>Breathing pattern</td><td>Orthopnea, shallow breathing, accessory muscle use, paradoxical breathing.</td></tr><tr><td>Cough/secretion clues</td><td>Weak cough, retained secretions, frequent suction need, recurrent infections.</td></tr><tr><td>Bulbar clues</td><td>Dysarthria, dysphagia, choking, drooling, aspiration episodes.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, low tidal volume, reduced vital capacity, fatigue.</td></tr><tr><td>Oxygenation clues</td><td>Desaturation may occur late, during sleep, with infection, or with atelectasis.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>In neuromuscular disease, hypoxemia may be a late sign. A normal pulse oximeter reading does not rule out nocturnal hypoventilation or CO₂ retention.</p></article></section>
+          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>ALS respiratory evaluation tracks muscle strength, ventilation, cough effectiveness, sleep-related hypoventilation, and complications such as atelectasis or pneumonia.</p><h3 style="margin-top:18px;">Pulmonary Function and Muscle Measures</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test</th><th>ALS Pattern</th><th>RT Meaning</th></tr><tr><td>FVC or SVC</td><td>Progressively decreases.</td><td>Tracks ventilatory reserve and need for NIV evaluation.</td></tr><tr><td>Supine VC</td><td>Drops more with diaphragm weakness.</td><td>High-yield clue for orthopnea and nocturnal hypoventilation.</td></tr><tr><td>MIP/NIF</td><td>Becomes less negative as inspiratory muscles weaken.</td><td>Reflects inspiratory muscle strength.</td></tr><tr><td>MEP</td><td>Declines with expiratory muscle weakness.</td><td>Reflects cough force and secretion clearance ability.</td></tr><tr><td>Peak cough flow</td><td>Low when cough is ineffective.</td><td>Supports cough assist and airway clearance planning.</td></tr></table></div><h3 style="margin-top:18px;">Gas Exchange and Sleep Testing</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>Meaning</th></tr><tr><td>Elevated PaCO₂ or VBG CO₂ trend</td><td>Alveolar hypoventilation from pump failure.</td></tr><tr><td>Overnight desaturation or elevated transcutaneous CO₂</td><td>Nocturnal hypoventilation may precede daytime failure.</td></tr><tr><td>Low SpO₂ with infection or secretions</td><td>May indicate atelectasis, aspiration, pneumonia, or hypoventilation.</td></tr><tr><td>Chest imaging</td><td>Rules out pneumonia, aspiration, atelectasis, or other acute causes.</td></tr></table></div></section>
+          <section class="info-card" id="severity"><h2>Respiratory Measures & Escalation Thresholds</h2><p>ALS severity is often followed with trends rather than a single number. Declining vital capacity, worsening symptoms, poor cough, and CO₂ retention matter more than isolated SpO₂.</p><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Early concern</strong><br>Orthopnea, sleep symptoms, declining FVC/SVC, weak cough.</div><div class="example-box soft-amber"><strong>Moderate concern</strong><br>Nocturnal hypoventilation, secretion retention, recurrent infections, low cough flow.</div><div class="example-box soft-coral"><strong>High concern</strong><br>Daytime hypercapnia, aspiration, inability to clear secretions, altered mental status.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="ALS Respiratory Measure Activity"><h3>Respiratory Measure Activity</h3><p>An ALS patient reports morning headaches and orthopnea. FVC has declined and PaCO₂ is rising. What does this most strongly suggest?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Bronchospasm causes obstructive symptoms and wheezing, but this pattern points to ventilatory muscle failure.">Acute bronchospasm requiring only albuterol.</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Morning headaches, orthopnea, declining vital capacity, and rising PaCO₂ are high-yield signs of hypoventilation from respiratory muscle weakness.">Progressive hypoventilation requiring ventilatory support evaluation.</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Oxygen alone may improve saturation but does not correct inadequate ventilation or CO₂ retention.">A pure oxygenation problem best treated with oxygen alone.</button></div><div class="quiz-feedback" role="status"></div></article></section>
+          <section class="info-card red" id="red-flags"><h2>Severity & Red Flags</h2><p>The key question is not simply “Is the saturation okay?” The key question is whether the patient can ventilate, protect the airway, and clear secretions.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Rising PaCO₂, confusion, or somnolence</td><td>Suggests ventilatory failure.</td></tr><tr><td>Inability to lie flat</td><td>Suggests diaphragm weakness.</td></tr><tr><td>Weak or absent cough</td><td>High risk for retained secretions and atelectasis.</td></tr><tr><td>Choking, drooling, aspiration events</td><td>Bulbar dysfunction may threaten airway protection.</td></tr><tr><td>Fever with increased secretions</td><td>Infection can rapidly exceed limited respiratory reserve.</td></tr><tr><td>Oxygen requirement without ventilation assessment</td><td>Oxygen alone can mask worsening hypoventilation.</td></tr></table></div></section>
+          <section class="info-card" id="management"><h2>Management & Treatment</h2><p>ALS management is supportive and anticipatory. RT care focuses on ventilation support, airway clearance, secretion management, infection prevention, education, and planning before crisis occurs.</p><h3 style="margin-top:18px;">RT-Focused Interventions</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Intervention</th><th>When It Helps</th><th>RT Focus</th></tr><tr><td>NIV/BiPAP</td><td>Nocturnal hypoventilation, symptoms, declining VC, hypercapnia.</td><td>Mask fit, comfort, settings, leak, adherence, CO₂ response.</td></tr><tr><td>Mouthpiece ventilation</td><td>Daytime support in selected patients.</td><td>Promotes mobility and daytime ventilation support.</td></tr><tr><td>Cough assist</td><td>Weak cough or retained secretions.</td><td>Teach timing, pressures per protocol, and secretion clearance routine.</td></tr><tr><td>Suction</td><td>Bulbar secretions or inability to clear airway.</td><td>Support airway hygiene and caregiver teaching.</td></tr><tr><td>Lung volume recruitment</td><td>Low volumes and weak cough when appropriate.</td><td>Support expansion and cough effectiveness.</td></tr><tr><td>Tracheostomy ventilation</td><td>Selected patients choosing invasive long-term support.</td><td>Requires goals, equipment, caregiver, and secretion planning.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ALS Respiratory Support Sequence"><h3>ALS Respiratory Support Sequence</h3><p>Select the steps in the best general order when an ALS patient presents with worsening dyspnea, weak cough, and suspected hypoventilation.</p><div class="sort-grid" id="sequenceSort"><div class="sort-row" data-answer="1"><strong>Assess ventilation, cough, airway protection, and oxygenation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="2"><strong>Check CO₂ trend and respiratory muscle/cough measures</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="3"><strong>Support ventilation with NIV if indicated and tolerated</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="4"><strong>Initiate airway clearance and cough augmentation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="5"><strong>Evaluate aspiration/infection and need for escalation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="6"><strong>Discuss goals of care and long-term ventilation planning</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div></div><button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button><div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div></article></section>
+          <section class="info-card red" id="status"><h2>Ventilation Planning & Escalation</h2><p>ALS respiratory failure is predictable, so escalation planning should happen before a crisis. NIV can improve symptoms and ventilation, but bulbar dysfunction, secretion burden, and patient goals shape the plan.</p><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-coral"><strong>Watch for:</strong><br>Hypercapnia, somnolence, aspiration, secretion retention, pneumonia, inability to tolerate NIV.</div><div class="example-box soft-amber"><strong>Vent goal:</strong><br>Support alveolar ventilation, rest respiratory muscles, and improve sleep-related hypoventilation.</div><div class="example-box soft-blue"><strong>Planning concept:</strong><br>Discuss NIV, cough assist, suction, advance directives, and tracheostomy preferences early.</div></div><article class="info-card board" style="margin-top:16px;"><h3>Board Pearl</h3><p>For ALS, oxygen is not the primary treatment for hypoventilation. If CO₂ is rising, the problem is ventilation. Think NIV and airway clearance, not oxygen alone.</p></article></section>
+          <section class="info-card rt" id="rt-role"><h2>Respiratory Therapist Role</h2><p>The RT is central to monitoring respiratory muscle decline, supporting ventilation, optimizing NIV tolerance, strengthening airway clearance routines, educating caregivers, and recognizing when acute deterioration requires escalation.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr><tr><td>Assess ventilation</td><td>CO₂ trend, sleep symptoms, RR/pattern, mental status, fatigue.</td><td>Detects hypoventilation before crisis.</td></tr><tr><td>Measure mechanics</td><td>FVC/SVC, MIP/NIF, MEP, peak cough flow.</td><td>Tracks muscle decline and intervention timing.</td></tr><tr><td>Optimize NIV</td><td>Mask fit, leak, comfort, settings, humidification, adherence.</td><td>Improves tolerance and ventilatory support.</td></tr><tr><td>Support airway clearance</td><td>Cough assist, suction, positioning, secretion plan.</td><td>Prevents mucus plugging, atelectasis, and infection.</td></tr><tr><td>Educate patient/caregivers</td><td>Device use, red flags, infection plan, emergency plan.</td><td>Supports safe home management.</td></tr></table></div></section>
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided ALS Case"><span class="eyebrow">Guided Unfolding Case Study</span><h2>The Normal SpO₂ That Wasn’t Enough</h2><p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p><div class="case-stage" data-case-stage="0"><h3>Stage 1: Clinic Presentation</h3><p>A 58-year-old patient with ALS reports morning headaches, daytime fatigue, and shortness of breath when lying flat. SpO₂ is 95% on room air.</p><div class="case-meta"><div><strong>FVC</strong><br>Declining trend</div><div><strong>Cough</strong><br>Weak</div><div><strong>Position</strong><br>Worse supine</div></div><p><strong>Decision Question:</strong> What is the priority RT interpretation?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Normal SpO₂ does not rule out hypoventilation or CO₂ retention in neuromuscular disease.">The patient is stable because SpO₂ is normal.</button><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Morning headaches, orthopnea, and declining FVC suggest nocturnal hypoventilation from respiratory muscle weakness.">Evaluate for nocturnal hypoventilation and ventilatory support need.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bronchodilator-only thinking misses the neuromuscular pump problem.">Treat as bronchospasm only.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Symptoms and declining mechanics require action, not routine follow-up only.">Schedule routine follow-up in one year.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="1"><h3>Stage 2: Testing</h3><p>Overnight monitoring shows hypoventilation with CO₂ elevation during sleep. The patient has difficulty sleeping flat.</p><p><strong>Decision Question:</strong> Which intervention best targets the primary problem?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. NIV supports ventilation and can reduce nocturnal hypoventilation symptoms.">Initiate and titrate NIV as ordered.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen alone may mask desaturation while CO₂ continues to rise.">Give oxygen alone without assessing ventilation.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Incentive spirometry alone does not correct ventilatory muscle failure.">Use incentive spirometry as the only therapy.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Antibiotics are not the primary treatment unless infection is present.">Start antibiotics for all ALS patients.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="2"><h3>Stage 3: Secretion Problem</h3><p>Two months later, the patient develops a respiratory infection and cannot clear secretions effectively. Peak cough flow is low.</p><p><strong>Decision Question:</strong> Which RT intervention directly addresses the weak cough?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Mechanical insufflation-exsufflation can augment cough and improve secretion clearance.">Mechanical insufflation-exsufflation/cough assist.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Increasing oxygen does not clear retained secretions.">Increase oxygen only.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Cough suppressants may worsen secretion retention.">Recommend cough suppression.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A weak cough is a functional airway clearance problem requiring support.">Ignore because cough strength is unrelated to ALS.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="3"><h3>Stage 4: Acute Deterioration</h3><p>The patient becomes drowsy with shallow breathing and rising PaCO₂. Secretions are increasing and mask NIV is poorly tolerated due to bulbar dysfunction.</p><p><strong>Decision Question:</strong> What is the safest next step?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. This is acute ventilatory failure risk with airway protection concerns. Escalate urgently and align interventions with the patient’s goals of care.">Urgently escalate care and reassess airway/ventilation options with goals of care.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This pattern is not reassuring; rising CO₂ and drowsiness are dangerous.">Wait because sleepiness means the patient is resting.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen alone does not correct ventilatory failure.">Apply oxygen only and stop monitoring CO₂.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bulbar dysfunction increases airway protection risk, not decreases it.">Assume airway protection is normal.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="4"><h3>Case Wrap-Up</h3><div class="example-box soft-teal"><strong>RT Takeaway:</strong> In ALS, assess ventilation and cough effectiveness, not SpO₂ alone. NIV, cough assist, suction, and planning are central RT interventions.</div><div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> rising CO₂, drowsiness, aspiration, retained secretions, or inability to tolerate NIV requires urgent escalation.</div></div></section>
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="ALS Knowledge Check"><span class="eyebrow">Knowledge Check</span><h2>Board-Style Practice</h2><p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p><div class="knowledge-question" data-question-id="kq1"><h3>Question 1</h3><p>An ALS patient has normal SpO₂ but reports morning headaches and orthopnea. What should the RT suspect?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Morning headaches and orthopnea suggest nocturnal hypoventilation from respiratory muscle weakness.">Nocturnal hypoventilation.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Normal SpO₂ does not exclude CO₂ retention.">No respiratory concern because SpO₂ is normal.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. ALS is primarily a neuromuscular pump problem, not asthma.">Reversible bronchospasm as the only issue.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pulmonary edema is not suggested by these ALS-specific clues.">Cardiogenic pulmonary edema.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq2"><h3>Question 2</h3><p>Which measurement best helps evaluate cough effectiveness in ALS?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Peak cough flow helps determine whether cough is strong enough to clear secretions.">Peak cough flow.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. SpO₂ does not directly measure cough strength.">Pulse oximetry only.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. FEV₁/FVC is more useful for obstructive disease patterns.">FEV₁/FVC ratio only.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Blood pressure does not evaluate airway clearance.">Blood pressure trend.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq3"><h3>Question 3</h3><p>Which intervention is most appropriate for chronic hypoventilation from ALS respiratory muscle weakness?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. NIV supports alveolar ventilation and is a key therapy in ALS-related hypoventilation.">Noninvasive ventilation.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Oxygen alone does not fix inadequate ventilation or CO₂ retention.">Oxygen alone as definitive therapy.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Bronchodilators do not correct neuromuscular ventilatory failure unless a separate obstructive process exists.">Scheduled bronchodilators as the primary therapy.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Diuretics are not the primary treatment for ALS hypoventilation.">Diuretic therapy.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq4"><h3>Question 4</h3><p>Which finding is most concerning in an ALS patient with respiratory symptoms?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Rising PaCO₂ with altered mental status suggests ventilatory failure and requires urgent escalation.">Rising PaCO₂ with new drowsiness.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Stable symptoms with effective NIV are less concerning than acute hypercapnia and drowsiness.">Stable NIV use with improved sleep.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. A mild isolated cough is not the most concerning option here.">Mild cough after drinking cold water once.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Good cough and normal mentation are reassuring compared with CO₂ retention.">Strong cough with normal mentation.</button></div><div class="quiz-feedback" role="status"></div></div><div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div></section>
+          <section id="faq"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common ALS Respiratory Questions</h2></div><details class="accordion" open><summary>What is the simplest way to understand ALS respiratory failure?</summary><div class="accordion-body"><p>The lungs may be normal, but the respiratory pump weakens. The patient cannot generate enough ventilation or cough force.</p></div></details><details class="accordion"><summary>Why can SpO₂ look normal while the patient is failing?</summary><div class="accordion-body"><p>Pulse oximetry measures oxygen saturation, not CO₂ clearance. ALS patients can retain CO₂ before oxygen saturation drops.</p></div></details><details class="accordion"><summary>Why is oxygen alone risky?</summary><div class="accordion-body"><p>Oxygen may improve saturation but does not correct hypoventilation. CO₂ can continue rising if ventilation is not supported.</p></div></details><details class="accordion"><summary>What symptoms suggest nocturnal hypoventilation?</summary><div class="accordion-body"><p>Morning headaches, daytime sleepiness, poor sleep, orthopnea, nightmares, and fatigue are common clues.</p></div></details><details class="accordion"><summary>Why is cough assist important?</summary><div class="accordion-body"><p>ALS weakens expiratory muscles. Cough assist helps clear secretions when the patient cannot generate enough cough flow.</p></div></details><details class="accordion"><summary>How does bulbar dysfunction change management?</summary><div class="accordion-body"><p>Bulbar weakness increases aspiration risk, secretion difficulty, and may make mask NIV less tolerable.</p></div></details><details class="accordion"><summary>When should escalation planning occur?</summary><div class="accordion-body"><p>Early. ALS decline is progressive, so NIV, airway clearance, emergency plans, and tracheostomy preferences should be discussed before crisis.</p></div></details></section>
+          <section class="info-card" id="summary"><h2>Summary & Clinical Pearls</h2><p>ALS causes progressive neuromuscular respiratory failure. The key RT problem is not bronchospasm or primary alveolar damage; it is ventilatory pump weakness, impaired cough, secretion retention, aspiration risk, and eventual hypercapnia.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Must know:</strong><br>ALS respiratory failure is primarily ventilatory muscle failure.</div><div class="example-box soft-amber"><strong>Board pearl:</strong><br>Normal SpO₂ does not rule out hypoventilation or CO₂ retention.</div><div class="example-box soft-blue"><strong>RT pearl:</strong><br>Trend FVC/SVC, MIP/NIF, MEP, cough flow, symptoms, and CO₂.</div><div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not treat hypoventilation with oxygen alone; support ventilation and airway clearance.</div></div></section>
+          <section id="glossary"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div><div class="glossary-card"><h3>Searchable Glossary</h3><p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p><div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: NIV, FVC, cough assist..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div><div class="glossary-list" id="glossaryList"></div></div><div class="glossary-card" style="margin-top:18px;"><h3>Glossary Flashcard Mastery Deck</h3><p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p><div class="flashcard-shell"><div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div><div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div><div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div><div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div><div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div><div class="completed-list" id="completedList"></div></div></div></section>
+        </div></div>
+    </main><footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+
+
+  <script>
+    const glossaryTerms = [
+      { term: "ALS", definition: "Amyotrophic lateral sclerosis is a progressive motor neuron disease that weakens voluntary muscles, including the muscles needed for breathing, cough, speech, and swallowing.", rt: "RTs monitor ventilatory muscle decline, cough effectiveness, secretion clearance, and need for NIV or airway support." },
+      { term: "Motor neuron disease", definition: "A disorder affecting nerve cells that control voluntary skeletal muscles.", rt: "Explains why respiratory failure in ALS is neuromuscular rather than primarily lung-tissue disease." },
+      { term: "Diaphragm weakness", definition: "Reduced strength of the main inspiratory muscle.", rt: "Causes reduced vital capacity, orthopnea, nocturnal hypoventilation, and eventual ventilatory failure." },
+      { term: "Nocturnal hypoventilation", definition: "Inadequate ventilation during sleep, often presenting before daytime ventilatory failure.", rt: "Morning headaches, sleep disruption, daytime somnolence, and rising CO₂ should prompt evaluation." },
+      { term: "FVC", definition: "Forced vital capacity; the volume exhaled forcefully after a full inhalation.", rt: "Serial FVC helps track respiratory muscle decline in ALS." },
+      { term: "SVC", definition: "Slow vital capacity; the volume exhaled slowly after a full inhalation.", rt: "Often easier than FVC for weak neuromuscular patients." },
+      { term: "MIP/NIF", definition: "Maximal inspiratory pressure or negative inspiratory force; a measure of inspiratory muscle strength.", rt: "Declining values suggest weakening ventilatory muscles." },
+      { term: "MEP", definition: "Maximal expiratory pressure; a measure of expiratory muscle strength.", rt: "Low MEP indicates impaired cough and secretion clearance risk." },
+      { term: "Peak cough flow", definition: "The highest airflow generated during cough.", rt: "Low values indicate ineffective cough and need for cough augmentation strategies." },
+      { term: "Bulbar dysfunction", definition: "Weakness affecting speech, swallowing, airway protection, and secretion handling.", rt: "Raises aspiration risk and may reduce tolerance of mask NIV." },
+      { term: "Aspiration", definition: "Entry of secretions, food, liquid, or gastric contents into the airway.", rt: "Can trigger pneumonia, atelectasis, hypoxemia, and acute respiratory decline." },
+      { term: "NIV", definition: "Noninvasive ventilation delivered by mask or mouthpiece.", rt: "A key ALS intervention for chronic hypoventilation and symptom relief." },
+      { term: "BiPAP", definition: "Bilevel positive airway pressure that supports inspiration and expiration with different pressure levels.", rt: "Common mode used to support ventilation in ALS." },
+      { term: "Cough assist", definition: "Mechanical insufflation-exsufflation that helps move secretions by simulating a stronger cough.", rt: "Useful when expiratory muscles cannot clear secretions effectively." },
+      { term: "Air stacking", definition: "Technique using sequential breaths to increase lung volume before cough.", rt: "Can improve cough volume when appropriate and tolerated." },
+      { term: "Orthopnea", definition: "Shortness of breath when lying flat.", rt: "High-yield clue for diaphragm weakness in ALS." },
+      { term: "Hypercapnia", definition: "Elevated PaCO₂ from inadequate alveolar ventilation.", rt: "In ALS, rising CO₂ reflects ventilatory muscle failure rather than bronchospasm." },
+      { term: "Atelectasis", definition: "Collapse or underexpansion of alveoli.", rt: "Can develop from shallow breathing, weak cough, and retained secretions." },
+      { term: "Tracheostomy ventilation", definition: "Invasive long-term ventilation through a tracheostomy.", rt: "Requires goals-of-care discussion, equipment planning, and secretion management." },
+      { term: "Advance care planning", definition: "Discussion of future treatment preferences before crisis decisions are required.", rt: "Important because ALS respiratory failure is progressive and predictable." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    shuffleSequence();
+    enableDynamicReorder();
+    initializeSequenceSort();
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> ALS causes progressive neuromuscular ventilatory failure from respiratory muscle weakness. Early recognition focuses on symptoms, FVC/SVC, MIP/NIF, cough strength, and CO₂ trends.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> ALS is not a primary obstructive lung disease. The main respiratory issue is progressive respiratory muscle weakness with hypoventilation and impaired cough.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
+</html>
