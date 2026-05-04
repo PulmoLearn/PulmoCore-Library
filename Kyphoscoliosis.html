@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PulmoCore | Kyphoscoliosis</title>
+<!-- PulmoCore font direction. Replace with self-hosted or approved web fonts if needed. -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Montserrat:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+<body>
+<div class="page-shell">
+<header aria-label="PulmoCore site navigation" class="top-nav">
+<div aria-label="PulmoCore brand" class="brand">
+<div aria-hidden="true" class="brand-mark">
+<svg fill="none" role="img" viewbox="0 0 64 64">
+<path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="32" cy="31" fill="#1CA7A8" r="4"></circle>
+</svg>
+</div>
+<div>
+<div class="brand-name">Pulmo<span>Core</span></div>
+<div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+</div>
+</div>
+<nav aria-label="Primary navigation" class="nav-links">
+<a href="#snapshot">Snapshot</a>
+<a href="#pathophysiology">Pathophysiology</a>
+<a href="#diagnostics">Diagnostics</a>
+<a href="#management">Management</a>
+<a href="#glossary">Glossary</a>
+</nav>
+<div class="mobile-menu-note">Menu</div>
+</header>
+<main class="main-content">
+<section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+<span class="eyebrow">Respiratory Disease Module</span>
+<h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Kyphoscoliosis</h1>
+<p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Kyphoscoliosis is a restrictive thoracic disorder caused by abnormal spinal curvature that limits chest wall expansion, reduces lung volumes, increases work of breathing, and may progress to chronic hypoventilation, pulmonary hypertension, and right heart strain. This module focuses on RT-level assessment, diagnostic interpretation, noninvasive support, airway clearance, oxygen safety, and escalation decisions.</p>
+<div aria-label="Module details" class="case-meta">
+<div><strong>Category</strong><br/>Restrictive Chest Wall Disorder</div>
+<div><strong>Estimated Time</strong><br/>30–40 minutes</div>
+<div><strong>Level</strong><br/>Core RT Knowledge</div>
+</div>
+</section>
+<div class="content-layout">
+<aside aria-label="Disease page quick navigation" class="side-nav">
+<h3>Lesson Sections</h3>
+<a href="#objectives">Objectives</a>
+<a href="#snapshot">Disease Snapshot</a>
+<a href="#precheck">Quick Pre-Check</a>
+<a href="#pathophysiology">Pathophysiology</a>
+<a href="#triggers">Etiology / Causes</a>
+<a href="#manifestations">Clinical Manifestations</a>
+<a href="#diagnostics">Diagnostics</a>
+<a href="#severity">Restriction + Ventilation</a>
+<a href="#red-flags">Red Flags</a>
+<a href="#management">Management</a>
+<a href="#status">Acute Decompensation</a>
+<a href="#rt-role">RT Role</a>
+<a href="#case-study">Case Study</a>
+<a href="#knowledge-check">Knowledge Check</a>
+<a href="#faq">FAQ</a>
+<a href="#summary">Summary</a>
+<a href="#glossary">Glossary Deck</a>
+</aside>
+<div class="lesson-stack">
+<section class="info-card" id="objectives">
+<h2>Learning Objectives</h2>
+<p>By the end of this kyphoscoliosis module, learners should be able to connect thoracic restriction, reduced lung volumes, hypoventilation risk, diagnostic findings, supportive therapies, and escalation priorities.</p>
+<div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+<div class="example-box soft-teal"><strong>1. Explain restriction</strong><br/>Describe how spinal curvature limits chest wall expansion and produces a restrictive breathing pattern.</div>
+<div class="example-box soft-blue"><strong>2. Interpret diagnostics</strong><br/>Use PFTs, ABGs, SpO₂ trends, imaging, and sleep-related hypoventilation clues to assess severity.</div>
+<div class="example-box soft-amber"><strong>3. Prioritize RT care</strong><br/>Apply oxygen carefully, support ventilation, promote airway clearance, and monitor cough effectiveness.</div>
+<div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br/>Recognize red flags such as rising PaCO₂, somnolence, recurrent infections, cor pulmonale signs, and ventilatory failure.</div>
+</div></section>
+<section class="info-card" id="snapshot">
+<h2>Disease Snapshot</h2>
+<p>Kyphoscoliosis combines excessive posterior spinal curvature with lateral curvature. The respiratory problem is primarily restrictive: the chest wall cannot expand normally, tidal volumes may be small, and chronic hypoventilation can develop when the ventilatory pump cannot meet demand.</p>
+<div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+<div class="example-box soft-teal"><strong>What it is:</strong><br/>Abnormal spinal curvature causing chest wall restriction.</div>
+<div class="example-box soft-teal"><strong>Primary problem:</strong><br/>Reduced thoracic expansion with low lung volumes.</div>
+<div class="example-box soft-teal"><strong>Classic symptoms:</strong><br/>Dyspnea on exertion, fatigue, shallow breathing, orthopnea, poor sleep, recurrent infections.</div>
+<div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br/>Low TLC and FVC with preserved or high FEV₁/FVC ratio.</div>
+<div class="example-box soft-teal"><strong>Acute danger:</strong><br/>Hypoventilation with rising PaCO₂, somnolence, acidosis, or signs of right heart strain.</div>
+<div class="example-box soft-teal"><strong>RT priority:</strong><br/>Assess ventilation, oxygenation, cough strength, secretion clearance, NIV need, and response to support.</div>
+</div>
+<article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>The RT must think beyond SpO₂. A patient with kyphoscoliosis may oxygenate acceptably while slowly retaining CO₂ because the chest wall mechanics limit ventilation.</p></article>
+<article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Immediately associate kyphoscoliosis with restrictive PFTs, reduced chest wall compliance, low VT, chronic alveolar hypoventilation, nocturnal NIV, airway clearance support, and caution with oxygen-only treatment when CO₂ retention is present.</p></article></section>
+<section class="quiz-card require-complete" data-activity-name="Quick Pre-Check" id="precheck">
+<span class="eyebrow">Quick Pre-Check</span>
+<h2>Start with the core kyphoscoliosis pattern</h2>
+<p>Which statement best describes the core respiratory problem in kyphoscoliosis?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false">The airways narrow episodically from bronchospasm and mucus plugging.</button>
+<button class="quiz-option" data-correct="true">Chest wall deformity limits thoracic expansion, creating a restrictive ventilatory pattern.</button>
+<button class="quiz-option" data-correct="false">The alveoli are permanently destroyed, causing obstructive air trapping.</button>
+<button class="quiz-option" data-correct="false">A clot blocks pulmonary perfusion and causes dead-space ventilation.</button>
+</div>
+<div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
+<section class="info-card" id="pathophysiology">
+<h2>Anatomy &amp; Pathophysiology</h2>
+<p>Kyphoscoliosis restricts the thoracic cage. The lungs may be structurally normal, but the chest wall cannot expand efficiently. This decreases compliance, lowers lung volumes, increases work of breathing, weakens cough mechanics, and can cause chronic alveolar hypoventilation.</p>
+<div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Spinal curvature → stiff chest wall + reduced expansion → low VT/FVC/TLC → increased WOB + atelectasis risk → secretion retention/recurrent infection → nocturnal then daytime hypoventilation → pulmonary hypertension/cor pulmonale risk.</div>
+<div class="example-box soft-blue" style="margin-top:16px;"><strong>Visual Placeholder: Restrictive Chest Wall Mechanics</strong><br/><img alt="Diagram showing kyphoscoliosis limiting rib cage expansion and reducing lung volumes" src="kyphoscoliosis-pathophysiology.png"/></div>
+<h3 style="margin-top:22px;">What Changes in Kyphoscoliosis</h3>
+<div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Reduced chest wall compliance</td><td>Thoracic cage is harder to expand.</td><td>Patient uses more effort for smaller breaths.</td></tr><tr><td>Low lung volumes</td><td>TLC, VC, and FVC decrease.</td><td>Classic restrictive pattern.</td></tr><tr><td>Small tidal volumes</td><td>Shallow breathing may develop.</td><td>Raises risk for atelectasis and CO₂ retention.</td></tr><tr><td>Weak cough mechanics</td><td>Low inspiratory volume and poor expiratory force.</td><td>Increases secretion retention and infection risk.</td></tr><tr><td>Chronic hypoventilation</td><td>Ventilatory pump cannot maintain alveolar ventilation.</td><td>Can produce hypercapnia, morning headaches, and somnolence.</td></tr></table></div>
+<h3 style="margin-top:22px;">ABG Progression Concept</h3><p>Early disease may show normal ABGs at rest with exertional or nocturnal desaturation. As restriction worsens, alveolar hypoventilation can cause elevated PaCO₂. A rising PaCO₂ with fatigue, somnolence, or acidosis is a major escalation sign.</p>
+<article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>Do not treat chronic hypoventilation with oxygen alone without assessing ventilation. Oxygen may improve SpO₂ while CO₂ retention continues.</p></article>
+<article class="activity-card require-complete" data-activity-name="Kyphoscoliosis Hotspot Graphic" style="margin-top:16px;"><h3>Click the Kyphoscoliosis Hotspots</h3><p>Click each hotspot to reveal how chest wall restriction affects breathing.</p><div class="hotspot-demo"><div aria-label="Simplified kyphoscoliosis chest wall graphic with clickable hotspots" class="hotspot-lung"><svg aria-hidden="true" fill="none" viewbox="0 0 240 240"><path d="M120 28 C92 58 153 81 111 116 C76 146 145 162 111 212" stroke="#0B1F33" stroke-linecap="round" stroke-width="10"></path><path d="M76 68 C55 92 46 128 50 166" stroke="#4BA3F2" stroke-width="4"></path><path d="M164 68 C185 92 194 128 190 166" stroke="#4BA3F2" stroke-width="4"></path><path d="M72 96 H168 M66 126 H174 M62 156 H178" stroke="#1CA7A8" stroke-linecap="round" stroke-width="5"></path><ellipse cx="94" cy="145" fill="rgba(75,163,242,.16)" rx="29" ry="48" stroke="#4BA3F2" stroke-width="3"></ellipse><ellipse cx="146" cy="145" fill="rgba(75,163,242,.16)" rx="29" ry="48" stroke="#4BA3F2" stroke-width="3"></ellipse></svg><button class="hotspot-btn" data-text="Kyphosis and scoliosis distort the thoracic cage and reduce mechanical efficiency." data-title="Spinal Curvature" style="left:45%; top:19%;">1</button><button class="hotspot-btn" data-text="The rib cage cannot expand normally, so tidal volume and vital capacity fall." data-title="Reduced Expansion" style="left:23%; top:45%;">2</button><button class="hotspot-btn" data-text="TLC and FVC decrease, creating a restrictive PFT pattern." data-title="Low Lung Volumes" style="right:25%; top:49%;">3</button><button class="hotspot-btn" data-text="Small breaths and increased load can lead to nocturnal then daytime CO₂ retention." data-title="Hypoventilation Risk" style="right:37%; bottom:19%;">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br/>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
+<section class="info-card" id="triggers">
+<h2>Etiology, Causes &amp; Risk Factors</h2><p>Kyphoscoliosis may be idiopathic, congenital, neuromuscular, degenerative, traumatic, or associated with connective tissue or skeletal disorders. Respiratory severity depends on the degree of curvature, age of onset, progression, respiratory muscle strength, and comorbid lung disease.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Cause or Risk Factor</th><th>Why It Matters</th><th>RT Focus</th></tr><tr><td>Severe spinal curvature</td><td>Greater thoracic restriction.</td><td>Watch lung volumes and WOB.</td></tr><tr><td>Neuromuscular disease</td><td>Weak respiratory muscles worsen hypoventilation.</td><td>Assess cough strength and NIV need.</td></tr><tr><td>Early-onset deformity</td><td>Can impair chest/lung growth.</td><td>Monitor long-term restriction.</td></tr><tr><td>Obesity or OSA</td><td>Adds ventilatory load and nocturnal hypoventilation risk.</td><td>Screen sleep symptoms and CO₂ retention.</td></tr><tr><td>Recurrent infections</td><td>Secretion retention and low volumes increase risk.</td><td>Prioritize airway clearance.</td></tr></table></div><article class="activity-card require-complete" data-activity-name="Kyphoscoliosis Factor Sorting" style="margin-top:16px;"><h3>Sort the Kyphoscoliosis Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="mechanism"><strong>Reduced thoracic expansion</strong><select aria-label="Category for reduced thoracic expansion"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="support"><strong>Nocturnal NIV</strong><select aria-label="Category for nocturnal NIV"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="mechanism"><strong>Low TLC and FVC</strong><select aria-label="Category for low TLC and FVC"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Rising PaCO₂ with somnolence</strong><select aria-label="Category for rising PaCO2"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="support"><strong>Airway clearance assistance</strong><select aria-label="Category for airway clearance"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" id="checkRiskSort" style="margin-top:12px;" type="button">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
+<section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Presentation ranges from mild exertional dyspnea to chronic ventilatory failure. RT assessment should focus on breathing pattern, chest wall movement, work of breathing, cough effectiveness, secretion burden, sleep symptoms, oxygenation, and ventilation.</p><div class="example-box soft-blue" style="margin-top:16px;"><strong>Visual Placeholder: Restriction vs Obstruction</strong><br/><img alt="Comparison diagram showing restrictive low lung volumes in kyphoscoliosis versus obstructive air trapping" src="kyphoscoliosis-restrictive-pattern.png"/></div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Symptoms</td><td>Dyspnea on exertion, fatigue, orthopnea, morning headaches, poor sleep, daytime somnolence.</td></tr><tr><td>Appearance</td><td>Visible spinal curvature, shallow breathing, accessory muscle use, reduced chest excursion.</td></tr><tr><td>Breath sounds</td><td>Often diminished bases; crackles may appear with atelectasis or infection.</td></tr><tr><td>Oxygenation clues</td><td>Exertional/nocturnal desaturation; worsening hypoxemia during infection.</td></tr><tr><td>Ventilation clues</td><td>Elevated PaCO₂, elevated serum bicarbonate in chronic compensation, drowsiness when acute.</td></tr><tr><td>Secretion clues</td><td>Weak cough, retained secretions, recurrent bronchitis or pneumonia.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>A stable SpO₂ does not prove ventilation is adequate. In restrictive chest wall disease, trend PaCO₂, pH, mental status, and sleep-related symptoms.</p></article></section>
+<section class="info-card board" id="diagnostics"><h2>Diagnostics &amp; Assessment</h2><p>Diagnostic data helps quantify restriction, identify chronic hypoventilation, evaluate complications, and guide support decisions.</p><h3 style="margin-top:18px;">PFT Pattern</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>Kyphoscoliosis Pattern</th></tr><tr><td>TLC</td><td>Decreased; confirms restriction.</td></tr><tr><td>FVC / VC</td><td>Decreased due to limited chest wall expansion.</td></tr><tr><td>FEV₁</td><td>Often decreased proportionally with FVC.</td></tr><tr><td>FEV₁/FVC</td><td>Normal or increased unless obstructive disease also exists.</td></tr><tr><td>DLCO</td><td>Often normal when lung parenchyma is not the primary problem.</td></tr></table></div><h3 style="margin-top:18px;">ABG / CO₂ Patterns</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Pattern</th><th>Meaning</th></tr><tr><td>Normal PaCO₂ at rest</td><td>May occur in mild disease; still assess exertion and sleep.</td></tr><tr><td>Elevated PaCO₂ with normal/near-normal pH</td><td>Chronic compensated hypoventilation.</td></tr><tr><td>Elevated PaCO₂ with acidemia</td><td>Acute-on-chronic ventilatory failure.</td></tr><tr><td>Elevated bicarbonate</td><td>Suggests chronic CO₂ retention compensation.</td></tr></table></div><h3 style="margin-top:18px;">Imaging and Sleep Testing</h3><p>Chest/spine imaging demonstrates curvature and may show low lung volumes or atelectasis. Overnight oximetry, capnography, or polysomnography may identify nocturnal hypoventilation or coexisting sleep-disordered breathing.</p></section>
+<section class="info-card" id="severity"><h2>Restriction Severity &amp; Ventilation Risk</h2><p>Severity is judged by lung volumes, symptoms, gas exchange, sleep-related hypoventilation, cough effectiveness, exacerbation history, and complications such as pulmonary hypertension.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Severity Clue</th><th>Clinical Meaning</th></tr><tr><td>Mild restriction</td><td>Low volumes but acceptable gas exchange and minimal symptoms.</td></tr><tr><td>Exertional limitation</td><td>Ventilatory reserve is reduced; monitor exercise desaturation.</td></tr><tr><td>Nocturnal hypoventilation</td><td>Often appears before daytime hypercapnia.</td></tr><tr><td>Daytime hypercapnia</td><td>Advanced ventilatory pump failure risk.</td></tr><tr><td>Recurrent infections</td><td>Suggests ineffective cough and secretion clearance issues.</td></tr></table></div><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Stable</strong><br/>Comfortable breathing, normal mentation, no acute CO₂ rise.</div><div class="example-box soft-amber"><strong>Monitor closely</strong><br/>Nocturnal symptoms, exertional desaturation, weak cough, increasing WOB.</div><div class="example-box soft-coral"><strong>Escalate</strong><br/>Somnolence, rising PaCO₂, acidemia, severe hypoxemia, or poor NIV response.</div></div><article class="quiz-card require-complete" data-activity-name="PFT Pattern Activity" id="peakflow-activity" style="margin-top:16px;"><h3>PFT Pattern Activity</h3><p>A patient with severe kyphoscoliosis has FVC 45% predicted, TLC 50% predicted, and FEV₁/FVC 88%. Which pattern is most likely?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Obstructive disease usually shows a reduced FEV₁/FVC ratio.">Obstructive pattern</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Low FVC and TLC with a preserved or high FEV₁/FVC ratio supports restrictive disease.">Restrictive pattern</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. These values are not normal because lung volumes are markedly reduced.">Normal pattern</button></div><div class="quiz-feedback" role="status"></div></article></section>
+<section class="info-card red" id="red-flags"><h2>Severity &amp; Red Flags</h2><p>The key question is whether the restrictive chest wall can support adequate ventilation, especially during sleep, infection, sedation, or acute illness.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Rising PaCO₂ or falling pH</td><td>Suggests worsening ventilatory failure.</td></tr><tr><td>Somnolence, confusion, morning headaches</td><td>May reflect hypercapnia or nocturnal hypoventilation.</td></tr><tr><td>Weak cough with retained secretions</td><td>Raises atelectasis and pneumonia risk.</td></tr><tr><td>Increasing oxygen need</td><td>May signal atelectasis, infection, or worsening V/Q mismatch.</td></tr><tr><td>Peripheral edema, JVD, loud P2</td><td>Possible pulmonary hypertension or cor pulmonale.</td></tr><tr><td>Failure of NIV to improve WOB/gas exchange</td><td>Requires urgent escalation.</td></tr></table></div></section>
+<section class="info-card" id="management"><h2>Management &amp; Treatment</h2><p>Management focuses on supporting ventilation, preventing atelectasis and infection, optimizing airway clearance, treating complications, and escalating early when ventilatory failure develops.</p><h3 style="margin-top:18px;">RT-Focused Interventions</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Intervention</th><th>Why It Helps</th><th>RT Watch Point</th></tr><tr><td>Noninvasive ventilation</td><td>Improves alveolar ventilation and unloads respiratory muscles.</td><td>Monitor PaCO₂, pH, leak, synchrony, comfort.</td></tr><tr><td>Oxygen therapy</td><td>Treats hypoxemia.</td><td>Do not ignore CO₂ retention; reassess ventilation.</td></tr><tr><td>Airway clearance</td><td>Helps mobilize secretions when cough is weak.</td><td>Use cough assist, PEP, CPT, suction as appropriate.</td></tr><tr><td>Lung expansion therapy</td><td>Reduces atelectasis risk.</td><td>Coach technique and monitor tolerance.</td></tr><tr><td>Vaccination/infection prevention</td><td>Reduces respiratory infection risk.</td><td>Reinforce prevention education.</td></tr><tr><td>Escalation to invasive ventilation</td><td>Needed for failed NIV or severe acute failure.</td><td>Prepare for difficult mechanics and close monitoring.</td></tr></table></div><article class="activity-card require-complete" data-activity-name="Kyphoscoliosis Care Sequence" style="margin-top:16px;"><h3>Acute Decompensation Care Sequence</h3><p>Select the steps in the best general order for a kyphoscoliosis patient with suspected acute-on-chronic hypoventilation.</p><div class="sort-grid" id="sequenceSort"><div class="sort-row" data-answer="1" data-sequence-item="Assess WOB, mentation, SpO₂, and ventilation"><strong>Assess WOB, mentation, SpO₂, and ventilation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="2" data-sequence-item="Obtain ABG or CO₂ assessment"><strong>Obtain ABG or CO₂ assessment</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="3" data-sequence-item="Treat hypoxemia while monitoring CO₂"><strong>Treat hypoxemia while monitoring CO₂</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="4" data-sequence-item="Start or optimize NIV if indicated"><strong>Start or optimize NIV if indicated</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="5" data-sequence-item="Support airway clearance and treat cause"><strong>Support airway clearance and treat cause</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="6" data-sequence-item="Escalate if NIV fails or acidosis worsens"><strong>Escalate if NIV fails or acidosis worsens</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div></div><button class="small-btn primary" id="checkSequenceSort" style="margin-top:12px;" type="button">Check Sequence</button><div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div></article></section>
+<section class="info-card red" id="status"><h2>Acute Decompensation &amp; Ventilator Considerations</h2><p>Kyphoscoliosis patients may acutely worsen during respiratory infection, postoperative periods, sedation, sleep, or increased secretion burden. The problem is often ventilatory pump failure rather than primary bronchospasm.</p><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-coral"><strong>Watch for:</strong><br/>Rising PaCO₂, acidemia, somnolence, weak cough, secretion retention, worsening WOB.</div><div class="example-box soft-amber"><strong>NIV goal:</strong><br/>Improve alveolar ventilation, unload respiratory muscles, and correct acute-on-chronic hypercapnia.</div><div class="example-box soft-blue"><strong>Vent concept:</strong><br/>Use support that achieves adequate VT/minute ventilation while avoiding excessive pressures and discomfort.</div></div><article class="info-card board" style="margin-top:16px;"><h3>Board Pearl</h3><p>For chest wall restriction with hypercapnia, think ventilatory support. Oxygen treats hypoxemia, but NIV treats hypoventilation.</p></article></section>
+<section class="info-card rt" id="rt-role"><h2>Respiratory Therapist Role</h2><p>The RT is central to recognizing hypoventilation, applying NIV, monitoring gas exchange, supporting airway clearance, and teaching long-term respiratory care.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr><tr><td>Assess ventilation</td><td>RR, pattern, VT estimate, PaCO₂, pH, ETCO₂/TcCO₂ when used, mental status.</td><td>Detects ventilatory failure.</td></tr><tr><td>Assess oxygenation</td><td>SpO₂, PaO₂, exertional/nocturnal desaturation.</td><td>Identifies hypoxemia and response.</td></tr><tr><td>Evaluate mechanics</td><td>Chest excursion, posture, accessory muscles, cough strength.</td><td>Links anatomy to breathing load.</td></tr><tr><td>Manage NIV</td><td>Interface fit, pressures, backup rate when ordered, leak, synchrony.</td><td>Supports ventilation and adherence.</td></tr><tr><td>Support airway clearance</td><td>Cough assist, PEP, CPT, suction, hydration/humidification when appropriate.</td><td>Reduces atelectasis/infection risk.</td></tr></table></div></section>
+<section class="case-card require-complete" data-activity-name="Guided Kyphoscoliosis Case" id="case-study"><span class="eyebrow">Guided Unfolding Case Study</span><h2>The Restrictive Patient Getting Sleepier</h2><p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p><div class="case-stage" data-case-stage="0"><h3>Stage 1: Initial Presentation</h3><p>A 34-year-old patient with severe kyphoscoliosis presents with dyspnea, fatigue, and morning headaches after several days of a respiratory infection.</p><div class="case-meta"><div><strong>RR</strong><br/>28/min, shallow</div><div><strong>SpO₂</strong><br/>88% on room air</div><div><strong>Appearance</strong><br/>Sleepy but arousable</div></div><p><strong>Decision Question:</strong> What should the RT prioritize first?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bronchodilators may help if bronchospasm exists, but the primary kyphoscoliosis risk is hypoventilation.">Give repeated bronchodilators as the only priority.</button><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Assess oxygenation and ventilation together. This patient may have acute-on-chronic hypercapnic failure.">Assess WOB, mentation, SpO₂, and obtain ventilation data such as ABG or CO₂ trend.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Discharge teaching is important later, but this patient has red flags now.">Provide only home exercise teaching and discharge.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen may be needed, but oxygen alone can miss worsening CO₂ retention.">Apply oxygen only and stop assessment once SpO₂ improves.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="1"><h3>Stage 2: ABG Data</h3><p>ABG on 2 L/min nasal cannula shows pH 7.31, PaCO₂ 62 mm Hg, PaO₂ 72 mm Hg, HCO₃⁻ 31 mEq/L.</p><p><strong>Decision Question:</strong> How should this be interpreted?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The elevated bicarbonate suggests chronic compensation, but the low pH indicates acute-on-chronic ventilatory failure.">Acute-on-chronic hypercapnic ventilatory failure.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. PaCO₂ is elevated, so ventilation is not normal.">Normal ventilation with mild hypoxemia only.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This is not a primary metabolic acidosis; CO₂ retention is the main driver.">Pure metabolic acidosis.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The pH is acidemic, so this is not fully compensated and stable.">Fully compensated chronic respiratory acidosis with no acute concern.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="2"><h3>Stage 3: Support Decision</h3><p>The patient is cooperative but tiring. Breath sounds are diminished in the bases. Secretions are present but cough is weak.</p><p><strong>Decision Question:</strong> Which RT intervention best targets the ventilatory problem?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. NIV can improve alveolar ventilation and unload respiratory muscles in chest wall restrictive disease.">Initiate or optimize NIV as ordered while monitoring response.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen alone does not correct hypoventilation or high PaCO₂.">Increase oxygen only until SpO₂ is normal.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Incentive spirometry alone is insufficient for acute hypercapnic ventilatory failure.">Use incentive spirometry only.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This would worsen hypoxemia and does not support ventilation.">Remove respiratory support to avoid dependence.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="3"><h3>Stage 4: Response Check</h3><p>After NIV, the patient is more alert and RR decreases. Repeat ABG shows pH 7.36 and PaCO₂ 52 mm Hg. Secretions remain difficult to clear.</p><p><strong>Decision Question:</strong> What should the RT address next?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Continue ventilatory support and add airway clearance strategies to reduce atelectasis and infection risk.">Continue NIV monitoring and support airway clearance.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Improvement does not mean all support can be stopped abruptly.">Stop NIV immediately and discharge without follow-up.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Secretions and weak cough are clinically important in restrictive chest wall disease.">Ignore cough strength because PFTs are restrictive.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen alone does not maintain ventilation for this problem.">Replace NIV with oxygen-only therapy.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="4"><h3>Case Wrap-Up</h3><div class="example-box soft-teal"><strong>RT Takeaway:</strong> In kyphoscoliosis, worsening ventilation may appear as fatigue, headache, somnolence, and rising CO₂ before severe oxygenation failure.</div><div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> declining mental status, acidemia, poor NIV tolerance, or secretion retention with respiratory failure requires urgent escalation.</div></div></section>
+<section class="quiz-card require-complete" data-activity-name="Kyphoscoliosis Knowledge Check" id="knowledge-check"><span class="eyebrow">Knowledge Check</span><h2>Board-Style Practice</h2><p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p><div class="knowledge-question" data-question-id="kq1"><h3>Question 1</h3><p>Which PFT pattern best supports kyphoscoliosis-related restriction?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-correct="true" data-feedback="Correct. Restriction shows reduced TLC/FVC with a normal or high FEV₁/FVC ratio." data-question="kq1">Decreased TLC and FVC with preserved FEV₁/FVC.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. A low FEV₁/FVC ratio suggests obstruction." data-question="kq1">Low FEV₁/FVC with high TLC.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Kyphoscoliosis does not typically increase lung volumes." data-question="kq1">Increased TLC and increased RV as the primary pattern.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Severe kyphoscoliosis usually reduces volumes." data-question="kq1">Normal spirometry and lung volumes in all cases.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq2"><h3>Question 2</h3><p>Which finding is most concerning in a patient with kyphoscoliosis?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-correct="true" data-feedback="Correct. Rising PaCO₂ with somnolence suggests ventilatory failure." data-question="kq2">Rising PaCO₂ with increasing somnolence.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Mild exertional dyspnea can occur, but it is not the most urgent red flag." data-question="kq2">Mild exertional dyspnea with normal mentation.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Stable normal PaCO₂ is reassuring compared with a rising PaCO₂." data-question="kq2">Stable PaCO₂ with no symptoms.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Spinal curvature is expected; the acute concern is ventilatory failure." data-question="kq2">Visible spinal curvature alone.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq3"><h3>Question 3</h3><p>Why is oxygen-only treatment risky in chronic hypoventilation?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-correct="true" data-feedback="Correct. Oxygen may improve saturation without correcting alveolar hypoventilation or CO₂ retention." data-question="kq3">It may improve SpO₂ while CO₂ retention continues.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Oxygen can be appropriate for hypoxemia, but ventilation still must be monitored." data-question="kq3">Oxygen is never used in restrictive disease.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Bronchodilation is not the primary mechanism of oxygen therapy." data-question="kq3">It causes bronchodilation that hides wheezing.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Oxygen therapy does not directly measure TLC." data-question="kq3">It falsely raises TLC on PFTs.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq4"><h3>Question 4</h3><p>Which intervention best targets hypercapnic ventilatory failure from chest wall restriction?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-correct="true" data-feedback="Correct. NIV improves alveolar ventilation and unloads respiratory muscles when appropriate." data-question="kq4">Noninvasive ventilation with monitoring of ABG/CO₂ response.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Humidification may help comfort/secretions but does not correct ventilatory failure by itself." data-question="kq4">Humidification alone.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Bronchodilators are not the primary treatment for restrictive chest wall hypoventilation unless bronchospasm coexists." data-question="kq4">SABA-only therapy.</button><button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Observation alone is unsafe with hypercapnic failure." data-question="kq4">Observation only until PaCO₂ normalizes.</button></div><div class="quiz-feedback" role="status"></div></div><div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div></section>
+<section id="faq"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common Kyphoscoliosis Questions</h2></div><details class="accordion" open=""><summary>What is the simplest way to understand kyphoscoliosis?</summary><div class="accordion-body"><p>It is a chest wall restriction problem caused by abnormal spinal curvature. The lungs may not expand fully because the thoracic cage is mechanically limited.</p></div></details><details class="accordion"><summary>Is kyphoscoliosis obstructive or restrictive?</summary><div class="accordion-body"><p>It is primarily restrictive. PFTs typically show decreased TLC and FVC with a normal or elevated FEV₁/FVC ratio.</p></div></details><details class="accordion"><summary>Why can these patients retain CO₂?</summary><div class="accordion-body"><p>Small tidal volumes, increased work of breathing, and respiratory muscle loading can reduce alveolar ventilation, especially during sleep or acute illness.</p></div></details><details class="accordion"><summary>Why is nocturnal NIV commonly considered?</summary><div class="accordion-body"><p>Nocturnal hypoventilation often appears before daytime hypercapnia. NIV can unload respiratory muscles and improve ventilation during sleep.</p></div></details><details class="accordion"><summary>What should the RT monitor after starting NIV?</summary><div class="accordion-body"><p>Monitor WOB, mental status, comfort, mask leak, synchrony, SpO₂, PaCO₂ or CO₂ trend, pH, and secretion clearance.</p></div></details><details class="accordion"><summary>Why is airway clearance important?</summary><div class="accordion-body"><p>Low lung volumes and weak cough mechanics increase secretion retention, atelectasis, and infection risk.</p></div></details><details class="accordion"><summary>What complications matter most?</summary><div class="accordion-body"><p>Chronic hypoventilation, recurrent infections, atelectasis, pulmonary hypertension, and cor pulmonale are high-yield complications.</p></div></details></section>
+<section class="info-card" id="summary"><h2>Summary &amp; Clinical Pearls</h2><p>Kyphoscoliosis is a restrictive chest wall disorder. Respiratory care focuses on mechanics, ventilation, airway clearance, oxygenation, and early recognition of acute-on-chronic hypercapnic failure.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Must know:</strong><br/>Low TLC/FVC with preserved FEV₁/FVC = restrictive pattern.</div><div class="example-box soft-amber"><strong>Board pearl:</strong><br/>Oxygen may correct SpO₂ but does not correct hypoventilation or high PaCO₂.</div><div class="example-box soft-blue"><strong>RT pearl:</strong><br/>Assess ventilation, mental status, cough strength, NIV response, and secretion clearance.</div><div class="example-box soft-coral"><strong>Common mistake:</strong><br/>Do not assume normal-looking SpO₂ means the patient is ventilating adequately.</div></div></section>
+<section id="glossary">
+<div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div>
+<div class="glossary-card">
+<h3>Searchable Glossary</h3>
+<p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p>
+<div class="glossary-controls"><input aria-label="Search glossary terms" id="glossarySearch" placeholder="Search terms: TLC, NIV, hypoventilation..." type="search"/><button class="small-btn" id="clearSearch">Clear</button></div>
+<div class="glossary-list" id="glossaryList"></div>
+</div>
+<div class="glossary-card" style="margin-top:18px;">
+<h3>Glossary Flashcard Mastery Deck</h3>
+<p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p>
+<div class="flashcard-shell">
+<div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<div aria-label="Flashcard deck view" class="tabs" role="tablist"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+<div aria-label="Flashcard direction" class="tabs" role="group"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div>
+<div aria-label="Current flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0"><div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden="" id="cardBack"></p></div></div>
+<div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+<div class="completed-list" id="completedList"></div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br/>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+</div>
+<script>
+    const glossaryTerms = [
+      {
+            "term": "Kyphoscoliosis",
+            "definition": "A combined kyphotic and scoliotic spinal deformity that can restrict chest wall expansion and impair ventilation.",
+            "rt": "Frames the disease as a restrictive chest wall mechanics problem."
+      },
+      {
+            "term": "Restrictive pattern",
+            "definition": "A pulmonary function pattern with reduced lung volumes, especially TLC and FVC, often with a normal or high FEV₁/FVC ratio.",
+            "rt": "Key board-style diagnostic pattern for kyphoscoliosis."
+      },
+      {
+            "term": "Chest wall compliance",
+            "definition": "The ability of the thoracic cage to expand during inspiration.",
+            "rt": "Reduced compliance increases work of breathing."
+      },
+      {
+            "term": "TLC",
+            "definition": "Total lung capacity, the total amount of gas in the lungs after maximal inspiration.",
+            "rt": "Decreased TLC confirms restriction."
+      },
+      {
+            "term": "FVC",
+            "definition": "Forced vital capacity, the amount of air forcibly exhaled after a maximal inhalation.",
+            "rt": "Often reduced in chest wall restriction."
+      },
+      {
+            "term": "FEV₁/FVC",
+            "definition": "The ratio comparing first-second forced exhaled volume to forced vital capacity.",
+            "rt": "Usually preserved or increased in pure restriction."
+      },
+      {
+            "term": "Alveolar hypoventilation",
+            "definition": "Inadequate ventilation at the alveolar level, causing CO₂ retention.",
+            "rt": "Central danger in advanced kyphoscoliosis."
+      },
+      {
+            "term": "Hypercapnia",
+            "definition": "Elevated arterial carbon dioxide level.",
+            "rt": "Signals inadequate ventilation and may require NIV or escalation."
+      },
+      {
+            "term": "Chronic respiratory acidosis",
+            "definition": "Long-standing CO₂ retention with renal bicarbonate compensation.",
+            "rt": "Elevated HCO₃⁻ may suggest chronic hypoventilation."
+      },
+      {
+            "term": "Acute-on-chronic respiratory failure",
+            "definition": "An acute worsening superimposed on chronic ventilatory impairment.",
+            "rt": "Look for low pH with high PaCO₂ in a chronically compensated patient."
+      },
+      {
+            "term": "Nocturnal hypoventilation",
+            "definition": "Under-ventilation during sleep, often preceding daytime hypercapnia.",
+            "rt": "A major reason NIV may be used at night."
+      },
+      {
+            "term": "NIV",
+            "definition": "Noninvasive ventilation, such as bilevel positive airway pressure delivered by mask.",
+            "rt": "Supports ventilation and unloads respiratory muscles."
+      },
+      {
+            "term": "Cough assist",
+            "definition": "A device or technique that helps generate stronger inspiratory and expiratory flows for secretion clearance.",
+            "rt": "Useful when cough is weak due to low volumes or muscle weakness."
+      },
+      {
+            "term": "Atelectasis",
+            "definition": "Collapse or incomplete expansion of alveoli.",
+            "rt": "Risk increases with shallow breathing and low lung volumes."
+      },
+      {
+            "term": "Cor pulmonale",
+            "definition": "Right heart strain or failure related to lung disease or pulmonary hypertension.",
+            "rt": "Can occur with chronic hypoxemia/hypoventilation complications."
+      },
+      {
+            "term": "Pulmonary hypertension",
+            "definition": "Elevated pressure in the pulmonary circulation.",
+            "rt": "A possible complication of chronic hypoxemia and ventilatory disease."
+      },
+      {
+            "term": "Vital capacity",
+            "definition": "The maximum volume exhaled after a maximal inhalation.",
+            "rt": "Low VC suggests reduced ventilatory reserve and cough effectiveness."
+      },
+      {
+            "term": "Work of breathing",
+            "definition": "The effort required to move air in and out of the lungs.",
+            "rt": "Often increased when the chest wall is stiff or deformed."
+      },
+      {
+            "term": "Ventilatory pump failure",
+            "definition": "Failure of the respiratory muscles and chest wall system to maintain adequate ventilation.",
+            "rt": "Describes the core escalation risk in severe kyphoscoliosis."
+      },
+      {
+            "term": "Airway clearance",
+            "definition": "Therapies that help mobilize and remove secretions.",
+            "rt": "Prevents secretion retention, atelectasis, and infection."
+      }
+];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    shuffleSequence();
+    enableDynamicReorder();
+    initializeSequenceSort();
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> Kyphoscoliosis is a restrictive chest wall disorder caused by abnormal thoracic mechanics. It limits expansion and can progress to hypoventilation.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> Kyphoscoliosis is primarily restrictive. The main issue is limited chest wall expansion, reduced lung volumes, and possible hypoventilation.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
+</html>
