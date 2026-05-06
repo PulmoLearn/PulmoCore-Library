@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | RSV Bronchiolitis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+    .course-menu-wrap { position: relative; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,.24); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-button:hover { background: rgba(255,255,255,.14); }
+    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; }
+    .course-menu-panel.open { display: grid; gap: 6px; }
+    .course-menu-item { display: grid; gap: 2px; text-decoration: none; padding: 11px 12px; border-radius: 12px; color: var(--core-navy); border: 1px solid transparent; }
+    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
+    .course-menu-item-title { font-weight: 800; }
+    .course-menu-item-status { color: var(--slate); font-size: .86rem; }
+    .course-menu-empty { padding: 12px; color: var(--slate); }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    #sequenceSort { visibility: hidden; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+  <script src="courses.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg>
+        </div><div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+      </div>
+      <div class="course-menu-wrap"><button class="course-menu-button" type="button" id="courseMenuButton" aria-haspopup="true" aria-expanded="false">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="Course menu"></div></div>
+    </header>
+
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Respiratory Syncytial Virus Infection<br><span style="color:var(--pulmo-teal);">Bronchiolitis</span></h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">RSV bronchiolitis is a viral lower respiratory tract infection that primarily affects infants and young children. It causes small-airway inflammation, edema, mucus plugging, air trapping, and increased work of breathing. This module focuses on RT-level recognition, supportive care, oxygen escalation, suctioning decisions, diagnostics, and red flags for respiratory failure.</p>
+        <div class="case-meta" aria-label="Module details"><div><strong>Category</strong><br>Pediatric Viral Lower Airway Disease</div><div><strong>Estimated Time</strong><br>30–40 minutes</div><div><strong>Level</strong><br>Core RT Knowledge</div></div>
+      </section>
+      <div class="content-layout"><aside class="side-nav" aria-label="Disease page quick navigation"><h3>Lesson Sections</h3><a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Severity + Monitoring</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Escalation</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a></aside>
+      <div class="lesson-stack">
+        <section class="info-card" id="objectives"><h2>Learning Objectives</h2><p>By the end of this RSV bronchiolitis module, learners should connect viral small-airway injury, mucus plugging, assessment findings, oxygenation trends, supportive interventions, and escalation decisions.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how RSV injures bronchioles, increases secretions, narrows small airways, and causes air trapping.</div><div class="example-box soft-blue"><strong>2. Interpret severity</strong><br>Use WOB, feeding, hydration, SpO₂ trend, apnea risk, and mental status to identify mild, moderate, and severe disease.</div><div class="example-box soft-amber"><strong>3. Choose RT interventions</strong><br>Prioritize suctioning, oxygen, humidification, monitoring, and escalation rather than reflexive bronchodilator use.</div><div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize apnea, exhaustion, cyanosis, persistent hypoxemia, dehydration, and impending respiratory failure.</div></div></section>
+
+        <section class="info-card" id="overview-video">
+          <span class="eyebrow">Video Overview</span>
+          <h2>2-Minute Respiratory Syncytial Virus Overview</h2>
+          <p>Watch this quick overview before moving into the disease snapshot.</p>
+          <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+            <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+              <source src="RSV.mp4" type="video/mp4">
+              <track src="RSV.vtt" kind="captions" srclang="en" label="English captions" default>
+            </video>
+          </div>
+        </section>
+
+        <section class="info-card" id="snapshot"><h2>Disease Snapshot</h2><p>RSV bronchiolitis is most dangerous in very young infants, premature infants, and children with cardiopulmonary or immune risk factors. The main problem is obstructed small airways, not primary bronchospasm. Care is mostly supportive: maintain airway patency, oxygenation, hydration, and close monitoring.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>What it is:</strong><br>Viral inflammation of the small airways.</div><div class="example-box soft-teal"><strong>Primary problem:</strong><br>Bronchiolar edema, mucus plugging, atelectasis, and air trapping.</div><div class="example-box soft-teal"><strong>Classic symptoms:</strong><br>Cough, rhinorrhea, wheeze, crackles, tachypnea, retractions, poor feeding.</div><div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Clinical diagnosis based on age, season, viral symptoms, and lower airway findings.</div><div class="example-box soft-teal"><strong>Acute danger:</strong><br>Apnea, exhaustion, cyanosis, dehydration, or persistent hypoxemia.</div><div class="example-box soft-teal"><strong>RT priority:</strong><br>Assess WOB, secretion burden, oxygen need, feeding safety, and response to supportive care.</div></div><article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>For RTs, RSV bronchiolitis is a secretion and small-airway support problem. The RT should avoid treating every wheeze like asthma and instead ask: Is the infant oxygenating, ventilating, feeding safely, clearing secretions, and tiring out?</p></article><article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Associate RSV bronchiolitis with infants, winter season, rhinorrhea progressing to wheeze/crackles, supportive care, nasal suctioning, oxygen if hypoxemic, and escalation to HFNC/CPAP/intubation when distress or failure worsens.</p></article></section>
+
+        <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check"><span class="eyebrow">Quick Pre-Check</span><h2>Start with the RSV bronchiolitis pattern</h2><p>Which statement best describes the primary airflow problem in RSV bronchiolitis?</p><div class="quiz-options"><button class="quiz-option" data-correct="false">Permanent alveolar destruction causes nonreversible emphysema.</button><button class="quiz-option" data-correct="true">Viral bronchiolar inflammation and mucus plug small airways, increasing work of breathing.</button><button class="quiz-option" data-correct="false">Pulmonary arteries are blocked by thrombi, preventing perfusion.</button><button class="quiz-option" data-correct="false">Pleural air collapses the lung and shifts the mediastinum.</button></div><div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
+
+        <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>RSV infects airway epithelial cells and produces inflammation, edema, sloughed cells, and thick secretions in small bronchioles. Because infant airways are narrow, small decreases in diameter can greatly increase resistance.</p><img src="rsv-bronchiolitis-pathophysiology.png" alt="Diagram of RSV bronchiolitis showing inflamed bronchioles, mucus plugging, atelectasis, air trapping, and V/Q mismatch" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft); margin-top:14px; border:1px solid var(--soft-border); background:#F8FBFD;"><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">RSV infection → epithelial injury → bronchiolar edema + mucus + cell debris → small-airway obstruction → air trapping and atelectasis → V/Q mismatch → hypoxemia and increased work of breathing.</div><h3 style="margin-top:22px;">What Changes During RSV Bronchiolitis</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Bronchiolar edema</td><td>Small airway walls swell.</td><td>Resistance rises quickly in infant airways.</td></tr><tr><td>Mucus plugging</td><td>Secretions and debris obstruct bronchioles.</td><td>Worsens atelectasis, wheeze, crackles, and oxygenation.</td></tr><tr><td>Air trapping</td><td>Exhalation becomes incomplete.</td><td>Increases WOB and may cause hyperinflation.</td></tr><tr><td>Atelectasis</td><td>Plugged regions collapse.</td><td>Creates V/Q mismatch and hypoxemia.</td></tr><tr><td>Fatigue</td><td>Infant cannot sustain high WOB.</td><td>Raises risk for apnea and respiratory failure.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>An infant who was fighting to breathe and then becomes quiet, limp, or less responsive may be tiring out. Less noise does not always mean improvement.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="RSV Hotspot Graphic"><h3>Click the RSV Hotspots</h3><p>Click each hotspot to reveal how RSV affects infant breathing.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified RSV bronchiolitis lung graphic with clickable hotspots"><img src="rsv-hotspot-lung.png" alt="Visual hotspot diagram of infant lungs affected by RSV bronchiolitis" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><button class="hotspot-btn" style="left:31%; top:34%;" data-title="Small Airway Edema" data-text="Swollen bronchioles narrow quickly because infant airways are already small.">1</button><button class="hotspot-btn" style="left:42%; top:55%;" data-title="Mucus Plugging" data-text="Thick secretions and sloughed cells obstruct airflow and can cause atelectasis.">2</button><button class="hotspot-btn" style="right:31%; top:44%;" data-title="Air Trapping" data-text="Obstructed exhalation creates hyperinflation and increased work of breathing.">3</button><button class="hotspot-btn" style="right:39%; bottom:20%;" data-title="V/Q Mismatch" data-text="Poorly ventilated lung units continue receiving blood flow, causing hypoxemia.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
+
+        <section class="info-card" id="triggers"><h2>Etiology, Transmission & Risk Factors</h2><p>RSV spreads through respiratory droplets and contaminated surfaces. Severe disease is more likely in young infants, prematurity, chronic lung disease, congenital heart disease, neuromuscular weakness, immunocompromise, and smoke exposure.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Factor</th><th>Why It Matters</th><th>RT Focus</th></tr><tr><td>Age under 3 months</td><td>Higher apnea and deterioration risk.</td><td>Monitor closely for pauses, fatigue, feeding difficulty.</td></tr><tr><td>Prematurity</td><td>Less respiratory reserve.</td><td>Escalate earlier if WOB increases.</td></tr><tr><td>Chronic lung or heart disease</td><td>Lower tolerance for hypoxemia.</td><td>Trend SpO₂ and WOB carefully.</td></tr><tr><td>Smoke exposure</td><td>Airway irritation worsens symptoms.</td><td>Teach avoidance and prevention.</td></tr><tr><td>Poor feeding</td><td>Signals distress and dehydration risk.</td><td>Coordinate suctioning and feeding safety.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="RSV Severity Sorting"><h3>Sort RSV Findings</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Exposure to respiratory droplets</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">Transmission/Risk Factor</option><option value="controller">Supportive Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Nasal suction before feeding</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">Transmission/Risk Factor</option><option value="controller">Supportive Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="trigger"><strong>Prematurity</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">Transmission/Risk Factor</option><option value="controller">Supportive Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Apnea or cyanosis</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">Transmission/Risk Factor</option><option value="controller">Supportive Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Humidified oxygen when hypoxemic</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">Transmission/Risk Factor</option><option value="controller">Supportive Intervention</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
+
+        <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>RSV often begins with upper respiratory symptoms and progresses to lower airway disease. RT assessment should focus on work of breathing, secretion burden, hydration, feeding ability, oxygenation, and fatigue.</p><img src="rsv-clinical-assessment.png" alt="Infant RSV assessment visual showing retractions, nasal flaring, tachypnea, wheeze, crackles, and poor feeding" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft); margin-top:14px; border:1px solid var(--soft-border); background:#F8FBFD;"><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Upper airway</td><td>Rhinorrhea, congestion, cough, secretion burden.</td></tr><tr><td>Breathing pattern</td><td>Tachypnea, nasal flaring, grunting, head bobbing, retractions.</td></tr><tr><td>Breath sounds</td><td>Wheezes, crackles, coarse sounds, diminished areas.</td></tr><tr><td>Oxygenation</td><td>Low or trending-down SpO₂, cyanosis in severe cases.</td></tr><tr><td>Feeding/hydration</td><td>Poor intake, fewer wet diapers, vomiting, fatigue with feeds.</td></tr><tr><td>Neurologic/energy</td><td>Irritability early; lethargy or poor responsiveness when severe.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>In infants, feeding is respiratory work. An infant who cannot feed because of tachypnea, congestion, or fatigue may need suctioning, hydration support, and closer monitoring.</p></article></section>
+
+        <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Bronchiolitis is usually a clinical diagnosis. Testing is used selectively to confirm viral infection, evaluate hypoxemia, or investigate complications and alternate diagnoses.</p><h3 style="margin-top:18px;">High-Yield Diagnostic Logic</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Tool</th><th>Typical Use</th><th>RT Interpretation</th></tr><tr><td>Clinical exam</td><td>Main basis for diagnosis and severity.</td><td>Trend WOB, air movement, feeding, hydration, and mental status.</td></tr><tr><td>Pulse oximetry</td><td>Monitors oxygenation.</td><td>Use trends plus clinical appearance; do not treat a number alone.</td></tr><tr><td>Viral testing</td><td>May confirm RSV for isolation/cohorting.</td><td>Does not replace severity assessment.</td></tr><tr><td>Chest x-ray</td><td>Not routine; used if severe, atypical, or concern for pneumonia/complication.</td><td>May show hyperinflation, peribronchial thickening, or atelectasis.</td></tr><tr><td>Blood gas</td><td>Used in severe distress or suspected failure.</td><td>Rising CO₂, acidosis, or fatigue suggests escalation.</td></tr></table></div><article class="info-card board" style="margin-top:16px;"><h3>Board Prep Framing</h3><p>If the infant has classic bronchiolitis findings, the best answer often emphasizes supportive care and monitoring rather than routine antibiotics, corticosteroids, or bronchodilators.</p></article></section>
+
+        <section class="info-card" id="severity"><h2>Severity Classification & Monitoring</h2><p>Severity is based on the whole clinical picture: respiratory rate, retractions, feeding, hydration, oxygenation, apnea risk, age, and fatigue.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Severity</th><th>Typical Pattern</th><th>RT Concern</th></tr><tr><td>Mild</td><td>Congestion/cough, mild wheeze, feeding mostly preserved.</td><td>Supportive care and caregiver teaching.</td></tr><tr><td>Moderate</td><td>Tachypnea, retractions, poor feeding, oxygen need may appear.</td><td>Suction, oxygen, hydration plan, close reassessment.</td></tr><tr><td>Severe</td><td>Marked retractions, grunting, apnea, cyanosis, lethargy, persistent hypoxemia.</td><td>Escalate respiratory support and notify provider urgently.</td></tr></table></div><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Mild</strong><br>Comfortable enough to feed and maintain oxygenation.</div><div class="example-box soft-amber"><strong>Moderate</strong><br>Increased WOB, feeding difficulty, possible oxygen need.</div><div class="example-box soft-coral"><strong>Severe</strong><br>Apnea, exhaustion, cyanosis, poor perfusion, or failure signs.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="RSV Severity Activity"><h3>Severity Decision Activity</h3><p>A 6-week-old with RSV has RR 68/min, nasal flaring, moderate retractions, poor feeding, and SpO₂ 88% on room air. Which category best fits?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Mild bronchiolitis usually has preserved feeding and no significant hypoxemia.">Mild bronchiolitis</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. This infant has hypoxemia, increased work of breathing, and poor feeding, consistent with at least moderate disease requiring supportive intervention and close reassessment.">Moderate to severe bronchiolitis</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. This is not a normal infant breathing pattern; tachypnea, retractions, and SpO₂ 88% are concerning.">Normal infant respiratory pattern</button></div><div class="quiz-feedback" role="status"></div></article></section>
+
+        <section class="info-card red" id="red-flags"><h2>Severity & Red Flags</h2><p>The key question is whether the infant can maintain oxygenation, ventilation, hydration, and enough respiratory muscle endurance to avoid failure.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Apnea, cyanosis, or bradycardia</td><td>May indicate severe disease or impending failure.</td></tr><tr><td>Lethargy, limp tone, poor responsiveness</td><td>Possible hypoxemia, hypercapnia, or exhaustion.</td></tr><tr><td>Severe retractions, head bobbing, grunting</td><td>High work of breathing and fatigue risk.</td></tr><tr><td>Persistent hypoxemia despite oxygen</td><td>May require HFNC, CPAP, or higher-level care.</td></tr><tr><td>Poor feeding or dehydration</td><td>Infant may not safely maintain intake.</td></tr><tr><td>Rising PaCO₂ or acidosis</td><td>Suggests ventilatory failure.</td></tr></table></div></section>
+
+        <section class="info-card" id="management"><h2>Management & Treatment</h2><p>RSV bronchiolitis treatment is primarily supportive. The goal is to reduce work of breathing, maintain oxygenation, support hydration, and escalate respiratory support when needed.</p><h3 style="margin-top:18px;">Supportive Care Priorities</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Intervention</th><th>Why It Helps</th><th>RT Decision Point</th></tr><tr><td>Nasal suctioning</td><td>Improves nasal airflow and feeding tolerance.</td><td>Use especially before feeds or oxygen escalation.</td></tr><tr><td>Humidified oxygen</td><td>Corrects hypoxemia and supports comfort.</td><td>Titrate to ordered target and reassess WOB.</td></tr><tr><td>HFNC</td><td>Provides heated humidified flow and may reduce WOB.</td><td>Use when low-flow oxygen is insufficient or WOB remains high.</td></tr><tr><td>Hydration support</td><td>Prevents dehydration and thick secretions.</td><td>Coordinate with team if feeding unsafe.</td></tr><tr><td>Bronchodilator trial</td><td>May be considered if asthma-like response suspected.</td><td>Continue only if objective improvement occurs.</td></tr><tr><td>Antibiotics/steroids</td><td>Not routine for uncomplicated viral bronchiolitis.</td><td>Use only when another indication exists.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="RSV Care Sequence"><h3>RSV Supportive Care Sequence</h3><p>Select the steps in the best general order for an infant with moderate RSV bronchiolitis and hypoxemia.</p><div class="sort-grid" id="sequenceSort"><div class="sort-row" data-answer="1" data-sequence-item="Assess WOB and oxygenation"><strong>Assess WOB and oxygenation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="2" data-sequence-item="Clear nasal secretions"><strong>Clear nasal secretions</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="3" data-sequence-item="Start/titrate humidified oxygen"><strong>Start/titrate humidified oxygen</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="4" data-sequence-item="Reassess feeding and hydration"><strong>Reassess feeding and hydration</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="5" data-sequence-item="Escalate to HFNC/CPAP if distress persists"><strong>Escalate to HFNC/CPAP if distress persists</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="6" data-sequence-item="Prepare for advanced airway if failure develops"><strong>Prepare for advanced airway if failure develops</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div></div><button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button><div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div></article></section>
+
+        <section class="info-card red" id="status"><h2>Escalation & Respiratory Support</h2><p>Escalation is needed when supportive care does not stabilize oxygenation, work of breathing, feeding safety, or ventilation.</p><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-coral"><strong>Watch for:</strong><br>Apnea, severe retractions, grunting, cyanosis, exhaustion, persistent hypoxemia.</div><div class="example-box soft-amber"><strong>Support goal:</strong><br>Reduce WOB while maintaining oxygenation and hydration.</div><div class="example-box soft-blue"><strong>Escalation concept:</strong><br>Low-flow oxygen → HFNC → CPAP/NIV where appropriate → intubation if failure develops.</div></div><article class="info-card board" style="margin-top:16px;"><h3>Board Pearl</h3><p>Do not choose routine bronchodilators, antibiotics, or corticosteroids as first-line treatment for uncomplicated RSV bronchiolitis. Choose suctioning, oxygen, hydration support, monitoring, and escalation for failure signs.</p></article></section>
+
+        <section class="info-card rt" id="rt-role"><h2>Respiratory Therapist Role</h2><p>The RT is central to bedside assessment, suctioning, oxygen delivery, HFNC/CPAP setup, response monitoring, caregiver education, and urgent escalation.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr><tr><td>Assess WOB</td><td>RR, retractions, nasal flaring, grunting, head bobbing.</td><td>Detects deterioration before SpO₂ alone changes.</td></tr><tr><td>Manage secretions</td><td>Nasal suctioning, humidification, timing before feeds.</td><td>Improves airflow and feeding tolerance.</td></tr><tr><td>Support oxygenation</td><td>Low-flow oxygen, HFNC, CPAP as ordered.</td><td>Corrects hypoxemia and reduces work in selected patients.</td></tr><tr><td>Monitor response</td><td>SpO₂ trend, WOB, feeding, mental status, CO₂ when severe.</td><td>Determines whether current support is enough.</td></tr><tr><td>Educate caregivers</td><td>Hand hygiene, smoke avoidance, suction basics, return precautions.</td><td>Supports prevention and safe discharge planning.</td></tr></table></div></section>
+
+        <section class="case-card require-complete" id="case-study" data-activity-name="Guided RSV Case"><span class="eyebrow">Guided Unfolding Case Study</span><h2>The Infant Who Is Working Too Hard</h2><p>This guided case reveals one stage at a time. Learners make an RT decision, receive feedback, and then continue.</p><div class="case-stage" data-case-stage="0"><h3>Stage 1: Initial Presentation</h3><p>A 2-month-old arrives with 3 days of congestion and cough. Today the infant is breathing fast and feeding poorly.</p><div class="case-meta"><div><strong>RR</strong><br>66/min</div><div><strong>SpO₂</strong><br>89% on room air</div><div><strong>Breath Sounds</strong><br>Wheezes, crackles, coarse secretions</div></div><p><strong>Decision Question:</strong> What is the priority first action?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This infant is hypoxemic and working hard; do not delay supportive care for imaging.">Wait for chest x-ray before any intervention.</button><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Assess severity, clear secretions, and begin oxygen support as indicated.">Assess WOB/oxygenation, suction, and start oxygen support.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Antibiotics are not routine for uncomplicated viral bronchiolitis.">Give antibiotics as the first-line treatment.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Routine bronchodilators are not first-line for all RSV bronchiolitis.">Give repeated albuterol treatments without reassessing response.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="1"><h3>Stage 2: After Suction and Low-Flow Oxygen</h3><p>After nasal suctioning and oxygen, SpO₂ improves to 92%, but RR remains 70/min with moderate retractions and poor feeding.</p><p><strong>Decision Question:</strong> What is the best next RT recommendation?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Persistent WOB despite initial support may require escalation such as HFNC and hydration planning.">Escalate support and discuss HFNC/hydration plan.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Feeding difficulty and ongoing distress mean this infant is not ready for discharge.">Discharge because SpO₂ is now above 90%.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Chest physiotherapy is not the primary treatment for bronchiolitis.">Start chest physiotherapy as the primary therapy.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygenation improved somewhat, but work of breathing remains concerning.">Ignore retractions because the infant is awake.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="2"><h3>Stage 3: Fatigue Appears</h3><p>Two hours later the infant becomes sleepier. Retractions are less forceful, breath sounds are diminished, and a blood gas shows rising CO₂ with acidosis.</p><p><strong>Decision Question:</strong> How should this change be interpreted?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Less movement with rising CO₂ and sleepiness suggests fatigue and impending respiratory failure.">Possible ventilatory failure from fatigue.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A tired infant with rising CO₂ is worsening, not improving.">Clear improvement because retractions look smaller.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen treats hypoxemia but does not guarantee ventilation is adequate.">Expected effect of oxygen therapy alone.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This requires closer monitoring and escalation.">A reason to reduce monitoring.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="3"><h3>Stage 4: Escalation Decision</h3><p>The team prepares for possible CPAP or intubation depending on response. The infant has recurrent apnea and worsening gas exchange.</p><p><strong>Decision Question:</strong> Which finding most strongly supports urgent escalation?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Recurrent apnea with worsening gas exchange is a major danger sign requiring urgent escalation.">Recurrent apnea with worsening gas exchange.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Mild congestion alone is common and does not equal failure.">Mild nasal congestion only.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A single cough does not indicate respiratory failure.">One brief cough during suctioning.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Improved feeding would be reassuring, not an escalation sign.">Improved feeding after suctioning.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="4"><h3>Case Wrap-Up</h3><div class="example-box soft-teal"><strong>RT Takeaway:</strong> RSV bronchiolitis care is supportive: suction, oxygen, humidification, hydration coordination, and close reassessment.</div><div class="example-box soft-coral" style="margin-top:12px;"><strong>If the infant worsens:</strong> apnea, lethargy, cyanosis, persistent hypoxemia, rising CO₂, or acidosis require urgent escalation.</div></div></section>
+
+        <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="RSV Knowledge Check"><span class="eyebrow">Knowledge Check</span><h2>Board-Style Practice</h2><p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p><div class="knowledge-question" data-question-id="kq1"><h3>Question 1</h3><p>An infant with rhinorrhea, cough, wheezes, crackles, tachypnea, and retractions during RSV season is diagnosed with bronchiolitis. What is the main pathophysiologic problem?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. RSV bronchiolitis causes small-airway inflammation, edema, mucus plugging, and air trapping.">Small-airway inflammation and mucus plugging.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Alveolar destruction is emphysema, not bronchiolitis.">Permanent alveolar wall destruction.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pulmonary embolism is a perfusion obstruction, not classic bronchiolitis.">Pulmonary arterial thrombus.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pleural air describes pneumothorax.">Air in the pleural space.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq2"><h3>Question 2</h3><p>Which intervention is most appropriate first-line supportive care for an infant with RSV congestion and feeding difficulty?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Nasal suctioning can improve nasal airflow and feeding tolerance.">Nasal suctioning before feeding.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Antibiotics are not routine for uncomplicated RSV bronchiolitis.">Routine antibiotics.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Steroids are not routine first-line therapy for typical bronchiolitis.">Routine systemic corticosteroids.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Incentive spirometry is not appropriate for a young infant.">Incentive spirometry coaching.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq3"><h3>Question 3</h3><p>Which finding is most concerning in RSV bronchiolitis?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. Apnea with cyanosis suggests severe disease and possible respiratory failure.">Apnea with cyanosis.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Mild cough with good feeding is less concerning.">Mild cough with normal feeding.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Clear rhinorrhea alone is common.">Clear nasal drainage only.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Improvement after suctioning is reassuring.">Improved feeding after suctioning.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq4"><h3>Question 4</h3><p>An infant on oxygen remains tachypneic with severe retractions and poor feeding. Which escalation is most appropriate to discuss?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. HFNC can provide heated humidified flow and may reduce work of breathing when low-flow support is insufficient.">High-flow nasal cannula and hydration support.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Discharge is unsafe when WOB and feeding problems persist.">Immediate discharge home.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Routine antibiotics do not address viral bronchiolitis unless bacterial infection is suspected.">Antibiotics as the only escalation.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Sedation could worsen ventilation and does not treat bronchiolitis.">Sedation to slow the respiratory rate.</button></div><div class="quiz-feedback" role="status"></div></div><div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div></section>
+
+        <section id="faq"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common RSV Bronchiolitis Questions</h2></div><details class="accordion" open><summary>What is the simplest way to understand RSV bronchiolitis?</summary><div class="accordion-body"><p>It is viral small-airway inflammation in infants that causes swelling, mucus plugging, air trapping, and increased work of breathing.</p></div></details><details class="accordion"><summary>Is RSV treated like asthma?</summary><div class="accordion-body"><p>No. Wheezing can occur, but routine bronchodilators are not first-line for typical bronchiolitis. Supportive care is the foundation.</p></div></details><details class="accordion"><summary>Why is suctioning so important?</summary><div class="accordion-body"><p>Infants breathe mainly through the nose, especially during feeding. Clearing secretions can reduce obstruction and improve feeding tolerance.</p></div></details><details class="accordion"><summary>When should the RT worry about respiratory failure?</summary><div class="accordion-body"><p>Apnea, lethargy, worsening hypoxemia, severe retractions, grunting, rising CO₂, acidosis, or exhaustion are major warning signs.</p></div></details><details class="accordion"><summary>Are chest x-rays required for every infant?</summary><div class="accordion-body"><p>No. Bronchiolitis is usually a clinical diagnosis. Imaging is reserved for severe, atypical, or complicated presentations.</p></div></details><details class="accordion"><summary>What does HFNC do?</summary><div class="accordion-body"><p>HFNC provides heated humidified flow and oxygen, may reduce work of breathing, and can improve tolerance compared with dry low-flow oxygen.</p></div></details></section>
+
+        <section class="info-card" id="summary"><h2>Summary & Clinical Pearls</h2><p>RSV bronchiolitis is a viral small-airway disease of infants and young children. It causes bronchiolar edema, mucus plugging, atelectasis, air trapping, V/Q mismatch, and increased work of breathing. Management is mostly supportive and escalation is based on clinical severity.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Must know:</strong><br>RSV bronchiolitis is primarily small-airway obstruction from edema and mucus, not classic asthma bronchospasm.</div><div class="example-box soft-amber"><strong>Board pearl:</strong><br>Choose suctioning, oxygen, hydration, and monitoring before routine antibiotics, steroids, or bronchodilators.</div><div class="example-box soft-blue"><strong>RT pearl:</strong><br>Trend WOB, feeding, hydration, SpO₂, mental status, and fatigue — not wheeze alone.</div><div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not assume a tired, quiet infant is improving. Quiet plus rising CO₂ or apnea is dangerous.</div></div></section>
+
+        <section id="glossary"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div><div class="glossary-card"><h3>Searchable Glossary</h3><p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p><div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: RSV, bronchiolitis, HFNC..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div><div class="glossary-list" id="glossaryList"></div></div><div class="glossary-card" style="margin-top:18px;"><h3>Glossary Flashcard Mastery Deck</h3><p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p><div class="flashcard-shell"><div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div><div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div><div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div><div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div><div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div><div class="completed-list" id="completedList"></div></div></div></section>
+      </div></div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+  <script>
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
+
+      const courseData = Array.isArray(window.PulmoCoreCourses) ? window.PulmoCoreCourses :
+        Array.isArray(window.pulmoCoreCourses) ? window.pulmoCoreCourses :
+        Array.isArray(window.courses) ? window.courses :
+        Array.isArray(window.COURSES) ? window.COURSES : [];
+
+      function readProgress(course) {
+        const key = course.progressKey || course.id || course.slug || course.href || course.url || course.title || course.name;
+        const candidates = [
+          `pulmocore-progress-${key}`,
+          `PulmoCore:${key}:progress`,
+          `progress-${key}`,
+          key
+        ];
+        for (const item of candidates) {
+          try {
+            const raw = localStorage.getItem(item);
+            if (!raw) continue;
+            const parsed = JSON.parse(raw);
+            if (typeof parsed === "number") return parsed;
+            if (typeof parsed.percent === "number") return parsed.percent;
+            if (typeof parsed.progress === "number") return parsed.progress;
+            if (parsed.complete === true || parsed.completed === true) return 100;
+          } catch (error) {
+            const numeric = Number(localStorage.getItem(item));
+            if (!Number.isNaN(numeric)) return numeric;
+          }
+        }
+        return 0;
+      }
+
+      function statusLabel(percent) {
+        const safePercent = Math.max(0, Math.min(100, Math.round(percent || 0)));
+        if (safePercent >= 100) return "Complete";
+        if (safePercent > 0) return `In progress (${safePercent}%)`;
+        return "Not started";
+      }
+
+      function courseTitle(course) { return course.title || course.name || course.label || "Untitled course"; }
+      function courseHref(course) { return course.href || course.url || course.file || "#"; }
+
+      panel.innerHTML = courseData.length
+        ? courseData.map(course => {
+            const progress = readProgress(course);
+            return `<a class="course-menu-item" role="menuitem" href="${courseHref(course)}"><span class="course-menu-item-title">${courseTitle(course)}</span><span class="course-menu-item-status">${statusLabel(progress)}</span></a>`;
+          }).join("")
+        : `<div class="course-menu-empty">No courses found. Check courses.js.</div>`;
+
+      button.addEventListener("click", () => {
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", event => {
+        if (!button.contains(event.target) && !panel.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+          button.focus();
+        }
+      });
+    }
+    initializeCourseMenu();
+    const glossaryTerms = [
+      { term: "RSV", definition: "Respiratory syncytial virus, a common viral cause of bronchiolitis and lower respiratory tract disease in infants and young children.", rt: "Common cause of pediatric respiratory distress requiring supportive respiratory care." },
+      { term: "Bronchiolitis", definition: "Inflammation and obstruction of the small airways, usually caused by viral infection in infants.", rt: "Creates wheezing, crackles, air trapping, and increased work of breathing." },
+      { term: "Mucus plugging", definition: "Accumulation of secretions that blocks small airways.", rt: "May worsen atelectasis, V/Q mismatch, and work of breathing." },
+      { term: "Air trapping", definition: "Incomplete exhalation caused by narrowed or obstructed airways.", rt: "Can increase respiratory effort and create hyperinflation on imaging." },
+      { term: "Apnea", definition: "A pause in breathing, especially concerning in young infants with RSV.", rt: "Requires close monitoring and escalation when present." },
+      { term: "Nasal suctioning", definition: "Removal of nasal secretions to improve upper airway patency.", rt: "High-yield supportive intervention before feeding or oxygen escalation." },
+      { term: "High-flow nasal cannula", definition: "A heated, humidified oxygen delivery system that can reduce work of breathing and support oxygenation.", rt: "Common escalation tool for moderate to severe bronchiolitis." },
+      { term: "Retractions", definition: "Visible inward movement of chest wall tissues during inspiration.", rt: "Indicates increased work of breathing." },
+      { term: "Nasal flaring", definition: "Widening of the nostrils during inspiration.", rt: "Pediatric sign of respiratory distress." },
+      { term: "Grunting", definition: "Expiratory sound used to generate back pressure and maintain alveolar recruitment.", rt: "Danger sign that may indicate worsening distress." },
+      { term: "Pulse oximetry", definition: "Noninvasive measurement of oxygen saturation.", rt: "Used to trend oxygenation, but clinical work of breathing matters too." },
+      { term: "V/Q mismatch", definition: "Imbalance between ventilation and perfusion.", rt: "Explains hypoxemia in obstructed or atelectatic lung units." },
+      { term: "Atelectasis", definition: "Collapse of alveoli or small lung regions.", rt: "Can occur from mucus plugging and worsen oxygenation." },
+      { term: "Supportive care", definition: "Treatment focused on hydration, suctioning, oxygen, monitoring, and escalation when needed.", rt: "Main management approach for RSV bronchiolitis." },
+      { term: "Bronchodilator trial", definition: "A monitored treatment attempt to see if wheeze improves.", rt: "Routine bronchodilators are not universally indicated in bronchiolitis; response should guide continuation." },
+      { term: "Dehydration", definition: "Fluid deficit caused by poor feeding, fever, tachypnea, or vomiting.", rt: "May worsen secretion clearance and clinical stability." },
+      { term: "Tachypnea", definition: "Abnormally rapid breathing.", rt: "Important severity sign and feeding safety concern in infants." },
+      { term: "Cyanosis", definition: "Bluish discoloration from inadequate oxygenation.", rt: "Late and serious sign requiring urgent intervention." },
+      { term: "CPAP", definition: "Continuous positive airway pressure used to support airway and alveolar recruitment.", rt: "May be used when HFNC is insufficient or distress worsens." },
+      { term: "Respiratory failure", definition: "Inability to maintain adequate oxygenation, ventilation, or both.", rt: "RTs monitor for fatigue, apnea, rising CO₂, and worsening mental status." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const current = sections.find(section => !section.classList.contains("lesson-hidden") && section.querySelector(":scope > .section-continue")); const fallback = current || sections.reduce((highest, section) => !section.classList.contains("lesson-hidden") ? section : highest, sections[0]); if (fallback) fallback.scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      let rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => {
+        row.classList.remove("correct", "incorrect");
+        const select = row.querySelector("select");
+        if (select) select.value = "";
+      });
+      const isCorrectOrder = list => list.every((row, index) => Number(row.dataset.answer) === index + 1);
+      let attempts = 0;
+      do {
+        for (let i = rows.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [rows[i], rows[j]] = [rows[j], rows[i]];
+        }
+        attempts++;
+      } while (isCorrectOrder(rows) && attempts < 20);
+      if (isCorrectOrder(rows) && rows.length > 1) [rows[0], rows[1]] = [rows[1], rows[0]];
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceContainer = document.getElementById("sequenceSort");
+      if (sequenceContainer) sequenceContainer.style.visibility = "visible";
+    });
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> RSV bronchiolitis is a viral small-airway disease driven by inflammation, edema, mucus plugging, and air trapping. Management is primarily supportive.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> RSV bronchiolitis is typically a viral lower-airway infection in infants causing edema, mucus plugging, and increased work of breathing.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
+</html>

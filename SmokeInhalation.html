@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Smoke Inhalation, Thermal Lung Injury & Carbon Monoxide Intoxication</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+
+    .course-menu-wrap { position: relative; display: flex; align-items: center; }
+    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-btn:hover { background: rgba(255,255,255,.14); }
+    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 50; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; gap: 4px; text-decoration: none; padding: 12px; border-radius: 14px; border: 1px solid transparent; }
+    .course-menu-item:hover, .course-menu-item:focus-visible { background: var(--mist-blue); border-color: var(--soft-border); }
+    .course-menu-title { font-weight: 800; font-family: var(--font-heading); }
+    .course-menu-status { font-size: .86rem; color: var(--slate); }
+    #sequenceSort { visibility: hidden; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  
+  </style>
+  <script src="courses.js"></script>
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div><div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div></div>
+      <div class="course-menu-wrap"><button class="course-menu-btn" type="button" id="courseMenuButton" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"></div></div>
+    </header>
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);"><span class="eyebrow">Respiratory Disease Module</span><h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Smoke Inhalation, Thermal Lung Injury & Carbon Monoxide Intoxication</h1><p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Smoke inhalation injuries combine airway burns, toxic gas exposure, chemical irritation, and impaired oxygen delivery. This module focuses on RT-level recognition, oxygenation priorities, airway escalation, CO poisoning traps, diagnostics, and board-style decision-making.</p><div class="case-meta" aria-label="Module details"><div><strong>Category</strong><br>Environmental / Toxic Inhalation Injury</div><div><strong>Estimated Time</strong><br>35–45 minutes</div><div><strong>Level</strong><br>Core RT Knowledge</div></div></section>
+      <div class="content-layout"><aside class="side-nav" aria-label="Disease page quick navigation"><h3>Lesson Sections</h3><a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Exposure Patterns</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">COHb + Severity</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Ventilation + ARDS Risk</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a></aside>
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives"><h2>Learning Objectives</h2><p>By the end of this module, learners should be able to connect fire exposure history, airway findings, toxic gas physiology, diagnostic interpretation, oxygen therapy, and escalation decisions.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>1. Explain injury mechanisms</strong><br>Differentiate upper-airway thermal edema, lower-airway chemical injury, and toxic gas poisoning.</div><div class="example-box soft-blue"><strong>2. Identify CO poisoning traps</strong><br>Explain why SpO₂ may appear normal despite impaired oxygen delivery.</div><div class="example-box soft-amber"><strong>3. Interpret diagnostics</strong><br>Use ABG/co-oximetry, COHb, lactate, CXR, bronchoscopy, and clinical findings.</div><div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize stridor, hoarseness, soot, facial burns, altered mental status, shock, and worsening oxygenation.</div></div></section>
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Smoke Inhalation Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="SmokeInhalation.mp4" type="video/mp4">
+                <track src="SmokeInhalation.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
+            </div>
+          </section>
+          <section class="info-card" id="snapshot"><h2>Disease Snapshot</h2><p>Smoke inhalation is a high-risk respiratory emergency because the patient may initially look stable and then develop airway edema, bronchospasm, hypoxemia, or toxic cellular hypoxia. In enclosed-space fires, carbon monoxide and cyanide must be considered early.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>What it is:</strong><br>Respiratory injury from heat, smoke particles, irritant gases, and toxic combustion products.</div><div class="example-box soft-teal"><strong>Primary problems:</strong><br>Airway edema, bronchospasm, chemical pneumonitis, CO poisoning, and possible cyanide toxicity.</div><div class="example-box soft-teal"><strong>Classic clues:</strong><br>Enclosed-space fire, soot, singed nasal hair, facial burns, cough, hoarseness, stridor, wheeze, headache, confusion.</div><div class="example-box soft-teal"><strong>Diagnostic clue:</strong><br>COHb requires co-oximetry; standard SpO₂ can be falsely reassuring.</div><div class="example-box soft-teal"><strong>Acute danger:</strong><br>Progressive upper-airway swelling may make later intubation difficult.</div><div class="example-box soft-teal"><strong>RT priority:</strong><br>High-concentration oxygen, airway assessment, ventilation monitoring, bronchodilators if needed, escalation.</div></div><article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>For RTs, the key is to treat the exposure as an airway-and-oxygen-delivery problem. Normal SpO₂ does not exclude carbon monoxide intoxication, and mild early hoarseness can become dangerous airway edema.</p></article><article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Immediately associate smoke inhalation with 100% oxygen, co-oximetry, airway edema risk, COHb interpretation, possible cyanide toxicity, and early intubation when upper-airway obstruction is likely.</p></article></section>
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check"><span class="eyebrow">Quick Pre-Check</span><h2>Start with the core smoke inhalation pattern</h2><p>A patient rescued from an enclosed-space fire has headache, confusion, soot around the mouth, and SpO₂ 99% on room air. Which interpretation is best?</p><div class="quiz-options"><button class="quiz-option" data-correct="false">The normal SpO₂ rules out clinically important oxygenation problems.</button><button class="quiz-option" data-correct="true">Carbon monoxide poisoning is still possible because standard pulse oximetry may be falsely normal.</button><button class="quiz-option" data-correct="false">The priority is to withhold oxygen until COHb results return.</button><button class="quiz-option" data-correct="false">Thermal injury only affects the alveoli and never causes upper-airway obstruction.</button></div><div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
+          <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>Fire-related inhalation injury has three high-yield mechanisms: heat injures the upper airway, smoke chemicals injure lower airways and alveoli, and toxic gases impair oxygen delivery or cellular oxygen use.</p><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Enclosed-space fire → heat + particles + toxic gases → airway edema/bronchospasm + COHb/cellular hypoxia → impaired oxygen delivery → respiratory failure risk.</div><div class="example-box soft-blue" style="margin-top:16px;"><img src="smoke-inhalation-pathophysiology.png" alt="Diagram showing upper airway thermal edema, lower airway smoke irritation, and carbon monoxide binding to hemoglobin" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"></div><h3 style="margin-top:22px;">What Changes After Smoke Exposure</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Mechanism</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Thermal upper-airway injury</td><td>Heat causes edema above the glottis.</td><td>Can progress to obstruction; early airway protection may be safer than waiting.</td></tr><tr><td>Lower-airway chemical injury</td><td>Irritant gases and particles inflame bronchi and alveoli.</td><td>Causes cough, wheeze, bronchospasm, secretions, and hypoxemia.</td></tr><tr><td>Carbon monoxide binding</td><td>CO binds hemoglobin and reduces oxygen carriage.</td><td>Creates tissue hypoxia despite potentially normal PaO₂ and SpO₂.</td></tr><tr><td>Left shift</td><td>Remaining hemoglobin holds oxygen more tightly.</td><td>Oxygen unloading to tissues worsens.</td></tr><tr><td>Cyanide toxicity</td><td>Cells cannot use oxygen effectively.</td><td>Shock, altered mental status, and high lactate may occur.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>Hoarseness, stridor, drooling, progressive swelling, facial/neck burns, or soot in the airway should raise concern that intubation may become harder if delayed.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Smoke Injury Hotspot Graphic"><h3>Click the Smoke Injury Hotspots</h3><p>Click each hotspot to reveal the RT significance of that injury location.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified airway and lung graphic with clickable smoke injury hotspots"><svg viewBox="0 0 240 240" fill="none" aria-hidden="true"><path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/><circle cx="120" cy="116" r="14" fill="#1CA7A8"/></svg><button class="hotspot-btn" style="left:44%; top:13%;" data-title="Upper-Airway Edema" data-text="Thermal injury often affects the upper airway. Hoarseness, stridor, soot, and swelling may require early intubation.">1</button><button class="hotspot-btn" style="left:31%; top:45%;" data-title="Bronchospasm" data-text="Lower-airway irritants can trigger wheezing and airflow obstruction. Bronchodilators may be indicated.">2</button><button class="hotspot-btn" style="right:31%; top:45%;" data-title="Chemical Pneumonitis" data-text="Toxic particles and gases injure bronchioles and alveoli, causing delayed hypoxemia and ARDS risk.">3</button><button class="hotspot-btn" style="right:39%; bottom:20%;" data-title="CO Impairs Oxygen Delivery" data-text="CO binds hemoglobin and causes tissue hypoxia. Standard pulse oximetry may appear normal.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
+          <section class="info-card" id="triggers"><h2>Etiology, Exposure Patterns & Risk Factors</h2><p>Risk increases with enclosed-space fires, prolonged exposure, loss of consciousness, burns to the face or neck, synthetic material combustion, and delayed removal from the source.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Exposure Clue</th><th>Concern</th><th>RT Focus</th></tr><tr><td>Enclosed-space fire</td><td>CO and cyanide accumulation</td><td>High-concentration oxygen and co-oximetry.</td></tr><tr><td>Soot in mouth or sputum</td><td>Airway exposure</td><td>Assess airway patency and secretion burden.</td></tr><tr><td>Hoarseness or stridor</td><td>Upper-airway edema</td><td>Escalate for airway protection.</td></tr><tr><td>Wheezing after smoke</td><td>Bronchospasm/lower-airway irritation</td><td>Bronchodilator assessment and response monitoring.</td></tr><tr><td>Confusion or syncope</td><td>CO, cyanide, hypoxemia, or shock</td><td>Do not trust SpO₂ alone.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Smoke Injury Sorting"><h3>Sort the Smoke Exposure Findings</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Enclosed-space fire exposure</strong><select aria-label="Category for enclosed space"><option value="">Choose category</option><option value="trigger">Exposure/Risk Clue</option><option value="controller">Management Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>High-concentration oxygen</strong><select aria-label="Category for high concentration oxygen"><option value="">Choose category</option><option value="trigger">Exposure/Risk Clue</option><option value="controller">Management Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Stridor with facial burns</strong><select aria-label="Category for stridor"><option value="">Choose category</option><option value="trigger">Exposure/Risk Clue</option><option value="controller">Management Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>ABG with co-oximetry</strong><select aria-label="Category for cooximetry"><option value="">Choose category</option><option value="trigger">Exposure/Risk Clue</option><option value="controller">Management Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Altered mental status despite normal SpO₂</strong><select aria-label="Category for altered mental status"><option value="">Choose category</option><option value="trigger">Exposure/Risk Clue</option><option value="controller">Management Action</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Presentation may include airway symptoms, pulmonary symptoms, neurologic symptoms from CO/cyanide, and burn-associated distress. The RT should reassess frequently because deterioration may be delayed.</p><div class="example-box soft-blue" style="margin-top:16px;"><img src="smoke-inhalation-clinical-concepts.png" alt="Visual checklist of smoke inhalation clinical clues including soot, hoarseness, stridor, wheeze, headache, and confusion" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"></div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Upper airway</td><td>Facial burns, singed nasal hair, soot, hoarseness, stridor, dysphagia, swelling.</td></tr><tr><td>Lower airway</td><td>Cough, wheeze, crackles, bronchospasm, carbonaceous sputum, increased secretions.</td></tr><tr><td>Oxygen delivery</td><td>Headache, dizziness, nausea, confusion, syncope, chest pain, normal-looking SpO₂ with CO exposure.</td></tr><tr><td>Ventilation</td><td>Tachypnea, accessory muscle use, fatigue, hypercapnia if failure develops.</td></tr><tr><td>Delayed lung injury</td><td>Increasing oxygen need, worsening CXR, pulmonary edema, ARDS pattern.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not wait for dramatic swelling before escalating airway concerns. A patient with soot, hoarseness, or stridor can become difficult to intubate as edema progresses.</p></article></section>
+          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostics should answer four questions: Is the airway safe? Is oxygen delivery impaired by CO? Is there cellular hypoxia from cyanide? Is lower-airway/lung injury evolving?</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test</th><th>High-Yield Interpretation</th></tr><tr><td>Pulse oximetry</td><td>May be falsely normal in CO poisoning; do not use it alone to rule out hypoxia.</td></tr><tr><td>ABG with co-oximetry</td><td>Measures PaO₂, pH, PaCO₂, COHb, and other hemoglobin species.</td></tr><tr><td>COHb level</td><td>Confirms exposure but may fall after oxygen; symptoms and exposure history matter.</td></tr><tr><td>Lactate/metabolic acidosis</td><td>Severe lactic acidosis after enclosed fire raises concern for cyanide toxicity or shock.</td></tr><tr><td>Chest x-ray</td><td>May initially be normal; repeat if oxygen need or symptoms worsen.</td></tr><tr><td>Bronchoscopy</td><td>Can identify soot, edema, erythema, ulceration, and lower-airway injury severity.</td></tr></table></div><h3 style="margin-top:18px;">ABG and CO Concept</h3><p>PaO₂ reflects dissolved oxygen in plasma, not how much hemoglobin is available to carry oxygen. In CO poisoning, PaO₂ may be normal while oxygen content and tissue delivery are dangerously reduced.</p></section>
+          <section class="info-card" id="severity"><h2>COHb, Severity & Oxygen Delivery</h2><p>COHb levels help frame severity, but symptoms, exposure history, pregnancy, cardiac disease, neurologic changes, and treatment already given matter. Do not delay oxygen while waiting for a number.</p><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Mild pattern</strong><br>Headache, dizziness, nausea; may still need oxygen and evaluation.</div><div class="example-box soft-amber"><strong>Moderate pattern</strong><br>Confusion, vomiting, dyspnea, tachycardia, chest discomfort.</div><div class="example-box soft-coral"><strong>Severe pattern</strong><br>Syncope, coma, seizures, ischemia, severe acidosis, shock, pregnancy concern.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="CO Oxygen Delivery Activity"><h3>CO Oxygen Delivery Activity</h3><p>A fire victim has headache and confusion after being found in an enclosed garage. SpO₂ is 100% on room air. What should the RT conclude?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Standard SpO₂ cannot distinguish oxyhemoglobin from carboxyhemoglobin well enough to rule out CO poisoning.">CO poisoning is ruled out because SpO₂ is normal.</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Suspected CO poisoning requires high-concentration oxygen and co-oximetry because standard SpO₂ can be falsely normal.">Give high-concentration oxygen and obtain co-oximetry.</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Waiting delays treatment. Oxygen should begin immediately when CO exposure is suspected.">Wait for COHb results before starting oxygen.</button></div><div class="quiz-feedback" role="status"></div></article></section>
+          <section class="info-card red" id="red-flags"><h2>Severity & Red Flags</h2><p>The most important question is whether this patient is about to lose the airway, fail ventilation, or suffer severe tissue hypoxia despite reassuring numbers.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Stridor, hoarseness, drooling, progressive swelling</td><td>Possible upper-airway obstruction.</td></tr><tr><td>Soot in mouth/sputum or facial/neck burns</td><td>Suggests airway exposure and edema risk.</td></tr><tr><td>Altered mental status, syncope, seizure</td><td>Severe CO/cyanide toxicity or hypoxemia concern.</td></tr><tr><td>Chest pain, dysrhythmia, ischemic ECG changes</td><td>CO reduces oxygen delivery to the myocardium.</td></tr><tr><td>Severe lactic acidosis after enclosed-space fire</td><td>Raises concern for cyanide toxicity.</td></tr><tr><td>Increasing O₂ requirement hours later</td><td>Possible evolving chemical pneumonitis, edema, or ARDS.</td></tr></table></div></section>
+          <section class="info-card" id="management"><h2>Management & Treatment</h2><p>Management prioritizes removing the patient from exposure, giving high-concentration oxygen, protecting the airway early when indicated, treating bronchospasm, evaluating toxic gases, and monitoring for delayed lung injury.</p><h3 style="margin-top:18px;">Core Treatment Logic</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Intervention</th><th>Why It Helps</th></tr><tr><td>High-concentration oxygen</td><td>Accelerates CO elimination and improves oxygen delivery.</td></tr><tr><td>Early airway protection</td><td>Prevents loss of airway if edema is progressing.</td></tr><tr><td>Bronchodilators</td><td>Treat smoke-triggered bronchospasm and wheezing.</td></tr><tr><td>Humidification/airway clearance as ordered</td><td>Supports secretion management when soot and secretions are present.</td></tr><tr><td>Hyperbaric oxygen consultation</td><td>Considered for severe CO features depending on protocol.</td></tr><tr><td>Cyanide antidote pathway</td><td>Consider when severe lactic acidosis/shock follows enclosed-space fire.</td></tr></table></div><div class="example-box soft-blue" style="margin-top:16px;"><img src="smoke-inhalation-management-flow.png" alt="Management flowchart showing exposure removal, high concentration oxygen, airway assessment, co-oximetry, bronchodilator therapy, and escalation" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Smoke Inhalation Treatment Sequence"><h3>Acute Smoke Inhalation Treatment Sequence</h3><p>Select the steps in the best general order for a smoke inhalation patient with possible CO poisoning.</p><div class="sort-grid" id="sequenceSort"><div class="sort-row" data-answer="1" data-sequence-item="Remove from exposure and assess ABCs"><strong>Remove from exposure and assess ABCs</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="2" data-sequence-item="Start high-concentration oxygen"><strong>Start high-concentration oxygen</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="3" data-sequence-item="Assess airway edema and need for early intubation"><strong>Assess airway edema and need for early intubation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="4" data-sequence-item="Obtain ABG with co-oximetry and lactate"><strong>Obtain ABG with co-oximetry and lactate</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="5" data-sequence-item="Treat bronchospasm and support ventilation"><strong>Treat bronchospasm and support ventilation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="6" data-sequence-item="Escalate for hyperbaric/cyanide/ICU care if severe"><strong>Escalate for hyperbaric/cyanide/ICU care if severe</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div></div><button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button><div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div></article></section>
+          <section class="info-card red" id="status"><h2>Ventilation, ARDS Risk & Escalation</h2><p>Severe smoke inhalation can progress to airway obstruction, respiratory failure, pulmonary edema, and ARDS. Ventilator support should protect the lungs while maintaining oxygenation and ventilation.</p><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-coral"><strong>Watch for:</strong><br>Progressive edema, stridor, fatigue, falling mental status, rising PaCO₂, worsening hypoxemia.</div><div class="example-box soft-amber"><strong>Vent goal:</strong><br>Support gas exchange while minimizing ventilator-induced lung injury.</div><div class="example-box soft-blue"><strong>Settings concept:</strong><br>Use lung-protective ventilation if ARDS develops and monitor secretion/airway pressure issues.</div></div><article class="info-card board" style="margin-top:16px;"><h3>Board Pearl</h3><p>For smoke inhalation, early normal CXR or SpO₂ does not guarantee safety. Reassessment is part of treatment because airway edema and lung injury may evolve over time.</p></article></section>
+          <section class="info-card rt" id="rt-role"><h2>Respiratory Therapist Role</h2><p>The RT is central to oxygen delivery, airway assessment, treatment delivery, ventilation support, monitoring, and escalation communication.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr><tr><td>Assess airway</td><td>Voice, stridor, swelling, soot, burns, secretion burden.</td><td>Detects airway loss risk early.</td></tr><tr><td>Deliver oxygen</td><td>Use high-concentration oxygen for suspected CO exposure.</td><td>Reduces CO half-life and improves oxygen delivery.</td></tr><tr><td>Interpret data</td><td>ABG/co-oximetry, COHb, lactate, PaCO₂ trend, CXR changes.</td><td>Identifies toxic hypoxia and respiratory failure patterns.</td></tr><tr><td>Treat bronchospasm</td><td>Administer bronchodilators when wheezing/obstruction is present.</td><td>Improves airflow and work of breathing.</td></tr><tr><td>Escalate</td><td>Report red flags and prepare for advanced airway or ventilator support.</td><td>Prevents delayed response to deterioration.</td></tr></table></div></section>
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided Smoke Inhalation Case"><span class="eyebrow">Guided Unfolding Case Study</span><h2>The Normal SpO₂ Trap</h2><p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p><div class="case-stage" data-case-stage="0"><h3>Stage 1: Initial Presentation</h3><p>A 34-year-old is rescued from an apartment fire. They are coughing, confused, and have soot around the mouth.</p><div class="case-meta"><div><strong>RR</strong><br>28/min</div><div><strong>SpO₂</strong><br>99% room air</div><div><strong>Voice</strong><br>Hoarse</div></div><p><strong>Decision Question:</strong> What is the priority RT action?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A normal SpO₂ can be falsely reassuring in CO poisoning.">Document normal oxygenation and observe without oxygen.</button><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Suspected smoke inhalation and CO exposure require high-concentration oxygen and immediate airway assessment.">Start high-concentration oxygen and assess airway risk.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen should not wait for imaging or labs when CO exposure is suspected.">Wait for chest x-ray before giving oxygen.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Incentive spirometry does not address acute toxic inhalation or airway edema risk.">Begin incentive spirometry teaching.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="1"><h3>Stage 2: Airway Clue</h3><p>The patient becomes more hoarse and develops mild inspiratory stridor. Facial burns are present.</p><p><strong>Decision Question:</strong> What should the RT recommend?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Progressive hoarseness/stridor after burn exposure suggests airway edema. Early airway protection should be considered before swelling worsens.">Escalate immediately for possible early intubation.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Nebulized bronchodilator may help bronchospasm but does not solve progressive upper-airway obstruction.">Only give albuterol and ignore airway swelling.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Discharge is unsafe with stridor and progressive hoarseness.">Discharge because SpO₂ is normal.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oral fluids do not treat airway edema and may increase aspiration risk if airway status worsens.">Encourage oral fluids and reassess tomorrow.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="2"><h3>Stage 3: Co-Oximetry</h3><p>ABG with co-oximetry shows pH 7.31, PaCO₂ 34 mm Hg, PaO₂ 210 mm Hg on high FiO₂, COHb 28%, and lactate 9 mmol/L.</p><p><strong>Decision Question:</strong> How should these results be interpreted?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. COHb confirms significant CO exposure, and high lactate after enclosed-space fire raises concern for cyanide toxicity or severe hypoperfusion.">Significant toxic inhalation with CO poisoning and cyanide concern.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. PaO₂ can be high on oxygen while hemoglobin oxygen delivery remains impaired by CO.">Normal oxygen delivery because PaO₂ is high.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Lactate is clinically important and may indicate cellular hypoxia.">Ignore lactate because the lungs are the only concern.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. COHb of 28% is not a harmless finding in a symptomatic patient.">Mild anxiety only.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="3"><h3>Stage 4: Delayed Pulmonary Injury</h3><p>Six hours later, oxygen requirement increases. CXR now shows bilateral hazy opacities, and lung compliance is worsening.</p><p><strong>Decision Question:</strong> Which concept is most important?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Smoke inhalation can evolve into chemical pneumonitis, pulmonary edema, and ARDS; lung-protective ventilation may be needed.">Monitor for evolving ARDS and use lung-protective support if ventilated.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Worsening oxygen need and compliance are not reassuring.">Assume the patient is improving because the injury happened hours ago.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. CXR may worsen after initially normal findings.">Ignore repeat imaging because initial CXR was normal.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Lower-airway injury can produce serious gas exchange problems.">Focus only on cosmetic burn care.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="4"><h3>Case Wrap-Up</h3><div class="example-box soft-teal"><strong>RT Takeaway:</strong> Treat suspected CO exposure immediately with high-concentration oxygen and obtain co-oximetry; do not trust SpO₂ alone.</div><div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> Hoarseness, stridor, altered mental status, high lactate, and rising oxygen needs require urgent escalation.</div></div></section>
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Smoke Inhalation Knowledge Check"><span class="eyebrow">Knowledge Check</span><h2>Board-Style Practice</h2><p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p><div class="knowledge-question" data-question-id="kq1"><h3>Question 1</h3><p>Why can pulse oximetry be misleading in carbon monoxide poisoning?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Standard pulse oximetry may read carboxyhemoglobin as oxyhemoglobin, so SpO₂ can appear normal.">It may falsely appear normal because it cannot reliably distinguish oxyhemoglobin from carboxyhemoglobin.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. PaO₂ may be normal or high on oxygen even when oxygen content is impaired.">It directly measures PaO₂.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. SpO₂ is not the definitive test for COHb.">It accurately reports COHb percentage.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. CO poisoning is primarily an oxygen delivery problem, not just a low respiratory rate problem.">It only becomes inaccurate when respiratory rate is below 8/min.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq2"><h3>Question 2</h3><p>Which finding most strongly suggests impending upper-airway obstruction after smoke exposure?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Stridor and progressive hoarseness indicate upper-airway narrowing and need urgent escalation.">Progressive hoarseness with stridor.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Headache can suggest CO exposure but does not specifically indicate upper-airway obstruction.">Mild headache alone.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. A normal SpO₂ is not reassuring for CO and does not rule out airway edema.">SpO₂ 99% on room air.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Singed arm hair alone is less specific than stridor and progressive voice change.">Singed arm hair only.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq3"><h3>Question 3</h3><p>Which diagnostic test is most appropriate to confirm carbon monoxide exposure?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. Co-oximetry measures carboxyhemoglobin and other hemoglobin species.">ABG or blood gas with co-oximetry.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Standard SpO₂ may be falsely normal.">Standard pulse oximetry alone.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Peak flow does not measure COHb.">Peak expiratory flow.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. CXR may help evaluate lung injury but does not confirm CO exposure.">Chest x-ray alone.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq4"><h3>Question 4</h3><p>A patient from an enclosed-space fire has shock, altered mental status, and severe lactic acidosis. What additional toxic exposure should be considered?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Enclosed-space fires involving synthetic materials can produce cyanide, causing cellular hypoxia and severe lactic acidosis.">Cyanide toxicity.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Allergic rhinitis does not explain severe lactic acidosis after a fire.">Allergic rhinitis.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Simple anxiety does not explain shock and severe lactic acidosis.">Anxiety only.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Sleep apnea is not the acute toxic exposure pattern here.">Obstructive sleep apnea.</button></div><div class="quiz-feedback" role="status"></div></div><div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div></section>
+          <section id="faq"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common Smoke Inhalation Questions</h2></div><details class="accordion" open><summary>Why give oxygen if the SpO₂ is normal?</summary><div class="accordion-body"><p>In CO poisoning, standard SpO₂ can look normal because it cannot reliably distinguish oxyhemoglobin from carboxyhemoglobin. Oxygen is treatment, not just supportive care.</p></div></details><details class="accordion"><summary>Where does thermal injury usually occur?</summary><div class="accordion-body"><p>Thermal injury most often affects the upper airway because heat is dissipated before reaching distal airways, except with steam or extreme exposures.</p></div></details><details class="accordion"><summary>Why is hoarseness concerning?</summary><div class="accordion-body"><p>Hoarseness after a fire may signal laryngeal edema. Progressive edema can make intubation more difficult if airway protection is delayed.</p></div></details><details class="accordion"><summary>Can the chest x-ray be normal early?</summary><div class="accordion-body"><p>Yes. Lower-airway injury and pulmonary edema may evolve over hours, so clinical reassessment is essential.</p></div></details><details class="accordion"><summary>When should cyanide toxicity be considered?</summary><div class="accordion-body"><p>Consider cyanide in enclosed-space fires, especially with shock, altered mental status, cardiovascular collapse, or severe lactic acidosis.</p></div></details><details class="accordion"><summary>What is the RT’s first treatment priority?</summary><div class="accordion-body"><p>Remove exposure if not already done, deliver high-concentration oxygen, assess airway patency, and communicate red flags early.</p></div></details></section>
+          <section class="info-card" id="summary"><h2>Summary & Clinical Pearls</h2><p>Smoke inhalation injury is a combined airway, lung, and toxic oxygen-delivery problem. The RT must recognize that normal SpO₂ can be misleading, airway edema can progress, and delayed lung injury can develop after the initial event.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Must know:</strong><br>Suspected CO exposure gets high-concentration oxygen immediately.</div><div class="example-box soft-amber"><strong>Board pearl:</strong><br>Use co-oximetry to evaluate COHb; do not trust standard pulse oximetry alone.</div><div class="example-box soft-blue"><strong>RT pearl:</strong><br>Voice change, stridor, soot, facial burns, and swelling are airway escalation clues.</div><div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not assume an initially normal CXR or SpO₂ means the patient is safe.</div></div></section>
+          <section id="glossary"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div><div class="glossary-card"><h3>Searchable Glossary</h3><p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p><div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: COHb, stridor, cyanide, co-oximetry..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div><div class="glossary-list" id="glossaryList"></div></div><div class="glossary-card" style="margin-top:18px;"><h3>Glossary Flashcard Mastery Deck</h3><p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p><div class="flashcard-shell"><div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div><div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div><div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div><div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div><div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div><div class="completed-list" id="completedList"></div></div></div></section>
+        </div></div></main><footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer></div>
+  <script>
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
+      const courseSource = window.PulmoCoreCourses || window.pulmoCoreCourses || window.courses || window.COURSES || window.courseList || window.CourseList || [];
+      const progressSource = window.PulmoCoreProgress || window.pulmoCoreProgress || {};
+      const courses = Array.isArray(courseSource) ? courseSource : [];
+      function getCourseTitle(course) { if (typeof course === "string") return course; return course?.title || course?.name || course?.label || "Untitled Course"; }
+      function getCourseHref(course) { if (typeof course === "string") return "#"; return course?.href || course?.url || course?.file || "#"; }
+      function getCourseId(course) { if (typeof course === "string") return course; return course?.id || course?.slug || getCourseHref(course) || getCourseTitle(course); }
+      function getStatus(course) {
+        const id = getCourseId(course);
+        const progress = course.progress ?? progressSource[id]?.progress ?? progressSource[id]?.percent ?? progressSource[id];
+        const complete = course.complete ?? course.completed ?? progressSource[id]?.complete ?? progressSource[id]?.completed;
+        if (complete || Number(progress) >= 100) return "Complete";
+        if (progress !== undefined && progress !== null && progress !== "") {
+          const pct = Math.max(0, Math.min(100, Math.round(Number(progress))));
+          if (!Number.isNaN(pct) && pct > 0) return `In progress (${pct}%)`;
+        }
+        return "Not started";
+      }
+      panel.innerHTML = courses.length ? courses.map(course => `<a class="course-menu-item" role="menuitem" href="${getCourseHref(course)}"><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-menu-status">${getStatus(course)}</span></a>`).join("") : `<div class="course-menu-item"><span class="course-menu-title">Courses unavailable</span><span class="course-menu-status">Check that courses.js is in this folder and defines a courses array.</span></div>`;
+      button.addEventListener("click", () => {
+        const open = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(open));
+      });
+      document.addEventListener("click", event => {
+        if (!button.contains(event.target) && !panel.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+          button.focus();
+        }
+      });
+    }
+    initializeCourseMenu();
+
+
+    const glossaryTerms = [
+      { term: "Smoke inhalation injury", definition: "Airway and lung injury caused by inhaling smoke, heat, toxic gases, and particulate matter during a fire exposure.", rt: "Requires early airway assessment, oxygen therapy, bronchodilator support when indicated, and close monitoring for delayed edema." },
+      { term: "Thermal airway injury", definition: "Heat-related injury most often affecting the upper airway above the glottis, causing edema and possible obstruction.", rt: "Facial burns, soot, hoarseness, and stridor should trigger early escalation for airway protection." },
+      { term: "Chemical pneumonitis", definition: "Inflammation of the lower airways and alveoli caused by toxic combustion products and irritant gases.", rt: "May worsen over hours with bronchospasm, hypoxemia, wheeze, crackles, or ARDS-like findings." },
+      { term: "Carbon monoxide", definition: "A colorless, odorless gas produced by incomplete combustion that binds hemoglobin with high affinity.", rt: "Pulse oximetry can look falsely normal; treat suspected exposure with high-concentration oxygen." },
+      { term: "Carboxyhemoglobin", definition: "Hemoglobin bound to carbon monoxide instead of oxygen.", rt: "COHb level helps confirm exposure severity but treatment should not wait when suspicion is high." },
+      { term: "Functional anemia", definition: "Reduced oxygen-carrying capacity despite a normal hemoglobin concentration because hemoglobin binding sites are occupied or impaired.", rt: "Explains why patients can be profoundly hypoxic at the tissue level with a normal PaO₂." },
+      { term: "Oxyhemoglobin dissociation left shift", definition: "Carbon monoxide makes remaining hemoglobin hold oxygen more tightly, reducing oxygen unloading to tissues.", rt: "Helps explain neurologic and cardiac symptoms even when oxygen numbers appear acceptable." },
+      { term: "Cyanide toxicity", definition: "Cellular hypoxia caused by impaired mitochondrial oxygen use, often associated with enclosed-space fires involving plastics or synthetics.", rt: "Consider when severe lactic acidosis, shock, or altered mental status is disproportionate." },
+      { term: "Soot", definition: "Black carbonaceous material from smoke that may be seen in the mouth, nares, sputum, or airway.", rt: "Suggests inhalation exposure and possible airway injury." },
+      { term: "Stridor", definition: "A harsh upper-airway sound suggesting narrowing or obstruction.", rt: "A red flag for upper-airway edema and possible need for early intubation." },
+      { term: "Bronchospasm", definition: "Contraction of airway smooth muscle that narrows the lower airways.", rt: "Treat with inhaled bronchodilator therapy when wheeze or airflow obstruction is present." },
+      { term: "Airway edema", definition: "Swelling of airway tissues after heat, smoke, or chemical irritation.", rt: "Can progress after the initial event, making delayed obstruction a major concern." },
+      { term: "Bronchoscopy", definition: "Direct visualization of the airway used to assess soot, erythema, edema, ulceration, and injury severity.", rt: "May help grade injury and guide airway clearance or ventilator planning." },
+      { term: "ABG with co-oximetry", definition: "Arterial blood gas testing paired with measurement of hemoglobin species including carboxyhemoglobin and methemoglobin.", rt: "Needed because standard pulse oximetry cannot reliably detect CO poisoning." },
+      { term: "Pulse oximetry gap", definition: "The mismatch between a reassuring SpO₂ and true impaired oxygen delivery in CO poisoning.", rt: "Do not let a normal SpO₂ delay high-flow oxygen when CO exposure is suspected." },
+      { term: "Hyperbaric oxygen", definition: "Oxygen delivered at increased atmospheric pressure to accelerate carbon monoxide elimination and improve tissue oxygenation.", rt: "Considered for severe CO poisoning, neurologic symptoms, cardiac ischemia, pregnancy, or very high COHb depending on facility protocols." },
+      { term: "High-concentration oxygen", definition: "Oxygen therapy delivered as close to 100% oxygen as practical, often by nonrebreather or ventilator FiO₂ 1.0 initially.", rt: "First-line treatment for suspected CO intoxication and significant smoke exposure." },
+      { term: "Delayed pulmonary edema", definition: "Worsening lung fluid and inflammation that can develop after smoke or chemical injury.", rt: "Requires repeated reassessment even if the patient initially looks stable." },
+      { term: "ARDS", definition: "Acute inflammatory lung injury with hypoxemia, bilateral infiltrates, and reduced lung compliance.", rt: "Severe smoke inhalation can progress to ARDS requiring lung-protective ventilation." },
+      { term: "Enclosed-space fire", definition: "Fire exposure in a poorly ventilated area such as a house, vehicle, or room.", rt: "Raises concern for carbon monoxide, cyanide, and significant inhalation injury." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => {
+        const select = row.querySelector("select");
+        if (select) select.value = "";
+        row.classList.remove("correct", "incorrect");
+      });
+      let shuffled = [...rows];
+      let attempts = 0;
+      do {
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        attempts++;
+      } while (shuffled.every((row, index) => Number(row.dataset.answer) === index + 1) && attempts < 10);
+      if (shuffled.every((row, index) => Number(row.dataset.answer) === index + 1) && shuffled.length > 1) {
+        [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+      }
+      shuffled.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> Smoke inhalation injury combines airway edema, lower-airway chemical irritation, and toxic gas exposure. Carbon monoxide impairs oxygen delivery even when SpO₂ appears normal.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> Smoke inhalation is not just a burn problem. The immediate RT priorities are airway protection, high-concentration oxygen, CO/cyanide recognition, and reassessment for delayed edema.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  
+  </script>
+</body>
+</html>

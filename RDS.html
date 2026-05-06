@@ -76,7 +76,7 @@
     .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
     .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
     .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
-    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
@@ -156,6 +156,20 @@
     .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
     .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
 
+
+    #sequenceSort { visibility: hidden; }
+    .course-menu-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-button:hover { background: rgba(255,255,255,.16); }
+    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(360px, calc(100vw - 32px)); background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; max-height: 70vh; overflow-y: auto; z-index: 50; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-title { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px; color: var(--core-navy); }
+    .course-menu-item { display: grid; gap: 3px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 14px; padding: 10px 12px; background: #FAFDFF; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item strong { font-family: var(--font-heading); font-size: .98rem; }
+    .course-menu-status { font-size: .84rem; color: var(--slate); font-weight: 700; }
+    .course-menu-empty { padding: 12px; border-radius: 12px; background: var(--mist-blue); color: var(--slate); font-weight: 700; }
+
     .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
     .footer strong span { color: var(--pulmo-teal); }
 
@@ -179,8 +193,13 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <nav class="nav-links" aria-label="Primary navigation"><a href="#snapshot">Snapshot</a><a href="#pathophysiology">Pathophysiology</a><a href="#diagnostics">Diagnostics</a><a href="#management">Management</a><a href="#glossary">Glossary</a></nav>
-      <div class="mobile-menu-note">Menu</div>
+      <div class="course-menu-wrap">
+        <button class="course-menu-button" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" aria-label="Course menu">
+          <div class="course-menu-title">PulmoCore Courses</div>
+          <div class="course-menu-empty">Loading courses...</div>
+        </div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -194,7 +213,7 @@
       <div class="content-layout">
         <aside class="side-nav" aria-label="Disease page quick navigation">
           <h3>Lesson Sections</h3>
-          <a href="#objectives">Objectives</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Severity + Oxygen Need</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Escalation + Ventilation</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
+          <a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Severity + Oxygen Need</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Escalation + Ventilation</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
         </aside>
 
         <div class="lesson-stack">
@@ -206,6 +225,18 @@
               <div class="example-box soft-blue"><strong>2. Recognize clinical patterns</strong><br>Identify grunting, nasal flaring, tachypnea, retractions, cyanosis, and increasing oxygen requirement in a premature newborn.</div>
               <div class="example-box soft-amber"><strong>3. Interpret diagnostics</strong><br>Use CXR, blood gas trends, pre/postductal SpO₂, glucose/temperature data, and differential diagnosis to guide care.</div>
               <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize failure of CPAP, persistent hypoxemia, apnea, rising CO₂, exhaustion, and need for surfactant or invasive support.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Respiratory Distress Syndrome Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="RDS.mp4" type="video/mp4">
+                <track src="RDS.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
             </div>
           </section>
 
@@ -238,7 +269,7 @@
             <h2>Anatomy & Pathophysiology</h2>
             <p>Surfactant lowers alveolar surface tension. Without enough surfactant, small alveoli collapse at end expiration. This decreases FRC, reduces compliance, creates diffuse atelectasis, and causes V/Q mismatch. The infant compensates with tachypnea, retractions, and grunting to generate auto-distending pressure.</p>
             <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Prematurity → immature type II pneumocytes → surfactant deficiency → increased surface tension → alveolar collapse → low compliance + low FRC → hypoxemia → fatigue and ventilatory failure risk.</div>
-            <div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-surfactant-pathophysiology.png" alt="Educational diagram showing surfactant deficiency causing alveolar collapse, low compliance, low FRC, and increased work of breathing in newborn RDS"><br><strong>Visual Learning:</strong> Use this image placeholder for a cause → effect diagram showing surfactant deficiency and alveolar collapse.</div>
+            <div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-surfactant-pathophysiology.png" alt="Educational diagram showing surfactant deficiency causing alveolar collapse, low compliance, low FRC, and increased work of breathing in newborn RDS" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><br><strong>Visual Learning:</strong> Use this image placeholder for a cause → effect diagram showing surfactant deficiency and alveolar collapse.</div>
             <h3 style="margin-top:22px;">What Changes During Newborn RDS</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RDS Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Surfactant deficiency</td><td>Alveoli have high surface tension.</td><td>Alveoli collapse more easily during exhalation.</td></tr><tr><td>Diffuse atelectasis</td><td>Many lung units are poorly aerated.</td><td>Creates shunt-like physiology and hypoxemia.</td></tr><tr><td>Low compliance</td><td>The lungs are stiff.</td><td>Newborn must work harder to generate tidal volume.</td></tr><tr><td>Low FRC</td><td>Less gas remains after exhalation.</td><td>Worsens derecruitment and oxygen instability.</td></tr><tr><td>V/Q mismatch</td><td>Perfused areas are poorly ventilated.</td><td>Oxygen requirement rises.</td></tr></table></div>
             <article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>A premature infant with worsening retractions who becomes apneic, bradycardic, limp, or less responsive is not improving. That pattern suggests exhaustion and possible respiratory failure.</p></article>
@@ -254,9 +285,9 @@
             <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="RDS Risk Sorting"><h3>Sort the Newborn Distress Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Prematurity at 28 weeks</strong><select aria-label="Category for prematurity"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>CPAP to recruit alveoli</strong><select aria-label="Category for CPAP"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="trigger"><strong>Maternal diabetes</strong><select aria-label="Category for maternal diabetes"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Apnea with bradycardia</strong><select aria-label="Category for apnea"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Exogenous surfactant</strong><select aria-label="Category for surfactant"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article>
           </section>
 
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>RDS usually appears soon after birth and worsens over the first hours if untreated. RT assessment should focus on respiratory effort, air entry, oxygen need, color, temperature, perfusion, apnea/bradycardia events, and response to CPAP or surfactant.</p><div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-clinical-signs.png" alt="Educational image showing neonatal respiratory distress signs including grunting, nasal flaring, retractions, tachypnea, and cyanosis"><br><strong>Visual Learning:</strong> Use this image placeholder to label grunting, flaring, retractions, and tachypnea.</div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Breathing pattern</td><td>Tachypnea, shallow breathing, apnea, grunting.</td></tr><tr><td>Appearance</td><td>Nasal flaring, intercostal/subcostal retractions, cyanosis, poor tone when severe.</td></tr><tr><td>Breath sounds</td><td>Fine crackles, decreased air entry, or poor aeration with worsening disease.</td></tr><tr><td>Oxygenation clues</td><td>Increasing FiO₂ requirement, low SpO₂, low PaO₂.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, respiratory acidosis, apnea, fatigue.</td></tr><tr><td>Response clues</td><td>Improved SpO₂, reduced retractions/grunting, lower FiO₂ need after CPAP or surfactant.</td></tr></table></div></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>RDS usually appears soon after birth and worsens over the first hours if untreated. RT assessment should focus on respiratory effort, air entry, oxygen need, color, temperature, perfusion, apnea/bradycardia events, and response to CPAP or surfactant.</p><div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-clinical-signs.png" alt="Educational image showing neonatal respiratory distress signs including grunting, nasal flaring, retractions, tachypnea, and cyanosis" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><br><strong>Visual Learning:</strong> Use this image placeholder to label grunting, flaring, retractions, and tachypnea.</div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Breathing pattern</td><td>Tachypnea, shallow breathing, apnea, grunting.</td></tr><tr><td>Appearance</td><td>Nasal flaring, intercostal/subcostal retractions, cyanosis, poor tone when severe.</td></tr><tr><td>Breath sounds</td><td>Fine crackles, decreased air entry, or poor aeration with worsening disease.</td></tr><tr><td>Oxygenation clues</td><td>Increasing FiO₂ requirement, low SpO₂, low PaO₂.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, respiratory acidosis, apnea, fatigue.</td></tr><tr><td>Response clues</td><td>Improved SpO₂, reduced retractions/grunting, lower FiO₂ need after CPAP or surfactant.</td></tr></table></div></section>
 
-          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic data helps confirm RDS severity, identify alternative diagnoses, and guide escalation. Interpret the infant’s clinical picture together with gestational age, timing of onset, CXR, oxygen need, and blood gas trends.</p><h3 style="margin-top:18px;">Chest X-ray</h3><div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-cxr-ground-glass-air-bronchograms.png" alt="Educational chest x-ray placeholder showing diffuse ground-glass pattern and air bronchograms in newborn respiratory distress syndrome"><br><strong>Visual Learning:</strong> Use this image placeholder for the high-yield CXR pattern: low lung volumes, diffuse ground-glass appearance, and air bronchograms.</div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test or Finding</th><th>RDS Pattern</th></tr><tr><td>CXR</td><td>Diffuse reticulogranular or ground-glass appearance, air bronchograms, low lung volumes.</td></tr><tr><td>ABG/CBG</td><td>Hypoxemia; rising PaCO₂ and acidosis as fatigue or failure develops.</td></tr><tr><td>Pulse oximetry</td><td>Used for target range monitoring and oxygen titration.</td></tr><tr><td>Pre/postductal SpO₂</td><td>Helps evaluate shunting or PPHN when hypoxemia is disproportionate.</td></tr><tr><td>Glucose and temperature</td><td>Hypoglycemia or cold stress can worsen distress and oxygen use.</td></tr><tr><td>Sepsis evaluation</td><td>Consider if infection risk, instability, abnormal temperature, or poor perfusion.</td></tr></table></div><h3 style="margin-top:18px;">ABG Pattern</h3><p>Early RDS often presents with hypoxemia from atelectasis and V/Q mismatch. Worsening ventilation appears as rising PaCO₂ and respiratory acidosis, especially when the infant tires or has apnea.</p></section>
+          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic data helps confirm RDS severity, identify alternative diagnoses, and guide escalation. Interpret the infant’s clinical picture together with gestational age, timing of onset, CXR, oxygen need, and blood gas trends.</p><h3 style="margin-top:18px;">Chest X-ray</h3><div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-cxr-ground-glass-air-bronchograms.png" alt="Educational chest x-ray placeholder showing diffuse ground-glass pattern and air bronchograms in newborn respiratory distress syndrome" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><br><strong>Visual Learning:</strong> Use this image placeholder for the high-yield CXR pattern: low lung volumes, diffuse ground-glass appearance, and air bronchograms.</div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test or Finding</th><th>RDS Pattern</th></tr><tr><td>CXR</td><td>Diffuse reticulogranular or ground-glass appearance, air bronchograms, low lung volumes.</td></tr><tr><td>ABG/CBG</td><td>Hypoxemia; rising PaCO₂ and acidosis as fatigue or failure develops.</td></tr><tr><td>Pulse oximetry</td><td>Used for target range monitoring and oxygen titration.</td></tr><tr><td>Pre/postductal SpO₂</td><td>Helps evaluate shunting or PPHN when hypoxemia is disproportionate.</td></tr><tr><td>Glucose and temperature</td><td>Hypoglycemia or cold stress can worsen distress and oxygen use.</td></tr><tr><td>Sepsis evaluation</td><td>Consider if infection risk, instability, abnormal temperature, or poor perfusion.</td></tr></table></div><h3 style="margin-top:18px;">ABG Pattern</h3><p>Early RDS often presents with hypoxemia from atelectasis and V/Q mismatch. Worsening ventilation appears as rising PaCO₂ and respiratory acidosis, especially when the infant tires or has apnea.</p></section>
 
           <section class="info-card" id="severity"><h2>Severity Classification & Oxygen Need</h2><p>Severity is judged by work of breathing, oxygen requirement, CPAP/PEEP need, blood gas trend, apnea/bradycardia events, and radiographic findings. Rising FiO₂ need despite adequate CPAP should trigger reassessment and possible surfactant/escalation discussion.</p><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Mild</strong><br>Tachypnea and mild retractions; stable oxygenation on low support.</div><div class="example-box soft-amber"><strong>Moderate</strong><br>Persistent grunting/retractions; increasing FiO₂ or CPAP need.</div><div class="example-box soft-coral"><strong>Severe</strong><br>Apnea, acidosis, rising CO₂, bradycardia, or refractory hypoxemia.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="Oxygen Escalation Activity"><h3>Oxygen Escalation Activity</h3><p>A 29-week infant on CPAP has increasing retractions and now needs FiO₂ 0.45 to maintain target SpO₂. What is the best RT interpretation?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Room-air stability would mean little or no supplemental oxygen need and improving distress.">The infant is stable on room air and can come off support.</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Rising FiO₂ need with persistent distress suggests worsening RDS or inadequate lung recruitment and should prompt reassessment and escalation discussion, including surfactant consideration per local protocol/provider order.">The infant needs reassessment for worsening RDS and possible escalation.</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Incorrect. Oxygen need alone should not be ignored, especially when work of breathing is worsening.">No action is needed because CPAP is already in place.</button></div><div class="quiz-feedback" role="status"></div></article></section>
 
@@ -296,6 +327,66 @@
 
   <script>
 
+
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
+
+      const rawCourses = window.PULMOCORE_COURSES || window.PulmoCoreCourses || window.courses || window.COURSES || [];
+      const courses = Array.isArray(rawCourses) ? rawCourses : Object.values(rawCourses || {});
+
+      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
+      function getCourseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
+      function getCourseId(course) { return course.id || course.slug || getCourseHref(course).replace(/[^a-z0-9]/gi, "_").toLowerCase(); }
+      function getStoredProgress(course) {
+        const id = getCourseId(course);
+        const direct = localStorage.getItem(`pulmocore:${id}:progress`) || localStorage.getItem(`pulmoCore:${id}:progress`) || localStorage.getItem(`${id}:progress`);
+        if (direct !== null && !Number.isNaN(Number(direct))) return Number(direct);
+        try {
+          const allProgress = JSON.parse(localStorage.getItem("pulmocoreCourseProgress") || localStorage.getItem("pulmoCoreCourseProgress") || "{}");
+          const value = allProgress[id] ?? allProgress[getCourseHref(course)] ?? allProgress[getCourseTitle(course)];
+          if (typeof value === "number") return value;
+          if (value && typeof value.percent === "number") return value.percent;
+        } catch (error) {}
+        return 0;
+      }
+      function getStatus(course) {
+        const explicit = course.status || course.progressStatus;
+        const percent = Math.max(0, Math.min(100, Number(course.progress ?? course.percent ?? getStoredProgress(course)) || 0));
+        if (explicit) return explicit;
+        if (percent >= 100) return "Complete";
+        if (percent > 0) return `In progress (${Math.round(percent)}%)`;
+        return "Not started";
+      }
+
+      const items = courses.map(course => {
+        const href = getCourseHref(course);
+        const isCurrent = href && location.pathname.endsWith(href.replace(/^.*\//, ""));
+        return `<a class="course-menu-item" href="${href}" ${isCurrent ? 'aria-current="page"' : ''}><strong>${getCourseTitle(course)}</strong><span class="course-menu-status">${getStatus(course)}</span></a>`;
+      }).join("");
+      panel.innerHTML = `<div class="course-menu-title">PulmoCore Courses</div>${items || '<div class="course-menu-empty">No courses found. Check courses.js.</div>'}`;
+
+      button.addEventListener("click", () => {
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      document.addEventListener("click", event => {
+        if (!panel.contains(event.target) && !button.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+          button.focus();
+        }
+      });
+    }
+    document.addEventListener("DOMContentLoaded", initializeCourseMenu);
 
     const glossaryTerms = [
       { term: "Neonatal RDS", definition: "A newborn respiratory disorder caused primarily by surfactant deficiency, leading to alveolar collapse, low lung compliance, and impaired gas exchange.", rt: "Core diagnosis for premature infants with early respiratory distress." },
@@ -398,7 +489,7 @@
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
-      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); updateNavState(currentVisible); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
@@ -420,7 +511,12 @@
         const j = Math.floor(Math.random() * (i + 1));
         [rows[i], rows[j]] = [rows[j], rows[i]];
       }
-      rows.forEach(row => container.appendChild(row));
+      rows.forEach(row => {
+        const select = row.querySelector("select");
+        if (select) select.value = "";
+        row.classList.remove("correct", "incorrect");
+        container.appendChild(row);
+      });
     }
 
     function normalizeSequenceRanks(changedSelect) {
@@ -482,9 +578,13 @@
       });
     }
 
-    shuffleSequence();
-    enableDynamicReorder();
-    initializeSequenceSort();
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
 
     function initializeKnowledgeCheck() {
       const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
