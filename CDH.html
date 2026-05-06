@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Congenital Diaphragmatic Hernia</title>
+
+  <!-- PulmoCore font direction. Replace with self-hosted or approved web fonts if needed. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+
+    .course-menu-wrap { position: relative; display: flex; align-items: center; }
+    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.10); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-btn:hover { background: rgba(255,255,255,.18); }
+    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; gap: 2px; padding: 12px 14px; border-radius: 14px; text-decoration: none; border: 1px solid transparent; }
+    .course-menu-item:hover, .course-menu-item.current { background: var(--airway-mint); border-color: #BCEFE5; }
+    .course-menu-title { font-weight: 800; font-family: var(--font-heading); }
+    .course-menu-status { color: var(--slate); font-size: .9rem; }
+    #sequenceSort { visibility: hidden; }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+      </div>
+      <div class="course-menu-wrap">
+        <button class="course-menu-btn" type="button" id="courseMenuButton" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore courses"></div>
+      </div>
+      <div class="mobile-menu-note">☰ Courses</div>
+    </header>
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Congenital Diaphragmatic Hernia</h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Congenital diaphragmatic hernia (CDH) is a neonatal respiratory emergency in which abdominal organs herniate through an incompletely formed diaphragm, compress the developing lungs, and contribute to pulmonary hypoplasia and pulmonary hypertension. This module focuses on RT recognition, stabilization, diagnostic interpretation, ventilatory priorities, and escalation logic.</p>
+        <div class="case-meta" aria-label="Module details"><div><strong>Category</strong><br>Neonatal Respiratory Disorder</div><div><strong>Estimated Time</strong><br>30–40 minutes</div><div><strong>Level</strong><br>Core RT Knowledge</div></div>
+      </section>
+      <div class="content-layout">
+        <aside class="side-nav" aria-label="Disease page quick navigation">
+          <h3>Lesson Sections</h3><a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Prenatal Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Oxygenation + PPHN</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Escalation</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
+        </aside>
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives"><h2>Learning Objectives</h2><p>By the end of this CDH module, learners should be able to connect abnormal diaphragm development, lung hypoplasia, pulmonary hypertension, neonatal distress, stabilization priorities, diagnostic findings, and escalation decisions.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how abdominal organ herniation compresses the lung and limits pulmonary development.</div><div class="example-box soft-blue"><strong>2. Recognize the bedside pattern</strong><br>Identify respiratory distress, scaphoid abdomen, asymmetric chest findings, and bowel sounds in the chest.</div><div class="example-box soft-amber"><strong>3. Interpret diagnostics</strong><br>Use chest x-ray, pre/postductal saturations, ABGs, echo findings, and prenatal history to support CDH reasoning.</div><div class="example-box soft-coral"><strong>4. Escalate safely</strong><br>Prioritize intubation, gastric decompression, gentle ventilation, PPHN management, and ECMO consultation when indicated.</div></div></section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Congenital Diaphragmatic Hernia Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="CDH.mp4" type="video/mp4">
+                <track src="CDH.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
+            </div>
+          </section>
+
+          <section class="info-card" id="snapshot"><h2>Disease Snapshot</h2><p>CDH is not primarily a surfactant problem or routine transient tachypnea. The major RT concern is that the newborn may have small, vulnerable lungs plus high pulmonary vascular resistance. Positive pressure must be used carefully because excessive pressures can injure hypoplastic lungs and bag-mask ventilation may inflate bowel in the chest.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>What it is:</strong><br>Defect in the diaphragm allowing abdominal contents into the chest.</div><div class="example-box soft-teal"><strong>Primary problem:</strong><br>Pulmonary hypoplasia, lung compression, and pulmonary hypertension.</div><div class="example-box soft-teal"><strong>Classic signs:</strong><br>Severe distress, scaphoid abdomen, diminished breath sounds, bowel sounds in chest.</div><div class="example-box soft-teal"><strong>Diagnostic clue:</strong><br>Chest x-ray showing bowel loops or stomach in thorax with mediastinal shift.</div><div class="example-box soft-teal"><strong>Acute danger:</strong><br>Refractory hypoxemia, acidosis, shock, or worsening pre/postductal saturation split.</div><div class="example-box soft-teal"><strong>RT priority:</strong><br>Avoid routine bag-mask ventilation, support oxygenation/ventilation gently, decompress stomach, and escalate early.</div></div><article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>For RTs, CDH is a stabilization problem before it is a surgical repair problem. The RT must protect fragile lungs, avoid gastric insufflation, monitor oxygenation and ventilation trends, and recognize pulmonary hypertension physiology.</p></article><article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Immediately associate CDH with newborn distress, scaphoid abdomen, bowel in chest, pulmonary hypoplasia, pulmonary hypertension, intubation rather than bag-mask ventilation, OG tube decompression, gentle ventilation, and delayed surgical repair after stabilization.</p></article></section>
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check"><span class="eyebrow">Quick Pre-Check</span><h2>Start with the core CDH pattern</h2><p>Which statement best describes the core respiratory problem in congenital diaphragmatic hernia?</p><div class="quiz-options"><button class="quiz-option" data-correct="false">The alveoli collapse because surfactant is absent in an otherwise normal lung.</button><button class="quiz-option" data-correct="true">Abdominal organs enter the chest, compress developing lungs, and contribute to pulmonary hypoplasia and pulmonary hypertension.</button><button class="quiz-option" data-correct="false">The upper airway is swollen from infection and causes inspiratory stridor.</button><button class="quiz-option" data-correct="false">Air leaks into the pleural space after trauma and collapses one lung.</button></div><div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
+          <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>In CDH, the diaphragm does not fully separate the abdominal and thoracic cavities. Herniated stomach, bowel, liver, or spleen can compress the ipsilateral lung and shift the mediastinum. The result may be pulmonary hypoplasia, abnormal pulmonary vasculature, V/Q mismatch, and persistent pulmonary hypertension of the newborn.</p><img src="cdh-pathophysiology.png" alt="Diagram showing abdominal organs herniating through a diaphragmatic defect into the thoracic cavity and compressing the developing lung" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft); margin-top:16px;"><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Diaphragm defect → abdominal contents enter chest → lung compression during development → pulmonary hypoplasia + abnormal pulmonary vessels → high pulmonary vascular resistance → right-to-left shunting → severe hypoxemia.</div><h3 style="margin-top:22px;">High-Yield Mechanism Map</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>CDH Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Diaphragm defect</td><td>Abdominal contents move into the thorax.</td><td>Reduces thoracic space for lung development.</td></tr><tr><td>Pulmonary hypoplasia</td><td>Lung tissue and vascular bed are underdeveloped.</td><td>Limits gas exchange and increases ventilator vulnerability.</td></tr><tr><td>Pulmonary hypertension</td><td>Pulmonary vascular resistance remains high.</td><td>Promotes right-to-left shunting and refractory hypoxemia.</td></tr><tr><td>Mediastinal shift</td><td>Heart and mediastinum shift away from herniation.</td><td>Can impair cardiopulmonary function.</td></tr><tr><td>Gastric/bowel distention</td><td>Air-filled bowel expands in the chest.</td><td>Further compresses the lung; avoid bag-mask ventilation when suspected.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>A newborn with suspected CDH should not receive routine prolonged bag-mask ventilation because it can insufflate herniated stomach or bowel and worsen lung compression.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CDH Hotspot Graphic"><h3>Click the CDH Hotspots</h3><p>Click each hotspot to reveal how the anatomy drives RT decision-making.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified CDH graphic with clickable hotspots"><svg viewBox="0 0 240 240" fill="none" aria-hidden="true"><path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M52 152c25-14 50-14 72 0 22 14 47 14 72 0" stroke="#E85D5D" stroke-width="5" stroke-linecap="round"/><circle cx="85" cy="155" r="18" fill="#F4B860" opacity=".9"/><circle cx="116" cy="168" r="13" fill="#F4B860" opacity=".75"/><path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/></svg><button class="hotspot-btn" style="left:27%; top:28%;" data-title="Hypoplastic Lung" data-text="The compressed lung develops with less functional tissue and a smaller vascular bed, limiting gas exchange.">1</button><button class="hotspot-btn" style="left:41%; top:63%;" data-title="Diaphragm Defect" data-text="The incomplete diaphragm allows abdominal organs to enter the thorax.">2</button><button class="hotspot-btn" style="right:28%; top:42%;" data-title="Mediastinal Shift" data-text="Herniated contents can push the heart and mediastinum, worsening cardiopulmonary compromise.">3</button><button class="hotspot-btn" style="left:31%; bottom:19%;" data-title="Bowel in Chest" data-text="Bag-mask ventilation can inflate stomach or bowel, increasing intrathoracic compression.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
+          <section class="info-card" id="triggers"><h2>Etiology, Prenatal Clues & Risk Factors</h2><p>CDH is usually identified prenatally or at birth. The defect most commonly occurs posterolaterally and is more often left-sided. Prenatal diagnosis allows delivery planning at a center with neonatal surgery, advanced ventilation, pulmonary hypertension support, and ECMO capability.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding or Risk Factor</th><th>Why It Matters</th><th>RT Teaching Focus</th></tr><tr><td>Prenatal ultrasound diagnosis</td><td>Allows planned delivery and immediate stabilization.</td><td>Anticipate intubation and OG decompression.</td></tr><tr><td>Left-sided defect</td><td>Common pattern; stomach/bowel may be in thorax.</td><td>Look for mediastinal shift and asymmetric breath sounds.</td></tr><tr><td>Liver herniation</td><td>May indicate more severe thoracic crowding.</td><td>Prepare for higher acuity support.</td></tr><tr><td>Low lung-to-head ratio</td><td>Suggests more severe pulmonary hypoplasia.</td><td>Anticipate difficult oxygenation/ventilation.</td></tr><tr><td>Associated anomalies</td><td>Cardiac or genetic findings can worsen prognosis.</td><td>Coordinate closely with NICU team.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CDH Risk Sorting"><h3>Sort the CDH Findings</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Prenatal ultrasound shows stomach in the chest</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">CDH Clue/Risk</option><option value="controller">Stabilization Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Place an orogastric tube for decompression</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">CDH Clue/Risk</option><option value="controller">Stabilization Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="trigger"><strong>Scaphoid abdomen after birth</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">CDH Clue/Risk</option><option value="controller">Stabilization Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Refractory hypoxemia with acidosis</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">CDH Clue/Risk</option><option value="controller">Stabilization Action</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Gentle mechanical ventilation after intubation</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">CDH Clue/Risk</option><option value="controller">Stabilization Action</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>CDH may present immediately after birth with severe respiratory distress. The RT should look beyond tachypnea and cyanosis and assess chest symmetry, abdomen shape, breath sounds, heart sounds, oxygen requirement, and response to ventilation.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Respiratory distress</td><td>Tachypnea, grunting, retractions, cyanosis, severe oxygen need.</td></tr><tr><td>Chest/abdomen</td><td>Barrel or asymmetric chest with scaphoid abdomen.</td></tr><tr><td>Breath sounds</td><td>Diminished on affected side; bowel sounds may be heard in chest.</td></tr><tr><td>Cardiac clues</td><td>Displaced heart sounds or signs of poor perfusion.</td></tr><tr><td>Oxygenation clues</td><td>Low SpO₂, possible pre/postductal split, poor response to escalating FiO₂.</td></tr><tr><td>Ventilation clues</td><td>Respiratory acidosis if ventilation fails; risk worsens with fatigue or inadequate support.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not treat suspected CDH like routine neonatal distress with prolonged bag-mask ventilation. Early controlled airway support and gastric decompression are high-yield priorities.</p></article></section>
+          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostics confirm the anatomy, evaluate pulmonary hypertension physiology, and guide stabilization. RTs should connect imaging and gas exchange data to bedside ventilation decisions.</p><img src="cdh-chest-xray.png" alt="Chest x-ray placeholder showing bowel gas pattern in the thorax with mediastinal shift in congenital diaphragmatic hernia" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft); margin-top:16px;"><h3 style="margin-top:18px;">Chest X-ray Pattern</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>CDH Pattern</th></tr><tr><td>Bowel gas in thorax</td><td>Air-filled loops may be visible in the chest.</td></tr><tr><td>Nasogastric/OG tube course</td><td>Tube may curl into stomach positioned in thorax.</td></tr><tr><td>Mediastinal shift</td><td>Heart and mediastinum shift away from herniation.</td></tr><tr><td>Small lung fields</td><td>Suggest compression and hypoplasia.</td></tr></table></div><h3 style="margin-top:18px;">ABG and Oxygenation Patterns</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Pattern</th><th>Meaning</th></tr><tr><td>Low PaO₂ despite high FiO₂</td><td>May reflect shunting/PPHN physiology.</td></tr><tr><td>Rising PaCO₂</td><td>Ventilation is inadequate or pressures are being limited by lung-protective strategy.</td></tr><tr><td>Metabolic or respiratory acidosis</td><td>Can worsen pulmonary vascular resistance and instability.</td></tr><tr><td>Pre/postductal SpO₂ split</td><td>Supports ductal shunting and pulmonary hypertension physiology.</td></tr></table></div><h3 style="margin-top:18px;">Echocardiography</h3><p>Echo helps evaluate pulmonary hypertension, shunting direction, ventricular function, and associated congenital heart disease.</p></section>
+          <section class="info-card" id="severity"><h2>Severity, Oxygenation & Pulmonary Hypertension</h2><p>Severity is driven by how much lung is available for gas exchange, the degree of pulmonary hypertension, and how the newborn responds to gentle support. CDH patients may be difficult to oxygenate because blood can bypass the lungs through fetal shunts.</p><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Preductal SpO₂</strong><br>Right hand value reflects oxygenation before ductal mixing.</div><div class="example-box soft-amber"><strong>Postductal SpO₂</strong><br>Lower extremity value reflects oxygenation after ductal mixing.</div><div class="example-box soft-coral"><strong>Large split</strong><br>May indicate right-to-left shunting and significant PPHN.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="Pre/Postductal Saturation Activity"><h3>Oxygenation Activity</h3><p>A newborn with suspected CDH has preductal SpO₂ 92% and postductal SpO₂ 78% despite high FiO₂. What does this most strongly suggest?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Isolated upper-airway obstruction would not best explain a large pre/postductal saturation split.">Upper-airway obstruction only.</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. A large pre/postductal saturation split suggests ductal shunting and pulmonary hypertension physiology.">Right-to-left shunting from pulmonary hypertension physiology.</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Normal transition should not produce severe persistent postductal desaturation.">Normal newborn transition with no concern.</button></div><div class="quiz-feedback" role="status"></div></article></section>
+          <section class="info-card red" id="red-flags"><h2>Severity & Red Flags</h2><p>The key question is not simply “Does this newborn have CDH?” The key question is whether oxygenation, ventilation, perfusion, and acid-base status can be stabilized without injuring hypoplastic lungs.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Severe hypoxemia despite high FiO₂</td><td>May indicate shunting, severe hypoplasia, or PPHN.</td></tr><tr><td>Worsening acidosis</td><td>Increases pulmonary vascular resistance and instability.</td></tr><tr><td>High ventilator pressures needed</td><td>Raises barotrauma risk in hypoplastic lungs.</td></tr><tr><td>Shock or poor perfusion</td><td>Signals cardiovascular compromise.</td></tr><tr><td>Large pre/postductal split</td><td>Suggests significant right-to-left shunting.</td></tr><tr><td>Delayed recognition with bag-mask ventilation</td><td>Can inflate bowel and worsen compression.</td></tr></table></div></section>
+          <section class="info-card" id="management"><h2>Management & Treatment</h2><p>Initial CDH management focuses on stabilization, not immediate operative repair. The newborn usually needs airway control, gastric decompression, gentle ventilation, correction of hypoxemia/acidosis, pulmonary hypertension management, and consultation with neonatal surgery and ECMO-capable teams when severe.</p><img src="cdh-stabilization.png" alt="Flow diagram placeholder showing CDH stabilization priorities: intubation, orogastric decompression, gentle ventilation, pulmonary hypertension support, and surgical repair after stabilization" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft); margin-top:16px;"><h3 style="margin-top:18px;">Stabilization Priorities</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Action</th><th>Why It Helps</th><th>RT Emphasis</th></tr><tr><td>Avoid routine bag-mask ventilation</td><td>Prevents gastric/bowel insufflation in thorax.</td><td>Anticipate controlled intubation when suspected.</td></tr><tr><td>Endotracheal intubation</td><td>Provides controlled ventilation.</td><td>Confirm placement and monitor pressures carefully.</td></tr><tr><td>OG tube decompression</td><td>Removes air/fluid from stomach and bowel.</td><td>Helps reduce intrathoracic compression.</td></tr><tr><td>Gentle ventilation</td><td>Limits ventilator-induced lung injury.</td><td>Avoid excessive PIP/volumes; monitor ABGs.</td></tr><tr><td>PPHN support</td><td>Reduces shunting when pulmonary vascular resistance is high.</td><td>Monitor pre/postductal SpO₂ and response.</td></tr><tr><td>Surgical repair after stabilization</td><td>Corrects the defect when patient can tolerate surgery.</td><td>Continue respiratory support pre/post-op.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CDH Stabilization Sequence"><h3>CDH Stabilization Sequence</h3><p>Select the steps in the best general order for a newborn with suspected CDH and severe distress.</p><div class="sort-grid" id="sequenceSort"><div class="sort-row" data-answer="1" data-sequence-item="Recognize suspected CDH and avoid routine bag-mask ventilation"><strong>Recognize suspected CDH and avoid routine bag-mask ventilation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="2" data-sequence-item="Prepare for controlled endotracheal intubation"><strong>Prepare for controlled endotracheal intubation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="3" data-sequence-item="Place OG tube for gastric decompression"><strong>Place OG tube for gastric decompression</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="4" data-sequence-item="Begin gentle ventilation and monitor pressures"><strong>Begin gentle ventilation and monitor pressures</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="5" data-sequence-item="Assess ABG, pre/postductal SpO₂, echo findings"><strong>Assess ABG, pre/postductal SpO₂, echo findings</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="6" data-sequence-item="Escalate to HFV/iNO/ECMO team if refractory"><strong>Escalate to HFV/iNO/ECMO team if refractory</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div></div><button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button><div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div></article></section>
+          <section class="info-card red" id="status"><h2>Escalation: HFV, iNO, ECMO & Surgical Timing</h2><p>Severe CDH may require advanced support when conventional ventilation cannot achieve acceptable gas exchange safely. Surgical repair is typically delayed until physiologic stabilization because uncontrolled pulmonary hypertension, acidosis, and shock increase risk.</p><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-coral"><strong>Watch for:</strong><br>Refractory hypoxemia, acidosis, shock, high pressure needs, worsening shunt physiology.</div><div class="example-box soft-amber"><strong>Vent goal:</strong><br>Support gas exchange while protecting small hypoplastic lungs from pressure injury.</div><div class="example-box soft-blue"><strong>Escalation concept:</strong><br>HFV, iNO, vasoactive support, and ECMO consultation may be needed depending on physiology and local protocol.</div></div><article class="info-card board" style="margin-top:16px;"><h3>Board Pearl</h3><p>In suspected CDH, do not choose immediate bag-mask ventilation as the best answer when controlled intubation and gastric decompression are available. Stabilization comes before definitive surgical repair.</p></article></section>
+          <section class="info-card rt" id="rt-role"><h2>Respiratory Therapist Role</h2><p>The RT is central to early recognition, ventilatory support, monitoring, escalation, and team communication. CDH care requires careful attention to pressure limits, gas exchange trends, perfusion, and pulmonary hypertension signs.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr><tr><td>Recognize CDH pattern</td><td>Distress, scaphoid abdomen, asymmetric breath sounds, bowel in chest.</td><td>Prevents harmful routine BMV approach.</td></tr><tr><td>Support airway</td><td>Assist with intubation, confirm tube placement, secure airway.</td><td>Allows controlled ventilation.</td></tr><tr><td>Monitor oxygenation</td><td>Pre/postductal SpO₂, PaO₂, FiO₂ response, cyanosis.</td><td>Detects shunting and PPHN physiology.</td></tr><tr><td>Monitor ventilation</td><td>PaCO₂, pH, pressures, volumes, chest movement.</td><td>Balances gas exchange with lung protection.</td></tr><tr><td>Communicate escalation</td><td>Report refractory hypoxemia, acidosis, rising pressure needs.</td><td>Triggers HFV/iNO/ECMO consultation and team response.</td></tr></table></div></section>
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided CDH Case"><span class="eyebrow">Guided Unfolding Case Study</span><h2>The Newborn Who Should Not Be Bagged</h2><p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p><div class="case-stage" data-case-stage="0"><h3>Stage 1: Delivery Room Recognition</h3><p>A term newborn has immediate severe respiratory distress. The abdomen appears scaphoid. Breath sounds are very diminished on the left, and heart sounds are shifted right.</p><div class="case-meta"><div><strong>RR</strong><br>70/min</div><div><strong>SpO₂</strong><br>78% preductal</div><div><strong>Appearance</strong><br>Cyanotic, retractions</div></div><p><strong>Decision Question:</strong> What is the priority RT action?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Prolonged bag-mask ventilation can inflate herniated stomach or bowel and worsen compression.">Begin prolonged bag-mask ventilation to inflate the lungs.</button><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Suspected CDH calls for controlled airway support, avoidance of routine BMV, and preparation for intubation with gastric decompression.">Alert the team to suspected CDH and prepare for intubation.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A nebulizer is not the priority for an anatomic neonatal emergency with severe hypoxemia.">Give albuterol as the primary intervention.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This newborn is unstable and requires immediate respiratory support.">Wait for surgical repair before supporting breathing.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="1"><h3>Stage 2: Stabilization</h3><p>The newborn is intubated. Breath sounds are confirmed bilaterally but remain reduced on the left. The chest x-ray shows bowel loops in the left chest and mediastinal shift.</p><p><strong>Decision Question:</strong> Which bedside action helps reduce intrathoracic compression?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. An OG tube decompresses the stomach/bowel and reduces additional thoracic compression.">Place an orogastric tube to continuous or intermittent suction per protocol.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Extra mask ventilation can worsen gastric insufflation.">Add mask ventilation between ventilator breaths.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. CPT is not the priority problem; this is an anatomic compression and gas exchange emergency.">Perform chest percussion as primary therapy.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Prone positioning alone does not decompress herniated bowel.">Use prone positioning only and delay decompression.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="2"><h3>Stage 3: Oxygenation Trend</h3><p>Despite FiO₂ 1.0, preductal SpO₂ is 91% and postductal SpO₂ is 75%. ABG shows pH 7.18, PaCO₂ 62 mm Hg, PaO₂ 42 mm Hg.</p><p><strong>Decision Question:</strong> What does this pattern suggest?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The saturation split and refractory hypoxemia suggest right-to-left shunting/PPHN physiology with inadequate ventilation and acidosis.">Significant pulmonary hypertension physiology with shunting and respiratory failure risk.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This is not reassuring; the ABG shows severe gas exchange failure.">Normal transition that does not need escalation.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. CDH is an anatomic and vascular problem, not a primary bronchospasm condition.">Simple bronchospasm that should resolve with albuterol alone.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A large pre/postductal split is clinically meaningful and should be reported.">Pulse oximeter artifact that should be ignored.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="3"><h3>Stage 4: Escalation Decision</h3><p>Conventional ventilation requires increasing pressure, and oxygenation remains poor. The team discusses HFV, pulmonary vasodilator therapy, and ECMO consultation.</p><p><strong>Decision Question:</strong> Which concept best supports escalation?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Escalation is appropriate when gas exchange cannot be supported safely without injurious pressures or when severe pulmonary hypertension physiology persists.">Refractory hypoxemia/acidosis despite gentle support and concern for pressure injury.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Very high pressures may injure hypoplastic lungs.">Use unlimited pressure until the PaCO₂ normalizes.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Surgery is important but usually after stabilization, not before correcting severe physiologic instability.">Skip stabilization and go directly to repair regardless of instability.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The RT should communicate worsening trends immediately.">Wait silently because the surgeon will manage all respiratory decisions.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="4"><h3>Case Wrap-Up</h3><div class="example-box soft-teal"><strong>RT Takeaway:</strong> CDH stabilization prioritizes controlled ventilation, gastric decompression, lung protection, and rapid recognition of pulmonary hypertension physiology.</div><div class="example-box soft-coral" style="margin-top:12px;"><strong>If the newborn worsens:</strong> refractory hypoxemia, acidosis, shock, or rising ventilator pressure needs require urgent escalation and possible ECMO-capable team involvement.</div></div></section>
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="CDH Knowledge Check"><span class="eyebrow">Knowledge Check</span><h2>Board-Style Practice</h2><p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p><div class="knowledge-question" data-question-id="kq1"><h3>Question 1</h3><p>A newborn has severe respiratory distress, a scaphoid abdomen, and bowel sounds heard over the left chest. Which diagnosis should the RT suspect?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. CDH commonly presents with neonatal distress, scaphoid abdomen, asymmetric breath sounds, and bowel in the chest.">Congenital diaphragmatic hernia.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. TTN usually does not cause bowel sounds in the chest or a scaphoid abdomen.">Transient tachypnea of the newborn.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Asthma is not the likely cause of immediate newborn distress with bowel sounds in the chest.">Asthma exacerbation.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Croup causes upper-airway symptoms such as stridor, not bowel in the chest.">Croup.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq2"><h3>Question 2</h3><p>Which action is most appropriate when CDH is suspected immediately after birth?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Controlled intubation and avoiding routine BMV reduce the risk of insufflating herniated bowel.">Prepare for endotracheal intubation and avoid routine prolonged bag-mask ventilation.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Prolonged BMV can inflate stomach/bowel and worsen lung compression.">Use aggressive bag-mask ventilation as the main therapy.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Bronchodilators do not correct the anatomic defect and lung compression.">Give bronchodilator therapy only.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. The infant requires stabilization before observation alone.">Observe without respiratory support.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq3"><h3>Question 3</h3><p>What is the purpose of placing an orogastric tube in a newborn with CDH?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. Decompression reduces distention of herniated stomach/bowel and may decrease thoracic compression.">To decompress stomach and bowel and reduce thoracic compression.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. An OG tube does not replace ventilatory support.">To provide all needed ventilation.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Surfactant is delivered through the airway, not an OG tube, and surfactant deficiency is not the core CDH problem.">To deliver surfactant into the lungs.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. The purpose is decompression, not enteral feeding during acute instability.">To start full-volume feeds immediately.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq4"><h3>Question 4</h3><p>A CDH newborn has refractory hypoxemia, acidosis, and a large pre/postductal saturation split. Which complication is most likely contributing?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. PPHN with right-to-left shunting commonly contributes to severe hypoxemia in CDH.">Persistent pulmonary hypertension with right-to-left shunting.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Simple nasal congestion would not explain severe hypoxemia with a large saturation split.">Simple nasal congestion.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Hyperventilation alone does not explain refractory hypoxemia and saturation splitting.">Uncomplicated hyperventilation.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Low-risk normal transition is not consistent with this severe pattern.">Normal transition with no disease.</button></div><div class="quiz-feedback" role="status"></div></div><div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div></section>
+          <section id="faq"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common CDH Questions</h2></div><details class="accordion" open><summary>What is the simplest way to understand CDH?</summary><div class="accordion-body"><p>CDH is a diaphragm defect that lets abdominal organs move into the chest, limiting lung development and causing severe newborn respiratory distress.</p></div></details><details class="accordion"><summary>Why is CDH dangerous after birth?</summary><div class="accordion-body"><p>The newborn may have hypoplastic lungs, pulmonary hypertension, right-to-left shunting, and poor oxygenation despite high oxygen support.</p></div></details><details class="accordion"><summary>Why avoid bag-mask ventilation?</summary><div class="accordion-body"><p>Mask ventilation can inflate the stomach and bowel that are already in the chest, worsening lung compression.</p></div></details><details class="accordion"><summary>Why is surgery not always immediate?</summary><div class="accordion-body"><p>The infant usually needs physiologic stabilization first. Severe hypoxemia, pulmonary hypertension, acidosis, and shock increase operative risk.</p></div></details><details class="accordion"><summary>What does a pre/postductal saturation split mean?</summary><div class="accordion-body"><p>A lower postductal saturation can suggest right-to-left ductal shunting from elevated pulmonary vascular resistance.</p></div></details><details class="accordion"><summary>What is the RT’s biggest ventilator concern?</summary><div class="accordion-body"><p>Support gas exchange while avoiding excessive pressures or volumes that can injure small hypoplastic lungs.</p></div></details></section>
+          <section class="info-card" id="summary"><h2>Summary & Clinical Pearls</h2><p>Congenital diaphragmatic hernia is a neonatal respiratory emergency caused by herniation of abdominal organs into the thorax. The RT must recognize the bedside pattern, avoid harmful bag-mask ventilation when suspected, support controlled intubation, decompress the stomach, use gentle ventilation, monitor pulmonary hypertension physiology, and escalate early when gas exchange fails.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Must know:</strong><br>CDH causes pulmonary hypoplasia and compression, not just temporary fluid retention.</div><div class="example-box soft-amber"><strong>Board pearl:</strong><br>Suspected CDH → avoid routine BMV, intubate, and decompress with OG tube.</div><div class="example-box soft-blue"><strong>RT pearl:</strong><br>Track pre/postductal SpO₂, ABG trends, pressure needs, and perfusion.</div><div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not rush to surgical repair before stabilization in an unstable newborn.</div></div></section>
+          <section id="glossary"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div><div class="glossary-card"><h3>Searchable Glossary</h3><p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p><div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: pulmonary hypoplasia, PPHN, ECMO..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div><div class="glossary-list" id="glossaryList"></div></div><div class="glossary-card" style="margin-top:18px;"><h3>Glossary Flashcard Mastery Deck</h3><p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p><div class="flashcard-shell"><div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div><div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div><div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div><div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div><div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div><div class="completed-list" id="completedList"></div></div></div></section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+  <script src="courses.js"></script>
+  <script>
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
+      const courseSource = window.PulmoCoreCourses || window.courses || window.COURSES || [];
+      const savedProgress = JSON.parse(localStorage.getItem("pulmocoreCourseProgress") || "{}");
+      const currentPath = window.location.pathname.split("/").pop();
+      const normalizeStatus = (course) => {
+        const id = course.id || course.slug || course.href || course.url || course.title || course.name;
+        const progress = course.progress ?? savedProgress[id] ?? savedProgress[course.href] ?? savedProgress[course.url];
+        const complete = course.complete || course.completed || Number(progress) >= 100;
+        if (complete) return "Complete";
+        if (progress && Number(progress) > 0) return `In progress (${Math.round(Number(progress))}%)`;
+        return "Not started";
+      };
+      const courses = Array.isArray(courseSource) ? courseSource : [];
+      panel.innerHTML = courses.length ? courses.map((course) => {
+        const title = course.title || course.name || "Untitled Course";
+        const href = course.href || course.url || "#";
+        const current = href.split("/").pop() === currentPath ? " current" : "";
+        return `<a class="course-menu-item${current}" href="${href}" role="menuitem"><span class="course-menu-title">${title}</span><span class="course-menu-status">${normalizeStatus(course)}</span></a>`;
+      }).join("") : `<div class="course-menu-item"><span class="course-menu-title">Course list unavailable</span><span class="course-menu-status">Add courses to courses.js to populate this menu.</span></div>`;
+      button.addEventListener("click", () => {
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".course-menu-wrap")) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+          button.focus();
+        }
+      });
+    }
+    initializeCourseMenu();
+
+    const glossaryTerms = [
+      { term: "Congenital diaphragmatic hernia", definition: "A birth defect in which incomplete diaphragm formation allows abdominal organs to move into the thoracic cavity.", rt: "Explains lung compression, pulmonary hypoplasia, and severe neonatal respiratory distress." },
+      { term: "Pulmonary hypoplasia", definition: "Underdevelopment of lung tissue, airways, and pulmonary vasculature.", rt: "Major cause of poor oxygenation and ventilation in CDH." },
+      { term: "Persistent pulmonary hypertension of the newborn", definition: "High pulmonary vascular resistance after birth causing right-to-left shunting and hypoxemia.", rt: "Common life-threatening CDH complication that drives oxygenation failure." },
+      { term: "Right-to-left shunt", definition: "Blood bypasses ventilated alveoli and enters systemic circulation without adequate oxygenation.", rt: "Explains severe hypoxemia that may not correct easily with oxygen alone." },
+      { term: "Scaphoid abdomen", definition: "A sunken abdomen caused by abdominal contents moving into the chest.", rt: "Classic physical finding that should raise suspicion for CDH." },
+      { term: "Bowel sounds in the chest", definition: "Intestinal sounds heard over the thorax when bowel has herniated through the diaphragm.", rt: "Supports CDH rather than routine newborn lung disease." },
+      { term: "Mediastinal shift", definition: "Displacement of the heart and mediastinal structures away from the herniated organs.", rt: "Can worsen cardiorespiratory compromise and is visible on imaging." },
+      { term: "Bag-mask ventilation risk", definition: "Positive pressure by mask can inflate stomach and bowel in the chest.", rt: "Avoid routine BMV when CDH is suspected; prepare for controlled intubation." },
+      { term: "Orogastric tube decompression", definition: "Placement of a tube to remove air and fluid from the stomach and bowel.", rt: "Reduces intrathoracic compression from distended herniated bowel." },
+      { term: "Gentle ventilation", definition: "A lung-protective approach using lower pressures and permissive gas targets when ordered.", rt: "Helps avoid barotrauma to small hypoplastic lungs." },
+      { term: "Preductal SpO₂", definition: "Oxygen saturation measured on the right hand before ductal blood mixing.", rt: "Used to assess oxygenation before ductal shunting." },
+      { term: "Postductal SpO₂", definition: "Oxygen saturation measured on a lower extremity after ductal mixing.", rt: "A pre/postductal split can suggest significant shunting or PPHN." },
+      { term: "High-frequency ventilation", definition: "Ventilation using very rapid small-volume breaths.", rt: "May be considered when conventional ventilation cannot meet goals safely." },
+      { term: "Inhaled nitric oxide", definition: "A selective pulmonary vasodilator used in some newborns with pulmonary hypertension physiology.", rt: "May improve pulmonary blood flow when PPHN contributes to hypoxemia." },
+      { term: "ECMO", definition: "Extracorporeal membrane oxygenation that provides temporary gas exchange and circulatory support.", rt: "Escalation option for severe refractory hypoxemia or cardiorespiratory failure." },
+      { term: "Surgical repair", definition: "Operative closure of the diaphragmatic defect after physiologic stabilization.", rt: "Usually occurs after stabilization, not as the first respiratory intervention." },
+      { term: "Barotrauma", definition: "Pressure-related lung injury from excessive airway pressures.", rt: "Hypoplastic CDH lungs are vulnerable to ventilator-induced injury." },
+      { term: "Permissive hypercapnia", definition: "Allowing a higher PaCO₂ within ordered limits to reduce injurious ventilation pressures.", rt: "May be part of gentle ventilation strategy." },
+      { term: "Prenatal diagnosis", definition: "Identification before birth by ultrasound or fetal imaging.", rt: "Allows planned delivery at a center with neonatal surgery, NICU, and ECMO capability." },
+      { term: "Left-sided CDH", definition: "The most common CDH pattern, often with stomach or bowel in the left chest.", rt: "Frequently causes mediastinal shift and respiratory distress immediately after birth." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden") || link.classList.contains("locked")) { const currentSection = sections.find(section => !section.classList.contains("lesson-hidden") && !isSectionComplete(section)) || sections.find(section => !section.classList.contains("lesson-hidden")) || sections[0]; if (currentSection) currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => { const select = row.querySelector("select"); if (select) select.value = ""; row.classList.remove("correct", "incorrect"); });
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> CDH causes respiratory distress because abdominal organs compress the lungs, impair lung development, and can worsen pulmonary hypertension. Stabilization comes before surgery.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> CDH is not a routine obstructive airway problem. The key issue is hypoplastic/compressed lungs with possible pulmonary hypertension and shunting.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
+</html>

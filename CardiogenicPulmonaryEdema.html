@@ -79,7 +79,7 @@
     .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
     .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
     .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
-    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
@@ -162,6 +162,24 @@
     .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
     .footer strong span { color: var(--pulmo-teal); }
 
+
+    #sequenceSort { visibility: hidden; }
+
+    .course-menu-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; }
+    .course-menu-btn { border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.10); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-btn:hover { background: rgba(255,255,255,.18); }
+    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(380px, calc(100vw - 32px)); max-height: 72vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 50; }
+    .course-menu-panel.open { display: block; }
+    .course-menu-title { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    .course-menu-list { display: grid; gap: 6px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px; border-radius: 12px; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; }
+    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
+    .course-menu-name { font-weight: 800; overflow-wrap: anywhere; }
+    .course-menu-status { font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF6FA; color: var(--slate); white-space: nowrap; }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-empty { padding: 14px; color: var(--slate); font-weight: 700; }
+
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
     @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
@@ -186,14 +204,13 @@
         </div>
       </div>
 
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#snapshot">Snapshot</a>
-        <a href="#pathophysiology">Pathophysiology</a>
-        <a href="#diagnostics">Diagnostics</a>
-        <a href="#management">Management</a>
-        <a href="#glossary">Glossary</a>
-      </nav>
-      <div class="mobile-menu-note">Menu</div>
+      <div class="course-menu-wrap">
+        <button class="course-menu-btn" type="button" id="courseMenuButton" aria-haspopup="true" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+          <div class="course-menu-title">PulmoCore Courses</div>
+          <div class="course-menu-list" id="courseMenuList"></div>
+        </div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -212,6 +229,7 @@
         <aside class="side-nav" aria-label="Disease page quick navigation">
           <h3>Lesson Sections</h3>
           <a href="#objectives">Objectives</a>
+          <a href="#overview-video">Video Overview</a>
           <a href="#snapshot">Disease Snapshot</a>
           <a href="#precheck">Quick Pre-Check</a>
           <a href="#pathophysiology">Pathophysiology</a>
@@ -239,6 +257,18 @@
               <div class="example-box soft-blue"><strong>2. Differentiate cardiogenic vs noncardiogenic edema</strong><br>Compare hydrostatic pulmonary edema with inflammatory permeability edema using history, imaging, BNP, echo, and response to therapy.</div>
               <div class="example-box soft-amber"><strong>3. Interpret assessment data</strong><br>Use symptoms, breath sounds, SpO₂, ABGs, CXR, BNP, ECG, hemodynamics, and response to oxygen/NIV/diuresis to determine severity.</div>
               <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize red flags such as severe hypoxemia, pink frothy sputum, altered mental status, hypotension, rising PaCO₂, and poor response to noninvasive support.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Cardiogenic Pulmonary Edema Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="CardiogenicPulmonaryEdema.mp4" type="video/mp4">
+                <track src="CardiogenicPulmonaryEdema.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
             </div>
           </section>
 
@@ -282,7 +312,7 @@
             <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">
               LV dysfunction or volume/pressure overload → ↑ left atrial pressure → ↑ pulmonary venous/capillary hydrostatic pressure → interstitial edema → alveolar flooding → low compliance + shunt/VQ mismatch → hypoxemia + high WOB → fatigue risk.
             </div>
-            <div class="data-card" style="margin-top:16px; background:#F7FBFD;"><img src="cardiogenic-pulmonary-edema-pathophysiology.png" alt="Diagram showing left ventricular failure increasing pulmonary venous pressure and causing interstitial and alveolar edema"></div>
+            <div class="data-card" style="margin-top:16px; background:#F7FBFD;"><img src="cardiogenic-pulmonary-edema-pathophysiology.png" alt="Diagram showing left ventricular failure increasing pulmonary venous pressure and causing interstitial and alveolar edema" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"></div>
             <h3 style="margin-top:22px;">What Changes During Cardiogenic Pulmonary Edema</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
               <table>
@@ -374,7 +404,7 @@
           <section class="info-card board" id="diagnostics">
             <h2>Diagnostics & Assessment</h2>
             <p>Diagnostic data helps identify cardiogenic causes, estimate severity, track oxygenation/ventilation, and distinguish cardiogenic edema from ARDS, pneumonia, COPD/cardiogenic pulmonary edema, PE, or pneumothorax.</p>
-            <div class="data-card" style="margin-top:16px; background:#F7FBFD;"><img src="pulmonary-edema-cxr-b-lines.png" alt="Educational comparison of chest x-ray vascular congestion and lung ultrasound B-lines in pulmonary edema"></div>
+            <div class="data-card" style="margin-top:16px; background:#F7FBFD;"><img src="pulmonary-edema-cxr-b-lines.png" alt="Educational comparison of chest x-ray vascular congestion and lung ultrasound B-lines in pulmonary edema" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"></div>
             <h3 style="margin-top:18px;">Imaging, Labs, and Bedside Data</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
               <table>
@@ -448,7 +478,7 @@
           <section class="info-card" id="management">
             <h2>Management & Treatment</h2>
             <p>Management focuses on improving oxygenation, decreasing work of breathing, reducing pulmonary venous pressure, and treating the cardiac cause. RTs provide oxygen/positive pressure support, monitor response, and escalate early when NIV is unsafe or ineffective.</p>
-            <div class="data-card" style="margin-top:16px; background:#F7FBFD;"><img src="pulmonary-edema-cpap-mechanism.png" alt="Diagram showing CPAP recruiting alveoli and reducing work of breathing in cardiogenic pulmonary edema"></div>
+            <div class="data-card" style="margin-top:16px; background:#F7FBFD;"><img src="pulmonary-edema-cpap-mechanism.png" alt="Diagram showing CPAP recruiting alveoli and reducing work of breathing in cardiogenic pulmonary edema" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"></div>
             <h3 style="margin-top:18px;">Treatment Categories</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
               <table>
@@ -682,7 +712,70 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
+  <script src="courses.js"></script>
   <script>
+
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      const list = document.getElementById("courseMenuList");
+      if (!button || !panel || !list) return;
+
+      const source = window.PULMOCORE_COURSES || window.PulmoCoreCourses || window.courses || window.COURSES || [];
+      const courses = Array.isArray(source) ? source : (Array.isArray(source.courses) ? source.courses : []);
+
+      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
+      function getCourseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
+      function getProgress(course) {
+        const key = course.progressKey || course.id || getCourseHref(course) || getCourseTitle(course);
+        const raw = localStorage.getItem(`pulmocore-progress-${key}`) || localStorage.getItem(`pulmocore:${key}`) || localStorage.getItem(key);
+        let parsed = null;
+        try { parsed = raw ? JSON.parse(raw) : null; } catch (error) { parsed = raw; }
+        if (course.status || course.progress !== undefined || course.percent !== undefined) return { status: course.status, percent: course.progress ?? course.percent };
+        if (typeof parsed === "number") return { percent: parsed };
+        if (typeof parsed === "string" && parsed) return { status: parsed };
+        if (parsed && typeof parsed === "object") return { status: parsed.status, percent: parsed.progress ?? parsed.percent ?? parsed.completedPercent };
+        return { status: "not-started" };
+      }
+      function formatStatus(progress) {
+        const percent = Number(progress.percent);
+        const status = String(progress.status || "").toLowerCase();
+        if (status === "complete" || status === "completed" || percent >= 100) return { text: "Complete", className: "complete" };
+        if ((percent > 0 && percent < 100) || status === "in-progress" || status === "in progress") return { text: Number.isFinite(percent) && percent > 0 ? `In progress ${Math.round(percent)}%` : "In progress", className: "in-progress" };
+        return { text: "Not started", className: "not-started" };
+      }
+
+      if (!courses.length) {
+        list.innerHTML = '<div class="course-menu-empty">No courses found. Check courses.js.</div>';
+      } else {
+        list.innerHTML = courses.map(course => {
+          const status = formatStatus(getProgress(course));
+          return `<a class="course-menu-item" role="menuitem" href="${getCourseHref(course)}"><span class="course-menu-name">${getCourseTitle(course)}</span><span class="course-menu-status ${status.className}">${status.text}</span></a>`;
+        }).join("");
+      }
+
+      button.addEventListener("click", event => {
+        event.stopPropagation();
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      document.addEventListener("click", event => {
+        if (!panel.contains(event.target) && event.target !== button) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+          button.focus();
+        }
+      });
+    }
+    initializeCourseMenu();
+
     const glossaryTerms = [
       { term: "Cardiogenic pulmonary edema", definition: "Fluid accumulation in the interstitium and alveoli caused by elevated left-sided cardiac filling pressures.", rt: "Explains why oxygenation support and cardiac-pressure reduction are priorities." },
       { term: "Hydrostatic pressure", definition: "Pressure within blood vessels that pushes fluid outward into surrounding tissue.", rt: "Primary mechanism in cardiogenic pulmonary edema." },
@@ -784,7 +877,7 @@
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
-      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); updateNavState(currentVisible); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
@@ -802,6 +895,7 @@
       const container = document.getElementById("sequenceSort");
       if (!container) return;
       const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => { const select = row.querySelector("select"); if (select) select.value = ""; row.classList.remove("correct", "incorrect"); });
       for (let i = rows.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [rows[i], rows[j]] = [rows[j], rows[i]];
@@ -868,9 +962,13 @@
       });
     }
 
-    shuffleSequence();
-    enableDynamicReorder();
-    initializeSequenceSort();
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceContainer = document.getElementById("sequenceSort");
+      if (sequenceContainer) sequenceContainer.style.visibility = "visible";
+    });
 
     function initializeKnowledgeCheck() {
       const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;

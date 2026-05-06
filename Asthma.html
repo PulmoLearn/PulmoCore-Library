@@ -162,11 +162,77 @@
     .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
     .footer strong span { color: var(--pulmo-teal); }
 
+    .course-menu-wrap { position: relative; margin-left: auto; }
+    .course-menu-button {
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: var(--white);
+      padding: 10px 16px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .course-menu-button:hover { background: rgba(255,255,255,.14); }
+    .course-menu-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: min(360px, calc(100vw - 32px));
+      max-height: 70vh;
+      overflow-y: auto;
+      background: var(--white);
+      color: var(--core-navy);
+      border: 1px solid var(--soft-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display: none;
+      z-index: 40;
+    }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--soft-border);
+      border-radius: 12px;
+      text-decoration: none;
+      background: #FAFDFF;
+    }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-title { font-weight: 800; }
+    .course-status {
+      white-space: nowrap;
+      font-size: .78rem;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #E5F0F6;
+      color: var(--slate);
+    }
+    .course-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-status.not-started { background: #EEF4F8; color: var(--slate); }
+
+    .side-nav a.locked {
+      pointer-events: none;
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    #sequenceSort { visibility: hidden; }
+
+
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
     @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
   @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
   </style>
+  <script src="courses.js"></script>
 </head>
 <body>
   <div class="page-shell">
@@ -186,14 +252,10 @@
         </div>
       </div>
 
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#snapshot">Snapshot</a>
-        <a href="#pathophysiology">Pathophysiology</a>
-        <a href="#diagnostics">Diagnostics</a>
-        <a href="#management">Management</a>
-        <a href="#glossary">Glossary</a>
-      </nav>
-      <div class="mobile-menu-note">Menu</div>
+      <div class="course-menu-wrap">
+        <button class="course-menu-button" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" aria-label="Course menu"></div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -212,6 +274,7 @@
         <aside class="side-nav" aria-label="Disease page quick navigation">
           <h3>Lesson Sections</h3>
           <a href="#objectives">Objectives</a>
+          <a href="#overview-video">Video Overview</a>
           <a href="#snapshot">Disease Snapshot</a>
           <a href="#precheck">Quick Pre-Check</a>
           <a href="#pathophysiology">Pathophysiology</a>
@@ -241,10 +304,10 @@
               <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize red flags such as silent chest, fatigue, altered mental status, rising PaCO₂, and poor response to initial therapy.</div>
             </div>
           </section>
- <a href="#overview-video">Video Overview</a>         
+          
 <section class="info-card" id="overview-video">
   <span class="eyebrow">Video Overview</span>
-  <h2>3-Minute Asthma Overview</h2>
+  <h2>2-Minute Asthma Overview</h2>
   <p>Watch this quick overview before moving into the disease snapshot.</p>
 
   <div style="
@@ -268,9 +331,9 @@
     border-radius: var(--radius-lg);
   "
 >
-      <source src="Asthma.mp4" type="video/mp4">
+      <source src="asthma.mp4" type="video/mp4">
       <track
-        src="Asthma.vtt"
+        src="asthma.vtt"
         kind="captions"
         srclang="en"
         label="English captions"
@@ -718,6 +781,89 @@
   </div>
 
   <script>
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
+
+      const courses = window.PULMO_COURSES || window.pulmoCourses || window.courses || window.courseList || [];
+      const normalizedCourses = Array.isArray(courses) ? courses : [];
+
+      function getCourseTitle(course) {
+        return course.title || course.name || course.label || "Untitled Course";
+      }
+
+      function getCourseUrl(course) {
+        return course.url || course.href || course.link || "#";
+      }
+
+      function getCourseId(course) {
+        return course.id || course.slug || getCourseTitle(course).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      }
+
+      function getStoredProgress(course) {
+        const id = getCourseId(course);
+        const explicit = course.progress ?? course.percent ?? course.completion;
+        if (typeof explicit === "number") return explicit;
+        const keys = [
+          `pulmocore-progress-${id}`,
+          `pulmocore_${id}_progress`,
+          `progress-${id}`,
+          id
+        ];
+        for (const key of keys) {
+          const raw = localStorage.getItem(key);
+          if (raw === null) continue;
+          const parsed = Number(raw);
+          if (!Number.isNaN(parsed)) return parsed;
+          try {
+            const obj = JSON.parse(raw);
+            if (typeof obj.progress === "number") return obj.progress;
+            if (typeof obj.percent === "number") return obj.percent;
+            if (obj.complete === true) return 100;
+          } catch (error) {}
+        }
+        return 0;
+      }
+
+      function getStatus(progress) {
+        if (progress >= 100) return { text: "Complete", className: "complete" };
+        if (progress > 0) return { text: `In progress (${Math.round(progress)}%)`, className: "in-progress" };
+        return { text: "Not started", className: "not-started" };
+      }
+
+      panel.innerHTML = normalizedCourses.length
+        ? normalizedCourses.map(course => {
+            const progress = getStoredProgress(course);
+            const status = getStatus(progress);
+            return `<a class="course-menu-item" href="${getCourseUrl(course)}"><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-status ${status.className}">${status.text}</span></a>`;
+          }).join("")
+        : `<div class="course-menu-item"><span class="course-menu-title">No courses found</span><span class="course-status not-started">Check courses.js</span></div>`;
+
+      button.addEventListener("click", event => {
+        event.stopPropagation();
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", event => {
+        if (!panel.contains(event.target) && event.target !== button) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    initializeCourseMenu();
+
     const glossaryTerms = [
       { term: "Asthma", definition: "A chronic inflammatory airway disease with variable airflow obstruction and bronchial hyperresponsiveness.", rt: "Helps identify reversible obstruction and trigger-driven symptoms." },
       { term: "Bronchospasm", definition: "Constriction of airway smooth muscle that narrows the airway lumen.", rt: "Primary target of rescue bronchodilator therapy." },
@@ -819,7 +965,19 @@
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
-      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      navLinks.forEach(link => {
+        link.addEventListener("click", event => {
+          const target = document.querySelector(link.getAttribute("href"));
+          if (!target || target.dataset.sectionIndex === undefined) return;
+          event.preventDefault();
+          if (target.classList.contains("lesson-hidden") || link.classList.contains("locked")) {
+            const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0);
+            if (sections[currentVisible]) sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" });
+            return;
+          }
+          revealThrough(Number(target.dataset.sectionIndex));
+        });
+      });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
@@ -837,6 +995,11 @@
       const container = document.getElementById("sequenceSort");
       if (!container) return;
       const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => {
+        row.classList.remove("correct", "incorrect");
+        const select = row.querySelector("select");
+        if (select) select.value = "";
+      });
       for (let i = rows.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [rows[i], rows[j]] = [rows[j], rows[i]];
@@ -903,9 +1066,13 @@
       });
     }
 
-    shuffleSequence();
-    enableDynamicReorder();
-    initializeSequenceSort();
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
 
     function initializeKnowledgeCheck() {
       const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
