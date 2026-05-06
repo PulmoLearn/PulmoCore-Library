@@ -109,9 +109,10 @@ function autoTrackCourseProgress() {
 ========================================= */
 
 function initializeCourseMenu() {
+  const button = document.getElementById("courseMenuButton");
   const dropdown = document.getElementById("courseDropdown");
 
-  if (!dropdown) return;
+  if (!button || !dropdown) return;
 
   dropdown.innerHTML = "";
 
@@ -127,24 +128,29 @@ function initializeCourseMenu() {
     }
 
     const item = document.createElement("a");
-
     item.href = course.file;
     item.className = "course-menu-item";
 
     item.innerHTML = `
-      <div class="course-menu-title">
-        ${course.title}
-      </div>
-
-      <div class="course-menu-status">
-        ${status}
-      </div>
+      <div class="course-menu-title">${course.title}</div>
+      <div class="course-menu-status">${status}</div>
     `;
 
     dropdown.appendChild(item);
   });
-}
 
+  button.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    dropdown.classList.toggle("show");
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".course-menu-wrapper")) {
+      dropdown.classList.remove("show");
+    }
+  });
+}
 /* =========================================
    INITIALIZE
 ========================================= */
