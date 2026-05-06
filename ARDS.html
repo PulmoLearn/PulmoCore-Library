@@ -712,75 +712,12 @@
   <script src="courses.js"></script>
   <script>
 
-    const defaultPulmoCoreCourses = [
-      { title: "Asthma", url: "Asthma.html", storageKey: "pulmocore-asthma" },
-      { title: "COPD", url: "COPD.html", storageKey: "pulmocore-copd" },
-      { title: "ARDS", url: "ARDS.html", storageKey: "pulmocore-ards" }
-    ];
-
     function getCurrentLessonStorageKey() {
       const courses = window.pulmoCoreCourses || defaultPulmoCoreCourses;
       const currentFile = (window.location.pathname.split("/").pop() || "ARDS.html").toLowerCase();
       const match = courses.find(course => (course.url || "").split("/").pop().toLowerCase() === currentFile);
       return match ? match.storageKey : "pulmocore-ards";
     }
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuBtn");
-      const menu = document.getElementById("courseMenu");
-      const list = document.getElementById("courseMenuList");
-      if (!button || !menu || !list) return;
-
-      const courses = window.pulmoCoreCourses || defaultPulmoCoreCourses;
-      const currentFile = (window.location.pathname.split("/").pop() || "ARDS.html").toLowerCase();
-
-      function getCourseStatus(course) {
-        const saved = localStorage.getItem(course.storageKey);
-        if (!saved) return { label: "Not started", className: "not-started" };
-        try {
-          const data = JSON.parse(saved);
-          if (data.complete === true || data.progress === 100) return { label: "Complete", className: "complete" };
-          if (data.progress && data.progress > 0) return { label: `${data.progress}%`, className: "progress" };
-          return { label: "Started", className: "progress" };
-        } catch {
-          return { label: "Started", className: "progress" };
-        }
-      }
-
-      function renderCourseList() {
-        list.innerHTML = courses.map(course => {
-          const status = getCourseStatus(course);
-          const courseFile = (course.url || "").split("/").pop().toLowerCase();
-          const currentAttr = courseFile === currentFile ? ' aria-current="page"' : "";
-          return `<a href="${course.url}"${currentAttr}><span>${course.title}</span><span class="course-status ${status.className}">${status.label}</span></a>`;
-        }).join("");
-      }
-
-      renderCourseList();
-
-      button.addEventListener("click", () => {
-        const isOpen = !menu.hidden;
-        menu.hidden = isOpen;
-        button.setAttribute("aria-expanded", String(!isOpen));
-        if (!isOpen) renderCourseList();
-      });
-
-      document.addEventListener("click", event => {
-        if (!button.contains(event.target) && !menu.contains(event.target)) {
-          menu.hidden = true;
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          menu.hidden = true;
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-    initializeCourseMenu();
 
     function updateLessonProgressStorage() {
       const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
