@@ -525,50 +525,6 @@
     }
     initializePeakFlowActivity();
 
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      const list = document.getElementById("courseMenuList");
-      if (!button || !panel || !list) return;
-      const source = window.PULMOCORE_COURSES || window.PulmoCoreCourses || window.courses || window.COURSES || window.courseList || [];
-      const courses = Array.isArray(source) ? source : [];
-      function getCourseTitle(course) { return course.title || course.name || course.label || course.disease || "Untitled Course"; }
-      function getCourseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
-      function getCourseKey(course) { return course.id || course.key || getCourseHref(course).replace(/[^a-z0-9]/gi, "_").toLowerCase(); }
-      function getProgress(course) {
-        const key = getCourseKey(course);
-        const raw = localStorage.getItem(`pulmocore_progress_${key}`) || localStorage.getItem(`PulmoCore:${key}:progress`) || localStorage.getItem(key);
-        let percent = Number(course.progress || 0);
-        if (raw) {
-          try { const parsed = JSON.parse(raw); percent = Number(parsed.percent ?? parsed.progress ?? percent); }
-          catch { percent = Number(raw) || percent; }
-        }
-        percent = Math.max(0, Math.min(100, Math.round(percent || 0)));
-        if (percent >= 100 || course.complete === true || course.completed === true) return "Complete";
-        if (percent > 0) return `In progress (${percent}%)`;
-        return "Not started";
-      }
-      list.innerHTML = courses.length ? courses.map(course => `<a class="course-menu-item" role="menuitem" href="${getCourseHref(course)}"><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-menu-status">${getProgress(course)}</span></a>`).join("") : `<div class="course-menu-item"><span class="course-menu-title">No courses found</span><span class="course-menu-status">Check courses.js is loaded in this folder.</span></div>`;
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!panel.contains(event.target) && !button.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-    initializeCourseMenu();
   </script>
 </body>
 </html>
