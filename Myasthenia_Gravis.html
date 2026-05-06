@@ -54,6 +54,21 @@
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+    .course-menu-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; }
+    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.10); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-btn:hover { background: rgba(255,255,255,.18); }
+    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(420px, calc(100vw - 32px)); max-height: min(70vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; }
+    .course-menu-panel.open { display: block; }
+    .course-menu-title { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 12px; border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    .course-menu-list { display: grid; gap: 6px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; padding: 10px; border-radius: 12px; border: 1px solid transparent; }
+    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
+    .course-menu-name { font-weight: 800; overflow-wrap: anywhere; }
+    .course-menu-status { font-size: .82rem; border-radius: 999px; padding: 4px 8px; background: #F1F6FA; color: var(--slate); white-space: nowrap; }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.progress { background: #FFF4DF; color: #7A4B00; }
+    #sequenceSort { visibility: hidden; }
+
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
@@ -76,7 +91,7 @@
     .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
     .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
     .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
-    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
@@ -175,8 +190,13 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <nav class="nav-links" aria-label="Primary navigation"><a href="#snapshot">Snapshot</a><a href="#pathophysiology">Pathophysiology</a><a href="#diagnostics">Diagnostics</a><a href="#management">Management</a><a href="#glossary">Glossary</a></nav>
-      <div class="mobile-menu-note">Menu</div>
+      <div class="course-menu-wrap">
+        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore courses">
+          <div class="course-menu-title">PulmoCore Courses</div>
+          <div class="course-menu-list" id="courseMenuList"><div class="course-menu-status">Loading courses...</div></div>
+        </div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -190,23 +210,35 @@
       <div class="content-layout">
         <aside class="side-nav" aria-label="Disease page quick navigation">
           <h3>Lesson Sections</h3>
-          <a href="#objectives">Objectives</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Triggers</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Respiratory Monitoring</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Myasthenic Crisis</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
+          <a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Triggers</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Respiratory Monitoring</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Myasthenic Crisis</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
         </aside>
 
         <div class="lesson-stack">
           <section class="info-card" id="objectives"><h2>Learning Objectives</h2><p>By the end of this module, learners should be able to connect autoimmune neuromuscular junction dysfunction to fluctuating weakness, respiratory muscle fatigue, airway protection risk, diagnostics, monitoring, and escalation priorities.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how antibodies impair acetylcholine-mediated transmission and reduce skeletal muscle strength.</div><div class="example-box soft-blue"><strong>2. Recognize respiratory risk</strong><br>Identify why normal SpO₂ does not rule out impending ventilatory failure in neuromuscular disease.</div><div class="example-box soft-amber"><strong>3. Interpret monitoring data</strong><br>Use VC/FVC, NIF/MIP, ABGs, cough strength, secretion burden, and bulbar symptoms to trend severity.</div><div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize myasthenic crisis, aspiration risk, fatigue, hypercapnia, and need for NIV or intubation.</div></div></section>
 
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Myasthenia Gravis Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="MyastheniaGravis.mp4" type="video/mp4">
+                <track src="MyastheniaGravis.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
+            </div>
+          </section>
+
           <section class="info-card" id="snapshot"><h2>Disease Snapshot</h2><p>Myasthenia gravis is not primarily a lung disease. The lungs may be structurally normal, but the patient may lose the muscle strength needed to ventilate, cough, swallow, and protect the airway. Symptoms often worsen with exertion or repeated use and improve with rest.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>What it is:</strong><br>Autoimmune neuromuscular junction disease.</div><div class="example-box soft-teal"><strong>Primary problem:</strong><br>Weak signal transmission from nerve to skeletal muscle.</div><div class="example-box soft-teal"><strong>Classic symptoms:</strong><br>Ptosis, diplopia, fatigue, dysphagia, dysarthria, weak cough, dyspnea.</div><div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Fluctuating weakness plus antibody/electrophysiology support.</div><div class="example-box soft-teal"><strong>Acute danger:</strong><br>Myasthenic crisis with ventilatory failure or airway protection failure.</div><div class="example-box soft-teal"><strong>RT priority:</strong><br>Trend VC/FVC, NIF, cough, ABG/CO₂, secretion burden, and bulbar function.</div></div><article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>Do not wait for SpO₂ to fall before taking MG seriously. Oxygenation may look acceptable while ventilation is failing. The RT must trend muscle strength, cough effectiveness, work of breathing, CO₂ retention, and ability to handle secretions.</p></article><article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Immediately associate MG with fluctuating weakness, ptosis/diplopia, bulbar symptoms, weak cough, low VC/FVC, worsening NIF/MIP, hypercapnia as a late sign, and myasthenic crisis requiring airway/ventilatory support.</p></article></section>
 
           <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check"><span class="eyebrow">Quick Pre-Check</span><h2>Start with the core MG pattern</h2><p>Which statement best describes the respiratory problem in myasthenia gravis?</p><div class="quiz-options"><button class="quiz-option" data-correct="false">Inflamed bronchi narrow episodically and usually improve with bronchodilator therapy.</button><button class="quiz-option" data-correct="true">Neuromuscular junction failure can weaken respiratory and bulbar muscles, leading to ventilatory failure or airway protection failure.</button><button class="quiz-option" data-correct="false">Alveolar destruction permanently reduces elastic recoil and causes chronic air trapping.</button><button class="quiz-option" data-correct="false">Pulmonary emboli obstruct perfusion and create sudden V/Q mismatch.</button></div><div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
 
-          <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>In MG, antibodies impair communication at the neuromuscular junction. The motor nerve releases acetylcholine, but the postsynaptic muscle membrane has fewer functional receptors or impaired receptor signaling. With repeated muscle use, transmission becomes less reliable, so weakness worsens.</p><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Autoantibodies → impaired acetylcholine receptor signaling → reduced muscle contraction → fluctuating skeletal muscle weakness → weak cough/swallow/ventilation → aspiration or ventilatory failure risk.</div><div class="example-box soft-blue" style="margin-top:16px;"><img src="mg-neuromuscular-junction.png" alt="Diagram placeholder showing antibodies impairing acetylcholine receptor signaling at the neuromuscular junction"><strong>Visual placeholder:</strong> Neuromuscular junction antibody mechanism.</div><h3 style="margin-top:22px;">What Changes During MG</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Change</th><th>What Happens</th><th>Why It Matters to RTs</th></tr><tr><td>Receptor dysfunction</td><td>Acetylcholine signaling is blocked or reduced.</td><td>Respiratory muscle contraction may weaken.</td></tr><tr><td>Use-dependent fatigue</td><td>Strength worsens with repeated activity.</td><td>Patient may decline during assessment, meals, or prolonged distress.</td></tr><tr><td>Bulbar weakness</td><td>Swallow, voice, cough, and airway protection weaken.</td><td>Aspiration and secretion retention risk increases.</td></tr><tr><td>Ventilatory muscle weakness</td><td>Diaphragm/intercostal strength falls.</td><td>Hypoventilation and rising PaCO₂ may occur.</td></tr><tr><td>Preserved lung parenchyma</td><td>Airways/alveoli may be normal.</td><td>SpO₂ can be misleadingly normal until late.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>A patient with MG who becomes quieter, cannot count or speak in full phrases, has a weak cough, pools secretions, or shows rising PaCO₂ may be entering myasthenic crisis.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MG Hotspot Graphic"><h3>Click the MG Hotspots</h3><p>Click each hotspot to reveal how neuromuscular weakness becomes an RT problem.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified neuromuscular respiratory graphic with clickable hotspots"><img src="mg-respiratory-muscles.png" alt="Educational placeholder showing respiratory muscles, bulbar muscles, cough, and ventilation affected by myasthenia gravis"><button class="hotspot-btn" style="left:30%; top:28%;" data-title="Bulbar Muscles" data-text="Weak swallow, voice, and airway protection increase aspiration and secretion risk.">1</button><button class="hotspot-btn" style="left:48%; top:46%;" data-title="Diaphragm" data-text="Diaphragm weakness reduces tidal volume and vital capacity.">2</button><button class="hotspot-btn" style="right:30%; top:34%;" data-title="Cough Strength" data-text="Weak cough makes secretion clearance and airway protection less effective.">3</button><button class="hotspot-btn" style="right:38%; bottom:20%;" data-title="Ventilation" data-text="Hypoventilation causes rising PaCO₂, often after oxygenation still appears acceptable.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
+          <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>In MG, antibodies impair communication at the neuromuscular junction. The motor nerve releases acetylcholine, but the postsynaptic muscle membrane has fewer functional receptors or impaired receptor signaling. With repeated muscle use, transmission becomes less reliable, so weakness worsens.</p><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Autoantibodies → impaired acetylcholine receptor signaling → reduced muscle contraction → fluctuating skeletal muscle weakness → weak cough/swallow/ventilation → aspiration or ventilatory failure risk.</div><div class="example-box soft-blue" style="margin-top:16px;"><img src="mg-neuromuscular-junction.png" alt="Diagram showing antibodies impairing acetylcholine receptor signaling at the neuromuscular junction" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Visual:</strong> Neuromuscular junction antibody mechanism.</div><h3 style="margin-top:22px;">What Changes During MG</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Change</th><th>What Happens</th><th>Why It Matters to RTs</th></tr><tr><td>Receptor dysfunction</td><td>Acetylcholine signaling is blocked or reduced.</td><td>Respiratory muscle contraction may weaken.</td></tr><tr><td>Use-dependent fatigue</td><td>Strength worsens with repeated activity.</td><td>Patient may decline during assessment, meals, or prolonged distress.</td></tr><tr><td>Bulbar weakness</td><td>Swallow, voice, cough, and airway protection weaken.</td><td>Aspiration and secretion retention risk increases.</td></tr><tr><td>Ventilatory muscle weakness</td><td>Diaphragm/intercostal strength falls.</td><td>Hypoventilation and rising PaCO₂ may occur.</td></tr><tr><td>Preserved lung parenchyma</td><td>Airways/alveoli may be normal.</td><td>SpO₂ can be misleadingly normal until late.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>A patient with MG who becomes quieter, cannot count or speak in full phrases, has a weak cough, pools secretions, or shows rising PaCO₂ may be entering myasthenic crisis.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MG Hotspot Graphic"><h3>Click the MG Hotspots</h3><p>Click each hotspot to reveal how neuromuscular weakness becomes an RT problem.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified neuromuscular respiratory graphic with clickable hotspots"><img src="mg-respiratory-muscles.png" alt="Educational diagram showing respiratory muscles, bulbar muscles, cough, and ventilation affected by myasthenia gravis" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><button class="hotspot-btn" style="left:30%; top:28%;" data-title="Bulbar Muscles" data-text="Weak swallow, voice, and airway protection increase aspiration and secretion risk.">1</button><button class="hotspot-btn" style="left:48%; top:46%;" data-title="Diaphragm" data-text="Diaphragm weakness reduces tidal volume and vital capacity.">2</button><button class="hotspot-btn" style="right:30%; top:34%;" data-title="Cough Strength" data-text="Weak cough makes secretion clearance and airway protection less effective.">3</button><button class="hotspot-btn" style="right:38%; bottom:20%;" data-title="Ventilation" data-text="Hypoventilation causes rising PaCO₂, often after oxygenation still appears acceptable.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
 
           <section class="info-card" id="triggers"><h2>Etiology, Exacerbation Triggers & Risk Factors</h2><p>MG exacerbations may follow infection, surgery, pregnancy/postpartum changes, medication effects, missed therapy, heat, stress, or disease progression. Certain medications can worsen neuromuscular transmission and should prompt medication review.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Trigger/Risk</th><th>Why It Matters</th><th>RT Teaching Focus</th></tr><tr><td>Respiratory infection</td><td>Raises ventilatory demand while muscle reserve is low.</td><td>Watch cough effectiveness and secretion burden.</td></tr><tr><td>Missed MG medication</td><td>Can worsen weakness.</td><td>Clarify timing of pyridostigmine and symptom pattern.</td></tr><tr><td>Bulbar symptoms</td><td>Threaten airway protection.</td><td>Escalate aspiration precautions and suction readiness.</td></tr><tr><td>Heat/exertion</td><td>Can worsen fatigue.</td><td>Schedule care to avoid exhausting the patient.</td></tr><tr><td>Medication effects</td><td>Some drugs can worsen MG.</td><td>Communicate concern to provider/pharmacy.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MG Sorting"><h3>Sort the MG Findings</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Respiratory infection</strong><select aria-label="Category for respiratory infection"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="monitor"><strong>Serial vital capacity</strong><select aria-label="Category for serial vital capacity"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Pooling secretions with weak cough</strong><select aria-label="Category for pooling secretions"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="monitor"><strong>Negative inspiratory force</strong><select aria-label="Category for NIF"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Rising PaCO₂ with fatigue</strong><select aria-label="Category for rising carbon dioxide"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
 
           <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>MG findings are often fluctuating and fatigable. Respiratory presentations may begin subtly: weak voice, short phrases, poor cough, difficulty clearing secretions, dysphagia, orthopnea, or tachypnea with shallow breathing.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Ocular</td><td>Ptosis and diplopia, often worse later in the day.</td></tr><tr><td>Bulbar</td><td>Dysphagia, nasal speech, dysarthria, choking, drooling, weak gag/cough.</td></tr><tr><td>Ventilatory</td><td>Shallow breathing, tachypnea, orthopnea, low VC/FVC, worsening NIF.</td></tr><tr><td>Airway clearance</td><td>Weak cough, retained secretions, atelectasis risk, aspiration risk.</td></tr><tr><td>ABG clues</td><td>Rising PaCO₂ and falling pH indicate ventilatory failure.</td></tr><tr><td>Response clues</td><td>Declining strength despite rest or therapy suggests need for escalation.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>In MG, the patient can look less dramatic than an asthma or COPD patient until late. A normal SpO₂ does not equal safe ventilation.</p></article></section>
 
-          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic testing confirms MG, while bedside respiratory monitoring determines immediate safety. RTs focus on the trend: Is muscle strength improving, stable, or failing?</p><h3 style="margin-top:18px;">Disease Confirmation</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test</th><th>MG Pattern</th></tr><tr><td>AChR antibodies</td><td>Support autoimmune MG when positive.</td></tr><tr><td>MuSK antibodies</td><td>May be present in some antibody-positive MG variants.</td></tr><tr><td>Repetitive nerve stimulation</td><td>Decremental response supports fatigable transmission failure.</td></tr><tr><td>Single-fiber EMG</td><td>Sensitive test for neuromuscular junction transmission abnormality.</td></tr><tr><td>Chest imaging</td><td>Assesses for thymoma or thymic abnormality.</td></tr></table></div><h3 style="margin-top:18px;">Respiratory Monitoring</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Measure</th><th>Meaning</th></tr><tr><td>VC/FVC trend</td><td>Falling values suggest declining ventilatory reserve.</td></tr><tr><td>NIF/MIP trend</td><td>Less negative values suggest weaker inspiratory muscles.</td></tr><tr><td>ABG or CO₂ monitoring</td><td>Rising PaCO₂ indicates inadequate ventilation.</td></tr><tr><td>Cough/secretion assessment</td><td>Weak cough or pooling secretions raises airway failure risk.</td></tr><tr><td>Speech/swallow assessment</td><td>Short phrases, dysarthria, choking, or drooling suggest bulbar involvement.</td></tr></table></div><div class="example-box soft-blue" style="margin-top:16px;"><img src="mg-respiratory-monitoring.png" alt="Diagram placeholder showing vital capacity, NIF, cough strength, secretion burden, and PaCO2 trends in myasthenia gravis"><strong>Visual placeholder:</strong> Objective respiratory monitoring trend dashboard.</div></section>
+          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic testing confirms MG, while bedside respiratory monitoring determines immediate safety. RTs focus on the trend: Is muscle strength improving, stable, or failing?</p><h3 style="margin-top:18px;">Disease Confirmation</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test</th><th>MG Pattern</th></tr><tr><td>AChR antibodies</td><td>Support autoimmune MG when positive.</td></tr><tr><td>MuSK antibodies</td><td>May be present in some antibody-positive MG variants.</td></tr><tr><td>Repetitive nerve stimulation</td><td>Decremental response supports fatigable transmission failure.</td></tr><tr><td>Single-fiber EMG</td><td>Sensitive test for neuromuscular junction transmission abnormality.</td></tr><tr><td>Chest imaging</td><td>Assesses for thymoma or thymic abnormality.</td></tr></table></div><h3 style="margin-top:18px;">Respiratory Monitoring</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Measure</th><th>Meaning</th></tr><tr><td>VC/FVC trend</td><td>Falling values suggest declining ventilatory reserve.</td></tr><tr><td>NIF/MIP trend</td><td>Less negative values suggest weaker inspiratory muscles.</td></tr><tr><td>ABG or CO₂ monitoring</td><td>Rising PaCO₂ indicates inadequate ventilation.</td></tr><tr><td>Cough/secretion assessment</td><td>Weak cough or pooling secretions raises airway failure risk.</td></tr><tr><td>Speech/swallow assessment</td><td>Short phrases, dysarthria, choking, or drooling suggest bulbar involvement.</td></tr></table></div><div class="example-box soft-blue" style="margin-top:16px;"><img src="mg-respiratory-monitoring.png" alt="Diagram showing vital capacity, NIF, cough strength, secretion burden, and PaCO2 trends in myasthenia gravis" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Visual:</strong> Objective respiratory monitoring trend dashboard.</div></section>
 
           <section class="info-card" id="severity"><h2>Severity & Respiratory Muscle Monitoring</h2><p>Severity is judged by muscle reserve and airway safety, not wheeze. Serial VC/FVC, NIF/MIP, cough strength, secretion handling, speech, swallow, and CO₂ trend help identify deterioration.</p><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Stable/Watch</strong><br>Speaking clearly, effective cough, stable VC/NIF trend, no CO₂ retention.</div><div class="example-box soft-amber"><strong>Concerning</strong><br>Falling VC, weaker NIF, short phrases, shallow breathing, difficulty clearing secretions.</div><div class="example-box soft-coral"><strong>Crisis Risk</strong><br>Bulbar failure, aspiration, rising PaCO₂, exhaustion, inability to protect airway.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="vc-activity" data-activity-name="Vital Capacity Activity"><h3>Vital Capacity Activity</h3><p>A patient with known MG has worsening dysphagia, shallow breathing, weak cough, and serial vital capacity is falling. What is the best interpretation?</p><div class="quiz-options"><button class="quiz-option vc-option" data-correct="false" data-feedback="Not quite. Bronchodilator response is not the key issue when the primary problem is neuromuscular weakness.">This most likely reflects reversible bronchospasm only.</button><button class="quiz-option vc-option" data-correct="true" data-feedback="Correct. Falling vital capacity plus bulbar symptoms and weak cough suggests declining respiratory muscle reserve and possible myasthenic crisis risk.">Declining ventilatory reserve with airway protection concern.</button><button class="quiz-option vc-option" data-correct="false" data-feedback="Not quite. Normal oxygen saturation can occur early; worsening VC and cough are still dangerous.">No concern if SpO₂ is currently normal.</button><button class="quiz-option vc-option" data-correct="false" data-feedback="Not quite. Atelectasis may occur later, but the primary pattern is neuromuscular weakness with ventilation/airway risk.">Primary alveolar flooding from cardiogenic edema.</button></div><div class="quiz-feedback" role="status"></div></article></section>
 
@@ -244,7 +276,74 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
+  <script src="courses.js"></script>
   <script>
+
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      const list = document.getElementById("courseMenuList");
+      if (!button || !panel || !list) return;
+
+      const possibleCourseSources = [
+        window.PULMOCORE_COURSES,
+        window.pulmoCoreCourses,
+        window.courses,
+        window.COURSES
+      ];
+      const courses = possibleCourseSources.find(source => Array.isArray(source)) || [];
+
+      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
+      function getCourseHref(course) { return course.href || course.url || course.file || "#"; }
+      function getCourseId(course) { return course.id || getCourseHref(course) || getCourseTitle(course).toLowerCase().replace(/\s+/g, "-"); }
+      function readStoredProgress(course) {
+        const id = getCourseId(course);
+        const keys = [`pulmocore-progress-${id}`, `PulmoCore:${id}:progress`, `progress:${id}`, id];
+        for (const key of keys) {
+          const raw = localStorage.getItem(key);
+          if (!raw) continue;
+          const numeric = Number(raw);
+          if (!Number.isNaN(numeric)) return Math.max(0, Math.min(100, numeric));
+          try {
+            const parsed = JSON.parse(raw);
+            if (typeof parsed.percent === "number") return Math.max(0, Math.min(100, parsed.percent));
+            if (typeof parsed.progress === "number") return Math.max(0, Math.min(100, parsed.progress));
+            if (parsed.complete === true || parsed.completed === true) return 100;
+          } catch (error) {}
+        }
+        if (typeof course.percent === "number") return Math.max(0, Math.min(100, course.percent));
+        if (typeof course.progress === "number") return Math.max(0, Math.min(100, course.progress));
+        if (course.complete === true || course.completed === true) return 100;
+        return 0;
+      }
+      function getStatusMarkup(percent) {
+        if (percent >= 100) return '<span class="course-menu-status complete">Complete</span>';
+        if (percent > 0) return `<span class="course-menu-status progress">In progress (${Math.round(percent)}%)</span>`;
+        return '<span class="course-menu-status">Not started</span>';
+      }
+      list.innerHTML = courses.length
+        ? courses.map(course => `<a class="course-menu-item" role="menuitem" href="${getCourseHref(course)}"><span class="course-menu-name">${getCourseTitle(course)}</span>${getStatusMarkup(readStoredProgress(course))}</a>`).join("")
+        : '<div class="course-menu-status">No courses found. Check courses.js.</div>';
+
+      button.addEventListener("click", () => {
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      document.addEventListener("click", event => {
+        if (!panel.contains(event.target) && !button.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+    initializeCourseMenu();
 
     const glossaryTerms = [
       { term: "Myasthenia gravis", definition: "An autoimmune neuromuscular junction disorder that causes fluctuating skeletal muscle weakness, often worsening with activity and improving with rest.", rt: "Respiratory failure can occur when respiratory muscles or bulbar muscles weaken." },
@@ -347,7 +446,7 @@
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
-      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); updateNavState(currentVisible); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
@@ -365,11 +464,24 @@
       const container = document.getElementById("sequenceSort");
       if (!container) return;
       const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
-      for (let i = rows.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [rows[i], rows[j]] = [rows[j], rows[i]];
+      rows.forEach(row => {
+        const select = row.querySelector("select");
+        if (select) select.value = "";
+        row.classList.remove("correct", "incorrect");
+      });
+      let shuffled = [...rows];
+      let attempts = 0;
+      do {
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        attempts++;
+      } while (shuffled.every((row, index) => Number(row.dataset.answer) === index + 1) && attempts < 12);
+      if (shuffled.every((row, index) => Number(row.dataset.answer) === index + 1) && shuffled.length > 1) {
+        [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
       }
-      rows.forEach(row => container.appendChild(row));
+      shuffled.forEach(row => container.appendChild(row));
     }
 
     function normalizeSequenceRanks(changedSelect) {
@@ -431,9 +543,13 @@
       });
     }
 
-    shuffleSequence();
-    enableDynamicReorder();
-    initializeSequenceSort();
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
 
     function initializeKnowledgeCheck() {
       const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;

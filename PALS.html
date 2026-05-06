@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Pulmonary Air Leak Syndromes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .course-menu { position: relative; display: flex; align-items: center; justify-content: flex-end; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; min-height: 44px; }
+    .course-menu-button:hover { background: rgba(255,255,255,.14); }
+    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(380px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; }
+    .course-menu-panel.open { display: block; }
+    .course-menu-panel h3 { font-size: 1rem; margin: 4px 6px 10px; }
+    .course-menu-list { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; gap: 3px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 14px; padding: 10px 12px; background: #FAFDFF; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item strong { font-family: var(--font-heading); font-size: .98rem; }
+    .course-menu-status { font-size: .86rem; color: var(--slate); }
+    #sequenceSort { visibility: hidden; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    .visual-card { background: #FAFDFF; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); padding: 14px; margin-top: 16px; }
+    .visual-card img { width: 100%; display: block; border-radius: 16px; border: 1px solid var(--soft-border); background: linear-gradient(135deg, #E6F3FF, #DDF7F2); min-height: 180px; object-fit: cover; }
+    .visual-caption { margin-top: 10px; color: var(--slate); font-size: .95rem; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Core</span></div>
+          <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+        </div>
+      </div>
+
+      <div class="course-menu">
+        <button class="course-menu-button" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="Course menu">
+          <h3>PulmoCore Courses</h3>
+          <div class="course-menu-list" id="courseMenuList">
+            <div class="course-menu-status">Loading courses...</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Pulmonary Air Leak Syndromes</h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Pulmonary air leak syndromes occur when air escapes from the normal tracheobronchial or alveolar space into tissues where it does not belong, such as the pleural space, mediastinum, pericardium, or subcutaneous tissue. This module focuses on RT recognition, pressure-related pathophysiology, diagnostic clues, neonatal and ventilated-patient risk, management priorities, and escalation when an air leak threatens ventilation or circulation.</p>
+        <div class="case-meta" aria-label="Module details">
+          <div><strong>Category</strong><br>Air Leak / Barotrauma Syndromes</div>
+          <div><strong>Estimated Time</strong><br>30–40 minutes</div>
+          <div><strong>Level</strong><br>Core RT Knowledge</div>
+        </div>
+      </section>
+
+      <div class="content-layout">
+        <aside class="side-nav" aria-label="Disease page quick navigation">
+          <h3>Lesson Sections</h3>
+          <a href="#objectives">Objectives</a>
+          <a href="#overview-video">Video Overview</a>
+          <a href="#snapshot">Disease Snapshot</a>
+          <a href="#precheck">Quick Pre-Check</a>
+          <a href="#pathophysiology">Pathophysiology</a>
+          <a href="#types">Types of Air Leak</a>
+          <a href="#manifestations">Clinical Manifestations</a>
+          <a href="#diagnostics">Diagnostics</a>
+          <a href="#severity">Severity + Risk</a>
+          <a href="#red-flags">Red Flags</a>
+          <a href="#management">Management</a>
+          <a href="#ventilation">Ventilator Strategy</a>
+          <a href="#rt-role">RT Role</a>
+          <a href="#case-study">Case Study</a>
+          <a href="#knowledge-check">Knowledge Check</a>
+          <a href="#faq">FAQ</a>
+          <a href="#summary">Summary</a>
+          <a href="#glossary">Glossary Deck</a>
+        </aside>
+
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives">
+            <h2>Learning Objectives</h2>
+            <p>By the end of this module, learners should be able to connect pressure injury, alveolar rupture, air dissection, clinical findings, imaging patterns, emergency priorities, and ventilator adjustments used to limit worsening air leak.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how alveolar rupture allows air to escape into the pleura, mediastinum, pericardium, or subcutaneous tissues.</div>
+              <div class="example-box soft-blue"><strong>2. Differentiate air leak types</strong><br>Compare pneumothorax, pneumomediastinum, pulmonary interstitial emphysema, pneumopericardium, and subcutaneous emphysema.</div>
+              <div class="example-box soft-amber"><strong>3. Interpret assessment data</strong><br>Use breath sounds, chest movement, oxygenation, hemodynamics, transillumination, chest x-ray, and ventilator trends to identify severity.</div>
+              <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize tension physiology, worsening hypoxemia, hypotension, bradycardia, rising ventilator pressures, and sudden deterioration.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Pulmonary Air Leak Syndrome Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="PALS.mp4" type="video/mp4">
+                <track src="PALS.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
+            </div>
+          </section>
+
+          <section class="info-card" id="snapshot">
+            <h2>Disease Snapshot</h2>
+            <p>Air leak syndromes are pressure-related complications in which gas leaves the alveoli or airway and tracks into abnormal spaces. They are especially important in neonates receiving positive pressure ventilation, patients with underlying lung disease, trauma patients, and mechanically ventilated patients exposed to high pressures or excessive tidal volumes.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>What it is:</strong><br>Escape of air from alveoli or airways into abnormal spaces.</div>
+              <div class="example-box soft-teal"><strong>Primary problem:</strong><br>Pressure gradient causes rupture and air dissection.</div>
+              <div class="example-box soft-teal"><strong>Classic syndromes:</strong><br>Pneumothorax, pneumomediastinum, PIE, pneumopericardium, and subcutaneous emphysema.</div>
+              <div class="example-box soft-teal"><strong>Key diagnostic clue:</strong><br>Sudden deterioration plus asymmetric breath sounds, chest x-ray findings, or transillumination in neonates.</div>
+              <div class="example-box soft-teal"><strong>Acute danger:</strong><br>Tension air leak with impaired venous return, hypotension, bradycardia, and severe hypoxemia.</div>
+              <div class="example-box soft-teal"><strong>RT priority:</strong><br>Recognize deterioration, reduce pressure injury risk, support oxygenation, and escalate rapidly.</div>
+            </div>
+            <article class="info-card rt" style="margin-top:16px;">
+              <h3>RT Clinical Connection</h3>
+              <p>For RTs, air leak syndromes are not just radiology findings. They are bedside emergencies when oxygenation, ventilation, or circulation suddenly worsens. The RT must connect changes in breath sounds, SpO₂, heart rate, blood pressure, ventilator pressures, and chest movement to possible air escape.</p>
+            </article>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Prep Frame</h3>
+              <p>Immediately associate air leak syndromes with positive pressure ventilation, high transpulmonary pressure, neonatal RDS or meconium aspiration, sudden hypoxemia, asymmetric chest findings, tracheal shift, transillumination, chest tube drainage, and ventilator adjustments that reduce further pressure injury.</p>
+            </article>
+          </section>
+
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check">
+            <span class="eyebrow">Quick Pre-Check</span>
+            <h2>Start with the core air leak pattern</h2>
+            <p>Which statement best describes the basic pathophysiology of pulmonary air leak syndromes?</p>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false">Pulmonary arteries constrict and prevent blood from reaching the alveoli.</button>
+              <button class="quiz-option" data-correct="true">Air escapes from ruptured alveoli or airways and dissects into abnormal spaces.</button>
+              <button class="quiz-option" data-correct="false">The airways become chronically inflamed and reversibly narrow after allergen exposure.</button>
+              <button class="quiz-option" data-correct="false">Fluid fills the alveoli because the left ventricle fails to pump forward.</button>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback" role="status"></div>
+          </section>
+
+          <section class="info-card" id="pathophysiology">
+            <h2>Anatomy & Pathophysiology</h2>
+            <p>Pulmonary air leaks usually begin when an alveolus ruptures because pressure inside the alveolus exceeds the strength of the surrounding tissue. Escaped air then follows tissue planes toward the pleural space, mediastinum, pericardium, interstitium, or subcutaneous tissues.</p>
+            <div class="visual-card">
+              <img src="air-leak-pathophysiology.png" alt="Diagram showing alveolar rupture with air tracking into the pleural space, mediastinum, and subcutaneous tissues" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <div class="visual-caption">Visual focus: alveolar rupture, pressure gradient, and air tracking into abnormal spaces.</div>
+            </div>
+            <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">
+              High alveolar pressure or fragile lung tissue → alveolar rupture → air leaves normal gas-exchange space → air dissects into pleura, mediastinum, pericardium, interstitium, or subcutaneous tissue → impaired ventilation, oxygenation, or circulation depending on location and pressure.
+            </div>
+            <h3 style="margin-top:22px;">How Air Leak Syndromes Develop</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Mechanism</th><th>What Happens</th><th>Why It Matters</th></tr>
+                <tr><td>Excessive alveolar pressure</td><td>Positive pressure, high PIP, air trapping, or forceful ventilation increases pressure inside fragile alveoli.</td><td>Raises risk for alveolar rupture.</td></tr>
+                <tr><td>Alveolar rupture</td><td>Air escapes from the alveolus into surrounding tissue planes.</td><td>Creates the source of the leak.</td></tr>
+                <tr><td>Air dissection</td><td>Escaped air tracks along bronchovascular sheaths or into the pleural space.</td><td>Determines whether the patient develops PIE, pneumomediastinum, pneumothorax, or subcutaneous emphysema.</td></tr>
+                <tr><td>Compression effects</td><td>Trapped air can compress lung tissue, heart, or great vessels.</td><td>Can impair oxygenation, ventilation, and venous return.</td></tr>
+                <tr><td>Worsening pressure cycle</td><td>More positive pressure may enlarge the leak if ventilator settings are not adjusted.</td><td>RTs must balance support with lung-protective strategy.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:22px;">High-Yield Mechanism</h3>
+            <p>The same pressure that helps open unstable alveoli can worsen an existing air leak. This is why the RT must monitor oxygenation and ventilation while also watching PIP, plateau pressure, tidal volume, PEEP, and signs of dynamic hyperinflation.</p>
+            <div class="visual-card">
+              <img src="air-leak-pressure-cycle.png" alt="Educational graphic showing how excessive positive pressure can enlarge an air leak and worsen lung compression" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <div class="visual-caption">Visual focus: positive pressure support can be lifesaving, but excessive pressure may enlarge the leak.</div>
+            </div>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Danger Sign</h3>
+              <p>Sudden hypoxemia, hypotension, bradycardia, absent or diminished unilateral breath sounds, and tracheal deviation suggest a tension air leak until proven otherwise.</p>
+            </article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Air Leak Hotspot Graphic">
+              <h3>Click the Air Leak Hotspots</h3>
+              <p>Click each hotspot to reveal how air location changes the clinical problem.</p>
+              <div class="hotspot-demo">
+                <div class="hotspot-lung" aria-label="Simplified air leak graphic with clickable hotspots">
+                  <svg viewBox="0 0 240 240" fill="none" aria-hidden="true">
+                    <path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/>
+                    <path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="120" cy="116" r="14" fill="#1CA7A8"/>
+                    <path d="M156 74c18 24 18 72 0 100" stroke="#E85D5D" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+                    <path d="M88 95c18 8 34 10 64 0" stroke="#F4B860" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+                  </svg>
+                  <button class="hotspot-btn" style="left:29%; top:34%;" data-title="Alveolar Rupture" data-text="The leak often starts when fragile or overdistended alveoli rupture under pressure.">1</button>
+                  <button class="hotspot-btn" style="right:23%; top:38%;" data-title="Pleural Air" data-text="Air in the pleural space can collapse the lung and create pneumothorax; tension can impair venous return.">2</button>
+                  <button class="hotspot-btn" style="left:45%; top:48%;" data-title="Mediastinal Air" data-text="Air can track centrally around the heart and great vessels, producing pneumomediastinum.">3</button>
+                  <button class="hotspot-btn" style="right:37%; bottom:19%;" data-title="Subcutaneous Air" data-text="Air may track into neck or chest wall tissues, causing palpable crepitus.">4</button>
+                </div>
+                <div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div>
+              </div>
+              <div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="types">
+            <h2>Types, Causes & Risk Factors</h2>
+            <p>Air leak syndromes are named by where the escaped air collects. Risk increases when lung tissue is fragile, noncompliant, obstructed, unevenly ventilated, or exposed to high distending pressure.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Air Leak Type</th><th>Where the Air Goes</th><th>Classic Clue</th></tr>
+                <tr><td>Pneumothorax</td><td>Pleural space.</td><td>Sudden distress, unilateral diminished breath sounds, possible mediastinal shift if tension develops.</td></tr>
+                <tr><td>Pneumomediastinum</td><td>Mediastinum around the heart, trachea, and great vessels.</td><td>Central chest air, possible crepitus, sometimes Hamman crunch.</td></tr>
+                <tr><td>Pulmonary interstitial emphysema</td><td>Interstitial tissues around airways and vessels.</td><td>Neonatal ventilator complication with cystic or linear lucencies on imaging.</td></tr>
+                <tr><td>Pneumopericardium</td><td>Pericardial sac.</td><td>Can restrict cardiac filling and mimic tamponade physiology.</td></tr>
+                <tr><td>Subcutaneous emphysema</td><td>Soft tissues of neck, face, or chest wall.</td><td>Palpable crackling or crepitus under the skin.</td></tr>
+              </table>
+            </div>
+            <div class="visual-card">
+              <img src="air-leak-types-map.png" alt="Labeled map of pulmonary air leak locations including pleural, mediastinal, interstitial, pericardial, and subcutaneous air" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <div class="visual-caption">Visual focus: location determines assessment findings and urgency.</div>
+            </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Air Leak Sorting">
+              <h3>Sort the Air Leak Findings</h3>
+              <p>Choose the best category for each item, then check your answers.</p>
+              <div class="sort-grid" id="riskSort">
+                <div class="sort-row" data-answer="type"><strong>Pulmonary interstitial emphysema</strong><select aria-label="Category for pulmonary interstitial emphysema"><option value="">Choose category</option><option value="risk">Common Risk Factor</option><option value="type">Air Leak Syndrome</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="risk"><strong>High peak inspiratory pressure</strong><select aria-label="Category for high peak inspiratory pressure"><option value="">Choose category</option><option value="risk">Common Risk Factor</option><option value="type">Air Leak Syndrome</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="type"><strong>Pneumomediastinum</strong><select aria-label="Category for pneumomediastinum"><option value="">Choose category</option><option value="risk">Common Risk Factor</option><option value="type">Air Leak Syndrome</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="danger"><strong>Sudden hypotension with unilateral absent breath sounds</strong><select aria-label="Category for sudden hypotension"><option value="">Choose category</option><option value="risk">Common Risk Factor</option><option value="type">Air Leak Syndrome</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="risk"><strong>Meconium aspiration with air trapping</strong><select aria-label="Category for meconium aspiration"><option value="">Choose category</option><option value="risk">Common Risk Factor</option><option value="type">Air Leak Syndrome</option><option value="danger">Danger Sign</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button>
+              <div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="manifestations">
+            <h2>Clinical Manifestations</h2>
+            <p>Presentation depends on where the air collects and how quickly pressure builds. The RT should look for sudden changes from baseline: increased work of breathing, worsening oxygenation, unequal breath sounds, chest asymmetry, crepitus, hemodynamic instability, or unexpected ventilator pressure changes.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Finding Type</th><th>What the RT May See</th></tr>
+                <tr><td>Symptoms</td><td>Acute dyspnea, chest pain, agitation, anxiety, or sudden deterioration in an infant or ventilated patient.</td></tr>
+                <tr><td>Appearance</td><td>Tachypnea, retractions, nasal flaring, accessory muscle use, cyanosis, or decreased responsiveness.</td></tr>
+                <tr><td>Breath sounds</td><td>Diminished or absent sounds on one side with pneumothorax; diffuse changes may occur with PIE.</td></tr>
+                <tr><td>Oxygenation clues</td><td>Falling SpO₂, increasing FiO₂ requirement, low PaO₂, or poor response to routine support.</td></tr>
+                <tr><td>Ventilation clues</td><td>Rising PaCO₂, sudden low exhaled tidal volume, increased leak alarms, or worsening compliance.</td></tr>
+                <tr><td>Circulation clues</td><td>Hypotension, bradycardia, poor perfusion, narrow pulse pressure, or shock with tension physiology.</td></tr>
+              </table>
+            </div>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Important Teaching Point</h3>
+              <p>A ventilated neonate or adult who suddenly desaturates and develops asymmetric breath sounds should be assessed for tube displacement, obstruction, equipment failure, and pneumothorax. Tension pneumothorax must be treated urgently.</p>
+            </article>
+          </section>
+
+          <section class="info-card board" id="diagnostics">
+            <h2>Diagnostics & Assessment</h2>
+            <p>Diagnosis combines bedside assessment and imaging. In unstable patients, treatment may need to occur before a confirmatory x-ray if tension physiology is strongly suspected.</p>
+            <h3 style="margin-top:18px;">Bedside Assessment and Imaging</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Assessment Tool</th><th>Air Leak Pattern</th><th>RT Interpretation</th></tr>
+                <tr><td>Auscultation</td><td>Unilateral diminished or absent sounds may suggest pneumothorax.</td><td>Compare both sides quickly during sudden deterioration.</td></tr>
+                <tr><td>Chest movement</td><td>Asymmetric expansion can occur with pneumothorax.</td><td>Look for one side moving less than the other.</td></tr>
+                <tr><td>Transillumination</td><td>Bright hemithorax in neonates may suggest pneumothorax.</td><td>Helpful rapid screening tool in newborns; confirm if patient stable.</td></tr>
+                <tr><td>Chest x-ray</td><td>Visible pleural line, collapsed lung, mediastinal air, PIE lucencies, or subcutaneous air.</td><td>Main diagnostic test when patient is stable enough.</td></tr>
+                <tr><td>Ultrasound</td><td>Absent lung sliding or lung point may support pneumothorax.</td><td>Can be rapid at bedside where available.</td></tr>
+                <tr><td>Ventilator graphics</td><td>Sudden pressure/compliance change, low exhaled VT, or worsening air leak.</td><td>Supports recognition but does not replace clinical assessment.</td></tr>
+              </table>
+            </div>
+            <div class="visual-card">
+              <img src="air-leak-cxr-findings.png" alt="Chest x-ray teaching image placeholder showing pneumothorax pleural line, mediastinal shift, and pulmonary interstitial emphysema lucencies" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <div class="visual-caption">Visual focus: identify pleural line, collapsed lung margin, mediastinal shift, and interstitial air patterns.</div>
+            </div>
+            <h3 style="margin-top:18px;">ABG and Ventilator Pattern</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Pattern</th><th>Meaning</th></tr>
+                <tr><td>Falling PaO₂ or SpO₂</td><td>Reduced ventilation/perfusion match, lung collapse, or worsening gas exchange.</td></tr>
+                <tr><td>Rising PaCO₂</td><td>Worsening ventilation, fatigue, or reduced effective tidal volume.</td></tr>
+                <tr><td>Increasing PIP with stable plateau</td><td>May suggest resistance problem, secretions, or tube issue rather than compliance alone.</td></tr>
+                <tr><td>Increasing PIP and plateau pressure</td><td>Suggests reduced compliance; pneumothorax or hyperinflation should be considered in the right context.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="info-card" id="severity">
+            <h2>Severity, Risk Stratification & Decision Cues</h2>
+            <p>Severity is based on physiologic impact, not just the amount of visible air. A small stable pneumomediastinum may need observation, while a rapidly expanding tension pneumothorax can become immediately life-threatening.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Severity Level</th><th>Typical Pattern</th><th>Action Logic</th></tr>
+                <tr><td>Mild / stable</td><td>Small air leak, stable vital signs, minimal oxygen need.</td><td>Observe, monitor, reduce risk factors, repeat imaging as ordered.</td></tr>
+                <tr><td>Moderate</td><td>Increased WOB, increased oxygen need, visible pneumothorax without shock.</td><td>Notify provider, prepare for drainage if worsening or clinically significant.</td></tr>
+                <tr><td>Severe</td><td>Severe hypoxemia, high WOB, rising PaCO₂, worsening ventilator pressures.</td><td>Escalate, support ventilation, reduce pressure injury, prepare emergency intervention.</td></tr>
+                <tr><td>Tension physiology</td><td>Hypotension, bradycardia, tracheal shift, severe distress, poor perfusion.</td><td>Emergency decompression and chest tube management; do not delay for routine testing.</td></tr>
+              </table>
+            </div>
+            <div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Stable clue</strong><br>Normal perfusion, stable SpO₂ on low support, no worsening distress.</div>
+              <div class="example-box soft-amber"><strong>Concerning clue</strong><br>Increasing FiO₂ need, rising pressures, asymmetric sounds, or worsening retractions.</div>
+              <div class="example-box soft-coral"><strong>Emergency clue</strong><br>Shock, bradycardia, severe hypoxemia, mediastinal shift, or rapid deterioration.</div>
+            </div>
+            <article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="Air Leak Decision Activity">
+              <h3>Decision-Based Scenario</h3>
+              <p>A ventilated newborn with RDS suddenly becomes cyanotic. SpO₂ falls to 72%, heart rate drops, breath sounds are markedly decreased on the right, and the right chest transilluminates brightly. What is the best interpretation?</p>
+              <div class="quiz-options">
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Routine atelectasis can worsen oxygenation, but sudden severe deterioration with unilateral decreased breath sounds and bright transillumination strongly suggests pneumothorax.">Routine atelectasis that can wait for the next scheduled x-ray.</button>
+                <button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Sudden hypoxemia, bradycardia, unilateral decreased breath sounds, and bright transillumination in a ventilated newborn strongly suggest pneumothorax with possible tension physiology.">Possible tension pneumothorax requiring immediate escalation.</button>
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Bronchospasm can increase work of breathing, but this unilateral presentation with transillumination points to air in the pleural space.">Isolated bronchospasm from airway hyperreactivity.</button>
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. An improving infant should not develop sudden cyanosis, bradycardia, and unilateral loss of breath sounds.">Normal improvement after surfactant therapy.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="red-flags">
+            <h2>Severity & Red Flags</h2>
+            <p>The key question is not simply “Is air present?” The key question is whether that air is compressing the lung, heart, or great vessels enough to threaten oxygenation, ventilation, or circulation.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Red Flag</th><th>Why It Matters</th></tr>
+                <tr><td>Sudden severe hypoxemia</td><td>May reflect acute lung collapse or tension air leak.</td></tr>
+                <tr><td>Unilateral absent or very diminished breath sounds</td><td>Classic pneumothorax clue, especially with sudden deterioration.</td></tr>
+                <tr><td>Hypotension, bradycardia, or poor perfusion</td><td>Suggests tension physiology with reduced venous return.</td></tr>
+                <tr><td>Tracheal deviation or mediastinal shift</td><td>Late and dangerous sign of pressure buildup.</td></tr>
+                <tr><td>Sudden increased ventilator pressures or poor exhaled tidal volume</td><td>Can indicate decreased compliance, worsening leak, obstruction, or circuit/tube issue.</td></tr>
+                <tr><td>Rapidly expanding subcutaneous emphysema</td><td>May indicate ongoing air leak that is worsening under pressure.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="info-card" id="management">
+            <h2>Management & Treatment</h2>
+            <p>Management depends on the patient’s stability, size and location of the leak, oxygenation, ventilation, hemodynamics, and whether positive pressure ventilation is needed. RT care focuses on rapid recognition, oxygenation, minimizing further pressure injury, and supporting emergency drainage when indicated.</p>
+            <h3 style="margin-top:18px;">Treatment Options and RT Logic</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Intervention</th><th>When It Helps</th><th>RT Role</th></tr>
+                <tr><td>Observation and monitoring</td><td>Small, stable leaks without distress or shock.</td><td>Trend breath sounds, SpO₂, WOB, vital signs, and imaging results.</td></tr>
+                <tr><td>Supplemental oxygen</td><td>Hypoxemia or increased oxygen need.</td><td>Titrate per protocol/order and reassess response.</td></tr>
+                <tr><td>Needle decompression</td><td>Suspected tension pneumothorax with life-threatening instability.</td><td>Recognize emergency, notify team, assist with airway/oxygenation and equipment.</td></tr>
+                <tr><td>Chest tube drainage</td><td>Clinically significant pneumothorax or persistent air leak.</td><td>Monitor bubbling, water seal, suction order, patient response, and ventilator effects.</td></tr>
+                <tr><td>Ventilator adjustment</td><td>Air leak worsens with high pressure or volume.</td><td>Support lung-protective strategy: reduce excessive pressures, avoid overdistention, and maintain adequate gas exchange.</td></tr>
+                <tr><td>Positioning strategies</td><td>Selected neonatal PIE or unilateral disease patterns.</td><td>Implement ordered positioning and monitor response.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:18px;">General Acute Management Sequence</h3>
+            <p>In unstable patients, airway and breathing support occur simultaneously with emergency escalation. Do not wait for perfect data when the patient has signs of tension physiology.</p>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Air Leak Treatment Sequence">
+              <h3>Acute Air Leak Response Sequence</h3>
+              <p>Select the steps in the best general order for sudden deterioration with suspected tension pneumothorax.</p>
+              <div class="sort-grid" id="sequenceSort">
+                <div class="sort-row" data-answer="1" data-sequence-item="Recognize sudden deterioration and assess ABCs"><strong>Recognize sudden deterioration and assess ABCs</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="2" data-sequence-item="Give oxygen and support ventilation"><strong>Give oxygen and support ventilation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="3" data-sequence-item="Compare breath sounds and chest movement"><strong>Compare breath sounds and chest movement</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="4" data-sequence-item="Notify provider and prepare emergency decompression"><strong>Notify provider and prepare emergency decompression</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="5" data-sequence-item="Assist with chest tube or definitive drainage"><strong>Assist with chest tube or definitive drainage</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="6" data-sequence-item="Reassess and adjust ventilator pressures"><strong>Reassess and adjust ventilator pressures</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button>
+              <div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="ventilation">
+            <h2>Ventilator Strategy & Neonatal Considerations</h2>
+            <p>Air leaks often occur in patients who need positive pressure, so management requires balancing gas exchange with pressure reduction. The goal is to avoid worsening overdistention while maintaining adequate oxygenation and ventilation.</p>
+            <div class="three-card-grid" style="margin-top:16px;">
+              <div class="example-box soft-coral"><strong>Watch for:</strong><br>Sudden desaturation, bradycardia, asymmetric chest movement, rising pressures, or new subcutaneous crepitus.</div>
+              <div class="example-box soft-amber"><strong>Vent goal:</strong><br>Use the least distending pressure that maintains acceptable gas exchange.</div>
+              <div class="example-box soft-blue"><strong>Settings concept:</strong><br>Avoid excessive tidal volume, high PIP, unnecessary PEEP, and air trapping when possible.</div>
+            </div>
+            <div class="visual-card">
+              <img src="air-leak-ventilator-management.png" alt="Ventilator management visual showing pressure reduction, lower tidal volume strategy, adequate expiratory time, and monitoring for air leak worsening" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <div class="visual-caption">Visual focus: reduce distending pressure while preserving safe oxygenation and ventilation.</div>
+            </div>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Pearl</h3>
+              <p>For test questions, sudden deterioration after positive pressure ventilation plus unilateral decreased breath sounds points toward pneumothorax. If hypotension or bradycardia appears, think tension pneumothorax and urgent decompression rather than routine imaging first.</p>
+            </article>
+          </section>
+
+          <section class="info-card rt" id="rt-role">
+            <h2>Respiratory Therapist Role</h2>
+            <p>The RT is central to recognizing air leak deterioration, supporting oxygenation and ventilation, communicating urgent changes, managing ventilator adjustments, and monitoring chest drainage systems after intervention.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr>
+                <tr><td>Assess ventilation</td><td>RR, pattern, PaCO₂ trend, exhaled VT, ventilator alarms, chest movement.</td><td>Detects worsening ventilation or reduced effective lung volume.</td></tr>
+                <tr><td>Assess oxygenation</td><td>SpO₂, PaO₂, FiO₂ requirement, cyanosis, response to intervention.</td><td>Identifies acute gas-exchange failure.</td></tr>
+                <tr><td>Evaluate breath sounds</td><td>Compare right and left sides for diminished or absent sounds.</td><td>Rapid clue for pneumothorax or tube displacement.</td></tr>
+                <tr><td>Monitor pressures</td><td>PIP, plateau pressure, PEEP, compliance trend, flow return to baseline.</td><td>Helps identify pressure injury risk and air trapping.</td></tr>
+                <tr><td>Support chest drainage</td><td>Observe bubbling, suction setup, water seal, secure connections, and patient response.</td><td>Air leak monitoring continues after tube placement.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided Air Leak Case">
+            <span class="eyebrow">Guided Unfolding Case Study</span>
+            <h2>The Ventilated Newborn Who Suddenly Crashed</h2>
+            <p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p>
+
+            <div class="case-stage" data-case-stage="0">
+              <h3>Stage 1: Initial Presentation</h3>
+              <p>A 30-week newborn with RDS is receiving mechanical ventilation. After a coughing episode and manual breaths during repositioning, the infant suddenly becomes cyanotic and agitated.</p>
+              <div class="case-meta"><div><strong>SpO₂</strong><br>74% despite increased FiO₂</div><div><strong>HR</strong><br>88/min and falling</div><div><strong>Breath Sounds</strong><br>Very diminished on left</div></div>
+              <p><strong>Decision Question:</strong> What is the priority interpretation?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Atelectasis can occur, but sudden severe hypoxemia with unilateral diminished breath sounds in a ventilated newborn should trigger concern for pneumothorax.">Routine atelectasis only; reassess during the next scheduled rounds.</button>
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Sudden deterioration, unilateral diminished breath sounds, and bradycardia in a ventilated newborn suggest pneumothorax with possible tension physiology.">Possible pneumothorax with tension physiology.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bronchospasm is less likely than an air leak when findings are sudden and unilateral with hemodynamic compromise.">Primary bronchospasm from airway hyperreactivity.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A stable transition would not usually cause sudden cyanosis, bradycardia, and unilateral breath sound loss.">Expected normal newborn transition.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="1">
+              <h3>Stage 2: Bedside Confirmation</h3>
+              <p>The left chest transilluminates brightly. The infant remains unstable, and the provider is called to the bedside.</p>
+              <p><strong>Decision Question:</strong> What should the RT prepare for?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. In an unstable infant with suspected tension pneumothorax, the team should prepare for immediate decompression and definitive chest drainage.">Emergency decompression and chest tube placement support.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Formal imaging is helpful when stable, but unstable tension physiology should not wait for routine testing.">Delay all treatment until a routine chest x-ray is completed.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. More pressure can worsen an air leak. Support oxygenation, but avoid unnecessary high distending pressure.">Increase PIP aggressively to overcome the leak without reassessment.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Humidity is important for ventilated patients but is not the priority emergency intervention here.">Change the humidifier chamber first.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="2">
+              <h3>Stage 3: After Chest Tube Placement</h3>
+              <p>After decompression and chest tube placement, SpO₂ improves to 92%. Continuous bubbling is seen in the drainage system. The ventilator shows high PIP compared with earlier values.</p>
+              <p><strong>Decision Question:</strong> What should the RT focus on next?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. After drainage, the RT should reassess breath sounds, oxygenation, bubbling, chest tube setup, and ventilator pressures to reduce ongoing pressure injury.">Reassess patient response, chest drainage, and pressure-limiting ventilator strategy.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A chest tube does not eliminate the need for monitoring; worsening air leak or malposition can still occur.">Stop monitoring because the chest tube fixed the problem permanently.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen should be titrated based on patient need; abruptly removing support could worsen hypoxemia.">Immediately discontinue all oxygen support.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Persistent bubbling may reflect an ongoing leak and should be assessed, not ignored.">Ignore bubbling because it is never clinically meaningful.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="3">
+              <h3>Stage 4: Ventilator Adjustment Concept</h3>
+              <p>The team asks for a strategy to reduce risk of worsening the air leak while maintaining acceptable gas exchange.</p>
+              <p><strong>Decision Question:</strong> Which concept is most appropriate?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Use the least distending pressure that maintains acceptable gas exchange, while watching CO₂, oxygenation, and chest tube findings.">Reduce excessive distending pressure while maintaining adequate oxygenation and ventilation.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Higher pressure may improve numbers briefly but can worsen the leak and lung injury.">Use the highest possible PIP to force the collapsed lung open.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. PEEP can be helpful in some conditions, but unnecessary high PEEP may worsen overdistention and air leak.">Increase PEEP without limit because all air leaks need more pressure.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The RT should continue monitoring ventilator mechanics after an air leak event.">Ignore ventilator pressures once SpO₂ improves.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="4">
+              <h3>Case Wrap-Up</h3>
+              <div class="example-box soft-teal"><strong>RT Takeaway:</strong> In air leak syndromes, sudden deterioration is a pattern-recognition emergency. Compare breath sounds, assess hemodynamics, support oxygenation, and communicate suspected tension physiology immediately.</div>
+              <div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> worsening hypoxemia, bradycardia, hypotension, unilateral absent breath sounds, or mediastinal shift require urgent escalation and possible decompression.</div>
+            </div>
+          </section>
+
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Air Leak Knowledge Check">
+            <span class="eyebrow">Knowledge Check</span>
+            <h2>Board-Style Practice</h2>
+            <p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p>
+
+            <div class="knowledge-question" data-question-id="kq1">
+              <h3>Question 1</h3>
+              <p>A mechanically ventilated patient suddenly develops severe hypoxemia, hypotension, and absent breath sounds on the right. What air leak complication is most concerning?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Sudden hypoxemia, unilateral absent breath sounds, and hypotension are classic for tension pneumothorax until proven otherwise.">Tension pneumothorax.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pneumomediastinum can occur, but unilateral absent breath sounds with shock most strongly suggests tension pneumothorax.">Stable pneumomediastinum.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pulmonary edema causes crackles and bilateral gas exchange issues, not usually unilateral absent breath sounds with sudden tension physiology.">Cardiogenic pulmonary edema only.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Chronic bronchitis does not typically cause sudden unilateral absent breath sounds and hypotension.">Chronic bronchitis exacerbation.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq2">
+              <h3>Question 2</h3>
+              <p>Which neonatal condition is strongly associated with pulmonary interstitial emphysema during positive pressure ventilation?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Premature infants with RDS have fragile, noncompliant lungs and may require positive pressure, increasing PIE risk.">Prematurity with respiratory distress syndrome requiring ventilation.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. A healthy term infant breathing room air has much lower risk than a ventilated premature infant with RDS.">Healthy term newborn breathing room air.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Isolated allergic rhinitis does not create the classic neonatal PIE risk pattern.">Isolated allergic rhinitis.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Stable mild anemia does not directly create an air leak syndrome.">Stable mild anemia.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq3">
+              <h3>Question 3</h3>
+              <p>Which finding is most consistent with subcutaneous emphysema?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. Subcutaneous emphysema produces palpable crackling or crepitus as air tracks through soft tissues.">Palpable crackling or crepitus in the neck or chest wall.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Green sputum suggests infection but not air in subcutaneous tissues.">Green sputum with productive cough.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Pedal edema is more associated with fluid overload or right heart strain, not subcutaneous air.">Dependent pedal edema.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Wheezing can occur in obstructive airway disease but is not the defining sign of subcutaneous emphysema.">Diffuse expiratory wheezing only.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq4">
+              <h3>Question 4</h3>
+              <p>After a pneumothorax is drained, which ventilator approach best reduces risk of worsening the air leak?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Lung-protective support uses the least distending pressure that maintains acceptable gas exchange.">Use the least distending pressure needed for adequate gas exchange.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Very high pressures can enlarge the air leak and worsen barotrauma.">Increase PIP as high as possible regardless of leak size.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Chest tube placement does not eliminate the need to monitor ventilator pressures and patient response.">Ignore ventilator mechanics once the chest tube is placed.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. High tidal volume can worsen overdistention and pressure injury.">Use large tidal volumes to force normal PaCO₂ immediately.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div>
+          </section>
+
+          <section id="faq">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common Air Leak Questions</h2></div>
+            <details class="accordion" open><summary>What is the simplest way to understand pulmonary air leak syndromes?</summary><div class="accordion-body"><p>Air leaks occur when gas escapes from the alveoli or airway and tracks into spaces where it does not belong, such as the pleural space, mediastinum, pericardium, or soft tissues.</p></div></details>
+            <details class="accordion"><summary>Why are ventilated neonates at risk?</summary><div class="accordion-body"><p>Premature or diseased neonatal lungs are fragile and noncompliant. Positive pressure may be necessary, but excessive distending pressure can rupture alveoli and produce air leak syndromes.</p></div></details>
+            <details class="accordion"><summary>What makes tension pneumothorax different?</summary><div class="accordion-body"><p>In tension pneumothorax, trapped pleural air builds pressure that compresses the lung and shifts mediastinal structures, reducing venous return and causing shock.</p></div></details>
+            <details class="accordion"><summary>Does subcutaneous emphysema always mean an emergency?</summary><div class="accordion-body"><p>Not always. It may be stable, but rapid expansion or association with respiratory or hemodynamic deterioration suggests an ongoing leak that needs urgent evaluation.</p></div></details>
+            <details class="accordion"><summary>When should imaging wait?</summary><div class="accordion-body"><p>If the patient has life-threatening tension physiology, emergency decompression should not be delayed for routine imaging. Stable patients can usually undergo confirmatory chest x-ray or ultrasound.</p></div></details>
+            <details class="accordion"><summary>What should the RT monitor after chest tube placement?</summary><div class="accordion-body"><p>Monitor breath sounds, SpO₂, work of breathing, ventilator pressures, exhaled tidal volume, bubbling, water seal/suction setup, connections, and overall patient response.</p></div></details>
+            <details class="accordion"><summary>What is the main ventilator principle?</summary><div class="accordion-body"><p>Use enough support to maintain acceptable oxygenation and ventilation while avoiding unnecessary distending pressure, overdistention, and air trapping.</p></div></details>
+          </section>
+
+          <section class="info-card" id="summary">
+            <h2>Summary & Clinical Pearls</h2>
+            <p>Pulmonary air leak syndromes occur when air escapes from alveoli or airways into abnormal spaces. The clinical priority is determining whether the leak is stable or causing life-threatening compression of the lung, heart, or great vessels. RTs must recognize sudden deterioration, support oxygenation and ventilation, reduce pressure injury risk, and escalate rapidly when tension physiology is suspected.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Must know:</strong><br>Air leak syndromes are caused by air escaping into abnormal spaces after rupture or airway injury.</div>
+              <div class="example-box soft-amber"><strong>Board pearl:</strong><br>Sudden hypoxemia plus unilateral absent breath sounds after positive pressure ventilation means pneumothorax until proven otherwise.</div>
+              <div class="example-box soft-blue"><strong>RT pearl:</strong><br>Trend breath sounds, chest movement, SpO₂, hemodynamics, ventilator pressures, exhaled VT, and chest tube behavior.</div>
+              <div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not wait for routine imaging when the patient has signs of tension pneumothorax and shock.</div>
+            </div>
+          </section>
+
+          <section id="glossary">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div>
+            <div class="glossary-card">
+              <h3>Searchable Glossary</h3>
+              <p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p>
+              <div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: pneumothorax, PIE, crepitus..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div>
+              <div class="glossary-list" id="glossaryList"></div>
+            </div>
+            <div class="glossary-card" style="margin-top:18px;">
+              <h3>Glossary Flashcard Mastery Deck</h3>
+              <p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p>
+              <div class="flashcard-shell">
+                <div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div>
+                <div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+                <div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div>
+                <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div>
+                <div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+                <div class="completed-list" id="completedList"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+
+  <script src="courses.js"></script>
+  <script>
+    const glossaryTerms = [
+      { term: "Pulmonary air leak syndrome", definition: "A condition in which air escapes from the alveoli or airways into abnormal spaces.", rt: "Requires rapid pattern recognition when oxygenation, ventilation, or hemodynamics worsen." },
+      { term: "Alveolar rupture", definition: "Tearing of alveolar tissue that allows air to leave the normal gas-exchange space.", rt: "Often caused by high pressure, fragile lung tissue, or uneven ventilation." },
+      { term: "Pneumothorax", definition: "Air in the pleural space that can partially or completely collapse the lung.", rt: "A sudden unilateral breath sound change with hypoxemia is a key clue." },
+      { term: "Tension pneumothorax", definition: "A life-threatening pneumothorax where trapped pressure compresses the lung and impairs venous return.", rt: "Hypotension, bradycardia, severe hypoxemia, and unilateral absent breath sounds require emergency escalation." },
+      { term: "Pneumomediastinum", definition: "Air in the mediastinum around central thoracic structures.", rt: "May occur after alveolar rupture with air tracking centrally." },
+      { term: "Pulmonary interstitial emphysema", definition: "Air trapped in the pulmonary interstitial tissues, often around airways and blood vessels.", rt: "High-yield neonatal ventilator complication, especially with premature fragile lungs." },
+      { term: "Pneumopericardium", definition: "Air in the pericardial sac surrounding the heart.", rt: "Can impair cardiac filling if pressure builds." },
+      { term: "Subcutaneous emphysema", definition: "Air in soft tissues under the skin, often causing palpable crackling.", rt: "Crepitus in neck or chest wall can indicate air tracking from a leak." },
+      { term: "Crepitus", definition: "A crackling sensation felt under the skin when air is present in subcutaneous tissue.", rt: "Document location and whether it is spreading." },
+      { term: "Transillumination", definition: "A bedside technique that uses light to help identify abnormal air in the chest, especially in neonates.", rt: "A brightly transilluminated hemithorax in a deteriorating newborn suggests pneumothorax." },
+      { term: "Barotrauma", definition: "Lung injury caused by excessive pressure.", rt: "Monitor PIP and plateau pressure and avoid unnecessary distending pressure." },
+      { term: "Volutrauma", definition: "Lung injury caused by excessive tidal volume and overdistention.", rt: "Use lung-protective support when air leak risk is present." },
+      { term: "PIP", definition: "Peak inspiratory pressure, the highest pressure measured during inspiration on the ventilator.", rt: "Sudden increases may reflect resistance, compliance change, obstruction, or worsening air leak context." },
+      { term: "Plateau pressure", definition: "Pressure measured during an inspiratory pause that reflects alveolar distending pressure.", rt: "Useful for assessing overdistention and compliance-related pressure injury risk." },
+      { term: "PEEP", definition: "Positive end-expiratory pressure used to keep alveoli open at end exhalation.", rt: "Helpful when needed, but excessive PEEP may worsen overdistention or air leak in some patients." },
+      { term: "Chest tube", definition: "A tube inserted into the pleural space to remove air or fluid.", rt: "Monitor drainage system function, bubbling, suction setup, and patient response." },
+      { term: "Water seal", definition: "A one-way seal in a chest drainage system that allows air to leave the pleural space while preventing reentry.", rt: "Observe for bubbling and maintain proper setup." },
+      { term: "Needle decompression", definition: "Emergency procedure to relieve tension pneumothorax by allowing trapped pleural air to escape.", rt: "RTs support oxygenation, ventilation, recognition, and emergency preparation." },
+      { term: "Mediastinal shift", definition: "Movement of mediastinal structures away from pressure buildup in the chest.", rt: "Late dangerous clue in tension pneumothorax." },
+      { term: "Dynamic hyperinflation", definition: "Air trapping that occurs when exhalation is incomplete before the next breath begins.", rt: "Can increase pressures and air leak risk, especially in obstructive disease or high-rate ventilation." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#types .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      let rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => { const select = row.querySelector("select"); if (select) select.value = ""; row.classList.remove("correct", "incorrect"); });
+      const original = rows.map(row => row.dataset.answer).join("|");
+      let shuffled = original;
+      let attempts = 0;
+      while (shuffled === original && attempts < 12) {
+        for (let i = rows.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [rows[i], rows[j]] = [rows[j], rows[i]];
+        }
+        shuffled = rows.map(row => row.dataset.answer).join("|");
+        attempts++;
+      }
+      if (shuffled === original && rows.length > 1) [rows[0], rows[1]] = [rows[1], rows[0]];
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> Pulmonary air leak syndromes occur when air escapes from the normal alveolar or airway space and tracks into abnormal spaces such as the pleura, mediastinum, pericardium, or soft tissues.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> The core problem is escaped air from ruptured alveoli or airways. The clinical danger depends on where that air collects and whether pressure builds.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the best interpretation to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      const list = document.getElementById("courseMenuList");
+      if (!button || !panel || !list) return;
+
+      const source = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.courses || window.COURSES || [];
+      const courses = Array.isArray(source) ? source : (Array.isArray(source.courses) ? source.courses : []);
+      const progressStore = JSON.parse(localStorage.getItem("pulmocoreCourseProgress") || "{}");
+
+      function courseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
+      function courseHref(course) { return course.href || course.url || course.file || "#"; }
+      function courseId(course) { return course.id || course.slug || courseHref(course) || courseTitle(course); }
+      function statusFor(course) {
+        const id = courseId(course);
+        const saved = progressStore[id] || progressStore[courseHref(course)] || course.progress;
+        if (course.complete || saved === 100 || saved === "complete") return "Complete";
+        if (typeof saved === "number" && saved > 0) return `In progress (${Math.round(saved)}%)`;
+        if (saved && typeof saved.percent === "number") return saved.percent >= 100 ? "Complete" : `In progress (${Math.round(saved.percent)}%)`;
+        return "Not started";
+      }
+
+      list.innerHTML = courses.length ? courses.map(course => `<a class="course-menu-item" href="${courseHref(course)}" role="menuitem"><strong>${courseTitle(course)}</strong><span class="course-menu-status">${statusFor(course)}</span></a>`).join("") : `<div class="course-menu-status">No courses found. Check courses.js.</div>`;
+
+      button.addEventListener("click", () => {
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      document.addEventListener("click", event => {
+        if (!panel.contains(event.target) && !button.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+          button.focus();
+        }
+      });
+    }
+    initializeCourseMenu();
+
+  </script>
+</body>
+</html>
