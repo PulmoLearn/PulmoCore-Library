@@ -1,6 +1,6 @@
 /* =========================================
    PULMOCORE COURSES.JS
-   Course list + progress + menu CSS + menu behavior
+   Course list + local progress + course menu
 ========================================= */
 
 /* ---------- COURSE LIST ---------- */
@@ -40,112 +40,11 @@ window.PULMOCORE_COURSES = [
   { title: "Tuberculosis", file: "Tuberculosis.html" }
 ];
 
+/* Compatibility aliases */
 window.courses = window.PULMOCORE_COURSES;
 window.pulmocoreCourses = window.PULMOCORE_COURSES;
+window.pulmoCoreCourses = window.PULMOCORE_COURSES;
 window.courseList = window.PULMOCORE_COURSES;
-
-/* ---------- CSS INJECTION ---------- */
-
-function injectCourseMenuCSS() {
-  if (document.getElementById("pulmocore-course-menu-css")) return;
-
-  const style = document.createElement("style");
-  style.id = "pulmocore-course-menu-css";
-
-  style.textContent = `
-    .course-menu-wrapper {
-      position: relative;
-      display: inline-block;
-      z-index: 9999;
-    }
-
-    .course-menu-button {
-      background: rgba(255,255,255,0.08);
-      color: #ffffff;
-      border: 2px solid rgba(255,255,255,0.28);
-      padding: 14px 24px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 1rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .course-menu-button:hover {
-      background: rgba(255,255,255,0.16);
-    }
-
-    .course-dropdown {
-      position: absolute;
-      top: calc(100% + 14px);
-      right: 0;
-      width: min(420px, 92vw);
-      max-height: 70vh;
-      overflow-y: auto;
-      background: #ffffff;
-      color: #0B1F33;
-      border: 1px solid #D7E6EF;
-      border-radius: 22px;
-      box-shadow: 0 18px 45px rgba(11, 31, 51, 0.22);
-      padding: 14px;
-      display: none;
-      z-index: 10000;
-    }
-
-    .course-dropdown.show {
-      display: grid;
-      gap: 8px;
-    }
-
-    .course-menu-item {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: center;
-      padding: 12px 14px;
-      border-radius: 14px;
-      text-decoration: none;
-      color: #0B1F33;
-      border: 1px solid transparent;
-    }
-
-    .course-menu-item:hover {
-      background: #F4FAFC;
-      border-color: #D7E6EF;
-    }
-
-    .course-menu-title {
-      font-weight: 800;
-      line-height: 1.2;
-    }
-
-    .course-menu-status {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #415A77;
-      background: #EEF5F8;
-      border-radius: 999px;
-      padding: 6px 10px;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 780px) {
-      .course-dropdown {
-        right: -10px;
-        width: min(360px, 92vw);
-      }
-
-      .course-menu-button {
-        padding: 10px 14px;
-        font-size: 0.95rem;
-      }
-    }
-  `;
-
-  document.head.appendChild(style);
-}
 
 /* ---------- PROGRESS HELPERS ---------- */
 
@@ -180,11 +79,7 @@ function saveCourseProgress(courseFile, percent, completed = false) {
 window.getCourseProgress = getCourseProgress;
 window.saveCourseProgress = saveCourseProgress;
 
-/* ---------- AUTO TRACK CURRENT LESSON ---------- */
-
-function autoTrackCourseProgress() {
-  updateCurrentLessonProgress();
-}
+/* ---------- CURRENT LESSON PROGRESS ---------- */
 
 function updateCurrentLessonProgress() {
   const currentFile = window.location.pathname.split("/").pop();
@@ -201,92 +96,99 @@ function updateCurrentLessonProgress() {
   const completed = percent >= 100;
 
   saveCourseProgress(currentFile, percent, completed);
-
-  if (typeof initializeCourseMenu === "function") {
-    initializeCourseMenu();
-  }
 }
 
-document.addEventListener("activityComplete", updateCurrentLessonProgress);
+function autoTrackCourseProgress() {
+  updateCurrentLessonProgress();
+}
 
-document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(updateCurrentLessonProgress, 750);
-});
-
-
-/* ---------- MENU INITIALIZATION ---------- */
+/* ---------- COURSE MENU ---------- */
 
 function initializeCourseMenu() {
-  injectCourseMenuCSS();
-
   const button = document.getElementById("courseMenuButton");
-  const dropdown = document.getElementById("courseDropdown");
 
-  if (!button || !dropdown) return;
+  const panel =
+    document.getElementById("courseMenuPanel") ||
+    document.getElementById("courseDropdown");
 
-  dropdown.innerHTML = "";
+  if (!button || !panel) return;
 
-  if (!window.PULMOCORE_COURSES || !window.PULMOCORE_COURSES.length) {
-    dropdown.innerHTML = `
-      <div class="course-menu-item">
-        <div class="course-menu-title">No courses found</div>
-        <div class="course-menu-status">Check courses.js</div>
-      </div>
-    `;
-    return;
-  }
+  const courseSource =
+    window.PULMOCORE_COURSES ||
+    window.pulmoCoreCourses ||
+    window.pulmocoreCourses ||
+    window.courseList ||
+    window.courses ||
+    [];
 
-  window.PULMOCORE_COURSES.forEach(course => {
+  panel.innerHTML = "";
+
+  courseSource.forEach(course => {
     const progress = getCourseProgress(course.file);
 
     let status = "Not started";
+    let statusClass = "not-started";
 
     if (progress.completed) {
       status = "Complete";
+      statusClass = "complete";
     } else if (progress.percent > 0) {
-      status = `In progress ${progress.percent}%`;
+      status = `In progress (${progress.percent}%)`;
+      statusClass = "in-progress";
     }
 
     const item = document.createElement("a");
     item.href = course.file;
     item.className = "course-menu-item";
+    item.setAttribute("role", "menuitem");
 
     item.innerHTML = `
-      <div class="course-menu-title">${course.title}</div>
-      <div class="course-menu-status">${status}</div>
+      <strong>${course.title}</strong>
+      <span class="course-menu-status ${statusClass}">${status}</span>
     `;
 
-    dropdown.appendChild(item);
+    panel.appendChild(item);
   });
 
-  button.onclick = function(event) {
+  button.onclick = function (event) {
     event.preventDefault();
     event.stopPropagation();
-    dropdown.classList.toggle("show");
+
+    const isOpen = panel.classList.toggle("open");
+    panel.classList.toggle("show", isOpen);
+
+    button.setAttribute("aria-expanded", String(isOpen));
   };
 
-  document.addEventListener("click", function(event) {
-    if (!event.target.closest(".course-menu-wrapper")) {
-      dropdown.classList.remove("show");
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".course-menu") && !event.target.closest(".course-menu-wrapper")) {
+      panel.classList.remove("open");
+      panel.classList.remove("show");
+      button.setAttribute("aria-expanded", "false");
     }
   });
 
-  document.addEventListener("keydown", function(event) {
+  document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
-      dropdown.classList.remove("show");
+      panel.classList.remove("open");
+      panel.classList.remove("show");
+      button.setAttribute("aria-expanded", "false");
     }
   });
 }
 
 window.initializeCourseMenu = initializeCourseMenu;
+window.updateCurrentLessonProgress = updateCurrentLessonProgress;
+window.autoTrackCourseProgress = autoTrackCourseProgress;
 
 /* ---------- INIT ---------- */
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   initializeCourseMenu();
 
-  setTimeout(function() {
-    autoTrackCourseProgress();
-    initializeCourseMenu();
-  }, 500);
+  setTimeout(function () {
+    updateCurrentLessonProgress();
+  }, 750);
+
+  document.addEventListener("activityComplete", updateCurrentLessonProgress);
 });
