@@ -1,6 +1,6 @@
 /* =========================================
    PULMOCORE COURSES.JS
-   Course list + local progress + course menu
+   Course list + local progress + clickable course menu
 ========================================= */
 
 /* ---------- COURSE LIST ---------- */
@@ -79,48 +79,37 @@ function saveCourseProgress(courseFile, percent, completed = false) {
 window.getCourseProgress = getCourseProgress;
 window.saveCourseProgress = saveCourseProgress;
 
-/* ---------- CURRENT LESSON PROGRESS ---------- */
+/* ---------- UTILITIES ---------- */
 
-function updateCurrentLessonProgress() {
-  const currentFile = window.location.pathname.split("/").pop();
-  if (!currentFile) return;
-
-  const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
-  if (!sections.length) return;
-
-  const unlockedSections = sections.filter(section =>
-    !section.classList.contains("lesson-hidden")
-  );
-
-  const percent = Math.round((unlockedSections.length / sections.length) * 100);
-  const completed = percent >= 100;
-
-  saveCourseProgress(currentFile, percent, completed);
-}
-
-function autoTrackCourseProgress() {
-  updateCurrentLessonProgress();
-}
-
-/* ---------- COURSE MENU ---------- */
-
-function initializeCourseMenu() {
-  const button = document.getElementById("courseMenuButton");
-
-  const panel =
-    document.getElementById("courseMenuPanel") ||
-    document.getElementById("courseDropdown");
-
-  if (!button || !panel) return;
-
-  const courseSource =
+function getCourseSource() {
+  return (
     window.PULMOCORE_COURSES ||
     window.pulmoCoreCourses ||
     window.pulmocoreCourses ||
     window.courseList ||
     window.courses ||
-    [];
+    []
+  );
+}
 
+function getCurrentFileName() {
+  return window.location.pathname.split("/").pop();
+}
+
+function getCoursePanel() {
+  return (
+    document.getElementById("courseMenuPanel") ||
+    document.getElementById("courseDropdown")
+  );
+}
+
+/* ---------- COURSE MENU ---------- */
+
+function renderCourseMenu() {
+  const panel = getCoursePanel();
+  if (!panel) return;
+
+  const courseSource = getCourseSource();
   panel.innerHTML = "";
 
   courseSource.forEach(course => {
@@ -141,27 +130,76 @@ function initializeCourseMenu() {
     item.href = course.file;
     item.className = "course-menu-item";
     item.setAttribute("role", "menuitem");
+    item.dataset.courseFile = course.file;
 
     item.innerHTML = `
       <strong>${course.title}</strong>
       <span class="course-menu-status ${statusClass}">${status}</span>
     `;
 
+    item.addEventListener("click", function (event) {
+      event.stopPropagation();
+      window.location.href = course.file;
+    });
+
     panel.appendChild(item);
   });
+}
+
+function updateCourseMenuStatuses() {
+  const panel = getCoursePanel();
+  if (!panel) return;
+
+  panel.querySelectorAll(".course-menu-item").forEach(item => {
+    const courseFile = item.dataset.courseFile;
+    const statusEl = item.querySelector(".course-menu-status");
+
+    if (!courseFile || !statusEl) return;
+
+    const progress = getCourseProgress(courseFile);
+
+    statusEl.className = "course-menu-status";
+
+    if (progress.completed) {
+      statusEl.textContent = "Complete";
+      statusEl.classList.add("complete");
+    } else if (progress.percent > 0) {
+      statusEl.textContent = `In progress (${progress.percent}%)`;
+      statusEl.classList.add("in-progress");
+    } else {
+      statusEl.textContent = "Not started";
+      statusEl.classList.add("not-started");
+    }
+  });
+}
+
+function initializeCourseMenu() {
+  const button = document.getElementById("courseMenuButton");
+  const panel = getCoursePanel();
+
+  if (!button || !panel) return;
+
+  renderCourseMenu();
 
   button.onclick = function (event) {
     event.preventDefault();
     event.stopPropagation();
 
-    const isOpen = panel.classList.toggle("open");
-    panel.classList.toggle("show", isOpen);
+    const isOpen =
+      panel.classList.contains("open") ||
+      panel.classList.contains("show");
 
-    button.setAttribute("aria-expanded", String(isOpen));
+    panel.classList.toggle("open", !isOpen);
+    panel.classList.toggle("show", !isOpen);
+
+    button.setAttribute("aria-expanded", String(!isOpen));
   };
 
   document.addEventListener("click", function (event) {
-    if (!event.target.closest(".course-menu") && !event.target.closest(".course-menu-wrapper")) {
+    if (
+      !event.target.closest(".course-menu") &&
+      !event.target.closest(".course-menu-wrapper")
+    ) {
       panel.classList.remove("open");
       panel.classList.remove("show");
       button.setAttribute("aria-expanded", "false");
@@ -177,9 +215,44 @@ function initializeCourseMenu() {
   });
 }
 
-window.initializeCourseMenu = initializeCourseMenu;
-window.updateCurrentLessonProgress = updateCurrentLessonProgress;
-window.autoTrackCourseProgress = autoTrackCourseProgress;
+/* ---------- CURRENT LESSON PROGRESS ---------- */
+
+function updateCurrentLessonProgress() {
+  const currentFile = getCurrentFileName();
+  if (!currentFile) return;
+
+  const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
+  if (!sections.length) return;
+
+  const unlockedSections = sections.filter(section =>
+    !section.classList.contains("lesson-hidden")
+  );
+
+  const percent = Math.round((unlockedSections.length / sections.length) * 100);
+  const completed = percent >= 100;
+
+  saveCourseProgress(currentFile, percent, completed);
+  updateCourseMenuStatuses();
+}
+
+function autoTrackCourseProgress() {
+  updateCurrentLessonProgress();
+}
+
+function watchLessonProgressChanges() {
+  const lessonStack = document.querySelector(".lesson-stack");
+  if (!lessonStack) return;
+
+  const observer = new MutationObserver(function () {
+    updateCurrentLessonProgress();
+  });
+
+  observer.observe(lessonStack, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["class", "data-complete"]
+  });
+}
 
 /* ---------- INIT ---------- */
 
@@ -188,7 +261,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   setTimeout(function () {
     updateCurrentLessonProgress();
+    watchLessonProgressChanges();
   }, 750);
 
   document.addEventListener("activityComplete", updateCurrentLessonProgress);
 });
+
+/* ---------- EXPOSE GLOBALS ---------- */
+
+window.initializeCourseMenu = initializeCourseMenu;
+window.updateCurrentLessonProgress = updateCurrentLessonProgress;
+window.autoTrackCourseProgress = autoTrackCourseProgress;
