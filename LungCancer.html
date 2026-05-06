@@ -551,59 +551,6 @@
       });
     }
     initializePeakFlowActivity();
-  
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-
-      const courseSource = Array.isArray(window.pulmoCoreCourses) ? window.pulmoCoreCourses :
-        Array.isArray(window.courses) ? window.courses :
-        Array.isArray(window.PulmoCoreCourses) ? window.PulmoCoreCourses : [];
-
-      function normalizeCourse(course, index) {
-        const title = course.title || course.name || course.disease || `Course ${index + 1}`;
-        const href = course.href || course.url || course.file || "#";
-        const rawProgress = course.progress ?? course.percent ?? course.completion ?? null;
-        const complete = course.complete === true || course.completed === true || Number(rawProgress) >= 100;
-        const started = complete || course.started === true || course.inProgress === true || (rawProgress !== null && Number(rawProgress) > 0);
-        const progressNumber = rawProgress !== null && rawProgress !== undefined && rawProgress !== "" && !Number.isNaN(Number(rawProgress)) ? Math.round(Number(rawProgress)) : null;
-        const status = complete ? "Complete" : started ? `In progress${progressNumber !== null ? ` (${progressNumber}%)` : ""}` : "Not started";
-        const statusClass = complete ? "complete" : started ? "in-progress" : "not-started";
-        return { title, href, status, statusClass };
-      }
-
-      const fallbackCourses = [
-        { title: "Asthma", href: "Asthma.html", status: "Not started", statusClass: "not-started" },
-        { title: "COPD", href: "COPD.html", status: "Not started", statusClass: "not-started" },
-        { title: "ARDS", href: "ARDS.html", status: "Not started", statusClass: "not-started" },
-        { title: "Lung Cancer", href: "PulmoCore_Lung_Cancer.html", status: "Not started", statusClass: "not-started" }
-      ];
-
-      const courses = courseSource.length ? courseSource.map(normalizeCourse) : fallbackCourses;
-      panel.innerHTML = courses.map(course => `<a class="course-menu-item" href="${course.href}" role="menuitem"><strong>${course.title}</strong><span class="course-menu-status ${course.statusClass}">${course.status}</span></a>`).join("");
-
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-
-      document.addEventListener("click", event => {
-        if (!event.target.closest(".course-menu")) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
 
   </script>
 </body>
