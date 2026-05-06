@@ -57,6 +57,18 @@
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
 
+    .course-menu-wrap { position: relative; display: flex; align-items: center; }
+    .course-menu-btn { border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-btn:hover { background: rgba(255,255,255,.16); }
+    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 50; }
+    .course-menu-panel.open { display: grid; gap: 6px; }
+    .course-menu-item { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; }
+    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
+    .course-menu-title { font-weight: 800; font-family: var(--font-heading); }
+    .course-menu-status { font-size: .86rem; color: var(--slate); }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    #sequenceSort { visibility: hidden; }
+
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
     h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
@@ -148,6 +160,7 @@
     .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
     .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
     .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-lung img { width: 100%; border-radius: 16px; box-shadow: var(--shadow-soft); display: block; }
     .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
     .hotspot-btn.visited { background: var(--oxygen-blue); }
     .hotspot-panel { min-height: 180px; }
@@ -181,8 +194,10 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <nav class="nav-links" aria-label="Primary navigation"><a href="#snapshot">Snapshot</a><a href="#pathophysiology">Pathophysiology</a><a href="#diagnostics">Diagnostics</a><a href="#management">Management</a><a href="#glossary">Glossary</a></nav>
-      <div class="mobile-menu-note">Menu</div>
+      <div class="course-menu-wrap">
+        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"></div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -195,7 +210,7 @@
 
       <div class="content-layout">
         <aside class="side-nav" aria-label="Disease page quick navigation">
-          <h3>Lesson Sections</h3><a href="#objectives">Objectives</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Causes + Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Severity + Oxygen Need</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Acute Exacerbation</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
+          <h3>Lesson Sections</h3><a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Causes + Risk Factors</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#severity">Severity + Oxygen Need</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#status">Acute Exacerbation</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
         </aside>
 
         <div class="lesson-stack">
@@ -207,6 +222,18 @@
               <div class="example-box soft-blue"><strong>2. Interpret restrictive PFTs</strong><br>Recognize low TLC/FVC with normal or increased FEV₁/FVC and decreased DLCO.</div>
               <div class="example-box soft-amber"><strong>3. Assess oxygenation</strong><br>Use SpO₂, ABGs, exertional desaturation, and six-minute walk data to guide oxygen decisions.</div>
               <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Identify acute worsening, rapidly increasing oxygen needs, pulmonary hypertension signs, and respiratory failure risk.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Interstitial Lung Disease Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="InterstitialLungDisease.mp4" type="video/mp4">
+                <track src="InterstitialLungDisease.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
             </div>
           </section>
 
@@ -235,12 +262,12 @@
             <h2>Anatomy & Pathophysiology</h2>
             <p>In ILD, injury occurs in the interstitium around alveoli and capillaries. Inflammation, collagen deposition, and fibrosis thicken the diffusion barrier and reduce lung compliance. The patient must work harder to breathe, yet oxygen transfer remains limited.</p>
             <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Trigger/injury → interstitial inflammation → fibrosis/remodeling → stiff low-compliance lungs → reduced TLC/FVC → impaired diffusion and low DLCO → exertional hypoxemia → progressive respiratory limitation.</div>
-            <div class="example-box soft-blue" style="margin-top:16px;"><img src="ild-pathophysiology.png" alt="Diagram showing normal alveolar capillary membrane compared with thickened fibrotic interstitium in interstitial lung disease"><strong>Visual learning:</strong><br>Use this placeholder for a custom graphic comparing normal diffusion distance with a thickened fibrotic alveolar-capillary membrane.</div>
+            <div class="example-box soft-blue" style="margin-top:16px;"><img src="ild-pathophysiology.png" alt="Diagram showing normal alveolar capillary membrane compared with thickened fibrotic interstitium in interstitial lung disease" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Visual learning:</strong><br>Use this placeholder for a custom graphic comparing normal diffusion distance with a thickened fibrotic alveolar-capillary membrane.</div>
             <h3 style="margin-top:22px;">What Changes in ILD</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>ILD Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Fibrotic interstitium</td><td>Scar tissue thickens the alveolar-capillary interface.</td><td>Oxygen has farther to diffuse, lowering DLCO.</td></tr><tr><td>Reduced compliance</td><td>Lungs become stiff and harder to expand.</td><td>Creates rapid shallow breathing and increased WOB.</td></tr><tr><td>Low lung volumes</td><td>TLC and FVC decrease.</td><td>Supports a restrictive PFT pattern.</td></tr><tr><td>V/Q and diffusion limitation</td><td>Oxygen transfer becomes inefficient.</td><td>Causes hypoxemia, especially with exercise.</td></tr><tr><td>Progressive remodeling</td><td>Fibrosis may worsen over time.</td><td>Can lead to chronic respiratory failure and pulmonary hypertension.</td></tr></table></div>
             <h3 style="margin-top:22px;">ABG Progression Concept</h3><p>Early or stable ILD may show hypoxemia with respiratory alkalosis because the patient hyperventilates. Advanced or acute worsening disease may progress to severe hypoxemia and, if fatigue develops, rising PaCO₂.</p>
             <article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>A sudden increase in oxygen requirement, new severe dyspnea, or new bilateral infiltrates in a patient with known ILD may represent acute exacerbation and needs urgent escalation.</p></article>
-            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ILD Hotspot Graphic"><h3>Click the ILD Hotspots</h3><p>Click each hotspot to reveal how that structure contributes to ILD.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified ILD lung graphic with clickable hotspots"><svg viewBox="0 0 240 240" fill="none" aria-hidden="true"><path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/><circle cx="120" cy="116" r="14" fill="#1CA7A8"/></svg><button class="hotspot-btn" style="left:31%; top:34%;" data-title="Thickened Interstitium" data-text="Fibrosis thickens the diffusion barrier between alveoli and capillaries.">1</button><button class="hotspot-btn" style="left:42%; top:55%;" data-title="Stiff Lung Units" data-text="Reduced compliance makes inspiration harder and increases work of breathing.">2</button><button class="hotspot-btn" style="right:31%; top:44%;" data-title="Low DLCO" data-text="Gas transfer decreases because oxygen must cross a damaged or thickened membrane.">3</button><button class="hotspot-btn" style="right:39%; bottom:20%;" data-title="Exertional Desaturation" data-text="Oxygen saturation may fall during activity when diffusion reserve is limited.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ILD Hotspot Graphic"><h3>Click the ILD Hotspots</h3><p>Click each hotspot to reveal how that structure contributes to ILD.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified ILD lung graphic with clickable hotspots"><img src="ild-pathophysiology.png" alt="Diagram showing interstitial fibrosis, stiff lung units, diffusion impairment, and exertional desaturation" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><button class="hotspot-btn" style="left:31%; top:34%;" data-title="Thickened Interstitium" data-text="Fibrosis thickens the diffusion barrier between alveoli and capillaries.">1</button><button class="hotspot-btn" style="left:42%; top:55%;" data-title="Stiff Lung Units" data-text="Reduced compliance makes inspiration harder and increases work of breathing.">2</button><button class="hotspot-btn" style="right:31%; top:44%;" data-title="Low DLCO" data-text="Gas transfer decreases because oxygen must cross a damaged or thickened membrane.">3</button><button class="hotspot-btn" style="right:39%; bottom:20%;" data-title="Exertional Desaturation" data-text="Oxygen saturation may fall during activity when diffusion reserve is limited.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article>
           </section>
 
           <section class="info-card" id="triggers"><h2>Etiology, Causes & Risk Factors</h2><p>ILD may be idiopathic, autoimmune, occupational/environmental, medication-related, radiation-related, or associated with hypersensitivity exposure. The RT should connect history to likely mechanism while prioritizing oxygenation and function.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Cause or Risk Factor</th><th>Why It Matters</th><th>Teaching Focus</th></tr><tr><td>Idiopathic pulmonary fibrosis</td><td>Progressive fibrotic ILD pattern.</td><td>Monitor function, oxygen need, and referral timing.</td></tr><tr><td>Connective tissue disease</td><td>Autoimmune inflammation can involve lung interstitium.</td><td>Ask about systemic symptoms and medications.</td></tr><tr><td>Hypersensitivity pneumonitis</td><td>Inhaled organic antigens can trigger immune lung injury.</td><td>Exposure identification/removal is high yield.</td></tr><tr><td>Occupational exposures</td><td>Dusts such as silica/asbestos can cause fibrotic disease.</td><td>Take a work and exposure history.</td></tr><tr><td>Medication/radiation injury</td><td>Some drugs and thoracic radiation can injure lung tissue.</td><td>Review treatment history.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ILD Cause Sorting"><h3>Sort the ILD Clues</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="cause"><strong>Silica or asbestos exposure</strong><select aria-label="Category for silica or asbestos"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="diagnostic"><strong>Decreased DLCO</strong><select aria-label="Category for decreased DLCO"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="cause"><strong>Connective tissue disease</strong><select aria-label="Category for connective tissue disease"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Sudden severe hypoxemia with new infiltrates</strong><select aria-label="Category for acute worsening"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="diagnostic"><strong>Low TLC with normal/high FEV₁/FVC</strong><select aria-label="Category for restrictive PFTs"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
@@ -274,7 +301,39 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
+  <script src="courses.js"></script>
   <script>
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
+      const courseSource = window.PulmoCoreCourses || window.PULMOCORE_COURSES || window.courses || window.COURSES || [];
+      const courses = Array.isArray(courseSource) ? courseSource : (Array.isArray(courseSource.courses) ? courseSource.courses : []);
+      function getTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
+      function getHref(course) { return course.href || course.url || course.file || "#"; }
+      function getKey(course) { return course.id || course.key || getHref(course).replace(/[^a-z0-9]/gi, "_"); }
+      function getProgress(course) {
+        const key = getKey(course);
+        const saved = Number(localStorage.getItem(`pulmocore_progress_${key}`) || localStorage.getItem(`progress_${key}`) || course.progress || 0);
+        const complete = course.complete || saved >= 100 || localStorage.getItem(`pulmocore_complete_${key}`) === "true";
+        if (complete) return "Complete";
+        if (saved > 0) return `In progress (${Math.round(saved)}%)`;
+        return "Not started";
+      }
+      panel.innerHTML = courses.length ? courses.map(course => `<a class="course-menu-item" role="menuitem" href="${getHref(course)}"><span class="course-menu-title">${getTitle(course)}</span><span class="course-menu-status">${getProgress(course)}</span></a>`).join("") : `<div class="course-menu-item"><span class="course-menu-title">Courses loading</span><span class="course-menu-status">Add courses.js in this folder to populate the menu.</span></div>`;
+      button.addEventListener("click", () => {
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      document.addEventListener("click", event => {
+        if (!panel.contains(event.target) && !button.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+    initializeCourseMenu();
 
     const glossaryTerms = [
       { term: "Interstitial Lung Disease", definition: "A broad group of disorders that cause inflammation and/or fibrosis of the lung interstitium, leading to stiff lungs and impaired gas exchange.", rt: "Think restrictive mechanics, diffusion impairment, exertional hypoxemia, and oxygen titration." },
@@ -377,7 +436,7 @@
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
-      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
@@ -395,6 +454,7 @@
       const container = document.getElementById("sequenceSort");
       if (!container) return;
       const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => { const select = row.querySelector("select"); if (select) select.value = ""; row.classList.remove("correct", "incorrect"); });
       for (let i = rows.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [rows[i], rows[j]] = [rows[j], rows[i]];
@@ -461,9 +521,13 @@
       });
     }
 
-    shuffleSequence();
-    enableDynamicReorder();
-    initializeSequenceSort();
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
 
     function initializeKnowledgeCheck() {
       const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;

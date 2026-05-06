@@ -78,8 +78,24 @@
     .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
     .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
     .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
-    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+
+    .course-menu-wrapper { position: relative; display: flex; align-items: center; justify-content: flex-end; }
+    .course-menu-btn { border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; min-height: 44px; display: inline-flex; align-items: center; gap: 8px; box-shadow: none; }
+    .course-menu-btn:hover { background: rgba(255,255,255,.18); }
+    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(360px, calc(100vw - 32px)); max-height: min(70vh, 560px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: block; }
+    .course-menu-header { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 12px; border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    .course-menu-list { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; gap: 4px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 14px; padding: 10px 12px; background: #FAFDFF; color: var(--core-navy); }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-title { font-weight: 800; line-height: 1.2; }
+    .course-menu-status { font-size: .86rem; color: var(--slate); }
+    .course-menu-status.complete { color: var(--pulmo-teal-dark); font-weight: 800; }
+    .course-menu-status.in-progress { color: #7A4B00; font-weight: 800; }
+    #sequenceSort { visibility: hidden; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
     .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
@@ -184,14 +200,13 @@
 <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
 </div>
 </div>
-<nav aria-label="Primary navigation" class="nav-links">
-<a href="#snapshot">Snapshot</a>
-<a href="#pathophysiology">Pathophysiology</a>
-<a href="#diagnostics">Diagnostics</a>
-<a href="#management">Management</a>
-<a href="#glossary">Glossary</a>
-</nav>
-<div class="mobile-menu-note">Menu</div>
+<div class="course-menu-wrapper">
+<button aria-expanded="false" aria-controls="courseMenuPanel" class="course-menu-btn" id="courseMenuButton" type="button">☰ Courses</button>
+<div aria-label="PulmoCore course menu" class="course-menu-panel" id="courseMenuPanel" role="menu">
+<div class="course-menu-header">PulmoCore Courses</div>
+<div class="course-menu-list" id="courseMenuList"></div>
+</div>
+</div>
 </header>
 <main class="main-content">
 <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
@@ -208,6 +223,7 @@
 <aside aria-label="Disease page quick navigation" class="side-nav">
 <h3>Lesson Sections</h3>
 <a href="#objectives">Objectives</a>
+<a href="#overview-video">Video Overview</a>
 <a href="#snapshot">Disease Snapshot</a>
 <a href="#precheck">Quick Pre-Check</a>
 <a href="#pathophysiology">Pathophysiology</a>
@@ -235,6 +251,17 @@
 <div class="example-box soft-amber"><strong>3. Prioritize RT care</strong><br/>Apply oxygen carefully, support ventilation, promote airway clearance, and monitor cough effectiveness.</div>
 <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br/>Recognize red flags such as rising PaCO₂, somnolence, recurrent infections, cor pulmonale signs, and ventilatory failure.</div>
 </div></section>
+<section class="info-card" id="overview-video">
+<span class="eyebrow">Video Overview</span>
+<h2>2-Minute Kyphoscoliosis Overview</h2>
+<p>Watch this quick overview before moving into the disease snapshot.</p>
+<div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+<video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+<source src="Kyphoscoliosis.mp4" type="video/mp4">
+<track src="Kyphoscoliosis.vtt" kind="captions" srclang="en" label="English captions" default>
+</video>
+</div>
+</section>
 <section class="info-card" id="snapshot">
 <h2>Disease Snapshot</h2>
 <p>Kyphoscoliosis combines excessive posterior spinal curvature with lateral curvature. The respiratory problem is primarily restrictive: the chest wall cannot expand normally, tidal volumes may be small, and chronic hypoventilation can develop when the ventilatory pump cannot meet demand.</p>
@@ -263,7 +290,7 @@
 <h2>Anatomy &amp; Pathophysiology</h2>
 <p>Kyphoscoliosis restricts the thoracic cage. The lungs may be structurally normal, but the chest wall cannot expand efficiently. This decreases compliance, lowers lung volumes, increases work of breathing, weakens cough mechanics, and can cause chronic alveolar hypoventilation.</p>
 <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Spinal curvature → stiff chest wall + reduced expansion → low VT/FVC/TLC → increased WOB + atelectasis risk → secretion retention/recurrent infection → nocturnal then daytime hypoventilation → pulmonary hypertension/cor pulmonale risk.</div>
-<div class="example-box soft-blue" style="margin-top:16px;"><strong>Visual Placeholder: Restrictive Chest Wall Mechanics</strong><br/><img alt="Diagram showing kyphoscoliosis limiting rib cage expansion and reducing lung volumes" src="kyphoscoliosis-pathophysiology.png"/></div>
+<div class="example-box soft-blue" style="margin-top:16px;"><strong>Restrictive Chest Wall Mechanics</strong><br/><img src="kyphoscoliosis-pathophysiology.png" alt="Diagram showing kyphoscoliosis limiting rib cage expansion and reducing lung volumes" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);" /></div>
 <h3 style="margin-top:22px;">What Changes in Kyphoscoliosis</h3>
 <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Reduced chest wall compliance</td><td>Thoracic cage is harder to expand.</td><td>Patient uses more effort for smaller breaths.</td></tr><tr><td>Low lung volumes</td><td>TLC, VC, and FVC decrease.</td><td>Classic restrictive pattern.</td></tr><tr><td>Small tidal volumes</td><td>Shallow breathing may develop.</td><td>Raises risk for atelectasis and CO₂ retention.</td></tr><tr><td>Weak cough mechanics</td><td>Low inspiratory volume and poor expiratory force.</td><td>Increases secretion retention and infection risk.</td></tr><tr><td>Chronic hypoventilation</td><td>Ventilatory pump cannot maintain alveolar ventilation.</td><td>Can produce hypercapnia, morning headaches, and somnolence.</td></tr></table></div>
 <h3 style="margin-top:22px;">ABG Progression Concept</h3><p>Early disease may show normal ABGs at rest with exertional or nocturnal desaturation. As restriction worsens, alveolar hypoventilation can cause elevated PaCO₂. A rising PaCO₂ with fatigue, somnolence, or acidosis is a major escalation sign.</p>
@@ -271,7 +298,7 @@
 <article class="activity-card require-complete" data-activity-name="Kyphoscoliosis Hotspot Graphic" style="margin-top:16px;"><h3>Click the Kyphoscoliosis Hotspots</h3><p>Click each hotspot to reveal how chest wall restriction affects breathing.</p><div class="hotspot-demo"><div aria-label="Simplified kyphoscoliosis chest wall graphic with clickable hotspots" class="hotspot-lung"><svg aria-hidden="true" fill="none" viewbox="0 0 240 240"><path d="M120 28 C92 58 153 81 111 116 C76 146 145 162 111 212" stroke="#0B1F33" stroke-linecap="round" stroke-width="10"></path><path d="M76 68 C55 92 46 128 50 166" stroke="#4BA3F2" stroke-width="4"></path><path d="M164 68 C185 92 194 128 190 166" stroke="#4BA3F2" stroke-width="4"></path><path d="M72 96 H168 M66 126 H174 M62 156 H178" stroke="#1CA7A8" stroke-linecap="round" stroke-width="5"></path><ellipse cx="94" cy="145" fill="rgba(75,163,242,.16)" rx="29" ry="48" stroke="#4BA3F2" stroke-width="3"></ellipse><ellipse cx="146" cy="145" fill="rgba(75,163,242,.16)" rx="29" ry="48" stroke="#4BA3F2" stroke-width="3"></ellipse></svg><button class="hotspot-btn" data-text="Kyphosis and scoliosis distort the thoracic cage and reduce mechanical efficiency." data-title="Spinal Curvature" style="left:45%; top:19%;">1</button><button class="hotspot-btn" data-text="The rib cage cannot expand normally, so tidal volume and vital capacity fall." data-title="Reduced Expansion" style="left:23%; top:45%;">2</button><button class="hotspot-btn" data-text="TLC and FVC decrease, creating a restrictive PFT pattern." data-title="Low Lung Volumes" style="right:25%; top:49%;">3</button><button class="hotspot-btn" data-text="Small breaths and increased load can lead to nocturnal then daytime CO₂ retention." data-title="Hypoventilation Risk" style="right:37%; bottom:19%;">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br/>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
 <section class="info-card" id="triggers">
 <h2>Etiology, Causes &amp; Risk Factors</h2><p>Kyphoscoliosis may be idiopathic, congenital, neuromuscular, degenerative, traumatic, or associated with connective tissue or skeletal disorders. Respiratory severity depends on the degree of curvature, age of onset, progression, respiratory muscle strength, and comorbid lung disease.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Cause or Risk Factor</th><th>Why It Matters</th><th>RT Focus</th></tr><tr><td>Severe spinal curvature</td><td>Greater thoracic restriction.</td><td>Watch lung volumes and WOB.</td></tr><tr><td>Neuromuscular disease</td><td>Weak respiratory muscles worsen hypoventilation.</td><td>Assess cough strength and NIV need.</td></tr><tr><td>Early-onset deformity</td><td>Can impair chest/lung growth.</td><td>Monitor long-term restriction.</td></tr><tr><td>Obesity or OSA</td><td>Adds ventilatory load and nocturnal hypoventilation risk.</td><td>Screen sleep symptoms and CO₂ retention.</td></tr><tr><td>Recurrent infections</td><td>Secretion retention and low volumes increase risk.</td><td>Prioritize airway clearance.</td></tr></table></div><article class="activity-card require-complete" data-activity-name="Kyphoscoliosis Factor Sorting" style="margin-top:16px;"><h3>Sort the Kyphoscoliosis Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="mechanism"><strong>Reduced thoracic expansion</strong><select aria-label="Category for reduced thoracic expansion"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="support"><strong>Nocturnal NIV</strong><select aria-label="Category for nocturnal NIV"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="mechanism"><strong>Low TLC and FVC</strong><select aria-label="Category for low TLC and FVC"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Rising PaCO₂ with somnolence</strong><select aria-label="Category for rising PaCO2"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="support"><strong>Airway clearance assistance</strong><select aria-label="Category for airway clearance"><option value="">Choose category</option><option value="mechanism">Disease Mechanism</option><option value="support">Supportive Therapy</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" id="checkRiskSort" style="margin-top:12px;" type="button">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
-<section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Presentation ranges from mild exertional dyspnea to chronic ventilatory failure. RT assessment should focus on breathing pattern, chest wall movement, work of breathing, cough effectiveness, secretion burden, sleep symptoms, oxygenation, and ventilation.</p><div class="example-box soft-blue" style="margin-top:16px;"><strong>Visual Placeholder: Restriction vs Obstruction</strong><br/><img alt="Comparison diagram showing restrictive low lung volumes in kyphoscoliosis versus obstructive air trapping" src="kyphoscoliosis-restrictive-pattern.png"/></div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Symptoms</td><td>Dyspnea on exertion, fatigue, orthopnea, morning headaches, poor sleep, daytime somnolence.</td></tr><tr><td>Appearance</td><td>Visible spinal curvature, shallow breathing, accessory muscle use, reduced chest excursion.</td></tr><tr><td>Breath sounds</td><td>Often diminished bases; crackles may appear with atelectasis or infection.</td></tr><tr><td>Oxygenation clues</td><td>Exertional/nocturnal desaturation; worsening hypoxemia during infection.</td></tr><tr><td>Ventilation clues</td><td>Elevated PaCO₂, elevated serum bicarbonate in chronic compensation, drowsiness when acute.</td></tr><tr><td>Secretion clues</td><td>Weak cough, retained secretions, recurrent bronchitis or pneumonia.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>A stable SpO₂ does not prove ventilation is adequate. In restrictive chest wall disease, trend PaCO₂, pH, mental status, and sleep-related symptoms.</p></article></section>
+<section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Presentation ranges from mild exertional dyspnea to chronic ventilatory failure. RT assessment should focus on breathing pattern, chest wall movement, work of breathing, cough effectiveness, secretion burden, sleep symptoms, oxygenation, and ventilation.</p><div class="example-box soft-blue" style="margin-top:16px;"><strong>Restriction vs Obstruction</strong><br/><img src="kyphoscoliosis-restrictive-pattern.png" alt="Comparison diagram showing restrictive low lung volumes in kyphoscoliosis versus obstructive air trapping" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);" /></div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Symptoms</td><td>Dyspnea on exertion, fatigue, orthopnea, morning headaches, poor sleep, daytime somnolence.</td></tr><tr><td>Appearance</td><td>Visible spinal curvature, shallow breathing, accessory muscle use, reduced chest excursion.</td></tr><tr><td>Breath sounds</td><td>Often diminished bases; crackles may appear with atelectasis or infection.</td></tr><tr><td>Oxygenation clues</td><td>Exertional/nocturnal desaturation; worsening hypoxemia during infection.</td></tr><tr><td>Ventilation clues</td><td>Elevated PaCO₂, elevated serum bicarbonate in chronic compensation, drowsiness when acute.</td></tr><tr><td>Secretion clues</td><td>Weak cough, retained secretions, recurrent bronchitis or pneumonia.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>A stable SpO₂ does not prove ventilation is adequate. In restrictive chest wall disease, trend PaCO₂, pH, mental status, and sleep-related symptoms.</p></article></section>
 <section class="info-card board" id="diagnostics"><h2>Diagnostics &amp; Assessment</h2><p>Diagnostic data helps quantify restriction, identify chronic hypoventilation, evaluate complications, and guide support decisions.</p><h3 style="margin-top:18px;">PFT Pattern</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>Kyphoscoliosis Pattern</th></tr><tr><td>TLC</td><td>Decreased; confirms restriction.</td></tr><tr><td>FVC / VC</td><td>Decreased due to limited chest wall expansion.</td></tr><tr><td>FEV₁</td><td>Often decreased proportionally with FVC.</td></tr><tr><td>FEV₁/FVC</td><td>Normal or increased unless obstructive disease also exists.</td></tr><tr><td>DLCO</td><td>Often normal when lung parenchyma is not the primary problem.</td></tr></table></div><h3 style="margin-top:18px;">ABG / CO₂ Patterns</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Pattern</th><th>Meaning</th></tr><tr><td>Normal PaCO₂ at rest</td><td>May occur in mild disease; still assess exertion and sleep.</td></tr><tr><td>Elevated PaCO₂ with normal/near-normal pH</td><td>Chronic compensated hypoventilation.</td></tr><tr><td>Elevated PaCO₂ with acidemia</td><td>Acute-on-chronic ventilatory failure.</td></tr><tr><td>Elevated bicarbonate</td><td>Suggests chronic CO₂ retention compensation.</td></tr></table></div><h3 style="margin-top:18px;">Imaging and Sleep Testing</h3><p>Chest/spine imaging demonstrates curvature and may show low lung volumes or atelectasis. Overnight oximetry, capnography, or polysomnography may identify nocturnal hypoventilation or coexisting sleep-disordered breathing.</p></section>
 <section class="info-card" id="severity"><h2>Restriction Severity &amp; Ventilation Risk</h2><p>Severity is judged by lung volumes, symptoms, gas exchange, sleep-related hypoventilation, cough effectiveness, exacerbation history, and complications such as pulmonary hypertension.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Severity Clue</th><th>Clinical Meaning</th></tr><tr><td>Mild restriction</td><td>Low volumes but acceptable gas exchange and minimal symptoms.</td></tr><tr><td>Exertional limitation</td><td>Ventilatory reserve is reduced; monitor exercise desaturation.</td></tr><tr><td>Nocturnal hypoventilation</td><td>Often appears before daytime hypercapnia.</td></tr><tr><td>Daytime hypercapnia</td><td>Advanced ventilatory pump failure risk.</td></tr><tr><td>Recurrent infections</td><td>Suggests ineffective cough and secretion clearance issues.</td></tr></table></div><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Stable</strong><br/>Comfortable breathing, normal mentation, no acute CO₂ rise.</div><div class="example-box soft-amber"><strong>Monitor closely</strong><br/>Nocturnal symptoms, exertional desaturation, weak cough, increasing WOB.</div><div class="example-box soft-coral"><strong>Escalate</strong><br/>Somnolence, rising PaCO₂, acidemia, severe hypoxemia, or poor NIV response.</div></div><article class="quiz-card require-complete" data-activity-name="PFT Pattern Activity" id="peakflow-activity" style="margin-top:16px;"><h3>PFT Pattern Activity</h3><p>A patient with severe kyphoscoliosis has FVC 45% predicted, TLC 50% predicted, and FEV₁/FVC 88%. Which pattern is most likely?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Obstructive disease usually shows a reduced FEV₁/FVC ratio.">Obstructive pattern</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Low FVC and TLC with a preserved or high FEV₁/FVC ratio supports restrictive disease.">Restrictive pattern</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. These values are not normal because lung volumes are markedly reduced.">Normal pattern</button></div><div class="quiz-feedback" role="status"></div></article></section>
 <section class="info-card red" id="red-flags"><h2>Severity &amp; Red Flags</h2><p>The key question is whether the restrictive chest wall can support adequate ventilation, especially during sleep, infection, sedation, or acute illness.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Rising PaCO₂ or falling pH</td><td>Suggests worsening ventilatory failure.</td></tr><tr><td>Somnolence, confusion, morning headaches</td><td>May reflect hypercapnia or nocturnal hypoventilation.</td></tr><tr><td>Weak cough with retained secretions</td><td>Raises atelectasis and pneumonia risk.</td></tr><tr><td>Increasing oxygen need</td><td>May signal atelectasis, infection, or worsening V/Q mismatch.</td></tr><tr><td>Peripheral edema, JVD, loud P2</td><td>Possible pulmonary hypertension or cor pulmonale.</td></tr><tr><td>Failure of NIV to improve WOB/gas exchange</td><td>Requires urgent escalation.</td></tr></table></div></section>
@@ -308,7 +335,8 @@
 </main>
 <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br/>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
 </div>
-<script>
+<script src="courses.js"></script>
+  <script>
     const glossaryTerms = [
       {
             "term": "Kyphoscoliosis",
@@ -444,6 +472,53 @@
 
     function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
 
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      const list = document.getElementById("courseMenuList");
+      if (!button || !panel || !list) return;
+
+      const source = window.pulmoCourses || window.courses || window.courseList || window.PulmoCoreCourses || [];
+      const courses = Array.isArray(source) ? source : (Array.isArray(source.courses) ? source.courses : []);
+      const currentPath = window.location.pathname.split("/").pop();
+
+      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
+      function getCourseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
+      function getStoredProgress(course) {
+        const href = getCourseHref(course);
+        const keyBase = (course.id || href || getCourseTitle(course)).toString();
+        const raw = course.progress ?? localStorage.getItem(`pulmocore-progress-${keyBase}`) ?? localStorage.getItem(`progress-${keyBase}`);
+        const parsed = Number(raw);
+        return Number.isFinite(parsed) ? Math.max(0, Math.min(100, parsed)) : null;
+      }
+      function getStatus(course) {
+        const explicit = (course.status || "").toString().toLowerCase();
+        const progress = getStoredProgress(course);
+        if (explicit.includes("complete") || progress === 100) return { text: "Complete", cls: "complete" };
+        if (explicit.includes("progress") || (progress !== null && progress > 0)) return { text: progress !== null ? `In progress (${Math.round(progress)}%)` : "In progress", cls: "in-progress" };
+        return { text: "Not started", cls: "not-started" };
+      }
+
+      if (!courses.length) {
+        list.innerHTML = '<div class="course-menu-item"><span class="course-menu-title">No courses found</span><span class="course-menu-status">Add courses to courses.js</span></div>';
+      } else {
+        list.innerHTML = courses.map(course => {
+          const href = getCourseHref(course);
+          const status = getStatus(course);
+          const title = getCourseTitle(course);
+          const isCurrent = href === currentPath || href.endsWith(currentPath);
+          return `<a class="course-menu-item" href="${href}" role="menuitem" aria-current="${isCurrent ? "page" : "false"}"><span class="course-menu-title">${title}${isCurrent ? " · Current" : ""}</span><span class="course-menu-status ${status.cls}">${status.text}</span></a>`;
+        }).join("");
+      }
+
+      function closeMenu() { panel.classList.remove("open"); button.setAttribute("aria-expanded", "false"); }
+      button.addEventListener("click", () => { const isOpen = panel.classList.toggle("open"); button.setAttribute("aria-expanded", isOpen ? "true" : "false"); });
+      document.addEventListener("click", event => { if (!panel.contains(event.target) && !button.contains(event.target)) closeMenu(); });
+      document.addEventListener("keydown", event => { if (event.key === "Escape") closeMenu(); });
+    }
+    initializeCourseMenu();
+
+
     function initializeGuidedCase() {
       const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
       caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
@@ -490,7 +565,7 @@
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
-      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); const targetIndex = Number(target.dataset.sectionIndex); if (target.classList.contains("lesson-hidden") || link.classList.contains("locked")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); updateNavState(currentVisible); return; } revealThrough(targetIndex); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
@@ -508,6 +583,21 @@
       const container = document.getElementById("sequenceSort");
       if (!container) return;
       const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => {
+        const select = row.querySelector("select");
+        if (select) select.value = "";
+        row.classList.remove("correct", "incorrect");
+      });
+      let attempts = 0;
+      do {
+        for (let i = rows.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [rows[i], rows[j]] = [rows[j], rows[i]];
+        }
+        attempts++;
+      } while (rows.every((row, index) => Number(row.dataset.answer) === index + 1) && attempts < 10);
+      rows.forEach(row => container.appendChild(row));
+      return;
       for (let i = rows.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [rows[i], rows[j]] = [rows[j], rows[i]];
@@ -574,9 +664,13 @@
       });
     }
 
-    shuffleSequence();
-    enableDynamicReorder();
-    initializeSequenceSort();
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
 
     function initializeKnowledgeCheck() {
       const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;

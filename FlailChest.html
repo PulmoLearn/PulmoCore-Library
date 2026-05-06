@@ -50,10 +50,19 @@
     .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
     .brand-name span { color: var(--pulmo-teal); }
     .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
-    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
-    .nav-links a { text-decoration: none; opacity: 0.95; }
-    .nav-links a:hover { color: var(--airway-mint); }
-    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+    .course-menu { position: relative; margin-left: auto; }
+    .course-menu-button { color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.24); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+    .course-menu-button:hover { background: rgba(255,255,255,.14); }
+    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 30; }
+    .course-menu-panel.open { display: grid; gap: 6px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; padding: 10px 12px; border-radius: 12px; border: 1px solid transparent; }
+    .course-menu-item:hover { background: var(--mist-blue); border-color: var(--soft-border); }
+    .course-menu-item.current-course { background: var(--airway-mint); font-weight: 800; }
+    .course-title { overflow-wrap: anywhere; }
+    .course-status { font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF6FA; color: var(--slate); white-space: nowrap; }
+    .course-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-status.progress { background: #FFF4DF; color: #7A4B00; }
+    .mobile-menu-note { display: none; }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
@@ -76,7 +85,8 @@
     .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
     .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
     .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
-    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    #sequenceSort { visibility: hidden; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
@@ -160,7 +170,7 @@
     .footer strong span { color: var(--pulmo-teal); }
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
-    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 1100px) { .mobile-menu-note { display: none; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
   @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
   </style>
@@ -174,8 +184,10 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <nav class="nav-links" aria-label="Primary navigation"><a href="#snapshot">Snapshot</a><a href="#pathophysiology">Pathophysiology</a><a href="#diagnostics">Diagnostics</a><a href="#management">Management</a><a href="#glossary">Glossary</a></nav>
-      <div class="mobile-menu-note">Menu</div>
+      <div class="course-menu">
+        <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"></div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -189,7 +201,7 @@
       <div class="content-layout">
         <aside class="side-nav" aria-label="Disease page quick navigation">
           <h3>Lesson Sections</h3>
-          <a href="#objectives">Objectives</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#visuals">Visual Concept</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#ventilation">Ventilation Strategy</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
+          <a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#visuals">Visual Concept</a><a href="#manifestations">Clinical Manifestations</a><a href="#diagnostics">Diagnostics</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#ventilation">Ventilation Strategy</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a>
         </aside>
 
         <div class="lesson-stack">
@@ -201,6 +213,18 @@
               <div class="example-box soft-blue"><strong>2. Recognize key findings</strong><br>Identify paradoxical movement, severe pain, tachypnea, hypoxemia, splinting, and contusion-related deterioration.</div>
               <div class="example-box soft-amber"><strong>3. Interpret trauma data</strong><br>Use chest imaging, ABGs, SpO₂ trends, work of breathing, and auscultation to judge severity.</div>
               <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Prioritize oxygenation, ventilation, pain control coordination, positive pressure support, and urgent escalation for fatigue or shock.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Flail Chest Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="FlailChest.mp4" type="video/mp4">
+                <track src="FlailChest.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
             </div>
           </section>
 
@@ -233,7 +257,7 @@
             <h2>Anatomy & Pathophysiology</h2>
             <p>Flail chest begins with high-energy blunt trauma. Rib fractures separate a segment of the chest wall from the stable rib cage. Pain causes splinting and shallow breathing, while the unstable segment decreases chest wall efficiency. The underlying lung is often bruised, producing pulmonary contusion and impaired gas exchange.</p>
             <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Blunt trauma → multiple rib fractures → unstable chest wall segment → paradoxical motion + severe pain → shallow breathing and poor cough → atelectasis/retained secretions + pulmonary contusion → hypoxemia and respiratory failure risk.</div>
-            <div class="example-box soft-blue" style="margin-top:16px;"><img src="flail-chest-pathophysiology.png" alt="Illustration showing multiple rib fractures creating an unstable flail segment and impaired ventilation"><strong>Visual placeholder:</strong> Use this image to show rib fractures, unstable segment movement, and underlying contused lung tissue.</div>
+            <div class="example-box soft-blue" style="margin-top:16px;"><img src="flail-chest-pathophysiology.png" alt="Illustration showing multiple rib fractures creating an unstable flail segment and impaired ventilation" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Visual learning:</strong> Rib fractures create an unstable segment while the underlying lung may be contused, reducing compliance and gas exchange.</div>
             <h3 style="margin-top:22px;">What Changes During Flail Chest</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Change</th><th>What Happens</th><th>Why It Matters</th></tr><tr><td>Chest wall instability</td><td>A rib segment moves independently from the rest of the chest wall.</td><td>Breathing becomes inefficient and painful.</td></tr><tr><td>Paradoxical movement</td><td>The flail segment may move inward during inspiration and outward during expiration.</td><td>Signals significant mechanical injury.</td></tr><tr><td>Pain and splinting</td><td>The patient avoids deep breaths and coughing.</td><td>Raises atelectasis, secretion retention, and pneumonia risk.</td></tr><tr><td>Pulmonary contusion</td><td>Bruised lung tissue develops edema and bleeding.</td><td>Creates V/Q mismatch, reduced compliance, and hypoxemia.</td></tr><tr><td>Respiratory muscle fatigue</td><td>WOB rises as ventilation becomes less efficient.</td><td>Can progress to ventilatory failure.</td></tr></table></div>
             <article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>Worsening oxygen need, increasing respiratory rate, exhaustion, confusion, or rising PaCO₂ after chest trauma suggests the patient may be losing the ability to ventilate effectively.</p></article>
@@ -252,7 +276,7 @@
 
           <section class="info-card board" id="diagnostics">
             <h2>Diagnostics & Assessment</h2><p>Diagnosis is clinical plus imaging. The RT helps trend oxygenation, ventilation, breath sounds, cough effectiveness, and response to therapy while the trauma team evaluates associated injuries.</p>
-            <div class="example-box soft-blue" style="margin-top:16px;"><img src="flail-chest-imaging-placeholder.png" alt="Chest x-ray or CT teaching placeholder showing rib fractures and possible pulmonary contusion"><strong>Visual placeholder:</strong> Use this image to reinforce rib fracture location, flail segment, and lung contusion on imaging.</div>
+            <div class="example-box soft-blue" style="margin-top:16px;"><img src="flail-chest-imaging-placeholder.png" alt="Chest x-ray or CT teaching image showing rib fractures and possible pulmonary contusion" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Visual learning:</strong> Use imaging to connect rib fracture location, flail segment mechanics, and possible pulmonary contusion.</div>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Assessment Tool</th><th>Expected or Important Findings</th><th>RT Meaning</th></tr><tr><td>Physical exam</td><td>Paradoxical segment, bruising, tenderness, crepitus, shallow breathing.</td><td>Identifies instability and pain-limited ventilation.</td></tr><tr><td>Chest x-ray</td><td>Rib fractures, pneumothorax, hemothorax, contusion signs.</td><td>Helps identify complications affecting oxygenation.</td></tr><tr><td>CT chest</td><td>Better visualization of fractures and pulmonary contusion.</td><td>Defines injury burden and associated trauma.</td></tr><tr><td>ABG/VBG trend</td><td>Hypoxemia, rising PaCO₂, acidosis if failing.</td><td>Supports escalation decisions.</td></tr><tr><td>Pulse oximetry</td><td>Low or worsening SpO₂.</td><td>Tracks oxygenation response.</td></tr><tr><td>Auscultation</td><td>Diminished sounds, crackles, absent unilateral sounds.</td><td>May suggest contusion, atelectasis, pneumothorax, or hemothorax.</td></tr></table></div>
           </section>
 
@@ -297,7 +321,38 @@
     </main>
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
+<script src="courses.js"></script>
 <script>
+function initializeCourseMenu() {
+  const button = document.getElementById("courseMenuButton");
+  const panel = document.getElementById("courseMenuPanel");
+  if (!button || !panel) return;
+  const source = window.PULMOCORE_COURSES || window.PulmoCoreCourses || window.courses || window.COURSES || [];
+  const courses = Array.isArray(source) ? source : (Array.isArray(source.courses) ? source.courses : []);
+  const currentPath = window.location.pathname.split("/").pop();
+  function getCourseUrl(course) { return course.url || course.href || course.file || course.filename || "#"; }
+  function getCourseTitle(course) { return course.title || course.name || course.disease || "Untitled Course"; }
+  function getProgress(course) {
+    const keyBase = course.id || getCourseUrl(course) || getCourseTitle(course);
+    const raw = localStorage.getItem(`pulmocore-progress-${keyBase}`) || localStorage.getItem(`progress-${keyBase}`) || course.progress;
+    const value = typeof raw === "string" ? Number(raw) : Number(raw || 0);
+    if (course.complete || value >= 100) return { label: "Complete", cls: "complete" };
+    if (value > 0) return { label: `In progress ${Math.round(value)}%`, cls: "progress" };
+    return { label: "Not started", cls: "" };
+  }
+  panel.innerHTML = courses.length ? courses.map(course => {
+    const url = getCourseUrl(course);
+    const title = getCourseTitle(course);
+    const progress = getProgress(course);
+    const isCurrent = url.split("/").pop() === currentPath;
+    return `<a class="course-menu-item ${isCurrent ? "current-course" : ""}" href="${url}" role="menuitem"><span class="course-title">${title}</span><span class="course-status ${progress.cls}">${progress.label}</span></a>`;
+  }).join("") : `<div class="course-menu-item"><span class="course-title">Add courses to courses.js</span><span class="course-status">Not started</span></div>`;
+  button.addEventListener("click", () => { const open = panel.classList.toggle("open"); button.setAttribute("aria-expanded", String(open)); });
+  document.addEventListener("click", event => { if (!button.contains(event.target) && !panel.contains(event.target)) { panel.classList.remove("open"); button.setAttribute("aria-expanded", "false"); } });
+  document.addEventListener("keydown", event => { if (event.key === "Escape") { panel.classList.remove("open"); button.setAttribute("aria-expanded", "false"); button.focus(); } });
+}
+initializeCourseMenu();
+
 const glossaryTerms = [
   { term: "Flail chest", definition: "A blunt chest trauma pattern where multiple adjacent ribs are fractured in multiple places, creating an unstable chest wall segment.", rt: "Triggers rapid assessment of ventilation, oxygenation, pain, and associated injuries." },
   { term: "Flail segment", definition: "The free-floating portion of chest wall that moves independently from the stable thoracic cage.", rt: "Paradoxical motion helps identify this injury at bedside." },
@@ -349,17 +404,97 @@ function markActivityComplete(element) { element.dataset.complete = "true"; elem
 
 function initializeGuidedCase() { const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return; caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); }); document.querySelectorAll(".case-option").forEach(option => { option.addEventListener("click", () => { const stage = option.closest(".case-stage"); if (stage.dataset.correctAnswered === "true") return; const feedback = stage.querySelector(".case-feedback"); const isCorrect = option.dataset.caseCorrect === "true"; stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { stage.dataset.correctAnswered = "true"; stage.querySelectorAll(".case-option").forEach(btn => { btn.disabled = true; if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback case-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>"; const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false; } else { option.classList.add("incorrect-choice"); feedback.className = "quiz-feedback case-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing."; const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true; } }); }); document.querySelectorAll(".case-next button").forEach(button => { button.disabled = true; button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); }); }); } initializeGuidedCase();
 
-function initializeProgressiveSections() { const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return; sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); }); function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; } function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); } function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; } function updateAllContinueStates() { sections.forEach(setContinueState); } function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); } function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); } sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); }); navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); }); document.addEventListener("activityComplete", () => updateAllContinueStates()); const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); } updateNavState(0); updateAllContinueStates(); } initializeProgressiveSections();
+function initializeProgressiveSections() {
+  const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
+  const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+  if (!sections.length) return;
+  sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+  function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+  function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+  function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+  function updateAllContinueStates() { sections.forEach(setContinueState); }
+  function currentVisibleIndex() { return sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); }
+  function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.setAttribute("aria-disabled", String(!isVisible)); link.classList.toggle("current", targetIndex === currentIndex); }); }
+  function revealThrough(targetIndex, shouldScroll = true) {
+    const currentVisible = currentVisibleIndex();
+    const currentSection = sections[currentVisible];
+    const targetSection = sections[targetIndex];
+    if (!targetSection) return;
+    if (targetSection.classList.contains("lesson-hidden") && targetIndex !== currentVisible + 1) { currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (targetIndex > currentVisible && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); });
+    updateNavState(targetIndex); updateAllContinueStates();
+    if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+  navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { sections[currentVisibleIndex()].scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
+  document.addEventListener("activityComplete", () => updateAllContinueStates());
+  const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+  updateNavState(0); updateAllContinueStates();
+} initializeProgressiveSections();
 
 function initializeHotspotActivity() { const activity = document.getElementById("visuals"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); } initializeHotspotActivity();
 
 function initializeRiskSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); } initializeRiskSort();
 
-function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
-function shuffleSequence() { const container = document.getElementById("sequenceSort"); if (!container) return; const rows = Array.from(container.querySelectorAll(":scope > .sort-row")); for (let i = rows.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [rows[i], rows[j]] = [rows[j], rows[i]]; } rows.forEach(row => container.appendChild(row)); }
-function normalizeSequenceRanks(changedSelect) { const container = document.getElementById("sequenceSort"); const rows = Array.from(container.querySelectorAll(":scope > .sort-row")); const changedRow = changedSelect.closest(".sort-row"); const chosenRank = Number(changedSelect.value); if (!chosenRank) return; const otherRows = rows.filter(row => row !== changedRow); const occupied = otherRows.map(row => ({ row, rank: Number(row.querySelector("select").value) })).filter(item => item.rank).sort((a, b) => a.rank - b.rank); const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row); bumpedRows.forEach(row => { const select = row.querySelector("select"); const current = Number(select.value); if (current < rows.length) select.value = String(current + 1); else select.value = ""; }); const used = new Set([chosenRank]); rows.forEach(row => { if (row === changedRow) return; const select = row.querySelector("select"); let rank = Number(select.value); if (!rank) return; while (used.has(rank) && rank < rows.length) rank++; if (used.has(rank)) select.value = ""; else { select.value = String(rank); used.add(rank); } }); }
-function reorderSequenceRows() { const container = document.getElementById("sequenceSort"); const rows = Array.from(container.querySelectorAll(":scope > .sort-row")); rows.sort((a, b) => { const aVal = Number(a.querySelector("select").value) || 99; const bVal = Number(b.querySelector("select").value) || 99; if (aVal !== bVal) return aVal - bVal; return Number(a.dataset.answer) - Number(b.dataset.answer); }); rows.forEach(row => container.appendChild(row)); }
-function enableDynamicReorder() { const container = document.getElementById("sequenceSort"); if (!container) return; container.querySelectorAll(".order-select").forEach(select => { select.addEventListener("change", () => { container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect")); normalizeSequenceRanks(select); reorderSequenceRows(); }); }); } shuffleSequence(); enableDynamicReorder(); initializeSequenceSort();
+function initializeSequenceSort() {
+  const activity = document.querySelector("#management .activity-card.require-complete");
+  const button = document.getElementById("checkSequenceSort");
+  const status = document.getElementById("sequenceSortStatus");
+  if (!activity || !button || button.dataset.sequenceInitialized === "true") return;
+  button.dataset.sequenceInitialized = "true";
+  button.addEventListener("click", () => {
+    const rows = Array.from(activity.querySelectorAll(".sort-row"));
+    let correctCount = 0;
+    rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; });
+    status.textContent = `${correctCount} / ${rows.length} correct`;
+    if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); }
+  });
+}
+function sequenceIsInCorrectVisualOrder(rows) { return rows.every((row, index) => Number(row.dataset.answer) === index + 1); }
+function shuffleSequence() {
+  const container = document.getElementById("sequenceSort");
+  if (!container) return;
+  let rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+  rows.forEach(row => { const select = row.querySelector("select"); if (select) select.value = ""; row.classList.remove("correct", "incorrect"); });
+  for (let attempt = 0; attempt < 10; attempt++) {
+    for (let i = rows.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [rows[i], rows[j]] = [rows[j], rows[i]]; }
+    if (!sequenceIsInCorrectVisualOrder(rows)) break;
+  }
+  if (sequenceIsInCorrectVisualOrder(rows) && rows.length > 1) [rows[0], rows[1]] = [rows[1], rows[0]];
+  rows.forEach(row => container.appendChild(row));
+}
+function normalizeSequenceRanks(changedSelect) {
+  const container = document.getElementById("sequenceSort");
+  const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+  const changedRow = changedSelect.closest(".sort-row");
+  const chosenRank = Number(changedSelect.value);
+  if (!chosenRank) return;
+  const otherRows = rows.filter(row => row !== changedRow);
+  const occupied = otherRows.map(row => ({ row, rank: Number(row.querySelector("select").value) })).filter(item => item.rank).sort((a, b) => a.rank - b.rank);
+  occupied.filter(item => item.rank >= chosenRank).forEach(item => { const select = item.row.querySelector("select"); const current = Number(select.value); select.value = current < rows.length ? String(current + 1) : ""; });
+  const used = new Set([chosenRank]);
+  rows.forEach(row => { if (row === changedRow) return; const select = row.querySelector("select"); let rank = Number(select.value); if (!rank) return; while (used.has(rank) && rank < rows.length) rank++; if (used.has(rank)) select.value = ""; else { select.value = String(rank); used.add(rank); } });
+}
+function reorderSequenceRows() {
+  const container = document.getElementById("sequenceSort");
+  const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+  rows.sort((a, b) => { const aVal = Number(a.querySelector("select").value) || 99; const bVal = Number(b.querySelector("select").value) || 99; if (aVal !== bVal) return aVal - bVal; return Number(a.dataset.answer) - Number(b.dataset.answer); });
+  rows.forEach(row => container.appendChild(row));
+}
+function enableDynamicReorder() {
+  const container = document.getElementById("sequenceSort");
+  if (!container || container.dataset.dynamicReorder === "true") return;
+  container.dataset.dynamicReorder = "true";
+  container.querySelectorAll(".order-select").forEach(select => { select.addEventListener("change", () => { container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect")); normalizeSequenceRanks(select); reorderSequenceRows(); }); });
+}
+document.addEventListener("DOMContentLoaded", () => {
+  shuffleSequence();
+  enableDynamicReorder();
+  initializeSequenceSort();
+  const sequenceSort = document.getElementById("sequenceSort");
+  if (sequenceSort) sequenceSort.style.visibility = "visible";
+});
 
 function initializeKnowledgeCheck() { const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return; const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length; document.querySelectorAll(".knowledge-option").forEach(option => { option.addEventListener("click", () => { const question = option.closest(".knowledge-question"); if (question.dataset.correctAnswered === "true") return; const feedback = question.querySelector(".quiz-feedback"); const isCorrect = option.dataset.correct === "true"; question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { question.dataset.correctAnswered = "true"; answered.add(option.dataset.question); question.querySelectorAll(".knowledge-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>"; } else { option.classList.add("incorrect-choice"); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question."; } status.textContent = `${answered.size} / ${total} questions answered correctly`; if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); } }); }); } initializeKnowledgeCheck();
 

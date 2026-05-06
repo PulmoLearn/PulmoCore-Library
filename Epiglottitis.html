@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>PulmoCore | Acute Epiglottitis & Bacterial Tracheitis</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"><script src="courses.js"></script><style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .course-menu { position: relative; display: flex; align-items: center; }
+    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; }
+    .course-menu-btn:hover { background: rgba(255,255,255,.14); }
+    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(380px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; gap: 4px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 12px; padding: 10px 12px; background: #FAFDFF; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-title { font-weight: 800; font-family: var(--font-heading); }
+    .course-menu-status { font-size: .88rem; color: var(--slate); }
+    .course-menu-empty { padding: 12px; color: var(--slate); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    #sequenceSort { visibility: hidden; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  </style></head><body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div><div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+      </div>
+      <div class="course-menu" aria-label="Course menu">
+        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore courses"></div>
+      </div>
+      <div class="mobile-menu-note">☰ Courses</div>
+    </header>
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);"><span class="eyebrow">Respiratory Disease Module</span><h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Acute Epiglottitis & Bacterial Tracheitis</h1><p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Two life-threatening upper airway infections that can progress rapidly from noisy breathing to complete obstruction. This module focuses on RT recognition, airway protection, diagnostics, escalation, and board-style decision-making.</p><div class="case-meta"><div><strong>Category</strong><br>Upper Airway Emergencies</div><div><strong>Estimated Time</strong><br>30–40 minutes</div><div><strong>Level</strong><br>Core RT Knowledge</div></div></section>
+      <div class="content-layout"><aside class="side-nav" aria-label="Disease page quick navigation"><h3>Lesson Sections</h3><a href="#objectives">Objectives</a><a href="#overview-video">Video Overview</a><a href="#snapshot">Disease Snapshot</a><a href="#precheck">Quick Pre-Check</a><a href="#pathophysiology">Pathophysiology</a><a href="#triggers">Clinical Picture</a><a href="#diagnostics">Diagnostics</a><a href="#red-flags">Red Flags</a><a href="#management">Management</a><a href="#rt-role">RT Role</a><a href="#case-study">Case Study</a><a href="#knowledge-check">Knowledge Check</a><a href="#faq">FAQ</a><a href="#summary">Summary</a><a href="#glossary">Glossary Deck</a></aside>
+        <div class="lesson-stack">
+          <section class="info-card" id="objectives"><h2>Learning Objectives</h2><p>By the end of this module, learners should connect infection location, airway narrowing, clinical signs, diagnostic choices, airway risk, and RT escalation priorities.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>1. Differentiate the diseases</strong><br>Compare supraglottic obstruction in epiglottitis with subglottic/tracheal obstruction from bacterial tracheitis.</div><div class="example-box soft-blue"><strong>2. Recognize airway danger</strong><br>Identify drooling, tripod positioning, toxic appearance, stridor, thick secretions, fatigue, and worsening obstruction.</div><div class="example-box soft-amber"><strong>3. Choose safe diagnostics</strong><br>Explain when imaging may help and when airway stabilization takes priority over throat inspection.</div><div class="example-box soft-coral"><strong>4. Prioritize RT action</strong><br>Support oxygenation while avoiding agitation, prepare airway equipment, and escalate early.</div></div></section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Epiglottitis Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
+                <source src="Epiglottitis.mp4" type="video/mp4">
+                <track src="Epiglottitis.vtt" kind="captions" srclang="en" label="English captions" default>
+              </video>
+            </div>
+          </section>
+          <section class="info-card" id="snapshot"><h2>Disease Snapshot</h2><p>Acute epiglottitis is inflammation and swelling of the epiglottis and supraglottic tissue. Bacterial tracheitis is bacterial infection of the tracheal mucosa with edema and thick purulent secretions. Both can cause rapidly progressive upper airway obstruction.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Epiglottitis location:</strong><br>Supraglottic airway above the vocal cords.</div><div class="example-box soft-teal"><strong>Tracheitis location:</strong><br>Trachea, often below the glottis, with thick secretions.</div><div class="example-box soft-teal"><strong>Classic sound:</strong><br>Inspiratory stridor signals upper airway narrowing.</div><div class="example-box soft-teal"><strong>Key danger:</strong><br>Agitation can worsen obstruction and precipitate complete airway loss.</div><div class="example-box soft-teal"><strong>Airway priority:</strong><br>Do not force throat examination when epiglottitis is suspected.</div><div class="example-box soft-teal"><strong>RT priority:</strong><br>Keep the patient calm, provide oxygen as tolerated, and prepare for advanced airway support.</div></div><article class="info-card rt" style="margin-top:16px;"><h3>RT Clinical Connection</h3><p>The RT must decide whether the patient is maintaining the airway or compensating on the edge of failure. In upper airway emergencies, quiet positioning, minimal stimulation, humidified oxygen, suction readiness, and early airway team activation matter more than completing a routine respiratory treatment checklist.</p></article><article class="info-card board" style="margin-top:16px;"><h3>Board Prep Frame</h3><p>Associate epiglottitis with fever, drooling, dysphagia, muffled voice, tripod posture, and airway emergency. Associate bacterial tracheitis with toxic appearance, stridor, high fever, poor response to croup therapy, and thick purulent secretions that may require suction/airway intervention.</p></article></section>
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check"><span class="eyebrow">Quick Pre-Check</span><h2>Start with the safest airway decision</h2><p>A child has high fever, drooling, muffled voice, tripod position, and inspiratory stridor. What is the safest RT mindset?</p><div class="quiz-options"><button class="quiz-option" data-correct="false">Have the child lie flat and inspect the throat aggressively.</button><button class="quiz-option" data-correct="true">Suspect an unstable upper airway and avoid agitation while preparing airway support.</button><button class="quiz-option" data-correct="false">Assume this is a routine lower-airway wheezing episode and give repeated bronchodilators first.</button><button class="quiz-option" data-correct="false">Delay escalation until a complete bedside exam is finished.</button></div><div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
+          <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>Both diseases narrow the upper airway, but they do it in different places. Epiglottitis produces swollen supraglottic tissue that can behave like a rapidly closing door. Bacterial tracheitis produces inflamed tracheal mucosa and thick secretions that can obstruct airflow below the glottis.</p><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Bacterial invasion → mucosal inflammation and edema → narrowed upper airway → turbulent airflow/stridor → increased work of breathing → fatigue, hypoxemia, or complete obstruction.</div><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-blue"><img src="epiglottitis-pathophysiology.png" alt="Illustration of swollen epiglottis narrowing the supraglottic airway" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Epiglottitis mechanism:</strong><br>Swollen epiglottis and aryepiglottic folds narrow the airway inlet.</div><div class="example-box soft-amber"><img src="bacterial-tracheitis-secretions.png" alt="Illustration of tracheal edema and thick purulent secretions narrowing the trachea" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Tracheitis mechanism:</strong><br>Edema plus thick secretions can block the tracheal lumen.</div><div class="example-box soft-coral"><img src="upper-airway-stridor.png" alt="Visual showing turbulent inspiratory flow through a narrowed upper airway" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Clinical concept:</strong><br>Stridor is a sign of turbulent flow through a narrowed upper airway.</div></div><h3 style="margin-top:22px;">High-Yield Comparison</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Feature</th><th>Acute Epiglottitis</th><th>Bacterial Tracheitis</th></tr><tr><td>Primary site</td><td>Epiglottis/supraglottic airway</td><td>Trachea/subglottic airway</td></tr><tr><td>Key obstruction</td><td>Swollen airway inlet</td><td>Edema plus thick purulent secretions</td></tr><tr><td>Typical clues</td><td>Drooling, dysphagia, muffled voice, tripod</td><td>Toxic, high fever, stridor, harsh cough, poor croup response</td></tr><tr><td>Major RT risk</td><td>Agitation or throat exam may trigger complete obstruction</td><td>Secretions may require suction and airway control</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>A child with stridor at rest, drooling, fatigue, cyanosis, altered mental status, or rapidly worsening retractions should be treated as a potential airway emergency.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Upper Airway Hotspot Graphic"><h3>Click the Upper Airway Hotspots</h3><p>Click each hotspot to review how the anatomy drives RT decisions.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified upper airway graphic with clickable hotspots"><svg viewBox="0 0 240 240" fill="none" aria-hidden="true"><path d="M120 20c-18 20-23 44-13 72 4 11 5 22 1 33l-18 58c-4 13 6 26 20 26h20c14 0 24-13 20-26l-18-58c-4-11-3-22 1-33 10-28 5-52-13-72Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"/><path d="M91 84c23-11 35-11 58 0" stroke="#1CA7A8" stroke-width="8" stroke-linecap="round"/><path d="M100 122h40M98 146h44M94 170h52" stroke="#E85D5D" stroke-width="5" stroke-linecap="round"/><circle cx="120" cy="96" r="10" fill="#1CA7A8"/></svg><button class="hotspot-btn" style="left:44%; top:30%;" data-title="Epiglottis" data-text="Swelling here can obstruct the airway inlet. Avoid forced throat inspection when epiglottitis is suspected.">1</button><button class="hotspot-btn" style="left:54%; top:48%;" data-title="Glottic Opening" data-text="A small amount of swelling can dramatically reduce airflow because resistance rises as radius narrows.">2</button><button class="hotspot-btn" style="left:41%; top:61%;" data-title="Tracheal Mucosa" data-text="Bacterial tracheitis causes edema and inflamed mucosa below the vocal cords.">3</button><button class="hotspot-btn" style="right:34%; bottom:18%;" data-title="Purulent Secretions" data-text="Thick secretions can plug the airway and may require suction or definitive airway management.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
+          <section class="info-card" id="triggers"><h2>Clinical Presentation & Differential Clues</h2><p>RT assessment must separate lower airway wheeze from upper airway stridor and must identify patients who should not be agitated. Ask: Is the sound inspiratory? Is the patient drooling? Can they swallow? Are they toxic? Are secretions obstructing airflow?</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>Likely Meaning</th><th>RT Action</th></tr><tr><td>Drooling and dysphagia</td><td>Cannot swallow secretions; epiglottitis concern</td><td>Keep upright, avoid oral exam, activate airway team</td></tr><tr><td>Inspiratory stridor at rest</td><td>Significant upper airway narrowing</td><td>Provide oxygen as tolerated, prepare escalation</td></tr><tr><td>Toxic appearance with thick secretions</td><td>Bacterial tracheitis concern</td><td>Prepare suction and possible airway intervention</td></tr><tr><td>Barking cough responding to therapy</td><td>Croup more likely</td><td>Monitor response, reassess for failure signs</td></tr><tr><td>Wheezing with prolonged expiration</td><td>Lower airway obstruction</td><td>Consider bronchodilator pathway if clinically consistent</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Upper Airway Sorting"><h3>Sort the Clinical Clues</h3><p>Choose the best category for each clue, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="epi"><strong>Drooling + muffled voice + tripod</strong><select><option value="">Choose category</option><option value="epi">Epiglottitis clue</option><option value="trach">Bacterial tracheitis clue</option><option value="danger">Immediate danger sign</option></select></div><div class="sort-row" data-answer="trach"><strong>Thick purulent secretions with toxic appearance</strong><select><option value="">Choose category</option><option value="epi">Epiglottitis clue</option><option value="trach">Bacterial tracheitis clue</option><option value="danger">Immediate danger sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Cyanosis or altered mental status</strong><select><option value="">Choose category</option><option value="epi">Epiglottitis clue</option><option value="trach">Bacterial tracheitis clue</option><option value="danger">Immediate danger sign</option></select></div><div class="sort-row" data-answer="epi"><strong>Refuses to lie down</strong><select><option value="">Choose category</option><option value="epi">Epiglottitis clue</option><option value="trach">Bacterial tracheitis clue</option><option value="danger">Immediate danger sign</option></select></div><div class="sort-row" data-answer="trach"><strong>Poor response to usual croup therapy</strong><select><option value="">Choose category</option><option value="epi">Epiglottitis clue</option><option value="trach">Bacterial tracheitis clue</option><option value="danger">Immediate danger sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
+          <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostics should never destabilize the airway. The board-style priority is to recognize when the patient needs controlled airway management before imaging or invasive examination.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Diagnostic Tool</th><th>Usefulness</th><th>Safety Note</th></tr><tr><td>Clinical assessment</td><td>Often drives immediate action</td><td>Do not force supine positioning or oral exam in suspected epiglottitis</td></tr><tr><td>Lateral neck radiograph</td><td>May show thumb sign in epiglottitis</td><td>Only if stable enough</td></tr><tr><td>AP/lateral neck or chest imaging</td><td>May support tracheitis/croup differential</td><td>Do not delay airway stabilization</td></tr><tr><td>Direct visualization</td><td>Can confirm diagnosis</td><td>Should occur in controlled setting with airway expertise</td></tr><tr><td>CBC/cultures</td><td>Support infectious workup</td><td>Secondary to airway safety</td></tr><tr><td>ABG/VBG</td><td>May show ventilation failure late</td><td>Do not agitate an unstable child just to obtain labs</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Board Prep Safety Rule</h3><p>If epiglottitis is suspected, do not use a tongue blade to inspect the throat at bedside. Keep the patient calm, upright, and prepare for controlled airway management.</p></article></section>
+          <section class="info-card red" id="red-flags"><h2>Red Flags & Escalation Triggers</h2><p>Upper airway infections can deteriorate suddenly. RTs should escalate before the child becomes exhausted or cyanotic.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>Stridor at rest</td><td>Indicates significant airway narrowing</td></tr><tr><td>Drooling or inability to swallow</td><td>Suggests severe supraglottic swelling</td></tr><tr><td>Tripod/sniffing position</td><td>Patient is positioning to maintain airway patency</td></tr><tr><td>Retractions, fatigue, quieting, or poor air movement</td><td>May indicate impending failure</td></tr><tr><td>Cyanosis or altered mental status</td><td>Late and dangerous signs of hypoxemia/ventilatory failure</td></tr><tr><td>Poor response to croup treatment</td><td>Raises concern for bacterial tracheitis or alternate diagnosis</td></tr></table></div></section>
+          <section class="info-card" id="management"><h2>Management & Treatment</h2><p>Management focuses on protecting the airway, minimizing agitation, treating infection, supporting oxygenation, and preparing for definitive airway control if deterioration occurs.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Intervention</th><th>Epiglottitis</th><th>Bacterial Tracheitis</th></tr><tr><td>Positioning</td><td>Allow upright position of comfort</td><td>Allow position of comfort; monitor WOB</td></tr><tr><td>Oxygen</td><td>Humidified oxygen as tolerated without agitation</td><td>Humidified oxygen; prepare suction</td></tr><tr><td>Airway team</td><td>Early controlled airway readiness</td><td>Possible intubation for obstruction/secretions</td></tr><tr><td>Antibiotics</td><td>Broad coverage after airway plan initiated</td><td>Broad coverage; often necessary</td></tr><tr><td>Suction</td><td>Use caution; avoid agitation</td><td>High-yield because secretions can obstruct</td></tr><tr><td>Croup meds</td><td>Not the primary solution</td><td>Poor response helps distinguish tracheitis</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Airway Management Sequence"><h3>Airway Management Sequence</h3><p>Select the steps in the best general order for a suspected unstable upper airway infection.</p><div class="sort-grid" id="sequenceSort"><div class="sort-row" data-answer="1"><strong>Recognize upper airway emergency signs</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="2"><strong>Keep patient calm/upright and avoid forced throat exam</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="3"><strong>Provide humidified oxygen as tolerated</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="4"><strong>Activate provider/anesthesia/airway team early</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="5"><strong>Prepare suction, airway equipment, and monitoring</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="sort-row" data-answer="6"><strong>Support controlled airway plan and antibiotic therapy</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div></div><button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button><div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div></article></section>
+          <section class="info-card rt" id="rt-role"><h2>Respiratory Therapist Role</h2><p>The RT role is centered on airway surveillance, safe oxygen delivery, equipment readiness, suction support, team communication, and avoiding actions that worsen obstruction.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr><tr><td>Assess airway sounds</td><td>Stridor, voice change, cough quality, air movement</td><td>Determines upper vs lower airway problem and urgency</td></tr><tr><td>Monitor distress</td><td>RR, retractions, fatigue, position, mental status, SpO₂</td><td>Detects deterioration before arrest</td></tr><tr><td>Deliver oxygen safely</td><td>Use least-agitating method tolerated</td><td>Agitation can worsen obstruction</td></tr><tr><td>Prepare suction/equipment</td><td>Suction, BVM, airway supplies, emergency setup</td><td>Tracheitis secretions may obstruct quickly</td></tr><tr><td>Communicate clearly</td><td>Report red flags and response trends</td><td>Supports timely controlled airway decisions</td></tr></table></div></section>
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided Upper Airway Case"><span class="eyebrow">Guided Unfolding Case Study</span><h2>The Stridor That Cannot Wait</h2><p>This guided case reveals one clinical stage at a time. Make the safest RT decision before continuing.</p><div class="case-stage" data-case-stage="0"><h3>Stage 1: Initial Presentation</h3><p>A 5-year-old arrives sitting forward, drooling, febrile, and anxious. The parent says the child has a sore throat and will not swallow.</p><div class="case-meta"><div><strong>RR</strong><br>34/min</div><div><strong>SpO₂</strong><br>92% RA</div><div><strong>Sound</strong><br>Inspiratory stridor</div></div><p><strong>Decision Question:</strong> What is the priority?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. For suspected epiglottitis, forced oral inspection can provoke airway obstruction.">Use a tongue blade to inspect the throat immediately.</button><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Keep the child calm and upright, provide oxygen as tolerated, and activate airway support early.">Minimize agitation and prepare controlled airway support.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Lying flat may worsen obstruction and distress.">Place the child flat for a complete assessment.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bronchodilators do not treat supraglottic swelling as the primary problem.">Treat first as lower-airway wheeze with repeated albuterol only.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="1"><h3>Stage 2: Differential Shift</h3><p>Another child presents with high fever, toxic appearance, stridor, harsh cough, and copious thick secretions. The child did not improve after usual croup therapy.</p><p><strong>Decision Question:</strong> Which diagnosis should move higher on the list?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Toxic appearance, stridor, thick secretions, and poor croup response are high-yield clues for bacterial tracheitis.">Bacterial tracheitis.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Lower-airway bronchospasm does not typically cause toxic appearance with purulent tracheal secretions.">Simple lower-airway bronchospasm.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Bronchiolitis usually affects infants/small airways and does not fit this toxic upper-airway picture as well.">Bronchiolitis as the best match.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. If the patient is worsening despite croup therapy, bacterial tracheitis must be considered.">Mild viral croup only.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="2"><h3>Stage 3: Escalation</h3><p>The child becomes more fatigued. Retractions worsen and air movement sounds quieter.</p><p><strong>Decision Question:</strong> What should the RT communicate?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Quieting, fatigue, and worsening work of breathing suggest impending failure and need urgent airway escalation.">This is worsening obstruction with possible impending airway failure.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Quieting can mean less airflow, not improvement.">The child is improving because the airway sounds quieter.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Waiting can be dangerous in progressive upper airway obstruction.">Delay escalation until the child becomes cyanotic.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Diagnostics should not delay airway stabilization in an unstable patient.">Transport for imaging before notifying the airway team.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="3"><h3>Stage 4: Airway Support</h3><p>The airway team prepares for controlled intubation. The RT is asked what equipment priorities matter most.</p><p><strong>Decision Question:</strong> Which setup is most appropriate?</p><div class="quiz-options case-options"><button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Prepare suction, oxygen/BVM, monitoring, and backup airway equipment because obstruction and secretions may worsen quickly.">Suction, oxygen/BVM, monitoring, and backup airway equipment.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Waiting without preparation risks delayed response during complete obstruction.">No equipment until antibiotics are completed.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Incentive spirometry is not appropriate in an unstable upper airway emergency.">Incentive spirometer and routine teaching supplies.</button><button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Forced oral procedures outside a controlled airway plan can worsen epiglottitis.">Tongue blade exam kit as the first priority.</button></div><div class="quiz-feedback case-feedback" role="status"></div><div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div></div><div class="case-stage lesson-hidden" data-case-stage="4"><h3>Case Wrap-Up</h3><div class="example-box soft-teal"><strong>RT Takeaway:</strong> In epiglottitis and bacterial tracheitis, airway protection comes before routine diagnostics.</div><div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> quieting, fatigue, altered mental status, cyanosis, or stridor at rest require urgent escalation.</div></div></section>
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Upper Airway Knowledge Check"><span class="eyebrow">Knowledge Check</span><h2>Board-Style Practice</h2><p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p><div class="knowledge-question" data-question-id="kq1"><h3>Question 1</h3><p>Which finding most strongly supports suspected acute epiglottitis?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Drooling, muffled voice, fever, and tripod posture are classic epiglottitis clues and suggest airway risk.">Fever, drooling, muffled voice, and tripod positioning.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Diffuse expiratory wheezing is more consistent with lower airway obstruction.">Diffuse expiratory wheezing after exercise.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pink frothy sputum suggests pulmonary edema, not epiglottitis.">Pink frothy sputum and crackles.</button><button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. A productive adult cough alone does not define epiglottitis.">Mild productive cough with normal voice.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq2"><h3>Question 2</h3><p>What action should be avoided in suspected epiglottitis?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Forced throat inspection can provoke airway obstruction in suspected epiglottitis.">Forcing a throat exam with a tongue blade.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Oxygen may be given if tolerated and delivered calmly.">Providing oxygen as tolerated.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Early airway team notification is appropriate.">Calling for airway support early.</button><button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Allowing position of comfort helps reduce distress.">Allowing the patient to sit upright.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq3"><h3>Question 3</h3><p>A toxic child has stridor, high fever, harsh cough, thick purulent secretions, and poor response to croup therapy. Which condition is most likely?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. This pattern is high-yield for bacterial tracheitis.">Bacterial tracheitis.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Lower-airway bronchospasm usually produces wheeze rather than purulent tracheal secretions and toxic stridor.">Lower-airway bronchospasm.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Simple viral croup should respond better to typical croup therapy and is usually less toxic.">Uncomplicated viral croup.</button><button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Pulmonary embolism is not the best match for this pediatric infectious upper airway picture.">Pulmonary embolism.</button></div><div class="quiz-feedback" role="status"></div></div><div class="knowledge-question" data-question-id="kq4"><h3>Question 4</h3><p>Which RT action best supports a child with suspected bacterial tracheitis and worsening obstruction?</p><div class="quiz-options"><button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Thick secretions and rapid obstruction risk make suction, oxygen/BVM, monitoring, and airway readiness essential.">Prepare suction, oxygen/BVM, monitoring, and airway equipment.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Incentive spirometry is not used for unstable upper airway obstruction.">Start incentive spirometry training.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Oral intake is unsafe in a child with respiratory distress and airway risk.">Offer oral fluids to thin secretions.</button><button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Leaving to get imaging before escalation can delay airway stabilization.">Transport alone for imaging before notifying anyone.</button></div><div class="quiz-feedback" role="status"></div></div><div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div></section>
+          <section id="faq"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common Upper Airway Questions</h2></div><details class="accordion" open><summary>What is the simplest way to separate epiglottitis from tracheitis?</summary><div class="accordion-body"><p>Epiglottitis is mainly supraglottic swelling with drooling, dysphagia, muffled voice, and tripod positioning. Bacterial tracheitis is mainly tracheal infection with toxic appearance, stridor, harsh cough, and thick purulent secretions.</p></div></details><details class="accordion"><summary>Why is throat inspection dangerous in suspected epiglottitis?</summary><div class="accordion-body"><p>Manipulating the airway can increase distress, worsen swelling, or trigger sudden obstruction. Airway evaluation should occur in a controlled setting with skilled airway support available.</p></div></details><details class="accordion"><summary>Does stridor mean lower-airway wheezing?</summary><div class="accordion-body"><p>No. Stridor is usually an upper airway sound. Lower-airway obstruction more commonly produces expiratory wheezing.</p></div></details><details class="accordion"><summary>Why can bacterial tracheitis look like severe croup?</summary><div class="accordion-body"><p>Both can cause stridor and cough, but bacterial tracheitis is usually more toxic, has higher fever, thicker secretions, and may respond poorly to usual croup therapy.</p></div></details><details class="accordion"><summary>What should the RT do first?</summary><div class="accordion-body"><p>Assess airway risk, keep the patient calm and upright, provide oxygen as tolerated, notify the team, and prepare suction and airway support.</p></div></details></section>
+          <section class="info-card" id="summary"><h2>Summary & Clinical Pearls</h2><p>Acute epiglottitis and bacterial tracheitis are high-risk upper airway infections. Epiglottitis threatens the supraglottic airway and can worsen with agitation. Bacterial tracheitis threatens the tracheal airway through edema and thick secretions. In both, airway safety comes before routine diagnostics.</p><div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Must know:</strong><br>Drooling, muffled voice, tripod position, and stridor are airway emergency clues.</div><div class="example-box soft-amber"><strong>Board pearl:</strong><br>Do not inspect the throat with a tongue blade when epiglottitis is suspected.</div><div class="example-box soft-blue"><strong>RT pearl:</strong><br>Use calm oxygen delivery, prepare suction/BVM, and escalate early.</div><div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not assume a quieter airway means improvement; it may mean less airflow.</div></div></section>
+          <section id="glossary"><div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div><div class="glossary-card"><h3>Searchable Glossary</h3><p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p><div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: epiglottitis, stridor, tracheitis..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div><div class="glossary-list" id="glossaryList"></div></div><div class="glossary-card" style="margin-top:18px;"><h3>Glossary Flashcard Mastery Deck</h3><p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p><div class="flashcard-shell"><div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div><div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div><div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div><div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div><div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div><div class="completed-list" id="completedList"></div></div></div></section>
+        </div></div></main><footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer></div>
+<script>
+    const glossaryTerms = [
+  { term: "Acute epiglottitis", definition: "Rapid inflammation and swelling of the epiglottis and supraglottic tissues that can obstruct the airway.", rt: "Treat as a potential airway emergency; avoid agitation and forced throat inspection." },
+  { term: "Bacterial tracheitis", definition: "Bacterial infection of the trachea causing mucosal edema and thick purulent secretions.", rt: "Requires airway monitoring, suction readiness, antibiotics, and possible airway control." },
+  { term: "Stridor", definition: "High-pitched turbulent breath sound usually caused by upper airway narrowing.", rt: "Stridor at rest is a red flag requiring urgent assessment and escalation." },
+  { term: "Supraglottic airway", definition: "Airway region above the vocal cords, including the epiglottis.", rt: "Primary danger zone in epiglottitis." },
+  { term: "Subglottic airway", definition: "Airway region below the vocal cords.", rt: "Relevant to croup and bacterial tracheitis differentials." },
+  { term: "Drooling", definition: "Inability or unwillingness to swallow secretions.", rt: "High-yield epiglottitis clue and airway danger sign." },
+  { term: "Tripod position", definition: "Sitting forward with support to optimize airway patency and breathing mechanics.", rt: "Do not force the patient supine." },
+  { term: "Muffled voice", definition: "Altered voice quality caused by upper airway or oropharyngeal swelling.", rt: "Concerning when paired with fever, drooling, and stridor." },
+  { term: "Toxic appearance", definition: "Clinical appearance of serious infection, such as lethargy, poor perfusion, high fever, or ill appearance.", rt: "Supports bacterial tracheitis or severe infection." },
+  { term: "Purulent secretions", definition: "Thick infected secretions containing inflammatory material and bacteria.", rt: "May plug the trachea and require suction or airway intervention." },
+  { term: "Thumb sign", definition: "Radiographic swelling of the epiglottis on lateral neck film.", rt: "May support epiglottitis diagnosis only when the patient is stable enough for imaging." },
+  { term: "Steeple sign", definition: "Subglottic narrowing seen on AP neck film, classically associated with croup.", rt: "Helps differential diagnosis but does not replace clinical airway assessment." },
+  { term: "Controlled airway", definition: "Airway management performed with skilled staff, equipment, monitoring, and backup plans ready.", rt: "Preferred when epiglottitis or severe tracheitis threatens airway patency." },
+  { term: "Humidified oxygen", definition: "Oxygen with added moisture to reduce drying and support comfort.", rt: "Useful when tolerated without increasing agitation." },
+  { term: "Retractions", definition: "Visible inward movement of soft tissues during inspiration due to increased work of breathing.", rt: "Worsening retractions indicate increased respiratory load." },
+  { term: "Airway obstruction", definition: "Partial or complete blockage limiting airflow.", rt: "The central life threat in both epiglottitis and bacterial tracheitis." },
+  { term: "Croup", definition: "Usually viral laryngotracheobronchitis causing barking cough and stridor.", rt: "Poor response to croup therapy raises concern for bacterial tracheitis." },
+  { term: "Airway team", definition: "Clinicians skilled in advanced airway management, such as anesthesia, ENT, emergency, or critical care teams.", rt: "Activate early when upper airway obstruction is suspected." }
+];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
+
+      const courseSource = window.PulmoCoreCourses || window.courses || window.COURSES || [];
+      const progressSource = window.PulmoCoreProgress || JSON.parse(localStorage.getItem("pulmocoreCourseProgress") || "{}");
+
+      function getStatus(course) {
+        const key = course.id || course.slug || course.title || course.name || course.href || course.url;
+        const value = progressSource[key] || progressSource[course.href] || progressSource[course.url] || course.progress;
+        if (value === 100 || value === "complete" || value === "completed") return "Complete";
+        if (typeof value === "number" && value > 0) return `In progress (${Math.round(value)}%)`;
+        if (value && typeof value.percent === "number") return value.percent >= 100 ? "Complete" : `In progress (${Math.round(value.percent)}%)`;
+        return "Not started";
+      }
+
+      function getTitle(course) { return course.title || course.name || course.label || "Untitled course"; }
+      function getHref(course) { return course.href || course.url || "#"; }
+
+      if (Array.isArray(courseSource) && courseSource.length) {
+        panel.innerHTML = courseSource.map(course => `<a class="course-menu-item" role="menuitem" href="${getHref(course)}"><span class="course-menu-title">${getTitle(course)}</span><span class="course-menu-status">${getStatus(course)}</span></a>`).join("");
+      } else {
+        panel.innerHTML = `<div class="course-menu-empty">No courses found. Check that courses.js is loaded and exposes a courses array.</div>`;
+      }
+
+      button.addEventListener("click", () => {
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      document.addEventListener("click", event => {
+        if (!button.contains(event.target) && !panel.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+    initializeCourseMenu();
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.forEach(row => { const select = row.querySelector("select"); if (select) select.value = ""; row.classList.remove("correct", "incorrect"); });
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      shuffleSequence();
+      enableDynamicReorder();
+      initializeSequenceSort();
+      const sequenceSort = document.getElementById("sequenceSort");
+      if (sequenceSort) sequenceSort.style.visibility = "visible";
+    });
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> Upper airway obstruction can progress quickly. Avoid agitation, keep the patient upright, and prepare airway support.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> This presentation suggests an unstable upper airway, not a routine lower-airway problem.<br><br><strong>Try again:</strong> Choose the safest airway-focused answer.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script></body></html>
