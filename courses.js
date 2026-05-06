@@ -262,7 +262,35 @@ function initializeCourseMenu() {
     }
   });
 }
+function updateCurrentLessonProgress() {
+  const currentFile = window.location.pathname.split("/").pop();
 
+  const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
+  if (!sections.length || !currentFile) return;
+
+  const unlockedSections = sections.filter(section =>
+    !section.classList.contains("lesson-hidden")
+  );
+
+  const percent = Math.round((unlockedSections.length / sections.length) * 100);
+  const completed = percent >= 100;
+
+  saveCourseProgress(currentFile, percent, completed);
+
+  if (typeof initializeCourseMenu === "function") {
+    initializeCourseMenu();
+  }
+}
+
+document.addEventListener("activityComplete", updateCurrentLessonProgress);
+
+document.addEventListener("click", function () {
+  setTimeout(updateCurrentLessonProgress, 250);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  setTimeout(updateCurrentLessonProgress, 750);
+});
 window.initializeCourseMenu = initializeCourseMenu;
 
 /* ---------- INIT ---------- */
