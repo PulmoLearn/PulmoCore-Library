@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <script src="courses.js"></script>
+
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -58,6 +59,21 @@
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
 
+    .course-menu-container { position: relative; display: flex; align-items: center; margin-left: auto; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; }
+    .course-menu-button:hover { background: rgba(255,255,255,.16); }
+    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(380px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 50; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 6px; color: var(--core-navy); }
+    .course-menu-item { display: grid; gap: 3px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 14px; padding: 10px 12px; background: #FAFDFF; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item[aria-current="page"] { background: #F2F8FE; border-color: var(--oxygen-blue); }
+    .course-menu-title { font-weight: 800; color: var(--core-navy); }
+    .course-menu-status { font-size: .86rem; color: var(--slate); }
+    .course-menu-status.complete { color: var(--pulmo-teal-dark); font-weight: 800; }
+    .course-menu-status.progress { color: #7A4B00; font-weight: 800; }
+    .course-menu-status.not-started { color: var(--slate); }
+
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
     h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
@@ -79,7 +95,7 @@
     .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
     .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
     .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
-    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
@@ -159,29 +175,6 @@
     .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
     .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
 
-
-
-    .side-nav a.locked {
-      opacity: 0.45;
-      pointer-events: none;
-      cursor: not-allowed;
-    }
-
-    .course-menu-wrap { position: relative; margin-left: auto; }
-    .course-menu-btn { border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 14px; font-weight: 800; }
-    .course-menu-btn:hover { background: rgba(255,255,255,.14); }
-    .course-menu { position: absolute; right: 0; top: calc(100% + 12px); width: min(390px, 88vw); max-height: min(70vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 16px; z-index: 50; }
-    .course-menu h3 { font-size: 1rem; margin-bottom: 10px; }
-    .course-menu a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; text-decoration: none; padding: 10px 12px; border-radius: 12px; color: var(--core-navy); border: 1px solid transparent; }
-    .course-menu a:hover { background: var(--airway-mint); border-color: var(--soft-border); }
-    .course-menu a[aria-current="page"] { background: #F2F8FE; border-color: var(--oxygen-blue); font-weight: 800; }
-    .course-status { font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #E5F0F6; color: var(--slate); white-space: nowrap; }
-    .course-status.complete { background: var(--airway-mint); color: var(--core-navy); }
-    .course-status.progress { background: #FFF4DF; color: #7A4B00; }
-    .course-status.not-started { background: #EDF2F7; color: var(--slate); }
-    .video-frame { margin-top: 16px; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); border: 1px solid var(--soft-border); background: #000; }
-    .video-frame video { display: block; width: 100%; height: auto; border-radius: var(--radius-lg); }
-
     .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
     .footer strong span { color: var(--pulmo-teal); }
 
@@ -209,10 +202,10 @@
         </div>
       </div>
 
-      <div class="course-menu-wrap">
-        <button class="course-menu-btn" id="courseMenuBtn" type="button" aria-expanded="false" aria-controls="courseMenu">☰ Courses</button>
-        <div class="course-menu" id="courseMenu" hidden>
-          <h3>PulmoCore Library</h3>
+      <div class="course-menu-container">
+        <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+          <div class="course-menu-heading">PulmoCore Courses</div>
           <div id="courseMenuList"></div>
         </div>
       </div>
@@ -269,8 +262,8 @@
             <span class="eyebrow">Video Overview</span>
             <h2>2-Minute ARDS Overview</h2>
             <p>Watch this quick overview before moving into the disease snapshot.</p>
-            <div class="video-frame">
-              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="display:block; width:100%; height:auto; border-radius:var(--radius-lg);">
                 <source src="ARDS.mp4" type="video/mp4">
                 <track src="ARDS.vtt" kind="captions" srclang="en" label="English captions" default>
                 Your browser does not support the video tag.
@@ -709,7 +702,348 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
- <script> const defaultPulmoCoreCourses = [ { title: "ARDS", url: "ARDS.html", storageKey: "pulmocore-ards" } ]; function initializeCourseMenu() { const button = document.getElementById("courseMenuBtn"); const menu = document.getElementById("courseMenu"); const list = document.getElementById("courseMenuList"); if (!button || !menu || !list) return; const courses = window.pulmoCoreCourses || defaultPulmoCoreCourses; const currentFile = (window.location.pathname.split("/").pop() || "ARDS.html").toLowerCase(); function getCourseStatus(course) { const saved = localStorage.getItem(course.storageKey); if (!saved) { return { label: "Not started", className: "not-started" }; } try { const data = JSON.parse(saved); if (data.complete === true || data.progress === 100) { return { label: "Complete", className: "complete" }; } if (data.progress && data.progress > 0) { return { label: `${data.progress}%`, className: "progress" }; } return { label: "Started", className: "progress" }; } catch { return { label: "Started", className: "progress" }; } } list.innerHTML = courses.map(course => { const status = getCourseStatus(course); const courseFile = (course.url || "").split("/").pop().toLowerCase(); const isCurrent = courseFile === currentFile; return ` <a href="${course.url}" ${isCurrent ? 'aria-current="page"' : ""}> <span>${course.title}</span> <span class="course-status ${status.className}"> ${status.label} </span> </a> `; }).join(""); button.addEventListener("click", event => { event.stopPropagation(); const isOpen = !menu.hidden; menu.hidden = isOpen; button.setAttribute( "aria-expanded", String(!isOpen) ); }); document.addEventListener("click", event => { if ( !button.contains(event.target) && !menu.contains(event.target) ) { menu.hidden = true; button.setAttribute("aria-expanded", "false"); } }); document.addEventListener("keydown", event => { if (event.key === "Escape") { menu.hidden = true; button.setAttribute("aria-expanded", "false"); } }); } initializeCourseMenu();
-</script>
- </body>
+  <script>
+
+    const defaultPulmoCoreCourses = [
+      { title: "ARDS", url: "ARDS.html", storageKey: "pulmocore-ards" }
+    ];
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      const list = document.getElementById("courseMenuList");
+      if (!button || !panel || !list) return;
+
+      const courses = window.pulmoCoreCourses || defaultPulmoCoreCourses;
+      const currentFile = (window.location.pathname.split("/").pop() || "ARDS.html").toLowerCase();
+
+      function getCourseStatus(course) {
+        const saved = localStorage.getItem(course.storageKey);
+        if (!saved) return { label: "Not started", className: "not-started" };
+        try {
+          const data = JSON.parse(saved);
+          if (data.complete === true || data.progress === 100) return { label: "Complete", className: "complete" };
+          if (data.progress && data.progress > 0) return { label: `${data.progress}% complete`, className: "progress" };
+          return { label: "In progress", className: "progress" };
+        } catch {
+          return { label: "In progress", className: "progress" };
+        }
+      }
+
+      list.innerHTML = courses.map(course => {
+        const status = getCourseStatus(course);
+        const courseFile = (course.url || "").split("/").pop().toLowerCase();
+        const isCurrent = courseFile === currentFile;
+        return `
+          <a class="course-menu-item" href="${course.url}" ${isCurrent ? 'aria-current="page"' : ''} role="menuitem">
+            <span class="course-menu-title">${course.title}</span>
+            <span class="course-menu-status ${status.className}">${status.label}</span>
+          </a>
+        `;
+      }).join("");
+
+      button.addEventListener("click", event => {
+        event.stopPropagation();
+        const isOpen = panel.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", event => {
+        if (!button.contains(event.target) && !panel.contains(event.target)) {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    initializeCourseMenu();
+
+    const glossaryTerms = [
+      { term: "ARDS", definition: "Acute respiratory distress syndrome is an acute diffuse inflammatory lung injury causing noncardiogenic pulmonary edema, low compliance, and severe hypoxemia.", rt: "Core ICU syndrome requiring oxygenation support and lung-protective ventilation." },
+      { term: "Alveolar-capillary membrane", definition: "The thin barrier between alveolar gas and pulmonary capillary blood.", rt: "In ARDS this barrier becomes leaky, allowing fluid into alveoli." },
+      { term: "Noncardiogenic pulmonary edema", definition: "Pulmonary edema caused by increased permeability rather than primary heart failure or fluid overload.", rt: "Key distinction in ARDS diagnosis." },
+      { term: "P/F ratio", definition: "The PaO₂ divided by the FiO₂ expressed as a decimal.", rt: "Used to classify ARDS oxygenation severity." },
+      { term: "Mild ARDS", definition: "PaO₂/FiO₂ 201–300 with PEEP or CPAP at least 5 cm H₂O.", rt: "Defines the least severe Berlin oxygenation category." },
+      { term: "Moderate ARDS", definition: "PaO₂/FiO₂ 101–200 with PEEP or CPAP at least 5 cm H₂O.", rt: "Signals significant oxygenation impairment." },
+      { term: "Severe ARDS", definition: "PaO₂/FiO₂ 100 or less with PEEP or CPAP at least 5 cm H₂O.", rt: "Often prompts proning and rescue escalation discussion." },
+      { term: "Shunt", definition: "Perfusion of lung units that are poorly ventilated or not ventilated.", rt: "Explains refractory hypoxemia in ARDS." },
+      { term: "Compliance", definition: "The ease with which the lung expands for a given pressure change.", rt: "ARDS causes low compliance and stiff lungs." },
+      { term: "Lung-protective ventilation", definition: "A ventilator strategy using low tidal volume and pressure limitation to reduce ventilator-induced lung injury.", rt: "Foundational RT management concept in ARDS." },
+      { term: "Predicted body weight", definition: "A height- and sex-based weight estimate used for ventilator tidal volume calculations.", rt: "Low VT in ARDS is based on predicted, not actual, body weight." },
+      { term: "Plateau pressure", definition: "Pressure measured during an inspiratory pause that reflects alveolar pressure under passive conditions.", rt: "Common ARDS target is less than 30 cm H₂O when possible." },
+      { term: "PEEP", definition: "Positive end-expiratory pressure that helps keep alveoli open at end exhalation.", rt: "Improves recruitment and oxygenation but must be balanced against overdistention." },
+      { term: "Prone positioning", definition: "Positioning the patient face-down to improve oxygenation and V/Q matching.", rt: "Important intervention for severe ARDS." },
+      { term: "Atelectrauma", definition: "Lung injury from repeated alveolar opening and collapse.", rt: "Adequate PEEP helps reduce this risk." },
+      { term: "Volutrauma", definition: "Lung injury from overdistention by excessive tidal volume.", rt: "Reason low tidal volume is prioritized." },
+      { term: "Barotrauma", definition: "Pressure-related lung injury such as pneumothorax.", rt: "Monitor pressures and sudden deterioration." },
+      { term: "Permissive hypercapnia", definition: "Allowing a higher PaCO₂ when necessary to maintain lung-protective ventilation.", rt: "May be accepted when ordered and clinically appropriate." },
+      { term: "Recruitment", definition: "Opening previously collapsed alveoli.", rt: "PEEP and proning may improve recruitment." },
+      { term: "ECMO", definition: "Extracorporeal membrane oxygenation that supports gas exchange outside the body.", rt: "Possible referral consideration in refractory severe ARDS." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    shuffleSequence();
+    enableDynamicReorder();
+    initializeSequenceSort();
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> ARDS is driven by inflammatory alveolar-capillary injury, permeability edema, shunt, and severe hypoxemia.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> ARDS is not a simple bronchospasm problem. The main issue is alveolar flooding, shunt physiology, and low compliance.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct category to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+</body>
 </html>
