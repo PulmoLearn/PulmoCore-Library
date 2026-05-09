@@ -231,6 +231,72 @@
     @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
   @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  
+
+    .top-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .home-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .home-button:hover {
+      background: rgba(255,255,255,0.16);
+      transform: translateY(-1px);
+    }
+
+    .home-icon {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .course-menu-container,
+    .course-menu-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .course-menu-heading {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      padding: 8px 10px 10px;
+      color: var(--core-navy);
+      border-bottom: 1px solid var(--soft-border);
+      margin-bottom: 8px;
+    }
+
+    #courseMenuList {
+      display: grid;
+      gap: 8px;
+    }
+
+    .course-menu-item.current {
+      border-color: var(--pulmo-teal);
+      background: var(--airway-mint);
+      box-shadow: inset 4px 0 0 var(--pulmo-teal);
+    }
+
+    @media (max-width: 780px) {
+      .top-nav-actions { gap: 8px; }
+      .home-button { width: 42px; height: 42px; border-radius: 12px; }
+      .home-icon { width: 22px; height: 22px; }
+      .course-menu-button { padding: 9px 12px; }
+    }
+
   </style>
   <script src="courses.js"></script>
 </head>
@@ -252,9 +318,46 @@
         </div>
       </div>
 
-      <div class="course-menu-wrap">
-        <button class="course-menu-button" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" aria-label="Course menu"></div>
+      <div class="top-nav-actions">
+
+        <a
+          href="https://pulmolearn.github.io/PulmoCore-Library/"
+          class="home-button"
+          aria-label="PulmoCore Home"
+          title="PulmoCore Home"
+        >
+          <img
+            src="pulmocore-home-minimal.svg"
+            alt="Home"
+            class="home-icon"
+          >
+        </a>
+
+        <div class="course-menu-container course-menu-wrapper">
+          <button
+            class="course-menu-button"
+            id="courseMenuButton"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            ☰ Courses
+          </button>
+
+          <div
+            class="course-menu-panel"
+            id="courseMenuPanel"
+            role="menu"
+            aria-label="PulmoCore course menu"
+          >
+            <div class="course-menu-heading">
+              PulmoCore Courses
+            </div>
+
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
+
       </div>
     </header>
 
@@ -331,9 +434,9 @@
     border-radius: var(--radius-lg);
   "
 >
-      <source src="Asthma.mp4" type="video/mp4">
+      <source src="asthma.mp4" type="video/mp4">
       <track
-        src="Asthma.vtt"
+        src="asthma.vtt"
         kind="captions"
         srclang="en"
         label="English captions"
@@ -782,36 +885,46 @@
 
   <script>
 
+
     function initializeCourseMenu() {
       const button = document.getElementById("courseMenuButton");
       const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
+      const list = document.getElementById("courseMenuList");
+      if (!button || !panel || !list) return;
 
-      const courses = window.PULMO_COURSES || window.pulmoCourses || window.courses || window.courseList || [];
+      const courses = window.pulmoCoreCourses || window.PULMO_COURSES || window.pulmoCourses || window.courses || window.courseList || [];
       const normalizedCourses = Array.isArray(courses) ? courses : [];
+      const currentFile = (window.location.pathname.split("/").pop() || "Asthma.html").toLowerCase();
 
       function getCourseTitle(course) {
         return course.title || course.name || course.label || "Untitled Course";
       }
 
       function getCourseUrl(course) {
-        return course.url || course.href || course.link || "#";
+        return course.url || course.href || course.link || course.file || "#";
+      }
+
+      function getCourseFile(course) {
+        const url = getCourseUrl(course);
+        return (url.split("?")[0].split("#")[0].split("/").pop() || "").toLowerCase();
       }
 
       function getCourseId(course) {
-        return course.id || course.slug || getCourseTitle(course).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        return course.id || course.slug || course.storageKey || getCourseTitle(course).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
       }
 
       function getStoredProgress(course) {
         const id = getCourseId(course);
         const explicit = course.progress ?? course.percent ?? course.completion;
         if (typeof explicit === "number") return explicit;
+        if (course.complete === true || course.completed === true) return 100;
         const keys = [
+          course.storageKey,
           `pulmocore-progress-${id}`,
           `pulmocore_${id}_progress`,
           `progress-${id}`,
           id
-        ];
+        ].filter(Boolean);
         for (const key of keys) {
           const raw = localStorage.getItem(key);
           if (raw === null) continue;
@@ -821,7 +934,7 @@
             const obj = JSON.parse(raw);
             if (typeof obj.progress === "number") return obj.progress;
             if (typeof obj.percent === "number") return obj.percent;
-            if (obj.complete === true) return 100;
+            if (obj.complete === true || obj.completed === true) return 100;
           } catch (error) {}
         }
         return 0;
@@ -833,11 +946,15 @@
         return { text: "Not started", className: "not-started" };
       }
 
-      panel.innerHTML = normalizedCourses.length
+      list.innerHTML = normalizedCourses.length
         ? normalizedCourses.map(course => {
             const progress = getStoredProgress(course);
             const status = getStatus(progress);
-            return `<a class="course-menu-item" href="${getCourseUrl(course)}"><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-status ${status.className}">${status.text}</span></a>`;
+            const file = getCourseFile(course);
+            const isCurrent = file === currentFile;
+            const currentClass = isCurrent ? " current" : "";
+            const ariaCurrent = isCurrent ? ' aria-current="page"' : "";
+            return `<a class="course-menu-item${currentClass}" href="${getCourseUrl(course)}" role="menuitem"${ariaCurrent}><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-status ${status.className}">${status.text}</span></a>`;
           }).join("")
         : `<div class="course-menu-item"><span class="course-menu-title">No courses found</span><span class="course-status not-started">Check courses.js</span></div>`;
 
