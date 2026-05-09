@@ -64,6 +64,7 @@
     .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 6px; color: var(--core-navy); }
     .course-menu-item { display: grid; gap: 3px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 14px; padding: 10px 12px; background: #FAFDFF; }
     .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); }
     .course-menu-title { font-weight: 800; color: var(--core-navy); }
     .course-menu-status { font-size: .86rem; color: var(--slate); }
     #sequenceSort { visibility: hidden; }
@@ -227,7 +228,7 @@
     title="PulmoCore Home"
   >
     <img
-      src="pulmocore-home-minimal.svg"
+      src="Pulmocore-home-minimal.svg"
       alt="Home"
       class="home-icon"
     >
@@ -593,39 +594,94 @@
 
 
     function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
+      const button = document.getElementById("courseMenuButton") || document.getElementById("courseMenuBtn");
+      const panel = document.getElementById("courseMenuPanel") || document.getElementById("courseMenu");
       const list = document.getElementById("courseMenuList");
       if (!button || !panel || !list) return;
-      const source = window.PULMOCORE_COURSES || window.PulmoCoreCourses || window.courses || window.COURSES || window.courseList || [];
+
+      const source =
+        window.pulmoCoreCourses ||
+        window.defaultPulmoCoreCourses ||
+        window.PULMOCORE_COURSES ||
+        window.PulmoCoreCourses ||
+        window.courses ||
+        window.COURSES ||
+        window.courseList ||
+        [];
+
       const courses = Array.isArray(source) ? source : [];
-      function getCourseTitle(course) { return course.title || course.name || course.label || course.disease || "Untitled Course"; }
-      function getCourseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
-      function getCourseKey(course) { return course.id || course.key || getCourseHref(course).replace(/[^a-z0-9]/gi, "_").toLowerCase(); }
-      function getProgress(course) {
-        const key = getCourseKey(course);
-        const raw = localStorage.getItem(`pulmocore_progress_${key}`) || localStorage.getItem(`PulmoCore:${key}:progress`) || localStorage.getItem(key);
-        let percent = Number(course.progress || 0);
-        if (raw) {
-          try { const parsed = JSON.parse(raw); percent = Number(parsed.percent ?? parsed.progress ?? percent); }
-          catch { percent = Number(raw) || percent; }
-        }
-        percent = Math.max(0, Math.min(100, Math.round(percent || 0)));
-        if (percent >= 100 || course.complete === true || course.completed === true) return "Complete";
-        if (percent > 0) return `In progress (${percent}%)`;
-        return "Not started";
+      const currentFile = (window.location.pathname.split("/").pop() || "ALS.html").toLowerCase();
+
+      function getCourseTitle(course) {
+        if (typeof course === "string") return course.replace(/\.html?$/i, "");
+        return course.title || course.name || course.label || course.disease || course.file || course.href || "Untitled Course";
       }
-      list.innerHTML = courses.length ? courses.map(course => `<a class="course-menu-item" role="menuitem" href="${getCourseHref(course)}"><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-menu-status">${getProgress(course)}</span></a>`).join("") : `<div class="course-menu-item"><span class="course-menu-title">No courses found</span><span class="course-menu-status">Check courses.js is loaded in this folder.</span></div>`;
+
+      function getCourseHref(course) {
+        if (typeof course === "string") return course;
+        return course.href || course.url || course.file || course.path || "#";
+      }
+
+      function getCourseKey(course) {
+        if (course && typeof course === "object" && course.storageKey) return course.storageKey;
+        if (course && typeof course === "object" && (course.id || course.key)) return course.id || course.key;
+        return getCourseHref(course).replace(/.*\//, "").replace(/\.html?$/i, "");
+      }
+
+      function getCourseStatus(course) {
+        const explicitComplete = course && typeof course === "object" && (course.complete === true || course.completed === true);
+        const explicitProgress = course && typeof course === "object" ? Number(course.progress || 0) : 0;
+        const keys = [
+          getCourseKey(course),
+          `pulmocore_progress_${getCourseKey(course)}`,
+          `PulmoCore:${getCourseKey(course)}:progress`,
+          getCourseHref(course),
+          getCourseHref(course).replace(/.*\//, "").toLowerCase()
+        ].filter(Boolean);
+
+        let percent = explicitProgress;
+        let complete = explicitComplete;
+
+        for (const key of keys) {
+          const raw = localStorage.getItem(key);
+          if (!raw) continue;
+          try {
+            const parsed = JSON.parse(raw);
+            if (parsed.complete === true || parsed.completed === true) complete = true;
+            percent = Number(parsed.percent ?? parsed.progress ?? parsed.completedPercent ?? percent);
+          } catch {
+            const numeric = Number(raw);
+            if (!Number.isNaN(numeric)) percent = numeric;
+          }
+        }
+
+        percent = Math.max(0, Math.min(100, Math.round(percent || 0)));
+        if (complete || percent >= 100) return { label: "Complete", className: "complete" };
+        if (percent > 0) return { label: `${percent}%`, className: "progress" };
+        return { label: "Not started", className: "not-started" };
+      }
+
+      list.innerHTML = courses.length ? courses.map(course => {
+        const href = getCourseHref(course);
+        const title = getCourseTitle(course);
+        const status = getCourseStatus(course);
+        const file = href.split("/").pop().toLowerCase();
+        const currentClass = file === currentFile ? " current" : "";
+        return `<a class="course-menu-item${currentClass}" role="menuitem" href="${href}"><span class="course-menu-title">${title}</span><span class="course-menu-status ${status.className}">${status.label}</span></a>`;
+      }).join("") : `<div class="course-menu-item"><span class="course-menu-title">No courses found</span><span class="course-menu-status">Check that courses.js is in the same GitHub folder and defines window.pulmoCoreCourses.</span></div>`;
+
       button.addEventListener("click", () => {
         const isOpen = panel.classList.toggle("open");
         button.setAttribute("aria-expanded", String(isOpen));
       });
+
       document.addEventListener("click", event => {
         if (!panel.contains(event.target) && !button.contains(event.target)) {
           panel.classList.remove("open");
           button.setAttribute("aria-expanded", "false");
         }
       });
+
       document.addEventListener("keydown", event => {
         if (event.key === "Escape") {
           panel.classList.remove("open");
