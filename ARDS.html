@@ -63,7 +63,7 @@
     .course-menu-button { border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; }
     .course-menu-button:hover { background: rgba(255,255,255,.16); }
     .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(380px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 50; }
-    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-panel.open, .course-menu-panel.show { display: grid; gap: 8px; }
     .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 6px; color: var(--core-navy); }
     .course-menu-item { display: grid; gap: 3px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 14px; padding: 10px 12px; background: #FAFDFF; }
     .course-menu-item:hover { background: var(--airway-mint); }
@@ -71,7 +71,7 @@
     .course-menu-title { font-weight: 800; color: var(--core-navy); }
     .course-menu-status { font-size: .86rem; color: var(--slate); }
     .course-menu-status.complete { color: var(--pulmo-teal-dark); font-weight: 800; }
-    .course-menu-status.progress { color: #7A4B00; font-weight: 800; }
+    .course-menu-status.progress, .course-menu-status.in-progress { color: #7A4B00; font-weight: 800; }
     .course-menu-status.not-started { color: var(--slate); }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
@@ -202,7 +202,7 @@
         </div>
       </div>
 
-      <div class="course-menu-container">
+      <div class="course-menu-container course-menu-wrapper">
         <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
         <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
           <div class="course-menu-heading">PulmoCore Courses</div>
@@ -705,37 +705,55 @@
   <script>
 
     const defaultPulmoCoreCourses = [
-      { title: "ARDS", url: "ARDS.html", storageKey: "pulmocore-ards" }
+      { title: "ARDS", file: "ARDS.html" }
     ];
 
     function initializeCourseMenu() {
       const button = document.getElementById("courseMenuButton");
       const panel = document.getElementById("courseMenuPanel");
-      const list = document.getElementById("courseMenuList");
+      const list = document.getElementById("courseMenuList") || panel;
       if (!button || !panel || !list) return;
 
-      const courses = window.pulmoCoreCourses || defaultPulmoCoreCourses;
+      if (button.dataset.menuInitialized === "true") return;
+      button.dataset.menuInitialized = "true";
+
+      const courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.pulmocoreCourses || window.courseList || window.courses || defaultPulmoCoreCourses;
       const currentFile = (window.location.pathname.split("/").pop() || "ARDS.html").toLowerCase();
 
+      function getCourseFile(course) {
+        return course.file || course.url || "#";
+      }
+
       function getCourseStatus(course) {
-        const saved = localStorage.getItem(course.storageKey);
+        const courseFile = getCourseFile(course);
+
+        if (typeof window.getCourseProgress === "function") {
+          const progress = window.getCourseProgress(courseFile);
+          if (progress && progress.completed) return { label: "Complete", className: "complete" };
+          if (progress && progress.percent > 0) return { label: `In progress (${progress.percent}%)`, className: "in-progress" };
+        }
+
+        const storageKey = course.storageKey || `pulmocore-${courseFile.replace(/\.html$/i, "").toLowerCase()}`;
+        const saved = localStorage.getItem(storageKey);
         if (!saved) return { label: "Not started", className: "not-started" };
+
         try {
           const data = JSON.parse(saved);
-          if (data.complete === true || data.progress === 100) return { label: "Complete", className: "complete" };
-          if (data.progress && data.progress > 0) return { label: `${data.progress}% complete`, className: "progress" };
-          return { label: "In progress", className: "progress" };
+          if (data.complete === true || data.completed === true || data.progress === 100 || data.percent === 100) return { label: "Complete", className: "complete" };
+          const progress = data.progress || data.percent || 0;
+          if (progress > 0) return { label: `In progress (${progress}%)`, className: "in-progress" };
+          return { label: "In progress", className: "in-progress" };
         } catch {
-          return { label: "In progress", className: "progress" };
+          return { label: "In progress", className: "in-progress" };
         }
       }
 
       list.innerHTML = courses.map(course => {
+        const courseFile = getCourseFile(course);
         const status = getCourseStatus(course);
-        const courseFile = (course.url || "").split("/").pop().toLowerCase();
-        const isCurrent = courseFile === currentFile;
+        const isCurrent = courseFile.split("/").pop().toLowerCase() === currentFile;
         return `
-          <a class="course-menu-item" href="${course.url}" ${isCurrent ? 'aria-current="page"' : ''} role="menuitem">
+          <a class="course-menu-item" href="${courseFile}" ${isCurrent ? 'aria-current="page"' : ''} role="menuitem" data-course-file="${courseFile}">
             <span class="course-menu-title">${course.title}</span>
             <span class="course-menu-status ${status.className}">${status.label}</span>
           </a>
@@ -743,14 +761,18 @@
       }).join("");
 
       button.addEventListener("click", event => {
+        event.preventDefault();
         event.stopPropagation();
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
+        const isOpen = panel.classList.contains("open") || panel.classList.contains("show");
+        panel.classList.toggle("open", !isOpen);
+        panel.classList.toggle("show", !isOpen);
+        button.setAttribute("aria-expanded", String(!isOpen));
       });
 
       document.addEventListener("click", event => {
         if (!button.contains(event.target) && !panel.contains(event.target)) {
           panel.classList.remove("open");
+          panel.classList.remove("show");
           button.setAttribute("aria-expanded", "false");
         }
       });
@@ -758,6 +780,7 @@
       document.addEventListener("keydown", event => {
         if (event.key === "Escape") {
           panel.classList.remove("open");
+          panel.classList.remove("show");
           button.setAttribute("aria-expanded", "false");
         }
       });
