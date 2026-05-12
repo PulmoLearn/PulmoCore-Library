@@ -174,7 +174,9 @@ function updateCourseMenuStatuses() {
 }
 
 function initializeCourseMenu() {
-  const button = document.getElementById("courseMenuButton");
+  const button =
+  document.getElementById("courseMenuBtn") ||
+  document.getElementById("courseMenuButton");
   const panel = getCoursePanel();
 
   if (!button || !panel) return;
