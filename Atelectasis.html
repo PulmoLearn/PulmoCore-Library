@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Montserrat:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<script src="courses.js"></script>
+    
 <style>
     :root {
       --core-navy: #0B1F33;
@@ -229,15 +231,19 @@
       box-shadow: var(--shadow);
       padding: 12px;
       display: none;
-      z-index: 50;
+      z-index: 40;
     }
-    .course-menu-panel.open { display: block; }
-    .course-menu-heading {
-      font-family: var(--font-heading);
-      font-weight: 800;
-      padding: 8px 10px 12px;
-      border-bottom: 1px solid var(--soft-border);
-      margin-bottom: 8px;
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--soft-border);
+      border-radius: 12px;
+      text-decoration: none;
+      background: #FAFDFF;
     }
     #courseMenuList { display: grid; gap: 6px; }
     .course-menu-item {
@@ -251,21 +257,29 @@
       border-radius: 12px;
       padding: 10px;
     }
-    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
-    .course-menu-item.current { background: #E6F3FF; border-color: var(--oxygen-blue); font-weight: 800; }
-    .course-menu-status {
-      font-size: 0.78rem;
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-title { font-weight: 800; }
+    .course-status {
+      white-space: nowrap;
+      font-size: .78rem;
       font-weight: 800;
       border-radius: 999px;
       padding: 4px 8px;
+      background: #E5F0F6;
       color: var(--slate);
-      background: #EEF6FA;
-      white-space: nowrap;
     }
-    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
-    .course-menu-status.progress { background: #FFF4DF; color: #7A4B00; }
-    .course-menu-status.not-started { background: #EEF6FA; color: var(--slate); }
-    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    .course-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-status.not-started { background: #EEF4F8; color: var(--slate); }
+
+    .side-nav a.locked {
+      pointer-events: none;
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    #sequenceSort { visibility: hidden; }
+    
     @media (max-width: 780px) {
       .top-nav { gap: 12px; }
       .top-nav-actions { gap: 8px; }
@@ -299,21 +313,48 @@
 }
 
 .home-button:hover {
-  background: rgba(255,255,255,0.16);
-  transform: translateY(-1px);
-}
+      background: rgba(255,255,255,0.16);
+      transform: translateY(-1px);
+    }
 
-.home-icon {
-  width: 24px;
-  height: 24px;
-  display: block;
-}
+    .home-icon {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
 
-.side-nav a.locked {
-  pointer-events: none;
-  opacity: 0.45;
-  cursor: not-allowed;
-}
+    .course-menu-container,
+    .course-menu-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .course-menu-heading {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      padding: 8px 10px 10px;
+      color: var(--core-navy);
+      border-bottom: 1px solid var(--soft-border);
+      margin-bottom: 8px;
+    }
+
+    #courseMenuList {
+      display: grid;
+      gap: 8px;
+    }
+
+    .course-menu-item.current {
+      border-color: var(--pulmo-teal);
+      background: var(--airway-mint);
+      box-shadow: inset 4px 0 0 var(--pulmo-teal);
+    }
+
+    @media (max-width: 780px) {
+      .top-nav-actions { gap: 8px; }
+      .home-button { width: 42px; height: 42px; border-radius: 12px; }
+      .home-icon { width: 22px; height: 22px; }
+      .course-menu-button { padding: 9px 12px; }
+    }
 
 </style>
 </head>
@@ -352,7 +393,7 @@
   <div class="course-menu-container course-menu-wrapper">
     <button
       class="course-menu-button"
-      id="courseMenuBtn"
+      id="courseMenuButton"
       type="button"
       aria-haspopup="true"
       aria-expanded="false"
@@ -846,7 +887,6 @@
 </main>
 <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br/>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
 </div>
-<script src="courses.js"></script>
 <script>
     const glossaryTerms = [
       { term: "Atelectasis", definition: "Partial or complete collapse or underinflation of alveoli, a segment, a lobe, or an entire lung.", rt: "Explains low-volume hypoxemia and guides lung expansion therapy." },
