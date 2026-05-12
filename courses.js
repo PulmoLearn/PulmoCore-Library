@@ -142,7 +142,7 @@ function renderCourseMenu() {
       window.location.href = course.file;
     });
 
-    panel.appendChild(item);
+    list.appendChild(item);
   });
 }
 
@@ -178,8 +178,9 @@ function initializeCourseMenu() {
   document.getElementById("courseMenuBtn") ||
   document.getElementById("courseMenuButton");
   const panel = getCoursePanel();
-
-  if (!button || !panel) return;
+const list = document.getElementById("courseMenuList") || panel;
+if (!panel || !list) return;
+list.innerHTML = "";
 
   renderCourseMenu();
 
