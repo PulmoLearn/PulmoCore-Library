@@ -59,6 +59,8 @@ function getPulmoCoreProgressData() {
 function getCourseProgress(courseFile) {
   const progress = getPulmoCoreProgressData();
 
+    console.log("Progress for", courseFile, progress[courseFile]);
+
   return progress[courseFile] || {
     completed: false,
     percent: 0
@@ -106,7 +108,8 @@ function getCoursePanel() {
 /* ---------- COURSE MENU ---------- */
 
 function renderCourseMenu() {
-  const panel = getCoursePanel();
+  console.log("renderCourseMenu triggered");
+   const panel = getCoursePanel();
   if (!panel) return;
 
   const courseSource = getCourseSource();
@@ -114,6 +117,7 @@ function renderCourseMenu() {
   panel.innerHTML = "";
 
   courseSource.forEach(course => {
+     console.log("Adding course:", course.title);
     const progress = getCourseProgress(course.file);
 
     let status = "Not started";
@@ -175,7 +179,9 @@ function updateCourseMenuStatuses() {
 }
 
 function initializeCourseMenu() {
-  const button =
+  console.log("initializeCourseMenu triggered");
+   
+   const button =
   document.getElementById("courseMenuBtn") ||
   document.getElementById("courseMenuButton");
   const panel = getCoursePanel();
@@ -193,6 +199,8 @@ list.innerHTML = "";
       panel.classList.contains("open") ||
       panel.classList.contains("show");
 
+     console.log("Toggling panel visibility", isOpen);
+     
     panel.classList.toggle("open", !isOpen);
     panel.classList.toggle("show", !isOpen);
 
