@@ -108,17 +108,21 @@ function getCoursePanel() {
 /* ---------- COURSE MENU ---------- */
 
 function renderCourseMenu() {
-  console.log("renderCourseMenu triggered");
-   const panel = getCoursePanel();
+  const panel = getCoursePanel();
   if (!panel) return;
 
   const courseSource = getCourseSource();
   const list = document.getElementById("courseMenuList");
-  panel.innerHTML = "";
+
+  console.log("Course list element:", list);  // Log the course list element to verify it's present
+
+  panel.innerHTML = "";  // Clear the panel content first
 
   courseSource.forEach(course => {
-     console.log("Adding course:", course.title);
+    console.log("Rendering course:", course.title);  // Log each course being rendered
+
     const progress = getCourseProgress(course.file);
+    console.log("Progress for", course.title, progress);  // Log the progress for each course
 
     let status = "Not started";
     let statusClass = "not-started";
@@ -147,6 +151,7 @@ function renderCourseMenu() {
       window.location.href = course.file;
     });
 
+    console.log("Appending course:", course.title);  // Log when each course item is appended
     list.appendChild(item);
   });
 }
