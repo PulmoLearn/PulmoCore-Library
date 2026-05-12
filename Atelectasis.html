@@ -277,7 +277,45 @@
       .home-button { width: 42px; height: 42px; }
       .home-icon { width: 22px; height: 22px; }
     }
-  </style>
+  
+.top-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.home-button:hover {
+  background: rgba(255,255,255,0.16);
+  transform: translateY(-1px);
+}
+
+.home-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.side-nav a.locked {
+  pointer-events: none;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+</style>
 </head>
 <body>
 <div class="page-shell">
@@ -297,20 +335,45 @@
 </div>
 </div>
 <div class="top-nav-actions">
-<a aria-label="PulmoCore Home" class="home-button" href="https://pulmolearn.github.io/PulmoCore-Library/" title="PulmoCore Home">
-<img alt="Home" class="home-icon" src="pulmocore-home-minimal.svg"/>
-</a>
-<div class="course-menu-container course-menu-wrapper">
-<button aria-expanded="false" aria-haspopup="true" class="course-menu-button" id="courseMenuButton" type="button">
-            ☰ Courses
-          </button>
-<div aria-label="PulmoCore course menu" class="course-menu-panel" id="courseMenuPanel" role="menu">
-<div class="course-menu-heading">
-              PulmoCore Courses
-            </div>
-<div id="courseMenuList"></div>
-</div>
-</div>
+
+  <a
+    href="https://pulmolearn.github.io/PulmoCore-Library/"
+    class="home-button"
+    aria-label="PulmoCore Home"
+    title="PulmoCore Home"
+  >
+    <img
+      src="pulmocore-home-minimal.svg"
+      alt="Home"
+      class="home-icon"
+    >
+  </a>
+
+  <div class="course-menu-container course-menu-wrapper">
+    <button
+      class="course-menu-button"
+      id="courseMenuBtn"
+      type="button"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      ☰ Courses
+    </button>
+
+    <div
+      class="course-menu-panel"
+      id="courseMenuPanel"
+      role="menu"
+      aria-label="PulmoCore course menu"
+    >
+      <div class="course-menu-heading">
+        PulmoCore Courses
+      </div>
+
+      <div id="courseMenuList"></div>
+    </div>
+  </div>
+
 </div>
 </header>
 <main class="main-content">
@@ -785,85 +848,6 @@
 </div>
 <script src="courses.js"></script>
 <script>
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      const list = document.getElementById("courseMenuList");
-      if (!button || !panel || !list) return;
-
-      const fallbackCourses = [
-        { title: "ALS", file: "ALS.html", storageKey: "pulmocore_als_progress" },
-        { title: "ARDS", file: "ARDS.html", storageKey: "pulmocore_ards_progress" },
-        { title: "Asthma", file: "Asthma.html", storageKey: "pulmocore_asthma_progress" },
-        { title: "Atelectasis", file: "Atelectasis.html", storageKey: "pulmocore_atelectasis_progress" },
-        { title: "Bronchiectasis", file: "Bronchiectasis.html", storageKey: "pulmocore_bronchiectasis_progress" },
-        { title: "COPD", file: "COPD.html", storageKey: "pulmocore_copd_progress" },
-        { title: "Croup", file: "Croup.html", storageKey: "pulmocore_croup_progress" },
-        { title: "Pneumonia", file: "Pneumonia.html", storageKey: "pulmocore_pneumonia_progress" },
-        { title: "Pneumothorax", file: "Pneumothorax.html", storageKey: "pulmocore_pneumothorax_progress" },
-        { title: "Pulmonary Embolism", file: "PulmonaryEmbolism.html", storageKey: "pulmocore_pulmonaryembolism_progress" }
-      ];
-
-      const courses = Array.isArray(window.pulmoCoreCourses) && window.pulmoCoreCourses.length
-        ? window.pulmoCoreCourses
-        : fallbackCourses;
-      const currentFile = (window.location.pathname.split("/").pop() || "Atelectasis.html").toLowerCase();
-
-      function getCourseTitle(course) {
-        return course.title || course.name || course.label || course.courseTitle || "Untitled Course";
-      }
-
-      function getCourseFile(course) {
-        return course.file || course.href || course.url || course.path || "#";
-      }
-
-      function getStorageKey(course) {
-        const file = getCourseFile(course).split("/").pop().replace(/\.html?$/i, "").toLowerCase();
-        return course.storageKey || course.key || `pulmocore_${file}_progress`;
-      }
-
-      function getCourseStatus(course) {
-        const saved = localStorage.getItem(getStorageKey(course));
-        if (!saved) return { label: "Not started", className: "not-started" };
-        try {
-          const data = JSON.parse(saved);
-          const progress = Number(data.progress || data.percent || data.completion || 0);
-          if (data.complete === true || data.completed === true || progress >= 100) return { label: "Complete", className: "complete" };
-          if (progress > 0) return { label: `${Math.round(progress)}%`, className: "progress" };
-        } catch (error) {
-          if (saved === "complete" || saved === "completed") return { label: "Complete", className: "complete" };
-          const progress = Number(saved);
-          if (!Number.isNaN(progress) && progress > 0) return { label: progress >= 100 ? "Complete" : `${Math.round(progress)}%`, className: progress >= 100 ? "complete" : "progress" };
-        }
-        return { label: "In progress", className: "progress" };
-      }
-
-      list.innerHTML = courses.map(course => {
-        const title = getCourseTitle(course);
-        const file = getCourseFile(course);
-        const status = getCourseStatus(course);
-        const fileName = file.split("/").pop().toLowerCase();
-        const isCurrent = fileName === currentFile;
-        return `<a class="course-menu-item${isCurrent ? " current" : ""}" href="${file}" role="menuitem"${isCurrent ? ' aria-current="page"' : ""}><span>${title}</span><span class="course-menu-status ${status.className}">${status.label}</span></a>`;
-      }).join("");
-
-      function closeMenu() {
-        panel.classList.remove("open");
-        button.setAttribute("aria-expanded", "false");
-      }
-
-      function toggleMenu() {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      }
-
-      button.addEventListener("click", event => { event.stopPropagation(); toggleMenu(); });
-      document.addEventListener("click", event => { if (!panel.contains(event.target) && event.target !== button) closeMenu(); });
-      document.addEventListener("keydown", event => { if (event.key === "Escape") closeMenu(); });
-    }
-
-    initializeCourseMenu();
     const glossaryTerms = [
       { term: "Atelectasis", definition: "Partial or complete collapse or underinflation of alveoli, a segment, a lobe, or an entire lung.", rt: "Explains low-volume hypoxemia and guides lung expansion therapy." },
       { term: "Alveolar collapse", definition: "Loss of alveolar volume that reduces ventilation to affected lung units.", rt: "Primary pathophysiology of atelectasis." },
