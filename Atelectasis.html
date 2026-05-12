@@ -887,6 +887,90 @@
 <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br/>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
 </div>
 <script>
+    const defaultPulmoCoreCourses = [
+      { title: "Atelectasis", file: "Atelectasis.html" }
+    ];
+
+    function initializeCourseMenu() {
+      const button = document.getElementById("courseMenuButton");
+      const panel = document.getElementById("courseMenuPanel");
+      const list = document.getElementById("courseMenuList") || panel;
+      if (!button || !panel || !list) return;
+
+      if (button.dataset.menuInitialized === "true") return;
+      button.dataset.menuInitialized = "true";
+
+      const courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.pulmocoreCourses || window.courseList || window.courses || defaultPulmoCoreCourses;
+      const currentFile = (window.location.pathname.split("/").pop() || "Asthma.html").toLowerCase();
+
+      function getCourseFile(course) {
+        return course.file || course.url || "#";
+      }
+
+      function getCourseStatus(course) {
+        const courseFile = getCourseFile(course);
+
+        if (typeof window.getCourseProgress === "function") {
+          const progress = window.getCourseProgress(courseFile);
+          if (progress && progress.completed) return { label: "Complete", className: "complete" };
+          if (progress && progress.percent > 0) return { label: `In progress (${progress.percent}%)`, className: "in-progress" };
+        }
+
+        const storageKey = course.storageKey || `pulmocore-${courseFile.replace(/\.html$/i, "").toLowerCase()}`;
+        const saved = localStorage.getItem(storageKey);
+        if (!saved) return { label: "Not started", className: "not-started" };
+
+        try {
+          const data = JSON.parse(saved);
+          if (data.complete === true || data.completed === true || data.progress === 100 || data.percent === 100) return { label: "Complete", className: "complete" };
+          const progress = data.progress || data.percent || 0;
+          if (progress > 0) return { label: `In progress (${progress}%)`, className: "in-progress" };
+          return { label: "In progress", className: "in-progress" };
+        } catch {
+          return { label: "In progress", className: "in-progress" };
+        }
+      }
+
+      list.innerHTML = courses.map(course => {
+        const courseFile = getCourseFile(course);
+        const status = getCourseStatus(course);
+        const isCurrent = courseFile.split("/").pop().toLowerCase() === currentFile;
+        return `
+          <a class="course-menu-item" href="${courseFile}" ${isCurrent ? 'aria-current="page"' : ''} role="menuitem" data-course-file="${courseFile}">
+            <span class="course-menu-title">${course.title}</span>
+            <span class="course-menu-status ${status.className}">${status.label}</span>
+          </a>
+        `;
+      }).join("");
+
+      button.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const isOpen = panel.classList.contains("open") || panel.classList.contains("show");
+        panel.classList.toggle("open", !isOpen);
+        panel.classList.toggle("show", !isOpen);
+        button.setAttribute("aria-expanded", String(!isOpen));
+      });
+
+      document.addEventListener("click", event => {
+        if (!button.contains(event.target) && !panel.contains(event.target)) {
+          panel.classList.remove("open");
+          panel.classList.remove("show");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          panel.classList.remove("open");
+          panel.classList.remove("show");
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    initializeCourseMenu();
+    
     const glossaryTerms = [
       { term: "Atelectasis", definition: "Partial or complete collapse or underinflation of alveoli, a segment, a lobe, or an entire lung.", rt: "Explains low-volume hypoxemia and guides lung expansion therapy." },
       { term: "Alveolar collapse", definition: "Loss of alveolar volume that reduces ventilation to affected lung units.", rt: "Primary pathophysiology of atelectasis." },
