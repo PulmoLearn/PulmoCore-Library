@@ -110,6 +110,7 @@ function renderCourseMenu() {
   if (!panel) return;
 
   const courseSource = getCourseSource();
+  const list = document.getElementById("courseMenuList");
   panel.innerHTML = "";
 
   courseSource.forEach(course => {
