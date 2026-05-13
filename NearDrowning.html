@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 
+  <script src="courses.js"></script>
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -82,15 +83,27 @@
     .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
 
-    .course-menu-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; }
-    .course-menu-btn { border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-btn:hover { background: rgba(255,255,255,.18); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 40; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
     .course-menu-panel.open { display: grid; gap: 8px; }
-    .course-menu-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; text-decoration: none; padding: 12px; border-radius: 12px; border: 1px solid transparent; }
-    .course-menu-item:hover { background: var(--mist-blue); border-color: var(--soft-border); }
-    .course-menu-title { font-weight: 800; overflow-wrap: anywhere; }
-    .course-menu-status { font-size: .78rem; font-weight: 800; color: var(--slate); background: #F4FAFC; border: 1px solid var(--soft-border); border-radius: 999px; padding: 5px 8px; white-space: nowrap; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
     #sequenceSort { visibility: hidden; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
@@ -193,9 +206,17 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu-wrap">
-        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="Course menu"></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -274,7 +295,7 @@
             <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Drowning Factor Sorting"><h3>Sort the Drowning Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Unwitnessed submersion</strong><select aria-label="Category"><option value="">Choose category</option><option value="trigger">Risk / Scene Clue</option><option value="controller">RT Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Apply oxygen and support ventilation</strong><select><option value="">Choose category</option><option value="trigger">Risk / Scene Clue</option><option value="controller">RT Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="trigger"><strong>Diving injury mechanism</strong><select><option value="">Choose category</option><option value="trigger">Risk / Scene Clue</option><option value="controller">RT Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Increasing oxygen requirement with crackles</strong><select><option value="">Choose category</option><option value="trigger">Risk / Scene Clue</option><option value="controller">RT Intervention</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Use CPAP/PEEP when indicated</strong><select><option value="">Choose category</option><option value="trigger">Risk / Scene Clue</option><option value="controller">RT Intervention</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article>
           </section>
 
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Presentation can range from mild cough after rescue to apnea, respiratory failure, or cardiac arrest. RT assessment should prioritize oxygenation, ventilation, airway protection, breath sounds, work of breathing, mental status, temperature, and trauma clues.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Symptoms</td><td>Cough, dyspnea, chest discomfort, fatigue, vomiting, anxiety.</td></tr><tr><td>Breath sounds</td><td>Crackles, wheezes, diminished sounds, coarse secretions.</td></tr><tr><td>Oxygenation</td><td>Low SpO₂, cyanosis, increasing oxygen need, low PaO₂.</td></tr><tr><td>Ventilation</td><td>Tachypnea early; hypoventilation, apnea, or rising PaCO₂ if fatigue/neurologic impairment develops.</td></tr><tr><td>Neurologic</td><td>Agitation, confusion, lethargy, seizure, decreased responsiveness.</td></tr><tr><td>Systemic</td><td>Hypothermia, dysrhythmia risk, shock signs, trauma signs.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Delayed symptoms matter. A patient who initially coughs but later develops worsening respiratory distress, crackles, or hypoxemia needs urgent reassessment.</p></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Presentation can range from mild cough after rescue to apnea, respiratory failure, or cardiac arrest. RT assessment should prioritize oxygenation, ventilation, airway protection, breath sounds, work of breathing, mental status, temperature, and trauma clues.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Symptoms</td><td>Cough, dyspnea, chest discomfort, fatigue, vomiting, anxiety.</td></tr><tr><td>Breath sounds</td><td>Crackles, wheezes, diminished sounds, coarse secretions.</td></tr><tr><td>Oxygenation</td><td>Low SpO₂, cyanosis, increasing oxygen need, low PaO₂.</td></tr><tr><td>Ventilation</td><td>Tachypnea early; hypoventilation, apnea, or rising PaCO₂ if fatigue/neurologic impairment develops.</td></tr><tr><td>Neurologic</td><td>Agitation, confusion, lethargy, seizure, decreased responsiveness.</td></tr><tr><td>Systemic</td><td>Hypothermia, dysrhythmia risk, shock signs, trauma signs.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Delayed symptoms matter. A patient who initially coughs but later develops worsening respiratory distress, crackles, or hypoxemia needs urgent reassessment.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Drowning Signs Sort"><h3>Sort the Post-Drowning Clinical Signs</h3><p>Categorize each finding as an Initial Presentation, Deterioration Sign, or Critical Finding, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="initial"><strong>Persistent cough and tachypnea after rescue</strong><select aria-label="Category for persistent cough"><option value="">Choose category</option><option value="initial">Initial Presentation</option><option value="deterioration">Deterioration Sign</option><option value="critical">Critical Finding</option></select></div><div class="sort-row" data-answer="deterioration"><strong>Progressive crackles with falling SpO₂</strong><select aria-label="Category for progressive crackles"><option value="">Choose category</option><option value="initial">Initial Presentation</option><option value="deterioration">Deterioration Sign</option><option value="critical">Critical Finding</option></select></div><div class="sort-row" data-answer="critical"><strong>Altered mental status with apnea</strong><select aria-label="Category for altered mental status with apnea"><option value="">Choose category</option><option value="initial">Initial Presentation</option><option value="deterioration">Deterioration Sign</option><option value="critical">Critical Finding</option></select></div><div class="sort-row" data-answer="deterioration"><strong>Increasing oxygen requirement with coarse secretions</strong><select aria-label="Category for increasing oxygen requirement"><option value="">Choose category</option><option value="initial">Initial Presentation</option><option value="deterioration">Deterioration Sign</option><option value="critical">Critical Finding</option></select></div><div class="sort-row" data-answer="critical"><strong>Severe hypothermia with dysrhythmia risk</strong><select aria-label="Category for severe hypothermia"><option value="">Choose category</option><option value="initial">Initial Presentation</option><option value="deterioration">Deterioration Sign</option><option value="critical">Critical Finding</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article></section>
 
           <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostics help quantify oxygenation/ventilation, identify aspiration-related lung injury, monitor delayed deterioration, and detect trauma, hypothermia, or neurologic complications.</p><div class="example-box soft-blue" style="margin-top:16px;"><img src="post-drowning-cxr-abg.png" alt="Educational placeholder showing post-drowning chest x-ray changes and ABG oxygenation interpretation" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><br><strong>Visual learning:</strong> Pair the chest image with ABG/SpO₂ trends. Early imaging may be normal even when symptoms require monitoring.</div><h3 style="margin-top:18px;">High-Yield Data</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test / Assessment</th><th>What It Helps Determine</th></tr><tr><td>SpO₂ trend</td><td>Immediate oxygenation status and response to therapy.</td></tr><tr><td>ABG or VBG/clinical ventilation assessment</td><td>Hypoxemia, acidosis, hypercapnia, and ventilatory failure risk.</td></tr><tr><td>Chest x-ray</td><td>Aspiration changes, edema, atelectasis, alternate injury; may lag behind symptoms.</td></tr><tr><td>Temperature</td><td>Hypothermia severity and rewarming need.</td></tr><tr><td>ECG/cardiac monitoring</td><td>Dysrhythmias after hypoxemia or hypothermia.</td></tr><tr><td>Trauma evaluation</td><td>C-spine, head injury, or chest trauma after diving/fall mechanism.</td></tr></table></div><h3 style="margin-top:18px;">ABG Patterns</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Pattern</th><th>Meaning</th></tr><tr><td>Low PaO₂ / low SpO₂</td><td>Hypoxemia from V/Q mismatch, shunt, atelectasis, or edema.</td></tr><tr><td>Low PaCO₂ early</td><td>Hyperventilation from distress or anxiety.</td></tr><tr><td>Rising PaCO₂</td><td>Fatigue, hypoventilation, airway compromise, or neurologic impairment.</td></tr><tr><td>Metabolic acidosis</td><td>Possible tissue hypoxia/lactic acidosis after significant hypoxic event.</td></tr></table></div></section>
 
@@ -313,47 +334,7 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
-  <script src="courses.js"></script>
   <script>
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-      const courses = Array.isArray(window.pulmoCoreCourses) ? window.pulmoCoreCourses : (Array.isArray(window.courses) ? window.courses : []);
-      const progress = JSON.parse(localStorage.getItem("pulmoCoreProgress") || "{}");
-      function statusFor(course) {
-        const key = course.id || course.slug || course.title || course.name || course.href || course.url;
-        const item = progress[key] || progress[course.href] || progress[course.url] || {};
-        if (item.complete || item.completed || Number(item.percent) >= 100) return "Complete";
-        const pct = Number(item.percent || item.progress || 0);
-        if (pct > 0) return `In progress (${Math.round(pct)}%)`;
-        return "Not started";
-      }
-      panel.innerHTML = courses.length ? courses.map(course => {
-        const title = course.title || course.name || "Untitled Course";
-        const href = course.href || course.url || "#";
-        return `<a class="course-menu-item" href="${href}" role="menuitem"><span class="course-menu-title">${title}</span><span class="course-menu-status">${statusFor(course)}</span></a>`;
-      }).join("") : `<div class="course-menu-item"><span class="course-menu-title">No courses found</span><span class="course-menu-status">Check courses.js</span></div>`;
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!event.target.closest(".course-menu-wrap")) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-    initializeCourseMenu();
-
     const glossaryTerms = [
       { term: "Drowning", definition: "A process of respiratory impairment from submersion or immersion in liquid that can be fatal or nonfatal.", rt: "Frames the problem as oxygenation and ventilation failure after liquid exposure." },
       { term: "Near drowning", definition: "An older term often used for survival after a drowning event; current terminology favors nonfatal drowning.", rt: "Students may still see this wording in charts, EMS reports, or exams." },
@@ -466,6 +447,8 @@
     initializeHotspotActivity();
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
     initializeRiskSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
@@ -645,6 +628,9 @@
     }
     initializePeakFlowActivity();
   
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script>
 </body>
 </html>
