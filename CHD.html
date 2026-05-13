@@ -170,17 +170,27 @@
     .visual-caption { color: var(--slate); font-size: .95rem; }
 
 
-    .course-menu-wrap { position: relative; display: flex; align-items: center; }
-    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 14px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-btn:hover { background: rgba(255,255,255,.14); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: min(70vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 50; }
-    .course-menu-panel.open { display: grid; gap: 6px; }
-    .course-menu-title { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; border-bottom: 1px solid var(--soft-border); margin-bottom: 4px; }
-    .course-menu-item { display: grid; gap: 3px; text-decoration: none; border-radius: 12px; padding: 10px; border: 1px solid transparent; color: var(--core-navy); }
-    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
-    .course-menu-item.current-course { background: #E6F3FF; border-color: var(--oxygen-blue); }
-    .course-menu-name { font-weight: 800; line-height: 1.2; }
-    .course-menu-status { color: var(--slate); font-size: .9rem; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
     .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     #sequenceSort { visibility: hidden; }
 
@@ -191,9 +201,17 @@
   <div class="page-shell">
     <header class="top-nav" aria-label="PulmoCore site navigation">
       <div class="brand" aria-label="PulmoCore brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div><div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div></div>
-      <div class="course-menu-wrap">
-        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" aria-label="Course menu"><div class="course-menu-title">PulmoCore Courses</div></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
       </div>
     </header>
     <main class="main-content">
@@ -217,7 +235,7 @@
           <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check"><span class="eyebrow">Quick Pre-Check</span><h2>Start with the core CHD pattern</h2><p>Which statement best describes why congenital heart disease may look like respiratory disease?</p><div class="quiz-options"><button class="quiz-option" data-correct="false">All congenital heart defects primarily destroy alveoli and cause emphysema.</button><button class="quiz-option" data-correct="true">Abnormal cardiac anatomy can change pulmonary blood flow, systemic perfusion, and oxygen mixing.</button><button class="quiz-option" data-correct="false">CHD only causes wheezing from reversible bronchospasm.</button><button class="quiz-option" data-correct="false">CHD always improves completely with high-flow oxygen alone.</button></div><div class="quiz-feedback" id="quizFeedback" role="status"></div></section>
           <section class="info-card" id="pathophysiology"><h2>Anatomy & Pathophysiology</h2><p>Normal transition after birth requires falling pulmonary vascular resistance, rising systemic vascular resistance, and closure of fetal shunts. Congenital defects disrupt this transition by allowing abnormal shunting, limiting blood flow, or requiring fetal pathways to remain open.</p><div class="visual-card"><img src="chd-pathophysiology.png" alt="Diagram showing fetal circulation transition and how congenital heart defects alter pulmonary and systemic blood flow" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><div class="visual-caption">Visual focus: fetal-to-newborn transition, ductus arteriosus closure, and why pulmonary/systemic flow balance matters.</div></div><div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">Structural defect → altered pressure or flow pathway → abnormal pulmonary blood flow or systemic perfusion → oxygen delivery problem → respiratory distress, cyanosis, poor feeding, or shock.</div><h3 style="margin-top:22px;">High-Yield Defect Physiology</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Physiology</th><th>Common Examples</th><th>RT Pattern</th></tr><tr><td>Left-to-right shunt</td><td>PDA, ASD, VSD</td><td>Pulmonary overcirculation, tachypnea, crackles, poor feeding, heart failure signs.</td></tr><tr><td>Right-to-left/cyanotic physiology</td><td>TOF</td><td>Cyanosis, decreased pulmonary blood flow, limited response to oxygen.</td></tr><tr><td>Mixing lesion</td><td>TGA</td><td>Profound cyanosis unless adequate mixing exists through ASD/VSD/PDA.</td></tr><tr><td>Ductal-dependent systemic flow</td><td>HLHS</td><td>Shock, weak pulses, acidosis when ductus constricts; oxygen must be used thoughtfully.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Danger Sign</h3><p>Severe hypoxemia that does not improve as expected with oxygen should trigger concern for cardiac shunting or mixing physiology rather than isolated lung disease.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CHD Hotspot Graphic"><h3>Click the CHD Hotspots</h3><p>Click each hotspot to reveal how a key structure affects oxygenation and RT decisions.</p><div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified congenital heart disease graphic with clickable hotspots"><img src="chd-heart-hotspot.png" alt="Simplified heart diagram with hotspots for septum, ductus arteriosus, pulmonary blood flow, and systemic perfusion" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><button class="hotspot-btn" style="left:42%; top:35%;" data-title="Septal Defect" data-text="ASD and VSD allow blood to cross between chambers. Direction depends on pressure gradients and pulmonary vascular resistance.">1</button><button class="hotspot-btn" style="right:27%; top:29%;" data-title="Ductus Arteriosus" data-text="A PDA can cause pulmonary overcirculation, but in ductal-dependent lesions the ductus may be life-saving.">2</button><button class="hotspot-btn" style="left:29%; bottom:32%;" data-title="Pulmonary Blood Flow" data-text="Too much flow causes tachypnea and pulmonary congestion; too little flow causes cyanosis.">3</button><button class="hotspot-btn" style="right:34%; bottom:22%;" data-title="Systemic Perfusion" data-text="Weak pulses, poor color, acidosis, and shock suggest inadequate systemic blood flow, especially in HLHS.">4</button></div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div></article></section>
           <section class="info-card" id="triggers"><h2>Defect Patterns: PDA, ASD, VSD, TOF, TGA, HLHS</h2><p>Instead of memorizing every defect separately, classify each condition by its dominant physiologic problem. This makes oxygen, ventilation, and escalation decisions safer.</p><div class="visual-card"><img src="chd-shunt-patterns.png" alt="Comparison chart showing left-to-right shunts, cyanotic lesions, mixing lesions, and ductal-dependent systemic flow" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><div class="visual-caption">Visual focus: shunt direction and whether the lungs receive too much flow, too little flow, or mixed blood.</div></div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Defect</th><th>Core Problem</th><th>Common RT Clues</th></tr><tr><td>PDA</td><td>Persistent aorta-to-pulmonary artery connection</td><td>Bounding pulses, murmur, tachypnea, pulmonary edema if large.</td></tr><tr><td>ASD</td><td>Atrial-level left-to-right shunt</td><td>Often mild early; recurrent respiratory symptoms or exercise intolerance later.</td></tr><tr><td>VSD</td><td>Ventricular-level left-to-right shunt</td><td>Tachypnea, poor feeding, diaphoresis, pulmonary congestion if large.</td></tr><tr><td>TOF</td><td>RV outflow obstruction with VSD and right-to-left shunting</td><td>Cyanosis, tet spells, squatting/knee-chest behavior.</td></tr><tr><td>TGA</td><td>Parallel pulmonary and systemic circuits</td><td>Severe cyanosis soon after birth; needs mixing.</td></tr><tr><td>HLHS</td><td>Left heart cannot support systemic output</td><td>Ductal-dependent shock, weak pulses, acidosis, gray appearance.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CHD Pattern Sorting"><h3>Sort the CHD Patterns</h3><p>Choose the best category for each finding, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Large VSD with pulmonary congestion</strong><select aria-label="Category for VSD"><option value="">Choose category</option><option value="trigger">Pulmonary Overcirculation</option><option value="controller">Cyanotic / Low Pulmonary Flow</option><option value="danger">Ductal-Dependent Emergency</option></select></div><div class="sort-row" data-answer="controller"><strong>Tetralogy of Fallot spell</strong><select aria-label="Category for TOF"><option value="">Choose category</option><option value="trigger">Pulmonary Overcirculation</option><option value="controller">Cyanotic / Low Pulmonary Flow</option><option value="danger">Ductal-Dependent Emergency</option></select></div><div class="sort-row" data-answer="trigger"><strong>Large PDA after pulmonary vascular resistance falls</strong><select aria-label="Category for PDA"><option value="">Choose category</option><option value="trigger">Pulmonary Overcirculation</option><option value="controller">Cyanotic / Low Pulmonary Flow</option><option value="danger">Ductal-Dependent Emergency</option></select></div><div class="sort-row" data-answer="danger"><strong>HLHS with closing ductus and weak pulses</strong><select aria-label="Category for HLHS"><option value="">Choose category</option><option value="trigger">Pulmonary Overcirculation</option><option value="controller">Cyanotic / Low Pulmonary Flow</option><option value="danger">Ductal-Dependent Emergency</option></select></div><div class="sort-row" data-answer="controller"><strong>Persistent cyanosis from right-to-left shunting</strong><select aria-label="Category for cyanosis"><option value="">Choose category</option><option value="trigger">Pulmonary Overcirculation</option><option value="controller">Cyanotic / Low Pulmonary Flow</option><option value="danger">Ductal-Dependent Emergency</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Congenital heart disease may appear as respiratory distress, feeding difficulty, cyanosis, or shock. RT assessment must separate primary lung disease from oxygen delivery and blood flow problems.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Respiratory</td><td>Tachypnea, retractions, grunting, crackles, increased oxygen need, recurrent infections.</td></tr><tr><td>Oxygenation</td><td>Cyanosis, low SpO₂, pre/postductal saturation differences, limited response to oxygen.</td></tr><tr><td>Perfusion</td><td>Poor pulses, cool extremities, prolonged capillary refill, gray color, metabolic acidosis.</td></tr><tr><td>Feeding/growth</td><td>Poor feeding, diaphoresis with feeds, failure to thrive, fatigue.</td></tr><tr><td>Cardiac clues</td><td>Murmur, gallop, hepatomegaly, cardiomegaly, pulmonary vascular markings on CXR.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not assume every tachypneic infant needs only more oxygen or bronchodilators. Tachypnea with poor feeding, hepatomegaly, pulmonary edema, or weak pulses may be cardiac.</p></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Congenital heart disease may appear as respiratory distress, feeding difficulty, cyanosis, or shock. RT assessment must separate primary lung disease from oxygen delivery and blood flow problems.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Respiratory</td><td>Tachypnea, retractions, grunting, crackles, increased oxygen need, recurrent infections.</td></tr><tr><td>Oxygenation</td><td>Cyanosis, low SpO₂, pre/postductal saturation differences, limited response to oxygen.</td></tr><tr><td>Perfusion</td><td>Poor pulses, cool extremities, prolonged capillary refill, gray color, metabolic acidosis.</td></tr><tr><td>Feeding/growth</td><td>Poor feeding, diaphoresis with feeds, failure to thrive, fatigue.</td></tr><tr><td>Cardiac clues</td><td>Murmur, gallop, hepatomegaly, cardiomegaly, pulmonary vascular markings on CXR.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not assume every tachypneic infant needs only more oxygen or bronchodilators. Tachypnea with poor feeding, hepatomegaly, pulmonary edema, or weak pulses may be cardiac.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CHD Signs Sort"><h3>Sort the CHD Clinical Signs</h3><p>Categorize each finding as a Left-to-Right Shunt Sign, Cyanotic/Shunt Sign, or Emergency Red Flag, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="ltr"><strong>Tachypnea with crackles, poor feeding, and hepatomegaly</strong><select aria-label="Category for tachypnea with crackles"><option value="">Choose category</option><option value="ltr">Left-to-Right Shunt Sign</option><option value="cyan">Cyanotic / Shunt Sign</option><option value="emergency">Emergency Red Flag</option></select></div><div class="sort-row" data-answer="cyan"><strong>Persistent cyanosis despite appropriate oxygen delivery</strong><select aria-label="Category for persistent cyanosis"><option value="">Choose category</option><option value="ltr">Left-to-Right Shunt Sign</option><option value="cyan">Cyanotic / Shunt Sign</option><option value="emergency">Emergency Red Flag</option></select></div><div class="sort-row" data-answer="emergency"><strong>Gray color, weak pulses, and metabolic acidosis</strong><select aria-label="Category for gray color and weak pulses"><option value="">Choose category</option><option value="ltr">Left-to-Right Shunt Sign</option><option value="cyan">Cyanotic / Shunt Sign</option><option value="emergency">Emergency Red Flag</option></select></div><div class="sort-row" data-answer="cyan"><strong>Large pre/postductal SpO₂ difference</strong><select aria-label="Category for pre/postductal difference"><option value="">Choose category</option><option value="ltr">Left-to-Right Shunt Sign</option><option value="cyan">Cyanotic / Shunt Sign</option><option value="emergency">Emergency Red Flag</option></select></div><div class="sort-row" data-answer="ltr"><strong>Cardiomegaly with pulmonary vascular congestion on CXR</strong><select aria-label="Category for cardiomegaly"><option value="">Choose category</option><option value="ltr">Left-to-Right Shunt Sign</option><option value="cyan">Cyanotic / Shunt Sign</option><option value="emergency">Emergency Red Flag</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article></section>
           <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic data should clarify whether the problem is oxygenation, ventilation, pulmonary blood flow, systemic perfusion, or cardiac anatomy.</p><h3 style="margin-top:18px;">High-Yield Tests</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test</th><th>What It Helps Determine</th></tr><tr><td>Preductal and postductal SpO₂</td><td>Detects differential oxygenation and possible ductal physiology.</td></tr><tr><td>ABG/VBG and lactate</td><td>Assesses oxygenation, ventilation, acid-base status, and shock.</td></tr><tr><td>Chest x-ray</td><td>Identifies cardiomegaly, pulmonary edema, vascular markings, or alternate lung disease.</td></tr><tr><td>Echocardiogram</td><td>Defines anatomy, shunt direction, ventricular function, and ductal flow.</td></tr><tr><td>ECG</td><td>May show chamber enlargement, axis changes, or rhythm concerns.</td></tr><tr><td>Four-extremity blood pressures</td><td>Can support evaluation of systemic flow obstruction or perfusion differences.</td></tr></table></div><h3 style="margin-top:18px;">Oxygen Response Pattern</h3><p>Hypoxemia from lung disease often improves meaningfully with oxygen. Hypoxemia from right-to-left shunt, poor mixing, or low pulmonary blood flow may show limited improvement because blood bypasses ventilated alveoli or cannot reach the lungs effectively.</p><div class="visual-card"><img src="chd-diagnostics.png" alt="Diagnostic flowchart for congenital heart disease showing SpO2 response, preductal and postductal saturation, ABG, chest x-ray, and echocardiogram" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><div class="visual-caption">Visual focus: diagnostic pathway from bedside oxygenation clues to echocardiography.</div></div></section>
           <section class="info-card" id="severity"><h2>Oxygenation, Shunts & Bedside Interpretation</h2><p>Oxygen saturation numbers must be interpreted in context. Some CHD patients have expected target saturations below normal, while others require urgent intervention for profound cyanosis or shock.</p><div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;"><div class="example-box soft-teal"><strong>Left-to-right shunt</strong><br>Often not cyanotic early; problem is too much pulmonary blood flow.</div><div class="example-box soft-amber"><strong>Right-to-left shunt</strong><br>Cyanosis may persist because blood bypasses the lungs.</div><div class="example-box soft-coral"><strong>Ductal-dependent flow</strong><br>Deterioration can occur quickly as the ductus closes.</div></div><article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="Oxygen Response Activity"><h3>Oxygen Response Activity</h3><p>A newborn remains cyanotic with SpO₂ 72% despite appropriate oxygen delivery and good chest movement. Which interpretation is most concerning?</p><div class="quiz-options"><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Bronchospasm is possible in older patients, but profound persistent newborn cyanosis with good chest movement should trigger concern for cardiac shunt or mixing physiology.">Simple bronchospasm is the most likely cause.</button><button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. Severe cyanosis with limited oxygen response suggests right-to-left shunt, poor pulmonary blood flow, or inadequate mixing such as TOF or TGA physiology.">A cyanotic congenital heart lesion or mixing problem should be considered.</button><button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. If cyanosis persists despite oxygen, simply stopping assessment is unsafe. Escalation and cardiac evaluation are needed.">No further evaluation is needed if breath sounds are present.</button></div><div class="quiz-feedback" role="status"></div></article></section>
           <section class="info-card red" id="red-flags"><h2>Severity & Red Flags</h2><p>The highest-risk CHD presentations involve persistent cyanosis, shock, worsening acidosis, apnea, or signs that pulmonary and systemic blood flow are out of balance.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Red Flag</th><th>Why It Matters</th></tr><tr><td>SpO₂ remains very low despite oxygen</td><td>Suggests shunt, poor mixing, or low pulmonary blood flow.</td></tr><tr><td>Weak pulses, gray color, poor perfusion</td><td>May indicate ductal-dependent systemic flow or shock.</td></tr><tr><td>Metabolic acidosis or rising lactate</td><td>Signals inadequate oxygen delivery and perfusion.</td></tr><tr><td>Apnea after prostaglandin E1</td><td>Known risk; RT must be ready to support ventilation.</td></tr><tr><td>Sudden cyanotic spell in TOF</td><td>Can rapidly reduce pulmonary blood flow.</td></tr><tr><td>Tachypnea with poor feeding and hepatomegaly</td><td>Suggests heart failure from pulmonary overcirculation.</td></tr></table></div></section>
@@ -290,56 +308,6 @@
 
     function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
 
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-      const currentPath = window.location.pathname.split("/").pop();
-      const courseData = Array.isArray(window.PulmoCoreCourses) ? window.PulmoCoreCourses : (Array.isArray(window.courses) ? window.courses : []);
-      const getProgress = (course) => {
-        const key = course.id || course.slug || course.title || course.name || course.href || course.file || "course";
-        const raw = localStorage.getItem(`pulmocore-progress-${key}`) || localStorage.getItem(`progress-${key}`) || course.progress;
-        const value = Number(raw);
-        if (course.complete || value >= 100) return "Complete";
-        if (value > 0) return `In progress (${Math.round(value)}%)`;
-        return "Not started";
-      };
-      const normalizeCourse = (course, index) => {
-        if (typeof course === "string") return { title: course, href: "#", order: index };
-        return {
-          title: course.title || course.name || course.label || `Course ${index + 1}`,
-          href: course.href || course.url || course.file || "#",
-          order: Number.isFinite(Number(course.order)) ? Number(course.order) : index,
-          source: course
-        };
-      };
-      const courses = courseData.map(normalizeCourse).sort((a, b) => a.order - b.order);
-      const items = courses.length ? courses.map(course => {
-        const status = getProgress(course.source || course);
-        const isCurrent = course.href && course.href.split("/").pop() === currentPath;
-        return `<a class="course-menu-item ${isCurrent ? "current-course" : ""}" href="${course.href}"><span class="course-menu-name">${course.title}</span><span class="course-menu-status">${status}</span></a>`;
-      }).join("") : `<div class="course-menu-item"><span class="course-menu-name">No courses found</span><span class="course-menu-status">Check courses.js</span></div>`;
-      panel.innerHTML = `<div class="course-menu-title">PulmoCore Courses</div>${items}`;
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!panel.contains(event.target) && !button.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-
-
     function initializeGuidedCase() {
       const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
       caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
@@ -398,6 +366,9 @@
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
     initializeRiskSort();
+
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
     function shuffleSequence() {
@@ -565,13 +536,50 @@
     initializePeakFlowActivity();
   
     document.addEventListener("DOMContentLoaded", () => {
-      initializeCourseMenu();
       shuffleSequence();
       enableDynamicReorder();
       initializeSequenceSort();
       const sequenceSort = document.getElementById("sequenceSort");
       if (sequenceSort) sequenceSort.style.visibility = "visible";
     });
+  </script>
+  <script>
+    (function () {
+      var menuBuilt = false;
+      function setupToggle() {
+        var button = document.getElementById("courseMenuButton");
+        var panel  = document.getElementById("courseMenuPanel");
+        if (!button || !panel || button.dataset.toggleReady) return;
+        button.dataset.toggleReady = "true";
+        button.onclick = function (event) { event.preventDefault(); event.stopPropagation(); var isOpen = panel.classList.contains("open"); panel.classList.toggle("open", !isOpen); panel.classList.toggle("show", !isOpen); button.setAttribute("aria-expanded", String(!isOpen)); };
+        document.addEventListener("click", function (event) { if (!button.contains(event.target) && !panel.contains(event.target)) { panel.classList.remove("open"); panel.classList.remove("show"); button.setAttribute("aria-expanded", "false"); } });
+        document.addEventListener("keydown", function (event) { if (event.key === "Escape") { panel.classList.remove("open"); panel.classList.remove("show"); button.setAttribute("aria-expanded", "false"); } });
+      }
+      function buildCourseMenu() {
+        if (menuBuilt) return;
+        var courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.courses || [];
+        if (!courses.length) return;
+        menuBuilt = true;
+        var button = document.getElementById("courseMenuButton");
+        var panel  = document.getElementById("courseMenuPanel");
+        if (!button || !panel) return;
+        panel.innerHTML = '<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+        var list = document.getElementById("courseMenuList");
+        var currentFile = window.location.pathname.split("/").pop().toLowerCase();
+        list.innerHTML = courses.map(function (course) {
+          var progress = typeof window.getCourseProgress === "function" ? window.getCourseProgress(course.file) : null;
+          var statusLabel = "Not started", statusClass = "not-started";
+          if (progress && progress.completed) { statusLabel = "Complete"; statusClass = "complete"; }
+          else if (progress && progress.percent > 0) { statusLabel = "In progress (" + progress.percent + "%)"; statusClass = "in-progress"; }
+          var isCurrent = course.file.toLowerCase() === currentFile;
+          return '<a class="course-menu-item" href="' + course.file + '" ' + (isCurrent ? 'aria-current="page" ' : '') + 'role="menuitem" data-course-file="' + course.file + '"><span class="course-menu-title">' + course.title + '</span><span class="course-menu-status ' + statusClass + '">' + statusLabel + '</span></a>';
+        }).join("");
+        setupToggle();
+      }
+      document.addEventListener("DOMContentLoaded", function () { setupToggle(); buildCourseMenu(); });
+      window.addEventListener("load", buildCourseMenu);
+      setTimeout(buildCourseMenu, 300);
+    })();
   </script>
 </body>
 </html>
