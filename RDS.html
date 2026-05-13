@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="courses.js"></script>
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -158,17 +159,27 @@
 
 
     #sequenceSort { visibility: hidden; }
-    .course-menu-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; }
-    .course-menu-button { border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-button:hover { background: rgba(255,255,255,.16); }
-    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(360px, calc(100vw - 32px)); background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; max-height: 70vh; overflow-y: auto; z-index: 50; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
     .course-menu-panel.open { display: grid; gap: 8px; }
-    .course-menu-title { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px; color: var(--core-navy); }
-    .course-menu-item { display: grid; gap: 3px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 14px; padding: 10px 12px; background: #FAFDFF; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
     .course-menu-item:hover { background: var(--airway-mint); }
-    .course-menu-item strong { font-family: var(--font-heading); font-size: .98rem; }
-    .course-menu-status { font-size: .84rem; color: var(--slate); font-weight: 700; }
-    .course-menu-empty { padding: 12px; border-radius: 12px; background: var(--mist-blue); color: var(--slate); font-weight: 700; }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
 
     .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
     .footer strong span { color: var(--pulmo-teal); }
@@ -193,11 +204,16 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu-wrap">
-        <button class="course-menu-button" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" aria-label="Course menu">
-          <div class="course-menu-title">PulmoCore Courses</div>
-          <div class="course-menu-empty">Loading courses...</div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
         </div>
       </div>
     </header>
@@ -285,7 +301,7 @@
             <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="RDS Risk Sorting"><h3>Sort the Newborn Distress Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Prematurity at 28 weeks</strong><select aria-label="Category for prematurity"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>CPAP to recruit alveoli</strong><select aria-label="Category for CPAP"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="trigger"><strong>Maternal diabetes</strong><select aria-label="Category for maternal diabetes"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Apnea with bradycardia</strong><select aria-label="Category for apnea"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="controller"><strong>Exogenous surfactant</strong><select aria-label="Category for surfactant"><option value="">Choose category</option><option value="trigger">RDS Risk Factor</option><option value="controller">RDS Support/Treatment</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article>
           </section>
 
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>RDS usually appears soon after birth and worsens over the first hours if untreated. RT assessment should focus on respiratory effort, air entry, oxygen need, color, temperature, perfusion, apnea/bradycardia events, and response to CPAP or surfactant.</p><div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-clinical-signs.png" alt="Educational image showing neonatal respiratory distress signs including grunting, nasal flaring, retractions, tachypnea, and cyanosis" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><br><strong>Visual Learning:</strong> Use this image placeholder to label grunting, flaring, retractions, and tachypnea.</div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Breathing pattern</td><td>Tachypnea, shallow breathing, apnea, grunting.</td></tr><tr><td>Appearance</td><td>Nasal flaring, intercostal/subcostal retractions, cyanosis, poor tone when severe.</td></tr><tr><td>Breath sounds</td><td>Fine crackles, decreased air entry, or poor aeration with worsening disease.</td></tr><tr><td>Oxygenation clues</td><td>Increasing FiO₂ requirement, low SpO₂, low PaO₂.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, respiratory acidosis, apnea, fatigue.</td></tr><tr><td>Response clues</td><td>Improved SpO₂, reduced retractions/grunting, lower FiO₂ need after CPAP or surfactant.</td></tr></table></div></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>RDS usually appears soon after birth and worsens over the first hours if untreated. RT assessment should focus on respiratory effort, air entry, oxygen need, color, temperature, perfusion, apnea/bradycardia events, and response to CPAP or surfactant.</p><div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-clinical-signs.png" alt="Educational image showing neonatal respiratory distress signs including grunting, nasal flaring, retractions, tachypnea, and cyanosis" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><br><strong>Visual Learning:</strong> Use this image placeholder to label grunting, flaring, retractions, and tachypnea.</div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Breathing pattern</td><td>Tachypnea, shallow breathing, apnea, grunting.</td></tr><tr><td>Appearance</td><td>Nasal flaring, intercostal/subcostal retractions, cyanosis, poor tone when severe.</td></tr><tr><td>Breath sounds</td><td>Fine crackles, decreased air entry, or poor aeration with worsening disease.</td></tr><tr><td>Oxygenation clues</td><td>Increasing FiO₂ requirement, low SpO₂, low PaO₂.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, respiratory acidosis, apnea, fatigue.</td></tr><tr><td>Response clues</td><td>Improved SpO₂, reduced retractions/grunting, lower FiO₂ need after CPAP or surfactant.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="RDS Signs Sort"><h3>Sort the Newborn RDS Clinical Signs</h3><p>Categorize each finding as an Expected RDS Finding, Worsening Sign, or Escalation Sign, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="expected"><strong>Grunting with nasal flaring and subcostal retractions</strong><select aria-label="Category for grunting and retractions"><option value="">Choose category</option><option value="expected">Expected RDS Finding</option><option value="worsening">Worsening Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="expected"><strong>Tachypnea with fine crackles and decreased air entry</strong><select aria-label="Category for tachypnea with crackles"><option value="">Choose category</option><option value="expected">Expected RDS Finding</option><option value="worsening">Worsening Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="worsening"><strong>Rising FiO₂ requirement despite adequate CPAP support</strong><select aria-label="Category for rising FiO2 on CPAP"><option value="">Choose category</option><option value="expected">Expected RDS Finding</option><option value="worsening">Worsening Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="escalation"><strong>Apnea with bradycardia requiring stimulation</strong><select aria-label="Category for apnea with bradycardia"><option value="">Choose category</option><option value="expected">Expected RDS Finding</option><option value="worsening">Worsening Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="escalation"><strong>Respiratory acidosis with rising PaCO₂ and fatigue</strong><select aria-label="Category for respiratory acidosis"><option value="">Choose category</option><option value="expected">Expected RDS Finding</option><option value="worsening">Worsening Sign</option><option value="escalation">Escalation Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article></section>
 
           <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic data helps confirm RDS severity, identify alternative diagnoses, and guide escalation. Interpret the infant’s clinical picture together with gestational age, timing of onset, CXR, oxygen need, and blood gas trends.</p><h3 style="margin-top:18px;">Chest X-ray</h3><div class="example-box soft-blue" style="margin-top:16px;"><img src="newborn-rds-cxr-ground-glass-air-bronchograms.png" alt="Educational chest x-ray placeholder showing diffuse ground-glass pattern and air bronchograms in newborn respiratory distress syndrome" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><br><strong>Visual Learning:</strong> Use this image placeholder for the high-yield CXR pattern: low lung volumes, diffuse ground-glass appearance, and air bronchograms.</div><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test or Finding</th><th>RDS Pattern</th></tr><tr><td>CXR</td><td>Diffuse reticulogranular or ground-glass appearance, air bronchograms, low lung volumes.</td></tr><tr><td>ABG/CBG</td><td>Hypoxemia; rising PaCO₂ and acidosis as fatigue or failure develops.</td></tr><tr><td>Pulse oximetry</td><td>Used for target range monitoring and oxygen titration.</td></tr><tr><td>Pre/postductal SpO₂</td><td>Helps evaluate shunting or PPHN when hypoxemia is disproportionate.</td></tr><tr><td>Glucose and temperature</td><td>Hypoglycemia or cold stress can worsen distress and oxygen use.</td></tr><tr><td>Sepsis evaluation</td><td>Consider if infection risk, instability, abnormal temperature, or poor perfusion.</td></tr></table></div><h3 style="margin-top:18px;">ABG Pattern</h3><p>Early RDS often presents with hypoxemia from atelectasis and V/Q mismatch. Worsening ventilation appears as rising PaCO₂ and respiratory acidosis, especially when the infant tires or has apnea.</p></section>
 
@@ -328,65 +344,6 @@
   <script>
 
 
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-
-      const rawCourses = window.PULMOCORE_COURSES || window.PulmoCoreCourses || window.courses || window.COURSES || [];
-      const courses = Array.isArray(rawCourses) ? rawCourses : Object.values(rawCourses || {});
-
-      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
-      function getCourseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
-      function getCourseId(course) { return course.id || course.slug || getCourseHref(course).replace(/[^a-z0-9]/gi, "_").toLowerCase(); }
-      function getStoredProgress(course) {
-        const id = getCourseId(course);
-        const direct = localStorage.getItem(`pulmocore:${id}:progress`) || localStorage.getItem(`pulmoCore:${id}:progress`) || localStorage.getItem(`${id}:progress`);
-        if (direct !== null && !Number.isNaN(Number(direct))) return Number(direct);
-        try {
-          const allProgress = JSON.parse(localStorage.getItem("pulmocoreCourseProgress") || localStorage.getItem("pulmoCoreCourseProgress") || "{}");
-          const value = allProgress[id] ?? allProgress[getCourseHref(course)] ?? allProgress[getCourseTitle(course)];
-          if (typeof value === "number") return value;
-          if (value && typeof value.percent === "number") return value.percent;
-        } catch (error) {}
-        return 0;
-      }
-      function getStatus(course) {
-        const explicit = course.status || course.progressStatus;
-        const percent = Math.max(0, Math.min(100, Number(course.progress ?? course.percent ?? getStoredProgress(course)) || 0));
-        if (explicit) return explicit;
-        if (percent >= 100) return "Complete";
-        if (percent > 0) return `In progress (${Math.round(percent)}%)`;
-        return "Not started";
-      }
-
-      const items = courses.map(course => {
-        const href = getCourseHref(course);
-        const isCurrent = href && location.pathname.endsWith(href.replace(/^.*\//, ""));
-        return `<a class="course-menu-item" href="${href}" ${isCurrent ? 'aria-current="page"' : ''}><strong>${getCourseTitle(course)}</strong><span class="course-menu-status">${getStatus(course)}</span></a>`;
-      }).join("");
-      panel.innerHTML = `<div class="course-menu-title">PulmoCore Courses</div>${items || '<div class="course-menu-empty">No courses found. Check courses.js.</div>'}`;
-
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!panel.contains(event.target) && !button.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-    document.addEventListener("DOMContentLoaded", initializeCourseMenu);
 
     const glossaryTerms = [
       { term: "Neonatal RDS", definition: "A newborn respiratory disorder caused primarily by surfactant deficiency, leading to alveolar collapse, low lung compliance, and impaired gas exchange.", rt: "Core diagnosis for premature infants with early respiratory distress." },
@@ -500,6 +457,8 @@
     initializeHotspotActivity();
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
     initializeRiskSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
@@ -677,6 +636,9 @@
     }
     initializePeakFlowActivity();
   
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script>
 </body>
 </html>

@@ -58,20 +58,27 @@
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
 
-    .course-menu-wrap { position: relative; display: flex; align-items: center; }
-    .course-menu-button { border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 14px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-button:hover { background: rgba(255,255,255,.14); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 10px; display: none; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
     .course-menu-panel.open { display: grid; gap: 8px; }
-    .course-menu-header { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 4px; color: var(--core-navy); }
-    .course-menu-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; text-decoration: none; padding: 10px; border-radius: 12px; border: 1px solid transparent; color: var(--core-navy); }
-    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
-    .course-menu-title { font-weight: 800; overflow-wrap: anywhere; }
-    .course-menu-status { font-size: .8rem; border-radius: 999px; padding: 4px 8px; background: #EEF6FA; color: var(--slate); white-space: nowrap; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
     .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
     .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
-    .course-menu-empty { padding: 12px; color: var(--slate); }
-    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
@@ -199,14 +206,18 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu-wrap">
-        <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
-          <div class="course-menu-header">PulmoCore Courses</div>
-          <div class="course-menu-empty">Loading courses...</div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
         </div>
       </div>
-      <div class="mobile-menu-note">Courses</div>
     </header>
 
     <main class="main-content">
@@ -290,7 +301,7 @@
             <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Sleep Apnea Sorting"><h3>Sort the Sleep Apnea Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="risk"><strong>Large neck circumference</strong><select><option value="">Choose category</option><option value="risk">OSA Risk Factor</option><option value="therapy">Therapy/Troubleshooting</option><option value="danger">Escalation Concern</option></select></div><div class="sort-row" data-answer="therapy"><strong>Mask refit for large leak</strong><select><option value="">Choose category</option><option value="risk">OSA Risk Factor</option><option value="therapy">Therapy/Troubleshooting</option><option value="danger">Escalation Concern</option></select></div><div class="sort-row" data-answer="risk"><strong>Supine sleep position</strong><select><option value="">Choose category</option><option value="risk">OSA Risk Factor</option><option value="therapy">Therapy/Troubleshooting</option><option value="danger">Escalation Concern</option></select></div><div class="sort-row" data-answer="danger"><strong>Persistent central apneas on PAP</strong><select><option value="">Choose category</option><option value="risk">OSA Risk Factor</option><option value="therapy">Therapy/Troubleshooting</option><option value="danger">Escalation Concern</option></select></div><div class="sort-row" data-answer="therapy"><strong>Heated humidification for dryness</strong><select><option value="">Choose category</option><option value="risk">OSA Risk Factor</option><option value="therapy">Therapy/Troubleshooting</option><option value="danger">Escalation Concern</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article>
           </section>
 
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Sleep apnea may present with nighttime symptoms, daytime impairment, or complications discovered through comorbid disease evaluation.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May Hear or See</th></tr><tr><td>Nighttime symptoms</td><td>Loud snoring, witnessed apneas, choking/gasping, restless sleep, nocturia.</td></tr><tr><td>Daytime symptoms</td><td>Sleepiness, fatigue, morning headaches, poor concentration, irritability.</td></tr><tr><td>Vitals/comorbidities</td><td>Hypertension, atrial fibrillation, pulmonary hypertension risk, obesity hypoventilation overlap.</td></tr><tr><td>Exam clues</td><td>Large neck, crowded oropharynx, retrognathia, high Mallampati score.</td></tr><tr><td>PAP report clues</td><td>Residual AHI, mask leak, pressure intolerance, poor nightly use.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>A patient can have severe sleep apnea without appearing acutely short of breath while awake. The danger often appears in sleep data: repeated desaturations, high AHI, arrhythmia risk, and unsafe daytime sleepiness.</p></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>Sleep apnea may present with nighttime symptoms, daytime impairment, or complications discovered through comorbid disease evaluation.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May Hear or See</th></tr><tr><td>Nighttime symptoms</td><td>Loud snoring, witnessed apneas, choking/gasping, restless sleep, nocturia.</td></tr><tr><td>Daytime symptoms</td><td>Sleepiness, fatigue, morning headaches, poor concentration, irritability.</td></tr><tr><td>Vitals/comorbidities</td><td>Hypertension, atrial fibrillation, pulmonary hypertension risk, obesity hypoventilation overlap.</td></tr><tr><td>Exam clues</td><td>Large neck, crowded oropharynx, retrognathia, high Mallampati score.</td></tr><tr><td>PAP report clues</td><td>Residual AHI, mask leak, pressure intolerance, poor nightly use.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>A patient can have severe sleep apnea without appearing acutely short of breath while awake. The danger often appears in sleep data: repeated desaturations, high AHI, arrhythmia risk, and unsafe daytime sleepiness.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Sleep Apnea Signs Sort"><h3>Sort the Sleep Apnea Clinical Signs</h3><p>Categorize each finding as a Nighttime Finding, Daytime Consequence, or Escalation Concern, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="nighttime"><strong>Loud snoring with witnessed apneas</strong><select aria-label="Category for snoring with witnessed apneas"><option value="">Choose category</option><option value="nighttime">Nighttime Finding</option><option value="daytime">Daytime Consequence</option><option value="escalation">Escalation Concern</option></select></div><div class="sort-row" data-answer="daytime"><strong>Excessive daytime sleepiness and morning headaches</strong><select aria-label="Category for daytime sleepiness and headaches"><option value="">Choose category</option><option value="nighttime">Nighttime Finding</option><option value="daytime">Daytime Consequence</option><option value="escalation">Escalation Concern</option></select></div><div class="sort-row" data-answer="daytime"><strong>Hypertension or atrial fibrillation associated with untreated OSA</strong><select aria-label="Category for hypertension or afib"><option value="">Choose category</option><option value="nighttime">Nighttime Finding</option><option value="daytime">Daytime Consequence</option><option value="escalation">Escalation Concern</option></select></div><div class="sort-row" data-answer="escalation"><strong>Persistent residual AHI despite PAP adherence</strong><select aria-label="Category for residual AHI on PAP"><option value="">Choose category</option><option value="nighttime">Nighttime Finding</option><option value="daytime">Daytime Consequence</option><option value="escalation">Escalation Concern</option></select></div><div class="sort-row" data-answer="escalation"><strong>Nocturnal oxygen desaturations below 85% on sleep study</strong><select aria-label="Category for severe nocturnal desaturation"><option value="">Choose category</option><option value="nighttime">Nighttime Finding</option><option value="daytime">Daytime Consequence</option><option value="escalation">Escalation Concern</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article></section>
 
           <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic evaluation identifies event type, severity, oxygenation burden, sleep fragmentation, and the best therapy pathway.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><img src="sleep-study-tracing.png" alt="Polysomnography tracing showing airflow reduction with continued effort and oxygen desaturation" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><p><strong>Visual learning:</strong> Use this image placeholder for PSG signals including airflow, effort belts, SpO₂, and arousal markers.</p></div><h3 style="margin-top:18px;">Sleep Study Metrics</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Metric</th><th>How to Interpret</th></tr><tr><td>AHI</td><td>Average number of apneas and hypopneas per hour of sleep.</td></tr><tr><td>Oxygen nadir</td><td>Lowest SpO₂ during sleep; lower values indicate greater hypoxemia burden.</td></tr><tr><td>Time below 90%</td><td>Duration of clinically relevant nocturnal hypoxemia.</td></tr><tr><td>Event type</td><td>Obstructive events show effort; central events show absent/reduced effort.</td></tr><tr><td>Sleep position and REM effect</td><td>Events may worsen supine or during REM sleep.</td></tr></table></div><h3 style="margin-top:18px;">Screening Tools</h3><p>STOP-Bang and Epworth Sleepiness Scale help identify risk and symptom burden, but sleep testing is needed to diagnose and classify sleep apnea.</p></section>
 
@@ -384,45 +395,6 @@
     shuffleAnswerOptions();
     function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
 
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-      const courseData = window.PulmoCoreCourses || window.PULMOCORE_COURSES || window.courses || window.COURSES || [];
-      const progressData = JSON.parse(localStorage.getItem("pulmocoreCourseProgress") || "{}");
-      function normalizeCourses(data) {
-        if (Array.isArray(data)) return data;
-        if (data && Array.isArray(data.courses)) return data.courses;
-        return [];
-      }
-      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
-      function getCourseHref(course) { return course.href || course.url || course.file || "#"; }
-      function getCourseKey(course) { return course.id || course.key || getCourseTitle(course).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
-      function getProgress(course) {
-        const key = getCourseKey(course);
-        const stored = progressData[key] || course.progress || course.status || null;
-        if (typeof stored === "number") return { text: stored >= 100 ? "Complete" : stored > 0 ? `In progress (${Math.round(stored)}%)` : "Not started", className: stored >= 100 ? "complete" : stored > 0 ? "in-progress" : "" };
-        if (stored && typeof stored === "object") {
-          const percent = Number(stored.percent ?? stored.progress ?? 0);
-          if (stored.complete || percent >= 100) return { text: "Complete", className: "complete" };
-          if (percent > 0) return { text: `In progress (${Math.round(percent)}%)`, className: "in-progress" };
-        }
-        if (stored === "complete") return { text: "Complete", className: "complete" };
-        if (stored === "in-progress") return { text: "In progress", className: "in-progress" };
-        return { text: "Not started", className: "" };
-      }
-      const courses = normalizeCourses(courseData);
-      panel.innerHTML = '<div class="course-menu-header">PulmoCore Courses</div>' + (courses.length ? courses.map(course => {
-        const progress = getProgress(course);
-        return `<a class="course-menu-item" role="menuitem" href="${getCourseHref(course)}"><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-menu-status ${progress.className}">${progress.text}</span></a>`;
-      }).join("") : '<div class="course-menu-empty">No courses found. Check courses.js.</div>');
-      button.addEventListener("click", () => { const isOpen = panel.classList.toggle("open"); button.setAttribute("aria-expanded", String(isOpen)); });
-      document.addEventListener("click", event => { if (!panel.contains(event.target) && !button.contains(event.target)) { panel.classList.remove("open"); button.setAttribute("aria-expanded", "false"); } });
-      document.addEventListener("keydown", event => { if (event.key === "Escape") { panel.classList.remove("open"); button.setAttribute("aria-expanded", "false"); button.focus(); } });
-    }
-    initializeCourseMenu();
-
-
     function initializeGuidedCase() {
       const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
       caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
@@ -460,6 +432,8 @@
     initializeHotspotActivity();
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
     initializeRiskSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
@@ -477,6 +451,9 @@
 
     function initializePeakFlowActivity() { const activity = document.getElementById("peakflow-activity"); if (!activity) return; activity.querySelectorAll(".peak-option").forEach(button => { button.addEventListener("click", () => { if (activity.dataset.correctAnswered === "true") return; const feedback = activity.querySelector(".quiz-feedback"); const isCorrect = button.dataset.correct === "true"; activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { activity.dataset.correctAnswered = "true"; activity.querySelectorAll(".peak-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>"; markActivityComplete(activity); } else { button.classList.add("incorrect-choice"); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct interpretation to continue."; } }); }); }
     initializePeakFlowActivity();
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script>
 </body>
 </html>
