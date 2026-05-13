@@ -624,47 +624,60 @@
     initializePeakFlowActivity();
   </script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const button = document.getElementById("courseMenuButton");
-      const panel  = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
+    (function () {
+      var menuBuilt = false;
 
-      panel.innerHTML =
-        '<div class="course-menu-heading">PulmoCore Courses</div>' +
-        '<div id="courseMenuList"></div>';
+      function buildCourseMenu() {
+        if (menuBuilt) return;
+        var courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.courses || [];
+        if (!courses.length) return;
+        menuBuilt = true;
 
-      const list        = document.getElementById("courseMenuList");
-      const courses     = window.PULMOCORE_COURSES || [];
-      const currentFile = window.location.pathname.split("/").pop().toLowerCase();
+        var button = document.getElementById("courseMenuButton");
+        var panel  = document.getElementById("courseMenuPanel");
+        if (!button || !panel) return;
 
-      list.innerHTML = courses.map(function (course) {
-        var progress    = typeof window.getCourseProgress === "function"
-                          ? window.getCourseProgress(course.file) : null;
-        var statusLabel = "Not started", statusClass = "not-started";
-        if (progress && progress.completed) {
-          statusLabel = "Complete"; statusClass = "complete";
-        } else if (progress && progress.percent > 0) {
-          statusLabel = "In progress (" + progress.percent + "%)";
-          statusClass = "in-progress";
-        }
-        var isCurrent = course.file.toLowerCase() === currentFile;
-        return '<a class="course-menu-item" href="' + course.file + '" ' +
-               (isCurrent ? 'aria-current="page" ' : '') +
-               'role="menuitem" data-course-file="' + course.file + '">' +
-               '<span class="course-menu-title">' + course.title + '</span>' +
-               '<span class="course-menu-status ' + statusClass + '">' + statusLabel + '</span>' +
-               '</a>';
-      }).join("");
+        panel.innerHTML =
+          '<div class="course-menu-heading">PulmoCore Courses</div>' +
+          '<div id="courseMenuList"></div>';
 
-      button.onclick = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        var isOpen = panel.classList.contains("open");
-        panel.classList.toggle("open", !isOpen);
-        panel.classList.toggle("show", !isOpen);
-        button.setAttribute("aria-expanded", String(!isOpen));
-      };
-    });
+        var list        = document.getElementById("courseMenuList");
+        var currentFile = window.location.pathname.split("/").pop().toLowerCase();
+
+        list.innerHTML = courses.map(function (course) {
+          var progress    = typeof window.getCourseProgress === "function"
+                            ? window.getCourseProgress(course.file) : null;
+          var statusLabel = "Not started", statusClass = "not-started";
+          if (progress && progress.completed) {
+            statusLabel = "Complete"; statusClass = "complete";
+          } else if (progress && progress.percent > 0) {
+            statusLabel = "In progress (" + progress.percent + "%)";
+            statusClass = "in-progress";
+          }
+          var isCurrent = course.file.toLowerCase() === currentFile;
+          return '<a class="course-menu-item" href="' + course.file + '" ' +
+                 (isCurrent ? 'aria-current="page" ' : '') +
+                 'role="menuitem" data-course-file="' + course.file + '">' +
+                 '<span class="course-menu-title">' + course.title + '</span>' +
+                 '<span class="course-menu-status ' + statusClass + '">' + statusLabel + '</span>' +
+                 '</a>';
+        }).join("");
+
+        button.onclick = function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var isOpen = panel.classList.contains("open");
+          panel.classList.toggle("open", !isOpen);
+          panel.classList.toggle("show", !isOpen);
+          button.setAttribute("aria-expanded", String(!isOpen));
+        };
+      }
+
+      // Three timing strategies — whichever fires last after courses.js wins
+      document.addEventListener("DOMContentLoaded", buildCourseMenu);
+      window.addEventListener("load", buildCourseMenu);
+      setTimeout(buildCourseMenu, 300);
+    })();
   </script>
 </body>
 </html>
