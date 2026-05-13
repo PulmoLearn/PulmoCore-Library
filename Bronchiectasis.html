@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 
+  <script src="courses.js"></script>
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -57,19 +58,6 @@
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
-    .course-menu-wrapper { position: relative; display: flex; align-items: center; justify-content: flex-end; }
-    .course-menu-button { border: 1px solid rgba(255,255,255,.22); border-radius: 999px; background: rgba(255,255,255,.08); color: var(--white); padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-button:hover { background: rgba(255,255,255,.14); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; }
-    .course-menu-panel.open { display: grid; gap: 8px; }
-    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; padding: 10px 12px; border-radius: 12px; border: 1px solid transparent; }
-    .course-menu-item:hover { background: var(--mist-blue); border-color: var(--soft-border); }
-    .course-menu-title { font-weight: 800; overflow-wrap: anywhere; }
-    .course-status { font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #E5F0F6; color: var(--slate); white-space: nowrap; }
-    .course-status.in-progress { background: #FFF4DF; color: #7A4B00; }
-    .course-status.complete { background: var(--airway-mint); color: var(--core-navy); }
-    .course-menu-empty { padding: 14px; color: var(--slate); font-weight: 700; }
-    #sequenceSort { visibility: hidden; }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
@@ -92,7 +80,7 @@
     .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
     .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
     .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
-    .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
+    .side-nav a.locked { opacity: 0.45; }
     .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
 
     .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
@@ -176,9 +164,123 @@
     .footer strong span { color: var(--pulmo-teal); }
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
-    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .course-menu-wrapper { margin-left: auto; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
-  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } .course-menu-button { padding: 8px 12px; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+    .top-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+    }
+    .home-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .home-button:hover {
+      background: rgba(255,255,255,0.16);
+      transform: translateY(-1px);
+    }
+    .home-icon {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+    .course-menu-container,
+    .course-menu-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .course-menu-button {
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      min-height: 46px;
+      padding: 10px 16px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: min(360px, calc(100vw - 28px));
+      max-height: min(72vh, 620px);
+      overflow-y: auto;
+      background: var(--white);
+      color: var(--core-navy);
+      border: 1px solid var(--soft-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display: none;
+      z-index: 40;
+    }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      padding: 8px 10px 10px;
+      color: var(--core-navy);
+      border-bottom: 1px solid var(--soft-border);
+      margin-bottom: 8px;
+    }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      text-decoration: none;
+      color: var(--core-navy);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current {
+      border-color: var(--pulmo-teal);
+      background: var(--airway-mint);
+      box-shadow: inset 4px 0 0 var(--pulmo-teal);
+    }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status {
+      white-space: nowrap;
+      font-size: .78rem;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #EEF4F8;
+      color: var(--slate);
+    }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) {
+      .top-nav-actions { gap: 8px; }
+      .home-button { width: 42px; height: 42px; border-radius: 12px; }
+      .home-icon { width: 22px; height: 22px; }
+      .course-menu-button { padding: 9px 12px; }
+    }
+    @media (max-width: 480px) {
+      .course-menu-button { font-size: 0.92rem; padding: 8px 10px; }
+      .home-icon { width: 22px; height: 22px; }
+    }
   </style>
 </head>
 <body>
@@ -199,9 +301,37 @@
         </div>
       </div>
 
-      <div class="course-menu-wrapper">
-        <button class="course-menu-button" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"></div>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#snapshot">Snapshot</a>
+        <a href="#pathophysiology">Pathophysiology</a>
+        <a href="#diagnostics">Diagnostics</a>
+        <a href="#management">Management</a>
+        <a href="#glossary">Glossary</a>
+      </nav>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button
+            class="course-menu-button"
+            id="courseMenuButton"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            ☰ Courses
+          </button>
+          <div
+            class="course-menu-panel"
+            id="courseMenuPanel"
+            role="menu"
+            aria-label="PulmoCore course menu"
+          >
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -221,7 +351,6 @@
         <aside class="side-nav" aria-label="Disease page quick navigation">
           <h3>Lesson Sections</h3>
           <a href="#objectives">Objectives</a>
-          <a href="#overview-video">Video Overview</a>
           <a href="#snapshot">Disease Snapshot</a>
           <a href="#precheck">Quick Pre-Check</a>
           <a href="#pathophysiology">Pathophysiology</a>
@@ -249,18 +378,6 @@
               <div class="example-box soft-blue"><strong>2. Interpret assessment findings</strong><br>Use chronic productive cough, sputum quality, crackles, hypoxemia, hemoptysis risk, and exacerbation symptoms to guide RT priorities.</div>
               <div class="example-box soft-amber"><strong>3. Connect diagnostics to decisions</strong><br>Relate HRCT findings, sputum culture, PFT patterns, ABGs, pulse oximetry, and CXR changes to management choices.</div>
               <div class="example-box soft-coral"><strong>4. Escalate appropriately</strong><br>Recognize danger signs such as massive hemoptysis, sepsis, worsening hypoxemia, respiratory failure, or inability to clear secretions.</div>
-            </div>
-          </section>
-
-          <section class="info-card" id="overview-video">
-            <span class="eyebrow">Video Overview</span>
-            <h2>2-Minute Bronchiectasis Overview</h2>
-            <p>Watch this quick overview before moving into the disease snapshot.</p>
-            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
-              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="width:100%;">
-                <source src="Bronchiectasis.mp4" type="video/mp4">
-                <track src="Bronchiectasis.vtt" kind="captions" srclang="en" label="English captions" default>
-              </video>
             </div>
           </section>
 
@@ -306,7 +423,7 @@
             </div>
             <h3 style="margin-top:22px;">Visual Learning: Dilated Airway + Mucus Retention</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
-              <img src="bronchiectasis-pathophysiology.png" alt="Illustration comparing a normal tapering bronchus with a dilated bronchiectatic airway containing retained mucus and inflammatory debris" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <img src="bronchiectasis-pathophysiology.png" alt="Illustration comparing a normal tapering bronchus with a dilated bronchiectatic airway containing retained mucus and inflammatory debris">
             </div>
             <h3 style="margin-top:22px;">What Changes in Bronchiectasis</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
@@ -391,7 +508,7 @@
             </div>
             <h3 style="margin-top:22px;">Visual Learning: Sputum and Airway Clearance</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
-              <img src="bronchiectasis-airway-clearance.png" alt="Respiratory therapy airway clearance visual showing mucus movement from dilated bronchi using huff cough and PEP technique" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <img src="bronchiectasis-airway-clearance.png" alt="Respiratory therapy airway clearance visual showing mucus movement from dilated bronchi using huff cough and PEP technique">
             </div>
             <article class="info-card red" style="margin-top:16px;">
               <h3>Important Teaching Point</h3>
@@ -488,7 +605,7 @@
             </div>
             <h3 style="margin-top:18px;">Visual Learning: Clearance Before/After</h3>
             <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
-              <img src="bronchiectasis-management-flow.png" alt="Flow diagram showing bronchiectasis management: assess severity, collect sputum, bronchodilator if indicated, airway clearance, antibiotics if exacerbation, reassess oxygenation and secretion clearance" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
+              <img src="bronchiectasis-management-flow.png" alt="Flow diagram showing bronchiectasis management: assess severity, collect sputum, bronchodilator if indicated, airway clearance, antibiotics if exacerbation, reassess oxygenation and secretion clearance">
             </div>
             <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Bronchiectasis Care Sequence">
               <h3>Bronchiectasis Exacerbation Care Sequence</h3>
@@ -709,77 +826,7 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
-  <script src="courses.js"></script>
   <script>
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-
-      const courseSource = window.PulmoCoreCourses || window.pulmoCoreCourses || window.PULMOCORE_COURSES || window.courses || window.COURSES || [];
-      const courses = Array.isArray(courseSource) ? courseSource : (Array.isArray(courseSource.courses) ? courseSource.courses : []);
-
-      function courseTitle(course) { return course.title || course.name || course.label || course.disease || "Untitled Course"; }
-      function courseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
-      function courseId(course) { return course.id || course.slug || course.key || courseTitle(course).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
-      function readProgress(course) {
-        const id = courseId(course);
-        const keys = [
-          `pulmocore:${id}:progress`,
-          `PulmoCore:${id}:progress`,
-          `pulmocore-progress-${id}`,
-          `${id}-progress`,
-          id
-        ];
-        for (const key of keys) {
-          const raw = localStorage.getItem(key);
-          if (!raw) continue;
-          try {
-            const parsed = JSON.parse(raw);
-            if (typeof parsed === "number") return parsed;
-            if (typeof parsed.percent === "number") return parsed.percent;
-            if (typeof parsed.progress === "number") return parsed.progress;
-            if (parsed.complete === true || parsed.completed === true) return 100;
-          } catch (error) {
-            const numeric = Number(raw);
-            if (!Number.isNaN(numeric)) return numeric;
-            if (raw.toLowerCase() === "complete" || raw.toLowerCase() === "completed") return 100;
-          }
-        }
-        return 0;
-      }
-      function statusLabel(progress) {
-        if (progress >= 100) return { text: "Complete", cls: "complete" };
-        if (progress > 0) return { text: `In progress (${Math.round(progress)}%)`, cls: "in-progress" };
-        return { text: "Not started", cls: "not-started" };
-      }
-
-      panel.innerHTML = courses.length ? courses.map(course => {
-        const progress = readProgress(course);
-        const status = statusLabel(progress);
-        return `<a class="course-menu-item" href="${courseHref(course)}" role="menuitem"><span class="course-menu-title">${courseTitle(course)}</span><span class="course-status ${status.cls}">${status.text}</span></a>`;
-      }).join("") : `<div class="course-menu-empty">No courses found. Confirm courses.js is in the same folder and defines a course list.</div>`;
-
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!button.contains(event.target) && !panel.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-    initializeCourseMenu();
-
     const glossaryTerms = [
       { term: "Bronchiectasis", definition: "A chronic airway disease with permanent abnormal bronchial dilation and impaired mucus clearance.", rt: "Explains chronic sputum, recurrent infection, and airway clearance needs." },
       { term: "Bronchial dilation", definition: "Abnormal widening of bronchi caused by airway wall damage.", rt: "Core structural abnormality seen on HRCT." },
@@ -881,7 +928,7 @@
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
-      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
@@ -899,21 +946,11 @@
       const container = document.getElementById("sequenceSort");
       if (!container) return;
       const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
-      rows.forEach(row => {
-        row.classList.remove("correct", "incorrect");
-        const select = row.querySelector("select");
-        if (select) select.value = "";
-      });
-      let shuffled = [...rows];
-      let attempts = 0;
-      do {
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        attempts++;
-      } while (shuffled.every((row, index) => Number(row.dataset.answer) === index + 1) && attempts < 10);
-      shuffled.forEach(row => container.appendChild(row));
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
     }
 
     function normalizeSequenceRanks(changedSelect) {
@@ -975,13 +1012,9 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      shuffleSequence();
-      enableDynamicReorder();
-      initializeSequenceSort();
-      const sequenceSort = document.getElementById("sequenceSort");
-      if (sequenceSort) sequenceSort.style.visibility = "visible";
-    });
+    shuffleSequence();
+    enableDynamicReorder();
+    initializeSequenceSort();
 
     function initializeKnowledgeCheck() {
       const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
@@ -1073,6 +1106,90 @@
       });
     }
     initializePeakFlowActivity();
+  </script>
+  <script>
+    (function () {
+      var menuBuilt = false;
+
+      function setupToggle() {
+        var button = document.getElementById("courseMenuButton");
+        var panel  = document.getElementById("courseMenuPanel");
+        if (!button || !panel || button.dataset.toggleReady) return;
+        button.dataset.toggleReady = "true";
+
+        button.onclick = function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var isOpen = panel.classList.contains("open");
+          panel.classList.toggle("open", !isOpen);
+          panel.classList.toggle("show", !isOpen);
+          button.setAttribute("aria-expanded", String(!isOpen));
+        };
+
+        document.addEventListener("click", function (event) {
+          if (!button.contains(event.target) && !panel.contains(event.target)) {
+            panel.classList.remove("open");
+            panel.classList.remove("show");
+            button.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            panel.classList.remove("open");
+            panel.classList.remove("show");
+            button.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+
+      function buildCourseMenu() {
+        if (menuBuilt) return;
+        var courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.courses || [];
+        if (!courses.length) return;
+        menuBuilt = true;
+
+        var button = document.getElementById("courseMenuButton");
+        var panel  = document.getElementById("courseMenuPanel");
+        if (!button || !panel) return;
+
+        panel.innerHTML =
+          '<div class="course-menu-heading">PulmoCore Courses</div>' +
+          '<div id="courseMenuList"></div>';
+
+        var list        = document.getElementById("courseMenuList");
+        var currentFile = window.location.pathname.split("/").pop().toLowerCase();
+
+        list.innerHTML = courses.map(function (course) {
+          var progress    = typeof window.getCourseProgress === "function"
+                            ? window.getCourseProgress(course.file) : null;
+          var statusLabel = "Not started", statusClass = "not-started";
+          if (progress && progress.completed) {
+            statusLabel = "Complete"; statusClass = "complete";
+          } else if (progress && progress.percent > 0) {
+            statusLabel = "In progress (" + progress.percent + "%)";
+            statusClass = "in-progress";
+          }
+          var isCurrent = course.file.toLowerCase() === currentFile;
+          return '<a class="course-menu-item" href="' + course.file + '" ' +
+                 (isCurrent ? 'aria-current="page" ' : '') +
+                 'role="menuitem" data-course-file="' + course.file + '">' +
+                 '<span class="course-menu-title">' + course.title + '</span>' +
+                 '<span class="course-menu-status ' + statusClass + '">' + statusLabel + '</span>' +
+                 '</a>';
+        }).join("");
+
+        // Override any broken onclick courses.js may have set
+        setupToggle();
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        setupToggle();
+        buildCourseMenu();
+      });
+      window.addEventListener("load", buildCourseMenu);
+      setTimeout(buildCourseMenu, 300);
+    })();
   </script>
 </body>
 </html>
