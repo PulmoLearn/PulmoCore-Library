@@ -149,7 +149,10 @@
 
     // Make sure user is logged in before they can pay
     const session = await requireAuth()
-    if (!session) return // requireAuth redirects to /login.html if not logged in
+if (!session) {
+  window.location.href = '/login.html'
+  throw new Error('Redirecting')
+}
 
     const btn = document.getElementById('payBtn')
     const btnText = document.getElementById('btnText')
