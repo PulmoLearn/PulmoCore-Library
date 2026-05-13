@@ -45,17 +45,27 @@
     .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
-    .course-menu { position: relative; display: flex; align-items: center; }
-    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; }
-    .course-menu-btn:hover { background: rgba(255,255,255,.14); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(380px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
     .course-menu-panel.open { display: grid; gap: 8px; }
-    .course-menu-item { display: grid; gap: 4px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 12px; padding: 10px 12px; background: #FAFDFF; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
     .course-menu-item:hover { background: var(--airway-mint); }
-    .course-menu-title { font-weight: 800; font-family: var(--font-heading); }
-    .course-menu-status { font-size: .88rem; color: var(--slate); }
-    .course-menu-empty { padding: 12px; color: var(--slate); }
-    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
@@ -178,11 +188,20 @@
           </svg>
         </div><div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu" aria-label="Course menu">
-        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore courses"></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">
+            ☰ Courses
+          </button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
       </div>
-      <div class="mobile-menu-note">☰ Courses</div>
     </header>
     <main class="main-content">
       <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);"><span class="eyebrow">Respiratory Disease Module</span><h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Acute Epiglottitis & Bacterial Tracheitis</h1><p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Two life-threatening upper airway infections that can progress rapidly from noisy breathing to complete obstruction. This module focuses on RT recognition, airway protection, diagnostics, escalation, and board-style decision-making.</p><div class="case-meta"><div><strong>Category</strong><br>Upper Airway Emergencies</div><div><strong>Estimated Time</strong><br>30–40 minutes</div><div><strong>Level</strong><br>Core RT Knowledge</div></div></section>
@@ -269,51 +288,6 @@
 
     function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
 
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-
-      const courseSource = window.PulmoCoreCourses || window.courses || window.COURSES || [];
-      const progressSource = window.PulmoCoreProgress || JSON.parse(localStorage.getItem("pulmocoreCourseProgress") || "{}");
-
-      function getStatus(course) {
-        const key = course.id || course.slug || course.title || course.name || course.href || course.url;
-        const value = progressSource[key] || progressSource[course.href] || progressSource[course.url] || course.progress;
-        if (value === 100 || value === "complete" || value === "completed") return "Complete";
-        if (typeof value === "number" && value > 0) return `In progress (${Math.round(value)}%)`;
-        if (value && typeof value.percent === "number") return value.percent >= 100 ? "Complete" : `In progress (${Math.round(value.percent)}%)`;
-        return "Not started";
-      }
-
-      function getTitle(course) { return course.title || course.name || course.label || "Untitled course"; }
-      function getHref(course) { return course.href || course.url || "#"; }
-
-      if (Array.isArray(courseSource) && courseSource.length) {
-        panel.innerHTML = courseSource.map(course => `<a class="course-menu-item" role="menuitem" href="${getHref(course)}"><span class="course-menu-title">${getTitle(course)}</span><span class="course-menu-status">${getStatus(course)}</span></a>`).join("");
-      } else {
-        panel.innerHTML = `<div class="course-menu-empty">No courses found. Check that courses.js is loaded and exposes a courses array.</div>`;
-      }
-
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!button.contains(event.target) && !panel.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-    }
-    initializeCourseMenu();
 
     function initializeGuidedCase() {
       const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
@@ -544,4 +518,7 @@
       });
     }
     initializePeakFlowActivity();
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script></body></html>
