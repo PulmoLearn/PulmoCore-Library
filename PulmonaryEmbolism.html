@@ -59,18 +59,27 @@
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
-    .course-menu-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; }
-    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.10); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-btn:hover { background: rgba(255,255,255,.18); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 40; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
     .course-menu-panel.open { display: grid; gap: 8px; }
-    .course-menu-title { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 4px; color: var(--core-navy); }
-    .course-menu-list { display: grid; gap: 6px; }
-    .course-menu-item { display: grid; gap: 4px; text-decoration: none; border: 1px solid var(--soft-border); border-radius: 12px; padding: 10px 12px; background: #FAFDFF; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
     .course-menu-item:hover { background: var(--airway-mint); }
-    .course-menu-name { font-weight: 800; color: var(--core-navy); }
-    .course-menu-status { font-size: .86rem; color: var(--slate); }
-    .course-status-badge { display: inline-flex; align-items: center; width: fit-content; border-radius: 999px; padding: 2px 8px; background: #E6F3FF; color: #18344E; font-size: .78rem; font-weight: 800; }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
     #sequenceSort { visibility: hidden; }
 
 
@@ -206,12 +215,15 @@
         </div>
       </div>
 
-      <div class="course-menu-wrap">
-        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
-          <div class="course-menu-title">PulmoCore Courses</div>
-          <div class="course-menu-list" id="courseMenuList">
-            <div class="course-menu-item"><span class="course-menu-name">Loading courses...</span><span class="course-menu-status">Progress status will appear here.</span></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
           </div>
         </div>
       </div>
@@ -444,6 +456,7 @@
                 <tr><td>Rising PaCO₂ with altered mental status or shock</td><td>Possible ventilatory failure or severe decompensation.</td></tr>
               </table>
             </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="PE Signs Sort"><h3>Sort the PE Clinical Signs</h3><p>Categorize each finding as a Typical PE Finding, High-Risk Sign, or Emergency Sign, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="typical"><strong>Sudden unexplained dyspnea with pleuritic chest pain</strong><select aria-label="Category for sudden dyspnea"><option value="">Choose category</option><option value="typical">Typical PE Finding</option><option value="high-risk">High-Risk Sign</option><option value="emergency">Emergency Sign</option></select></div><div class="sort-row" data-answer="typical"><strong>Tachycardia and tachypnea after prolonged immobilization</strong><select aria-label="Category for tachycardia after immobilization"><option value="">Choose category</option><option value="typical">Typical PE Finding</option><option value="high-risk">High-Risk Sign</option><option value="emergency">Emergency Sign</option></select></div><div class="sort-row" data-answer="high-risk"><strong>Refractory hypoxemia with signs of right ventricular strain</strong><select aria-label="Category for RV strain with hypoxemia"><option value="">Choose category</option><option value="typical">Typical PE Finding</option><option value="high-risk">High-Risk Sign</option><option value="emergency">Emergency Sign</option></select></div><div class="sort-row" data-answer="high-risk"><strong>Rising oxygen requirement unresponsive to positioning</strong><select aria-label="Category for rising oxygen need"><option value="">Choose category</option><option value="typical">Typical PE Finding</option><option value="high-risk">High-Risk Sign</option><option value="emergency">Emergency Sign</option></select></div><div class="sort-row" data-answer="emergency"><strong>Hemodynamic collapse with obstructive shock and altered mentation</strong><select aria-label="Category for hemodynamic collapse"><option value="">Choose category</option><option value="typical">Typical PE Finding</option><option value="high-risk">High-Risk Sign</option><option value="emergency">Emergency Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article>
           </section>
 
           <section class="info-card" id="severity">
@@ -726,73 +739,6 @@
 
   <script>
 
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      const list = document.getElementById("courseMenuList");
-      if (!button || !panel || !list) return;
-
-      const courseSource = window.PulmoCoreCourses || window.pulmoCoreCourses || window.courses || window.COURSES || [];
-      const courses = Array.isArray(courseSource) ? courseSource : Object.values(courseSource || {});
-      const storagePrefix = "pulmocore-progress-";
-
-      function getCourseName(course) { return course.title || course.name || course.label || course.disease || "Untitled Course"; }
-      function getCourseHref(course) { return course.href || course.url || course.file || course.path || "#"; }
-      function getCourseKey(course) { return course.id || course.key || getCourseName(course).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
-      function getStoredProgress(course) {
-        const key = getCourseKey(course);
-        const raw = localStorage.getItem(storagePrefix + key) || localStorage.getItem("PulmoCore:" + key) || localStorage.getItem(key + ":progress");
-        if (!raw) return null;
-        try {
-          const parsed = JSON.parse(raw);
-          if (typeof parsed === "number") return parsed;
-          if (typeof parsed.percent === "number") return parsed.percent;
-          if (typeof parsed.progress === "number") return parsed.progress;
-          if (parsed.complete === true) return 100;
-        } catch (error) {
-          const numeric = Number(raw);
-          if (!Number.isNaN(numeric)) return numeric;
-        }
-        return null;
-      }
-      function getStatus(course) {
-        const progress = typeof course.progress === "number" ? course.progress : getStoredProgress(course);
-        const complete = course.complete === true || progress >= 100;
-        if (complete) return "Complete";
-        if (progress && progress > 0) return `In progress (${Math.round(progress)}%)`;
-        return "Not started";
-      }
-
-      if (!courses.length) {
-        list.innerHTML = `<div class="course-menu-item"><span class="course-menu-name">No courses found</span><span class="course-menu-status">Add course data to courses.js.</span></div>`;
-      } else {
-        list.innerHTML = courses.map(course => {
-          const name = getCourseName(course);
-          const href = getCourseHref(course);
-          const status = getStatus(course);
-          return `<a class="course-menu-item" href="${href}" role="menuitem"><span class="course-menu-name">${name}</span><span class="course-status-badge">${status}</span></a>`;
-        }).join("");
-      }
-
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!panel.contains(event.target) && !button.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-
     const glossaryTerms = [
       { term: "Pulmonary embolism", definition: "Obstruction of pulmonary arterial blood flow by embolic material, most often a thrombus from the venous system.", rt: "Explains sudden hypoxemia, tachypnea, and dead space ventilation." },
       { term: "Embolus", definition: "Material that travels through the bloodstream and lodges in a vessel.", rt: "In PE, the embolus commonly travels from a DVT to the pulmonary arteries." },
@@ -905,6 +851,8 @@
     initializeHotspotActivity();
 
     function initializeRiskSort() { const activity = document.querySelector("#risk-factors .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
     initializeRiskSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
@@ -990,7 +938,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      initializeCourseMenu();
       shuffleSequence();
       enableDynamicReorder();
       initializeSequenceSort();
@@ -1088,6 +1035,9 @@
       });
     }
     initializePeakFlowActivity();
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script>
 </body>
 </html>
