@@ -8,7 +8,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 export async function requireAuth() {
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    window.location.href = '/login.html'
+    window.location.href = '/diseases.html'
   }
   return session
 }
