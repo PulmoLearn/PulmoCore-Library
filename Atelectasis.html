@@ -889,86 +889,53 @@
 </div>
 <script>
 
-    const defaultPulmoCoreCourses = [
-      { title: "Atelectasis", file: "Atelectasis.html" }
-    ];
-
-    function initializeCourseMenu() {
+    // courses.js DOMContentLoaded runs first (registered in <head>) and calls its own
+    // renderCourseMenu(), which wipes panel.innerHTML and leaves the list detached.
+    // This listener is registered later (inline body script), so it fires second
+    // and rebuilds the panel correctly after courses.js has already run.
+    document.addEventListener("DOMContentLoaded", function () {
       const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      const list = document.getElementById("courseMenuList") || panel;
-      if (!button || !panel || !list) return;
+      const panel  = document.getElementById("courseMenuPanel");
+      if (!button || !panel) return;
 
-      if (button.dataset.menuInitialized === "true") return;
-      button.dataset.menuInitialized = "true";
+      // Rebuild the panel structure that courses.js wiped
+      panel.innerHTML =
+        '<div class="course-menu-heading">PulmoCore Courses</div>' +
+        '<div id="courseMenuList"></div>';
 
-      const courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.pulmocoreCourses || window.courseList || window.courses || defaultPulmoCoreCourses;
-      const currentFile = (window.location.pathname.split("/").pop() || "Atelectasis.html").toLowerCase();
+      const list        = document.getElementById("courseMenuList");
+      const courses     = window.PULMOCORE_COURSES || [];
+      const currentFile = window.location.pathname.split("/").pop().toLowerCase();
 
-      function getCourseFile(course) {
-        return course.file || course.url || "#";
-      }
-
-      function getCourseStatus(course) {
-        const courseFile = getCourseFile(course);
-        if (typeof window.getCourseProgress === "function") {
-          const progress = window.getCourseProgress(courseFile);
-          if (progress && progress.completed) return { label: "Complete", className: "complete" };
-          if (progress && progress.percent > 0) return { label: `In progress (${progress.percent}%)`, className: "in-progress" };
+      list.innerHTML = courses.map(function (course) {
+        var progress    = typeof window.getCourseProgress === "function"
+                          ? window.getCourseProgress(course.file) : null;
+        var statusLabel = "Not started", statusClass = "not-started";
+        if (progress && progress.completed) {
+          statusLabel = "Complete"; statusClass = "complete";
+        } else if (progress && progress.percent > 0) {
+          statusLabel = "In progress (" + progress.percent + "%)";
+          statusClass = "in-progress";
         }
-        const storageKey = course.storageKey || `pulmocore-${courseFile.replace(/\.html$/i, "").toLowerCase()}`;
-        const saved = localStorage.getItem(storageKey);
-        if (!saved) return { label: "Not started", className: "not-started" };
-        try {
-          const data = JSON.parse(saved);
-          if (data.complete === true || data.completed === true || data.progress === 100 || data.percent === 100) return { label: "Complete", className: "complete" };
-          const progress = data.progress || data.percent || 0;
-          if (progress > 0) return { label: `In progress (${progress}%)`, className: "in-progress" };
-          return { label: "In progress", className: "in-progress" };
-        } catch {
-          return { label: "In progress", className: "in-progress" };
-        }
-      }
-
-      list.innerHTML = courses.map(course => {
-        const courseFile = getCourseFile(course);
-        const status = getCourseStatus(course);
-        const isCurrent = courseFile.split("/").pop().toLowerCase() === currentFile;
-        return `
-          <a class="course-menu-item" href="${courseFile}" ${isCurrent ? 'aria-current="page"' : ''} role="menuitem" data-course-file="${courseFile}">
-            <span class="course-menu-title">${course.title}</span>
-            <span class="course-menu-status ${status.className}">${status.label}</span>
-          </a>
-        `;
+        var isCurrent = course.file.toLowerCase() === currentFile;
+        return '<a class="course-menu-item" href="' + course.file + '" ' +
+               (isCurrent ? 'aria-current="page" ' : '') +
+               'role="menuitem" data-course-file="' + course.file + '">' +
+               '<span class="course-menu-title">' + course.title + '</span>' +
+               '<span class="course-menu-status ' + statusClass + '">' + statusLabel + '</span>' +
+               '</a>';
       }).join("");
 
-      button.addEventListener("click", event => {
+      // courses.js sets button.onclick to its broken handler — override it
+      button.onclick = function (event) {
         event.preventDefault();
         event.stopPropagation();
-        const isOpen = panel.classList.contains("open") || panel.classList.contains("show");
+        var isOpen = panel.classList.contains("open");
         panel.classList.toggle("open", !isOpen);
         panel.classList.toggle("show", !isOpen);
         button.setAttribute("aria-expanded", String(!isOpen));
-      });
-
-      document.addEventListener("click", event => {
-        if (!button.contains(event.target) && !panel.contains(event.target)) {
-          panel.classList.remove("open");
-          panel.classList.remove("show");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          panel.classList.remove("show");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-    }
-
-    initializeCourseMenu();
+      };
+    });
 
     const glossaryTerms = [
       { term: "Atelectasis", definition: "Partial or complete collapse or underinflation of alveoli, a segment, a lobe, or an entire lung.", rt: "Explains low-volume hypoxemia and guides lung expansion therapy." },
