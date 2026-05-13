@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 
+  <script src="courses.js"></script>
+
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -57,15 +59,27 @@
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
 
-    .course-menu-wrap { position: relative; display: flex; align-items: center; }
-    .course-menu-btn { border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(255,255,255,.10); color: var(--white); padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-btn:hover { background: rgba(255,255,255,.16); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 50; }
-    .course-menu-panel.open { display: grid; gap: 6px; }
-    .course-menu-item { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; }
-    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
-    .course-menu-title { font-weight: 800; font-family: var(--font-heading); }
-    .course-menu-status { font-size: .86rem; color: var(--slate); }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
     .side-nav a.locked { pointer-events: none; opacity: 0.45; cursor: not-allowed; }
     #sequenceSort { visibility: hidden; }
 
@@ -194,9 +208,17 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu-wrap">
-        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -272,7 +294,9 @@
 
           <section class="info-card" id="triggers"><h2>Etiology, Causes & Risk Factors</h2><p>ILD may be idiopathic, autoimmune, occupational/environmental, medication-related, radiation-related, or associated with hypersensitivity exposure. The RT should connect history to likely mechanism while prioritizing oxygenation and function.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Cause or Risk Factor</th><th>Why It Matters</th><th>Teaching Focus</th></tr><tr><td>Idiopathic pulmonary fibrosis</td><td>Progressive fibrotic ILD pattern.</td><td>Monitor function, oxygen need, and referral timing.</td></tr><tr><td>Connective tissue disease</td><td>Autoimmune inflammation can involve lung interstitium.</td><td>Ask about systemic symptoms and medications.</td></tr><tr><td>Hypersensitivity pneumonitis</td><td>Inhaled organic antigens can trigger immune lung injury.</td><td>Exposure identification/removal is high yield.</td></tr><tr><td>Occupational exposures</td><td>Dusts such as silica/asbestos can cause fibrotic disease.</td><td>Take a work and exposure history.</td></tr><tr><td>Medication/radiation injury</td><td>Some drugs and thoracic radiation can injure lung tissue.</td><td>Review treatment history.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ILD Cause Sorting"><h3>Sort the ILD Clues</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="cause"><strong>Silica or asbestos exposure</strong><select aria-label="Category for silica or asbestos"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="diagnostic"><strong>Decreased DLCO</strong><select aria-label="Category for decreased DLCO"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="cause"><strong>Connective tissue disease</strong><select aria-label="Category for connective tissue disease"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Sudden severe hypoxemia with new infiltrates</strong><select aria-label="Category for acute worsening"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="diagnostic"><strong>Low TLC with normal/high FEV₁/FVC</strong><select aria-label="Category for restrictive PFTs"><option value="">Choose category</option><option value="cause">Cause/Risk Factor</option><option value="diagnostic">Diagnostic Clue</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
 
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>ILD often presents gradually with exertional dyspnea and dry cough. As restriction and diffusion impairment progress, patients may develop tachypnea, fine inspiratory crackles, clubbing, resting hypoxemia, pulmonary hypertension, and declining exercise tolerance.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Symptoms</td><td>Progressive dyspnea, dry cough, fatigue, activity intolerance.</td></tr><tr><td>Breathing pattern</td><td>Rapid shallow breathing due to stiff lungs and increased elastic load.</td></tr><tr><td>Breath sounds</td><td>Fine inspiratory crackles, often basilar; wheezing is not the classic pattern.</td></tr><tr><td>Oxygenation clues</td><td>Exertional desaturation, low PaO₂, increased oxygen need over time.</td></tr><tr><td>Chronic signs</td><td>Digital clubbing, weight loss, pulmonary hypertension signs in advanced disease.</td></tr><tr><td>Response clues</td><td>Bronchodilators may help coexisting obstruction but do not reverse fibrosis.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not judge ILD severity by resting SpO₂ alone. Many patients reveal the problem during ambulation or a six-minute walk test.</p></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>ILD often presents gradually with exertional dyspnea and dry cough. As restriction and diffusion impairment progress, patients may develop tachypnea, fine inspiratory crackles, clubbing, resting hypoxemia, pulmonary hypertension, and declining exercise tolerance.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Symptoms</td><td>Progressive dyspnea, dry cough, fatigue, activity intolerance.</td></tr><tr><td>Breathing pattern</td><td>Rapid shallow breathing due to stiff lungs and increased elastic load.</td></tr><tr><td>Breath sounds</td><td>Fine inspiratory crackles, often basilar; wheezing is not the classic pattern.</td></tr><tr><td>Oxygenation clues</td><td>Exertional desaturation, low PaO₂, increased oxygen need over time.</td></tr><tr><td>Chronic signs</td><td>Digital clubbing, weight loss, pulmonary hypertension signs in advanced disease.</td></tr><tr><td>Response clues</td><td>Bronchodilators may help coexisting obstruction but do not reverse fibrosis.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not judge ILD severity by resting SpO₂ alone. Many patients reveal the problem during ambulation or a six-minute walk test.</p></article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="ILD Signs Sort"><h3>Sort the ILD Clinical Signs</h3><p>Categorize each finding as a Typical ILD Finding, Severity Sign, or Urgent Concern, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="typical"><strong>Progressive exertional dyspnea and dry cough</strong><select aria-label="Category for exertional dyspnea"><option value="">Choose category</option><option value="typical">Typical ILD Finding</option><option value="severity">Severity Sign</option><option value="urgent">Urgent Concern</option></select></div><div class="sort-row" data-answer="typical"><strong>Fine inspiratory crackles at the lung bases</strong><select aria-label="Category for basilar crackles"><option value="">Choose category</option><option value="typical">Typical ILD Finding</option><option value="severity">Severity Sign</option><option value="urgent">Urgent Concern</option></select></div><div class="sort-row" data-answer="severity"><strong>SpO₂ dropping from 94% to 84% during ambulation</strong><select aria-label="Category for exertional desaturation"><option value="">Choose category</option><option value="typical">Typical ILD Finding</option><option value="severity">Severity Sign</option><option value="urgent">Urgent Concern</option></select></div><div class="sort-row" data-answer="urgent"><strong>Sudden severe hypoxemia with new bilateral infiltrates</strong><select aria-label="Category for sudden hypoxemia"><option value="">Choose category</option><option value="typical">Typical ILD Finding</option><option value="severity">Severity Sign</option><option value="urgent">Urgent Concern</option></select></div><div class="sort-row" data-answer="severity"><strong>Rapidly declining FVC on serial measurements</strong><select aria-label="Category for declining FVC"><option value="">Choose category</option><option value="typical">Typical ILD Finding</option><option value="severity">Severity Sign</option><option value="urgent">Urgent Concern</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article>
+          </section>
 
           <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic data helps confirm restriction, quantify diffusion impairment, identify disease pattern, and monitor progression or acute worsening.</p><div class="example-box soft-blue" style="margin-top:16px;"><img src="ild-hrct-patterns.png" alt="High resolution CT teaching placeholder showing reticulation ground glass opacities and honeycombing patterns in ILD"><strong>Visual learning:</strong><br>Use this placeholder for an HRCT pattern graphic showing reticulation, ground-glass opacity, traction bronchiectasis, and honeycombing.</div><h3 style="margin-top:18px;">PFT Pattern</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>ILD Pattern</th></tr><tr><td>TLC</td><td>Decreased; confirms restriction when below normal.</td></tr><tr><td>FVC</td><td>Decreased due to reduced lung volume.</td></tr><tr><td>FEV₁</td><td>Often decreased proportionally to FVC.</td></tr><tr><td>FEV₁/FVC</td><td>Normal or increased because FVC falls with FEV₁.</td></tr><tr><td>DLCO</td><td>Decreased due to impaired gas transfer.</td></tr></table></div><h3 style="margin-top:18px;">ABG and Oxygen Assessment</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Pattern</th><th>Meaning</th></tr><tr><td>Low PaO₂ with low/normal PaCO₂</td><td>Common hypoxemia with compensatory hyperventilation.</td></tr><tr><td>Worse SpO₂ during walking</td><td>Diffusion limitation and reduced reserve.</td></tr><tr><td>Rising PaCO₂ with fatigue</td><td>Possible ventilatory failure or advanced disease.</td></tr><tr><td>Increasing oxygen need</td><td>Progression, acute exacerbation, infection, PE, or pulmonary hypertension must be considered.</td></tr></table></div><h3 style="margin-top:18px;">Imaging</h3><p>HRCT is central for ILD pattern recognition. Chest x-ray may show reticular or reduced-volume changes but can miss early disease.</p></section>
 
@@ -301,39 +325,7 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
-  <script src="courses.js"></script>
   <script>
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      if (!button || !panel) return;
-      const courseSource = window.PulmoCoreCourses || window.PULMOCORE_COURSES || window.courses || window.COURSES || [];
-      const courses = Array.isArray(courseSource) ? courseSource : (Array.isArray(courseSource.courses) ? courseSource.courses : []);
-      function getTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
-      function getHref(course) { return course.href || course.url || course.file || "#"; }
-      function getKey(course) { return course.id || course.key || getHref(course).replace(/[^a-z0-9]/gi, "_"); }
-      function getProgress(course) {
-        const key = getKey(course);
-        const saved = Number(localStorage.getItem(`pulmocore_progress_${key}`) || localStorage.getItem(`progress_${key}`) || course.progress || 0);
-        const complete = course.complete || saved >= 100 || localStorage.getItem(`pulmocore_complete_${key}`) === "true";
-        if (complete) return "Complete";
-        if (saved > 0) return `In progress (${Math.round(saved)}%)`;
-        return "Not started";
-      }
-      panel.innerHTML = courses.length ? courses.map(course => `<a class="course-menu-item" role="menuitem" href="${getHref(course)}"><span class="course-menu-title">${getTitle(course)}</span><span class="course-menu-status">${getProgress(course)}</span></a>`).join("") : `<div class="course-menu-item"><span class="course-menu-title">Courses loading</span><span class="course-menu-status">Add courses.js in this folder to populate the menu.</span></div>`;
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!panel.contains(event.target) && !button.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-    }
-    initializeCourseMenu();
 
     const glossaryTerms = [
       { term: "Interstitial Lung Disease", definition: "A broad group of disorders that cause inflammation and/or fibrosis of the lung interstitium, leading to stiff lungs and impaired gas exchange.", rt: "Think restrictive mechanics, diffusion impairment, exertional hypoxemia, and oxygen titration." },
@@ -447,6 +439,8 @@
     initializeHotspotActivity();
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
     initializeRiskSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
@@ -620,6 +614,9 @@
     }
     initializePeakFlowActivity();
   
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script>
 </body>
 </html>
