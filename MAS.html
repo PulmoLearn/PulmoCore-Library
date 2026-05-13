@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 
+  <script src="courses.js"></script>
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -57,20 +58,27 @@
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
-    .course-menu-wrap { position: relative; }
-    .course-menu-button { border: 1px solid rgba(255,255,255,.24); background: rgba(255,255,255,.08); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-button:hover { background: rgba(255,255,255,.14); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; max-height: 70vh; overflow-y: auto; }
-    .course-menu-panel.open { display: block; }
-    .course-menu-panel h3 { font-size: 1rem; margin: 4px 8px 10px; }
-    .course-menu-list { display: grid; gap: 8px; }
-    .course-menu-item { display: grid; gap: 3px; padding: 10px 12px; border: 1px solid var(--soft-border); border-radius: 12px; text-decoration: none; background: #FAFDFF; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
     .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
     .course-menu-title { font-weight: 800; }
-    .course-menu-status { color: var(--slate); font-size: .88rem; }
-    .course-menu-status.complete { color: var(--pulmo-teal-dark); font-weight: 800; }
-    .course-menu-status.in-progress { color: #7A4B00; font-weight: 800; }
-    .course-menu-empty { padding: 12px; border-radius: 12px; background: var(--mist-blue); color: var(--slate); }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
@@ -182,7 +190,6 @@
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
   @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
   </style>
-  <script src="courses.js"></script>
 </head>
 <body>
   <div class="page-shell">
@@ -198,14 +205,18 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu-wrap">
-        <button class="course-menu-button" id="courseMenuButton" type="button" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
-          <h3>Courses</h3>
-          <div class="course-menu-list" id="courseMenuList"><div class="course-menu-empty">Loading courses...</div></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
         </div>
       </div>
-      <div class="mobile-menu-note">Courses</div>
     </header>
 
     <main class="main-content">
@@ -298,7 +309,7 @@
             <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MAS Factor Sorting"><h3>Sort the MAS Factors</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="risk"><strong>Thick meconium-stained amniotic fluid</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="mechanism"><strong>Surfactant inactivation</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="risk"><strong>Post-term delivery</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Sudden worsening with asymmetric chest movement</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="mechanism"><strong>Ball-valve air trapping</strong><select><option value="">Choose category</option><option value="risk">MAS Risk/Context</option><option value="mechanism">Pathophysiology Mechanism</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article>
           </section>
 
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>MAS presentation ranges from mild tachypnea to severe respiratory failure. RT assessment should focus on work of breathing, oxygenation, ventilation, perfusion, neurologic tone, and response to support.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Delivery clues</td><td>Meconium-stained fluid, stained skin/nails/cord, fetal distress history.</td></tr><tr><td>Appearance</td><td>Tachypnea, grunting, nasal flaring, retractions, cyanosis, poor tone if severe.</td></tr><tr><td>Breath sounds</td><td>Coarse crackles/rhonchi, diminished areas, variable aeration.</td></tr><tr><td>Chest mechanics</td><td>Hyperinflation/barrel chest from air trapping or reduced expansion from atelectasis.</td></tr><tr><td>Oxygenation clues</td><td>Low SpO₂, pre/postductal saturation gradient, low PaO₂.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, acidosis, apnea, fatigue.</td></tr></table></div><img src="mas-clinical-signs.png" alt="Visual summary of MAS signs including tachypnea, grunting, retractions, cyanosis, coarse breath sounds, and hypoxemia" style="width:100%; margin-top:16px; border-radius:16px; box-shadow: var(--shadow-soft); border:1px solid var(--soft-border); background:#F8FBFD;"><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not treat MAS as a single-mechanism disease. A newborn can have airway obstruction, collapsed alveoli, hyperinflated regions, inflammation, low compliance, and pulmonary hypertension at the same time.</p></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>MAS presentation ranges from mild tachypnea to severe respiratory failure. RT assessment should focus on work of breathing, oxygenation, ventilation, perfusion, neurologic tone, and response to support.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Delivery clues</td><td>Meconium-stained fluid, stained skin/nails/cord, fetal distress history.</td></tr><tr><td>Appearance</td><td>Tachypnea, grunting, nasal flaring, retractions, cyanosis, poor tone if severe.</td></tr><tr><td>Breath sounds</td><td>Coarse crackles/rhonchi, diminished areas, variable aeration.</td></tr><tr><td>Chest mechanics</td><td>Hyperinflation/barrel chest from air trapping or reduced expansion from atelectasis.</td></tr><tr><td>Oxygenation clues</td><td>Low SpO₂, pre/postductal saturation gradient, low PaO₂.</td></tr><tr><td>Ventilation clues</td><td>Rising PaCO₂, acidosis, apnea, fatigue.</td></tr></table></div><img src="mas-clinical-signs.png" alt="Visual summary of MAS signs including tachypnea, grunting, retractions, cyanosis, coarse breath sounds, and hypoxemia" style="width:100%; margin-top:16px; border-radius:16px; box-shadow: var(--shadow-soft); border:1px solid var(--soft-border); background:#F8FBFD;"><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>Do not treat MAS as a single-mechanism disease. A newborn can have airway obstruction, collapsed alveoli, hyperinflated regions, inflammation, low compliance, and pulmonary hypertension at the same time.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MAS Signs Sort"><h3>Sort the MAS Clinical Signs</h3><p>Categorize each finding as an Expected MAS Finding, Concerning Sign, or Escalation Sign, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="expected"><strong>Tachypnea with grunting and nasal flaring after delivery</strong><select aria-label="Category for tachypnea with grunting"><option value="">Choose category</option><option value="expected">Expected MAS Finding</option><option value="concerning">Concerning Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="expected"><strong>Coarse rhonchi with variable aeration on auscultation</strong><select aria-label="Category for coarse rhonchi"><option value="">Choose category</option><option value="expected">Expected MAS Finding</option><option value="concerning">Concerning Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="concerning"><strong>Persistent rising oxygen need with worsening retractions</strong><select aria-label="Category for rising oxygen need"><option value="">Choose category</option><option value="expected">Expected MAS Finding</option><option value="concerning">Concerning Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="escalation"><strong>Pre/postductal SpO₂ gradient suggesting right-to-left ductal shunting</strong><select aria-label="Category for pre/postductal gradient"><option value="">Choose category</option><option value="expected">Expected MAS Finding</option><option value="concerning">Concerning Sign</option><option value="escalation">Escalation Sign</option></select></div><div class="sort-row" data-answer="escalation"><strong>Refractory hypoxemia with acidosis despite ventilatory support</strong><select aria-label="Category for refractory hypoxemia"><option value="">Choose category</option><option value="expected">Expected MAS Finding</option><option value="concerning">Concerning Sign</option><option value="escalation">Escalation Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article></section>
 
           <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic data helps determine severity, identify complications, and guide escalation. In MAS, the RT should integrate delivery history, physical assessment, oxygenation trend, ABGs, chest x-ray, and signs of PPHN.</p><h3 style="margin-top:18px;">Chest X-ray Pattern</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding</th><th>MAS Pattern</th></tr><tr><td>Patchy infiltrates</td><td>Inflammatory injury and uneven aeration.</td></tr><tr><td>Hyperinflation</td><td>Air trapping from partial obstruction.</td></tr><tr><td>Atelectasis</td><td>Complete obstruction or surfactant dysfunction.</td></tr><tr><td>Air leak</td><td>Pneumothorax or pneumomediastinum may complicate severe disease.</td></tr></table></div><img src="mas-cxr-placeholder.png" alt="Chest x-ray learning placeholder showing patchy infiltrates, hyperinflation, atelectasis, and air leak concern in MAS" style="width:100%; margin-top:16px; border-radius:16px; box-shadow: var(--shadow-soft); border:1px solid var(--soft-border); background:#F8FBFD;"><h3 style="margin-top:18px;">ABG and Oxygenation Patterns</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Pattern</th><th>Meaning</th></tr><tr><td>Low PaO₂ / low SpO₂</td><td>V/Q mismatch, shunt physiology, or PPHN.</td></tr><tr><td>Respiratory alkalosis early</td><td>Tachypnea may lower PaCO₂ initially.</td></tr><tr><td>Respiratory acidosis</td><td>Ventilatory failure, fatigue, or severe obstruction.</td></tr><tr><td>Pre/postductal SpO₂ difference</td><td>May suggest right-to-left ductal shunting with PPHN.</td></tr></table></div></section>
 
@@ -341,59 +352,6 @@
   </div>
 
   <script>
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      const list = document.getElementById("courseMenuList");
-      if (!button || !panel || !list) return;
-
-      let courseSource = [];
-      if (typeof PulmoCoreCourses !== "undefined") courseSource = PulmoCoreCourses;
-      else if (typeof courses !== "undefined") courseSource = courses;
-      else if (typeof COURSES !== "undefined") courseSource = COURSES;
-      else courseSource = window.PulmoCoreCourses || window.courses || window.COURSES || [];
-      const menuCourses = Array.isArray(courseSource) ? courseSource : [];
-
-      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
-      function getCourseUrl(course) { return course.url || course.href || course.file || "#"; }
-      function getStoredProgress(course) {
-        const key = course.id || course.slug || getCourseTitle(course).toLowerCase().replace(/[^a-z0-9]+/g, "-");
-        const raw = localStorage.getItem(`pulmocore-progress-${key}`) || localStorage.getItem(`PulmoCore:${key}`);
-        const numeric = raw ? Number(raw) : Number(course.progress || 0);
-        return Number.isFinite(numeric) ? Math.max(0, Math.min(100, numeric)) : 0;
-      }
-      function getStatus(progress) {
-        if (progress >= 100) return { text: "Complete", className: "complete" };
-        if (progress > 0) return { text: `In progress (${Math.round(progress)}%)`, className: "in-progress" };
-        return { text: "Not started", className: "not-started" };
-      }
-
-      list.innerHTML = menuCourses.length ? menuCourses.map(course => {
-        const progress = getStoredProgress(course);
-        const status = getStatus(progress);
-        return `<a class="course-menu-item" href="${getCourseUrl(course)}" role="menuitem"><span class="course-menu-title">${getCourseTitle(course)}</span><span class="course-menu-status ${status.className}">${status.text}</span></a>`;
-      }).join("") : `<div class="course-menu-empty">No courses found. Check courses.js.</div>`;
-
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!panel.contains(event.target) && !button.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-          button.focus();
-        }
-      });
-    }
-    initializeCourseMenu();
 
     const glossaryTerms = [
       { term: "Meconium Aspiration Syndrome", definition: "Respiratory distress caused when a newborn aspirates meconium-stained amniotic fluid before, during, or immediately after birth.", rt: "Helps RTs connect birth history, obstruction, surfactant dysfunction, hypoxemia, and escalation needs." },
@@ -518,6 +476,8 @@
     initializeHotspotActivity();
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
     initializeRiskSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
@@ -698,6 +658,9 @@
       });
     }
     initializePeakFlowActivity();
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="courses.js"></script>
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -54,19 +55,27 @@
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
-    .course-menu-wrap { position: relative; display: flex; align-items: center; justify-content: flex-end; }
-    .course-menu-btn { border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.10); color: var(--white); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-btn:hover { background: rgba(255,255,255,.18); }
-    .course-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; width: min(420px, calc(100vw - 32px)); max-height: min(70vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 12px; display: none; }
-    .course-menu-panel.open { display: block; }
-    .course-menu-title { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 12px; border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
-    .course-menu-list { display: grid; gap: 6px; }
-    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; padding: 10px; border-radius: 12px; border: 1px solid transparent; }
-    .course-menu-item:hover { background: var(--airway-mint); border-color: #BCEFE5; }
-    .course-menu-name { font-weight: 800; overflow-wrap: anywhere; }
-    .course-menu-status { font-size: .82rem; border-radius: 999px; padding: 4px 8px; background: #F1F6FA; color: var(--slate); white-space: nowrap; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
     .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
-    .course-menu-status.progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
     #sequenceSort { visibility: hidden; }
 
 
@@ -190,11 +199,16 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu-wrap">
-        <button class="course-menu-btn" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="courseMenuPanel">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore courses">
-          <div class="course-menu-title">PulmoCore Courses</div>
-          <div class="course-menu-list" id="courseMenuList"><div class="course-menu-status">Loading courses...</div></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
         </div>
       </div>
     </header>
@@ -236,7 +250,7 @@
 
           <section class="info-card" id="triggers"><h2>Etiology, Exacerbation Triggers & Risk Factors</h2><p>MG exacerbations may follow infection, surgery, pregnancy/postpartum changes, medication effects, missed therapy, heat, stress, or disease progression. Certain medications can worsen neuromuscular transmission and should prompt medication review.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Trigger/Risk</th><th>Why It Matters</th><th>RT Teaching Focus</th></tr><tr><td>Respiratory infection</td><td>Raises ventilatory demand while muscle reserve is low.</td><td>Watch cough effectiveness and secretion burden.</td></tr><tr><td>Missed MG medication</td><td>Can worsen weakness.</td><td>Clarify timing of pyridostigmine and symptom pattern.</td></tr><tr><td>Bulbar symptoms</td><td>Threaten airway protection.</td><td>Escalate aspiration precautions and suction readiness.</td></tr><tr><td>Heat/exertion</td><td>Can worsen fatigue.</td><td>Schedule care to avoid exhausting the patient.</td></tr><tr><td>Medication effects</td><td>Some drugs can worsen MG.</td><td>Communicate concern to provider/pharmacy.</td></tr></table></div><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MG Sorting"><h3>Sort the MG Findings</h3><p>Choose the best category for each item, then check your answers.</p><div class="sort-grid" id="riskSort"><div class="sort-row" data-answer="trigger"><strong>Respiratory infection</strong><select aria-label="Category for respiratory infection"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="monitor"><strong>Serial vital capacity</strong><select aria-label="Category for serial vital capacity"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Pooling secretions with weak cough</strong><select aria-label="Category for pooling secretions"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="monitor"><strong>Negative inspiratory force</strong><select aria-label="Category for NIF"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div><div class="sort-row" data-answer="danger"><strong>Rising PaCO₂ with fatigue</strong><select aria-label="Category for rising carbon dioxide"><option value="">Choose category</option><option value="trigger">Exacerbation Trigger</option><option value="monitor">Respiratory Monitoring</option><option value="danger">Danger Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div></article></section>
 
-          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>MG findings are often fluctuating and fatigable. Respiratory presentations may begin subtly: weak voice, short phrases, poor cough, difficulty clearing secretions, dysphagia, orthopnea, or tachypnea with shallow breathing.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Ocular</td><td>Ptosis and diplopia, often worse later in the day.</td></tr><tr><td>Bulbar</td><td>Dysphagia, nasal speech, dysarthria, choking, drooling, weak gag/cough.</td></tr><tr><td>Ventilatory</td><td>Shallow breathing, tachypnea, orthopnea, low VC/FVC, worsening NIF.</td></tr><tr><td>Airway clearance</td><td>Weak cough, retained secretions, atelectasis risk, aspiration risk.</td></tr><tr><td>ABG clues</td><td>Rising PaCO₂ and falling pH indicate ventilatory failure.</td></tr><tr><td>Response clues</td><td>Declining strength despite rest or therapy suggests need for escalation.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>In MG, the patient can look less dramatic than an asthma or COPD patient until late. A normal SpO₂ does not equal safe ventilation.</p></article></section>
+          <section class="info-card" id="manifestations"><h2>Clinical Manifestations</h2><p>MG findings are often fluctuating and fatigable. Respiratory presentations may begin subtly: weak voice, short phrases, poor cough, difficulty clearing secretions, dysphagia, orthopnea, or tachypnea with shallow breathing.</p><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Finding Type</th><th>What the RT May See</th></tr><tr><td>Ocular</td><td>Ptosis and diplopia, often worse later in the day.</td></tr><tr><td>Bulbar</td><td>Dysphagia, nasal speech, dysarthria, choking, drooling, weak gag/cough.</td></tr><tr><td>Ventilatory</td><td>Shallow breathing, tachypnea, orthopnea, low VC/FVC, worsening NIF.</td></tr><tr><td>Airway clearance</td><td>Weak cough, retained secretions, atelectasis risk, aspiration risk.</td></tr><tr><td>ABG clues</td><td>Rising PaCO₂ and falling pH indicate ventilatory failure.</td></tr><tr><td>Response clues</td><td>Declining strength despite rest or therapy suggests need for escalation.</td></tr></table></div><article class="info-card red" style="margin-top:16px;"><h3>Important Teaching Point</h3><p>In MG, the patient can look less dramatic than an asthma or COPD patient until late. A normal SpO₂ does not equal safe ventilation.</p></article><article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="MG Signs Sort"><h3>Sort the MG Clinical Signs</h3><p>Categorize each finding as an MG Baseline Sign, Ventilatory Warning, or Crisis Sign, then check your answers.</p><div class="sort-grid" id="manifestationsSort"><div class="sort-row" data-answer="baseline"><strong>Fluctuating ptosis and diplopia worse later in the day</strong><select aria-label="Category for ptosis and diplopia"><option value="">Choose category</option><option value="baseline">MG Baseline Sign</option><option value="warning">Ventilatory Warning</option><option value="crisis">Crisis Sign</option></select></div><div class="sort-row" data-answer="warning"><strong>Weak cough with difficulty clearing secretions</strong><select aria-label="Category for weak cough"><option value="">Choose category</option><option value="baseline">MG Baseline Sign</option><option value="warning">Ventilatory Warning</option><option value="crisis">Crisis Sign</option></select></div><div class="sort-row" data-answer="crisis"><strong>Dysphagia with pooling secretions and aspiration risk</strong><select aria-label="Category for dysphagia with pooling"><option value="">Choose category</option><option value="baseline">MG Baseline Sign</option><option value="warning">Ventilatory Warning</option><option value="crisis">Crisis Sign</option></select></div><div class="sort-row" data-answer="warning"><strong>Shallow tachypneic breathing with declining vital capacity</strong><select aria-label="Category for shallow tachypneic breathing"><option value="">Choose category</option><option value="baseline">MG Baseline Sign</option><option value="warning">Ventilatory Warning</option><option value="crisis">Crisis Sign</option></select></div><div class="sort-row" data-answer="crisis"><strong>Rising PaCO₂ with exhaustion despite oxygen therapy</strong><select aria-label="Category for rising PaCO2 with exhaustion"><option value="">Choose category</option><option value="baseline">MG Baseline Sign</option><option value="warning">Ventilatory Warning</option><option value="crisis">Crisis Sign</option></select></div></div><button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button><div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div></article></section>
 
           <section class="info-card board" id="diagnostics"><h2>Diagnostics & Assessment</h2><p>Diagnostic testing confirms MG, while bedside respiratory monitoring determines immediate safety. RTs focus on the trend: Is muscle strength improving, stable, or failing?</p><h3 style="margin-top:18px;">Disease Confirmation</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Test</th><th>MG Pattern</th></tr><tr><td>AChR antibodies</td><td>Support autoimmune MG when positive.</td></tr><tr><td>MuSK antibodies</td><td>May be present in some antibody-positive MG variants.</td></tr><tr><td>Repetitive nerve stimulation</td><td>Decremental response supports fatigable transmission failure.</td></tr><tr><td>Single-fiber EMG</td><td>Sensitive test for neuromuscular junction transmission abnormality.</td></tr><tr><td>Chest imaging</td><td>Assesses for thymoma or thymic abnormality.</td></tr></table></div><h3 style="margin-top:18px;">Respiratory Monitoring</h3><div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;"><table><tr><th>Measure</th><th>Meaning</th></tr><tr><td>VC/FVC trend</td><td>Falling values suggest declining ventilatory reserve.</td></tr><tr><td>NIF/MIP trend</td><td>Less negative values suggest weaker inspiratory muscles.</td></tr><tr><td>ABG or CO₂ monitoring</td><td>Rising PaCO₂ indicates inadequate ventilation.</td></tr><tr><td>Cough/secretion assessment</td><td>Weak cough or pooling secretions raises airway failure risk.</td></tr><tr><td>Speech/swallow assessment</td><td>Short phrases, dysarthria, choking, or drooling suggest bulbar involvement.</td></tr></table></div><div class="example-box soft-blue" style="margin-top:16px;"><img src="mg-respiratory-monitoring.png" alt="Diagram showing vital capacity, NIF, cough strength, secretion burden, and PaCO2 trends in myasthenia gravis" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"><strong>Visual:</strong> Objective respiratory monitoring trend dashboard.</div></section>
 
@@ -276,74 +290,7 @@
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
 
-  <script src="courses.js"></script>
   <script>
-
-
-    function initializeCourseMenu() {
-      const button = document.getElementById("courseMenuButton");
-      const panel = document.getElementById("courseMenuPanel");
-      const list = document.getElementById("courseMenuList");
-      if (!button || !panel || !list) return;
-
-      const possibleCourseSources = [
-        window.PULMOCORE_COURSES,
-        window.pulmoCoreCourses,
-        window.courses,
-        window.COURSES
-      ];
-      const courses = possibleCourseSources.find(source => Array.isArray(source)) || [];
-
-      function getCourseTitle(course) { return course.title || course.name || course.label || "Untitled Course"; }
-      function getCourseHref(course) { return course.href || course.url || course.file || "#"; }
-      function getCourseId(course) { return course.id || getCourseHref(course) || getCourseTitle(course).toLowerCase().replace(/\s+/g, "-"); }
-      function readStoredProgress(course) {
-        const id = getCourseId(course);
-        const keys = [`pulmocore-progress-${id}`, `PulmoCore:${id}:progress`, `progress:${id}`, id];
-        for (const key of keys) {
-          const raw = localStorage.getItem(key);
-          if (!raw) continue;
-          const numeric = Number(raw);
-          if (!Number.isNaN(numeric)) return Math.max(0, Math.min(100, numeric));
-          try {
-            const parsed = JSON.parse(raw);
-            if (typeof parsed.percent === "number") return Math.max(0, Math.min(100, parsed.percent));
-            if (typeof parsed.progress === "number") return Math.max(0, Math.min(100, parsed.progress));
-            if (parsed.complete === true || parsed.completed === true) return 100;
-          } catch (error) {}
-        }
-        if (typeof course.percent === "number") return Math.max(0, Math.min(100, course.percent));
-        if (typeof course.progress === "number") return Math.max(0, Math.min(100, course.progress));
-        if (course.complete === true || course.completed === true) return 100;
-        return 0;
-      }
-      function getStatusMarkup(percent) {
-        if (percent >= 100) return '<span class="course-menu-status complete">Complete</span>';
-        if (percent > 0) return `<span class="course-menu-status progress">In progress (${Math.round(percent)}%)</span>`;
-        return '<span class="course-menu-status">Not started</span>';
-      }
-      list.innerHTML = courses.length
-        ? courses.map(course => `<a class="course-menu-item" role="menuitem" href="${getCourseHref(course)}"><span class="course-menu-name">${getCourseTitle(course)}</span>${getStatusMarkup(readStoredProgress(course))}</a>`).join("")
-        : '<div class="course-menu-status">No courses found. Check courses.js.</div>';
-
-      button.addEventListener("click", () => {
-        const isOpen = panel.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
-      });
-      document.addEventListener("click", event => {
-        if (!panel.contains(event.target) && !button.contains(event.target)) {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-          panel.classList.remove("open");
-          button.setAttribute("aria-expanded", "false");
-        }
-      });
-    }
-    initializeCourseMenu();
 
     const glossaryTerms = [
       { term: "Myasthenia gravis", definition: "An autoimmune neuromuscular junction disorder that causes fluctuating skeletal muscle weakness, often worsening with activity and improving with rest.", rt: "Respiratory failure can occur when respiratory muscles or bulbar muscles weaken." },
@@ -457,6 +404,8 @@
     initializeHotspotActivity();
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
     initializeRiskSort();
 
     function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
@@ -642,6 +591,9 @@
     }
     initializeVCActivity();
   
+  </script>
+  <script>
+    (function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
   </script>
 </body>
 </html>
