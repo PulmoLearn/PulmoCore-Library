@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | Chronic Lung Disease of Infancy</title>
+
+  <!-- PulmoCore font direction. Replace with self-hosted or approved web fonts if needed. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <script src="courses.js"></script>
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    img, svg, video, canvas { max-width: 100%; height: auto; }
+    main, section, aside, div, article { min-width: 0; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
+    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
+    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
+    .brand-mark svg { width: 42px; height: 42px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
+    .nav-links a { text-decoration: none; opacity: 0.95; }
+    .nav-links a:hover { color: var(--airway-mint); }
+    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
+
+    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
+    h3 { font-size: 1.45rem; }
+
+    .content-layout { display: grid; grid-template-columns: minmax(190px, 245px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 26px; width: 100%; max-width: 100%; }
+    .lesson-stack { display: grid; gap: 18px; min-width: 0; max-width: 100%; }
+    .feature-card, .info-card, .quiz-card, .case-card, .glossary-card, .activity-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
+    .info-card.rt { border-left-color: var(--oxygen-blue); }
+    .info-card.board { border-left-color: var(--clinical-amber); }
+    .info-card.red { border-left-color: var(--alert-coral); }
+    .info-card p { margin-bottom: 0; }
+    .quiz-card, .case-card, .glossary-card, .activity-card { padding: 24px; }
+    .case-card { border-top: 10px solid var(--core-navy); }
+
+    .side-nav { position: sticky; top: 104px; display: grid; gap: 6px; padding: 14px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); width: 100%; max-width: 245px; align-self: start; overflow: hidden; }
+    .side-nav h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .side-nav a { text-decoration: none; color: #243b55; padding: 6px 8px; border-radius: 10px; font-size: 0.92rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+    .side-nav a:hover { background: var(--airway-mint); color: var(--core-navy); }
+    .side-nav a.locked { opacity: 0.45; }
+    .side-nav a.current { background: var(--airway-mint); color: var(--core-navy); font-weight: 800; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; min-width: 0; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 100%; align-items: stretch; }
+    .three-card-grid .example-box { width: 100%; margin-top: 0; }
+    .example-box { margin-top: auto; border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+    .soft-teal { background: var(--airway-mint); }
+    .soft-blue { background: #E6F3FF; }
+    .soft-amber { background: #FFF4DF; }
+    .soft-coral { background: #FDE9E9; }
+    .data-card { font-family: var(--font-data); background: #F8FBFD; border: 1px solid var(--soft-border); border-radius: 14px; padding: 14px; color: #18344E; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; }
+    th, td { text-align: left; padding: 8px; vertical-align: top; }
+
+    .case-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .case-meta div { background: #F7FBFD; border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px; }
+
+    .quiz-options { display: grid; gap: 10px; margin: 18px 0; }
+    .quiz-option { border: 1px solid var(--soft-border); background: #fff; border-radius: 12px; padding: 12px 14px; text-align: left; color: var(--core-navy); }
+    .quiz-option:hover { border-color: var(--oxygen-blue); background: #F2F8FE; }
+    .quiz-option.correct-choice { border-color: #86D9C8; background: var(--airway-mint); }
+    .quiz-option.incorrect-choice { border-color: #F2B5B5; background: #FDE9E9; }
+    .quiz-feedback { display: none; border-radius: 12px; padding: 14px; background: var(--airway-mint); color: var(--core-navy); }
+    .quiz-feedback.show { display: block; }
+
+    details.accordion { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); overflow: hidden; }
+    details.accordion + details.accordion { margin-top: 12px; }
+    details.accordion summary { list-style: none; padding: 18px 20px; font-weight: 800; font-family: var(--font-heading); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.4rem; }
+    details.accordion[open] summary::after { content: "–"; }
+    .accordion-body { padding: 0 20px 20px; color: #243b55; }
+
+    .glossary-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0; }
+    .glossary-controls input { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .glossary-list { display: grid; gap: 10px; margin-top: 14px; }
+    .glossary-item { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; background: #FAFDFF; }
+    .glossary-item strong { color: var(--core-navy); }
+    .flashcard-shell { display: grid; gap: 16px; }
+    .progress-row { display: grid; gap: 8px; }
+    .progress-bar { height: 12px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .2s ease; }
+    .flashcard { min-height: 220px; border: 1px solid var(--soft-border); border-radius: var(--radius-lg); display: grid; place-items: center; padding: 22px; text-align: center; background: linear-gradient(145deg, #FFFFFF, #F4FAFC); box-shadow: inset 0 0 30px rgba(75, 163, 242, .07); }
+    .flashcard .term { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.8rem); color: var(--core-navy); }
+    .flashcard .definition { font-size: 1.1rem; color: #263f5e; max-width: 720px; }
+    .deck-actions, .tabs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .small-btn, .tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
+    .tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .completed-list { display: none; border-top: 1px solid var(--soft-border); padding-top: 12px; margin-top: 8px; color: #263f5e; }
+    .completed-list.show { display: block; }
+    .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
+
+    .lesson-hidden { display: none; }
+    .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
+    .section-continue .btn { min-height: 44px; padding: 10px 18px; }
+    .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
+    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 48px; padding: 12px 22px; font-weight: 800; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .activity-status { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #F8FBFD; border: 1px solid var(--soft-border); color: var(--slate); font-weight: 700; }
+    .activity-status.complete { background: var(--airway-mint); color: var(--core-navy); border-color: #BCEFE5; }
+
+    .hotspot-demo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: center; margin-top: 16px; }
+    .hotspot-lung { position: relative; min-height: 300px; border-radius: var(--radius-lg); background: radial-gradient(circle at center, rgba(75, 163, 242, .18), rgba(221, 247, 242, .45)); border: 1px solid var(--soft-border); display: grid; place-items: center; overflow: hidden; }
+    .hotspot-lung svg { width: 82%; height: 82%; }
+    .hotspot-btn { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--white); background: var(--pulmo-teal); color: var(--white); font-weight: 800; box-shadow: var(--shadow-soft); }
+    .hotspot-btn.visited { background: var(--oxygen-blue); }
+    .hotspot-panel { min-height: 180px; }
+
+    .sort-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .sort-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(130px, 190px); gap: 10px; align-items: center; border: 1px solid var(--soft-border); background: #FAFDFF; border-radius: 12px; padding: 10px; max-width: 100%; }
+    .sort-row select { border: 1px solid var(--soft-border); border-radius: 10px; padding: 9px 10px; background: var(--white); width: 100%; min-width: 0; }
+    .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+
+    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+    .footer strong span { color: var(--pulmo-teal); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .content-layout { grid-template-columns: minmax(0, 1fr); } .side-nav { position: relative; top: auto; order: -1; width: 100%; max-width: 100%; } .side-nav a { white-space: normal; } }
+    @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
+  @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav" aria-label="PulmoCore site navigation">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" role="img">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Core</span></div>
+          <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+        </div>
+      </div>
+
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">
+            ☰ Courses
+          </button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);">
+        <span class="eyebrow">Respiratory Disease Module</span>
+        <h1 style="font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px;">Chronic Lung Disease of Infancy</h1>
+        <p style="font-size: 1.18rem; max-width: 980px; color:#243b55;">Chronic lung disease of infancy, often called bronchopulmonary dysplasia, is a chronic respiratory disorder most often seen in premature infants who required prolonged oxygen, positive pressure, or mechanical ventilation. This module focuses on RT-level recognition, gas exchange support, ventilator strategy, oxygen safety, nutrition-growth connections, and escalation when respiratory reserve is limited.</p>
+        <div class="case-meta" aria-label="Module details">
+          <div><strong>Category</strong><br>Neonatal / Pediatric Lung Disease</div>
+          <div><strong>Estimated Time</strong><br>30–40 minutes</div>
+          <div><strong>Level</strong><br>Core RT Knowledge</div>
+        </div>
+      </section>
+
+      <div class="content-layout">
+        <aside class="side-nav" aria-label="Disease page quick navigation">
+          <h3>Lesson Sections</h3>
+          <a href="#objectives">Objectives</a>
+          <a href="#overview-video">Video Overview</a>
+          <a href="#snapshot">Disease Snapshot</a>
+          <a href="#precheck">Quick Pre-Check</a>
+          <a href="#pathophysiology">Pathophysiology</a>
+          <a href="#triggers">Triggers</a>
+          <a href="#manifestations">Clinical Manifestations</a>
+          <a href="#diagnostics">Diagnostics</a>
+          <a href="#severity">Severity + Oxygen Support</a>
+          <a href="#red-flags">Red Flags</a>
+          <a href="#management">Management</a>
+          <a href="#status">Status Chronic Lung Disease of Infancyticus</a>
+          <a href="#rt-role">RT Role</a>
+          <a href="#case-study">Case Study</a>
+          <a href="#knowledge-check">Knowledge Check</a>
+          <a href="#faq">FAQ</a>
+          <a href="#summary">Summary</a>
+          <a href="#glossary">Glossary Deck</a>
+        </aside>
+
+        <div class="lesson-stack">
+          <!-- PulmoCore CLDI lesson generated from the Asthma design/functionality template. -->
+          <section class="info-card" id="objectives">
+            <h2>Learning Objectives</h2>
+            <p>By the end of this module, learners should connect prematurity, lung injury, impaired alveolar development, oxygen need, ventilatory support, clinical assessment, and safe escalation in infants with chronic lung disease.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>1. Explain pathophysiology</strong><br>Describe how prematurity, inflammation, oxygen exposure, and positive pressure can disrupt alveolar and vascular development.</div>
+              <div class="example-box soft-blue"><strong>2. Interpret clinical data</strong><br>Use SpO₂ trend, FiO₂ need, work of breathing, blood gases, imaging, growth, and feeding tolerance to assess status.</div>
+              <div class="example-box soft-amber"><strong>3. Manage support safely</strong><br>Apply oxygen, CPAP, noninvasive support, ventilator concepts, humidification, and weaning logic while minimizing injury.</div>
+              <div class="example-box soft-coral"><strong>4. Recognize deterioration</strong><br>Identify apnea, bradycardia, increased oxygen requirement, rising CO₂, fatigue, pulmonary hypertension clues, and infection risk.</div>
+            </div>
+          </section>
+
+          <section class="info-card" id="overview-video">
+            <span class="eyebrow">Video Overview</span>
+            <h2>2-Minute Chronic Lung Disease of Infancy Overview</h2>
+            <p>Watch this quick overview before moving into the disease snapshot.</p>
+            <div style="margin-top:16px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border); background:#000;">
+              <video controls controlsList="nodownload" disablePictureInPicture preload="metadata" playsinline style="display:block; width:100%; height:auto; border-radius:var(--radius-lg);">
+                <source src="CLDI.mp4" type="video/mp4">
+                <track src="CLDI.vtt" kind="captions" srclang="en" label="English captions" default>
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </section>
+
+          <section class="info-card" id="snapshot">
+            <h2>Disease Snapshot</h2>
+            <p>Chronic lung disease of infancy develops when immature lungs are exposed to injury during a critical period of growth. The result is reduced pulmonary reserve, abnormal alveolar development, increased work of breathing, and prolonged need for oxygen or respiratory support.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>What it is:</strong><br>Chronic respiratory disease of prematurity with persistent oxygen or support needs.</div>
+              <div class="example-box soft-teal"><strong>Primary problem:</strong><br>Immature lungs plus inflammation, oxygen exposure, and pressure or volume injury.</div>
+              <div class="example-box soft-teal"><strong>Classic signs:</strong><br>Tachypnea, retractions, oxygen dependence, feeding difficulty, poor growth, and episodic desaturation.</div>
+              <div class="example-box soft-teal"><strong>Diagnostic clue:</strong><br>Prematurity history with persistent oxygen requirement and chronic changes on chest imaging.</div>
+              <div class="example-box soft-teal"><strong>Acute danger:</strong><br>Apnea, bradycardia, rising CO₂, worsening FiO₂ requirement, or pulmonary hypertension signs.</div>
+              <div class="example-box soft-teal"><strong>RT priority:</strong><br>Balance adequate oxygenation with lung-protective support and careful monitoring.</div>
+            </div>
+            <article class="info-card rt" style="margin-top:16px;">
+              <h3>RT Clinical Connection</h3>
+              <p>For RTs, chronic lung disease of infancy is a reserve problem. These infants may look stable at baseline but deteriorate quickly with feeding fatigue, viral infection, airway obstruction, pulmonary hypertension, or excessive ventilatory demand.</p>
+            </article>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Prep Frame</h3>
+              <p>Immediately connect chronic lung disease of infancy with prematurity, prolonged oxygen or ventilator exposure, impaired alveolar development, persistent oxygen need, careful saturation targeting, pulmonary hypertension risk, and slow support weaning.</p>
+            </article>
+          </section>
+
+          <section class="quiz-card require-complete" id="precheck" data-activity-name="Quick Pre-Check">
+            <span class="eyebrow">Quick Pre-Check</span>
+            <h2>Start with the core CLDI pattern</h2>
+            <p>Which statement best describes chronic lung disease of infancy?</p>
+            <div class="quiz-options">
+              <button class="quiz-option" data-correct="false">A congenital absence of surfactant that resolves immediately after the first breath.</button>
+              <button class="quiz-option" data-correct="true">A chronic lung disorder of premature infants associated with disrupted lung development and prolonged oxygen or respiratory support needs.</button>
+              <button class="quiz-option" data-correct="false">A sudden pleural air leak that always requires immediate needle decompression.</button>
+              <button class="quiz-option" data-correct="false">A purely infectious disease treated only with antibiotics and no respiratory support.</button>
+            </div>
+            <div class="quiz-feedback" id="quizFeedback" role="status"></div>
+          </section>
+
+          <section class="info-card" id="pathophysiology">
+            <h2>Anatomy & Pathophysiology</h2>
+            <p>CLDI occurs when immature lungs are injured before normal alveolar and vascular development is complete. Inflammation, oxygen exposure, ventilator pressure, infection, fluid overload, and poor growth can all worsen the disease process.</p>
+            <div class="data-card" style="margin-top:14px; white-space:normal; font-family:var(--font-body);">
+              <img src="cldi-pathophysiology.png" alt="Diagram showing premature alveoli with impaired septation, inflammation, oxygen exposure, ventilator pressure, and reduced gas exchange reserve">
+              Prematurity → immature alveoli and capillaries → oxygen/pressure/inflammation exposure → disrupted alveolarization + vascular remodeling → decreased reserve → chronic oxygen need, tachypnea, retractions, feeding fatigue, and pulmonary hypertension risk.
+            </div>
+            <h3 style="margin-top:22px;">What Changes in CLDI</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Change</th><th>What Happens</th><th>Why It Matters</th></tr>
+                <tr><td>Impaired alveolar growth</td><td>Fewer and larger simplified alveoli may develop.</td><td>Less surface area for gas exchange.</td></tr>
+                <tr><td>Inflammation</td><td>Airways and lung tissue remain irritated.</td><td>Increases oxygen need and work of breathing.</td></tr>
+                <tr><td>Vascular remodeling</td><td>Pulmonary vessels may develop abnormally.</td><td>Raises pulmonary hypertension risk.</td></tr>
+                <tr><td>Airway reactivity</td><td>Small airways may narrow or obstruct.</td><td>Can cause wheeze, air trapping, and episodic deterioration.</td></tr>
+                <tr><td>Poor respiratory reserve</td><td>Infant has limited ability to tolerate stress.</td><td>Feeding, infection, or agitation may cause desaturation.</td></tr>
+              </table>
+            </div>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Danger Sign</h3>
+              <p>An infant with CLDI who has increasing oxygen requirement, apnea/bradycardia, rising PaCO₂, poor feeding, or worsening retractions needs urgent reassessment.</p>
+            </article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CLDI Hotspot Graphic">
+              <h3>Click the CLDI Hotspots</h3>
+              <p>Click each hotspot to reveal how that mechanism contributes to chronic lung disease of infancy.</p>
+              <div class="hotspot-demo">
+                <div class="hotspot-lung" aria-label="Simplified infant lung graphic with clickable hotspots">
+                  <img src="cldi-hotspot-lung.png" alt="Educational infant lung graphic showing alveolar simplification, oxygen exposure, ventilator pressure, and pulmonary vascular changes">
+                  <button class="hotspot-btn" style="left:29%; top:31%;" data-title="Premature Alveoli" data-text="Premature lungs may not complete normal alveolar development, reducing gas exchange surface area.">1</button>
+                  <button class="hotspot-btn" style="left:43%; top:55%;" data-title="Oxygen Exposure" data-text="Oxygen is lifesaving, but excessive exposure can contribute to oxidative lung injury; RTs titrate to ordered targets.">2</button>
+                  <button class="hotspot-btn" style="right:31%; top:39%;" data-title="Positive Pressure" data-text="CPAP and ventilation support gas exchange, but excessive pressure or volume can worsen injury.">3</button>
+                  <button class="hotspot-btn" style="right:37%; bottom:20%;" data-title="Pulmonary Vascular Risk" data-text="Abnormal lung vascular growth and chronic hypoxemia increase pulmonary hypertension risk.">4</button>
+                </div>
+                <div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div>
+              </div>
+              <div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="triggers">
+            <h2>Etiology, Triggers & Risk Factors</h2>
+            <p>Chronic Lung Disease of Infancy symptoms often occur after exposure to triggers that irritate or inflame hyperresponsive airways. Triggers vary by patient and may include allergens, exercise, cold air, respiratory infection, smoke, occupational exposures, strong odors, stress, and medication sensitivity.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Trigger or Risk Factor</th><th>Why It Matters</th><th>Teaching Focus</th></tr>
+                <tr><td>Allergens</td><td>Can activate inflammatory pathways.</td><td>Identify and reduce exposure when possible.</td></tr>
+                <tr><td>Exercise</td><td>Can trigger small airway reactivity in susceptible patients.</td><td>Plan pretreatment/action plan when ordered.</td></tr>
+                <tr><td>Cold air</td><td>Can irritate hyperresponsive airways.</td><td>Use avoidance and protection strategies.</td></tr>
+                <tr><td>Viral infection</td><td>Common exacerbation trigger.</td><td>Monitor worsening symptoms and rescue use.</td></tr>
+                <tr><td>Smoke/strong odors</td><td>Direct airway irritants.</td><td>Remove exposure and educate.</td></tr>
+                <tr><td>Aspirin/NSAID sensitivity</td><td>Can worsen symptoms in sensitive patients.</td><td>Review medication history.</td></tr>
+              </table>
+            </div>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Chronic Lung Disease of Infancy Trigger Sorting">
+              <h3>Sort the Chronic Lung Disease of Infancy Factors</h3>
+              <p>Choose the best category for each item, then check your answers.</p>
+              <div class="sort-grid" id="riskSort">
+                <div class="sort-row" data-answer="trigger"><strong>Cat dander exposure</strong><select aria-label="Category for cat dander"><option value="">Choose category</option><option value="trigger">Common Trigger</option><option value="controller">Controller Therapy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="controller"><strong>Inhaled corticosteroid</strong><select aria-label="Category for inhaled corticosteroid"><option value="">Choose category</option><option value="trigger">Common Trigger</option><option value="controller">Controller Therapy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="trigger"><strong>Cold air</strong><select aria-label="Category for cold air"><option value="">Choose category</option><option value="trigger">Common Trigger</option><option value="controller">Controller Therapy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="danger"><strong>Silent chest</strong><select aria-label="Category for silent chest"><option value="">Choose category</option><option value="trigger">Common Trigger</option><option value="controller">Controller Therapy</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="controller"><strong>Daily anti-inflammatory control plan</strong><select aria-label="Category for daily control plan"><option value="">Choose category</option><option value="trigger">Common Trigger</option><option value="controller">Controller Therapy</option><option value="danger">Danger Sign</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkRiskSort" style="margin-top:12px;">Check Sorting</button>
+              <div class="activity-status" id="riskSortStatus">Complete the sorting activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card" id="manifestations">
+            <h2>Clinical Manifestations</h2>
+            <p>Chronic Lung Disease of Infancy presentation ranges from mild cough or increased work of breathing to severe respiratory distress. RT assessment should focus on air movement, work of breathing, oxygenation, ventilation, speech pattern, mental status, and response to treatment.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Finding Type</th><th>What the RT May See</th></tr>
+                <tr><td>Symptoms</td><td>Tachypnea and Retractions, cough, dyspnea, chest tightness, nocturnal symptoms, exercise limitation.</td></tr>
+                <tr><td>Appearance</td><td>Anxiety, tripod position, accessory muscle use, inability to speak full sentences.</td></tr>
+                <tr><td>Breath sounds</td><td>Tachypnea and Retractions, diminished breath sounds, prolonged expiratory phase, silent chest in severe obstruction.</td></tr>
+                <tr><td>Oxygenation clues</td><td>Low SpO₂, low PaO₂, cyanosis in severe cases.</td></tr>
+                <tr><td>Ventilation clues</td><td>Low PaCO₂ early; normalizing/rising PaCO₂ as fatigue develops.</td></tr>
+                <tr><td>Response clues</td><td>Improvement in WOB, air movement, oxygen support, and symptoms after respiratory support therapy.</td></tr>
+              </table>
+            </div>
+            <article class="info-card red" style="margin-top:16px;">
+              <h3>Important Teaching Point</h3>
+              <p>A severe chronic lung disease of infancy patient who becomes drowsy, quiet, or less responsive is more concerning than a patient who is loudly tachypnea and retractions but still moving air. Quiet can mean failure.</p>
+            </article>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="CLDI Signs Sort">
+              <h3>Sort the CLDI Clinical Signs</h3>
+              <p>Categorize each finding as an Early/Mild Sign, Worsening Sign, or Danger Sign, then check your answers.</p>
+              <div class="sort-grid" id="manifestationsSort">
+                <div class="sort-row" data-answer="early"><strong>Tachypnea with mild accessory muscle use</strong><select aria-label="Category for tachypnea"><option value="">Choose category</option><option value="early">Early / Mild Sign</option><option value="worsening">Worsening Sign</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="danger"><strong>Drowsy or less responsive despite distress</strong><select aria-label="Category for drowsy or less responsive"><option value="">Choose category</option><option value="early">Early / Mild Sign</option><option value="worsening">Worsening Sign</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="worsening"><strong>Rising PaCO₂ with persistent severe distress</strong><select aria-label="Category for rising PaCO2"><option value="">Choose category</option><option value="early">Early / Mild Sign</option><option value="worsening">Worsening Sign</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="early"><strong>Low SpO₂ improving with supplemental oxygen</strong><select aria-label="Category for SpO2 improving with oxygen"><option value="">Choose category</option><option value="early">Early / Mild Sign</option><option value="worsening">Worsening Sign</option><option value="danger">Danger Sign</option></select></div>
+                <div class="sort-row" data-answer="danger"><strong>Silent chest with minimal air movement</strong><select aria-label="Category for silent chest"><option value="">Choose category</option><option value="early">Early / Mild Sign</option><option value="worsening">Worsening Sign</option><option value="danger">Danger Sign</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkManifestationsSort" style="margin-top:12px;">Check Sorting</button>
+              <div class="activity-status" id="manifestationsSortStatus">Complete the sorting activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card board" id="diagnostics">
+            <h2>Diagnostics & Assessment</h2>
+            <p>Diagnostic data helps confirm reversible obstruction, monitor exacerbation severity, identify poor response, and rule out alternate causes of dyspnea.</p>
+            <h3 style="margin-top:18px;">Spirometry and PFTs</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Finding</th><th>Chronic Lung Disease of Infancy Pattern</th></tr>
+                <tr><td>FEV₁</td><td>Decreased during obstruction; improves with respiratory support when reversible.</td></tr>
+                <tr><td>FVC</td><td>Normal or decreased during air trapping.</td></tr>
+                <tr><td>FEV₁/FVC</td><td>Decreased during obstruction.</td></tr>
+                <tr><td>Respiratory Support response</td><td>Significant improvement supports chronic lung disease of infancy.</td></tr>
+                <tr><td>Peak expiratory flow</td><td>Useful for monitoring severity and action plan zones.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:18px;">ABG Patterns</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Pattern</th><th>Meaning</th></tr>
+                <tr><td>Low PaCO₂ with respiratory distress</td><td>Often early hyperventilation.</td></tr>
+                <tr><td>Normal PaCO₂ despite severe distress</td><td>Concerning because PaCO₂ may be rising from prior low level.</td></tr>
+                <tr><td>High PaCO₂ with fatigue or altered mental status</td><td>Possible ventilatory failure.</td></tr>
+                <tr><td>Low PaO₂</td><td>Hypoxemia from V/Q mismatch or severe obstruction.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:18px;">Chest X-ray</h3>
+            <p>Chest x-ray may show hyperinflation during an exacerbation, but it is also useful for ruling out pneumonia, pneumothorax, or other causes of respiratory distress.</p>
+          </section>
+
+          <section class="info-card" id="severity">
+            <h2>Severity Classification & Oxygen Support Zones</h2>
+            <p>Chronic Lung Disease of Infancy severity considers symptom frequency, nighttime awakenings, rescue medication use, activity limitation, lung function, and exacerbation history. Peak flow zones help translate the patient’s personal best into action levels.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Severity Category</th><th>Typical Pattern</th></tr>
+                <tr><td>Intermittent</td><td>Symptoms ≤2 days/week; nighttime symptoms ≤2 times/month; normal lung function between episodes.</td></tr>
+                <tr><td>Mild persistent</td><td>Symptoms >2 days/week but not daily; minor limitation may occur.</td></tr>
+                <tr><td>Moderate persistent</td><td>Daily symptoms; nighttime symptoms more than once per week; some activity limitation.</td></tr>
+                <tr><td>Severe persistent</td><td>Symptoms throughout the day; frequent nighttime symptoms; extreme activity limitation.</td></tr>
+              </table>
+            </div>
+            <div class="component-grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Green Zone</strong><br>80–100% of personal best. Chronic Lung Disease of Infancy is generally controlled.</div>
+              <div class="example-box soft-amber"><strong>Yellow Zone</strong><br>50–79% of personal best. Symptoms are worsening; use the action plan.</div>
+              <div class="example-box soft-coral"><strong>Red Zone</strong><br>Below 50% of personal best. Medical alert; severe obstruction risk.</div>
+            </div>
+            <article class="quiz-card require-complete" style="margin-top:16px;" id="peakflow-activity" data-activity-name="Oxygen Support Activity">
+              <h3>Oxygen Support Activity</h3>
+              <p>A patient’s personal best oxygen support is 500 L/min. Today’s oxygen support is 225 L/min. Which zone is this?</p>
+              <div class="quiz-options">
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Green zone is usually 80–100% of personal best. This patient is at 45%.">Green Zone</button>
+                <button class="quiz-option peak-option" data-correct="false" data-feedback="Not quite. Yellow zone is usually 50–79% of personal best. This patient is below 50%.">Yellow Zone</button>
+                <button class="quiz-option peak-option" data-correct="true" data-feedback="Correct. 225 ÷ 500 = 45%. A oxygen support below 50% of personal best is the red zone and suggests severe obstruction risk.">Red Zone</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="red-flags">
+            <h2>Severity & Red Flags</h2>
+            <p>The key question is not simply “Does this patient have chronic lung disease of infancy?” The key question is whether the patient is moving enough air to maintain ventilation.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Red Flag</th><th>Why It Matters</th></tr>
+                <tr><td>Silent chest or very poor air movement</td><td>May indicate severe obstruction and impending failure.</td></tr>
+                <tr><td>Rising PaCO₂ with distress</td><td>Suggests fatigue and worsening ventilation.</td></tr>
+                <tr><td>New confusion, drowsiness, or exhaustion</td><td>May indicate hypoxemia, hypercapnia, or respiratory muscle fatigue.</td></tr>
+                <tr><td>Inability to speak full sentences</td><td>Significant respiratory distress.</td></tr>
+                <tr><td>Peak flow below 50% personal best</td><td>Red zone; severe obstruction risk.</td></tr>
+                <tr><td>No improvement after initial respiratory support therapy</td><td>Treatment failure; reassess and escalate.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="info-card" id="management">
+            <h2>Management & Treatment</h2>
+            <p>Chronic Lung Disease of Infancy management depends on whether the patient is stable, acutely symptomatic, or progressing toward respiratory failure. Rescue therapy treats acute small airway reactivity. Controller therapy treats chronic inflammation.</p>
+            <h3 style="margin-top:18px;">Medication Classes</h3>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>Class</th><th>Example</th><th>Why It Helps</th></tr>
+                <tr><td>oxygen/flow support</td><td>oxygen and flow support</td><td>Rapid bronchodilation for acute symptoms.</td></tr>
+                <tr><td>anti-inflammatory/supportive therapy</td><td>Fluticasone, budesonide</td><td>Reduces chronic lung inflammation.</td></tr>
+                <tr><td>long-term respiratory support</td><td>Salmeterol, formoterol</td><td>Long-acting bronchodilation; used with anti-inflammatory/supportive therapy for chronic lung disease of infancy control, not alone.</td></tr>
+                <tr><td>Anticholinergic</td><td>support escalation</td><td>Added in moderate/severe acute exacerbations.</td></tr>
+                <tr><td>Systemic steroid</td><td>Prednisone, methylprednisolone</td><td>Reduces inflammation during significant exacerbation; not immediate bronchodilation.</td></tr>
+                <tr><td>Magnesium sulfate</td><td>IV magnesium</td><td>May be used for severe exacerbations with poor initial response.</td></tr>
+              </table>
+            </div>
+            <h3 style="margin-top:18px;">Stepwise Control Concept</h3>
+            <p>Increase therapy when chronic lung disease of infancy is uncontrolled, and step down only after sustained control. Long-term plans typically increase anti-inflammatory/controller support as symptom burden and exacerbation risk increase.</p>
+            <article class="activity-card require-complete" style="margin-top:16px;" data-activity-name="Chronic Lung Disease of Infancy Treatment Sequence">
+              <h3>Acute Chronic Lung Disease of Infancy Treatment Sequence</h3>
+              <p>Select the steps in the best general order for a moderate to severe chronic lung disease of infancy exacerbation.</p>
+              <div class="sort-grid" id="sequenceSort">
+                <div class="sort-row" data-answer="1" data-sequence-item="Assess severity and oxygenation"><strong>Assess severity and oxygenation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="2" data-sequence-item="Give oxygen as needed"><strong>Give oxygen as needed</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="3" data-sequence-item="Administer inhaled oxygen/flow support"><strong>Administer inhaled oxygen/flow support</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="4" data-sequence-item="Add support escalation for moderate/severe exacerbation"><strong>Add support escalation for moderate/severe exacerbation</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="5" data-sequence-item="Give systemic corticosteroid"><strong>Give systemic corticosteroid</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+                <div class="sort-row" data-answer="6" data-sequence-item="Escalate if poor response"><strong>Escalate if poor response</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+              </div>
+              <button class="small-btn primary" type="button" id="checkSequenceSort" style="margin-top:12px;">Check Sequence</button>
+              <div class="activity-status" id="sequenceSortStatus">Complete the sequence activity to continue.</div>
+            </article>
+          </section>
+
+          <section class="info-card red" id="status">
+            <h2>Status Chronic Lung Disease of Infancyticus & Ventilator Considerations</h2>
+            <p>Status chronic lung disease of infancyticus is a severe chronic lung disease of infancy exacerbation that does not respond adequately to standard initial treatment. These patients are at risk for respiratory failure.</p>
+            <div class="three-card-grid" style="margin-top:16px;">
+              <div class="example-box soft-coral"><strong>Watch for:</strong><br>Rising PaCO₂, fatigue, altered mental status, silent chest, severe accessory muscle use.</div>
+              <div class="example-box soft-amber"><strong>Vent goal:</strong><br>Support ventilation while reducing dynamic hyperinflation and barotrauma risk.</div>
+              <div class="example-box soft-blue"><strong>Settings concept:</strong><br>Use enough expiratory time to reduce air trapping and auto-PEEP.</div>
+            </div>
+            <article class="info-card board" style="margin-top:16px;">
+              <h3>Board Pearl</h3>
+              <p>In severe chronic lung disease of infancy requiring ventilation, avoid breath stacking. Concepts usually include lower respiratory rate, longer expiratory time, careful monitoring for auto-PEEP, and permissive hypercapnia when clinically appropriate and ordered.</p>
+            </article>
+          </section>
+
+          <section class="info-card rt" id="rt-role">
+            <h2>Respiratory Therapist Role</h2>
+            <p>The RT is central to chronic lung disease of infancy assessment, treatment delivery, monitoring, education, and escalation. The RT should assess respiratory rate and pattern, work of breathing, breath sounds, oxygen support, oxygen device/settings, SpO₂, mental status, triggers, baseline status, and response to therapy.</p>
+            <div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+              <table>
+                <tr><th>RT Task</th><th>What to Assess or Do</th><th>Why It Matters</th></tr>
+                <tr><td>Assess ventilation</td><td>RR, pattern, PaCO₂ trend, mental status, fatigue.</td><td>Detects impending ventilatory failure.</td></tr>
+                <tr><td>Assess oxygenation</td><td>SpO₂, PaO₂, cyanosis, oxygen need.</td><td>Identifies hypoxemia and response.</td></tr>
+                <tr><td>Evaluate breath sounds</td><td>Increased Work of Breathings, diminished sounds, silent chest.</td><td>Guides therapy and escalation.</td></tr>
+                <tr><td>Monitor response</td><td>Pre/post respiratory support symptoms, air movement, oxygen support.</td><td>Determines effectiveness.</td></tr>
+                <tr><td>Educate patient</td><td>Inhaler technique, spacer use, triggers, oxygen support/action plan.</td><td>Supports long-term control.</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section class="case-card require-complete" id="case-study" data-activity-name="Guided Chronic Lung Disease of Infancy Case">
+            <span class="eyebrow">Guided Unfolding Case Study</span>
+            <h2>The Increased Work of Breathing That Got Quiet</h2>
+            <p>This guided case reveals one clinical stage at a time. Learners make an RT decision, receive feedback, and then continue to the next stage.</p>
+
+            <div class="case-stage" data-case-stage="0">
+              <h3>Stage 1: Initial Presentation</h3>
+              <p>A 19-year-old patient arrives with shortness of breath after exposure to a cat. They are anxious, tachypnea and retractions, and speaking in short phrases.</p>
+              <div class="case-meta"><div><strong>RR</strong><br>32/min</div><div><strong>SpO₂</strong><br>90% on room air</div><div><strong>Breath Sounds</strong><br>Diffuse expiratory increased work of breathings</div></div>
+              <p><strong>Decision Question:</strong> What is the priority first action?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. PFTs are useful diagnostically, but acute distress should not wait for formal testing.">Wait for full pulmonary function testing before treating.</button>
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. This patient has acute respiratory distress and hypoxemia. Initial care should focus on assessment, oxygenation, and rapid bronchodilation.">Assess severity and begin oxygen/respiratory support support.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. anti-inflammatory/supportive therapy helps long-term inflammation control but is not the sole rapid rescue treatment for acute small airway reactivity.">Give an inhaled corticosteroid only and reassess tomorrow.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Hypoxemia should be corrected. Oxygen can be used as needed in chronic lung disease of infancy exacerbation.">Avoid oxygen because chronic lung disease of infancy is neonatal / pediatric.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="1">
+              <h3>Stage 2: After Initial Respiratory Support Therapy</h3>
+              <p>After initial oxygen and flow support treatments, the patient remains dyspneic. Tachypnea and Retractions is still present, RR is 32/min, and accessory muscles are visible.</p>
+              <p><strong>Decision Question:</strong> Which additional therapy is commonly added for moderate to severe exacerbation?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. support escalation is often added to oxygen/flow support therapy in moderate to severe acute chronic lung disease of infancy exacerbations.">support escalation bromide.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. long-term respiratory support is not used as sole rescue therapy for acute chronic lung disease of infancy symptoms.">long-term respiratory support as the only acute rescue medication.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Tachypnea reflects distress; respiratory support support is still needed.">Discontinue respiratory supports because tachypnea is present.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The immediate issue is small airway reactivity/inflammation, not retained secretions requiring CPT as primary care.">Chest physiotherapy as the primary treatment.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="2">
+              <h3>Stage 3: ABG Trend</h3>
+              <p>The patient’s ABG initially shows pH 7.48, PaCO₂ 30 mm Hg, PaO₂ 64 mm Hg. Later, they become fatigued and PaCO₂ rises to 48 mm Hg.</p>
+              <p><strong>Decision Question:</strong> How should the rising PaCO₂ be interpreted?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Early chronic lung disease of infancy exacerbations often cause low PaCO₂ from hyperventilation. A normalizing or rising PaCO₂ during worsening distress is dangerous.">Possible ventilatory failure from fatigue.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Rising PaCO₂ in a tired chronic lung disease of infancytic patient suggests worsening ventilation, not improvement.">Clear evidence that the chronic lung disease of infancy attack is resolving.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Oxygen may improve PaO₂, but a rising PaCO₂ reflects inadequate ventilation.">Expected effect of oxygen therapy alone.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. This finding requires closer monitoring and possible escalation.">A reason to stop monitoring the patient closely.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="3">
+              <h3>Stage 4: Ventilator Concept</h3>
+              <p>The patient becomes drowsy. Breath sounds are very diminished. The team prepares for possible intubation and mechanical ventilation.</p>
+              <p><strong>Decision Question:</strong> Which ventilator strategy concept is most important in severe chronic lung disease of infancy?</p>
+              <div class="quiz-options case-options">
+                <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Severe chronic lung disease of infancy creates high airway resistance and prolonged exhalation. Ventilation should avoid dynamic hyperinflation and auto-PEEP.">Allow adequate expiratory time to reduce air trapping.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. High rates can worsen air trapping by reducing expiratory time.">Use a very high respiratory rate to normalize PaCO₂ quickly.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Auto-PEEP can occur in chronic lung disease of infancy due to airflow obstruction and incomplete exhalation.">Ignore auto-PEEP because it only occurs in neonatal lung disease.</button>
+                <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Short expiratory time worsens breath stacking and hyperinflation risk.">Prioritize short expiratory time to improve oxygenation.</button>
+              </div>
+              <div class="quiz-feedback case-feedback" role="status"></div>
+              <div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+            </div>
+
+            <div class="case-stage lesson-hidden" data-case-stage="4">
+              <h3>Case Wrap-Up</h3>
+              <div class="example-box soft-teal"><strong>RT Takeaway:</strong> In severe chronic lung disease of infancy, improvement is measured by air movement, work of breathing, mental status, oxygen support/clinical response, and ABG trend — not tachypnea and retractions alone.</div>
+              <div class="example-box soft-coral" style="margin-top:12px;"><strong>If the patient worsens:</strong> silent chest, drowsiness, rising PaCO₂, and falling pH suggest impending respiratory failure and need urgent escalation.</div>
+            </div>
+          </section>
+
+          <section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Chronic Lung Disease of Infancy Knowledge Check">
+            <span class="eyebrow">Knowledge Check</span>
+            <h2>Board-Style Practice</h2>
+            <p>Answer each question to complete this activity. Answer choices shuffle each time the lesson opens.</p>
+
+            <div class="knowledge-question" data-question-id="kq1">
+              <h3>Question 1</h3>
+              <p>A patient with chronic lung disease of infancy has tachypnea and retractions, dyspnea, and a decreased FEV₁/FVC ratio that improves significantly after respiratory support administration. What does this support?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. Chronic Lung Disease of Infancy is characterized by variable/reversible airflow obstruction.">Reversible airflow obstruction consistent with chronic lung disease of infancy.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Restrictive disease usually decreases lung volumes rather than producing a primarily reversible neonatal / pediatric pattern.">Irreversible restriction from pulmonary fibrosis.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. A decreased FEV₁/FVC indicates obstruction.">Normal spirometry with no obstruction.</button>
+                <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Pneumothorax is not diagnosed by respiratory support reversibility on spirometry.">Pneumothorax as the most likely diagnosis.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq2">
+              <h3>Question 2</h3>
+              <p>Which finding is most concerning in a severe chronic lung disease of infancy exacerbation?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Rising PaCO₂ suggests worsening ventilation and possible respiratory failure.">Rising PaCO₂ with increasing fatigue.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. This may represent mild symptoms, not the most concerning finding.">Mild tachypnea and retractions after exercise with normal speech.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. This is in the green zone.">Peak flow 90% of personal best.</button>
+                <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Improvement with rescue therapy is reassuring compared with rising PaCO₂.">Cough that improves after rescue inhaler use.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq3">
+              <h3>Question 3</h3>
+              <p>Which medication class is the foundation of long-term inflammation control in persistent chronic lung disease of infancy?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. anti-inflammatory/supportive therapy therapy reduces chronic lung inflammation and is foundational controller therapy.">Inhaled corticosteroid.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. oxygen/flow support relieves acute small airway reactivity but does not control chronic inflammation alone.">Short-acting beta₂ agonist only.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Chronic Lung Disease of Infancy is not treated with antibiotics unless infection is present.">Antibiotic therapy.</button>
+                <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Diuretics are not primary chronic lung disease of infancy controller therapy.">Diuretic therapy.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="knowledge-question" data-question-id="kq4">
+              <h3>Question 4</h3>
+              <p>In status chronic lung disease of infancyticus requiring ventilation, which approach helps reduce dynamic hyperinflation?</p>
+              <div class="quiz-options">
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Longer expiratory time helps prevent breath stacking and auto-PEEP.">Longer expiratory time.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. High rates shorten exhalation and worsen air trapping.">Very high respiratory rate.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. Monitoring pressures and auto-PEEP is important.">Ignoring plateau pressure and auto-PEEP.</button>
+                <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. The key concept is allowing enough time to exhale.">Short inspiratory and short expiratory time equally.</button>
+              </div>
+              <div class="quiz-feedback" role="status"></div>
+            </div>
+
+            <div class="activity-status" id="knowledgeStatus">0 / 4 questions answered</div>
+          </section>
+
+          <section id="faq">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">FAQ</span><h2>Common Chronic Lung Disease of Infancy Questions</h2></div>
+            <details class="accordion" open><summary>What is the simplest way to understand chronic lung disease of infancy?</summary><div class="accordion-body"><p>Chronic Lung Disease of Infancy is a chronic inflammatory airway disease where triggers can cause small airway reactivity, swelling, secretions, and reversible airflow obstruction.</p></div></details>
+            <details class="accordion"><summary>How is chronic lung disease of infancy different from neonatal lung disease?</summary><div class="accordion-body"><p>Chronic Lung Disease of Infancy is often episodic, trigger-driven, and more reversible. neonatal lung disease is usually progressive and less fully reversible.</p></div></details>
+            <details class="accordion"><summary>Why is a rising PaCO₂ dangerous in chronic lung disease of infancy?</summary><div class="accordion-body"><p>Early chronic lung disease of infancy often causes hyperventilation and low PaCO₂. If PaCO₂ normalizes or rises while distress continues, the patient may be fatiguing and failing to ventilate.</p></div></details>
+            <details class="accordion"><summary>Does tachypnea and retractions always mean the patient is moving air well?</summary><div class="accordion-body"><p>No. Tachypnea and Retractions requires airflow. A severe patient with very diminished or absent breath sounds may be worse than a loud increased work of breathingr.</p></div></details>
+            <details class="accordion"><summary>What does oxygen support tell us?</summary><div class="accordion-body"><p>Peak flow estimates how quickly the patient can exhale. It helps monitor severity and action plan zones compared with personal best.</p></div></details>
+            <details class="accordion"><summary>Why not use long-term respiratory support alone for chronic lung disease of infancy?</summary><div class="accordion-body"><p>long-term respiratory support should not be used as sole chronic lung disease of infancy control therapy. It is typically paired with inhaled corticosteroid therapy when indicated.</p></div></details>
+            <details class="accordion"><summary>What is status chronic lung disease of infancyticus?</summary><div class="accordion-body"><p>Status chronic lung disease of infancyticus is a severe chronic lung disease of infancy exacerbation that does not respond adequately to standard initial treatment and may progress to respiratory failure.</p></div></details>
+          </section>
+
+          <section class="info-card" id="summary">
+            <h2>Summary & Clinical Pearls</h2>
+            <p>Chronic Lung Disease of Infancy is a chronic inflammatory neonatal / pediatric airway disease with variable and often reversible airflow obstruction. Acute symptoms occur when triggers cause small airway reactivity, secretions, and airway swelling. Severe chronic lung disease of infancy can progress to air trapping, fatigue, rising PaCO₂, and respiratory failure.</p>
+            <div class="component-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:16px;">
+              <div class="example-box soft-teal"><strong>Must know:</strong><br>Chronic Lung Disease of Infancy is neonatal / pediatric and often reversible with respiratory support therapy.</div>
+              <div class="example-box soft-amber"><strong>Board pearl:</strong><br>Low PaCO₂ is common early; rising PaCO₂ during distress is dangerous.</div>
+              <div class="example-box soft-blue"><strong>RT pearl:</strong><br>Assess air movement, WOB, speech, mental status, oxygen support, and response — not tachypnea and retractions alone.</div>
+              <div class="example-box soft-coral"><strong>Common mistake:</strong><br>Do not assume a quiet chest means improvement. Silent chest can mean near-failure.</div>
+            </div>
+          </section>
+
+          <section id="glossary">
+            <div class="section-heading" style="margin-top:0;"><span class="eyebrow">Glossary System</span><h2>Tooltip, searchable glossary, and mastery deck</h2></div>
+            <div class="glossary-card">
+              <h3>Searchable Glossary</h3>
+              <p>Terms are stored once and can power inline tooltips, glossary entries, and flashcards.</p>
+              <div class="glossary-controls"><input id="glossarySearch" type="search" placeholder="Search terms: small airway reactivity, oxygen/flow support, oxygen support..." aria-label="Search glossary terms" /><button class="small-btn" id="clearSearch">Clear</button></div>
+              <div class="glossary-list" id="glossaryList"></div>
+            </div>
+            <div class="glossary-card" style="margin-top:18px;">
+              <h3>Glossary Flashcard Mastery Deck</h3>
+              <p>Click the card to flip it. Use Term → Definition or Definition → Term mode. Mark known cards to move them into the completed pile.</p>
+              <div class="flashcard-shell">
+                <div class="progress-row" aria-live="polite"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div></div>
+                <div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+                <div class="tabs" role="group" aria-label="Flashcard direction"><button class="tab-btn active" data-mode="term">Term → Definition</button><button class="tab-btn" data-mode="definition">Definition → Term</button></div>
+                <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Current flashcard. Click to flip."><div><div class="term" id="cardFront">Loading...</div><p class="definition" id="cardBack" hidden></p></div></div>
+                <div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+                <div class="completed-list" id="completedList"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
+  </div>
+
+  <script>
+    const glossaryTerms = [
+      { term: "Chronic lung disease of infancy", definition: "A chronic respiratory disorder of infancy, most often associated with prematurity and prolonged oxygen or respiratory support needs.", rt: "Frames the infant as having limited pulmonary reserve and chronic support needs." },
+      { term: "Bronchopulmonary dysplasia", definition: "A common form of chronic lung disease in premature infants involving disrupted lung development and chronic respiratory support needs.", rt: "High-yield term often used with CLDI." },
+      { term: "Prematurity", definition: "Birth before full gestational development, leaving the lungs structurally and functionally immature.", rt: "Major risk factor for CLDI." },
+      { term: "Alveolar simplification", definition: "Reduced formation of normal small alveoli, resulting in fewer and larger air spaces.", rt: "Explains decreased gas exchange surface area." },
+      { term: "Pulmonary vascular remodeling", definition: "Abnormal changes in pulmonary blood vessels that can increase vascular resistance.", rt: "Connects CLDI with pulmonary hypertension risk." },
+      { term: "Pulmonary hypertension", definition: "Elevated pressure in the pulmonary circulation.", rt: "Major complication that can worsen oxygenation and clinical stability." },
+      { term: "FiO₂", definition: "Fraction of inspired oxygen delivered to the patient.", rt: "Must be titrated to ordered saturation targets." },
+      { term: "Oxygen toxicity", definition: "Cellular injury related to excessive oxygen exposure.", rt: "Supports careful oxygen titration rather than unnecessary hyperoxia." },
+      { term: "Hypoxemia", definition: "Low oxygen level in arterial blood.", rt: "Can worsen pulmonary vasoconstriction and clinical instability." },
+      { term: "CPAP", definition: "Continuous positive airway pressure used to maintain airway and alveolar recruitment.", rt: "Common noninvasive support strategy in infants." },
+      { term: "HFNC", definition: "Heated humidified high-flow nasal cannula providing flow, oxygen, and some distending pressure.", rt: "Requires monitoring of flow, FiO₂, humidification, and clinical response." },
+      { term: "Retractions", definition: "Visible inward movement of chest wall soft tissues during inspiration.", rt: "Important sign of increased work of breathing." },
+      { term: "Apnea", definition: "Pause in breathing.", rt: "Red flag in infants with CLDI, especially with bradycardia or desaturation." },
+      { term: "Bradycardia", definition: "Abnormally slow heart rate.", rt: "Can occur with apnea or hypoxemia in infants." },
+      { term: "Desaturation", definition: "Drop in oxygen saturation below the target range.", rt: "Trend frequency, trigger, duration, and recovery." },
+      { term: "Work of breathing", definition: "The effort required to move air in and out of the lungs.", rt: "Rising WOB can signal deterioration or fatigue." },
+      { term: "Chronic CO₂ retention", definition: "Persistently elevated CO₂ with metabolic compensation over time.", rt: "Requires trend interpretation, not one isolated value." },
+      { term: "Lung-protective ventilation", definition: "Ventilation strategy that supports gas exchange while minimizing pressure and volume injury.", rt: "Core concept when CLDI infants require invasive support." },
+      { term: "Weaning", definition: "Gradual reduction of respiratory support as stability improves.", rt: "Should be based on overall clinical tolerance, not one normal SpO₂ value." },
+      { term: "Feeding fatigue", definition: "Respiratory or energy limitation during feeding.", rt: "May cause desaturation, increased WOB, or poor growth in CLDI." }
+    ];
+
+    const glossaryList = document.getElementById("glossaryList");
+    const glossarySearch = document.getElementById("glossarySearch");
+    const clearSearch = document.getElementById("clearSearch");
+    function renderGlossary(filter = "") { const query = filter.trim().toLowerCase(); const terms = glossaryTerms.filter(item => item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query) || item.rt.toLowerCase().includes(query)); glossaryList.innerHTML = terms.length ? terms.map(item => `<div class="glossary-item"><strong>${item.term}</strong><br>${item.definition}<br><em>RT relevance:</em> ${item.rt}</div>`).join("") : `<div class="empty-state">No glossary terms match that search.</div>`; }
+    glossarySearch.addEventListener("input", event => renderGlossary(event.target.value));
+    clearSearch.addEventListener("click", () => { glossarySearch.value = ""; renderGlossary(); glossarySearch.focus(); });
+    renderGlossary();
+
+    let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", cardMode = "term", answerShown = false;
+    const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"), progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+    function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+    function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = currentView === "active" ? "Use Reset All to move completed terms back into the review deck." : "Mark terms as known to build your completed pile."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = cardMode === "term" ? card.term : card.definition; cardBack.textContent = cardMode === "term" ? card.definition : card.term; cardFront.className = cardMode === "term" ? "term" : "definition"; cardBack.className = cardMode === "term" ? "definition" : "term"; } updateProgress(); renderCompletedList(); }
+    function flipCurrentCard() { const deck = getVisibleDeck(); if (!deck.length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+    function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+    function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+    function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards have been marked completed yet.</div>`; }
+    document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("click", flipCurrentCard);
+    flashcard.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); flipCurrentCard(); } });
+    document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+    document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+    document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+    document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+    renderFlashcard();
+
+    function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+    shuffleAnswerOptions();
+
+    function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+    function initializeGuidedCase() {
+      const caseStages = Array.from(document.querySelectorAll(".case-stage")); if (!caseStages.length) return;
+      caseStages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+      document.querySelectorAll(".case-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const stage = option.closest(".case-stage");
+          if (stage.dataset.correctAnswered === "true") return;
+          const feedback = stage.querySelector(".case-feedback");
+          const isCorrect = option.dataset.caseCorrect === "true";
+          stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            stage.dataset.correctAnswered = "true";
+            stage.querySelectorAll(".case-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = false;
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback case-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+            const nextButton = stage.querySelector(".case-next button"); if (nextButton) nextButton.disabled = true;
+          }
+        });
+      });
+      document.querySelectorAll(".case-next button").forEach(button => {
+        button.disabled = true;
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      });
+    }
+    initializeGuidedCase();
+
+    function initializeProgressiveSections() {
+      const sections = Array.from(document.querySelectorAll(".lesson-stack > section")); const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']")); if (!sections.length) return;
+      sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+      function getSectionTitle(section) { const heading = section.querySelector("h2, h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+      function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+      function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requiresCompletion) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+      function updateAllContinueStates() { sections.forEach(setContinueState); }
+      function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+      function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
+      document.addEventListener("activityComplete", () => updateAllContinueStates());
+      const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
+      updateNavState(0); updateAllContinueStates();
+    }
+    initializeProgressiveSections();
+
+    function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
+    initializeHotspotActivity();
+
+    function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+
+    function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    initializeManifestationsSort();
+    initializeRiskSort();
+
+    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+    function shuffleSequence() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      for (let i = rows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rows[i], rows[j]] = [rows[j], rows[i]];
+      }
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function normalizeSequenceRanks(changedSelect) {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      const changedRow = changedSelect.closest(".sort-row");
+      const chosenRank = Number(changedSelect.value);
+      if (!chosenRank) return;
+
+      rows.forEach(row => row.dataset.previousRank = row.querySelector("select").value || "");
+
+      const otherRows = rows.filter(row => row !== changedRow);
+      const occupied = otherRows
+        .map(row => ({ row, rank: Number(row.querySelector("select").value) }))
+        .filter(item => item.rank)
+        .sort((a, b) => a.rank - b.rank);
+
+      const bumpedRows = occupied.filter(item => item.rank >= chosenRank).map(item => item.row);
+      bumpedRows.forEach(row => {
+        const select = row.querySelector("select");
+        const current = Number(select.value);
+        if (current < rows.length) select.value = String(current + 1);
+        else select.value = "";
+      });
+
+      const used = new Set([chosenRank]);
+      rows.forEach(row => {
+        if (row === changedRow) return;
+        const select = row.querySelector("select");
+        let rank = Number(select.value);
+        if (!rank) return;
+        while (used.has(rank) && rank < rows.length) rank++;
+        if (used.has(rank)) select.value = "";
+        else { select.value = String(rank); used.add(rank); }
+      });
+    }
+
+    function reorderSequenceRows() {
+      const container = document.getElementById("sequenceSort");
+      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
+      rows.sort((a, b) => {
+        const aVal = Number(a.querySelector("select").value) || 99;
+        const bVal = Number(b.querySelector("select").value) || 99;
+        if (aVal !== bVal) return aVal - bVal;
+        return a.dataset.answer - b.dataset.answer;
+      });
+      rows.forEach(row => container.appendChild(row));
+    }
+
+    function enableDynamicReorder() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      container.querySelectorAll(".order-select").forEach(select => {
+        select.addEventListener("change", () => {
+          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
+          normalizeSequenceRanks(select);
+          reorderSequenceRows();
+        });
+      });
+    }
+
+    shuffleSequence();
+    enableDynamicReorder();
+    initializeSequenceSort();
+
+    function initializeKnowledgeCheck() {
+      const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return;
+      const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length;
+      document.querySelectorAll(".knowledge-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const question = option.closest(".knowledge-question");
+          if (question.dataset.correctAnswered === "true") return;
+          const feedback = question.querySelector(".quiz-feedback");
+          const isCorrect = option.dataset.correct === "true";
+          question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            question.dataset.correctAnswered = "true";
+            answered.add(option.dataset.question);
+            question.querySelectorAll(".knowledge-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+          } else {
+            option.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question.";
+          }
+          status.textContent = `${answered.size} / ${total} questions answered correctly`;
+          if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+        });
+      });
+    }
+    initializeKnowledgeCheck();
+
+    function initializePrecheck() {
+      document.querySelectorAll("#precheck .quiz-option").forEach(button => {
+        button.addEventListener("click", () => {
+          const section = button.closest(".require-complete");
+          if (section.dataset.correctAnswered === "true") return;
+          const feedback = document.getElementById("quizFeedback");
+          const isCorrect = button.dataset.correct === "true";
+          section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            section.dataset.correctAnswered = "true";
+            section.querySelectorAll(".quiz-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = "<strong>Correct.</strong> CLDI is a chronic respiratory disorder of prematurity associated with disrupted lung development and ongoing oxygen or respiratory support needs.<br><br><strong>You may continue.</strong>";
+            markActivityComplete(section);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = "<strong>Not quite.</strong> Focus on the pattern: prematurity, immature lungs, chronic oxygen/support need, and reduced pulmonary reserve.<br><br><strong>Try again:</strong> Choose the correct answer to continue.";
+          }
+        });
+      });
+    }
+    initializePrecheck();
+
+    function initializePeakFlowActivity() {
+      const activity = document.getElementById("peakflow-activity"); if (!activity) return;
+      activity.querySelectorAll(".peak-option").forEach(button => {
+        button.addEventListener("click", () => {
+          if (activity.dataset.correctAnswered === "true") return;
+          const feedback = activity.querySelector(".quiz-feedback");
+          const isCorrect = button.dataset.correct === "true";
+          activity.querySelectorAll(".peak-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+          if (isCorrect) {
+            activity.dataset.correctAnswered = "true";
+            activity.querySelectorAll(".peak-option").forEach(btn => {
+              btn.disabled = true;
+              if (btn.dataset.correct === "true") btn.classList.add("correct-choice");
+            });
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--airway-mint)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+            markActivityComplete(activity);
+          } else {
+            button.classList.add("incorrect-choice");
+            feedback.className = "quiz-feedback show";
+            feedback.style.background = "var(--soft-coral)";
+            feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct zone to continue.";
+          }
+        });
+      });
+    }
+    initializePeakFlowActivity();
+  </script>
+  <script>
+    (function () {
+      var menuBuilt = false;
+      function setupToggle() {
+        var button = document.getElementById("courseMenuButton");
+        var panel  = document.getElementById("courseMenuPanel");
+        if (!button || !panel || button.dataset.toggleReady) return;
+        button.dataset.toggleReady = "true";
+        button.onclick = function (event) { event.preventDefault(); event.stopPropagation(); var isOpen = panel.classList.contains("open"); panel.classList.toggle("open", !isOpen); panel.classList.toggle("show", !isOpen); button.setAttribute("aria-expanded", String(!isOpen)); };
+        document.addEventListener("click", function (event) { if (!button.contains(event.target) && !panel.contains(event.target)) { panel.classList.remove("open"); panel.classList.remove("show"); button.setAttribute("aria-expanded", "false"); } });
+        document.addEventListener("keydown", function (event) { if (event.key === "Escape") { panel.classList.remove("open"); panel.classList.remove("show"); button.setAttribute("aria-expanded", "false"); } });
+      }
+      function buildCourseMenu() {
+        if (menuBuilt) return;
+        var courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || window.courses || [];
+        if (!courses.length) return;
+        menuBuilt = true;
+        var button = document.getElementById("courseMenuButton");
+        var panel  = document.getElementById("courseMenuPanel");
+        if (!button || !panel) return;
+        panel.innerHTML = '<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+        var list = document.getElementById("courseMenuList");
+        var currentFile = window.location.pathname.split("/").pop().toLowerCase();
+        list.innerHTML = courses.map(function (course) {
+          var progress = typeof window.getCourseProgress === "function" ? window.getCourseProgress(course.file) : null;
+          var statusLabel = "Not started", statusClass = "not-started";
+          if (progress && progress.completed) { statusLabel = "Complete"; statusClass = "complete"; }
+          else if (progress && progress.percent > 0) { statusLabel = "In progress (" + progress.percent + "%)"; statusClass = "in-progress"; }
+          var isCurrent = course.file.toLowerCase() === currentFile;
+          return '<a class="course-menu-item" href="' + course.file + '" ' + (isCurrent ? 'aria-current="page" ' : '') + 'role="menuitem" data-course-file="' + course.file + '"><span class="course-menu-title">' + course.title + '</span><span class="course-menu-status ' + statusClass + '">' + statusLabel + '</span></a>';
+        }).join("");
+        setupToggle();
+      }
+      document.addEventListener("DOMContentLoaded", function () { setupToggle(); buildCourseMenu(); });
+      window.addEventListener("load", buildCourseMenu);
+      setTimeout(buildCourseMenu, 300);
+    })();
+  </script>
+</body>
+</html>
