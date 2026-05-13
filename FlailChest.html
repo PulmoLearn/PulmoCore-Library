@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="courses.js"></script>
   <style>
     :root {
       --core-navy: #0B1F33;
@@ -50,19 +51,27 @@
     .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
     .brand-name span { color: var(--pulmo-teal); }
     .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
-    .course-menu { position: relative; margin-left: auto; }
-    .course-menu-button { color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.24); border-radius: 999px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-    .course-menu-button:hover { background: rgba(255,255,255,.14); }
-    .course-menu-panel { position: absolute; right: 0; top: calc(100% + 12px); width: min(360px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 10px; display: none; z-index: 30; }
-    .course-menu-panel.open { display: grid; gap: 6px; }
-    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; padding: 10px 12px; border-radius: 12px; border: 1px solid transparent; }
-    .course-menu-item:hover { background: var(--mist-blue); border-color: var(--soft-border); }
-    .course-menu-item.current-course { background: var(--airway-mint); font-weight: 800; }
-    .course-title { overflow-wrap: anywhere; }
-    .course-status { font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF6FA; color: var(--slate); white-space: nowrap; }
-    .course-status.complete { background: var(--airway-mint); color: var(--core-navy); }
-    .course-status.progress { background: #FFF4DF; color: #7A4B00; }
-    .mobile-menu-note { display: none; }
+    .top-nav-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+    .home-button { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); transition: all 0.2s ease; flex-shrink: 0; }
+    .home-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .home-icon { width: 24px; height: 24px; display: block; }
+    .course-menu-container, .course-menu-wrapper { position: relative; flex-shrink: 0; }
+    .course-menu-button { border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; background: rgba(255,255,255,0.08); color: var(--white); min-height: 46px; padding: 10px 16px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; white-space: nowrap; }
+    .course-menu-button:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .course-menu-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(360px, calc(100vw - 28px)); max-height: min(72vh, 620px); overflow-y: auto; background: var(--white); color: var(--core-navy); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow); padding: 12px; display: none; z-index: 40; }
+    .course-menu-panel.open { display: grid; gap: 8px; }
+    .course-menu-heading { font-family: var(--font-heading); font-weight: 800; padding: 8px 10px 10px; color: var(--core-navy); border-bottom: 1px solid var(--soft-border); margin-bottom: 8px; }
+    #courseMenuList { display: grid; gap: 8px; }
+    .course-menu-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: center; text-decoration: none; color: var(--core-navy); border: 1px solid transparent; border-radius: 12px; padding: 10px; }
+    .course-menu-item:hover { background: var(--airway-mint); }
+    .course-menu-item.current { border-color: var(--pulmo-teal); background: var(--airway-mint); box-shadow: inset 4px 0 0 var(--pulmo-teal); }
+    .course-menu-title { font-weight: 800; }
+    .course-menu-status { white-space: nowrap; font-size: .78rem; font-weight: 800; border-radius: 999px; padding: 4px 8px; background: #EEF4F8; color: var(--slate); }
+    .course-menu-status.complete { background: var(--airway-mint); color: var(--core-navy); }
+    .course-menu-status.in-progress { background: #FFF4DF; color: #7A4B00; }
+    .course-menu-status.not-started { background: #EEF4F8; color: var(--slate); }
+    @media (max-width: 780px) { .top-nav-actions { gap: 8px; } .home-button { width: 42px; height: 42px; border-radius: 12px; } .home-icon { width: 22px; height: 22px; } .course-menu-button { padding: 9px 12px; } }
+    @media (max-width: 480px) { .course-menu-button { font-size: 0.92rem; padding: 8px 10px; } .home-icon { width: 22px; height: 22px; } }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
     .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
@@ -184,9 +193,17 @@
         </div>
         <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
       </div>
-      <div class="course-menu">
-        <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
-        <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"></div>
+      <div class="top-nav-actions">
+        <a href="index.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home">
+          <img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon">
+        </a>
+        <div class="course-menu-container course-menu-wrapper">
+          <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+          <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+            <div class="course-menu-heading">PulmoCore Courses</div>
+            <div id="courseMenuList"></div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -321,38 +338,7 @@
     </main>
     <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Glossary Decks · FAQ Hub</div></footer>
   </div>
-<script src="courses.js"></script>
 <script>
-function initializeCourseMenu() {
-  const button = document.getElementById("courseMenuButton");
-  const panel = document.getElementById("courseMenuPanel");
-  if (!button || !panel) return;
-  const source = window.PULMOCORE_COURSES || window.PulmoCoreCourses || window.courses || window.COURSES || [];
-  const courses = Array.isArray(source) ? source : (Array.isArray(source.courses) ? source.courses : []);
-  const currentPath = window.location.pathname.split("/").pop();
-  function getCourseUrl(course) { return course.url || course.href || course.file || course.filename || "#"; }
-  function getCourseTitle(course) { return course.title || course.name || course.disease || "Untitled Course"; }
-  function getProgress(course) {
-    const keyBase = course.id || getCourseUrl(course) || getCourseTitle(course);
-    const raw = localStorage.getItem(`pulmocore-progress-${keyBase}`) || localStorage.getItem(`progress-${keyBase}`) || course.progress;
-    const value = typeof raw === "string" ? Number(raw) : Number(raw || 0);
-    if (course.complete || value >= 100) return { label: "Complete", cls: "complete" };
-    if (value > 0) return { label: `In progress ${Math.round(value)}%`, cls: "progress" };
-    return { label: "Not started", cls: "" };
-  }
-  panel.innerHTML = courses.length ? courses.map(course => {
-    const url = getCourseUrl(course);
-    const title = getCourseTitle(course);
-    const progress = getProgress(course);
-    const isCurrent = url.split("/").pop() === currentPath;
-    return `<a class="course-menu-item ${isCurrent ? "current-course" : ""}" href="${url}" role="menuitem"><span class="course-title">${title}</span><span class="course-status ${progress.cls}">${progress.label}</span></a>`;
-  }).join("") : `<div class="course-menu-item"><span class="course-title">Add courses to courses.js</span><span class="course-status">Not started</span></div>`;
-  button.addEventListener("click", () => { const open = panel.classList.toggle("open"); button.setAttribute("aria-expanded", String(open)); });
-  document.addEventListener("click", event => { if (!button.contains(event.target) && !panel.contains(event.target)) { panel.classList.remove("open"); button.setAttribute("aria-expanded", "false"); } });
-  document.addEventListener("keydown", event => { if (event.key === "Escape") { panel.classList.remove("open"); button.setAttribute("aria-expanded", "false"); button.focus(); } });
-}
-initializeCourseMenu();
-
 const glossaryTerms = [
   { term: "Flail chest", definition: "A blunt chest trauma pattern where multiple adjacent ribs are fractured in multiple places, creating an unstable chest wall segment.", rt: "Triggers rapid assessment of ventilation, oxygenation, pain, and associated injuries." },
   { term: "Flail segment", definition: "The free-floating portion of chest wall that moves independently from the stable thoracic cage.", rt: "Paradoxical motion helps identify this injury at bedside." },
@@ -499,6 +485,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeKnowledgeCheck() { const section = document.getElementById("knowledge-check"); const status = document.getElementById("knowledgeStatus"); if (!section) return; const answered = new Set(); const total = section.querySelectorAll(".knowledge-question").length; document.querySelectorAll(".knowledge-option").forEach(option => { option.addEventListener("click", () => { const question = option.closest(".knowledge-question"); if (question.dataset.correctAnswered === "true") return; const feedback = question.querySelector(".quiz-feedback"); const isCorrect = option.dataset.correct === "true"; question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { question.dataset.correctAnswered = "true"; answered.add(option.dataset.question); question.querySelectorAll(".knowledge-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>"; } else { option.classList.add("incorrect-choice"); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer to complete this question."; } status.textContent = `${answered.size} / ${total} questions answered correctly`; if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); } }); }); } initializeKnowledgeCheck();
 
 function initializePrecheck() { document.querySelectorAll("#precheck .quiz-option").forEach(button => { button.addEventListener("click", () => { const section = button.closest(".require-complete"); if (section.dataset.correctAnswered === "true") return; const feedback = document.getElementById("quizFeedback"); const isCorrect = button.dataset.correct === "true"; section.querySelectorAll(".quiz-option").forEach(btn => btn.classList.remove("incorrect-choice")); if (isCorrect) { section.dataset.correctAnswered = "true"; section.querySelectorAll(".quiz-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); }); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)"; feedback.innerHTML = "<strong>Correct.</strong> Flail chest is caused by multiple adjacent ribs fractured in multiple places, producing an unstable chest wall segment.<br><br><strong>You may continue.</strong>"; markActivityComplete(section); } else { button.classList.add("incorrect-choice"); feedback.className = "quiz-feedback show"; feedback.style.background = "var(--soft-coral)"; feedback.innerHTML = "<strong>Not quite.</strong> Think blunt chest trauma plus rib fractures that create a free-floating chest wall segment.<br><br><strong>Try again:</strong> Choose the correct answer to continue."; } }); }); } initializePrecheck();
+</script>
+<script>
+(function(){var menuBuilt=false;function setupToggle(){var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel||button.dataset.toggleReady)return;button.dataset.toggleReady="true";button.onclick=function(e){e.preventDefault();e.stopPropagation();var open=panel.classList.contains("open");panel.classList.toggle("open",!open);panel.classList.toggle("show",!open);button.setAttribute("aria-expanded",String(!open))};document.addEventListener("click",function(e){if(!button.contains(e.target)&&!panel.contains(e.target)){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){panel.classList.remove("open","show");button.setAttribute("aria-expanded","false")}})}function buildCourseMenu(){if(menuBuilt)return;var courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||window.courses||[];if(!courses.length)return;menuBuilt=true;var button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(!button||!panel)return;panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';var list=document.getElementById("courseMenuList"),currentFile=window.location.pathname.split("/").pop().toLowerCase();list.innerHTML=courses.map(function(c){var p=typeof window.getCourseProgress==="function"?window.getCourseProgress(c.file):null,label="Not started",cls="not-started";if(p&&p.completed){label="Complete";cls="complete"}else if(p&&p.percent>0){label="In progress ("+p.percent+"%)";cls="in-progress"}var cur=c.file.toLowerCase()===currentFile;return'<a class="course-menu-item" href="'+c.file+'" '+(cur?'aria-current="page" ':'')+' role="menuitem" data-course-file="'+c.file+'"><span class="course-menu-title">'+c.title+'</span><span class="course-menu-status '+cls+'">'+label+'</span></a>'}).join("");setupToggle()}document.addEventListener("DOMContentLoaded",function(){setupToggle();buildCourseMenu()});window.addEventListener("load",buildCourseMenu);setTimeout(buildCourseMenu,300)})();
 </script>
 </body>
 </html>
