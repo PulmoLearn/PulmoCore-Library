@@ -360,7 +360,7 @@ window.addEventListener('load', async () => {
   console.log(`PulmoLearn: On load — ${allSections.length} total sections, ${hiddenCount} hidden, ${allSections.length - hiddenCount} visible`)
 
   setTimeout(async () => {
-    console.log('PulmoLearn: 2000ms delay complete — running init')
+    console.log('PulmoLearn: 3000ms delay complete — running init')
 
     // Check again after delay
     const sections2 = getAllSections()
