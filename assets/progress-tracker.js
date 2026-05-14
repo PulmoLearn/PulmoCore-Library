@@ -387,7 +387,7 @@ window.addEventListener('load', () => {
   document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
     link.addEventListener('click', async (e) => {
       e.preventDefault()
-      await saveProgress()
+      saveProgress() // don't await — fire and forget
       window.location.href = link.href
     })
   })
