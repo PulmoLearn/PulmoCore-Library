@@ -378,7 +378,50 @@ window.addEventListener('load', async () => {
   callInit('initializeKnowledgeCheck')
   callInit('initializeGuidedCase')
   callInit('initializePeakFlowActivity')
+  
+// ── Review mode — auto-show correct answers ──
+  if (new URLSearchParams(window.location.search).get('review') === 'true') {
+    console.log('PulmoLearn: Review mode — auto-completing all activities')
+    setTimeout(() => {
+      // Auto-select correct quiz options
+      document.querySelectorAll('.quiz-option[data-correct="true"]').forEach(btn => {
+        if (!btn.closest('[data-correct-answered="true"]')) {
+          btn.click()
+        }
+      })
 
+      // Auto-select correct knowledge check options
+      document.querySelectorAll('.knowledge-option[data-correct="true"]').forEach(btn => {
+        if (!btn.closest('[data-correct-answered="true"]')) {
+          btn.click()
+        }
+      })
+
+      // Auto-select correct case options
+      document.querySelectorAll('.case-option[data-correct="true"]').forEach(btn => {
+        if (!btn.closest('[data-correct-answered="true"]')) {
+          btn.click()
+        }
+      })
+
+      // Auto-select correct sort answers
+      document.querySelectorAll('.sort-row').forEach(row => {
+        const select = row.querySelector('select')
+        if (select && row.dataset.answer) {
+          select.value = row.dataset.answer
+        }
+      })
+
+      // Click check buttons to confirm sorts
+      document.querySelectorAll('[id^="check"]').forEach(btn => {
+        if (btn.tagName === 'BUTTON') btn.click()
+      })
+
+      // Click all hotspots
+      document.querySelectorAll('.hotspot-btn').forEach(btn => btn.click())
+
+    }, 500)
+  }
   // Save immediately when user clicks any dashboard link
   document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
     link.addEventListener('click', (e) => {
