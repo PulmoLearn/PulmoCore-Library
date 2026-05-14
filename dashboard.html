@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PulmoCore | Disease Library</title>
-
+  <title>PulmoLearn | Disease Library</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -42,6 +46,20 @@
     button { cursor: pointer; }
     button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
 
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: var(--core-navy);
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 18px;
+      transition: opacity .3s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-brand { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; color: var(--white); }
+    .loading-brand span { color: var(--pulmo-teal); }
+    .loading-spinner { width: 32px; height: 32px; border: 3px solid rgba(28,167,168,0.3); border-top-color: var(--pulmo-teal); border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: rgba(255,255,255,0.5); font-size: .9rem; }
+
     .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
     .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
     .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
@@ -53,6 +71,10 @@
     .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
     .nav-links a { text-decoration: none; opacity: 0.95; }
     .nav-links a:hover { color: var(--airway-mint); }
+    .nav-user { display: flex; align-items: center; gap: 12px; }
+    .nav-email { font-size: .8rem; color: rgba(255,255,255,0.55); font-weight: 700; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-signout { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; color: var(--white); padding: 8px 16px; font-size: .85rem; font-weight: 800; transition: background .18s; }
+    .btn-signout:hover { background: rgba(255,255,255,0.16); }
     .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
 
     .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
@@ -67,7 +89,6 @@
     .hero-card p { max-width: 980px; font-size: 1.14rem; color: #243b55; }
     .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
     .info-card.rt { border-left-color: var(--oxygen-blue); }
-    .info-card.board { border-left-color: var(--clinical-amber); }
     .library-card { padding: 24px; margin-top: 22px; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
@@ -75,15 +96,12 @@
     .stat-card strong { display: block; font-family: var(--font-heading); font-size: 1.75rem; letter-spacing: -0.04em; }
     .stat-card span { color: var(--slate); font-weight: 700; }
 
-    .dashboard-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; margin: 18px 0 22px; align-items: center; }
+    .dashboard-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; margin: 18px 0 22px; align-items: center; }
     .dashboard-tools input, .dashboard-tools select { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; background: var(--white); color: var(--core-navy); }
     .small-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 10px 14px; font-weight: 800; }
-    .small-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
-    .small-btn.warn { background: #FFF4DF; border-color: #F8D9A5; color: #7A4B00; }
 
     .disease-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
     .disease-card { padding: 20px; display: grid; gap: 14px; position: relative; overflow: hidden; border-top: 7px solid var(--pulmo-teal); }
-    .disease-card.locked { opacity: .72; }
     .disease-header { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
     .disease-title-group { min-width: 0; }
     .disease-category { color: var(--slate); font-size: .9rem; font-weight: 700; margin-top: 4px; }
@@ -91,7 +109,6 @@
     .badge.complete { background: var(--airway-mint); color: var(--core-navy); border: 1px solid #BCEFE5; }
     .badge.progress { background: #E6F3FF; color: var(--core-navy); border: 1px solid #CFE8FF; }
     .badge.not-started { background: #F8FBFD; color: var(--slate); border: 1px solid var(--soft-border); }
-    .badge.locked { background: #FDE9E9; color: #7F2E2E; border: 1px solid #F2B5B5; }
     .disease-description { color: #243b55; margin: 0; }
     .progress-row { display: grid; gap: 8px; }
     .progress-label { display: flex; justify-content: space-between; gap: 10px; color: var(--slate); font-weight: 800; font-size: .92rem; }
@@ -104,8 +121,8 @@
     .btn:hover { transform: translateY(-1px); }
     .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
     .btn-primary:hover { background: var(--pulmo-teal-dark); }
-    .btn-secondary { background: var(--white); color: var(--core-navy); border-color: var(--soft-border); }
-    .btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; transform: none; box-shadow: none; }
+    .btn-secondary { background: var(--white); color: var(--core-navy); border-color: var(--soft-border); font-size: .88rem; }
+    .btn-secondary:hover { border-color: var(--pulmo-teal); color: var(--pulmo-teal); }
 
     .complete-medallion { position: absolute; right: -34px; bottom: -34px; width: 115px; height: 115px; border-radius: 50%; background: rgba(221,247,242,.85); display: grid; place-items: start; padding: 20px 0 0 24px; color: var(--pulmo-teal-dark); font-size: 1.5rem; opacity: 0; transform: scale(.85); transition: all .25s ease; }
     .disease-card.is-complete .complete-medallion { opacity: 1; transform: scale(1); }
@@ -117,6 +134,13 @@
 
     .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
     .footer strong span { color: var(--pulmo-teal); }
+
+    /* Sync indicator */
+    .sync-indicator { display: flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 700; color: var(--slate); margin-bottom: 12px; }
+    .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pulmo-teal); }
+    .sync-dot.syncing { background: var(--clinical-amber); animation: pulse 1s infinite; }
+    .sync-dot.error { background: var(--alert-coral); }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
 
     @media (max-width: 1100px) {
       .nav-links { display: none; }
@@ -133,6 +157,7 @@
       .hero-card, .library-card, .info-card { padding: 18px; border-radius: 18px; }
       .dashboard-tools { grid-template-columns: 1fr; }
       .disease-grid, .stats-grid { grid-template-columns: 1fr; }
+      .nav-email { display: none; }
     }
     @media (max-width: 480px) {
       .brand-name { font-size: 1.35rem; }
@@ -146,9 +171,17 @@
   </style>
 </head>
 <body>
+
+  <!-- Loading overlay shown while auth + progress loads -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-brand">Pulmo<span>Learn</span></div>
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading your progress...</div>
+  </div>
+
   <div class="page-shell">
-    <header class="top-nav" aria-label="PulmoCore site navigation">
-      <div class="brand" aria-label="PulmoCore brand">
+    <header class="top-nav" aria-label="PulmoLearn site navigation">
+      <div class="brand" aria-label="PulmoLearn brand">
         <div class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 64 64" fill="none" role="img">
             <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -158,30 +191,34 @@
           </svg>
         </div>
         <div>
-          <div class="brand-name">Pulmo<span>Core</span></div>
-          <div class="brand-tagline">Core respiratory disease learning for future RTs.</div>
+          <div class="brand-name">Pulmo<span>Learn</span></div>
+          <div class="brand-tagline">Complete RT curriculum & NBRC board prep.</div>
         </div>
       </div>
 
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#library">Disease Library</a>
         <a href="#progress">Progress</a>
-        <a href="#recommended">Recommended Path</a>
-        <a href="#account">Account</a>
+        <a href="#recommended">Study Path</a>
       </nav>
+
+      <div class="nav-user">
+        <span class="nav-email" id="navEmail"></span>
+        <button class="btn-signout" id="signOutBtn">Sign Out</button>
+      </div>
       <div class="mobile-menu-note">Dashboard</div>
     </header>
 
     <main class="main-content">
       <section class="hero-card" id="progress">
-        <span class="eyebrow">Paid Learner Dashboard</span>
+        <span class="eyebrow">Your Dashboard</span>
         <h1>Respiratory Disease Library</h1>
-        <p>Continue your PulmoCore respiratory disease modules, track completion across the full disease library, and build board-style clinical reasoning one condition at a time.</p>
-        <div class="stats-grid" aria-label="PulmoCore progress summary">
-          <div class="stat-card"><strong id="completedCount">0</strong><span>Lessons completed</span></div>
-          <div class="stat-card"><strong id="inProgressCount">0</strong><span>In progress</span></div>
-          <div class="stat-card"><strong id="overallPercent">0%</strong><span>Overall completion</span></div>
-          <div class="stat-card"><strong id="masteryBadge">Starter</strong><span>Current badge</span></div>
+        <p>Work through your PulmoLearn modules, track completion across the full disease library, and build board-style clinical reasoning one condition at a time.</p>
+        <div class="stats-grid" aria-label="PulmoLearn progress summary">
+          <div class="stat-card"><strong id="completedCount">—</strong><span>Lessons completed</span></div>
+          <div class="stat-card"><strong id="inProgressCount">—</strong><span>In progress</span></div>
+          <div class="stat-card"><strong id="overallPercent">—</strong><span>Overall completion</span></div>
+          <div class="stat-card"><strong id="masteryBadge">—</strong><span>Current badge</span></div>
         </div>
       </section>
 
@@ -197,7 +234,11 @@
 
       <section class="library-card" id="library">
         <span class="eyebrow">Disease Library</span>
-        <h2>Your PulmoCore Modules</h2>
+        <h2>Your PulmoLearn Modules</h2>
+        <div class="sync-indicator">
+          <div class="sync-dot" id="syncDot"></div>
+          <span id="syncLabel">Progress synced</span>
+        </div>
         <div class="dashboard-tools" aria-label="Disease library controls">
           <input id="searchLessons" type="search" placeholder="Search diseases: asthma, COPD, RSV..." aria-label="Search disease lessons" />
           <select id="filterLessons" aria-label="Filter lessons by status">
@@ -206,21 +247,31 @@
             <option value="in-progress">In progress</option>
             <option value="completed">Completed</option>
           </select>
-          <button class="small-btn warn" id="demoProgress" type="button">Demo Progress</button>
         </div>
         <div class="disease-grid" id="diseaseGrid" aria-live="polite"></div>
       </section>
-
-      <section class="info-card board" id="account" style="margin-top:22px;">
-        <h2>Progress System Note</h2>
-        <p>This page is ready for Supabase progress data. For testing, it reads local demo progress first. When Supabase is connected, replace the <strong>loadLearnerProgress()</strong> function with a Supabase query and keep the disease card rendering logic the same.</p>
-      </section>
     </main>
 
-    <footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div><div>Disease Library · Board Prep · Progress Tracking · Glossary Decks</div></footer>
+    <footer class="footer">
+      <div><strong>Pulmo<span>Learn</span></strong><br>Complete RT curriculum & NBRC board prep.</div>
+      <div>Disease Library · Board Prep · Progress Tracking</div>
+    </footer>
   </div>
 
-  <script>
+  <script type="module">
+    import { supabase, requireAccess, signOut } from '/assets/auth.js'
+
+    // ── Auth guard — redirects if not logged in or no access ──
+    const session = await requireAccess()
+    if (!session) throw new Error('Redirecting')
+
+    // Show user email in nav
+    document.getElementById('navEmail').textContent = session.user.email
+
+    // Sign out button
+    document.getElementById('signOutBtn').addEventListener('click', () => signOut())
+
+    // ── Lesson definitions ──
     const lessons = [
       { id: "als", title: "ALS", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "ALS.html", description: "Respiratory muscle weakness, cough impairment, secretion clearance, NIV concepts, and signs of ventilatory failure." },
       { id: "ards", title: "ARDS", category: "Acute Respiratory Failure", time: "35–45 min", level: "Intermediate", href: "ARDS.html", description: "Diffuse alveolar injury, refractory hypoxemia, lung-protective ventilation, PEEP, and RT escalation priorities." },
@@ -254,55 +305,100 @@
       { id: "smoke_inhalation", title: "Smoke Inhalation", category: "Environmental / Airway Injury", time: "30–40 min", level: "Intermediate", href: "SmokInhalation.html", description: "Thermal and chemical airway injury, carbon monoxide concerns, soot/hoarseness red flags, oxygen therapy, and escalation." },
       { id: "ttn", title: "Transient Tachypnea of the Newborn", category: "Neonatal Respiratory Disease", time: "25–35 min", level: "Core RT Knowledge", href: "TTN.html", description: "Delayed fetal lung fluid clearance, tachypnea, oxygen support, differentiation from RDS, and expected clinical course." },
       { id: "tuberculosis", title: "Tuberculosis", category: "Infectious Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Tuberculosis.html", description: "Airborne infection control, cavitary lung disease, chronic cough, isolation precautions, diagnostics, and public health considerations." }
-    ];
+    ]
 
-    function loadLearnerProgress() {
-      const stored = localStorage.getItem("pulmocore_progress");
-      if (stored) return JSON.parse(stored);
-      return {
-        asthma: { percent: 0, completed: false, status: "not-started" },
-        copd: { percent: 0, completed: false, status: "not-started" },
-        ards: { percent: 0, completed: false, status: "not-started" }
-      };
-    }
-
-    function saveLearnerProgress(progress) {
-      localStorage.setItem("pulmocore_progress", JSON.stringify(progress));
-    }
-
-    function getStatus(progressItem) {
-      if (!progressItem || progressItem.percent === 0) return "not-started";
-      if (progressItem.completed || progressItem.percent >= 100) return "completed";
-      return "in-progress";
+    // ── Progress helpers ──
+    function getStatus(item) {
+      if (!item || item.percent === 0) return "not-started"
+      if (item.completed || item.percent >= 100) return "completed"
+      return "in-progress"
     }
 
     function statusLabel(status) {
-      if (status === "completed") return "✓ Complete";
-      if (status === "in-progress") return "In Progress";
-      return "Not Started";
+      if (status === "completed") return "✓ Complete"
+      if (status === "in-progress") return "In Progress"
+      return "Not Started"
     }
 
-    function renderLessons() {
-      const progress = loadLearnerProgress();
-      const query = document.getElementById("searchLessons").value.trim().toLowerCase();
-      const filter = document.getElementById("filterLessons").value;
-      const grid = document.getElementById("diseaseGrid");
+    function buttonLabel(status) {
+      if (status === "not-started") return "Start Lesson"
+      if (status === "completed") return "Restart Lesson"
+      return "Continue Lesson"
+    }
+
+    // ── Sync indicator ──
+    function setSyncState(state) {
+      const dot = document.getElementById('syncDot')
+      const label = document.getElementById('syncLabel')
+      dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : '')
+      label.textContent = state === 'syncing' ? 'Syncing...' : state === 'error' ? 'Sync error — check connection' : 'Progress synced'
+    }
+
+    // ── Load progress from Supabase ──
+    async function loadProgress() {
+      setSyncState('syncing')
+      const { data, error } = await supabase
+        .from('progress')
+        .select('lesson_id, percent, completed')
+        .eq('user_id', session.user.id)
+
+      if (error) {
+        console.error('Failed to load progress:', error.message)
+        setSyncState('error')
+        return {}
+      }
+
+      setSyncState('synced')
+      const map = {}
+      data.forEach(row => {
+        map[row.lesson_id] = { percent: row.percent, completed: row.completed }
+      })
+      return map
+    }
+
+    // ── Save a single lesson's progress to Supabase ──
+    async function saveProgress(lessonId, percent, completed) {
+      setSyncState('syncing')
+      const { error } = await supabase.from('progress').upsert({
+        user_id: session.user.id,
+        lesson_id: lessonId,
+        percent,
+        completed,
+        updated_at: new Date().toISOString(),
+        ...(completed ? { completed_at: new Date().toISOString() } : {})
+      }, { onConflict: 'user_id,lesson_id' })
+
+      if (error) {
+        console.error('Failed to save progress:', error.message)
+        setSyncState('error')
+      } else {
+        setSyncState('synced')
+      }
+    }
+
+    // ── Render dashboard ──
+    async function renderLessons() {
+      const progress = await loadProgress()
+      const query = document.getElementById("searchLessons").value.trim().toLowerCase()
+      const filter = document.getElementById("filterLessons").value
+      const grid = document.getElementById("diseaseGrid")
 
       const filtered = lessons.filter(lesson => {
-        const item = progress[lesson.id] || { percent: 0, completed: false };
-        const status = getStatus(item);
-        const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query);
-        const matchesFilter = filter === "all" || status === filter;
-        return matchesSearch && matchesFilter;
-      });
+        const item = progress[lesson.id] || { percent: 0, completed: false }
+        const status = getStatus(item)
+        const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query)
+        const matchesFilter = filter === "all" || status === filter
+        return matchesSearch && matchesFilter
+      })
 
       grid.innerHTML = filtered.length ? filtered.map(lesson => {
-        const item = progress[lesson.id] || { percent: 0, completed: false };
-        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
-        const status = getStatus(item);
-        const isComplete = status === "completed";
-        const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started";
-        const buttonText = status === "not-started" ? "Start Lesson" : isComplete ? "Review Lesson" : "Continue Lesson";
+        const item = progress[lesson.id] || { percent: 0, completed: false }
+        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
+        const status = getStatus(item)
+        const isComplete = status === "completed"
+        const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started"
+        const btnLabel = buttonLabel(status)
+        const btnClass = status === "completed" ? "btn btn-secondary" : "btn btn-primary"
         return `
           <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
             <div class="disease-header">
@@ -322,66 +418,55 @@
               <span class="pill">${lesson.level}</span>
             </div>
             <div class="card-actions">
-              <a class="btn btn-primary" href="${lesson.href}">${buttonText}</a>
-              <button class="btn btn-secondary" type="button" data-mark-complete="${lesson.id}">Mark Complete</button>
+              <a class="${btnClass}" href="${lesson.href}">${btnLabel}</a>
             </div>
             <div class="complete-medallion" aria-hidden="true">✓</div>
           </article>
-        `;
-      }).join("") : `<div class="info-card" style="grid-column:1/-1;"><h3>No lessons match your search.</h3><p>Try clearing the search or changing the status filter.</p></div>`;
+        `
+      }).join("") : `<div class="info-card" style="grid-column:1/-1;"><h3>No lessons match your search.</h3><p>Try clearing the search or changing the status filter.</p></div>`
 
-      updateSummary(progress);
-      attachCardActions();
+      updateSummary(progress)
+
+      // Hide loading overlay once rendered
+      document.getElementById('loadingOverlay').classList.add('hidden')
     }
 
     function updateSummary(progress) {
-      const total = lessons.length;
-      let completed = 0;
-      let inProgress = 0;
-      let percentSum = 0;
+      const total = lessons.length
+      let completed = 0, inProgress = 0, percentSum = 0
 
       lessons.forEach(lesson => {
-        const item = progress[lesson.id] || { percent: 0, completed: false };
-        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
-        percentSum += percent;
-        const status = getStatus(item);
-        if (status === "completed") completed++;
-        if (status === "in-progress") inProgress++;
-      });
+        const item = progress[lesson.id] || { percent: 0, completed: false }
+        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
+        percentSum += percent
+        const status = getStatus(item)
+        if (status === "completed") completed++
+        if (status === "in-progress") inProgress++
+      })
 
-      const overall = Math.round(percentSum / total);
-      document.getElementById("completedCount").textContent = completed;
-      document.getElementById("inProgressCount").textContent = inProgress;
-      document.getElementById("overallPercent").textContent = `${overall}%`;
-      document.getElementById("masteryBadge").textContent = completed >= total ? "Library Master" : completed >= 24 ? "Disease Pro" : completed >= 12 ? "Core Builder" : completed >= 1 ? "First Win" : "Starter";
+      const overall = Math.round(percentSum / total)
+      document.getElementById("completedCount").textContent = completed
+      document.getElementById("inProgressCount").textContent = inProgress
+      document.getElementById("overallPercent").textContent = `${overall}%`
+      document.getElementById("masteryBadge").textContent =
+        completed >= total ? "Library Master" :
+        completed >= 24 ? "Disease Pro" :
+        completed >= 12 ? "Core Builder" :
+        completed >= 1 ? "First Win" : "Starter"
     }
 
-    function attachCardActions() {
-      document.querySelectorAll("[data-mark-complete]").forEach(button => {
-        button.addEventListener("click", () => {
-          const id = button.dataset.markComplete;
-          const progress = loadLearnerProgress();
-          progress[id] = { percent: 100, completed: true, status: "completed", completedAt: new Date().toISOString() };
-          saveLearnerProgress(progress);
-          renderLessons();
-        });
-      });
+    // Search and filter (debounced so it doesn't hammer Supabase on every keystroke)
+    let debounceTimer
+    function debounceRender() {
+      clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(renderLessons, 300)
     }
 
-    document.getElementById("searchLessons").addEventListener("input", renderLessons);
-    document.getElementById("filterLessons").addEventListener("change", renderLessons);
-    document.getElementById("demoProgress").addEventListener("click", () => {
-      saveLearnerProgress({
-        asthma: { percent: 100, completed: true, status: "completed", completedAt: new Date().toISOString() },
-        copd: { percent: 65, completed: false, status: "in-progress", lastSection: "management" },
-        ards: { percent: 35, completed: false, status: "in-progress", lastSection: "pathophysiology" },
-        rsv: { percent: 20, completed: false, status: "in-progress", lastSection: "snapshot" },
-        rds: { percent: 0, completed: false, status: "not-started" }
-      });
-      renderLessons();
-    });
+    document.getElementById("searchLessons").addEventListener("input", debounceRender)
+    document.getElementById("filterLessons").addEventListener("change", renderLessons)
 
-    renderLessons();
+    // Initial render
+    renderLessons()
   </script>
 </body>
 </html>
