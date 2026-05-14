@@ -379,8 +379,14 @@ window.addEventListener('load', async () => {
   callInit('initializeGuidedCase')
   callInit('initializePeakFlowActivity')
   callInit('shuffleAnswerOptions')
-  callInit('shuffleSequence')
   callInit('enableDynamicReorder')
+  // Shuffle sequence multiple times for better randomization
+  if (typeof shuffleSequence === 'function') {
+    shuffleSequence()
+    shuffleSequence()
+    shuffleSequence()
+  }
+  
   
 // ── Review mode — auto-show correct answers ──
   if (new URLSearchParams(window.location.search).get('review') === 'true') {
