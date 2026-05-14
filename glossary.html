@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoLearn | Glossary</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --font-heading: "Montserrat", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", Arial, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font: inherit; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 20;
+      background: var(--core-navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px clamp(18px,4vw,52px);
+      box-shadow: 0 6px 18px rgba(11,31,51,0.18);
+    }
+    .nav-brand { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.04em; color: var(--white); }
+    .nav-brand span { color: var(--pulmo-teal); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link { color: rgba(255,255,255,0.75); font-size: .9rem; font-weight: 700; transition: color .18s; }
+    .nav-link:hover { color: var(--white); }
+    .nav-back { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; color: var(--white); padding: 8px 16px; font-size: .88rem; font-weight: 800; transition: background .18s; }
+    .nav-back:hover { background: rgba(255,255,255,0.16); }
+
+    /* HERO */
+    .page-hero { background: var(--core-navy-2); border-bottom: 1px solid rgba(255,255,255,0.07); padding: 52px clamp(20px,5vw,64px) 40px; }
+    .page-hero-inner { max-width: 1100px; margin: 0 auto; }
+    .page-label { font-family: var(--font-mono); font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--pulmo-teal); margin-bottom: 12px; }
+    .page-hero h1 { font-family: var(--font-heading); font-size: clamp(2rem,4vw,3rem); font-weight: 800; letter-spacing: -0.045em; color: var(--white); margin-bottom: 10px; }
+    .page-hero h1 em { font-style: normal; color: var(--pulmo-teal); }
+    .page-hero p { color: rgba(255,255,255,0.6); font-size: .98rem; max-width: 560px; }
+
+    /* SEARCH BAR */
+    .search-wrap { background: var(--white); border-bottom: 1px solid var(--soft-border); padding: 20px clamp(20px,5vw,64px); position: sticky; top: 65px; z-index: 10; box-shadow: 0 4px 12px rgba(11,31,51,0.06); }
+    .search-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; }
+    .search-input { border: 1.5px solid var(--soft-border); border-radius: 12px; padding: 13px 16px; font-size: 1rem; font-family: var(--font-body); color: var(--core-navy); width: 100%; transition: border-color .18s; background: #FAFCFE; }
+    .search-input:focus { outline: none; border-color: var(--pulmo-teal); }
+    .filter-select { border: 1.5px solid var(--soft-border); border-radius: 12px; padding: 13px 14px; font-size: .92rem; font-family: var(--font-body); color: var(--core-navy); background: var(--white); min-width: 160px; }
+    .filter-select:focus { outline: none; border-color: var(--pulmo-teal); }
+    .result-count { font-size: .82rem; font-weight: 700; color: var(--slate); white-space: nowrap; }
+
+    /* FLASHCARD SECTION */
+    .content { max-width: 1100px; margin: 0 auto; padding: clamp(32px,5vw,56px) clamp(20px,5vw,64px); }
+    .section-label { font-family: var(--font-mono); font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--pulmo-teal); margin-bottom: 12px; }
+    .section-title { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 6px; }
+
+    /* FLASHCARD */
+    .flashcard-panel { background: var(--white); border: 1px solid var(--soft-border); border-radius: 22px; padding: 28px; box-shadow: 0 8px 20px rgba(11,31,51,0.08); margin-bottom: 40px; }
+    .fc-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+    .fc-btn { border: 1.5px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 8px 16px; font-size: .88rem; font-weight: 800; transition: all .18s; }
+    .fc-btn:hover { border-color: var(--pulmo-teal); color: var(--pulmo-teal); }
+    .fc-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .fc-btn.primary { background: var(--pulmo-teal); color: var(--white); border-color: var(--pulmo-teal); }
+    .fc-btn.primary:hover { background: var(--pulmo-teal-dark); }
+    .fc-progress-row { margin-bottom: 16px; }
+    .fc-progress-label { display: flex; justify-content: space-between; font-size: .82rem; font-weight: 700; color: var(--slate); margin-bottom: 6px; }
+    .fc-bar { height: 8px; background: #E5F0F6; border-radius: 999px; overflow: hidden; }
+    .fc-fill { height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); border-radius: 999px; transition: width .3s ease; }
+    .flashcard {
+      min-height: 200px; border: 1.5px solid var(--soft-border); border-radius: 18px;
+      display: grid; place-items: center; padding: 28px; text-align: center;
+      background: linear-gradient(145deg, #FFFFFF, #F4FAFC);
+      box-shadow: inset 0 0 30px rgba(75,163,242,0.06);
+      cursor: pointer; transition: transform .2s; margin-bottom: 16px;
+    }
+    .flashcard:hover { transform: translateY(-2px); }
+    .fc-term { font-family: var(--font-heading); font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 800; letter-spacing: -0.04em; color: var(--core-navy); }
+    .fc-def { font-size: 1.05rem; color: #263f5e; max-width: 600px; line-height: 1.65; }
+    .fc-rt { font-size: .9rem; color: var(--slate); margin-top: 12px; font-style: italic; }
+    .fc-hint { font-size: .82rem; color: rgba(28,167,168,0.7); margin-top: 8px; }
+    .fc-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .fc-empty { text-align: center; padding: 40px; color: var(--slate); font-weight: 700; }
+
+    /* GLOSSARY LIST */
+    .glossary-section { }
+    .glossary-grid { display: grid; gap: 12px; }
+    .glossary-card {
+      background: var(--white); border: 1px solid var(--soft-border);
+      border-radius: 16px; border-left: 5px solid var(--pulmo-teal);
+      padding: 18px 20px; transition: box-shadow .18s;
+    }
+    .glossary-card:hover { box-shadow: 0 6px 18px rgba(11,31,51,0.1); }
+    .glossary-term { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em; color: var(--core-navy); margin-bottom: 6px; }
+    .glossary-def { color: #243b55; font-size: .95rem; margin-bottom: 8px; line-height: 1.65; }
+    .glossary-rt { font-size: .88rem; color: var(--slate); font-style: italic; }
+    .glossary-lessons { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .lesson-tag { font-size: .72rem; font-weight: 700; background: var(--mist-blue); border: 1px solid var(--soft-border); border-radius: 999px; padding: 3px 10px; color: var(--slate); text-transform: uppercase; letter-spacing: .05em; }
+    .no-results { text-align: center; padding: 48px 20px; color: var(--slate); }
+    .no-results h3 { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 8px; }
+
+    /* FOOTER */
+    footer { background: var(--core-navy); border-top: 1px solid rgba(255,255,255,0.06); padding: 28px clamp(20px,5vw,64px); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 64px; }
+    .footer-brand { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; letter-spacing: -0.04em; color: var(--white); }
+    .footer-brand span { color: var(--pulmo-teal); }
+    footer p { color: rgba(255,255,255,0.35); font-size: .82rem; }
+
+    @media (max-width: 700px) {
+      .search-inner { grid-template-columns: 1fr; }
+      .filter-select { width: 100%; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/dashboard.html" class="nav-brand">Pulmo<span>Learn</span></a>
+    <div class="nav-right">
+      <a href="/dashboard.html" class="nav-back">← Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-label">Reference</div>
+      <h1>Complete <em>Glossary</em></h1>
+      <p>All clinical terms across every PulmoLearn module in one searchable, reviewable reference. Filter by lesson or search any term.</p>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <div class="search-inner">
+      <input type="search" id="glossarySearch" class="search-input" placeholder="Search terms: NIV, FVC, PEEP, albuterol..." />
+      <select id="lessonFilter" class="filter-select">
+        <option value="all">All Lessons</option>
+      </select>
+      <span class="result-count" id="resultCount"></span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- FLASHCARD SECTION -->
+    <div class="flashcard-panel">
+      <div class="section-label">Flashcard Mode</div>
+      <div class="section-title">Term Mastery Deck</div>
+      <p style="color:var(--slate); font-size:.92rem; margin-bottom:18px;">Click the card to flip. Use the buttons to mark mastered terms or review again.</p>
+
+      <div class="fc-controls">
+        <button class="fc-btn active" id="modeTermBtn" onclick="setMode('term')">Term → Definition</button>
+        <button class="fc-btn" id="modeDefBtn" onclick="setMode('definition')">Definition → Term</button>
+        <span style="flex:1"></span>
+        <button class="fc-btn" id="viewActiveBtn" onclick="setView('active')">Review Deck</button>
+        <button class="fc-btn" id="viewDoneBtn" onclick="setView('completed')">Mastered ✓</button>
+        <button class="fc-btn" onclick="shuffleDeck()">Shuffle</button>
+        <button class="fc-btn" onclick="resetDeck()">Reset All</button>
+      </div>
+
+      <div class="fc-progress-row">
+        <div class="fc-progress-label">
+          <span id="fcProgressText">0 / 0 mastered</span>
+          <span id="fcCardPos"></span>
+        </div>
+        <div class="fc-bar"><div class="fc-fill" id="fcFill" style="width:0%"></div></div>
+      </div>
+
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div>
+          <div class="fc-term" id="fcFront">Loading...</div>
+          <div class="fc-def" id="fcBack" style="display:none"></div>
+          <div class="fc-rt" id="fcRt" style="display:none"></div>
+          <div class="fc-hint" id="fcHint">Click to reveal definition</div>
+        </div>
+      </div>
+
+      <div class="fc-actions">
+        <button class="fc-btn" onclick="flipCard()">Flip Card</button>
+        <button class="fc-btn primary" onclick="markKnown()">Know It ✓</button>
+        <button class="fc-btn" onclick="markReview()">Review Again</button>
+      </div>
+    </div>
+
+    <!-- GLOSSARY LIST -->
+    <div class="glossary-section">
+      <div class="section-label">Full Reference</div>
+      <div class="section-title" style="margin-bottom:20px;">All Terms</div>
+      <div class="glossary-grid" id="glossaryGrid"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">Pulmo<span>Learn</span></div>
+    <p>© 2026 PulmoLearn. All rights reserved.</p>
+  </footer>
+
+  <script src="/assets/glossary-data.js"></script>
+  <script type="module">
+    import { supabase, requireAccess } from '/assets/auth.js'
+    await requireAccess()
+
+    // ── Build lesson filter dropdown ──
+    const lessonSet = new Set()
+    PULMO_GLOSSARY.forEach(t => t.lessons.forEach(l => lessonSet.add(l)))
+    const lessonSelect = document.getElementById('lessonFilter')
+    Array.from(lessonSet).sort().forEach(id => {
+      const opt = document.createElement('option')
+      opt.value = id
+      opt.textContent = id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+      lessonSelect.appendChild(opt)
+    })
+
+    // ── Flashcard state ──
+    let cardMode = 'term'
+    let cardView = 'active'
+    let flipped = false
+    let mastered = new Set()
+    let currentIndex = 0
+    let deck = []
+
+    function getDeck() {
+      const query = document.getElementById('glossarySearch').value.trim().toLowerCase()
+      const lesson = document.getElementById('lessonFilter').value
+      let terms = PULMO_GLOSSARY.filter(t => {
+        const matchLesson = lesson === 'all' || t.lessons.includes(lesson)
+        const matchSearch = !query || t.term.toLowerCase().includes(query) || t.definition.toLowerCase().includes(query)
+        return matchLesson && matchSearch
+      })
+      if (cardView === 'active') terms = terms.filter(t => !mastered.has(t.term))
+      if (cardView === 'completed') terms = terms.filter(t => mastered.has(t.term))
+      return terms
+    }
+
+    function renderFlashcard() {
+      deck = getDeck()
+      const total = PULMO_GLOSSARY.length
+      const masteredCount = mastered.size
+      document.getElementById('fcProgressText').textContent = `${masteredCount} / ${total} mastered`
+      document.getElementById('fcFill').style.width = `${Math.round(masteredCount / total * 100)}%`
+
+      if (!deck.length) {
+        document.getElementById('fcFront').textContent = cardView === 'completed' ? 'No mastered cards yet' : 'All cards mastered!'
+        document.getElementById('fcBack').style.display = 'none'
+        document.getElementById('fcRt').style.display = 'none'
+        document.getElementById('fcHint').style.display = 'none'
+        document.getElementById('fcCardPos').textContent = ''
+        return
+      }
+
+      if (currentIndex >= deck.length) currentIndex = 0
+      const card = deck[currentIndex]
+      flipped = false
+      document.getElementById('fcCardPos').textContent = `${currentIndex + 1} / ${deck.length}`
+      document.getElementById('fcFront').textContent = cardMode === 'term' ? card.term : card.definition
+      document.getElementById('fcBack').textContent = cardMode === 'term' ? card.definition : card.term
+      document.getElementById('fcRt').textContent = card.rt ? `RT Clinical Note: ${card.rt}` : ''
+      document.getElementById('fcBack').style.display = 'none'
+      document.getElementById('fcRt').style.display = 'none'
+      document.getElementById('fcHint').style.display = 'block'
+      document.getElementById('fcHint').textContent = 'Click to reveal ' + (cardMode === 'term' ? 'definition' : 'term')
+    }
+
+    window.flipCard = function() {
+      if (!deck.length) return
+      flipped = !flipped
+      const card = deck[currentIndex]
+      document.getElementById('fcBack').style.display = flipped ? 'block' : 'none'
+      document.getElementById('fcRt').style.display = flipped && card.rt ? 'block' : 'none'
+      document.getElementById('fcHint').style.display = flipped ? 'none' : 'block'
+    }
+
+    window.markKnown = function() {
+      if (!deck.length) return
+      mastered.add(deck[currentIndex].term)
+      currentIndex = Math.min(currentIndex, getDeck().length - 1)
+      renderFlashcard()
+    }
+
+    window.markReview = function() {
+      if (!deck.length) return
+      currentIndex = (currentIndex + 1) % deck.length
+      renderFlashcard()
+    }
+
+    window.shuffleDeck = function() {
+      deck = getDeck().sort(() => Math.random() - 0.5)
+      currentIndex = 0
+      renderFlashcard()
+    }
+
+    window.resetDeck = function() {
+      mastered.clear()
+      currentIndex = 0
+      renderFlashcard()
+    }
+
+    window.setMode = function(mode) {
+      cardMode = mode
+      currentIndex = 0
+      document.getElementById('modeTermBtn').classList.toggle('active', mode === 'term')
+      document.getElementById('modeDefBtn').classList.toggle('active', mode === 'definition')
+      renderFlashcard()
+    }
+
+    window.setView = function(view) {
+      cardView = view
+      currentIndex = 0
+      document.getElementById('viewActiveBtn').classList.toggle('active', view === 'active')
+      document.getElementById('viewDoneBtn').classList.toggle('active', view === 'completed')
+      renderFlashcard()
+    }
+
+    // ── Glossary list ──
+    function renderGlossary() {
+      const query = document.getElementById('glossarySearch').value.trim().toLowerCase()
+      const lesson = document.getElementById('lessonFilter').value
+
+      const filtered = PULMO_GLOSSARY.filter(t => {
+        const matchLesson = lesson === 'all' || t.lessons.includes(lesson)
+        const matchSearch = !query ||
+          t.term.toLowerCase().includes(query) ||
+          t.definition.toLowerCase().includes(query) ||
+          (t.rt && t.rt.toLowerCase().includes(query))
+        return matchLesson && matchSearch
+      }).sort((a, b) => a.term.localeCompare(b.term))
+
+      document.getElementById('resultCount').textContent = `${filtered.length} term${filtered.length !== 1 ? 's' : ''}`
+
+      const grid = document.getElementById('glossaryGrid')
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="no-results"><h3>No terms found</h3><p>Try a different search or clear the lesson filter.</p></div>`
+        return
+      }
+
+      grid.innerHTML = filtered.map(t => `
+        <div class="glossary-card">
+          <div class="glossary-term">${t.term}</div>
+          <div class="glossary-def">${t.definition}</div>
+          ${t.rt ? `<div class="glossary-rt">RT Note: ${t.rt}</div>` : ''}
+          <div class="glossary-lessons">
+            ${t.lessons.map(l => `<span class="lesson-tag">${l.replace(/_/g, ' ')}</span>`).join('')}
+          </div>
+        </div>
+      `).join('')
+
+      // Also update flashcard deck when filters change
+      currentIndex = 0
+      renderFlashcard()
+    }
+
+    // ── Events ──
+    let debounce
+    document.getElementById('glossarySearch').addEventListener('input', () => {
+      clearTimeout(debounce)
+      debounce = setTimeout(renderGlossary, 250)
+    })
+    document.getElementById('lessonFilter').addEventListener('change', renderGlossary)
+
+    // ── Init ──
+    renderGlossary()
+  </script>
+</body>
+</html>
