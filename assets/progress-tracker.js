@@ -24,6 +24,21 @@ if (!lessonId) {
   console.error('PulmoLearn: window.LESSON_ID is not set on this lesson page.')
 }
 // ── Handle restart ──
+async function restoreProgress() {
+  if (!lessonId || !userId) return
+
+  const { data, error } = await supabase
+    .from('progress')
+    .select('percent, completed')
+    .eq('user_id', userId)
+    .eq('lesson_id', lessonId)
+    .single()
+
+  // Only restore if there's meaningful saved progress
+  if (error || !data || data.percent < 10) return
+
+  // ... rest of the function stays the same
+  
 async function resetProgress() {
   await supabase.from('progress').upsert({
     user_id: userId,
@@ -352,10 +367,15 @@ document.addEventListener('activityComplete', scheduleSave)
 
 // ── Init ──
 window.addEventListener('load', async () => {
+  // Wait longer for initializeProgressiveSections() to finish hiding sections
   setTimeout(async () => {
-    await restoreProgress()
-    setTimeout(saveProgress, 500)
-  }, 400)
+    const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
+    if (!isRestart) {
+      await restoreProgress()
+    }
+    // Extra delay before first save so lesson init is fully complete
+    setTimeout(saveProgress, 2000)
+  }, 800)
 })
 
 // ── Save on tab close ──
