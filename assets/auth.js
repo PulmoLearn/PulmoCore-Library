@@ -15,14 +15,19 @@ export async function requireAuth() {
 
 export async function requireAccess() {
   const session = await requireAuth()
+  if (!session) return null
+
   const { data } = await supabase
     .from('user_access')
-    .select('*')
+    .select('access_type')
     .eq('user_id', session.user.id)
     .single()
+
   if (!data) {
-    window.location.href = '/signup.html'
+    window.location.href = '/payment.html'
+    return null
   }
+
   return session
 }
 export async function signOut() {
