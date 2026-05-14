@@ -380,12 +380,8 @@ window.addEventListener('load', async () => {
     observerPaused = false
     console.log('PulmoLearn: Observer enabled')
 
-    // Initial save after everything settles
-    setTimeout(() => {
-      console.log('PulmoLearn: Running initial saveProgress')
-      saveProgress()
-    }, 2000)
-  }, 800)
+    // No initial save — only save when user interacts
+    console.log('PulmoLearn: Ready — waiting for user interaction to save')
 })
 
 // ── Save on tab close ──
