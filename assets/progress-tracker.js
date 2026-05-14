@@ -23,44 +23,7 @@ const lessonId = window.LESSON_ID
 if (!lessonId) {
   console.error('PulmoLearn: window.LESSON_ID is not set on this lesson page.')
 }
-// ── Handle restart ──
-async function restoreProgress() {
-  if (!lessonId || !userId) return
 
-  const { data, error } = await supabase
-    .from('progress')
-    .select('percent, completed')
-    .eq('user_id', userId)
-    .eq('lesson_id', lessonId)
-    .single()
-
-  // Only restore if there's meaningful saved progress
-  if (error || !data || data.percent < 10) return
-
-  // ... rest of the function stays the same
-  
-async function resetProgress() {
-  await supabase.from('progress').upsert({
-    user_id: userId,
-    lesson_id: lessonId,
-    percent: 0,
-    completed: false,
-    updated_at: new Date().toISOString()
-  }, { onConflict: 'user_id,lesson_id' })
-
-  // Remove the ?restart=true from the URL without reloading
-  const url = new URL(window.location.href)
-  url.searchParams.delete('restart')
-  window.history.replaceState({}, '', url)
-
-  console.log(`PulmoLearn: Progress reset for "${lessonId}"`)
-}
-
-// Check for restart flag on load
-if (new URLSearchParams(window.location.search).get('restart') === 'true') {
-  await resetProgress()
-  // Don't call restoreProgress — let the lesson start fresh
-}
 // ── Inject shared styles ──
 const style = document.createElement('style')
 style.textContent = `
@@ -197,7 +160,6 @@ function showCompletionBanner() {
   if (completionShown) return
   completionShown = true
 
-  // Insert banner after the last section in the lesson stack
   const lessonStack = document.querySelector('.lesson-stack')
   if (!lessonStack) return
 
@@ -232,8 +194,6 @@ function showCompletionBanner() {
     </div>
   `
   lessonStack.appendChild(banner)
-
-  // Scroll to the banner
   setTimeout(() => banner.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200)
 }
 
@@ -255,8 +215,25 @@ function showResumeBanner(percent, sectionsRevealed, allSections) {
   if (lastVisible) {
     setTimeout(() => lastVisible.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400)
   }
-
   setTimeout(() => { if (banner.parentNode) banner.remove() }, 6000)
+}
+
+// ── Reset progress (used by Restart Lesson) ──
+async function resetProgress() {
+  await supabase.from('progress').upsert({
+    user_id: userId,
+    lesson_id: lessonId,
+    percent: 0,
+    completed: false,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,lesson_id' })
+
+  // Remove ?restart=true from URL without reloading
+  const url = new URL(window.location.href)
+  url.searchParams.delete('restart')
+  window.history.replaceState({}, '', url)
+
+  console.log(`PulmoLearn: Progress reset for "${lessonId}"`)
 }
 
 // ── Save progress ──
@@ -303,7 +280,8 @@ async function restoreProgress() {
     .eq('lesson_id', lessonId)
     .single()
 
-  if (error || !data || data.percent === 0) return
+  // Only restore if there's meaningful saved progress
+  if (error || !data || data.percent < 10) return
 
   const allSections = getAllSections()
   const total = allSections.length
@@ -333,7 +311,7 @@ async function restoreProgress() {
 
   // If lesson was already complete, show banner immediately
   if (data.completed) {
-    completionShown = false // allow re-show
+    completionShown = false
     setTimeout(showCompletionBanner, 600)
   } else {
     showResumeBanner(data.percent, sectionsToReveal, allSections)
@@ -367,10 +345,11 @@ document.addEventListener('activityComplete', scheduleSave)
 
 // ── Init ──
 window.addEventListener('load', async () => {
-  // Wait longer for initializeProgressiveSections() to finish hiding sections
   setTimeout(async () => {
     const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
-    if (!isRestart) {
+    if (isRestart) {
+      await resetProgress()
+    } else {
       await restoreProgress()
     }
     // Extra delay before first save so lesson init is fully complete
