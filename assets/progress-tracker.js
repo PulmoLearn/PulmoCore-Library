@@ -379,6 +379,8 @@ window.addEventListener('load', async () => {
   callInit('initializeGuidedCase')
   callInit('initializePeakFlowActivity')
   callInit('shuffleAnswerOptions')
+  callInit('shuffleSequence')
+  callInit('enableDynamicReorder')
   
 // ── Review mode — auto-show correct answers ──
   if (new URLSearchParams(window.location.search).get('review') === 'true') {
