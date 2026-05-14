@@ -23,7 +23,29 @@ const lessonId = window.LESSON_ID
 if (!lessonId) {
   console.error('PulmoLearn: window.LESSON_ID is not set on this lesson page.')
 }
+// ── Handle restart ──
+async function resetProgress() {
+  await supabase.from('progress').upsert({
+    user_id: userId,
+    lesson_id: lessonId,
+    percent: 0,
+    completed: false,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,lesson_id' })
 
+  // Remove the ?restart=true from the URL without reloading
+  const url = new URL(window.location.href)
+  url.searchParams.delete('restart')
+  window.history.replaceState({}, '', url)
+
+  console.log(`PulmoLearn: Progress reset for "${lessonId}"`)
+}
+
+// Check for restart flag on load
+if (new URLSearchParams(window.location.search).get('restart') === 'true') {
+  await resetProgress()
+  // Don't call restoreProgress — let the lesson start fresh
+}
 // ── Inject shared styles ──
 const style = document.createElement('style')
 style.textContent = `
