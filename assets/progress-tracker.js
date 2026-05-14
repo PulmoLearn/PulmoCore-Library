@@ -1,14 +1,13 @@
 /**
- * PulmoLearn Progress Tracker
+ * PulmoLearn Progress Tracker v4 (debug build)
  * Add to every lesson page just before </body>:
  *   <script>window.LESSON_ID = 'als'</script>
  *   <script type="module" src="/assets/progress-tracker.js"></script>
- *
- * Saves + restores progress via Supabase, and shows a completion
- * banner when the user reaches the end of the lesson.
  */
 
 import { supabase } from '/assets/auth.js'
+
+console.log('PulmoLearn: progress-tracker.js v4 loaded')
 
 // ── Auth check ──
 const { data: { session } } = await supabase.auth.getSession()
@@ -19,6 +18,8 @@ if (!session) {
 
 const userId = session.user.id
 const lessonId = window.LESSON_ID
+
+console.log(`PulmoLearn: lessonId="${lessonId}" userId="${userId}"`)
 
 if (!lessonId) {
   console.error('PulmoLearn: window.LESSON_ID is not set on this lesson page.')
@@ -144,6 +145,7 @@ function calculateProgress() {
   const total = allSections.length
   if (!total) return 0
   const visible = Array.from(allSections).filter(s => !s.classList.contains('lesson-hidden')).length
+  console.log(`PulmoLearn: calculateProgress — ${visible} visible / ${total} total = ${Math.round((visible / total) * 100)}%`)
   return Math.round((visible / total) * 100)
 }
 
@@ -218,8 +220,9 @@ function showResumeBanner(percent, sectionsRevealed, allSections) {
   setTimeout(() => { if (banner.parentNode) banner.remove() }, 6000)
 }
 
-// ── Reset progress (used by Restart Lesson) ──
+// ── Reset progress ──
 async function resetProgress() {
+  console.log(`PulmoLearn: Resetting progress for "${lessonId}"`)
   await supabase.from('progress').upsert({
     user_id: userId,
     lesson_id: lessonId,
@@ -231,14 +234,13 @@ async function resetProgress() {
   const url = new URL(window.location.href)
   url.searchParams.delete('restart')
   window.history.replaceState({}, '', url)
-
-  console.log(`PulmoLearn: Progress reset for "${lessonId}"`)
+  console.log(`PulmoLearn: Progress reset complete for "${lessonId}"`)
 }
 
 // ── Save progress ──
 let saveTimer = null
 
-// Start paused — prevents observer firing during initializeProgressiveSections()
+// Starts paused — prevents observer firing during initializeProgressiveSections()
 let observerPaused = true
 
 function scheduleSave() {
@@ -253,6 +255,8 @@ async function saveProgress() {
   const percent = calculateProgress()
   const completed = isLessonComplete()
 
+  console.log(`PulmoLearn: Saving — ${lessonId} ${percent}% completed=${completed}`)
+
   const { error } = await supabase.from('progress').upsert({
     user_id: userId,
     lesson_id: lessonId,
@@ -265,7 +269,7 @@ async function saveProgress() {
   if (error) {
     console.error('PulmoLearn: Failed to save progress:', error.message)
   } else {
-    console.log(`PulmoLearn: Saved — ${lessonId} ${percent}% ${completed ? '✓' : ''}`)
+    console.log(`PulmoLearn: Save confirmed — ${lessonId} ${percent}%`)
     if (completed) showCompletionBanner()
   }
 }
@@ -274,7 +278,8 @@ async function saveProgress() {
 async function restoreProgress() {
   if (!lessonId || !userId) return
 
-  // maybeSingle() returns null instead of 406 error when no row exists
+  console.log(`PulmoLearn: Checking for saved progress for "${lessonId}"`)
+
   const { data, error } = await supabase
     .from('progress')
     .select('percent, completed')
@@ -282,11 +287,16 @@ async function restoreProgress() {
     .eq('lesson_id', lessonId)
     .maybeSingle()
 
-  // No saved progress or error — start fresh, nothing to restore
-  if (error || !data || data.percent < 10) return
+  console.log(`PulmoLearn: restoreProgress result — data=${JSON.stringify(data)} error=${JSON.stringify(error)}`)
+
+  if (error || !data || data.percent < 10) {
+    console.log('PulmoLearn: No meaningful progress to restore — starting fresh')
+    return
+  }
 
   const allSections = getAllSections()
   const total = allSections.length
+  console.log(`PulmoLearn: Restoring to ${data.percent}% — ${total} total sections`)
   if (!total) return
 
   const sectionsToReveal = Math.round((data.percent / 100) * total)
@@ -296,7 +306,6 @@ async function restoreProgress() {
     if (index < sectionsToReveal) section.classList.remove('lesson-hidden')
   })
 
-  // Remove orphaned continue buttons from already-completed sections
   allSections.forEach((section, index) => {
     if (index < sectionsToReveal - 1) {
       const btn = section.querySelector('.section-continue')
@@ -315,10 +324,10 @@ async function restoreProgress() {
     showResumeBanner(data.percent, sectionsToReveal, allSections)
   }
 
-  console.log(`PulmoLearn: Restored ${lessonId} to ${data.percent}%`)
+  console.log(`PulmoLearn: Restore complete — ${lessonId} at ${data.percent}%`)
 }
 
-// ── MutationObserver — watches for section reveals ──
+// ── MutationObserver ──
 const observer = new MutationObserver((mutations) => {
   if (observerPaused) return
   for (const mutation of mutations) {
@@ -343,19 +352,39 @@ document.addEventListener('activityComplete', scheduleSave)
 
 // ── Init ──
 window.addEventListener('load', async () => {
+  console.log('PulmoLearn: load event fired')
+
+  // Check visible sections immediately on load
+  const allSections = getAllSections()
+  const hiddenCount = Array.from(allSections).filter(s => s.classList.contains('lesson-hidden')).length
+  console.log(`PulmoLearn: On load — ${allSections.length} total sections, ${hiddenCount} hidden, ${allSections.length - hiddenCount} visible`)
+
   setTimeout(async () => {
+    console.log('PulmoLearn: 800ms delay complete — running init')
+
+    // Check again after delay
+    const sections2 = getAllSections()
+    const hidden2 = Array.from(sections2).filter(s => s.classList.contains('lesson-hidden')).length
+    console.log(`PulmoLearn: After 800ms — ${sections2.length} total, ${hidden2} hidden, ${sections2.length - hidden2} visible`)
+
     const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
+    console.log(`PulmoLearn: isRestart=${isRestart}`)
+
     if (isRestart) {
       await resetProgress()
     } else {
       await restoreProgress()
     }
 
-    // Enable observer now that lesson init and restore are both complete
+    // Enable observer — lesson init and restore are both complete
     observerPaused = false
+    console.log('PulmoLearn: Observer enabled')
 
-    // Delay first save so everything has fully settled
-    setTimeout(saveProgress, 2000)
+    // Initial save after everything settles
+    setTimeout(() => {
+      console.log('PulmoLearn: Running initial saveProgress')
+      saveProgress()
+    }, 2000)
   }, 800)
 })
 
@@ -373,4 +402,4 @@ window.addEventListener('pagehide', () => {
   )
 })
 
-console.log(`PulmoLearn: Progress tracker active for "${lessonId}"`)
+console.log(`PulmoLearn: Setup complete for "${lessonId}"`)
