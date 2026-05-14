@@ -216,60 +216,75 @@
     })
 
     document.getElementById('signupBtn').addEventListener('click', async () => {
-      const email = document.getElementById('email').value.trim()
-      const password = document.getElementById('password').value
-      const errorMsg = document.getElementById('errorMsg')
-      const btn = document.getElementById('signupBtn')
+  const email = document.getElementById('email').value.trim()
+  const password = document.getElementById('password').value
+  const voucherInput = document.getElementById('voucher').value.trim().toUpperCase()
+  const errorMsg = document.getElementById('errorMsg')
+  const btn = document.getElementById('signupBtn')
 
-      errorMsg.style.display = 'none'
+  errorMsg.style.display = 'none'
 
-      if (!email || !password) {
-        errorMsg.textContent = 'Please fill in all fields.'
-        errorMsg.style.display = 'block'
-        return
-      }
-      if (password.length < 8) {
-        errorMsg.textContent = 'Password must be at least 8 characters.'
-        errorMsg.style.display = 'block'
-        return
-      }
+  if (!email || !password) {
+    errorMsg.textContent = 'Please fill in all fields.'
+    errorMsg.style.display = 'block'
+    return
+  }
+  if (password.length < 8) {
+    errorMsg.textContent = 'Password must be at least 8 characters.'
+    errorMsg.style.display = 'block'
+    return
+  }
 
-      btn.disabled = true
-      btn.textContent = 'Creating account...'
+  btn.disabled = true
+  btn.textContent = 'Creating account...'
 
-      // 1. Create the user account
-      const { data: authData, error: authError } = await supabase.auth.signUp({ email, password })
+  // 1. Create the user account
+  const { data: authData, error: authError } = await supabase.auth.signUp({ email, password })
 
-      if (authError) {
-        errorMsg.textContent = authError.message
-        errorMsg.style.display = 'block'
-        btn.disabled = false
-        btn.textContent = 'Create Account'
-        return
-      }
+  if (authError) {
+    errorMsg.textContent = authError.message
+    errorMsg.style.display = 'block'
+    btn.disabled = false
+    btn.textContent = 'Create Account'
+    return
+  }
 
-      const userId = authData.user.id
+  const userId = authData.user.id
 
-      // 2a. Voucher path — grant free access
-      if (validVoucher) {
-        await supabase.from('user_access').insert({
-          user_id: userId,
-          access_type: 'voucher',
-          voucher_code: validVoucher
-        })
-        await supabase.from('vouchers').update({
-          redeemed_by: userId,
-          redeemed_at: new Date().toISOString(),
-          active: false
-        }).eq('code', validVoucher)
+  // 2a. Voucher path — use validVoucher OR re-check the input field directly
+  const codeToUse = validVoucher || voucherInput
 
-        window.location.href = '/dashboard.html'
+  if (codeToUse) {
+    // Re-verify the code is still valid at time of submission
+    const { data: voucherData } = await supabase
+      .from('vouchers')
+      .select('code')
+      .eq('code', codeToUse)
+      .eq('active', true)
+      .is('redeemed_by', null)
+      .single()
 
-      // 2b. No voucher — send to payment
-      } else {
-        window.location.href = '/payment.html'
-      }
-    })
+    if (voucherData) {
+      await supabase.from('user_access').insert({
+        user_id: userId,
+        access_type: 'voucher',
+        voucher_code: codeToUse
+      })
+      await supabase.from('vouchers').update({
+        redeemed_by: userId,
+        redeemed_at: new Date().toISOString(),
+        active: false
+      }).eq('code', codeToUse)
+
+      await new Promise(resolve => setTimeout(resolve, 800))
+      window.location.href = '/dashboard.html'
+      return
+    }
+  }
+
+  // 2b. No valid voucher — send to payment
+  window.location.href = '/payment.html'
+})
   </script>
 </body>
 </html>
