@@ -1,5 +1,5 @@
 /**
- * PulmoLearn Progress Tracker v4 (debug build)
+ * PulmoLearn Progress Tracker v5
  * Add to every lesson page just before </body>:
  *   <script>window.LESSON_ID = 'als'</script>
  *   <script type="module" src="/assets/progress-tracker.js"></script>
@@ -7,7 +7,7 @@
 
 import { supabase } from '/assets/auth.js'
 
-console.log('PulmoLearn: progress-tracker.js v4 loaded')
+console.log('PulmoLearn: progress-tracker.js v5 loaded')
 
 // ── Auth check ──
 const { data: { session } } = await supabase.auth.getSession()
@@ -239,8 +239,6 @@ async function resetProgress() {
 
 // ── Save progress ──
 let saveTimer = null
-
-// Starts paused — prevents observer firing during initializeProgressiveSections()
 let observerPaused = true
 
 function scheduleSave() {
@@ -359,6 +357,8 @@ window.addEventListener('load', async () => {
   if (typeof initializeProgressiveSections === 'function') {
     console.log('PulmoLearn: Calling initializeProgressiveSections')
     initializeProgressiveSections()
+  } else {
+    console.warn('PulmoLearn: initializeProgressiveSections not found!')
   }
 
   setTimeout(async () => {
@@ -381,29 +381,6 @@ window.addEventListener('load', async () => {
     console.log('PulmoLearn: Observer enabled')
     console.log('PulmoLearn: Ready — waiting for user interaction to save')
   }, 3500)
-})
-
-    // Check again after delay
-    const sections2 = getAllSections()
-    const hidden2 = Array.from(sections2).filter(s => s.classList.contains('lesson-hidden')).length
-    console.log(`PulmoLearn: After 3500ms — ${sections2.length} total, ${hidden2} hidden, ${sections2.length - hidden2} visible`)
-
-    const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
-    console.log(`PulmoLearn: isRestart=${isRestart}`)
-
-    if (isRestart) {
-      await resetProgress()
-    } else {
-      await restoreProgress()
-    }
-
-    // Enable observer — lesson init and restore are both complete
-    observerPaused = false
-    console.log('PulmoLearn: Observer enabled')
-
-    // No initial save — only save when user interacts
-    console.log('PulmoLearn: Ready — waiting for user interaction to save')
-    }, 3500)
 })
 
 // ── Save on tab close ──
