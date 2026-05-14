@@ -354,13 +354,34 @@ document.addEventListener('activityComplete', scheduleSave)
 window.addEventListener('load', async () => {
   console.log('PulmoLearn: load event fired')
 
-  // Check visible sections immediately on load
-  const allSections = getAllSections()
-  const hiddenCount = Array.from(allSections).filter(s => s.classList.contains('lesson-hidden')).length
-  console.log(`PulmoLearn: On load — ${allSections.length} total sections, ${hiddenCount} hidden, ${allSections.length - hiddenCount} visible`)
+  // Call initializeProgressiveSections if it hasn't run yet
+  // This ensures sections are hidden before we check progress
+  if (typeof initializeProgressiveSections === 'function') {
+    console.log('PulmoLearn: Calling initializeProgressiveSections')
+    initializeProgressiveSections()
+  }
 
   setTimeout(async () => {
     console.log('PulmoLearn: 3500ms delay complete — running init')
+
+    const sections2 = getAllSections()
+    const hidden2 = Array.from(sections2).filter(s => s.classList.contains('lesson-hidden')).length
+    console.log(`PulmoLearn: After 3500ms — ${sections2.length} total, ${hidden2} hidden, ${sections2.length - hidden2} visible`)
+
+    const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
+    console.log(`PulmoLearn: isRestart=${isRestart}`)
+
+    if (isRestart) {
+      await resetProgress()
+    } else {
+      await restoreProgress()
+    }
+
+    observerPaused = false
+    console.log('PulmoLearn: Observer enabled')
+    console.log('PulmoLearn: Ready — waiting for user interaction to save')
+  }, 3500)
+})
 
     // Check again after delay
     const sections2 = getAllSections()
