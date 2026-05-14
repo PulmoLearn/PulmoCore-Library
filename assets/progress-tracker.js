@@ -1,5 +1,5 @@
 /**
- * PulmoLearn Progress Tracker v6
+ * PulmoLearn Progress Tracker v7
  * Add to every lesson page just before </body>:
  *   <script>window.LESSON_ID = 'als'</script>
  *   <script type="module" src="/assets/progress-tracker.js"></script>
@@ -7,7 +7,7 @@
 
 import { supabase } from '/assets/auth.js'
 
-console.log('PulmoLearn: progress-tracker.js v6 loaded')
+console.log('PulmoLearn: progress-tracker.js v7 loaded')
 
 // ── Auth check ──
 const { data: { session } } = await supabase.auth.getSession()
@@ -325,6 +325,19 @@ async function restoreProgress() {
   console.log(`PulmoLearn: Restore complete — ${lessonId} at ${data.percent}%`)
 }
 
+// ── Safely call a lesson init function by name ──
+// Checks it exists and hasn't already been initialized
+function callInit(name) {
+  if (typeof window[name] === 'function') {
+    console.log(`PulmoLearn: Calling ${name}`)
+    try {
+      window[name]()
+    } catch (e) {
+      console.warn(`PulmoLearn: ${name} threw an error:`, e.message)
+    }
+  }
+}
+
 // ── MutationObserver ──
 const observer = new MutationObserver((mutations) => {
   if (observerPaused) return
@@ -352,21 +365,21 @@ document.addEventListener('activityComplete', scheduleSave)
 window.addEventListener('load', async () => {
   console.log('PulmoLearn: load event fired')
 
-  // Re-run lesson init functions now that DOM is fully ready
-  // These may have run too early during initial script parse
-  if (typeof initializeProgressiveSections === 'function') {
-    console.log('PulmoLearn: Calling initializeProgressiveSections')
-    initializeProgressiveSections()
-  } else {
-    console.warn('PulmoLearn: initializeProgressiveSections not found!')
-  }
+  // Re-run all lesson init functions now that DOM is fully ready.
+  // These run too early during initial script parse so listeners
+  // don't attach correctly. Running them again on load fixes this.
+  // Each function is guarded so it only runs if it exists in the lesson.
+  callInit('initializeProgressiveSections')
+  callInit('initializePrecheck')
+  callInit('initializeHotspotActivity')
+  callInit('initializeRiskSort')
+  callInit('initializeManifestationsSort')
+  callInit('initializeSequenceSort')
+  callInit('initializeKnowledgeCheck')
+  callInit('initializeGuidedCase')
+  callInit('initializePeakFlowActivity')
 
-  if (typeof initializePrecheck === 'function') {
-    console.log('PulmoLearn: Calling initializePrecheck')
-    initializePrecheck()
-  }
-
-  // Save immediately when user clicks home/dashboard link
+  // Save immediately when user clicks any dashboard link
   document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault()
