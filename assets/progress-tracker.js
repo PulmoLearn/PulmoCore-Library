@@ -382,7 +382,16 @@ window.addEventListener('load', async () => {
     console.log('PulmoLearn: Ready — waiting for user interaction to save')
   }, 3500)
 })
-
+// ── Save immediately when navigating home ──
+window.addEventListener('load', () => {
+  document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
+    link.addEventListener('click', async (e) => {
+      e.preventDefault()
+      await saveProgress()
+      window.location.href = link.href
+    })
+  })
+})
 // ── Save on tab close ──
 window.addEventListener('pagehide', () => {
   if (!lessonId || !userId) return
