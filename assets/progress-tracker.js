@@ -378,6 +378,7 @@ window.addEventListener('load', async () => {
   callInit('initializeKnowledgeCheck')
   callInit('initializeGuidedCase')
   callInit('initializePeakFlowActivity')
+  callInit('shuffleAnswerOptions')
   
 // ── Review mode — auto-show correct answers ──
   if (new URLSearchParams(window.location.search).get('review') === 'true') {
