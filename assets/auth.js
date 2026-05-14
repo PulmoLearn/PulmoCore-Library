@@ -25,3 +25,7 @@ export async function requireAccess() {
   }
   return session
 }
+export async function signOut() {
+  await supabase.auth.signOut()
+  window.location.href = '/'
+}
