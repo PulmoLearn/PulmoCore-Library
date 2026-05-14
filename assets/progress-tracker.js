@@ -1,5 +1,5 @@
 /**
- * PulmoLearn Progress Tracker v5
+ * PulmoLearn Progress Tracker v6
  * Add to every lesson page just before </body>:
  *   <script>window.LESSON_ID = 'als'</script>
  *   <script type="module" src="/assets/progress-tracker.js"></script>
@@ -7,7 +7,7 @@
 
 import { supabase } from '/assets/auth.js'
 
-console.log('PulmoLearn: progress-tracker.js v5 loaded')
+console.log('PulmoLearn: progress-tracker.js v6 loaded')
 
 // ── Auth check ──
 const { data: { session } } = await supabase.auth.getSession()
@@ -352,14 +352,28 @@ document.addEventListener('activityComplete', scheduleSave)
 window.addEventListener('load', async () => {
   console.log('PulmoLearn: load event fired')
 
-  // Call initializeProgressiveSections if it hasn't run yet
-  // This ensures sections are hidden before we check progress
+  // Re-run lesson init functions now that DOM is fully ready
+  // These may have run too early during initial script parse
   if (typeof initializeProgressiveSections === 'function') {
     console.log('PulmoLearn: Calling initializeProgressiveSections')
     initializeProgressiveSections()
   } else {
     console.warn('PulmoLearn: initializeProgressiveSections not found!')
   }
+
+  if (typeof initializePrecheck === 'function') {
+    console.log('PulmoLearn: Calling initializePrecheck')
+    initializePrecheck()
+  }
+
+  // Save immediately when user clicks home/dashboard link
+  document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault()
+      saveProgress() // fire and forget
+      window.location.href = link.href
+    })
+  })
 
   setTimeout(async () => {
     console.log('PulmoLearn: 3500ms delay complete — running init')
@@ -382,16 +396,7 @@ window.addEventListener('load', async () => {
     console.log('PulmoLearn: Ready — waiting for user interaction to save')
   }, 3500)
 })
-// ── Save immediately when navigating home ──
-window.addEventListener('load', () => {
-  document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
-    link.addEventListener('click', async (e) => {
-      e.preventDefault()
-      saveProgress() // don't await — fire and forget
-      window.location.href = link.href
-    })
-  })
-})
+
 // ── Save on tab close ──
 window.addEventListener('pagehide', () => {
   if (!lessonId || !userId) return
