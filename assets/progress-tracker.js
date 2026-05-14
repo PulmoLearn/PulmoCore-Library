@@ -238,7 +238,10 @@ async function resetProgress() {
 
 // ── Save progress ──
 let saveTimer = null
-let observerPaused = false
+
+// Start paused — stays paused until lesson finishes initializing
+// This prevents the observer firing during initializeProgressiveSections()
+let observerPaused = true
 
 function scheduleSave() {
   if (observerPaused) return
@@ -280,7 +283,7 @@ async function restoreProgress() {
     .eq('lesson_id', lessonId)
     .single()
 
-  // Only restore if there's meaningful saved progress
+  // Only restore if there is meaningful saved progress
   if (error || !data || data.percent < 10) return
 
   const allSections = getAllSections()
@@ -290,13 +293,11 @@ async function restoreProgress() {
   const sectionsToReveal = Math.round((data.percent / 100) * total)
   if (sectionsToReveal <= 1) return
 
-  observerPaused = true
-
   allSections.forEach((section, index) => {
     if (index < sectionsToReveal) section.classList.remove('lesson-hidden')
   })
 
-  // Remove orphaned continue buttons
+  // Remove orphaned continue buttons from already-completed sections
   allSections.forEach((section, index) => {
     if (index < sectionsToReveal - 1) {
       const btn = section.querySelector('.section-continue')
@@ -305,7 +306,6 @@ async function restoreProgress() {
   })
 
   setTimeout(() => {
-    observerPaused = false
     document.dispatchEvent(new CustomEvent('progressRestored'))
   }, 200)
 
@@ -352,7 +352,11 @@ window.addEventListener('load', async () => {
     } else {
       await restoreProgress()
     }
-    // Extra delay before first save so lesson init is fully complete
+
+    // Enable observer now that lesson init and restore are both complete
+    observerPaused = false
+
+    // Extra delay before first save so everything has settled
     setTimeout(saveProgress, 2000)
   }, 800)
 })
