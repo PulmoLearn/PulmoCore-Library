@@ -228,7 +228,6 @@ async function resetProgress() {
     updated_at: new Date().toISOString()
   }, { onConflict: 'user_id,lesson_id' })
 
-  // Remove ?restart=true from URL without reloading
   const url = new URL(window.location.href)
   url.searchParams.delete('restart')
   window.history.replaceState({}, '', url)
@@ -239,8 +238,7 @@ async function resetProgress() {
 // ── Save progress ──
 let saveTimer = null
 
-// Start paused — stays paused until lesson finishes initializing
-// This prevents the observer firing during initializeProgressiveSections()
+// Start paused — prevents observer firing during initializeProgressiveSections()
 let observerPaused = true
 
 function scheduleSave() {
@@ -276,14 +274,15 @@ async function saveProgress() {
 async function restoreProgress() {
   if (!lessonId || !userId) return
 
+  // maybeSingle() returns null instead of 406 error when no row exists
   const { data, error } = await supabase
     .from('progress')
     .select('percent, completed')
     .eq('user_id', userId)
     .eq('lesson_id', lessonId)
-    .single()
+    .maybeSingle()
 
-  // Only restore if there is meaningful saved progress
+  // No saved progress or error — start fresh, nothing to restore
   if (error || !data || data.percent < 10) return
 
   const allSections = getAllSections()
@@ -309,7 +308,6 @@ async function restoreProgress() {
     document.dispatchEvent(new CustomEvent('progressRestored'))
   }, 200)
 
-  // If lesson was already complete, show banner immediately
   if (data.completed) {
     completionShown = false
     setTimeout(showCompletionBanner, 600)
@@ -356,7 +354,7 @@ window.addEventListener('load', async () => {
     // Enable observer now that lesson init and restore are both complete
     observerPaused = false
 
-    // Extra delay before first save so everything has settled
+    // Delay first save so everything has fully settled
     setTimeout(saveProgress, 2000)
   }, 800)
 })
