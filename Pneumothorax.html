@@ -187,6 +187,27 @@
     @media (max-width: 1100px) { .nav-links { display: none; } .mobile-menu-note { display: block; } .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .side-nav { position: relative; top: auto; } .side-nav a { white-space: normal; } }
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } }
   @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } .mobile-menu-note { display: none; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 <body>
@@ -299,10 +320,10 @@
               <div class="hotspot-demo"><div class="hotspot-lung" aria-label="Simplified pneumothorax lung graphic with clickable hotspots">
                 <img src="pneumothorax-hotspot.png" alt="Pneumothorax hotspot graphic with pleural air, collapsed lung, mediastinum, and chest tube location" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.16;">
                 <svg viewBox="0 0 240 240" fill="none" aria-hidden="true"><path d="M114 30v65c-14-25-43-34-62-20-24 18-26 78-2 105 23 26 55-4 60-57l4-93Z" fill="rgba(75,163,242,.16)" stroke="#4BA3F2" stroke-width="3"/><path d="M126 30v65c14-25 43-34 62-20 24 18 26 78 2 105-23 26-55-4-60-57l-4-93Z" fill="rgba(232,93,93,.10)" stroke="#E85D5D" stroke-width="3"/><path d="M120 27v76m0 0c-22 8-35 26-45 51m45-51c22 8 35 26 45 51" stroke="#1CA7A8" stroke-width="5" stroke-linecap="round"/><path d="M167 76c20 25 18 78-4 98" stroke="#E85D5D" stroke-width="6" stroke-linecap="round" stroke-dasharray="7 7"/><circle cx="120" cy="111" r="12" fill="#1CA7A8"/></svg>
-                <button class="hotspot-btn" style="left:30%; top:35%;" data-title="Normal Pleural Contact" data-text="The lung stays expanded when pleural surfaces remain coupled by negative intrapleural pressure.">1</button>
-                <button class="hotspot-btn" style="right:24%; top:34%;" data-title="Pleural Air" data-text="Air in the pleural space separates pleural layers and prevents the lung from fully expanding.">2</button>
-                <button class="hotspot-btn" style="right:38%; top:56%;" data-title="Collapsed Lung Tissue" data-text="Collapsed lung regions receive less ventilation, which can worsen oxygenation and increase work of breathing.">3</button>
-                <button class="hotspot-btn" style="right:26%; bottom:19%;" data-title="Drainage / Chest Tube Concept" data-text="A chest tube removes pleural air and allows the lung to re-expand when simple observation is not enough.">4</button>
+                <button class="hotspot-btn" aria-label="Hotspot 1: Normal Pleural Contact" style="left:30%; top:35%;" data-title="Normal Pleural Contact" data-text="The lung stays expanded when pleural surfaces remain coupled by negative intrapleural pressure.">1</button>
+                <button class="hotspot-btn" aria-label="Hotspot 2: Pleural Air" style="right:24%; top:34%;" data-title="Pleural Air" data-text="Air in the pleural space separates pleural layers and prevents the lung from fully expanding.">2</button>
+                <button class="hotspot-btn" aria-label="Hotspot 3: Collapsed Lung Tissue" style="right:38%; top:56%;" data-title="Collapsed Lung Tissue" data-text="Collapsed lung regions receive less ventilation, which can worsen oxygenation and increase work of breathing.">3</button>
+                <button class="hotspot-btn" aria-label="Hotspot 4: Drainage / Chest Tube Concept" style="right:26%; bottom:19%;" data-title="Drainage / Chest Tube Concept" data-text="A chest tube removes pleural air and allows the lung to re-expand when simple observation is not enough.">4</button>
               </div><div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div></div><div class="activity-status" id="hotspotStatus">0 / 4 hotspots reviewed</div>
             </article>
           </section>
@@ -448,5 +469,75 @@
   </script>
   <script>window.LESSON_ID = 'pneumothorax'</script>
   <script type="module" src="/assets/progress-tracker.js"></script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body>
 </html>

@@ -184,6 +184,27 @@
     @media (max-width: 1100px) { .component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .three-card-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } .side-nav { position: relative; top: auto; } .side-nav a { white-space: normal; } }
     @media (max-width: 780px) { .top-nav { padding: 14px 16px; } .brand { min-width: auto; } .brand-mark { width: 48px; height: 48px; border-radius: 14px; } .brand-tagline { display: none; } .main-content { padding: 20px 14px 56px; } .case-card, .quiz-card, .glossary-card, .activity-card, .info-card { padding: 18px; border-radius: 18px; } .component-grid, .three-card-grid, .case-meta { grid-template-columns: 1fr !important; } .glossary-controls { grid-template-columns: 1fr; } .hotspot-demo { grid-template-columns: 1fr; } .sort-row { grid-template-columns: 1fr; } table { min-width: 560px; } .course-menu-panel { right: -6px; } }
     @media (max-width: 480px) { .brand-name { font-size: 1.35rem; } h2 { font-size: 1.65rem; } h3 { font-size: 1.25rem; } .btn { width: 100%; justify-content: center; } .section-continue { justify-content: stretch; } .section-continue .btn { width: 100%; } .quiz-option { padding: 11px 12px; } table { min-width: 520px; } }
+  
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 <body>
@@ -342,10 +363,10 @@
               <div class="hotspot-demo">
                 <div class="hotspot-lung" aria-label="Simplified pneumonia lung graphic with clickable hotspots">
                   <img src="pneumonia-lung-hotspots.png" alt="Educational lung diagram showing pneumonia consolidation and airway secretion hotspots" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);">
-                  <button class="hotspot-btn" style="left:59%; top:61%;" data-title="Consolidated Alveoli" data-text="Inflammatory fluid fills alveoli, reducing ventilation and causing crackles, bronchial breath sounds, and hypoxemia.">1</button>
-                  <button class="hotspot-btn" style="left:42%; top:54%;" data-title="Airway Secretions" data-text="Secretions can increase resistance, worsen atelectasis, and require cough assessment, airway clearance, or suctioning.">2</button>
-                  <button class="hotspot-btn" style="left:31%; top:35%;" data-title="V/Q Mismatch" data-text="Blood continues flowing past poorly ventilated lung units, causing low oxygen levels and possible shunt-like physiology.">3</button>
-                  <button class="hotspot-btn" style="right:24%; bottom:20%;" data-title="Escalation Risk" data-text="Worsening oxygenation, rising CO₂, fatigue, or altered mental status signals possible respiratory failure.">4</button>
+                  <button class="hotspot-btn" aria-label="Hotspot 1: Consolidated Alveoli" style="left:59%; top:61%;" data-title="Consolidated Alveoli" data-text="Inflammatory fluid fills alveoli, reducing ventilation and causing crackles, bronchial breath sounds, and hypoxemia.">1</button>
+                  <button class="hotspot-btn" aria-label="Hotspot 2: Airway Secretions" style="left:42%; top:54%;" data-title="Airway Secretions" data-text="Secretions can increase resistance, worsen atelectasis, and require cough assessment, airway clearance, or suctioning.">2</button>
+                  <button class="hotspot-btn" aria-label="Hotspot 3: V/Q Mismatch" style="left:31%; top:35%;" data-title="V/Q Mismatch" data-text="Blood continues flowing past poorly ventilated lung units, causing low oxygen levels and possible shunt-like physiology.">3</button>
+                  <button class="hotspot-btn" aria-label="Hotspot 4: Escalation Risk" style="right:24%; bottom:20%;" data-title="Escalation Risk" data-text="Worsening oxygenation, rising CO₂, fatigue, or altered mental status signals possible respiratory failure.">4</button>
                 </div>
                 <div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br>Click all four hotspots to complete this activity.</div>
               </div>
@@ -656,5 +677,75 @@
   </script>
   <script>window.LESSON_ID = 'pneumonia'</script>
   <script type="module" src="/assets/progress-tracker.js"></script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body>
 </html>

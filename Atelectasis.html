@@ -356,7 +356,28 @@
       .course-menu-button { padding: 9px 12px; }
     }
 
-</style>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 <body>
 <div class="page-shell">
@@ -546,10 +567,10 @@
 <ellipse cx="162" cy="162" fill="#E85D5D" opacity=".35" rx="25" ry="14"></ellipse>
 <circle cx="120" cy="116" fill="#1CA7A8" r="14"></circle>
 </svg>
-<button class="hotspot-btn" data-text="Collapsed alveoli receive little ventilation, reducing gas exchange and lowering lung volume." data-title="Collapsed Alveoli" style="left:28%; top:62%;">1</button>
-<button class="hotspot-btn" data-text="Secretions can obstruct an airway so distal alveoli absorb gas and collapse." data-title="Mucus Plug" style="left:43%; top:48%;">2</button>
-<button class="hotspot-btn" data-text="Collapsed areas become harder to inflate, increasing work of breathing." data-title="Reduced Compliance" style="right:27%; top:65%;">3</button>
-<button class="hotspot-btn" data-text="Perfusion may continue through poorly ventilated regions, causing hypoxemia." data-title="V/Q Mismatch" style="right:39%; bottom:19%;">4</button>
+<button class="hotspot-btn" aria-label="Hotspot 1: Collapsed Alveoli" data-text="Collapsed alveoli receive little ventilation, reducing gas exchange and lowering lung volume." data-title="Collapsed Alveoli" style="left:28%; top:62%;">1</button>
+<button class="hotspot-btn" aria-label="Hotspot 2: Mucus Plug" data-text="Secretions can obstruct an airway so distal alveoli absorb gas and collapse." data-title="Mucus Plug" style="left:43%; top:48%;">2</button>
+<button class="hotspot-btn" aria-label="Hotspot 3: Reduced Compliance" data-text="Collapsed areas become harder to inflate, increasing work of breathing." data-title="Reduced Compliance" style="right:27%; top:65%;">3</button>
+<button class="hotspot-btn" aria-label="Hotspot 4: V/Q Mismatch" data-text="Perfusion may continue through poorly ventilated regions, causing hypoxemia." data-title="V/Q Mismatch" style="right:39%; bottom:19%;">4</button>
 </div>
 <div class="hotspot-panel example-box soft-blue" id="hotspotPanel"><strong>Start here:</strong><br/>Click all four hotspots to complete this activity.</div>
 </div>
@@ -1181,5 +1202,75 @@
   </script>
     <script>window.LESSON_ID = 'atelectasis'</script>
   <script type="module" src="/assets/progress-tracker.js"></script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body>
 </html>
