@@ -1,31 +1,649 @@
+
+Curriculum Website
+/
+Claude finished the response
+You said: After uploading all the updated courses and trying to access today I get this upon sign up: Understand this error
+After uploading all the updated courses and trying to access today I get this upon sign up: Understand this error
+
+9:15 AM
+Claude responded: It looks like you forgot to attach the screenshot or error message!
+
+Investigated missing error details from course upload issue
+Investigated missing error details from course upload issue
+It looks like you forgot to attach the screenshot or error message! Could you share the error (as an image, paste the text, or describe what you're seeing) so I can help you understand it?
+
+You said: Failed to load resource: the server responded with a status of 404 ()
+Failed to load resource: the server responded with a status of 404 ()
+
+9:15 AM
+Claude responded: 404 Error — "Not Found"
+
+Diagnosed server error and prepared explanation
+Diagnosed server error and prepared explanation
+404 Error — "Not Found"
+A 404 means your browser is trying to load a resource (a file, image, script, API endpoint, etc.) that doesn't exist on the server. The server is reachable, but it can't find what's being requested.
+
+In your context (after uploading updated courses), the most likely causes are:
+A file path changed or broke during the upload
+A course asset (image, video, JS/CSS file) is referenced by the old path but was moved or renamed.
+A file wasn't uploaded at all
+Some files may have been missed during the upload, so links pointing to them return 404.
+A sign-up page or API endpoint is missing
+The signup flow may call a script or API route that no longer exists or was accidentally deleted/overwritten.
+Case sensitivity mismatch
+Servers (especially Linux) are case-sensitive. Course.jpg ≠ course.jpg. A rename during upload could break references.
+Caching old paths
+Your browser or CDN may be caching references to old file paths that no longer exist.
+How to pinpoint the exact problem:
+Open your browser's DevTools → F12 or right-click → Inspect
+Go to the Network tab
+Reload the page / try signing up again
+Look for any request shown in red with status 404
+Click on it — the URL it tried to load will tell you exactly what file/endpoint is missing
+Once you find the exact URL that's 404-ing, I can help you track down why and fix it. Can you share what that URL looks like?
+
+You said: https://pulmolearn.
+https://pulmolearn.github.io/signup.html
+Request Method
+GET
+Status Code
+404 Not Found
+Remote Address
+[2606:50c0:8002::153]:443
+Referrer Policy
+strict-origin-when-cross-origin
+﻿
+__signup.html:1__  GET __https://pulmolearn.github.io/signup.html__ 404 (Not Found)
+4
+signup.html:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+
+Show more
+9:18 AM
+Claude responded: The Problem is Clear
+
+Diagnosed GitHub Pages file-not-found error
+Diagnosed GitHub Pages file-not-found error
+The Problem is Clear
+Your signup.html file does not exist at https://pulmolearn.github.io/signup.html — GitHub Pages can't find it.
+
+Most Likely Causes on GitHub Pages
+The file wasn't pushed to the repository
+You may have uploaded course files but forgot to include signup.html in the commit/push.
+Wrong filename or casing
+GitHub Pages (Linux server) is case-sensitive. If your file is named Signup.html or SignUp.html, it won't match signup.html.
+File is in the wrong folder
+If signup.html is inside a subfolder (e.g., /pages/signup.html), it won't be found at the root URL.
+Wrong branch being served
+GitHub Pages may be serving from main but your file was pushed to a different branch.
+How to Fix It — Step by Step
+Go to your GitHub repo → https://github.com/pulmolearn/pulmolearn.github.io
+Look for signup.html in the file list — does it exist?
+❌ Not there → you need to upload/push it
+✅ There but wrong name → rename it to exactly signup.html (all lowercase)
+Check Settings → Pages → confirm it's deploying from the right branch and root folder (/ (root))
+After any fix, wait 1–2 minutes for GitHub Pages to redeploy
+The Second Error Explained
+Uncaught (in promise) Error: A listener indicated an asynchronous response 
+by returning true, but the message channel closed before a response was received
+This is a browser extension conflict (likely a Chrome extension on your end) — it's not your site's fault and not something you need to fix on the server.
+
+Can you check your GitHub repo and confirm if signup.html is actually there?
+
+You said: Sign up is in there and was working before, maybe the 508 accessibility patch messed it up?
+Sign up is in there and was working before, maybe the 508 accessibility patch messed it up?
+
+9:20 AM
+Claude responded: Let me fetch the live site and the signup page to see what's actually happening.
+
+Investigated accessibility patch's impact on signup functionality
+Investigated accessibility patch's impact on signup functionality
+Let me fetch the live site and the signup page to see what's actually happening.
+
+
+Investigated patch-related file corruption and formulated diagnostic guidance
+Investigated patch-related file corruption and formulated diagnostic guidance
+The page is genuinely returning a live 404 right now — meaning even though the file exists in the repo, GitHub Pages isn't serving it. The 508 patch is a very likely culprit. Here's why and what to check:
+
+What the 508 Patch May Have Done
+Accidentally deleted or overwrote signup.html during the upload
+If the patch was applied as a bulk file upload, it may have replaced the repo contents without including signup.html
+Introduced a broken redirect
+If the patch added a _redirects file, 404.html, or modified .htaccess/jekyll config, it could be intercepting the route
+Renamed the file
+Some accessibility tools rename files (e.g., signup.html → sign-up.html) to match best practices
+Check These in Your GitHub Repo Right Now
+Go to https://github.com/pulmolearn/pulmolearn.github.io and look for:
+
+What to check	What to look for
+signup.html in file list	Is it still there after the patch commit?
+Recent commits	Click "commits" — what files did the patch change/delete?
+_redirects or 404.html	Did the patch add either of these?
+_config.yml	Did anything change in the Jekyll config?
+Quickest Fix
+Go to Commits, find the commit before the 508 patch, and compare it to the current state. If signup.html was removed or modified, you can restore the previous version directly in GitHub by clicking the file → History → select old version → Restore.
+
+Can you share what you see in the recent commits, or paste the list of files the patch modified?
+
+You said: The file is called signup.
+
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>PulmoLearn | Create Account</title> <meta name="robots" content="noindex, nofollow" /> <link rel="icon" type="image/x-icon" href="/assets/
+
+pasted
+
+The file is called signup.html and this is the code inside it:
+
+9:21 AM
+Claude responded: Good News — The Code Itself is Fine
+
+Diagnosed GitHub Pages deployment issue, ruled out code problems
+Diagnosed GitHub Pages deployment issue, ruled out code problems
+Good News — The Code Itself is Fine
+The signup.html file is not broken by the 508 patch. The patch added hotspot keyboard navigation code that only targets .hotspot-demo elements — those don't exist on the signup page, so it simply runs and does nothing. It won't cause a 404.
+
+The 404 is a GitHub Pages Deployment Problem
+The file exists, but GitHub Pages isn't serving it. This means the deployment either failed or didn't pick up the new file.
+
+Check This First — GitHub Actions Tab
+Go to your repo → click the "Actions" tab
+Look at the most recent workflow run
+Is there a red ✗ (failed) or orange spinner (still running)?
+A failed Jekyll build will cause pages to either not update or go missing entirely.
+
+What the 508 Patch May Have Broken Elsewhere
+Even though signup.html is fine, if the patch also touched another file (like _config.yml, a layout file, or a course page), it could have broken the entire Jekyll build, taking signup.html down with it.
+
+Quick Checklist
+Step	Where to look
+Check deployment status	Repo → Actions tab
+Confirm file is committed	Repo file list — does signup.html show the latest commit message?
+Look for Jekyll build errors	Actions → click the failed run → expand logs
+Check if other pages are also 404	Try https://pulmolearn.github.io/login.html
+Can you go to the Actions tab and tell me if the latest deployment shows a green ✓, red ✗, or is still running?
+
+You said: There are no errors in actions, it looks like all my pages have 404 besides the index
+There are no errors in actions, it looks like all my pages have 404 besides the index
+
+9:25 AM
+Claude responded: That's a very telling clue — only index.
+
+Diagnosed GitHub Pages routing issue, investigated configuration problems
+Diagnosed GitHub Pages routing issue, investigated configuration problems
+That's a very telling clue — only index.html works, everything else is 404. This points to one of two likely causes from the patch upload:
+
+Most Likely Cause: Files Got Pushed Into a Subfolder
+When uploading multiple files via GitHub's UI, it's easy to accidentally create a folder. Your files may now be at:
+
+/508-patch/signup.html
+/508-patch/login.html
+instead of the repo root. Index works because it was already there untouched.
+
+Check: In your GitHub repo, do you see a folder in the file list instead of all your .html files sitting at the root level?
+
+Second Likely Cause: _config.yml Was Added or Modified
+If the patch introduced a _config.yml with a baseurl or exclude setting, it can break all page routing except index.
+
+Check: Do you see a _config.yml file in your repo? If so, open it and look for:
+
+yaml
+baseurl: "/something"   # ← this breaks everything
+exclude: [signup.html, login.html...]  # ← this hides files
+If baseurl is anything other than "", that's your problem.
+
+Quick Fix Options
+Cause	Fix
+Files in a subfolder	Move all .html files back to the repo root
+Wrong baseurl in _config.yml	Set baseurl: "" or delete the file
+_config.yml has an exclude list	Remove the excluded filenames
+Can you look at the root of your repo and tell me what you see — are your HTML files listed directly, or is there a folder containing them?
+
+You said: There is no subfolder for all the files, there is only the .
+There is no subfolder for all the files, there is only the .github/workflows with the 508 file, assets, and api folders. The rest are in the root.
+
+9:30 AM
+Claude responded: That's very helpful.
+
+Investigated workflow file and GitHub Pages configuration issues
+Investigated workflow file and GitHub Pages configuration issues
+That's very helpful. The .github/workflows 508 file is now the prime suspect. A workflow file can control what gets deployed — if it's only copying/deploying certain files, everything else would 404.
+
+Two Things to Check Right Now
+1. Open the 508 workflow file
+Go to .github/workflows → open the 508 file → paste the contents here. A workflow that does something like copy index.html or deploys only specific files would explain exactly this.
+
+2. Check GitHub Pages Settings
+Go to Settings → Pages and tell me:
+
+Source — is it set to Deploy from a branch or GitHub Actions?
+Branch — which branch and folder (/ (root) or /docs)?
+Why This Matters
+If the 508 workflow changed the deployment method from "deploy from branch" to "GitHub Actions", but the workflow only moves some files to the deploy output, GitHub Pages would only serve what the workflow explicitly included — which may have only been index.html.
+
+This is the most consistent explanation for:
+
+✅ Index works
+❌ Everything else 404s
+✅ No build errors
+✅ All files visible in repo root
+Can you paste the workflow file contents and the Pages settings?
+
+You said: This is listed next to all the lessons in the repository for last action" ci: apply 508 accessibility patches to lesson HTML files
+This is listed next to all the lessons in the repository for last action" ci: apply 508 accessibility patches to lesson HTML files
+[main](https://github.com/PulmoLearn/PulmoCore-Library/compare/main)
+
+1 parent b849cc5 commit 038d1ba
+44 files changed
+
+9:32 AM
+Claude responded: This is a critical clue.
+
+Investigated repository deployment discrepancy between two GitHub locations
+Investigated repository deployment discrepancy between two GitHub locations
+This is a critical clue. The 508 patch touched 44 files in the PulmoCore-Library repo, and your site is deployed via a workflow. The workflow likely only deployed the lesson files it patched — overwriting your live site with just those files, leaving signup, login, dashboard, etc. behind.
+
+What Almost Certainly Happened
+The workflow ran something like:
+
+Applied 508 patches to 44 lesson HTML files
+Deployed only those 44 files to GitHub Pages
+All other pages (signup, login, dashboard, payment) were wiped from the live site
+index.html survived only because it was one of the 44 or it was already cached
+Fix It — Two Options
+Option A — Quick Fix (Restore missing pages)
+Go to commit b849cc5 (the one before the 508 patch) and check which non-lesson files existed. Then re-upload or restore:
+
+signup.html
+login.html
+dashboard.html
+payment.html
+Any other non-lesson pages
+Option B — Proper Fix (Fix the workflow)
+Open the 508 workflow file and make sure the deploy step copies all files, not just the patched ones. It should deploy the entire repo, not a subset.
+
+Right Now — Can You Do This?
+Go to the commit 038d1ba on GitHub and click "44 files changed" — scroll to the bottom and see if signup.html, login.html, etc. are absent from the list. That will confirm these files weren't included in the deploy.
+
+Can you confirm which files were in those 44?
+
+You said: the signup, success, privacy, etc all say the same
+the signup, success, privacy, etc all say the same
+
+9:33 AM
+Claude responded: So the 508 patch did touch signup, privacy, success, etc.
+
+Identified repository mismatch and workflow deployment issue
+Identified repository mismatch and workflow deployment issue
+So the 508 patch did touch signup, privacy, success, etc. — they're all in the repo. That rules out missing files entirely.
+
+This now points directly at the workflow file as the culprit. The patch must have added a workflow that runs on push and deploys only certain files (like just index.html or the lessons), overwriting the live site partially.
+
+You Need to Show Me the Workflow File
+Go to:
+
+.github/workflows/ → open the 508 file
+Click on it, then click the Raw button and paste the contents here. That file is almost certainly doing something like:
+
+yaml
+- run: cp lessons/*.html dist/     # ← only copies lessons
+- run: cp index.html dist/          # ← only copies index
+# signup.html, login.html etc. never copied to deploy output
+While You're There — Also Check
+Settings → Pages → Source
+
+It likely got switched from:
+
+✅ Deploy from branch (main) ← what it was before
+❌ GitHub Actions ← what the 508 patch changed it to
+If it was switched to GitHub Actions, the workflow now controls everything that gets served — and if the workflow is incomplete, most of your pages vanish.
+
+That one settings change + incomplete workflow = exactly what you're seeing.
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PulmoCore — 508 Accessibility Auto-Patch
+#
+# Runs whenever HTML lesson files are pushed to the repository.
+# Applies aria-labels, focus CSS, and keyboard nav JS to every lesson,
+# then commits the changes back automatically.
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: 508 Accessibility Patch
+
+on:
+  push:
+    paths:
+      - '**.html'          # only trigger when HTML files change
+  workflow_dispatch:       # also allows manual "Run workflow" from GitHub UI
+
+jobs:
+  patch-accessibility:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write      # needed to push the commit back
+
+    steps:
+      # 1. Check out the repo
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      # 2. Run the accessibility script against all HTML in the repo
+      - name: Run 508 accessibility patch
+        run: python3 add_508_accessibility.py .
+
+      # 3. Commit and push any changes
+      - name: Commit patched files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit — all files already 508 compliant."
+          else
+            git commit -m "ci: apply 508 accessibility patches to lesson HTML files"
+            git push
+          fi
+Show more
+9:35 AM
+Claude responded: The Workflow is NOT the Deployment Problem
+
+Investigated workflow mechanics and pinpointed accessibility script as culprit
+Investigated workflow mechanics and pinpointed accessibility script as culprit
+The Workflow is NOT the Deployment Problem
+This workflow only patches and commits files — it doesn't touch GitHub Pages deployment at all. So this isn't causing the 404s directly.
+
+The real suspect is now the Python script it runs:
+
+yaml
+- run: python3 add_508_accessibility.py .
+This script ran against every HTML file in your repo — including signup, login, payment, etc. If the script has a bug that corrupts non-lesson pages, that would explain exactly why everything except index is broken.
+
+Two Things Needed Right Now
+1. Share add_508_accessibility.py
+That script is sitting in your repo root. Open it and paste it here — it's the most likely cause.
+
+2. Check for a .nojekyll file
+Look in your repo root — is there a file called exactly .nojekyll? If the script accidentally deleted it, GitHub's Jekyll processor would kick in and silently break pages it can't process.
+
+Also Confirm
+Go to Settings → Pages → Source and tell me:
+
+Is it Deploy from a branch or GitHub Actions?
+Which branch?
+The workflow itself is clean — the answer is almost certainly inside add_508_accessibility.py. Can you paste that script?
+
+
+""" PulmoCore — 508 Accessibility Enhancement Script Run automatically via GitHub Actions, or manually: python3 add_508_accessibility.py [folder] Adds to every lesson HTML file: 1. aria-label on hotspot buttons (e.g. "Hotspot 1: Droplet Nuclei") 2. Focus-visible CSS (amber o
+
+pasted
+
+9:37 AM
+Claude responded: The Script is Clean — But I Just Noticed Something Critical
+
+I notice the user prompt is empty, so I cannot determine the primary language or provide an appropriate summary. Please provide the user prompt so I can create an accurate summary in the correct language
+I notice the user prompt is empty, so I cannot determine the primary language or provide an appropriate summary. Please provide the user prompt so I can create an accurate summary in the correct language
+The Script is Clean — But I Just Noticed Something Critical
+The Python script is fine. It only adds CSS and JS, never deletes or breaks anything. But look at this link you shared earlier:
+
+https://github.com/PulmoLearn/PulmoCore-Library/compare/main
+The 508 patch ran on PulmoCore-Library — a completely different repo from your live site (pulmolearn.github.io). This means the 508 patch likely has nothing to do with your 404s at all.
+
+The Real Question Is: What Changed in pulmolearn.github.io?
+Go to https://github.com/PulmoLearn/pulmolearn.github.io (your actual site repo) and check:
+
+1. Recent Commits
+What was the last commit made to this repo, and when? Did anything change around the time the 404s started?
+
+2. Settings → Pages Source
+This is now the most important thing to check:
+
+Is it set to "Deploy from a branch" or "GitHub Actions"?
+If branch — which branch (main?) and which folder (/ root)?
+3. Is there a 404.html file?
+If someone added a 404.html that redirects or renders blank, every missing route hits it silently.
+
+The 508 patch is a red herring. Your site repo (pulmolearn.github.io) has its own separate issue — likely a Pages source misconfiguration or a bad recent commit directly to that repo. Can you check those settings?
+
+You said: The action I committed after the 508 patch was uploading all the images.
+The action I committed after the 508 patch was uploading all the images. I briefly checked and the lesson file was working and images visible but also noticed the continue buttons were not showing again. Closed it for the night and then all 404 this morning.
+
+9:44 AM
+Claude responded: That's the Key — The Image Upload Broke It
+
+Investigated image upload as deployment failure culprit
+Investigated image upload as deployment failure culprit
+That's the Key — The Image Upload Broke It
+When you upload files via GitHub's web UI, it's very easy to accidentally cause one of these:
+
+Most Likely: The Upload Committed to the Wrong Branch
+GitHub's upload UI sometimes defaults to creating a new branch instead of committing directly to main. If your images went to a branch like patch-1 or upload-files, that commit may have also moved your HTML files there, leaving main without them.
+
+Check right now:
+
+In your pulmolearn.github.io repo, click the branch dropdown (top left, says "main")
+Do you see any extra branches that weren't there before?
+Second Likely: Repo Exceeded GitHub Pages Size Limit
+GitHub Pages has a 1GB soft limit. A large image upload could have pushed you over, causing the build to silently fail for all pages except the cached index.html.
+
+Check: Go to Settings → Pages — is there any warning message?
+
+Also Explains "Continue Buttons Not Showing"
+That was likely a pre-existing separate issue unrelated to the 404s — don't conflate the two problems or you'll chase the wrong fix.
+
+Right Now, Do This First
+Go to https://github.com/PulmoLearn/pulmolearn.github.io/branches and tell me:
+
+How many branches exist?
+Are there any branches created recently besides main?
+That one check will almost certainly identify the problem.
+
+You said: no main is the only branch
+no main is the only branch
+
+9:45 AM
+Claude responded: Then We Need to Look at the Exact Image Upload Commit
+
+Investigated GitHub Pages 404 errors and commit history changes
+Investigated GitHub Pages 404 errors and commit history changes
+Then We Need to Look at the Exact Image Upload Commit
+Go to https://github.com/PulmoLearn/pulmolearn.github.io/commits/main and open the most recent commit (the image upload one). Click it and tell me:
+
+How many files changed?
+Does it show any red deleted files (shown with a minus sign)?
+Is there anything other than image files in the list?
+Also Check These Two Things Right Now
+1. Is there a _config.yml in your repo root?
+GitHub Pages runs Jekyll. If the image upload accidentally created or modified a _config.yml, it could be excluding all your HTML files. Look for it in the file list.
+
+2. Check your assets folder
+Open the assets folder — are your .html files still in the root, or did anything shift during the upload? Specifically look for:
+
+signup.html
+login.html
+dashboard.html
+in the root, not inside any folder.
+
+Why Index Alone Still Works
+index.html is special — GitHub Pages serves it as a fallback no matter what. Even a badly broken Jekyll config will usually still serve index.html. Every other page needs clean routing to work, which is why they're all failing while index survives.
+
+The answer is in that image upload commit. Can you open it and tell me what files it touched?
+
+You said: No warning messages in Github pages
+No warning messages in Github pages
+
+9:47 AM
+Claude responded: We Need to See Your Pages Source Setting Directly
+
+Investigated missing warnings and identified critical configuration details
+Investigated missing warnings and identified critical configuration details
+We Need to See Your Pages Source Setting Directly
+You've checked warnings but haven't confirmed the actual source setting yet. This is now the most important thing.
+
+Go to Settings → Pages and tell me exactly what you see under "Build and deployment":
+
+It will look like one of these two:
+
+Option A — Branch deployment
+Source: Deploy from a branch
+Branch: main / (root)
+Option B — GitHub Actions
+Source: GitHub Actions
+Why This Matters So Much
+If it says GitHub Actions but there's no workflow in pulmolearn.github.io that actually deploys the site, GitHub Pages would only serve whatever was last successfully deployed — which may have been just index.html from a previous build.
+
+The image upload commit may have:
+
+Triggered a new deployment attempt
+That deployment used GitHub Actions as the source
+But with no deploy workflow, it only served index.html
+Also — Can You Paste the URL You See in Pages Settings?
+It will say something like:
+
+Your site is live at https://pulmolearn.github.io
+And just below that is the Source dropdown. That one screenshot or copy-paste will solve this. What does it say?
+
+Screenshot 2026-05-15 094808.png
+9:48 AM
+Claude responded: You're in the Wrong Repo
+
+The user prompt is empty, so I cannot determine the primary language. However, based on the thinking block alone, here is a summary: Identified repository confusion and redirected toward correct settings
+The user prompt is empty, so I cannot determine the primary language. However, based on the thinking block alone, here is a summary: Identified repository confusion and redirected toward correct settings
+You're in the Wrong Repo
+This screenshot shows PulmoCore-Library/assets — that's your content/lessons repo, not your live website.
+
+You need to go to your other repo — the one that actually runs the website.
+
+Go Here Right Now
+👉 https://github.com/PulmoLearn/pulmolearn.github.io
+
+That repo has your signup.html, index.html, etc. in the root.
+
+Then once you're there:
+
+Click Settings (top tab)
+Click Pages (left sidebar)
+Screenshot or copy what it says under "Build and deployment → Source"
+You Have Two Separate Repos
+Repo	Purpose
+PulmoCore-Library	Lesson content, assets, 508 patch — not the live site
+pulmolearn.github.io	Your actual live website — this is what's broken
+Everything we need to look at to fix the 404s is in pulmolearn.github.io. That's where the Pages settings, the recent commits, and the image upload all need to be checked. Can you navigate there and share the Pages settings?
+
+You said: I think i figured it out.
+I think i figured it out. My root is __https://pulmolearn.github.io/PulmoCore-Library/____ but the link to my other pages the Pulmocore-Library is dropped__
+
+9:50 AM
+Claude responded: You Found It — Classic GitHub Pages baseurl Problem
+
+Diagnosed GitHub Pages baseurl configuration issue
+Diagnosed GitHub Pages baseurl configuration issue
+You Found It — Classic GitHub Pages baseurl Problem
+Your site is a project page, not a root user page. That means:
+
+✅ Correct URL: https://pulmolearn.github.io/PulmoCore-Library/signup.html
+❌ What your links use: /signup.html → resolves to https://pulmolearn.github.io/signup.html → 404
+Every absolute path link starting with / drops the /PulmoCore-Library/ prefix.
+
+The Fix
+You have two options:
+
+Option A — Quickest Fix: Add baseurl to _config.yml
+Create or edit _config.yml in your repo root and add:
+
+yaml
+baseurl: "/PulmoCore-Library"
+Then change all your links from /signup.html to {{ site.baseurl }}/signup.html — but this only works if you're using Jekyll templating.
+
+Option B — Simplest Fix: Change All Links to Relative Paths
+In every HTML file, change absolute paths to relative:
+
+html
+<!-- Change this -->
+href="/signup.html"
+href="/assets/auth.js"
+
+<!-- To this -->
+href="./signup.html"
+href="./assets/auth.js"
+Option C — Cleanest Long-Term Fix
+Move everything to the pulmolearn.github.io repo root so your site truly lives at https://pulmolearn.github.io/ with no subfolder.
+
+Why It Broke Now
+The 508 patch script ran on all files and likely rewrote some paths, or the image upload was the first time you accessed the site and noticed it. The baseurl problem was always there — you just hadn't hit it on every page until now.
+
+Option B (relative paths) is your fastest fix — would you like help running a script to update all the links at once?
+
+You said: Here is my current index.
+Here is my current index.html, can you fix the links?
+
+9:55 AM
+Claude responded: It looks like you forgot to attach the index.
+It looks like you forgot to attach the index.html file! Please paste the code or upload the file and I'll fix all the links right away.
+
+
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>PulmoLearn | Complete RT Curriculum & NBRC Board Prep</title> <!-- SEO --> <meta name="description" content="The complete respiratory th
+
+pasted
+
+9:55 AM
+Claude responded: I can see all the broken links.
+
+Identified and catalogued path corrections systematically
+Identified and catalogued path corrections systematically
+I can see all the broken links. Every path starting with / needs /PulmoCore-Library added. Let me fix them all now.
+
+
+Ran a command, created a file, read a file
+Ran a command, created a file, read a file
+Here's the fixed file. Every broken path has been updated — here's a summary of what changed:
+
+Before	After
+/signup.html (×4)	/PulmoCore-Library/signup.html
+/asthmasample.html	/PulmoCore-Library/asthmasample.html
+/privacy.html	/PulmoCore-Library/privacy.html
+/terms.html	/PulmoCore-Library/terms.html
+/assets/favicon.png (×2)	/PulmoCore-Library/assets/favicon.png
+voucher redirect in JS	/PulmoCore-Library/signup.html?voucher=...
+Upload this to replace your current index.html in the repo. You'll need to do the same fix across your other pages (signup.html, login.html, dashboard.html, etc.) — any link starting with / needs /PulmoCore-Library prepended. Want me to fix those too once you share them?
+
+
+Index
+Code · HTML 
+
+Want to be notified when Claude responds?
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+Index · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PulmoLearn | Complete RT Curriculum & NBRC Board Prep</title>
-
+ 
   <!-- SEO -->
   <meta name="description" content="The complete respiratory therapy curriculum — 32 disease modules plus core RT content covering patient assessment, physiology, equipment, and ventilator management. Built to make you a better clinician and pass the NBRC boards." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://pulmolearn.com/" />
-
+ 
   <!-- Open Graph (Google + social sharing) -->
   <meta property="og:title" content="PulmoLearn | Complete RT Curriculum & NBRC Board Prep" />
   <meta property="og:description" content="32 respiratory disease modules plus core RT curriculum — patient assessment, physiology, equipment, and ventilator management. Self-paced, NBRC board-aligned, lifetime access." />
   <meta property="og:url" content="https://pulmolearn.com" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="PulmoLearn" />
-
+ 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="PulmoLearn | Master Respiratory Therapy" />
   <meta name="twitter:description" content="Clinically accurate pulmonary disease lessons built for respiratory therapists and students." />
-
+ 
   <!-- Favicon (place a favicon.png in your /assets folder) -->
-  <link rel="icon" type="image/png" href="/assets/favicon.png" />
-  <link rel="apple-touch-icon" href="/assets/favicon.png" />
-
+  <link rel="icon" type="image/png" href="/PulmoCore-Library/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="/PulmoCore-Library/assets/favicon.png" />
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -47,13 +665,13 @@
       --font-body: "Atkinson Hyperlegible", Arial, sans-serif;
       --font-mono: "IBM Plex Mono", monospace;
     }
-
+ 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { background: var(--core-navy); color: var(--white); font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
     button { cursor: pointer; font: inherit; }
-
+ 
     /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 50;
@@ -70,7 +688,7 @@
     .nav-link:hover { opacity: 1; }
     .nav-cta { background: var(--pulmo-teal); color: var(--white); border-radius: 10px; padding: 10px 20px; font-weight: 800; font-size: .95rem; transition: background .2s; }
     .nav-cta:hover { background: var(--pulmo-teal-dark); }
-
+ 
     /* ── HERO ── */
     .hero {
       min-height: 92vh;
@@ -149,7 +767,7 @@
       transition: border-color .2s, color .2s;
     }
     .btn-ghost:hover { border-color: rgba(255,255,255,0.6); color: var(--white); }
-
+ 
     .hero-stats {
       display: flex; gap: clamp(24px,4vw,56px); margin-top: 64px; flex-wrap: wrap; justify-content: center;
       animation: fadeUp .6s .4s ease both;
@@ -157,14 +775,14 @@
     .hero-stat { text-align: center; }
     .hero-stat strong { display: block; font-family: var(--font-heading); font-size: clamp(1.8rem,3vw,2.8rem); font-weight: 800; letter-spacing: -0.04em; color: var(--white); }
     .hero-stat span { font-size: .85rem; color: rgba(255,255,255,0.55); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
-
+ 
     /* ── SECTION BASE ── */
     section { padding: clamp(64px,8vw,120px) clamp(20px,5vw,64px); }
     .section-label { font-family: var(--font-mono); font-size: .78rem; font-weight: 600; color: var(--pulmo-teal); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px; }
     .section-title { font-family: var(--font-heading); font-size: clamp(2rem,4vw,3.2rem); font-weight: 800; letter-spacing: -0.045em; line-height: 1.1; }
     .section-title em { font-style: normal; color: var(--pulmo-teal); }
     .section-sub { color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 1.05rem; max-width: 560px; }
-
+ 
     /* ── WHAT YOU GET ── */
     .features-section { background: var(--core-navy-2); }
     .features-inner { max-width: 1200px; margin: 0 auto; }
@@ -189,7 +807,7 @@
     }
     .feature-card h3 { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px; }
     .feature-card p { color: rgba(255,255,255,0.58); font-size: .95rem; line-height: 1.65; }
-
+ 
     /* ── CURRICULUM PREVIEW ── */
     .curriculum-section { background: var(--core-navy); }
     .curriculum-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
@@ -227,7 +845,7 @@
     .cc-section.done { color: rgba(255,255,255,0.9); }
     .cc-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0; }
     .cc-section.done .cc-dot { background: var(--pulmo-teal); }
-
+ 
     /* ── PRICING ── */
     .pricing-section { background: var(--core-navy-2); }
     .pricing-inner { max-width: 1100px; margin: 0 auto; }
@@ -271,7 +889,7 @@
     .btn-pricing.primary:hover { background: var(--pulmo-teal-dark); }
     .btn-pricing.outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.25); }
     .btn-pricing.outline:hover { border-color: rgba(255,255,255,0.5); }
-
+ 
     /* Voucher box */
     .voucher-box {
       max-width: 480px; margin: 40px auto 0;
@@ -295,7 +913,7 @@
     .voucher-feedback { min-height: 22px; font-size: .85rem; font-weight: 700; margin-top: 10px; }
     .voucher-feedback.valid { color: var(--airway-mint); }
     .voucher-feedback.invalid { color: #F2B5B5; }
-
+ 
     /* ── TESTIMONIALS ── */
     .social-section { background: var(--core-navy); }
     .social-inner { max-width: 1100px; margin: 0 auto; }
@@ -313,7 +931,7 @@
     .t-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--pulmo-teal-light); border: 1px solid rgba(28,167,168,0.3); display: grid; place-items: center; font-size: 1rem; }
     .t-name { font-weight: 700; font-size: .9rem; }
     .t-role { font-size: .78rem; color: rgba(255,255,255,0.45); }
-
+ 
     /* ── FAQ ── */
     .faq-section { background: var(--core-navy-2); }
     .faq-inner { max-width: 720px; margin: 0 auto; }
@@ -331,7 +949,7 @@
     .faq-item.open .faq-question::after { transform: rotate(45deg); }
     .faq-answer { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
     .faq-answer p { padding: 0 22px 20px; color: rgba(255,255,255,0.6); font-size: .95rem; line-height: 1.7; }
-
+ 
     /* ── CTA BANNER ── */
     .cta-section {
       background: linear-gradient(135deg, var(--pulmo-teal-dark) 0%, #0d7a7b 50%, var(--core-navy-2) 100%);
@@ -347,7 +965,7 @@
     .cta-section h2 { font-family: var(--font-heading); font-size: clamp(2rem,4vw,3rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 16px; position: relative; }
     .cta-section p { color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-bottom: 36px; position: relative; }
     .cta-section .btn-hero { position: relative; }
-
+ 
     /* ── FOOTER ── */
     footer {
       background: #070f1a;
@@ -361,13 +979,13 @@
     .footer-links { display: flex; gap: 20px; }
     .footer-links a { color: rgba(255,255,255,0.45); font-size: .85rem; font-weight: 700; transition: color .2s; }
     .footer-links a:hover { color: var(--pulmo-teal); }
-
+ 
     /* ── ANIMATIONS ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
+ 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .features-grid { grid-template-columns: 1fr 1fr; }
@@ -405,7 +1023,7 @@
   </style>
 </head>
 <body>
-
+ 
   <!-- NAV -->
   <nav>
     <div class="nav-brand">Pulmo<span>Learn</span></div>
@@ -413,10 +1031,10 @@
       <a href="#curriculum" class="nav-link">Curriculum</a>
       <a href="#pricing" class="nav-link">Pricing</a>
       <a href="#faq" class="nav-link">FAQ</a>
-      <a href="/signup.html" class="nav-cta">Get Access</a>
+      <a href="/PulmoCore-Library/signup.html" class="nav-cta">Get Access</a>
     </div>
   </nav>
-
+ 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-grid-bg"></div>
@@ -424,7 +1042,7 @@
     <h1>Everything You Need to<br>Become a <em>Better</em><br>Respiratory Therapist.</h1>
     <p class="hero-sub">32 respiratory disease modules plus growing core curriculum covering patient assessment, physiology, equipment, and ventilator management — all built to sharpen your clinical skills and help you pass the NBRC boards.</p>
     <div class="hero-actions">
-      <a href="/signup.html" class="btn-hero">Get Lifetime Access — $97</a>
+      <a href="/PulmoCore-Library/signup.html" class="btn-hero">Get Lifetime Access — $97</a>
       <a href="#curriculum" class="btn-ghost">Browse Curriculum</a>
     </div>
     <div class="hero-stats">
@@ -446,7 +1064,7 @@
       </div>
     </div>
   </section>
-
+ 
   <!-- FEATURES -->
   <section class="features-section" id="features">
     <div class="features-inner">
@@ -489,7 +1107,7 @@
       </div>
     </div>
   </section>
-
+ 
   <!-- CURRICULUM -->
   <section class="curriculum-section" id="curriculum">
     <div class="curriculum-inner" style="grid-template-columns: 1fr; max-width: 720px;">
@@ -504,7 +1122,7 @@
               <strong>Asthma</strong>
               <span>Disease Library · Obstructive</span>
             </div>
-            <a href="/asthmasample.html" class="lesson-pill" style="text-decoration:none; background:rgba(75,163,242,0.15); color:#4BA3F2; border:1px solid rgba(75,163,242,0.3);">▶ Sample Lesson</a>
+            <a href="/PulmoCore-Library/asthmasample.html" class="lesson-pill" style="text-decoration:none; background:rgba(75,163,242,0.15); color:#4BA3F2; border:1px solid rgba(75,163,242,0.3);">▶ Sample Lesson</a>
           </div>
           <div class="lesson-item">
             <span class="lesson-num">02</span>
@@ -558,7 +1176,7 @@
       </div>
     </div>
   </section>
-
+ 
   <!-- PRICING -->
   <section class="pricing-section" id="pricing">
     <div class="pricing-inner">
@@ -585,11 +1203,11 @@
             <li>All future modules added at no extra cost</li>
             <li>7-day money-back guarantee</li>
           </ul>
-          <button class="btn-pricing primary" onclick="window.location.href='/signup.html'">Get Lifetime Access for $97</button>
+          <button class="btn-pricing primary" onclick="window.location.href='/PulmoCore-Library/signup.html'">Get Lifetime Access for $97</button>
           <p style="text-align:center; margin-top:14px; font-size:.82rem; color:rgba(255,255,255,0.4);">7-day refund guarantee · Secure payment via Stripe</p>
         </div>
       </div>
-
+ 
       <!-- Voucher -->
       <div class="voucher-box">
         <p>Have a voucher or institutional access code? Enter it below for free access.</p>
@@ -601,7 +1219,7 @@
       </div>
     </div>
   </section>
-
+ 
   <!-- TESTIMONIALS -->
   <section class="social-section">
     <div class="social-inner">
@@ -646,7 +1264,7 @@
       </div>
     </div>
   </section>
-
+ 
   <!-- FAQ -->
   <section class="faq-section" id="faq">
     <div class="faq-inner">
@@ -686,25 +1304,25 @@
       </div>
     </div>
   </section>
-
+ 
   <!-- CTA -->
   <section class="cta-section">
     <h2>Build the knowledge your patients deserve.</h2>
     <p>32 disease modules + full core RT curriculum. One price, lifetime access. Less than a quarter of Kettering.</p>
-    <a href="/signup.html" class="btn-hero">Get Lifetime Access — $97</a>
+    <a href="/PulmoCore-Library/signup.html" class="btn-hero">Get Lifetime Access — $97</a>
   </section>
-
+ 
   <!-- FOOTER -->
   <footer>
     <div class="footer-brand">Pulmo<span>Learn</span></div>
     <p>© 2026 PulmoLearn. All rights reserved.</p>
     <div class="footer-links">
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms of Use</a>
+      <a href="/PulmoCore-Library/privacy.html">Privacy Policy</a>
+      <a href="/PulmoCore-Library/terms.html">Terms of Use</a>
       <a href="mailto:hello@pulmolearn.com">Contact</a>
     </div>
   </footer>
-
+ 
   <script>
     function toggleFaq(btn) {
       const item = btn.closest('.faq-item')
@@ -719,20 +1337,20 @@
         answer.style.maxHeight = answer.scrollHeight + 'px'
       }
     }
-
+ 
     function checkVoucher() {
       const code = document.getElementById('voucherInput').value.trim().toUpperCase()
       const feedback = document.getElementById('voucherFeedback')
       if (!code) return
       // Redirect to signup with the code pre-filled in the URL
-      window.location.href = `/signup.html?voucher=${encodeURIComponent(code)}`
+      window.location.href = `/PulmoCore-Library/signup.html?voucher=${encodeURIComponent(code)}`
     }
-
+ 
     document.getElementById('voucherInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') checkVoucher()
     })
   </script>
-
+ 
   <!-- Structured Data (Schema.org) -->
   <script type="application/ld+json">
   {
@@ -765,7 +1383,7 @@
     }
   }
   </script>
-
+ 
   <script>
   /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
   (function () {
@@ -773,8 +1391,7 @@
       document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
         var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
         var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
+ 
         var live = demo.querySelector('[data-a11y-live]');
         if (!live) {
           live = document.createElement('div');
@@ -784,9 +1401,8 @@
           live.className = 'sr-only';
           demo.appendChild(live);
         }
-
+ 
         buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
           btn.addEventListener('keydown', function (e) {
             var target;
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
@@ -804,8 +1420,7 @@
             }
             if (target) target.focus();
           });
-
-          /* On activation, push content to aria-live region */
+ 
           btn.addEventListener('click', function () {
             var title = btn.dataset.title || '';
             var text  = btn.dataset.text  || '';
@@ -813,8 +1428,7 @@
             if (panel) panel.setAttribute('aria-label', title + ': ' + text);
           });
         });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
+ 
         var container = demo.querySelector('.hotspot-lung');
         if (container && buttons.length > 0) {
           container.addEventListener('focus', function () {
@@ -826,7 +1440,7 @@
         }
       });
     }
-
+ 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initA11yHotspots);
     } else {
@@ -834,6 +1448,7 @@
     }
   })();
   </script>
-
+ 
 </body>
 </html>
+ 
