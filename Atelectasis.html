@@ -278,7 +278,7 @@
       cursor: not-allowed;
     }
 
-    #sequenceSort { visibility: hidden; }
+    #sequenceSort { visibility: visible; }
     
     @media (max-width: 780px) {
       .top-nav { gap: 12px; }
@@ -1053,7 +1053,6 @@
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
     }
-    initializeProgressiveSections();
 
     function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
 
@@ -1069,6 +1068,7 @@
         [rows[i], rows[j]] = [rows[j], rows[i]];
       }
       rows.forEach(row => container.appendChild(row));
+      container.style.visibility = 'visible';
     }
 
     function normalizeSequenceRanks(changedSelect) {
@@ -1254,7 +1254,8 @@
         /* When focus enters the hotspot container, route to first unvisited button */
         var container = demo.querySelector('.hotspot-lung');
         if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
+          container.addEventListener('focus', function (e) {
+            if (buttons.indexOf(e.target) !== -1) return;
             var first = buttons.find(function (b) {
               return !b.classList.contains('visited');
             }) || buttons[0];
