@@ -5,14 +5,14 @@
  *   <script type="module" src="/assets/progress-tracker.js"></script>
  */
 
-import { supabase } from '/assets/auth.js'
+import { supabase } from '/PulmoCore-Library/assets/auth.js'
 
 console.log('PulmoLearn: progress-tracker.js v7 loaded')
 
 // ── Auth check ──
 const { data: { session } } = await supabase.auth.getSession()
 if (!session) {
-  window.location.href = '/login.html'
+  window.location.href = '/PulmoCore-Library/login.html'
   throw new Error('Not authenticated')
 }
 
@@ -137,7 +137,7 @@ document.head.appendChild(style)
 
 // ── Progress calculations ──
 function getAllSections() {
-  return document.querySelectorAll('.lesson-stack > section')
+  return document.querySelectorAll('.lesson-stack-top > section, .lesson-stack > section')
 }
 
 function calculateProgress() {
@@ -191,8 +191,8 @@ function showCompletionBanner() {
       </div>
     </div>
     <div class="pl-complete-actions">
-      <a href="/dashboard.html" class="pl-btn-home">← Back to Dashboard</a>
-      <a href="/glossary.html" class="pl-btn-glossary">📖 Full Glossary</a>
+      <a href="/PulmoCore-Library/dashboard.html" class="pl-btn-home">← Back to Dashboard</a>
+      <a href="/PulmoCore-Library/glossary.html" class="pl-btn-glossary">📖 Full Glossary</a>
     </div>
   `
   lessonStack.appendChild(banner)
