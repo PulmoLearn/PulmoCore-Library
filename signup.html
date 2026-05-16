@@ -187,9 +187,23 @@
   <script type="module">
     import { supabase } from '/PulmoCore-Library/assets/auth.js'
 
-    // If already logged in, go straight to dashboard
     const { data: { session } } = await supabase.auth.getSession()
-    if (session) window.location.href = '/PulmoCore-Library/dashboard.html'
+if (session) {
+  // Check if they already have access
+  const { data: access } = await supabase
+    .from('user_access')
+    .select('user_id')
+    .eq('user_id', session.user.id)
+    .maybeSingle()
+
+  if (access) {
+    // Has access — go to dashboard
+    window.location.href = '/PulmoCore-Library/dashboard.html'
+  } else {
+    // Logged in but no access — go to payment
+    window.location.href = '/PulmoCore-Library/payment.html'
+  }
+}
 
     // Pre-fill voucher code if passed in URL e.g. /signup.html?voucher=CODE123
     const params = new URLSearchParams(window.location.search)
