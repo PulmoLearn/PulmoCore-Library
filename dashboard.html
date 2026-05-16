@@ -201,7 +201,7 @@
   </div>
 
   <div class="page-shell">
-    <a href="https://pulmolearn.github.io/PulmoCore-Library/index.html" class="brand" aria-label="PulmoLearn site navigation">
+    <header class="top-nav" aria-label="PulmoLearn site navigation">
       <div class="brand" aria-label="PulmoLearn brand">
         <div class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 64 64" fill="none" role="img">
@@ -216,6 +216,7 @@
           <div class="brand-tagline">Complete RT curriculum & NBRC board prep.</div>
         </div>
       </div>
+
 
       <div class="nav-user">
         <span class="nav-email" id="navEmail"></span>
@@ -397,64 +398,62 @@
 
     // ── Render dashboard ──
     async function renderLessons() {
-  try {
-    const progress = await loadProgress()
-    const query = document.getElementById("searchLessons").value.trim().toLowerCase()
-    const filter = document.getElementById("filterLessons").value
-    const grid = document.getElementById("diseaseGrid")
+      const progress = await loadProgress()
+      const query = document.getElementById("searchLessons").value.trim().toLowerCase()
+      const filter = document.getElementById("filterLessons").value
+      const grid = document.getElementById("diseaseGrid")
 
-    const filtered = lessons.filter(lesson => {
-      const item = progress[lesson.id] || { percent: 0, completed: false }
-      const status = getStatus(item)
-      const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query)
-      const matchesFilter = filter === "all" || status === filter
-      return matchesSearch && matchesFilter
-    })
+      const filtered = lessons.filter(lesson => {
+        const item = progress[lesson.id] || { percent: 0, completed: false }
+        const status = getStatus(item)
+        const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query)
+        const matchesFilter = filter === "all" || status === filter
+        return matchesSearch && matchesFilter
+      })
 
-    grid.innerHTML = filtered.length ? filtered.map(lesson => {
-      const item = progress[lesson.id] || { percent: 0, completed: false }
-      const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
-      const status = getStatus(item)
-      const isComplete = status === "completed"
-      const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started"
-      const btnLabel = buttonLabel(status)
-      const btnHref = status === 'completed' ? `${lesson.href}?restart=true` : lesson.href
-      const btnClass = status === "completed" ? "btn btn-secondary" : "btn btn-primary"
-      return `
-        <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
-          <div class="disease-header">
-            <div class="disease-title-group">
-              <h3>${lesson.title}</h3>
-              <div class="disease-category">${lesson.category}</div>
+      grid.innerHTML = filtered.length ? filtered.map(lesson => {
+        const item = progress[lesson.id] || { percent: 0, completed: false }
+        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
+        const status = getStatus(item)
+        const isComplete = status === "completed"
+        const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started"
+        const btnLabel = buttonLabel(status)
+const btnHref = status === 'completed'
+  ? `${lesson.href}?restart=true`
+  : lesson.href
+        const btnClass = status === "completed" ? "btn btn-secondary" : "btn btn-primary"
+        return `
+          <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
+            <div class="disease-header">
+              <div class="disease-title-group">
+                <h3>${lesson.title}</h3>
+                <div class="disease-category">${lesson.category}</div>
+              </div>
+              <span class="badge ${badgeClass}">${statusLabel(status)}</span>
             </div>
-            <span class="badge ${badgeClass}">${statusLabel(status)}</span>
-          </div>
-          <p class="disease-description">${lesson.description}</p>
-          <div class="progress-row" aria-label="${lesson.title} progress">
-            <div class="progress-label"><span>Lesson progress</span><span>${percent}%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
-          </div>
-          <div class="disease-meta">
-            <span class="pill">${lesson.time}</span>
-            <span class="pill">${lesson.level}</span>
-          </div>
-          <div class="card-actions">
-            <a class="${btnClass}" href="${btnHref}">${btnLabel}</a>
-            ${status === 'completed' ? `<a class="btn btn-secondary" href="${lesson.href}?review=true">Review Lesson</a>` : ''}
-          </div>
-          <div class="complete-medallion" aria-hidden="true">✓</div>
-        </article>
-      `
-    }).join("") : `<div class="info-card" style="grid-column:1/-1;"><h3>No lessons match your search.</h3><p>Try clearing the search or changing the status filter.</p></div>`
+            <p class="disease-description">${lesson.description}</p>
+            <div class="progress-row" aria-label="${lesson.title} progress">
+              <div class="progress-label"><span>Lesson progress</span><span>${percent}%</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
+            </div>
+            <div class="disease-meta">
+              <span class="pill">${lesson.time}</span>
+              <span class="pill">${lesson.level}</span>
+            </div>
+            <div class="card-actions">
+              <a class="${btnClass}" href="${btnHref}">${btnLabel}</a>
+              ${status === 'completed' ? `<a class="btn btn-secondary" href="${lesson.href}?review=true">Review Lesson</a>` : ''}
+            </div>
+            <div class="complete-medallion" aria-hidden="true">✓</div>
+          </article>
+        `
+      }).join("") : `<div class="info-card" style="grid-column:1/-1;"><h3>No lessons match your search.</h3><p>Try clearing the search or changing the status filter.</p></div>`
 
-    updateSummary(progress)
-  } catch (err) {
-    console.error('PulmoLearn: renderLessons error:', err)
-  } finally {
-    // Always hide the overlay even if something fails
-    document.getElementById('loadingOverlay').classList.add('hidden')
-  }
-}
+      updateSummary(progress)
+
+      // Hide loading overlay once rendered
+      document.getElementById('loadingOverlay').classList.add('hidden')
+    }
 
     function updateSummary(progress) {
       const total = lessons.length
