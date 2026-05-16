@@ -302,15 +302,47 @@
 
     // ── Build lesson filter dropdown ──
     const lessonSet = new Set()
-    PULMO_GLOSSARY.forEach(t => t.lessons.forEach(l => lessonSet.add(l)))
-    const lessonSelect = document.getElementById('lessonFilter')
-    Array.from(lessonSet).sort().forEach(id => {
-      const opt = document.createElement('option')
-      opt.value = id
-      opt.textContent = id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-      lessonSelect.appendChild(opt)
-    })
-
+   PULMO_GLOSSARY.forEach(t => t.lessons.forEach(l => lessonSet.add(l)))
+const lessonSelect = document.getElementById('lessonFilter')
+const lessonLabels = {
+  als: 'ALS',
+  ards: 'ARDS',
+  asthma: 'Asthma',
+  atelectasis: 'Atelectasis',
+  bronchiectasis: 'Bronchiectasis',
+  cdh: 'CDH',
+  chd: 'Congenital Heart Disease',
+  cldi: 'Chronic Lung Disease of Infancy',
+  cardiogenic_pulmonary_edema: 'Cardiogenic Pulmonary Edema',
+  croup: 'Croup',
+  cystic_fibrosis: 'Cystic Fibrosis',
+  epiglottitis: 'Epiglottitis',
+  flail_chest: 'Flail Chest',
+  guillain_barre: 'Guillain-Barré Syndrome',
+  interstitial_lung_disease: 'Interstitial Lung Disease',
+  kyphoscoliosis: 'Kyphoscoliosis',
+  lung_cancer: 'Lung Cancer',
+  mas: 'MAS',
+  myasthenia_gravis: 'Myasthenia Gravis',
+  near_drowning: 'Near Drowning',
+  pals: 'PALS',
+  pleural_effusion: 'Pleural Effusion',
+  pneumonia: 'Pneumonia',
+  pneumothorax: 'Pneumothorax',
+  pulmonary_embolism: 'Pulmonary Embolism',
+  rds: 'RDS',
+  rsv: 'RSV',
+  sleep_apnea: 'Sleep Apnea',
+  smoke_inhalation: 'Smoke Inhalation',
+  ttn: 'TTN',
+  tuberculosis: 'Tuberculosis',
+}
+Array.from(lessonSet).sort().forEach(id => {
+  const opt = document.createElement('option')
+  opt.value = id
+  opt.textContent = lessonLabels[id] || id
+  lessonSelect.appendChild(opt)
+})
     // ── Flashcard state ──
     let cardMode = 'term'
     let cardView = 'active'
