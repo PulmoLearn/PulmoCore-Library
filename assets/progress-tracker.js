@@ -385,6 +385,8 @@ window.addEventListener('load', async () => {
     shuffleSequence()
     shuffleSequence()
     shuffleSequence()
+    shuffleSequence()
+    shuffleSequence()
   }
   
   
