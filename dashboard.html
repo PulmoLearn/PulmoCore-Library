@@ -97,6 +97,17 @@
     .stat-card span { color: var(--slate); font-weight: 700; }
 
     .dashboard-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; margin: 18px 0 22px; align-items: center; }
+
+    .course-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 18px; border-bottom: 1px solid var(--soft-border); padding-bottom: 14px; }
+    .course-tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 10px 14px; font-weight: 800; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+    .course-tab-btn:hover { transform: translateY(-1px); border-color: var(--pulmo-teal); }
+    .course-tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
+    .course-section-stack { display: grid; gap: 24px; }
+    .course-section { border: 1px solid var(--soft-border); border-radius: var(--radius-lg); background: #FAFDFF; padding: 18px; box-shadow: var(--shadow-soft); }
+    .course-section-header { display: flex; justify-content: space-between; gap: 14px; align-items: start; margin-bottom: 14px; }
+    .course-section-header p { margin: 6px 0 0; color: var(--slate); }
+    .course-count-pill { border: 1px solid var(--soft-border); background: var(--white); color: var(--slate); border-radius: 999px; padding: 7px 10px; font-size: .84rem; font-weight: 800; white-space: nowrap; }
+
     .dashboard-tools input, .dashboard-tools select { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; background: var(--white); color: var(--core-navy); }
     .small-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 10px 14px; font-weight: 800; }
 
@@ -142,6 +153,19 @@
     .sync-dot.error { background: var(--alert-coral); }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
 
+    .auth-notice {
+      margin-top: 14px;
+      border: 1px solid #F8D9A5;
+      background: #FFF8EA;
+      color: #5F3B00;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 700;
+      display: none;
+    }
+    .auth-notice.show { display: block; }
+
+
     @media (max-width: 1100px) {
       .nav-links { display: none; }
       .mobile-menu-note { display: block; }
@@ -156,6 +180,7 @@
       .main-content { padding: 20px 14px 56px; }
       .hero-card, .library-card, .info-card { padding: 18px; border-radius: 18px; }
       .dashboard-tools { grid-template-columns: 1fr; }
+      .course-section-header { display: grid; }
       .disease-grid, .stats-grid { grid-template-columns: 1fr; }
       .nav-email { display: none; }
     }
@@ -239,7 +264,7 @@
       <section class="hero-card" id="progress">
         <span class="eyebrow">Your Dashboard</span>
         <h1>Respiratory Disease Library</h1>
-        <p>Work through your PulmoLearn modules, track completion across the full disease library, and build board-style clinical reasoning one condition at a time.</p>
+        <p>Work through your PulmoCore modules, track completion across the full disease library, and build board-style clinical reasoning one condition at a time.</p>
         <div class="stats-grid" aria-label="PulmoLearn progress summary">
           <div class="stat-card"><strong id="completedCount">—</strong><span>Lessons completed</span></div>
           <div class="stat-card"><strong id="inProgressCount">—</strong><span>In progress</span></div>
@@ -248,26 +273,18 @@
         </div>
       </section>
 
-      <section class="info-card rt" id="recommended" style="margin-top:22px;">
-        <h2>Recommended Study Path</h2>
-        <p>Start with foundational obstructive and restrictive patterns, then move into acute respiratory failure, neonatal/pediatric conditions, neuromuscular disease, and sleep-related breathing disorders.</p>
-        <div class="stats-grid" style="grid-template-columns: repeat(3, minmax(0,1fr));">
-          <div class="example-box soft-teal"><strong>1. Core patterns</strong><br>Asthma, COPD, ARDS, Pneumonia</div>
-          <div class="example-box soft-blue"><strong>2. Special populations</strong><br>Newborn RDS, TTN, RSV, Cystic Fibrosis</div>
-          <div class="example-box soft-amber"><strong>3. Escalation thinking</strong><br>Near Drowning, ALS, Sleep Apnea, Pulmonary Embolism</div>
-        </div>
-      </section>
-
       <section class="library-card" id="library">
         <span class="eyebrow">Disease Library</span>
-<h2>Your PulmoLearn Modules</h2>
+<h2>Your PulmoCore Modules</h2>
 <p style="color:var(--slate); font-size:.92rem; margin-bottom:4px;">
         <div class="sync-indicator">
           <div class="sync-dot" id="syncDot"></div>
           <span id="syncLabel">Progress synced</span>
         </div>
-        <div class="dashboard-tools" aria-label="Disease library controls">
-          <input id="searchLessons" type="search" placeholder="Search diseases: asthma, COPD, RSV..." aria-label="Search disease lessons" />
+        <div class="auth-notice" id="authNotice" role="status"></div>
+        <div class="course-tabs" id="courseTabs" role="tablist" aria-label="Course category tabs"></div>
+        <div class="dashboard-tools" aria-label="Course library controls">
+          <input id="searchLessons" type="search" placeholder="Search courses: asthma, pharmacology, spirometry..." aria-label="Search course lessons" />
           <select id="filterLessons" aria-label="Filter lessons by status">
             <option value="all">All lessons</option>
             <option value="not-started">Not started</option>
@@ -275,7 +292,7 @@
             <option value="completed">Completed</option>
           </select>
         </div>
-        <div class="disease-grid" id="diseaseGrid" aria-live="polite"></div>
+        <div class="course-section-stack" id="courseSections" aria-live="polite"></div>
       </section>
     </main>
 
@@ -286,20 +303,61 @@
   </div>
 
   <script type="module">
-    import { supabase, requireAccess, signOut } from 'https://pulmolearn.github.io/PulmoCore-Library/assets/auth.js'
+    const AUTH_MODULE_URL = 'https://pulmolearn.github.io/PulmoCore-Library/assets/auth.js'
+    const LOGIN_URL = 'https://pulmolearn.github.io/PulmoCore-Library/login.html'
+    const isGitHubPages = window.location.hostname === 'pulmolearn.github.io'
+    let supabase = null
+    let session = null
 
-    // ── Auth guard — redirects if not logged in or no access ──
-    const session = await requireAccess()
-    if (!session) throw new Error('Redirecting')
+    function showAuthNotice(message) {
+      const notice = document.getElementById('authNotice')
+      if (!notice) return
+      notice.textContent = message
+      notice.classList.add('show')
+    }
 
-    // Show user email in nav
-    document.getElementById('navEmail').textContent = session.user.email
+    function hideLoadingOverlay() {
+      const overlay = document.getElementById('loadingOverlay')
+      if (overlay) overlay.classList.add('hidden')
+    }
 
-    // Sign out button
-    document.getElementById('signOutBtn').addEventListener('click', async () => {
-  await supabase.auth.signOut()
-  window.location.href = 'https://pulmolearn.github.io/PulmoCore-Library/login.html'
-})
+    try {
+      if (isGitHubPages) {
+        const auth = await import(AUTH_MODULE_URL)
+        supabase = auth.supabase
+        session = await auth.requireAccess()
+        if (!session) throw new Error('Access check did not return a session.')
+
+        document.getElementById('navEmail').textContent = session.user.email
+        document.getElementById('signOutBtn').addEventListener('click', async () => {
+          await supabase.auth.signOut()
+          window.location.href = LOGIN_URL
+        })
+      } else {
+        document.getElementById('navEmail').textContent = 'Preview mode'
+        document.getElementById('signOutBtn').style.display = 'none'
+        showAuthNotice('Local/file preview mode: tabs and links are visible, but Supabase login and progress sync only work after this file is published to GitHub Pages.')
+      }
+    } catch (error) {
+      console.error('Dashboard auth/progress setup failed:', error)
+      document.getElementById('navEmail').textContent = 'Preview mode'
+      document.getElementById('signOutBtn').style.display = 'none'
+      showAuthNotice('Dashboard preview loaded without Supabase progress. Publish this file to GitHub Pages and log in to enable synced progress.')
+    }
+
+    // ── Course section definitions ──
+    // Add future lessons by assigning courseGroup to one of these keys.
+    // The dashboard tabs and grouped containers render from this list.
+    const courseSections = [
+      { key: "all", label: "All Courses", description: "View every PulmoLearn course section together." },
+      { key: "respiratory-diseases", label: "Respiratory Diseases", baseUrl: "https://pulmolearn.github.io/PulmoCore-Library/", description: "Disease-based PulmoCore modules for RT clinical reasoning and board prep." },
+      { key: "foundations", label: "Foundations of Respiratory Care", baseUrl: "https://pulmolearn.github.io/Foundations/", description: "Orientation, safety, infection control, clinical environment, and foundational RT practice." },
+      { key: "physiology", label: "Respiratory Physiology", baseUrl: "https://pulmolearn.github.io/Physiology/", description: "Ventilation, diffusion, oxygen transport, pulmonary blood flow, mechanics, and gas exchange." },
+      { key: "pulmonary-assessment", label: "Pulmonary Assessment", baseUrl: "https://pulmolearn.github.io/Assessment/", description: "Patient assessment, breath sounds, vitals, chart review, diagnostics, and clinical interpretation." },
+      { key: "equipment-procedures", label: "Equipment & Procedures", baseUrl: "https://pulmolearn.github.io/Equipment/", description: "Aerosol devices, humidity therapy, airway clearance, lung expansion, oxygen devices, and core bedside procedures." }
+    ]
+
+    let activeCourseGroup = "respiratory-diseases"
 
     // ── Lesson definitions ──
     const lessons = [
@@ -335,7 +393,7 @@
       { id: "smoke_inhalation", title: "Smoke Inhalation", category: "Environmental / Airway Injury", time: "30–40 min", level: "Intermediate", href: "SmokeInhalation.html", description: "Thermal and chemical airway injury, carbon monoxide concerns, soot/hoarseness red flags, oxygen therapy, and escalation." },
       { id: "ttn", title: "Transient Tachypnea of the Newborn", category: "Neonatal Respiratory Disease", time: "25–35 min", level: "Core RT Knowledge", href: "TTN.html", description: "Delayed fetal lung fluid clearance, tachypnea, oxygen support, differentiation from RDS, and expected clinical course." },
       { id: "tuberculosis", title: "Tuberculosis", category: "Infectious Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Tuberculosis.html", description: "Airborne infection control, cavitary lung disease, chronic cough, isolation precautions, diagnostics, and public health considerations." }
-    ]
+    ].map(lesson => ({ ...lesson, courseGroup: lesson.courseGroup || "respiratory-diseases" }))
 
     // ── Progress helpers ──
     function getStatus(item) {
@@ -361,11 +419,16 @@
       const dot = document.getElementById('syncDot')
       const label = document.getElementById('syncLabel')
       dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : '')
-      label.textContent = state === 'syncing' ? 'Syncing...' : state === 'error' ? 'Sync error — check connection' : 'Progress synced'
+      label.textContent = state === 'syncing' ? 'Syncing...' : state === 'error' ? 'Sync error — check connection' : state === 'demo' ? 'Preview mode — progress not synced' : 'Progress synced'
     }
 
-    // ── Load progress from Supabase ──
+    // ── Load progress from Supabase, or use demo progress when previewing outside GitHub Pages ──
     async function loadProgress() {
+      if (!supabase || !session) {
+        setSyncState('demo')
+        return {}
+      }
+
       setSyncState('syncing')
       const { data, error } = await supabase
         .from('progress')
@@ -388,6 +451,7 @@
 
     // ── Save a single lesson's progress to Supabase ──
     async function saveProgress(lessonId, percent, completed) {
+      if (!supabase || !session) return
       setSyncState('syncing')
       const { error } = await supabase.from('progress').upsert({
         user_id: session.user.id,
@@ -407,62 +471,112 @@
     }
 
     // ── Render dashboard ──
+    function renderCourseTabs() {
+      const tabs = document.getElementById("courseTabs")
+      if (!tabs) return
+      tabs.innerHTML = courseSections.map(section => `
+        <button class="course-tab-btn ${section.key === activeCourseGroup ? "active" : ""}"
+          type="button"
+          role="tab"
+          aria-selected="${section.key === activeCourseGroup}"
+          data-course-group="${section.key}">
+          ${section.label}
+        </button>
+      `).join("")
+
+      tabs.querySelectorAll(".course-tab-btn").forEach(button => {
+        button.addEventListener("click", () => {
+          activeCourseGroup = button.dataset.courseGroup
+          renderLessons()
+        })
+      })
+    }
+
+    function resolveLessonHref(lesson, mode = '') {
+      const section = courseSections.find(item => item.key === lesson.courseGroup)
+      const baseUrl = section && section.baseUrl ? section.baseUrl : ''
+      const href = /^https?:\/\//i.test(lesson.href) ? lesson.href : `${baseUrl}${lesson.href}`
+      return mode ? `${href}${href.includes('?') ? '&' : '?'}${mode}=true` : href
+    }
+
+    function lessonCardTemplate(lesson, progress) {
+      const item = progress[lesson.id] || { percent: 0, completed: false }
+      const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
+      const status = getStatus(item)
+      const isComplete = status === "completed"
+      const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started"
+      const btnLabel = buttonLabel(status)
+      const btnHref = status === 'completed' ? resolveLessonHref(lesson, 'restart') : resolveLessonHref(lesson)
+      const btnClass = status === "completed" ? "btn btn-secondary" : "btn btn-primary"
+      return `
+        <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
+          <div class="disease-header">
+            <div class="disease-title-group">
+              <h3>${lesson.title}</h3>
+              <div class="disease-category">${lesson.category}</div>
+            </div>
+            <span class="badge ${badgeClass}">${statusLabel(status)}</span>
+          </div>
+          <p class="disease-description">${lesson.description}</p>
+          <div class="progress-row" aria-label="${lesson.title} progress">
+            <div class="progress-label"><span>Lesson progress</span><span>${percent}%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
+          </div>
+          <div class="disease-meta">
+            <span class="pill">${lesson.time}</span>
+            <span class="pill">${lesson.level}</span>
+          </div>
+          <div class="card-actions">
+            <a class="${btnClass}" href="${btnHref}">${btnLabel}</a>
+            ${status === 'completed' ? `<a class="btn btn-secondary" href="${resolveLessonHref(lesson, 'review')}">Review Lesson</a>` : ''}
+          </div>
+          <div class="complete-medallion" aria-hidden="true">✓</div>
+        </article>
+      `
+    }
+
     async function renderLessons() {
+      renderCourseTabs()
       const progress = await loadProgress()
       const query = document.getElementById("searchLessons").value.trim().toLowerCase()
       const filter = document.getElementById("filterLessons").value
-      const grid = document.getElementById("diseaseGrid")
+      const sectionsContainer = document.getElementById("courseSections")
+      const visibleSections = activeCourseGroup === "all"
+        ? courseSections.filter(section => section.key !== "all")
+        : courseSections.filter(section => section.key === activeCourseGroup)
 
-      const filtered = lessons.filter(lesson => {
-        const item = progress[lesson.id] || { percent: 0, completed: false }
-        const status = getStatus(item)
-        const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query)
-        const matchesFilter = filter === "all" || status === filter
-        return matchesSearch && matchesFilter
-      })
+      const sectionHtml = visibleSections.map(section => {
+        const sectionLessons = lessons.filter(lesson => lesson.courseGroup === section.key)
+        const filteredLessons = sectionLessons.filter(lesson => {
+          const item = progress[lesson.id] || { percent: 0, completed: false }
+          const status = getStatus(item)
+          const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query)
+          const matchesFilter = filter === "all" || status === filter
+          return matchesSearch && matchesFilter
+        })
 
-      grid.innerHTML = filtered.length ? filtered.map(lesson => {
-        const item = progress[lesson.id] || { percent: 0, completed: false }
-        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
-        const status = getStatus(item)
-        const isComplete = status === "completed"
-        const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started"
-        const btnLabel = buttonLabel(status)
-const btnHref = status === 'completed'
-  ? `${lesson.href}?restart=true`
-  : lesson.href
-        const btnClass = status === "completed" ? "btn btn-secondary" : "btn btn-primary"
+        const cards = filteredLessons.length
+          ? `<div class="disease-grid">${filteredLessons.map(lesson => lessonCardTemplate(lesson, progress)).join("")}</div>`
+          : `<div class="info-card" style="box-shadow:none;"><h3>No lessons match this tab yet.</h3><p>Try clearing the search/filter, or add lessons to this section by assigning the matching <code>courseGroup</code> value in the lessons list.</p></div>`
+
         return `
-          <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
-            <div class="disease-header">
-              <div class="disease-title-group">
-                <h3>${lesson.title}</h3>
-                <div class="disease-category">${lesson.category}</div>
+          <section class="course-section" data-course-section="${section.key}">
+            <div class="course-section-header">
+              <div>
+                <h3>${section.label}</h3>
+                <p>${section.description}</p>
               </div>
-              <span class="badge ${badgeClass}">${statusLabel(status)}</span>
+              <span class="course-count-pill">${filteredLessons.length} / ${sectionLessons.length} shown</span>
             </div>
-            <p class="disease-description">${lesson.description}</p>
-            <div class="progress-row" aria-label="${lesson.title} progress">
-              <div class="progress-label"><span>Lesson progress</span><span>${percent}%</span></div>
-              <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
-            </div>
-            <div class="disease-meta">
-              <span class="pill">${lesson.time}</span>
-              <span class="pill">${lesson.level}</span>
-            </div>
-            <div class="card-actions">
-              <a class="${btnClass}" href="${btnHref}">${btnLabel}</a>
-              ${status === 'completed' ? `<a class="btn btn-secondary" href="${lesson.href}?review=true">Review Lesson</a>` : ''}
-            </div>
-            <div class="complete-medallion" aria-hidden="true">✓</div>
-          </article>
+            ${cards}
+          </section>
         `
-      }).join("") : `<div class="info-card" style="grid-column:1/-1;"><h3>No lessons match your search.</h3><p>Try clearing the search or changing the status filter.</p></div>`
+      }).join("")
+
+      sectionsContainer.innerHTML = sectionHtml || `<div class="info-card"><h3>No course sections available.</h3><p>Add section definitions to <code>courseSections</code>.</p></div>`
 
       updateSummary(progress)
-
-      // Hide loading overlay once rendered
-      document.getElementById('loadingOverlay').classList.add('hidden')
+      hideLoadingOverlay()
     }
 
     function updateSummary(progress) {
@@ -478,7 +592,7 @@ const btnHref = status === 'completed'
         if (status === "in-progress") inProgress++
       })
 
-      const overall = Math.round(percentSum / total)
+      const overall = total ? Math.round(percentSum / total) : 0
       document.getElementById("completedCount").textContent = completed
       document.getElementById("inProgressCount").textContent = inProgress
       document.getElementById("overallPercent").textContent = `${overall}%`
@@ -501,7 +615,7 @@ const btnHref = status === 'completed'
 
     // Initial render
     renderLessons()
-  </script>
+
 
   <script>
   /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
