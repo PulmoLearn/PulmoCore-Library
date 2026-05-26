@@ -5,7 +5,7 @@
  *   <script type="module" src="/assets/progress-tracker.js"></script>
  */
 
-import { supabase } from '/PulmoCore-Library/assets/auth.js'
+import { supabase } from '/assets/auth.js'
 
 console.log('PulmoLearn: progress-tracker.js v7 loaded')
 
@@ -17,7 +17,7 @@ if (!session) {
 }
 
 const userId = session.user.id
-const lessonId = window.LESSON_ID
+const lessonId = window.PULMO_LESSON_ID || window.LESSON_ID
 
 console.log(`PulmoLearn: lessonId="${lessonId}" userId="${userId}"`)
 
