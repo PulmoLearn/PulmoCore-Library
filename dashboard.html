@@ -12,259 +12,124 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
     :root {
-      --core-navy: #0B1F33;
-      --core-navy-2: #102A43;
-      --pulmo-teal: #1CA7A8;
-      --pulmo-teal-dark: #128486;
-      --oxygen-blue: #4BA3F2;
-      --mist-blue: #F4FAFC;
-      --airway-mint: #DDF7F2;
-      --clinical-amber: #F4B860;
-      --alert-coral: #E85D5D;
-      --white: #FFFFFF;
-      --slate: #415A77;
-      --soft-border: #D7E6EF;
-      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
-      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
-      --radius-lg: 22px;
-      --radius-md: 16px;
-      --radius-sm: 10px;
-      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
-      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
-      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+      --core-navy: #0B1F33; --core-navy-2: #102A43; --pulmo-teal: #1CA7A8; --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2; --mist-blue: #F4FAFC; --airway-mint: #DDF7F2; --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D; --white: #FFFFFF; --slate: #415A77; --soft-border: #D7E6EF;
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08); --radius-lg: 22px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif; --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
     }
-
     * { box-sizing: border-box; }
-    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.55; }
-    a { color: inherit; }
-    button, input, select { font: inherit; }
-    button { cursor: pointer; }
-    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--clinical-amber); outline-offset: 3px; }
-
-    /* Loading overlay */
-    .loading-overlay {
-      position: fixed; inset: 0; z-index: 100;
-      background: var(--core-navy);
-      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 18px;
-      transition: opacity .3s ease;
-    }
-    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
-    .loading-brand { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; color: var(--white); }
-    .loading-brand span { color: var(--pulmo-teal); }
-    .loading-spinner { width: 32px; height: 32px; border: 3px solid rgba(28,167,168,0.3); border-top-color: var(--pulmo-teal); border-radius: 50%; animation: spin .7s linear infinite; }
+    html, body { width:100%; max-width:100%; overflow-x:hidden; }
+    body { margin:0; background:var(--mist-blue); color:var(--core-navy); font-family:var(--font-body); line-height:1.55; }
+    a { color:inherit; } button, input, select { font:inherit; } button { cursor:pointer; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:3px solid var(--clinical-amber); outline-offset:3px; }
+    .loading-overlay { position:fixed; inset:0; z-index:100; background:var(--core-navy); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px; transition:opacity .3s ease; }
+    .loading-overlay.hidden { opacity:0; pointer-events:none; }
+    .loading-brand { font-family:var(--font-heading); font-size:2rem; font-weight:800; letter-spacing:-.04em; color:var(--white); }
+    .loading-brand span { color:var(--pulmo-teal); }
+    .loading-spinner { width:32px; height:32px; border:3px solid rgba(28,167,168,.3); border-top-color:var(--pulmo-teal); border-radius:50%; animation:spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: rgba(255,255,255,0.5); font-size: .9rem; }
-
-    .page-shell { max-width: 1440px; margin: 0 auto; background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%); min-height: 100vh; }
-    .top-nav { position: sticky; top: 0; z-index: 20; background: var(--core-navy); color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(18px, 4vw, 52px); box-shadow: 0 6px 18px rgba(11, 31, 51, 0.18); }
-    .brand { display: flex; align-items: center; gap: 14px; min-width: 260px; }
-    .brand-mark { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28, 167, 168, 0.12); }
-    .brand-mark svg { width: 42px; height: 42px; }
-    .brand-name { font-family: var(--font-heading); font-size: clamp(1.5rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
-    .brand-name span { color: var(--pulmo-teal); }
-    .brand-tagline { font-size: 0.78rem; opacity: 0.9; margin-top: 4px; }
-    .nav-links { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-weight: 700; white-space: nowrap; }
-    .nav-links a { text-decoration: none; opacity: 0.95; }
-    .nav-links a:hover { color: var(--airway-mint); }
-    .nav-user { display: flex; align-items: center; gap: 12px; }
-    .nav-email { font-size: .8rem; color: rgba(255,255,255,0.55); font-weight: 700; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .btn-signout { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; color: var(--white); padding: 8px 16px; font-size: .85rem; font-weight: 800; transition: background .18s; }
-    .btn-signout:hover { background: rgba(255,255,255,0.16); }
-    .mobile-menu-note { display: none; color: var(--white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 8px 12px; font-size: .9rem; }
-
-    .main-content { padding: 32px clamp(20px, 4vw, 56px) 76px; }
-    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
-    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
-    h1 { font-size: clamp(2.4rem, 5vw, 4.3rem); line-height: 1.05; letter-spacing: -0.055em; margin: 8px 0 14px; }
-    h2 { font-size: clamp(1.9rem, 3vw, 3rem); }
-    h3 { font-size: 1.35rem; }
-
-    .hero-card, .info-card, .library-card, .disease-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
-    .hero-card { padding: 28px; border-top: 10px solid var(--pulmo-teal); }
-    .hero-card p { max-width: 980px; font-size: 1.14rem; color: #243b55; }
-    .info-card { padding: 24px; border-left: 8px solid var(--pulmo-teal); }
-    .info-card.rt { border-left-color: var(--oxygen-blue); }
-    .library-card { padding: 24px; margin-top: 22px; }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
-    .stat-card { border-radius: 16px; padding: 16px; background: #F8FBFD; border: 1px solid var(--soft-border); }
-    .stat-card strong { display: block; font-family: var(--font-heading); font-size: 1.75rem; letter-spacing: -0.04em; }
-    .stat-card span { color: var(--slate); font-weight: 700; }
-
-    .dashboard-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; margin: 18px 0 22px; align-items: center; }
-
-    .course-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 18px; border-bottom: 1px solid var(--soft-border); padding-bottom: 14px; }
-    .course-tab-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 10px 14px; font-weight: 800; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
-    .course-tab-btn:hover { transform: translateY(-1px); border-color: var(--pulmo-teal); }
-    .course-tab-btn.active { background: var(--core-navy); color: var(--white); border-color: var(--core-navy); }
-    .course-section-stack { display: grid; gap: 24px; }
-    .course-section { border: 1px solid var(--soft-border); border-radius: var(--radius-lg); background: #FAFDFF; padding: 18px; box-shadow: var(--shadow-soft); }
-    .course-section-header { display: flex; justify-content: space-between; gap: 14px; align-items: start; margin-bottom: 14px; }
-    .course-section-header p { margin: 6px 0 0; color: var(--slate); }
-    .course-count-pill { border: 1px solid var(--soft-border); background: var(--white); color: var(--slate); border-radius: 999px; padding: 7px 10px; font-size: .84rem; font-weight: 800; white-space: nowrap; }
-
-    .dashboard-tools input, .dashboard-tools select { border: 1px solid var(--soft-border); border-radius: 12px; padding: 12px 14px; min-width: 0; background: var(--white); color: var(--core-navy); }
-    .small-btn { border: 1px solid var(--soft-border); border-radius: 999px; background: var(--white); color: var(--core-navy); padding: 10px 14px; font-weight: 800; }
-
-    .disease-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-    .disease-card { padding: 20px; display: grid; gap: 14px; position: relative; overflow: hidden; border-top: 7px solid var(--pulmo-teal); }
-    .disease-header { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
-    .disease-title-group { min-width: 0; }
-    .disease-category { color: var(--slate); font-size: .9rem; font-weight: 700; margin-top: 4px; }
-    .badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 7px 10px; font-weight: 800; font-size: .82rem; white-space: nowrap; }
-    .badge.complete { background: var(--airway-mint); color: var(--core-navy); border: 1px solid #BCEFE5; }
-    .badge.progress { background: #E6F3FF; color: var(--core-navy); border: 1px solid #CFE8FF; }
-    .badge.not-started { background: #F8FBFD; color: var(--slate); border: 1px solid var(--soft-border); }
-    .disease-description { color: #243b55; margin: 0; }
-    .progress-row { display: grid; gap: 8px; }
-    .progress-label { display: flex; justify-content: space-between; gap: 10px; color: var(--slate); font-weight: 800; font-size: .92rem; }
-    .progress-bar { height: 13px; border-radius: 999px; background: #E5F0F6; overflow: hidden; }
-    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pulmo-teal), var(--oxygen-blue)); transition: width .25s ease; }
-    .disease-meta { display: flex; flex-wrap: wrap; gap: 8px; }
-    .pill { border: 1px solid var(--soft-border); border-radius: 999px; padding: 6px 9px; color: var(--slate); font-size: .84rem; font-weight: 700; background: #FAFDFF; }
-    .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2px; }
-    .btn { border: 2px solid transparent; border-radius: 12px; min-height: 46px; padding: 11px 18px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { background: var(--pulmo-teal); color: var(--white); box-shadow: 0 8px 16px rgba(28, 167, 168, .24); }
-    .btn-primary:hover { background: var(--pulmo-teal-dark); }
-    .btn-secondary { background: var(--white); color: var(--core-navy); border-color: var(--soft-border); font-size: .88rem; }
-    .btn-secondary:hover { border-color: var(--pulmo-teal); color: var(--pulmo-teal); }
-
-    .complete-medallion { position: absolute; right: -34px; bottom: -34px; width: 115px; height: 115px; border-radius: 50%; background: rgba(221,247,242,.85); display: grid; place-items: start; padding: 20px 0 0 24px; color: var(--pulmo-teal-dark); font-size: 1.5rem; opacity: 0; transform: scale(.85); transition: all .25s ease; }
-    .disease-card.is-complete .complete-medallion { opacity: 1; transform: scale(1); }
-
-    .soft-teal { background: var(--airway-mint); }
-    .soft-blue { background: #E6F3FF; }
-    .soft-amber { background: #FFF4DF; }
-    .example-box { border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
-
-    .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
-    .footer strong span { color: var(--pulmo-teal); }
-
-    /* Sync indicator */
-    .sync-indicator { display: flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 700; color: var(--slate); margin-bottom: 12px; }
-    .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pulmo-teal); }
-    .sync-dot.syncing { background: var(--clinical-amber); animation: pulse 1s infinite; }
-    .sync-dot.error { background: var(--alert-coral); }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-
-    .auth-notice {
-      margin-top: 14px;
-      border: 1px solid #F8D9A5;
-      background: #FFF8EA;
-      color: #5F3B00;
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-weight: 700;
-      display: none;
-    }
-    .auth-notice.show { display: block; }
-
-
-    @media (max-width: 1100px) {
-      .nav-links { display: none; }
-      .mobile-menu-note { display: block; }
-      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .disease-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 780px) {
-      .top-nav { padding: 14px 16px; }
-      .brand { min-width: auto; }
-      .brand-mark { width: 48px; height: 48px; border-radius: 14px; }
-      .brand-tagline { display: none; }
-      .main-content { padding: 20px 14px 56px; }
-      .hero-card, .library-card, .info-card { padding: 18px; border-radius: 18px; }
-      .dashboard-tools { grid-template-columns: 1fr; }
-      .course-section-header { display: grid; }
-      .disease-grid, .stats-grid { grid-template-columns: 1fr; }
-      .nav-email { display: none; }
-    }
-    @media (max-width: 480px) {
-      .brand-name { font-size: 1.35rem; }
-      .mobile-menu-note { display: none; }
-      h1 { font-size: 2.15rem; }
-      h2 { font-size: 1.65rem; }
-      h3 { font-size: 1.22rem; }
-      .btn { width: 100%; }
-      .card-actions { display: grid; }
-    }
-  
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
+    .loading-text { color:rgba(255,255,255,.5); font-size:.9rem; }
+    .page-shell { max-width:1440px; margin:0 auto; background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%); min-height:100vh; }
+    .top-nav { position:sticky; top:0; z-index:20; background:var(--core-navy); color:var(--white); display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px clamp(18px,4vw,52px); box-shadow:0 6px 18px rgba(11,31,51,.18); }
+    .brand { display:flex; align-items:center; gap:14px; min-width:260px; text-decoration:none; }
+    .brand-mark { width:52px; height:52px; border:2px solid rgba(255,255,255,.55); border-radius:16px; display:grid; place-items:center; background:rgba(28,167,168,.12); }
+    .brand-name { font-family:var(--font-heading); font-size:clamp(1.5rem,2vw,2.25rem); font-weight:800; line-height:1; letter-spacing:-.04em; }
+    .brand-name span, .footer strong span { color:var(--pulmo-teal); }
+    .brand-tagline { font-size:.78rem; opacity:.9; margin-top:4px; }
+    .btn-glossary-nav { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:10px 16px; color:#fff; text-decoration:none; font-weight:800; font-size:.9rem; white-space:nowrap; }
+    .btn-glossary-nav:hover { background:rgba(255,255,255,.16); }
+    .nav-user { display:flex; align-items:center; gap:12px; }
+    .nav-email { font-size:.8rem; color:rgba(255,255,255,.55); font-weight:700; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .btn-signout { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:999px; color:var(--white); padding:8px 16px; font-size:.85rem; font-weight:800; }
+    .mobile-menu-note { display:none; color:var(--white); background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:999px; padding:8px 12px; font-size:.9rem; }
+    .main-content { padding:32px clamp(20px,4vw,56px) 76px; }
+    .eyebrow { display:inline-block; color:var(--pulmo-teal); font-weight:800; letter-spacing:.04em; text-transform:uppercase; font-size:.82rem; margin-bottom:8px; }
+    h1,h2,h3 { font-family:var(--font-heading); letter-spacing:-.035em; line-height:1.15; margin:0; }
+    h1 { font-size:clamp(2.4rem,5vw,4.3rem); line-height:1.05; letter-spacing:-.055em; margin:8px 0 14px; }
+    h2 { font-size:clamp(1.9rem,3vw,3rem); } h3 { font-size:1.35rem; }
+    .hero-card,.info-card,.library-card,.disease-card { background:var(--white); border:1px solid var(--soft-border); border-radius:var(--radius-lg); box-shadow:var(--shadow-soft); }
+    .hero-card { padding:28px; border-top:10px solid var(--pulmo-teal); }
+    .hero-card p { max-width:980px; font-size:1.14rem; color:#243b55; }
+    .library-card { padding:24px; margin-top:22px; }
+    .info-card { padding:24px; border-left:8px solid var(--pulmo-teal); }
+    .stats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-top:18px; }
+    .stat-card { border-radius:16px; padding:16px; background:#F8FBFD; border:1px solid var(--soft-border); }
+    .stat-card strong { display:block; font-family:var(--font-heading); font-size:1.75rem; letter-spacing:-.04em; }
+    .stat-card span { color:var(--slate); font-weight:700; }
+    .sync-indicator { display:flex; align-items:center; gap:6px; font-size:.78rem; font-weight:700; color:var(--slate); margin:12px 0; }
+    .sync-dot { width:8px; height:8px; border-radius:50%; background:var(--pulmo-teal); }
+    .sync-dot.syncing { background:var(--clinical-amber); animation:pulse 1s infinite; } .sync-dot.error { background:var(--alert-coral); }
+    @keyframes pulse { 50% { opacity:.4; } }
+    .auth-notice { margin-top:14px; border:1px solid #F8D9A5; background:#FFF8EA; color:#5F3B00; border-radius:14px; padding:12px 14px; font-weight:700; display:none; }
+    .auth-notice.show { display:block; }
+    .course-tabs { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0; border-bottom:1px solid var(--soft-border); padding-bottom:14px; }
+    .course-tab-btn { border:1px solid var(--soft-border); border-radius:999px; background:var(--white); color:var(--core-navy); padding:10px 14px; font-weight:800; transition:background .18s,border-color .18s,transform .18s; }
+    .course-tab-btn:hover { transform:translateY(-1px); border-color:var(--pulmo-teal); }
+    .course-tab-btn.active { background:var(--core-navy); color:var(--white); border-color:var(--core-navy); }
+    .dashboard-tools { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; margin:18px 0 22px; align-items:center; }
+    .dashboard-tools input,.dashboard-tools select { border:1px solid var(--soft-border); border-radius:12px; padding:12px 14px; min-width:0; background:var(--white); color:var(--core-navy); }
+    .course-section-stack { display:grid; gap:24px; }
+    .course-section { border:1px solid var(--soft-border); border-radius:var(--radius-lg); background:#FAFDFF; padding:18px; box-shadow:var(--shadow-soft); }
+    .course-section-header { display:flex; justify-content:space-between; gap:14px; align-items:start; margin-bottom:14px; }
+    .course-section-header p { margin:6px 0 0; color:var(--slate); }
+    .course-count-pill { border:1px solid var(--soft-border); background:var(--white); color:var(--slate); border-radius:999px; padding:7px 10px; font-size:.84rem; font-weight:800; white-space:nowrap; }
+    .disease-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+    .disease-card { padding:20px; display:grid; gap:14px; position:relative; overflow:hidden; border-top:7px solid var(--pulmo-teal); }
+    .disease-header { display:flex; justify-content:space-between; gap:12px; align-items:start; }
+    .disease-category { color:var(--slate); font-size:.9rem; font-weight:700; margin-top:4px; }
+    .badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:7px 10px; font-weight:800; font-size:.82rem; white-space:nowrap; }
+    .badge.complete { background:var(--airway-mint); color:var(--core-navy); border:1px solid #BCEFE5; }
+    .badge.progress { background:#E6F3FF; color:var(--core-navy); border:1px solid #CFE8FF; }
+    .badge.not-started { background:#F8FBFD; color:var(--slate); border:1px solid var(--soft-border); }
+    .disease-description { color:#243b55; margin:0; }
+    .progress-row { display:grid; gap:8px; }
+    .progress-label { display:flex; justify-content:space-between; gap:10px; color:var(--slate); font-weight:800; font-size:.92rem; }
+    .progress-bar { height:13px; border-radius:999px; background:#E5F0F6; overflow:hidden; }
+    .progress-fill { width:0%; height:100%; background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue)); transition:width .25s ease; }
+    .disease-meta { display:flex; flex-wrap:wrap; gap:8px; }
+    .pill { border:1px solid var(--soft-border); border-radius:999px; padding:6px 9px; color:var(--slate); font-size:.84rem; font-weight:700; background:#FAFDFF; }
+    .card-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
+    .btn { border:2px solid transparent; border-radius:12px; min-height:46px; padding:11px 18px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; transition:transform .18s,background .18s,border-color .18s; }
+    .btn:hover { transform:translateY(-1px); }
+    .btn-primary { background:var(--pulmo-teal); color:var(--white); box-shadow:0 8px 16px rgba(28,167,168,.24); }
+    .btn-primary:hover { background:var(--pulmo-teal-dark); }
+    .btn-secondary { background:var(--white); color:var(--core-navy); border-color:var(--soft-border); font-size:.88rem; }
+    .btn-secondary:hover { border-color:var(--pulmo-teal); color:var(--pulmo-teal); }
+    .complete-medallion { position:absolute; right:-34px; bottom:-34px; width:115px; height:115px; border-radius:50%; background:rgba(221,247,242,.85); display:grid; place-items:start; padding:20px 0 0 24px; color:var(--pulmo-teal-dark); font-size:1.5rem; opacity:0; transform:scale(.85); transition:all .25s ease; }
+    .disease-card.is-complete .complete-medallion { opacity:1; transform:scale(1); }
+    .footer { background:var(--core-navy); color:var(--white); padding:34px clamp(20px,4vw,56px); display:flex; justify-content:space-between; gap:22px; flex-wrap:wrap; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media (max-width:1100px) { .stats-grid,.disease-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .mobile-menu-note { display:block; } }
+    @media (max-width:780px) { .top-nav{padding:14px 16px;} .brand{min-width:auto;} .brand-tagline,.nav-email{display:none;} .main-content{padding:20px 14px 56px;} .hero-card,.library-card,.info-card{padding:18px;border-radius:18px;} .dashboard-tools,.course-section-header,.stats-grid,.disease-grid{grid-template-columns:1fr; display:grid;} }
+    @media (max-width:480px) { h1{font-size:2.15rem;} h2{font-size:1.65rem;} h3{font-size:1.22rem;} .btn{width:100%;} .card-actions{display:grid;} .btn-glossary-nav{display:none;} }
   </style>
 </head>
 <body>
-
-  <!-- Loading overlay shown while auth + progress loads -->
   <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-brand">Pulmo<span>Learn</span></div>
     <div class="loading-spinner"></div>
     <div class="loading-text">Loading your progress...</div>
   </div>
-
-<div class="page-shell">
-  <header class="top-nav">
-    <a href="https://pulmolearn.github.io/PulmoCore-Library/index.html" class="brand" aria-label="PulmoLearn home" style="display:flex;align-items:center;gap:14px;text-decoration:none;">
-      <div class="brand-mark" style="width:52px;height:52px;border:2px solid rgba(255,255,255,.55);border-radius:16px;display:grid;place-items:center;background:rgba(28,167,168,0.12);">
-        <svg viewBox="0 0 64 64" fill="none" width="38" height="38">
-          <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
-        </svg>
-      </div>
-      <div>
-        <div class="brand-name">Pulmo<span>Learn</span></div>
-        <div class="brand-tagline">Complete RT curriculum & NBRC board prep.</div>
-      </div>
-       </a>
-      <a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="btn-glossary-nav" style="
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.16);
-  border-radius:12px;padding:10px 16px;
-  color:#fff;text-decoration:none;
-  font-weight:800;font-size:.9rem;
-  transition:background .18s;
-  white-space:nowrap;
-" onmouseover="this.style.background='rgba(255,255,255,0.16)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
-  📖 Glossary/Flashcards
-</a>
-    <div class="nav-user">
-      <span class="nav-email" id="navEmail"></span>
-      <button class="btn-signout" id="signOutBtn">Sign Out</button>
-    </div>
-    <div class="mobile-menu-note">Dashboard</div>
-  </header>
-
+  <div class="page-shell">
+    <header class="top-nav">
+      <a href="/index.html" class="brand" aria-label="PulmoLearn home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" width="38" height="38"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg>
+        </div>
+        <div><div class="brand-name">Pulmo<span>Learn</span></div><div class="brand-tagline">Complete RT curriculum & NBRC board prep.</div></div>
+      </a>
+      <a href="/glossary.html" class="btn-glossary-nav">📖 Glossary/Flashcards</a>
+      <div class="nav-user"><span class="nav-email" id="navEmail"></span><button class="btn-signout" id="signOutBtn">Sign Out</button></div>
+      <div class="mobile-menu-note">Dashboard</div>
+    </header>
     <main class="main-content">
       <section class="hero-card" id="progress">
         <span class="eyebrow">Your Dashboard</span>
-        <h1>Respiratory Disease Library</h1>
-        <p>Work through your PulmoCore modules, track completion across the full disease library, and build board-style clinical reasoning one condition at a time.</p>
+        <h1>Respiratory Learning Library</h1>
+        <p>Work through your PulmoLearn modules, track completion across the full library, and build board-style clinical reasoning one lesson at a time.</p>
         <div class="stats-grid" aria-label="PulmoLearn progress summary">
           <div class="stat-card"><strong id="completedCount">—</strong><span>Lessons completed</span></div>
           <div class="stat-card"><strong id="inProgressCount">—</strong><span>In progress</span></div>
@@ -272,472 +137,285 @@
           <div class="stat-card"><strong id="masteryBadge">—</strong><span>Current badge</span></div>
         </div>
       </section>
-
       <section class="library-card" id="library">
-        <span class="eyebrow">Disease Library</span>
-<h2>Your PulmoCore Modules</h2>
-<p style="color:var(--slate); font-size:.92rem; margin-bottom:4px;">
-        <div class="sync-indicator">
-          <div class="sync-dot" id="syncDot"></div>
-          <span id="syncLabel">Progress synced</span>
-        </div>
+        <span class="eyebrow">Course Library</span>
+        <h2>Your PulmoLearn Modules</h2>
+        <p style="color:var(--slate); font-size:.92rem; margin-bottom:4px;">Use the tabs to view all courses or focus on a single section.</p>
+        <div class="sync-indicator"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">Progress synced</span></div>
         <div class="auth-notice" id="authNotice" role="status"></div>
         <div class="course-tabs" id="courseTabs" role="tablist" aria-label="Course category tabs"></div>
         <div class="dashboard-tools" aria-label="Course library controls">
-          <input id="searchLessons" type="search" placeholder="Search courses: asthma, pharmacology, spirometry..." aria-label="Search course lessons" />
-          <select id="filterLessons" aria-label="Filter lessons by status">
-            <option value="all">All lessons</option>
-            <option value="not-started">Not started</option>
-            <option value="in-progress">In progress</option>
-            <option value="completed">Completed</option>
-          </select>
+          <input id="searchLessons" type="search" placeholder="Search courses: asthma, spirometry, oxygen devices..." aria-label="Search course lessons" />
+          <select id="filterLessons" aria-label="Filter lessons by status"><option value="all">All lessons</option><option value="not-started">Not started</option><option value="in-progress">In progress</option><option value="completed">Completed</option></select>
         </div>
         <div class="course-section-stack" id="courseSections" aria-live="polite"></div>
       </section>
     </main>
-
-    <footer class="footer">
-      <div><strong>Pulmo<span>Learn</span></strong><br>Complete RT curriculum & NBRC board prep.</div>
-      <div>Disease Library · Board Prep · Progress Tracking</div>
-    </footer>
+    <footer class="footer"><div><strong>Pulmo<span>Learn</span></strong><br>Complete RT curriculum & NBRC board prep.</div><div>Disease Library · Board Prep · Progress Tracking</div></footer>
   </div>
-
   <script type="module">
-    const AUTH_MODULE_URL = 'https://pulmolearn.github.io/PulmoCore-Library/assets/auth.js'
-    const LOGIN_URL = 'https://pulmolearn.github.io/PulmoCore-Library/login.html'
-    const isGitHubPages = window.location.hostname === 'pulmolearn.github.io'
-    let supabase = null
-    let session = null
+    const AUTH_MODULE_URL = '/assets/auth.js';
+    const LOGIN_URL = '/login.html';
+    const isLocalPreview = window.location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    let supabase = null;
+    let session = null;
 
-    function showAuthNotice(message) {
-      const notice = document.getElementById('authNotice')
-      if (!notice) return
-      notice.textContent = message
-      notice.classList.add('show')
-    }
-
-    function hideLoadingOverlay() {
-      const overlay = document.getElementById('loadingOverlay')
-      if (overlay) overlay.classList.add('hidden')
-    }
+    function showAuthNotice(message) { const notice = document.getElementById('authNotice'); if (!notice) return; notice.textContent = message; notice.classList.add('show'); }
+    function hideLoadingOverlay() { const overlay = document.getElementById('loadingOverlay'); if (overlay) overlay.classList.add('hidden'); }
 
     try {
-      if (isGitHubPages) {
-        const auth = await import(AUTH_MODULE_URL)
-        supabase = auth.supabase
-        session = await auth.requireAccess()
-        if (!session) throw new Error('Access check did not return a session.')
-
-        document.getElementById('navEmail').textContent = session.user.email
-        document.getElementById('signOutBtn').addEventListener('click', async () => {
-          await supabase.auth.signOut()
-          window.location.href = LOGIN_URL
-        })
+      if (!isLocalPreview) {
+        const auth = await import(AUTH_MODULE_URL);
+        supabase = auth.supabase;
+        session = await auth.requireAccess();
+        if (!session) throw new Error('Access check did not return a session.');
+        document.getElementById('navEmail').textContent = session.user.email;
+        document.getElementById('signOutBtn').addEventListener('click', async () => { await supabase.auth.signOut(); window.location.href = LOGIN_URL; });
       } else {
-        document.getElementById('navEmail').textContent = 'Preview mode'
-        document.getElementById('signOutBtn').style.display = 'none'
-        showAuthNotice('Local/file preview mode: tabs and links are visible, but Supabase login and progress sync only work after this file is published to GitHub Pages.')
+        document.getElementById('navEmail').textContent = 'Preview mode';
+        document.getElementById('signOutBtn').style.display = 'none';
+        showAuthNotice('Local/file preview mode: tabs and links are visible, but Supabase login and progress sync only work after this file is published.');
       }
     } catch (error) {
-      console.error('Dashboard auth/progress setup failed:', error)
-      document.getElementById('navEmail').textContent = 'Preview mode'
-      document.getElementById('signOutBtn').style.display = 'none'
-      showAuthNotice('Dashboard preview loaded without Supabase progress. Publish this file to GitHub Pages and log in to enable synced progress.')
+      console.error('Dashboard auth/progress setup failed:', error);
+      document.getElementById('navEmail').textContent = 'Preview mode';
+      document.getElementById('signOutBtn').style.display = 'none';
+      showAuthNotice('Dashboard loaded without Supabase progress. Check /assets/auth.js if login or sync should be enabled.');
     }
 
-    // ── Course section definitions ──
-    // Add future lessons by assigning courseGroup to one of these keys.
-    // The dashboard tabs and grouped containers render from this list.
     const courseSections = [
       { key: "all", label: "All Courses", description: "View every PulmoLearn course section together." },
-      { key: "diseases", label: "Respiratory Diseases", baseUrl: "https://pulmolearn.github.io/PulmoCore-Library/", description: "Disease-based PulmoCore modules for RT clinical reasoning and board prep." },
+      { key: "diseases", label: "Respiratory Diseases", baseUrl: "/", description: "Disease-based PulmoCore modules for RT clinical reasoning and board prep." },
       { key: "foundations", label: "Foundations of Respiratory Care", baseUrl: "https://pulmolearn.github.io/Foundations/", description: "Orientation, safety, infection control, clinical environment, and foundational RT practice." },
       { key: "physiology", label: "Respiratory Physiology", baseUrl: "https://pulmolearn.github.io/Physiology/", description: "Ventilation, diffusion, oxygen transport, pulmonary blood flow, mechanics, and gas exchange." },
       { key: "assessment", label: "Pulmonary Assessment", baseUrl: "https://pulmolearn.github.io/Assessment/", description: "Patient assessment, breath sounds, vitals, chart review, diagnostics, and clinical interpretation." },
       { key: "equipment", label: "Equipment & Procedures", baseUrl: "https://pulmolearn.github.io/Equipment/", description: "Aerosol devices, humidity therapy, airway clearance, lung expansion, oxygen devices, and core bedside procedures." }
-    ]
+    ];
 
-    let activeCourseGroup = "respiratory-diseases"
+    let activeCourseGroup = "diseases";
 
-    // ── Lesson definitions ──
     const lessons = [
-      { id: "als", title: "ALS", courseGroup: "diseases", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "ALS.html", description: "Respiratory muscle weakness, cough impairment, secretion clearance, NIV concepts, and signs of ventilatory failure." },
-      { id: "ards", title: "ARDS", courseGroup: "diseases", category: "Acute Respiratory Failure", time: "35–45 min", level: "Intermediate", href: "ARDS.html", description: "Diffuse alveolar injury, refractory hypoxemia, lung-protective ventilation, PEEP, and RT escalation priorities." },
-      { id: "asthma", title: "Asthma", courseGroup: "diseases", category: "Obstructive Lung Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Asthma.html", description: "Variable airflow obstruction, bronchospasm, inflammation, peak flow zones, and escalation during status asthmaticus." },
-      { id: "atelectasis", title: "Atelectasis", courseGroup: "diseases", category: "Ventilation / Lung Expansion Disorder", time: "25–35 min", level: "Core RT Knowledge", href: "Atelectasis.html", description: "Alveolar collapse, reduced ventilation, post-op risk, lung expansion therapy, and oxygenation monitoring." },
-      { id: "bronchiectasis", title: "Bronchiectasis", courseGroup: "diseases", category: "Chronic Airway Disease", time: "30–40 min", level: "Intermediate", href: "Bronchiectasis.html", description: "Permanent airway dilation, chronic sputum production, recurrent infection, airway clearance, and exacerbation management." },
-      { id: "cdh", title: "Congenital Diaphragmatic Hernia", courseGroup: "diseases", category: "Neonatal Respiratory Disease", time: "35–45 min", level: "Intermediate", href: "CDH.html", description: "Pulmonary hypoplasia, respiratory distress at birth, pulmonary hypertension risk, stabilization, and ventilation priorities." },
-      { id: "chd", title: "Congenital Heart Disease", courseGroup: "diseases", category: "Cardiopulmonary / Pediatric", time: "35–45 min", level: "Intermediate", href: "CHD.html", description: "Cardiac shunts, cyanosis, pulmonary blood flow changes, oxygenation clues, and RT assessment priorities." },
-      { id: "cldi", title: "Chronic Lung Disease of Infancy", courseGroup: "diseases", category: "Neonatal / Pediatric Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "CLDI.html", description: "Chronic respiratory support needs after prematurity, oxygen dependency, growth concerns, and long-term pulmonary care." },
-      { id: "copd", title: "COPD", courseGroup: "diseases", category: "Obstructive Lung Disease", time: "35–45 min", level: "Core RT Knowledge", href: "COPD.html", description: "Chronic airflow limitation, air trapping, oxygenation targets, exacerbation management, and ventilatory support concepts." },
-      { id: "cardiogenic_pulmonary_edema", title: "Cardiogenic Pulmonary Edema", courseGroup: "diseases", category: "Cardiopulmonary / Gas Exchange", time: "30–40 min", level: "Intermediate", href: "CardiogenicPulmonaryEdema.html", description: "Fluid in alveoli from cardiac causes, hypoxemia, crackles, positive pressure support, and emergency escalation." },
-      { id: "croup", title: "Croup", courseGroup: "diseases", category: "Pediatric Upper Airway Disease", time: "25–35 min", level: "Core RT Knowledge", href: "Croup.html", description: "Upper airway swelling, barking cough, stridor, racemic epinephrine concepts, and pediatric distress red flags." },
-      { id: "cystic_fibrosis", title: "Cystic Fibrosis", courseGroup: "diseases", category: "Genetic / Chronic Airway Disease", time: "35–45 min", level: "Intermediate", href: "CysticFibrosis.html", description: "Thick secretions, chronic infection risk, airway clearance, inhaled therapies, nutrition links, and exacerbation care." },
-      { id: "epiglottitis", title: "Epiglottitis", courseGroup: "diseases", category: "Pediatric Upper Airway Emergency", time: "25–35 min", level: "Intermediate", href: "Epiglottitis.html", description: "Supraglottic swelling, drooling, tripod positioning, airway emergency recognition, and minimal-agitation priorities." },
-      { id: "flail_chest", title: "Flail Chest", courseGroup: "diseases", category: "Trauma / Chest Wall", time: "30–40 min", level: "Intermediate", href: "FlailChest.html", description: "Paradoxical chest movement, pulmonary contusion risk, pain control, oxygenation, ventilation, and trauma escalation." },
-      { id: "guillain_barre", title: "Guillain-Barré Syndrome", courseGroup: "diseases", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "GuillainBarre.html", description: "Ascending weakness, ventilatory failure risk, vital capacity monitoring, secretion clearance, and escalation thresholds." },
-      { id: "interstitial_lung_disease", title: "Interstitial Lung Disease", courseGroup: "diseases", category: "Restrictive Lung Disease", time: "35–45 min", level: "Intermediate", href: "InterstitialLungDisease.html", description: "Stiff lungs, diffusion limitation, restrictive patterns, exertional hypoxemia, and long-term oxygen considerations." },
-      { id: "kyphoscoliosis", title: "Kyphoscoliosis", courseGroup: "diseases", category: "Restrictive Chest Wall Disorder", time: "30–40 min", level: "Intermediate", href: "Kyphoscoliosis.html", description: "Chest wall restriction, reduced lung volumes, hypoventilation risk, sleep-related breathing issues, and ventilatory support." },
-      { id: "lung_cancer", title: "Lung Cancer", courseGroup: "diseases", category: "Oncology / Pulmonary Disease", time: "30–40 min", level: "Core RT Knowledge", href: "LungCancer.html", description: "Airway obstruction, pleural complications, hemoptysis risk, oxygenation support, and RT role in symptom management." },
-      { id: "mas", title: "Meconium Aspiration Syndrome", courseGroup: "diseases", category: "Neonatal Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "MAS.html", description: "Meconium obstruction, chemical pneumonitis, air trapping, pulmonary hypertension risk, and newborn respiratory support." },
-      { id: "myasthenia_gravis", title: "Myasthenia Gravis", courseGroup: "diseases", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "MyastheniaGravis.html", description: "Fatigable weakness, myasthenic crisis, ventilatory monitoring, airway protection, and respiratory support priorities." },
-      { id: "near_drowning", title: "Near Drowning", courseGroup: "diseases", category: "Environmental / Acute Injury", time: "30–40 min", level: "Intermediate", href: "NearDrowning.html", description: "Aspiration injury, surfactant washout, hypoxemia, delayed pulmonary edema, and monitoring after submersion events." },
-      { id: "pals", title: "Pulmonary Air Leak Syndrome", courseGroup: "diseases", category: "Neonatal / Air Leak Disorder", time: "30–40 min", level: "Intermediate", href: "PALS.html", description: "Air leak complications, pneumothorax risk, ventilator pressure concerns, assessment findings, and emergency response." },
-      { id: "pleural_effusion", title: "Pleural Effusion", courseGroup: "diseases", category: "Pleural Disease", time: "30–40 min", level: "Core RT Knowledge", href: "PleuralEffusion.html", description: "Fluid in the pleural space, restrictive mechanics, diminished breath sounds, imaging clues, and oxygenation support." },
-      { id: "pneumonia", title: "Pneumonia", courseGroup: "diseases", category: "Infectious Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Pneumonia.html", description: "Alveolar infection, consolidation, gas exchange impairment, secretion management, oxygenation, and clinical worsening signs." },
-      { id: "pneumothorax", title: "Pneumothorax", courseGroup: "diseases", category: "Pleural / Emergency Respiratory Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Pneumothorax.html", description: "Air in the pleural space, lung collapse, tension pneumothorax red flags, decompression concepts, and RT recognition." },
-      { id: "pulmonary_embolism", title: "Pulmonary Embolism", courseGroup: "diseases", category: "Pulmonary Vascular Disease", time: "30–40 min", level: "Intermediate", href: "PulmonaryEmbolism.html", description: "Ventilation-perfusion mismatch, dead space, hypoxemia, sudden dyspnea, diagnostic clues, and emergency priorities." },
-      { id: "rds", title: "Respiratory Distress Syndrome", courseGroup: "diseases", category: "Neonatal Respiratory Disease", time: "35–45 min", level: "Intermediate", href: "RDS.html", description: "Surfactant deficiency, decreased compliance, grunting, CPAP, surfactant therapy, and neonatal respiratory support." },
-      { id: "rsv", title: "RSV Bronchiolitis", courseGroup: "diseases", category: "Pediatric Respiratory Disease", time: "30–40 min", level: "Core RT Knowledge", href: "RSV.html", description: "Small airway inflammation, pediatric distress assessment, supportive care, suctioning, oxygen, and escalation red flags." },
-      { id: "sleep_apnea", title: "Sleep Apnea", courseGroup: "diseases", category: "Sleep-Related Breathing Disorder", time: "30–40 min", level: "Core RT Knowledge", href: "SleepApnea.html", description: "Upper airway obstruction, hypopnea/apnea patterns, CPAP/BiPAP concepts, oxygenation, and patient adherence support." },
-      { id: "smoke_inhalation", title: "Smoke Inhalation", courseGroup: "diseases", category: "Environmental / Airway Injury", time: "30–40 min", level: "Intermediate", href: "SmokeInhalation.html", description: "Thermal and chemical airway injury, carbon monoxide concerns, soot/hoarseness red flags, oxygen therapy, and escalation." },
-      { id: "ttn", title: "Transient Tachypnea of the Newborn", courseGroup: "diseases", category: "Neonatal Respiratory Disease", time: "25–35 min", level: "Core RT Knowledge", href: "TTN.html", description: "Delayed fetal lung fluid clearance, tachypnea, oxygen support, differentiation from RDS, and expected clinical course." },
-      { id: "tuberculosis", title: "Tuberculosis", courseGroup: "diseases", category: "Infectious Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Tuberculosis.html", description: "Airborne infection control, cavitary lung disease, chronic cough, isolation precautions, diagnostics, and public health considerations." }
-    
-  // FOUNDATIONS
-  { id: "foundations-1-1", title: "Professional Communication & Conflict Resolution", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_1_Student_FULL.html", description: "Professional email communication, respectful patient-centered language, conflict resolution, and teamwork skills for respiratory therapy students." },
-  { id: "foundations-1-2", title: "Medical Math, Units & Dosage Calculations", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_2_Student_REBUILT.html", description: "Metric conversions, dimensional analysis, dosage calculations, temperature conversions, and ideal body weight calculations." },
-  { id: "foundations-1-3", title: "Oxygenation & Gas Exchange Calculations", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_3_Student_FULL.html", description: "PiO₂, PAO₂, A-a gradient, P/F ratio, oxygen extraction, and core oxygenation calculations." },
-  { id: "foundations-1-4", title: "Introduction to Pulmonary Function Testing", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_4_Student_FULL.html", description: "Airflow, lung volumes, gas exchange testing, bronchodilator response, and beginner PFT interpretation." },
-  { id: "foundations-2-1", title: "Oximetry & Capnography", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_2_1_Student_FULL.html", description: "Pulse oximetry, co-oximetry, capnography, ETCO₂ patterns, airway placement, and monitoring trends." },
-  { id: "foundations-2-2", title: "Interpreting Clinical & Laboratory Data", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner / Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_2_2_Student_FULL.html", description: "Lab values related to anemia, infection, fluid status, cardiac causes of dyspnea, bleeding risk, and respiratory assessment." },
-  { id: "foundations-2-3", title: "ABG Interpretation", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner / Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_2_3_Student_FULL.html", description: "A structured ABG interpretation pathway for acid-base balance, ventilation, oxygenation, compensation, and severity." },
-  { id: "foundations-2-4", title: "Integrated Respiratory Decision-Making", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_2_4_Student_FULL.html", description: "Integrates monitoring, labs, ABGs, assessment data, and RT interventions into clinical decision-making." },
-  { id: "foundations-3-1", title: "Flexible Bronchoscopy: Procedure, Sedation & Airway Assessment", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_3_1_Student_FULL.html", description: "Bronchoscopy preparation, conscious sedation monitoring, diagnostic sampling, therapeutic interventions, and airway assessment." },
-  { id: "foundations-3-2", title: "ECG Interpretation & Cardiac Rhythm Analysis", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_3_2_Student_FULL.html", description: "Normal and life-threatening rhythms, heart rate calculation, rhythm interpretation, and escalation priorities." },
-  { id: "foundations-3-3", title: "Anion Gap, Bicarbonate Gap & Mixed Acid-Base Disorders", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Advanced", href: "https://pulmolearn.github.io/Foundations/Foundations_3_3_Student_FULL.html", description: "Anion gap, bicarbonate gap, metabolic acidosis causes, and identification of hidden mixed acid-base disorders." },
-  { id: "foundations-3-4", title: "Nutrition, Ethics & Electronic Medical Records", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_3_4_Student_FULL.html", description: "Nutritional support, professional ethics, documentation, EMR use, and patient advocacy." },
+      { id: "als", title: "ALS", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "ALS.html", description: "Respiratory muscle weakness, cough impairment, secretion clearance, NIV concepts, and signs of ventilatory failure." },
+      { id: "ards", title: "ARDS", category: "Acute Respiratory Failure", time: "35–45 min", level: "Intermediate", href: "ARDS.html", description: "Diffuse alveolar injury, refractory hypoxemia, lung-protective ventilation, PEEP, and RT escalation priorities." },
+      { id: "asthma", title: "Asthma", category: "Obstructive Lung Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Asthma.html", description: "Variable airflow obstruction, bronchospasm, inflammation, peak flow zones, and escalation during status asthmaticus." },
+      { id: "atelectasis", title: "Atelectasis", category: "Ventilation / Lung Expansion Disorder", time: "25–35 min", level: "Core RT Knowledge", href: "Atelectasis.html", description: "Alveolar collapse, reduced ventilation, post-op risk, lung expansion therapy, and oxygenation monitoring." },
+      { id: "bronchiectasis", title: "Bronchiectasis", category: "Chronic Airway Disease", time: "30–40 min", level: "Intermediate", href: "Bronchiectasis.html", description: "Permanent airway dilation, chronic sputum production, recurrent infection, airway clearance, and exacerbation management." },
+      { id: "cdh", title: "Congenital Diaphragmatic Hernia", category: "Neonatal Respiratory Disease", time: "35–45 min", level: "Intermediate", href: "CDH.html", description: "Pulmonary hypoplasia, respiratory distress at birth, pulmonary hypertension risk, stabilization, and ventilation priorities." },
+      { id: "chd", title: "Congenital Heart Disease", category: "Cardiopulmonary / Pediatric", time: "35–45 min", level: "Intermediate", href: "CHD.html", description: "Cardiac shunts, cyanosis, pulmonary blood flow changes, oxygenation clues, and RT assessment priorities." },
+      { id: "cldi", title: "Chronic Lung Disease of Infancy", category: "Neonatal / Pediatric Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "CLDI.html", description: "Chronic respiratory support needs after prematurity, oxygen dependency, growth concerns, and long-term pulmonary care." },
+      { id: "copd", title: "COPD", category: "Obstructive Lung Disease", time: "35–45 min", level: "Core RT Knowledge", href: "COPD.html", description: "Chronic airflow limitation, air trapping, oxygenation targets, exacerbation management, and ventilatory support concepts." },
+      { id: "cardiogenic_pulmonary_edema", title: "Cardiogenic Pulmonary Edema", category: "Cardiopulmonary / Gas Exchange", time: "30–40 min", level: "Intermediate", href: "CardiogenicPulmonaryEdema.html", description: "Fluid in alveoli from cardiac causes, hypoxemia, crackles, positive pressure support, and emergency escalation." },
+      { id: "croup", title: "Croup", category: "Pediatric Upper Airway Disease", time: "25–35 min", level: "Core RT Knowledge", href: "Croup.html", description: "Upper airway swelling, barking cough, stridor, racemic epinephrine concepts, and pediatric distress red flags." },
+      { id: "cystic_fibrosis", title: "Cystic Fibrosis", category: "Genetic / Chronic Airway Disease", time: "35–45 min", level: "Intermediate", href: "CysticFibrosis.html", description: "Thick secretions, chronic infection risk, airway clearance, inhaled therapies, nutrition links, and exacerbation care." },
+      { id: "epiglottitis", title: "Epiglottitis", category: "Pediatric Upper Airway Emergency", time: "25–35 min", level: "Intermediate", href: "Epiglottitis.html", description: "Supraglottic swelling, drooling, tripod positioning, airway emergency recognition, and minimal-agitation priorities." },
+      { id: "flail_chest", title: "Flail Chest", category: "Trauma / Chest Wall", time: "30–40 min", level: "Intermediate", href: "FlailChest.html", description: "Paradoxical chest movement, pulmonary contusion risk, pain control, oxygenation, ventilation, and trauma escalation." },
+      { id: "guillain_barre", title: "Guillain-Barré Syndrome", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "GuillainBarre.html", description: "Ascending weakness, ventilatory failure risk, vital capacity monitoring, secretion clearance, and escalation thresholds." },
+      { id: "interstitial_lung_disease", title: "Interstitial Lung Disease", category: "Restrictive Lung Disease", time: "35–45 min", level: "Intermediate", href: "InterstitialLungDisease.html", description: "Stiff lungs, diffusion limitation, restrictive patterns, exertional hypoxemia, and long-term oxygen considerations." },
+      { id: "kyphoscoliosis", title: "Kyphoscoliosis", category: "Restrictive Chest Wall Disorder", time: "30–40 min", level: "Intermediate", href: "Kyphoscoliosis.html", description: "Chest wall restriction, reduced lung volumes, hypoventilation risk, sleep-related breathing issues, and ventilatory support." },
+      { id: "lung_cancer", title: "Lung Cancer", category: "Oncology / Pulmonary Disease", time: "30–40 min", level: "Core RT Knowledge", href: "LungCancer.html", description: "Airway obstruction, pleural complications, hemoptysis risk, oxygenation support, and RT role in symptom management." },
+      { id: "mas", title: "Meconium Aspiration Syndrome", category: "Neonatal Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "MAS.html", description: "Meconium obstruction, chemical pneumonitis, air trapping, pulmonary hypertension risk, and newborn respiratory support." },
+      { id: "myasthenia_gravis", title: "Myasthenia Gravis", category: "Neuromuscular Respiratory Disease", time: "30–40 min", level: "Intermediate", href: "MyastheniaGravis.html", description: "Fatigable weakness, myasthenic crisis, ventilatory monitoring, airway protection, and respiratory support priorities." },
+      { id: "near_drowning", title: "Near Drowning", category: "Environmental / Acute Injury", time: "30–40 min", level: "Intermediate", href: "NearDrowning.html", description: "Aspiration injury, surfactant washout, hypoxemia, delayed pulmonary edema, and monitoring after submersion events." },
+      { id: "pals", title: "Pulmonary Air Leak Syndrome", category: "Neonatal / Air Leak Disorder", time: "30–40 min", level: "Intermediate", href: "PALS.html", description: "Air leak complications, pneumothorax risk, ventilator pressure concerns, assessment findings, and emergency response." },
+      { id: "pleural_effusion", title: "Pleural Effusion", category: "Pleural Disease", time: "30–40 min", level: "Core RT Knowledge", href: "PleuralEffusion.html", description: "Fluid in the pleural space, restrictive mechanics, diminished breath sounds, imaging clues, and oxygenation support." },
+      { id: "pneumonia", title: "Pneumonia", category: "Infectious Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Pneumonia.html", description: "Alveolar infection, consolidation, gas exchange impairment, secretion management, oxygenation, and clinical worsening signs." },
+      { id: "pneumothorax", title: "Pneumothorax", category: "Pleural / Emergency Respiratory Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Pneumothorax.html", description: "Air in the pleural space, lung collapse, tension pneumothorax red flags, decompression concepts, and RT recognition." },
+      { id: "pulmonary_embolism", title: "Pulmonary Embolism", category: "Pulmonary Vascular Disease", time: "30–40 min", level: "Intermediate", href: "PulmonaryEmbolism.html", description: "Ventilation-perfusion mismatch, dead space, hypoxemia, sudden dyspnea, diagnostic clues, and emergency priorities." },
+      { id: "rds", title: "Respiratory Distress Syndrome", category: "Neonatal Respiratory Disease", time: "35–45 min", level: "Intermediate", href: "RDS.html", description: "Surfactant deficiency, decreased compliance, grunting, CPAP, surfactant therapy, and neonatal respiratory support." },
+      { id: "rsv", title: "RSV Bronchiolitis", category: "Pediatric Respiratory Disease", time: "30–40 min", level: "Core RT Knowledge", href: "RSV.html", description: "Small airway inflammation, pediatric distress assessment, supportive care, suctioning, oxygen, and escalation red flags." },
+      { id: "sleep_apnea", title: "Sleep Apnea", category: "Sleep-Related Breathing Disorder", time: "30–40 min", level: "Core RT Knowledge", href: "SleepApnea.html", description: "Upper airway obstruction, hypopnea/apnea patterns, CPAP/BiPAP concepts, oxygenation, and patient adherence support." },
+      { id: "smoke_inhalation", title: "Smoke Inhalation", category: "Environmental / Airway Injury", time: "30–40 min", level: "Intermediate", href: "SmokeInhalation.html", description: "Thermal and chemical airway injury, carbon monoxide concerns, soot/hoarseness red flags, oxygen therapy, and escalation." },
+      { id: "ttn", title: "Transient Tachypnea of the Newborn", category: "Neonatal Respiratory Disease", time: "25–35 min", level: "Core RT Knowledge", href: "TTN.html", description: "Delayed fetal lung fluid clearance, tachypnea, oxygen support, differentiation from RDS, and expected clinical course." },
+      { id: "tuberculosis", title: "Tuberculosis", category: "Infectious Disease", time: "30–40 min", level: "Core RT Knowledge", href: "Tuberculosis.html", description: "Airborne infection control, cavitary lung disease, chronic cough, isolation precautions, diagnostics, and public health considerations." },
+      { id: "foundations-1-1", title: "Professional Communication & Conflict Resolution", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_1_Student_FULL.html", description: "Professional email communication, respectful patient-centered language, conflict resolution, and teamwork skills for respiratory therapy students." },
+      { id: "foundations-1-2", title: "Medical Math, Units & Dosage Calculations", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_2_Student_REBUILT.html", description: "Metric conversions, dimensional analysis, dosage calculations, temperature conversions, and ideal body weight calculations." },
+      { id: "foundations-1-3", title: "Oxygenation & Gas Exchange Calculations", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_3_Student_FULL.html", description: "PiO₂, PAO₂, A-a gradient, P/F ratio, oxygen extraction, and core oxygenation calculations." },
+      { id: "foundations-1-4", title: "Introduction to Pulmonary Function Testing", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_1_4_Student_FULL.html", description: "Airflow, lung volumes, gas exchange testing, bronchodilator response, and beginner PFT interpretation." },
+      { id: "foundations-2-1", title: "Oximetry & Capnography", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Foundations/Foundations_2_1_Student_FULL.html", description: "Pulse oximetry, co-oximetry, capnography, ETCO₂ patterns, airway placement, and monitoring trends." },
+      { id: "foundations-2-2", title: "Interpreting Clinical & Laboratory Data", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner / Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_2_2_Student_FULL.html", description: "Lab values related to anemia, infection, fluid status, cardiac causes of dyspnea, bleeding risk, and respiratory assessment." },
+      { id: "foundations-2-3", title: "ABG Interpretation", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Beginner / Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_2_3_Student_FULL.html", description: "A structured ABG interpretation pathway for acid-base balance, ventilation, oxygenation, compensation, and severity." },
+      { id: "foundations-2-4", title: "Integrated Respiratory Decision-Making", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_2_4_Student_FULL.html", description: "Integrates monitoring, labs, ABGs, assessment data, and RT interventions into clinical decision-making." },
+      { id: "foundations-3-1", title: "Flexible Bronchoscopy: Procedure, Sedation & Airway Assessment", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_3_1_Student_FULL.html", description: "Bronchoscopy preparation, conscious sedation monitoring, diagnostic sampling, therapeutic interventions, and airway assessment." },
+      { id: "foundations-3-2", title: "ECG Interpretation & Cardiac Rhythm Analysis", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_3_2_Student_FULL.html", description: "Normal and life-threatening rhythms, heart rate calculation, rhythm interpretation, and escalation priorities." },
+      { id: "foundations-3-3", title: "Anion Gap, Bicarbonate Gap & Mixed Acid-Base Disorders", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Advanced", href: "https://pulmolearn.github.io/Foundations/Foundations_3_3_Student_FULL.html", description: "Anion gap, bicarbonate gap, metabolic acidosis causes, and identification of hidden mixed acid-base disorders." },
+      { id: "foundations-3-4", title: "Nutrition, Ethics & Electronic Medical Records", courseGroup: "foundations", category: "Foundations of Respiratory Care", time: "35–45 min", level: "Intermediate", href: "https://pulmolearn.github.io/Foundations/Foundations_3_4_Student_FULL.html", description: "Nutritional support, professional ethics, documentation, EMR use, and patient advocacy." },
+      { id: "rp-1-1", title: "Airway Defense & Conditioning", courseGroup: "physiology", category: "Respiratory Physiology", time: "30–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_1_Student.html", description: "How the respiratory system protects, cleans, warms, and humidifies inspired air before it reaches the alveoli." },
+      { id: "rp-1-2", title: "Basic Respiratory Anatomy", courseGroup: "physiology", category: "Respiratory Physiology", time: "30–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_2_Student.html", description: "Respiratory anatomy needed before learning mechanics, gas exchange, lung volumes, and disease patterns." },
+      { id: "rp-1-3", title: "Mechanics of Ventilation", courseGroup: "physiology", category: "Respiratory Physiology", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_3_Student_FULL.html", description: "Pressure gradients, respiratory muscles, chest volume, neural signals, and how air moves in and out of the lungs." },
+      { id: "rp-1-4", title: "Lung Volumes and Capacities", courseGroup: "physiology", category: "Respiratory Physiology", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_4_Student.html", description: "Basic lung volumes and capacities, spirogram interpretation, volume relationships, and clinical meaning." },
+      { id: "rp-2-1", title: "Acid-Base Physiology & Kidney Compensation", courseGroup: "physiology", category: "Respiratory Physiology", time: "60–75 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_1_Student.html", description: "CO₂-bicarbonate balance, respiratory acid-base control, renal compensation, and acid-base physiology." },
+      { id: "rp-2-2", title: "Neural Control of Ventilation, Respiratory Drives & V/Q Ratio", courseGroup: "physiology", category: "Respiratory Physiology", time: "65–80 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_2_Student.html", description: "Central and peripheral chemoreceptors, CO₂ and O₂ drives, ventilatory control, and V/Q relationships." },
+      { id: "rp-2-3", title: "Assessment & Treatment of Hypoxia, V/Q Calculations & Physiologic Oxygenation", courseGroup: "physiology", category: "Respiratory Physiology", time: "65–80 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_3_Student.html", description: "Signs of hypoxemia, hypoxia classification, V/Q calculations, oxygenation assessment, and treatment reasoning." },
+      { id: "rp-2-4", title: "Sleep-Disordered Breathing, Sleep Studies & Clinical Interpretation", courseGroup: "physiology", category: "Respiratory Physiology", time: "60–75 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_4_Student.html", description: "Sleep apnea patterns, sleep event types, waveform interpretation, AHI classification, and clinical sleep study concepts." },
+      { id: "rp-3-1", title: "Cardiovascular System & Cardiac Electrophysiology", courseGroup: "physiology", category: "Respiratory Physiology", time: "70–85 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_3_1_Student.html", description: "Cardiac pump function, electrophysiology, ECG foundations, and cardiopulmonary monitoring concepts." },
+      { id: "rp-3-2", title: "Cardiac Pathology & Hemodynamics", courseGroup: "physiology", category: "Respiratory Physiology", time: "70–80 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_3_2_Student.html", description: "Ischemia, infarction, valve disease, hemodynamics, Swan-Ganz catheter concepts, and cardiopulmonary consequences." },
+      { id: "rp-3-3", title: "Fluid Volume Overload", courseGroup: "physiology", category: "Respiratory Physiology", time: "45–55 min", level: "Foundational", href: "https://pulmolearn.github.io/Physiology/RP_3_3_Student.html", description: "How excess vascular fluid affects the lungs, heart, kidneys, oxygenation, and respiratory assessment." },
+      { id: "rp-3-4", title: "Newborn Assessment & APGAR Scoring", courseGroup: "physiology", category: "Respiratory Physiology", time: "55–65 min", level: "Foundational", href: "https://pulmolearn.github.io/Physiology/RP_3_4_Student.html", description: "Newborn transition, fetal-to-neonatal circulation changes, APGAR scoring, and respiratory assessment after birth." },
+      { id: "pa-1-1", title: "Introduction to Pulmonary Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_1_Student.html", description: "Foundations of pulmonary assessment, observation skills, respiratory patterns, and RT clinical reasoning." },
+      { id: "pa-1-2", title: "Vital Signs & Respiratory Patterns", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_2_Student.html", description: "Respiratory rate, pulse, blood pressure, temperature, pulse oximetry, and interpretation of abnormal breathing patterns." },
+      { id: "pa-1-3", title: "Inspection, Palpation & Chest Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_3_Student.html", description: "Thoracic assessment, tracheal position, tactile fremitus, chest symmetry, and identifying visible respiratory distress." },
+      { id: "pa-1-4", title: "Breath Sounds & Lung Auscultation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "40–50 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_4_Student.html", description: "Normal and abnormal breath sounds including wheezes, crackles, rhonchi, diminished sounds, and pleural rubs." },
+      { id: "pa-2-1", title: "ABG Sampling & Interpretation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_2_1_Student.html", description: "Arterial puncture concepts, oxygenation, ventilation, acid-base interpretation, and RT decision-making." },
+      { id: "pa-2-2", title: "Chest X-Ray Interpretation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_2_2_Student.html", description: "Chest x-ray orientation, infiltrates, consolidation, pneumothorax, edema, atelectasis, and RT imaging recognition." },
+      { id: "pa-2-3", title: "Pulmonary Function Testing Interpretation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_2_3_Student.html", description: "Spirometry interpretation, obstructive vs restrictive patterns, bronchodilator response, and lung volume analysis." },
+      { id: "pa-2-4", title: "Patient Interviewing & History Taking", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_2_4_Student.html", description: "Focused respiratory interviews, symptom analysis, smoking history, occupational exposure, and clinical questioning." },
+      { id: "pa-3-1", title: "Respiratory Distress Recognition", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_3_1_Student.html", description: "Recognizing early and late respiratory distress, fatigue, impending failure, and escalation priorities." },
+      { id: "pa-3-2", title: "Oxygenation & Ventilation Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_3_2_Student.html", description: "Assessing oxygenation status, ventilation adequacy, V/Q mismatch, hypoxemia, and hypercapnia." },
+      { id: "pa-3-3", title: "Integrated Pulmonary Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "50–65 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_3_3_Student.html", description: "Combining physical assessment, labs, imaging, vitals, and respiratory findings into clinical RT decision-making." },
+      { id: "pa-3-4", title: "Clinical Scenarios & RT Decision-Making", courseGroup: "assessment", category: "Pulmonary Assessment", time: "50–65 min", level: "Intermediate / Advanced", href: "https://pulmolearn.github.io/Assessment/PA_3_4_Student.html", description: "Scenario-based pulmonary assessment emphasizing prioritization, escalation, and board-style clinical reasoning." },
+      { id: "ep-1-1", title: "Medical Gas Systems & Safety", courseGroup: "equipment", category: "Equipment & Procedures", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_1_Student.html", description: "Medical gas sources, pipeline systems, cylinder safety, regulators, and oxygen hazard prevention." },
+      { id: "ep-1-2", title: "Oxygen Delivery Devices", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_2_Student.html", description: "Nasal cannulas, simple masks, Venturi masks, NRBs, HFNC, FiO₂ ranges, and oxygen device selection." },
+      { id: "ep-1-3", title: "MDIs, DPIs & Spacer Devices", courseGroup: "equipment", category: "Equipment & Procedures", time: "40–50 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_3_Student.html", description: "Metered-dose inhalers, dry powder inhalers, spacers, inhalation technique, and medication delivery optimization." },
+      { id: "ep-1-4", title: "Nebulizers & Aerosol Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_4_Student.html", description: "SVN, LVN, mesh nebulizers, continuous nebulization, aerosol deposition, and medication delivery systems." },
+      { id: "ep-2-1", title: "Humidity & Bland Aerosol Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "40–55 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_1_Student.html", description: "Humidification systems, heated humidity, bland aerosol therapy, secretion mobilization, and airway conditioning." },
+      { id: "ep-2-2", title: "Lung Expansion Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_2_Student.html", description: "IS, CPAP, PEP therapy, atelectasis prevention, postoperative lung expansion, and RT monitoring." },
+      { id: "ep-2-3", title: "Airway Clearance Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_3_Student.html", description: "Chest physiotherapy, oscillatory PEP, cough assist, secretion mobilization, and airway clearance strategies." },
+      { id: "ep-2-4", title: "Suctioning Procedures", courseGroup: "equipment", category: "Equipment & Procedures", time: "40–55 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_4_Student.html", description: "Nasotracheal suctioning, inline suctioning, sterile technique, secretion removal, and airway maintenance." },
+      { id: "ep-3-1", title: "Basic Airway Management", courseGroup: "equipment", category: "Equipment & Procedures", time: "50–65 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_3_1_Student.html", description: "OPA/NPA placement, bag-mask ventilation, airway positioning, and emergency airway support." },
+      { id: "ep-3-2", title: "Artificial Airways", courseGroup: "equipment", category: "Equipment & Procedures", time: "50–65 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_3_2_Student.html", description: "ET tubes, tracheostomy tubes, cuff management, airway complications, and airway care." },
+      { id: "ep-3-3", title: "Mechanical Ventilation Basics", courseGroup: "equipment", category: "Equipment & Procedures", time: "60–75 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_3_3_Student.html", description: "Basic ventilator controls, modes, alarms, pressures, volumes, and introductory ventilator management." },
+      { id: "ep-3-4", title: "Emergency Respiratory Procedures", courseGroup: "equipment", category: "Equipment & Procedures", time: "60–75 min", level: "Intermediate / Advanced", href: "https://pulmolearn.github.io/Equipment/EP_3_4_Student.html", description: "Rapid response support, emergency oxygenation, airway emergencies, and RT escalation during acute deterioration." }
+    ].map(lesson => ({ ...lesson, courseGroup: lesson.courseGroup || "diseases" }));
 
-  // PHYSIOLOGY
-  { id: "rp-1-1", title: "Airway Defense & Conditioning", courseGroup: "physiology", category: "Respiratory Physiology", time: "30–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_1_Student.html", description: "How the respiratory system protects, cleans, warms, and humidifies inspired air before it reaches the alveoli." },
-  { id: "rp-1-2", title: "Basic Respiratory Anatomy", courseGroup: "physiology", category: "Respiratory Physiology", time: "30–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_2_Student.html", description: "Respiratory anatomy needed before learning mechanics, gas exchange, lung volumes, and disease patterns." },
-  { id: "rp-1-3", title: "Mechanics of Ventilation", courseGroup: "physiology", category: "Respiratory Physiology", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_3_Student_FULL.html", description: "Pressure gradients, respiratory muscles, chest volume, neural signals, and how air moves in and out of the lungs." },
-  { id: "rp-1-4", title: "Lung Volumes and Capacities", courseGroup: "physiology", category: "Respiratory Physiology", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Physiology/RP_1_4_Student.html", description: "Basic lung volumes and capacities, spirogram interpretation, volume relationships, and clinical meaning." },
-  { id: "rp-2-1", title: "Acid-Base Physiology & Kidney Compensation", courseGroup: "physiology", category: "Respiratory Physiology", time: "60–75 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_1_Student.html", description: "CO₂-bicarbonate balance, respiratory acid-base control, renal compensation, and acid-base physiology." },
-  { id: "rp-2-2", title: "Neural Control of Ventilation, Respiratory Drives & V/Q Ratio", courseGroup: "physiology", category: "Respiratory Physiology", time: "65–80 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_2_Student.html", description: "Central and peripheral chemoreceptors, CO₂ and O₂ drives, ventilatory control, and V/Q relationships." },
-  { id: "rp-2-3", title: "Assessment & Treatment of Hypoxia, V/Q Calculations & Physiologic Oxygenation", courseGroup: "physiology", category: "Respiratory Physiology", time: "65–80 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_3_Student.html", description: "Signs of hypoxemia, hypoxia classification, V/Q calculations, oxygenation assessment, and treatment reasoning." },
-  { id: "rp-2-4", title: "Sleep-Disordered Breathing, Sleep Studies & Clinical Interpretation", courseGroup: "physiology", category: "Respiratory Physiology", time: "60–75 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_2_4_Student.html", description: "Sleep apnea patterns, sleep event types, waveform interpretation, AHI classification, and clinical sleep study concepts." },
-  { id: "rp-3-1", title: "Cardiovascular System & Cardiac Electrophysiology", courseGroup: "physiology", category: "Respiratory Physiology", time: "70–85 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_3_1_Student.html", description: "Cardiac pump function, electrophysiology, ECG foundations, and cardiopulmonary monitoring concepts." },
-  { id: "rp-3-2", title: "Cardiac Pathology & Hemodynamics", courseGroup: "physiology", category: "Respiratory Physiology", time: "70–80 min", level: "Intermediate", href: "https://pulmolearn.github.io/Physiology/RP_3_2_Student.html", description: "Ischemia, infarction, valve disease, hemodynamics, Swan-Ganz catheter concepts, and cardiopulmonary consequences." },
-  { id: "rp-3-3", title: "Fluid Volume Overload", courseGroup: "physiology", category: "Respiratory Physiology", time: "45–55 min", level: "Foundational", href: "https://pulmolearn.github.io/Physiology/RP_3_3_Student.html", description: "How excess vascular fluid affects the lungs, heart, kidneys, oxygenation, and respiratory assessment." },
-  { id: "rp-3-4", title: "Newborn Assessment & APGAR Scoring", courseGroup: "physiology", category: "Respiratory Physiology", time: "55–65 min", level: "Foundational", href: "https://pulmolearn.github.io/Physiology/RP_3_4_Student.html", description: "Newborn transition, fetal-to-neonatal circulation changes, APGAR scoring, and respiratory assessment after birth." }
+    function getStatus(item) { if (!item || Number(item.percent || 0) === 0) return "not-started"; if (item.completed || Number(item.percent || 0) >= 100) return "completed"; return "in-progress"; }
+    function statusLabel(status) { if (status === "completed") return "✓ Complete"; if (status === "in-progress") return "In Progress"; return "Not Started"; }
+    function buttonLabel(status) { if (status === "not-started") return "Start Lesson"; if (status === "completed") return "Restart Lesson"; return "Continue Lesson"; }
+    function setSyncState(state) { const dot = document.getElementById('syncDot'); const label = document.getElementById('syncLabel'); if (!dot || !label) return; dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : ''); label.textContent = state === 'syncing' ? 'Syncing...' : state === 'error' ? 'Sync error — check connection' : state === 'demo' ? 'Preview mode — progress not synced' : 'Progress synced'; }
 
-  { id: "pa-1-1", title: "Introduction to Pulmonary Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_1_Student.html", description: "Foundations of pulmonary assessment, observation skills, respiratory patterns, and RT clinical reasoning." },
-  { id: "pa-1-2", title: "Vital Signs & Respiratory Patterns", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_2_Student.html", description: "Respiratory rate, pulse, blood pressure, temperature, pulse oximetry, and interpretation of abnormal breathing patterns." },
-  { id: "pa-1-3", title: "Inspection, Palpation & Chest Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_3_Student.html", description: "Thoracic assessment, tracheal position, tactile fremitus, chest symmetry, and identifying visible respiratory distress." },
-  { id: "pa-1-4", title: "Breath Sounds & Lung Auscultation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "40–50 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_1_4_Student.html", description: "Normal and abnormal breath sounds including wheezes, crackles, rhonchi, diminished sounds, and pleural rubs." },
-  { id: "pa-2-1", title: "ABG Sampling & Interpretation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_2_1_Student.html", description: "Arterial puncture concepts, oxygenation, ventilation, acid-base interpretation, and RT decision-making." },
-  { id: "pa-2-2", title: "Chest X-Ray Interpretation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_2_2_Student.html", description: "Chest x-ray orientation, infiltrates, consolidation, pneumothorax, edema, atelectasis, and RT imaging recognition." },
-  { id: "pa-2-3", title: "Pulmonary Function Testing Interpretation", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_2_3_Student.html", description: "Spirometry interpretation, obstructive vs restrictive patterns, bronchodilator response, and lung volume analysis." },
-  { id: "pa-2-4", title: "Patient Interviewing & History Taking", courseGroup: "assessment", category: "Pulmonary Assessment", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Assessment/PA_2_4_Student.html", description: "Focused respiratory interviews, symptom analysis, smoking history, occupational exposure, and clinical questioning." },
-  { id: "pa-3-1", title: "Respiratory Distress Recognition", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_3_1_Student.html", description: "Recognizing early and late respiratory distress, fatigue, impending failure, and escalation priorities." },
-  { id: "pa-3-2", title: "Oxygenation & Ventilation Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_3_2_Student.html", description: "Assessing oxygenation status, ventilation adequacy, V/Q mismatch, hypoxemia, and hypercapnia." },
-  { id: "pa-3-3", title: "Integrated Pulmonary Assessment", courseGroup: "assessment", category: "Pulmonary Assessment", time: "50–65 min", level: "Intermediate", href: "https://pulmolearn.github.io/Assessment/PA_3_3_Student.html", description: "Combining physical assessment, labs, imaging, vitals, and respiratory findings into clinical RT decision-making." },
-  { id: "pa-3-4", title: "Clinical Scenarios & RT Decision-Making", courseGroup: "assessment", category: "Pulmonary Assessment", time: "50–65 min", level: "Intermediate / Advanced", href: "https://pulmolearn.github.io/Assessment/PA_3_4_Student.html", description: "Scenario-based pulmonary assessment emphasizing prioritization, escalation, and board-style clinical reasoning." }
-
-  { id: "ep-1-1", title: "Medical Gas Systems & Safety", courseGroup: "equipment", category: "Equipment & Procedures", time: "35–45 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_1_Student.html", description: "Medical gas sources, pipeline systems, cylinder safety, regulators, and oxygen hazard prevention." },
-  { id: "ep-1-2", title: "Oxygen Delivery Devices", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_2_Student.html", description: "Nasal cannulas, simple masks, Venturi masks, NRBs, HFNC, FiO₂ ranges, and oxygen device selection." },
-  { id: "ep-1-3", title: "MDIs, DPIs & Spacer Devices", courseGroup: "equipment", category: "Equipment & Procedures", time: "40–50 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_3_Student.html", description: "Metered-dose inhalers, dry powder inhalers, spacers, inhalation technique, and medication delivery optimization." },
-  { id: "ep-1-4", title: "Nebulizers & Aerosol Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Beginner", href: "https://pulmolearn.github.io/Equipment/EP_1_4_Student.html", description: "SVN, LVN, mesh nebulizers, continuous nebulization, aerosol deposition, and medication delivery systems." },
-  { id: "ep-2-1", title: "Humidity & Bland Aerosol Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "40–55 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_1_Student.html", description: "Humidification systems, heated humidity, bland aerosol therapy, secretion mobilization, and airway conditioning." },
-  { id: "ep-2-2", title: "Lung Expansion Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_2_Student.html", description: "IS, CPAP, PEP therapy, atelectasis prevention, postoperative lung expansion, and RT monitoring." },
-  { id: "ep-2-3", title: "Airway Clearance Therapy", courseGroup: "equipment", category: "Equipment & Procedures", time: "45–60 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_3_Student.html", description: "Chest physiotherapy, oscillatory PEP, cough assist, secretion mobilization, and airway clearance strategies." },
-  { id: "ep-2-4", title: "Suctioning Procedures", courseGroup: "equipment", category: "Equipment & Procedures", time: "40–55 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_2_4_Student.html", description: "Nasotracheal suctioning, inline suctioning, sterile technique, secretion removal, and airway maintenance." },
-  { id: "ep-3-1", title: "Basic Airway Management", courseGroup: "equipment", category: "Equipment & Procedures", time: "50–65 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_3_1_Student.html", description: "OPA/NPA placement, bag-mask ventilation, airway positioning, and emergency airway support." },
-  { id: "ep-3-2", title: "Artificial Airways", courseGroup: "equipment", category: "Equipment & Procedures", time: "50–65 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_3_2_Student.html", description: "ET tubes, tracheostomy tubes, cuff management, airway complications, and airway care." },
-  { id: "ep-3-3", title: "Mechanical Ventilation Basics", courseGroup: "equipment", category: "Equipment & Procedures", time: "60–75 min", level: "Intermediate", href: "https://pulmolearn.github.io/Equipment/EP_3_3_Student.html", description: "Basic ventilator controls, modes, alarms, pressures, volumes, and introductory ventilator management." },
-  { id: "ep-3-4", title: "Emergency Respiratory Procedures", courseGroup: "equipment", category: "Equipment & Procedures", time: "60–75 min", level: "Intermediate / Advanced", href: "https://pulmolearn.github.io/Equipment/EP_3_4_Student.html", description: "Rapid response support, emergency oxygenation, airway emergencies, and RT escalation during acute deterioration." }
-];
-    // ── Progress helpers ──
-    function getStatus(item) {
-      if (!item || item.percent === 0) return "not-started"
-      if (item.completed || item.percent >= 100) return "completed"
-      return "in-progress"
-    }
-
-    function statusLabel(status) {
-      if (status === "completed") return "✓ Complete"
-      if (status === "in-progress") return "In Progress"
-      return "Not Started"
-    }
-
-    function buttonLabel(status) {
-      if (status === "not-started") return "Start Lesson"
-      if (status === "completed") return "Restart Lesson"
-      return "Continue Lesson"
-    }
-
-    // ── Sync indicator ──
-    function setSyncState(state) {
-      const dot = document.getElementById('syncDot')
-      const label = document.getElementById('syncLabel')
-      dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : '')
-      label.textContent = state === 'syncing' ? 'Syncing...' : state === 'error' ? 'Sync error — check connection' : state === 'demo' ? 'Preview mode — progress not synced' : 'Progress synced'
-    }
-
-    // ── Load progress from Supabase, or use demo progress when previewing outside GitHub Pages ──
     async function loadProgress() {
-      if (!supabase || !session) {
-        setSyncState('demo')
-        return {}
-      }
-
-      setSyncState('syncing')
-      const { data, error } = await supabase
-        .from('progress')
-        .select('lesson_id, percent, completed')
-        .eq('user_id', session.user.id)
-
-      if (error) {
-        console.error('Failed to load progress:', error.message)
-        setSyncState('error')
-        return {}
-      }
-
-      setSyncState('synced')
-      const map = {}
-      data.forEach(row => {
-        map[row.lesson_id] = { percent: row.percent, completed: row.completed }
-      })
-      return map
+      if (!supabase || !session) { setSyncState('demo'); return {}; }
+      setSyncState('syncing');
+      const { data, error } = await supabase.from('progress').select('lesson_id, percent, completed').eq('user_id', session.user.id);
+      if (error) { console.error('Failed to load progress:', error.message); setSyncState('error'); return {}; }
+      setSyncState('synced');
+      const map = {};
+      data.forEach(row => { map[row.lesson_id] = { percent: row.percent, completed: row.completed }; });
+      return map;
     }
 
-    // ── Save a single lesson's progress to Supabase ──
     async function saveProgress(lessonId, percent, completed) {
-      if (!supabase || !session) return
-      setSyncState('syncing')
+      if (!supabase || !session) return;
+      setSyncState('syncing');
       const { error } = await supabase.from('progress').upsert({
-        user_id: session.user.id,
-        lesson_id: lessonId,
-        percent,
-        completed,
-        updated_at: new Date().toISOString(),
-        ...(completed ? { completed_at: new Date().toISOString() } : {})
-      }, { onConflict: 'user_id,lesson_id' })
-
-      if (error) {
-        console.error('Failed to save progress:', error.message)
-        setSyncState('error')
-      } else {
-        setSyncState('synced')
-      }
+        user_id: session.user.id, lesson_id: lessonId, percent, completed,
+        updated_at: new Date().toISOString(), ...(completed ? { completed_at: new Date().toISOString() } : {})
+      }, { onConflict: 'user_id,lesson_id' });
+      setSyncState(error ? 'error' : 'synced');
+      if (error) console.error('Failed to save progress:', error.message);
     }
 
-    // ── Render dashboard ──
     function renderCourseTabs() {
-      const tabs = document.getElementById("courseTabs")
-      if (!tabs) return
+      const tabs = document.getElementById("courseTabs");
+      if (!tabs) return;
       tabs.innerHTML = courseSections.map(section => `
-        <button class="course-tab-btn ${section.key === activeCourseGroup ? "active" : ""}"
-          type="button"
-          role="tab"
-          aria-selected="${section.key === activeCourseGroup}"
-          data-course-group="${section.key}">
-          ${section.label}
-        </button>
-      `).join("")
-
+        <button class="course-tab-btn ${section.key === activeCourseGroup ? "active" : ""}" type="button" role="tab" aria-selected="${section.key === activeCourseGroup}" data-course-group="${section.key}">${section.label}</button>
+      `).join("");
       tabs.querySelectorAll(".course-tab-btn").forEach(button => {
-        button.addEventListener("click", () => {
-          activeCourseGroup = button.dataset.courseGroup
-          renderLessons()
-        })
-      })
-    }
-
-    function resolveLessonHref(lesson, mode = '') {
-      const section = courseSections.find(item => item.key === lesson.courseGroup)
-      const baseUrl = section && section.baseUrl ? section.baseUrl : ''
-      const href = /^https?:\/\//i.test(lesson.href) ? lesson.href : `${baseUrl}${lesson.href}`
-      return mode ? `${href}${href.includes('?') ? '&' : '?'}${mode}=true` : href
-    }
-
-    function lessonCardTemplate(lesson, progress) {
-      const item = progress[lesson.id] || { percent: 0, completed: false }
-      const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
-      const status = getStatus(item)
-      const isComplete = status === "completed"
-      const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started"
-      const btnLabel = buttonLabel(status)
-      const btnHref = status === 'completed' ? resolveLessonHref(lesson, 'restart') : resolveLessonHref(lesson)
-      const btnClass = status === "completed" ? "btn btn-secondary" : "btn btn-primary"
-      return `
-        <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
-          <div class="disease-header">
-            <div class="disease-title-group">
-              <h3>${lesson.title}</h3>
-              <div class="disease-category">${lesson.category}</div>
-            </div>
-            <span class="badge ${badgeClass}">${statusLabel(status)}</span>
-          </div>
-          <p class="disease-description">${lesson.description}</p>
-          <div class="progress-row" aria-label="${lesson.title} progress">
-            <div class="progress-label"><span>Lesson progress</span><span>${percent}%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div>
-          </div>
-          <div class="disease-meta">
-            <span class="pill">${lesson.time}</span>
-            <span class="pill">${lesson.level}</span>
-          </div>
-          <div class="card-actions">
-            <a class="${btnClass}" href="${btnHref}">${btnLabel}</a>
-            ${status === 'completed' ? `<a class="btn btn-secondary" href="${resolveLessonHref(lesson, 'review')}">Review Lesson</a>` : ''}
-          </div>
-          <div class="complete-medallion" aria-hidden="true">✓</div>
-        </article>
-      `
-    }
-
-    async function renderLessons() {
-      renderCourseTabs()
-      const progress = await loadProgress()
-      const query = document.getElementById("searchLessons").value.trim().toLowerCase()
-      const filter = document.getElementById("filterLessons").value
-      const sectionsContainer = document.getElementById("courseSections")
-      const visibleSections = activeCourseGroup === "all"
-        ? courseSections.filter(section => section.key !== "all")
-        : courseSections.filter(section => section.key === activeCourseGroup)
-
-      const sectionHtml = visibleSections.map(section => {
-        const sectionLessons = lessons.filter(lesson => lesson.courseGroup === section.key)
-        const filteredLessons = sectionLessons.filter(lesson => {
-          const item = progress[lesson.id] || { percent: 0, completed: false }
-          const status = getStatus(item)
-          const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query)
-          const matchesFilter = filter === "all" || status === filter
-          return matchesSearch && matchesFilter
-        })
-
-        const cards = filteredLessons.length
-          ? `<div class="disease-grid">${filteredLessons.map(lesson => lessonCardTemplate(lesson, progress)).join("")}</div>`
-          : `<div class="info-card" style="box-shadow:none;"><h3>No lessons match this tab yet.</h3><p>Try clearing the search/filter, or add lessons to this section by assigning the matching <code>courseGroup</code> value in the lessons list.</p></div>`
-
-        return `
-          <section class="course-section" data-course-section="${section.key}">
-            <div class="course-section-header">
-              <div>
-                <h3>${section.label}</h3>
-                <p>${section.description}</p>
-              </div>
-              <span class="course-count-pill">${filteredLessons.length} / ${sectionLessons.length} shown</span>
-            </div>
-            ${cards}
-          </section>
-        `
-      }).join("")
-
-      sectionsContainer.innerHTML = sectionHtml || `<div class="info-card"><h3>No course sections available.</h3><p>Add section definitions to <code>courseSections</code>.</p></div>`
-
-      updateSummary(progress)
-      hideLoadingOverlay()
-    }
-
-    function updateSummary(progress) {
-      const total = lessons.length
-      let completed = 0, inProgress = 0, percentSum = 0
-
-      lessons.forEach(lesson => {
-        const item = progress[lesson.id] || { percent: 0, completed: false }
-        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)))
-        percentSum += percent
-        const status = getStatus(item)
-        if (status === "completed") completed++
-        if (status === "in-progress") inProgress++
-      })
-
-      const overall = total ? Math.round(percentSum / total) : 0
-      document.getElementById("completedCount").textContent = completed
-      document.getElementById("inProgressCount").textContent = inProgress
-      document.getElementById("overallPercent").textContent = `${overall}%`
-      document.getElementById("masteryBadge").textContent =
-        completed >= total ? "Library Master" :
-        completed >= 24 ? "Disease Pro" :
-        completed >= 12 ? "Core Builder" :
-        completed >= 1 ? "First Win" : "Starter"
-    }
-
-    // Search and filter (debounced so it doesn't hammer Supabase on every keystroke)
-    let debounceTimer
-    function debounceRender() {
-      clearTimeout(debounceTimer)
-      debounceTimer = setTimeout(renderLessons, 300)
-    }
-
-    document.getElementById("searchLessons").addEventListener("input", debounceRender)
-    document.getElementById("filterLessons").addEventListener("change", renderLessons)
-
-    // Initial render
-    renderLessons()
-
-</script>
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
+        button.addEventListener("click", () => { activeCourseGroup = button.dataset.courseGroup; renderLessons(); });
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
+    function resolveLessonHref(lesson, mode = '') {
+      const section = courseSections.find(item => item.key === lesson.courseGroup);
+      const baseUrl = section && section.baseUrl ? section.baseUrl : '';
+      const href = /^https?:\/\//i.test(lesson.href) ? lesson.href : `${baseUrl}${lesson.href}`;
+      return mode ? `${href}${href.includes('?') ? '&' : '?'}${mode}=true` : href;
     }
-  })();
-  </script>
 
+    function lessonCardTemplate(lesson, progress) {
+      const item = progress[lesson.id] || { percent: 0, completed: false };
+      const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
+      const status = getStatus(item);
+      const isComplete = status === "completed";
+      const badgeClass = isComplete ? "complete" : status === "in-progress" ? "progress" : "not-started";
+      const btnHref = status === 'completed' ? resolveLessonHref(lesson, 'restart') : resolveLessonHref(lesson);
+      const btnClass = status === "completed" ? "btn btn-secondary" : "btn btn-primary";
+      return `
+        <article class="disease-card ${isComplete ? "is-complete" : ""}" data-status="${status}">
+          <div class="disease-header"><div class="disease-title-group"><h3>${lesson.title}</h3><div class="disease-category">${lesson.category}</div></div><span class="badge ${badgeClass}">${statusLabel(status)}</span></div>
+          <p class="disease-description">${lesson.description}</p>
+          <div class="progress-row" aria-label="${lesson.title} progress"><div class="progress-label"><span>Lesson progress</span><span>${percent}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div></div>
+          <div class="disease-meta"><span class="pill">${lesson.time}</span><span class="pill">${lesson.level}</span></div>
+          <div class="card-actions"><a class="${btnClass}" href="${btnHref}">${buttonLabel(status)}</a>${status === 'completed' ? `<a class="btn btn-secondary" href="${resolveLessonHref(lesson, 'review')}">Review Lesson</a>` : ''}</div>
+          <div class="complete-medallion" aria-hidden="true">✓</div>
+        </article>`;
+    }
+
+    async function renderLessons() {
+      renderCourseTabs();
+      const progress = await loadProgress();
+      const searchEl = document.getElementById("searchLessons");
+      const filterEl = document.getElementById("filterLessons");
+      const sectionsContainer = document.getElementById("courseSections");
+      const query = searchEl ? searchEl.value.trim().toLowerCase() : "";
+      const filter = filterEl ? filterEl.value : "all";
+      const visibleSections = activeCourseGroup === "all" ? courseSections.filter(section => section.key !== "all") : courseSections.filter(section => section.key === activeCourseGroup);
+      const sectionHtml = visibleSections.map(section => {
+        const sectionLessons = lessons.filter(lesson => lesson.courseGroup === section.key);
+        const filteredLessons = sectionLessons.filter(lesson => {
+          const item = progress[lesson.id] || { percent: 0, completed: false };
+          const status = getStatus(item);
+          const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query);
+          const matchesFilter = filter === "all" || status === filter;
+          return matchesSearch && matchesFilter;
+        });
+        const cards = filteredLessons.length
+          ? `<div class="disease-grid">${filteredLessons.map(lesson => lessonCardTemplate(lesson, progress)).join("")}</div>`
+          : `<div class="info-card" style="box-shadow:none;"><h3>No lessons match this tab yet.</h3><p>Try clearing the search/filter, or add lessons to this section by assigning the matching <code>courseGroup</code> value in the lessons list.</p></div>`;
+        return `<section class="course-section" data-course-section="${section.key}"><div class="course-section-header"><div><h3>${section.label}</h3><p>${section.description}</p></div><span class="course-count-pill">${filteredLessons.length} / ${sectionLessons.length} shown</span></div>${cards}</section>`;
+      }).join("");
+      sectionsContainer.innerHTML = sectionHtml || `<div class="info-card"><h3>No course sections available.</h3><p>Add section definitions to <code>courseSections</code>.</p></div>`;
+      updateSummary(progress);
+      hideLoadingOverlay();
+    }
+
+    function updateSummary(progress) {
+      const total = lessons.length;
+      let completed = 0, inProgress = 0, percentSum = 0;
+      lessons.forEach(lesson => {
+        const item = progress[lesson.id] || { percent: 0, completed: false };
+        const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
+        percentSum += percent;
+        const status = getStatus(item);
+        if (status === "completed") completed++;
+        if (status === "in-progress") inProgress++;
+      });
+      const overall = total ? Math.round(percentSum / total) : 0;
+      document.getElementById("completedCount").textContent = completed;
+      document.getElementById("inProgressCount").textContent = inProgress;
+      document.getElementById("overallPercent").textContent = `${overall}%`;
+      document.getElementById("masteryBadge").textContent = completed >= total ? "Library Master" : completed >= 48 ? "Curriculum Pro" : completed >= 24 ? "Disease Pro" : completed >= 12 ? "Core Builder" : completed >= 1 ? "First Win" : "Starter";
+    }
+
+    let debounceTimer;
+    function debounceRender() { clearTimeout(debounceTimer); debounceTimer = setTimeout(renderLessons, 300); }
+    document.getElementById("searchLessons").addEventListener("input", debounceRender);
+    document.getElementById("filterLessons").addEventListener("change", renderLessons);
+    renderLessons();
+  </script>
+  <script>
+    (function () {
+      function initA11yHotspots() {
+        document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+          var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+          var panel = demo.querySelector('.hotspot-panel');
+          var live = demo.querySelector('[data-a11y-live]');
+          if (!live) { live = document.createElement('div'); live.setAttribute('aria-live', 'polite'); live.setAttribute('aria-atomic', 'true'); live.setAttribute('data-a11y-live', '1'); live.className = 'sr-only'; demo.appendChild(live); }
+          buttons.forEach(function (btn, idx) {
+            btn.addEventListener('keydown', function (e) {
+              var target;
+              if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); target = buttons[(idx + 1) % buttons.length]; }
+              else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); target = buttons[(idx - 1 + buttons.length) % buttons.length]; }
+              else if (e.key === 'Home') { e.preventDefault(); target = buttons[0]; }
+              else if (e.key === 'End') { e.preventDefault(); target = buttons[buttons.length - 1]; }
+              if (target) target.focus();
+            });
+            btn.addEventListener('click', function () { var title = btn.dataset.title || ''; var text = btn.dataset.text || ''; live.textContent = title + '. ' + text; if (panel) panel.setAttribute('aria-label', title + ': ' + text); });
+          });
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initA11yHotspots); else initA11yHotspots();
+    })();
+  </script>
 </body>
 </html>
