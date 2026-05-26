@@ -12,7 +12,7 @@ console.log('PulmoLearn: progress-tracker.js v7 loaded')
 // ── Auth check ──
 const { data: { session } } = await supabase.auth.getSession()
 if (!session) {
-  window.location.href = '/PulmoCore-Library/login.html'
+  window.location.href = '/login.html'
   throw new Error('Not authenticated')
 }
 
@@ -191,8 +191,8 @@ function showCompletionBanner() {
       </div>
     </div>
     <div class="pl-complete-actions">
-      <a href="/PulmoCore-Library/dashboard.html" class="pl-btn-home">← Back to Dashboard</a>
-      <a href="/PulmoCore-Library/glossary.html" class="pl-btn-glossary">📖 Full Glossary</a>
+      <a href="/dashboard.html" class="pl-btn-home">← Back to Dashboard</a>
+      <a href="/glossary.html" class="pl-btn-glossary">📖 Full Glossary</a>
     </div>
   `
   lessonStack.appendChild(banner)
