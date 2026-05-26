@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Pulmonary Assessment 2.4</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%}table{width:100%;border-collapse:collapse;min-width:420px}th,td{text-align:left;padding:9px;vertical-align:top;border-bottom:1px solid var(--soft-border)}thead th{background:#E5F0F6}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,230px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);text-align:center;font-weight:700}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:380px}.home-button{width:42px;height:42px}.course-menu-button{padding:9px 12px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}table{min-width:340px}}
+
+/* ── PA 2.4 specific ─────────────────────────────────────────────────────── */
+.modality-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
+.modality-card{border-radius:14px;padding:16px;border:3px solid;background:#fff}
+.modality-icon{font-family:var(--font-heading);font-size:2rem;font-weight:800;line-height:1;margin-bottom:8px}
+.cxr-sim{background:#1A1A1A;border-radius:14px;padding:20px;color:#fff;margin:12px 0;font-family:var(--font-data);overflow:hidden}
+.cxr-finding{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.cxr-finding:last-child{border-bottom:none}
+.cxr-badge{border-radius:8px;padding:4px 10px;font-size:.78rem;font-weight:800;white-space:nowrap;flex-shrink:0}
+.echo-struct-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.echo-card{border-radius:12px;padding:14px;border:2px solid;background:#fff}
+.vq-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.vq-panel{border-radius:14px;padding:16px;border:2px solid;background:#fff}
+.rad-safety-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.rad-card{border-radius:12px;padding:14px;border:2px solid;background:#fff;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start}
+.rad-icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1rem;flex-shrink:0;color:var(--white)}
+.indication-table{margin-top:14px}
+@media(max-width:900px){.modality-grid{grid-template-columns:1fr}.echo-struct-grid,.vq-compare,.rad-safety-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<!-- ── NAV ─────────────────────────────────────────────────────────────── -->
+<header class="top-nav" aria-label="PulmoCore site navigation">
+  <div class="brand" aria-label="PulmoCore brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+    <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+  </div>
+  <div class="top-nav-actions">
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button"><img src="pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+    <div class="course-menu-wrapper">
+      <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+      <div class="course-menu-panel" id="courseMenuPanel" role="menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+  <span class="eyebrow">Pulmonary Assessment · Lesson 2.4</span>
+  <h1 style="font-family:var(--font-heading);font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Radiologic Examination — Imaging Modalities, CXR Interpretation & Radiation Safety</h1>
+  <p style="font-size:1.18rem;max-width:980px;color:#243b55">Respiratory therapists interpret chest X-rays, assist with echocardiograms during procedural sedation, understand V/Q scans for pulmonary embolism workup, and maintain radiation safety for themselves and patients. This lesson covers the full spectrum of radiologic assessment from plain film to advanced nuclear medicine imaging.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>Course Track</strong><br>Pulmonary Assessment</div>
+    <div class="example-box soft-blue"><strong>Chapter</strong><br>Radiologic Examination — Imaging, CXR, Safety</div>
+    <div class="example-box soft-amber"><strong>Level</strong><br>Intermediate RT — clinical interpretation and safety competency</div>
+  </div>
+</section>
+
+<div class="content-layout">
+<aside class="side-nav" aria-label="Lesson navigation">
+  <h3>Lesson Sections</h3>
+  <a href="#objectives">Objectives</a>
+  <a href="#overview-video">Video</a>
+  <a href="#modalities">Modalities Overview</a>
+  <a href="#ct-mri">CT Scan & MRI</a>
+  <a href="#echo">Echocardiogram & TEE</a>
+  <a href="#pet">PET Scan</a>
+  <a href="#vq">V/Q Scan</a>
+  <a href="#cxr">CXR Interpretation</a>
+  <a href="#rad-safety">Radiation Safety</a>
+  <a href="#indications">Indications Guide</a>
+  <a href="#scenario">Unfolding Case</a>
+  <a href="#practice">Assignment Practice</a>
+  <a href="#knowledge-check">Knowledge Check</a>
+  <a href="#faq">FAQ</a>
+  <a href="#summary">Summary</a>
+  <a href="#glossary">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+<section class="info-card" id="objectives">
+  <h2>Learning Objectives</h2>
+  <p>By the end of this lesson, you will be able to distinguish between X-ray, CT, MRI, PET scan, V/Q scan, and echocardiogram imaging modalities; describe the RT role during TEE procedures; identify consolidation, pneumothorax, pleural effusion, and pulmonary edema on a chest X-ray; interpret basic V/Q scan findings; apply radiation safety principles; and select the appropriate imaging modality for a given clinical scenario.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+    <div class="example-box soft-teal"><strong>1. Know the imaging modalities</strong><br>Understand what each test shows, how it works, and when it is used clinically.</div>
+    <div class="example-box soft-blue"><strong>2. Interpret the chest X-ray</strong><br>Recognize consolidation, pneumothorax, pleural effusion, pulmonary edema, and normal findings.</div>
+    <div class="example-box soft-amber"><strong>3. Understand advanced imaging</strong><br>Know the RT role during echocardiography/TEE and interpret basic V/Q scan results.</div>
+    <div class="example-box soft-coral"><strong>4. Apply radiation safety</strong><br>Follow distance, shielding, and barrier principles to protect yourself and your patients.</div>
+  </div>
+</section>
+
+<section class="info-card" id="overview-video">
+  <span class="eyebrow">Video Placeholder</span>
+  <h2>2-Minute Overview: Radiologic Assessment for RTs</h2>
+  <div style="margin-top:14px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--soft-border);background:#000">
+    <video controls controlslist="nodownload" playsinline preload="metadata" style="width:100%">
+      <source src="PA_2_4.mp4" type="video/mp4"/>
+      <track default kind="captions" label="English captions" src="PA_2_4.vtt" srclang="en"/>
+    </video>
+  </div>
+</section>
+</div>
+</div>
+
+<!-- ── PROGRESSIVE LESSON STACK ─────────────────────────────────────────── -->
+<div class="lesson-stack">
+
+<!-- SECTION 1: Modalities Overview -->
+<section class="info-card" id="modalities">
+  <h2>Imaging Modalities — What Each Test Shows</h2>
+  <p>Each imaging modality uses a different physical principle to reveal different types of tissue. Selecting the right study for the right clinical question is as important as interpreting the result. Knowing these distinctions guides appropriate test ordering and patient preparation.</p>
+  <img src="PA_2_4_assets/pa-2-4-modalities-overview.png" alt="Six imaging modality panels arranged in two rows of three. Each panel shows the modality name, the physical principle used, what it best visualizes, and a representative example image description. X-ray uses ionizing radiation to show dense structures like bone and shows best for pneumothorax pneumonia fractures and foreign bodies. CT scan uses multiple X-ray angles to create cross-sectional slices and shows best for brain bleeding trauma and detailed lung structure. MRI uses magnetic fields and radiofrequency pulses and shows best for soft tissue injury brain tumors and spinal cord. Echocardiogram uses ultrasound waves and shows best for cardiac structure and function. PET scan uses radioactive tracers absorbed by metabolically active cells and shows best for cancer detection and metabolic activity. V/Q scan uses inhaled and injected radionuclides and shows best for matching ventilation to perfusion for pulmonary embolism diagnosis." style="margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="modality-grid">
+    <div class="modality-card" style="border-color:var(--oxygen-blue)">
+      <div class="modality-icon" style="color:var(--oxygen-blue)">X-RAY</div>
+      <p style="font-size:.88rem;color:var(--slate);margin:0 0 8px"><strong>Principle:</strong> Ionizing radiation passes through the body. Dense structures (bone, fluid, metal) absorb X-rays and appear white. Air appears black.</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Best for:</strong> Bone structures, lung opacities, pneumothorax, pleural effusion, cardiomegaly, endotracheal tube position, line placement</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Limitations:</strong> Two-dimensional. Soft tissue detail poor. Contrast (swallowed or injected) needed to visualize internal GI or vascular structures.</p>
+    </div>
+
+    <div class="modality-card" style="border-color:var(--pulmo-teal)">
+      <div class="modality-icon" style="color:var(--pulmo-teal)">CT</div>
+      <p style="font-size:.88rem;color:var(--slate);margin:0 0 8px"><strong>Principle:</strong> Multiple X-ray beams rotate 360° around the body, creating transverse "slices." Computer reconstructs 3D images from the cross-sections.</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Best for:</strong> Brain bleeding, stroke, pulmonary embolism (CT-PA), aortic dissection, trauma, detailed lung/lobe anatomy, metastatic disease</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>RT relevance:</strong> Lobar and segmental anatomy on CT guides bronchoscopy approach. CT-PA is the gold standard for PE diagnosis.</p>
+    </div>
+
+    <div class="modality-card" style="border-color:#8B5CF6">
+      <div class="modality-icon" style="color:#8B5CF6">MRI</div>
+      <p style="font-size:.88rem;color:var(--slate);margin:0 0 8px"><strong>Principle:</strong> Magnetic fields align hydrogen protons; radiofrequency pulses knock them out of alignment. The energy released as they realign is detected to create images. No ionizing radiation.</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Best for:</strong> Soft tissue (brain tumors, spinal cord, ligaments, joints), cardiac MRI, demyelinating disease</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Limitations:</strong> Slow (30–90 min). Loud. Claustrophobic. Cannot use with ferromagnetic metal implants. Patients requiring life support need MRI-compatible equipment.</p>
+    </div>
+
+    <div class="modality-card" style="border-color:var(--alert-coral)">
+      <div class="modality-icon" style="color:var(--alert-coral)">ECHO</div>
+      <p style="font-size:.88rem;color:var(--slate);margin:0 0 8px"><strong>Principle:</strong> High-frequency sound waves (ultrasound) reflect off cardiac structures. The returning echoes create real-time images of the moving heart.</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Best for:</strong> Cardiac function, ejection fraction, valve disease, wall motion abnormalities, pericardial effusion, emergency hemodynamic assessment</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>No ionizing radiation.</strong> Portable — can be performed at the bedside. Real-time imaging of heart motion.</p>
+    </div>
+
+    <div class="modality-card" style="border-color:var(--clinical-amber)">
+      <div class="modality-icon" style="color:#7A4B00">PET</div>
+      <p style="font-size:.88rem;color:var(--slate);margin:0 0 8px"><strong>Principle:</strong> Nuclear medicine. Radioactive tracer (typically FDG — glucose analog) is injected. Metabolically active cells (especially cancer) absorb more tracer, emitting detectable gamma rays.</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Best for:</strong> Cancer staging and detection, recurrence assessment, infection localization, brain function mapping</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Note:</strong> Often combined with CT (PET-CT) to correlate metabolic activity with anatomical location.</p>
+    </div>
+
+    <div class="modality-card" style="border-color:#F472B6">
+      <div class="modality-icon" style="color:#be185d">V/Q</div>
+      <p style="font-size:.88rem;color:var(--slate);margin:0 0 8px"><strong>Principle:</strong> Nuclear medicine. Two-part study: inhaled radionuclide shows VENTILATION; injected radionuclide shows PERFUSION. V/Q mismatch (ventilated but not perfused) suggests PE.</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>Best for:</strong> Pulmonary embolism workup when CT-PA is contraindicated (renal failure, contrast allergy, pregnancy)</p>
+      <p style="font-size:.85rem;margin:4px 0"><strong>RT role:</strong> Administer the inhaled portion. Monitor patient during procedure.</p>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Modality Match" style="margin-top:14px">
+    <h3>Match the Clinical Scenario to the Most Appropriate Imaging Study</h3>
+    <div class="sort-grid" id="modalitySort">
+      <div class="sort-row" data-answer="ct"><strong>Patient found unresponsive after a fall. Head trauma is suspected. You need immediate visualization of brain bleeding.</strong><select><option value="">Choose study</option><option value="xray">Chest X-ray</option><option value="ct">CT scan (head)</option><option value="mri">MRI</option><option value="echo">Echocardiogram</option><option value="pet">PET scan</option><option value="vq">V/Q scan</option></select></div>
+      <div class="sort-row" data-answer="vq"><strong>Patient with suspected pulmonary embolism has renal failure and cannot receive iodinated contrast. No CT-PA possible.</strong><select><option value="">Choose study</option><option value="xray">Chest X-ray</option><option value="ct">CT scan</option><option value="mri">MRI</option><option value="echo">Echocardiogram</option><option value="pet">PET scan</option><option value="vq">V/Q scan</option></select></div>
+      <div class="sort-row" data-answer="echo"><strong>Patient in shock. Physician needs immediate bedside assessment of cardiac function, ejection fraction, and wall motion.</strong><select><option value="">Choose study</option><option value="xray">Chest X-ray</option><option value="ct">CT scan</option><option value="mri">MRI</option><option value="echo">Echocardiogram (bedside)</option><option value="pet">PET scan</option><option value="vq">V/Q scan</option></select></div>
+      <div class="sort-row" data-answer="pet"><strong>Lung cancer patient after chemotherapy. Oncologist needs to assess for residual metabolically active tumor and potential metastases.</strong><select><option value="">Choose study</option><option value="xray">Chest X-ray</option><option value="ct">CT scan</option><option value="mri">MRI</option><option value="echo">Echocardiogram</option><option value="pet">PET scan</option><option value="vq">V/Q scan</option></select></div>
+      <div class="sort-row" data-answer="mri"><strong>Patient with new onset leg weakness. Physician suspects spinal cord compression or demyelinating disease (MS). No metal implants.</strong><select><option value="">Choose study</option><option value="xray">Chest X-ray</option><option value="ct">CT scan</option><option value="mri">MRI (spine / brain)</option><option value="echo">Echocardiogram</option><option value="pet">PET scan</option><option value="vq">V/Q scan</option></select></div>
+      <div class="sort-row" data-answer="xray"><strong>Intubated ICU patient. The RT needs to verify ET tube position after intubation.</strong><select><option value="">Choose study</option><option value="xray">Chest X-ray (portable AP)</option><option value="ct">CT scan</option><option value="mri">MRI</option><option value="echo">Echocardiogram</option><option value="pet">PET scan</option><option value="vq">V/Q scan</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkModalitySort" type="button" style="margin-top:12px">Check Modality Selection</button>
+    <div class="activity-status" id="modalitySortStatus">Complete the modality matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 2: CT & MRI -->
+<section class="info-card rt" id="ct-mri">
+  <h2>CT Scan & MRI — Advanced Structural Imaging</h2>
+  <p>CT and MRI provide far greater anatomical detail than plain X-ray. Each has specific clinical advantages, patient preparation requirements, and safety considerations the RT must know — particularly when managing patients who require monitoring during these studies.</p>
+  <img src="PA_2_4_assets/pa-2-4-ct-mri.png" alt="Two-panel comparison of CT and MRI. Left panel shows CT scan: a donut-shaped gantry with the patient on a sliding table, multiple X-ray emitters rotating 360 degrees creating transverse slices, with a diagram of lung lobar anatomy visible on the CT reconstructed image showing right upper lobe right middle lobe right lower lobe left upper lobe and left lower lobe with their segments labeled. Right panel shows MRI: a longer tunnel-shaped magnet, and a diagram showing hydrogen protons being aligned by the magnetic field then knocked out of alignment by radiofrequency pulses and emitting energy as they return to alignment, with safety screening checklist showing items to remove before entering the MRI suite." style="margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+    <div style="border:2px solid var(--pulmo-teal);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--pulmo-teal);font-size:1.1rem">CT Scan — Key Points</h3>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem">
+        <li><strong>Fast:</strong> Chest CT takes ~10 seconds — ideal for unstable patients</li>
+        <li><strong>High-resolution lung anatomy:</strong> Identifies individual lung lobes, segments, nodules, ground-glass opacities, consolidation, air trapping</li>
+        <li><strong>CT Pulmonary Angiography (CT-PA):</strong> Gold standard for diagnosing PE — requires iodinated IV contrast</li>
+        <li><strong>Brain CT:</strong> First-line for acute stroke and head trauma — rapidly identifies hemorrhage</li>
+        <li><strong>Contrast allergy/renal failure:</strong> IV contrast is contraindicated — V/Q scan or non-contrast CT used instead</li>
+        <li><strong>Radiation exposure:</strong> Chest CT = ~7 mSv (vs. CXR = 0.02 mSv)</li>
+      </ul>
+    </div>
+    <div style="border:2px solid #8B5CF6;border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:#8B5CF6;font-size:1.1rem">MRI — Key Points</h3>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem">
+        <li><strong>No ionizing radiation</strong> — uses magnetic field and radiofrequency pulses</li>
+        <li><strong>Superior soft tissue contrast</strong> — brain, spinal cord, ligaments, tumors</li>
+        <li><strong>MRI safety screening required:</strong> Remove all metal (pacemakers, cochlear implants, aneurysm clips are absolute contraindications)</li>
+        <li><strong>Duration:</strong> 30–90 minutes — patients with dyspnea or anxiety may need sedation</li>
+        <li><strong>RT equipment:</strong> Ventilators, IV pumps, and monitoring must be MRI-compatible (non-ferromagnetic)</li>
+        <li><strong>Gadolinium contrast</strong> (MRI contrast) used for some studies — different from CT iodinated contrast</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:18px">Lung Lobar Anatomy on CT — RT-Relevant Knowledge</h3>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:10px">
+    <table>
+      <thead><tr><th>Lobe</th><th>Location</th><th>Segments</th><th>RT Relevance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Right Upper Lobe</strong></td><td>Right apex</td><td>Apical, posterior, anterior</td><td>Reactivation TB; post-obstructive atelectasis from right upper lobe bronchus lesion</td></tr>
+        <tr><td><strong>Right Middle Lobe</strong></td><td>Right anterior-inferior</td><td>Lateral, medial</td><td>RML syndrome from external compression; prone to aspiration</td></tr>
+        <tr><td><strong>Right Lower Lobe</strong></td><td>Right posterior-inferior</td><td>Superior, anterior/posterior/lateral/medial basal</td><td>Most common pneumonia location; aspiration prone (gravity)</td></tr>
+        <tr><td><strong>Left Upper Lobe</strong></td><td>Left upper (includes lingula)</td><td>Apicoposterior, anterior, superior lingula, inferior lingula</td><td>Left upper lobe mass or collapse — check left main bronchus on CXR</td></tr>
+        <tr><td><strong>Left Lower Lobe</strong></td><td>Left posterior-inferior</td><td>Superior, anteromedial/posterior/lateral basal</td><td>Aspiration; posterior position means gravity-dependent when supine</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="CT vs MRI Sort" style="margin-top:14px">
+    <h3>CT or MRI — Which Is Appropriate?</h3>
+    <div class="sort-grid" id="ctMriSort">
+      <div class="sort-row" data-answer="ct"><strong>55-year-old arrives with sudden severe headache. Physician suspects subarachnoid hemorrhage — needs immediate evaluation.</strong><select><option value="">Choose</option><option value="ct">CT (fast, detects acute blood)</option><option value="mri">MRI (better soft tissue)</option></select></div>
+      <div class="sort-row" data-answer="mri"><strong>Patient with new onset progressive leg weakness. Physician suspects MS or spinal cord compression. Patient is hemodynamically stable. No metal implants.</strong><select><option value="">Choose</option><option value="ct">CT (faster, acute setting)</option><option value="mri">MRI (superior for spinal cord/soft tissue)</option></select></div>
+      <div class="sort-row" data-answer="ct"><strong>Trauma patient — multiple rib fractures suspected, possible pneumothorax and pulmonary contusion. Needs rapid evaluation.</strong><select><option value="">Choose</option><option value="ct">CT (rapid, full body survey possible)</option><option value="mri">MRI (better soft tissue)</option></select></div>
+      <div class="sort-row" data-answer="mri"><strong>Brain tumor follow-up — oncologist needs to assess response to treatment and distinguish tumor recurrence from radiation necrosis.</strong><select><option value="">Choose</option><option value="ct">CT (adequate for follow-up)</option><option value="mri">MRI (superior for brain tumor characterization)</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkCtMriSort" type="button" style="margin-top:12px">Check CT vs. MRI</button>
+    <div class="activity-status" id="ctMriSortStatus">Complete the CT vs. MRI matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 3: Echocardiogram & TEE -->
+<section class="info-card board" id="echo">
+  <h2>Echocardiogram & Transesophageal Echocardiogram (TEE)</h2>
+  <p>The echocardiogram is the primary tool for real-time cardiac structural and functional assessment. Respiratory therapists frequently assist with echocardiography, particularly during TEE — where conscious sedation monitoring is a direct RT responsibility.</p>
+  <img src="PA_2_4_assets/pa-2-4-echo-tee.png" alt="Two-panel illustration comparing external echocardiogram and TEE. Left panel shows external transthoracic echocardiogram with ultrasound transducer placed on the chest wall and a diagram of the cardiac structures visible including all four chambers atria and ventricles the mitral and aortic valves and the aorta with Doppler color flow showing regurgitation. Right panel shows TEE with a flexible probe similar to an endoscope placed in the esophagus with the transducer at the tip positioned directly behind the heart, patient in lateral decubitus position, and the RT monitoring cardiac rhythm SpO2 blood pressure and respiratory rate during conscious sedation. The TEE image shows clearer cardiac detail than TTE due to the proximity of the esophagus to the heart." style="margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--alert-coral);font-size:1.1rem">External Echocardiogram (TTE)</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0">Transducer placed on chest wall. Non-invasive. No sedation required. Can be performed portably at the bedside during emergencies. Limited image quality in patients with obesity, COPD (hyperinflated lungs), or chest wall abnormalities.</p>
+      <p style="font-size:.88rem;margin:4px 0"><strong>Emergency use:</strong> Immediately assesses cardiac tamponade, cardiac arrest with PEA (pulseless electrical activity), massive PE, acute valvular emergencies.</p>
+    </div>
+    <div style="border:2px solid #8B5CF6;border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:#8B5CF6;font-size:1.1rem">Trans-Esophageal Echo (TEE)</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0">Flexible probe with ultrasound transducer placed in the esophagus (directly behind the heart). Superior image quality — no lung or rib interference. Requires conscious sedation.</p>
+      <p style="font-size:.88rem;margin:4px 0"><strong>RT responsibilities during TEE:</strong> Monitor SpO₂, HR, BP, RR continuously. Manage oxygen supplementation. Respond to airway complications (secretions, laryngospasm, respiratory depression from sedation). Be prepared for emergency airway intervention.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:18px">Cardiac Structures Assessed by Echocardiogram</h3>
+  <div class="echo-struct-grid">
+    <div class="echo-card" style="border-color:var(--oxygen-blue)">
+      <strong style="color:var(--oxygen-blue)">Atria</strong>
+      <p style="font-size:.88rem;margin:6px 0">Left and right atrial size. Enlarged left atrium suggests mitral valve disease, AFib, or left ventricular failure. Enlarged right atrium suggests right heart strain (pulmonary hypertension, PE, right heart failure).</p>
+    </div>
+    <div class="echo-card" style="border-color:var(--alert-coral)">
+      <strong style="color:var(--alert-coral)">Ventricles</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Ejection Fraction (EF):</strong> Normal >55%. EF &lt;40% = reduced systolic function (heart failure with reduced EF). Wall motion abnormalities indicate ischemia or infarction territories. LV hypertrophy from chronic hypertension.</p>
+    </div>
+    <div class="echo-card" style="border-color:var(--pulmo-teal)">
+      <strong style="color:var(--pulmo-teal)">Valves</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Aortic valve:</strong> Stenosis (high gradient, thickened leaflets) vs. regurgitation (blood flowing backward). <strong>Mitral valve:</strong> MVP, stenosis, regurgitation. Doppler color flow shows direction and velocity of blood through valves.</p>
+    </div>
+    <div class="echo-card" style="border-color:var(--clinical-amber)">
+      <strong style="color:#7A4B00">Great Vessels & Pressures</strong>
+      <p style="font-size:.88rem;margin:6px 0">Aortic root diameter. Pulmonary artery pressure estimation (RVSP = right ventricular systolic pressure) — elevated in pulmonary hypertension. Pericardial effusion around the heart. IVC size and collapsibility (preload estimate).</p>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="TEE RT Role Sort" style="margin-top:14px">
+    <h3>Which RT Responsibility Applies During TEE?</h3>
+    <div class="sort-grid" id="teeSort">
+      <div class="sort-row" data-answer="monitor-spo2"><strong>The sedation has just been administered. What is the RT's immediate monitoring priority?</strong><select><option value="">Choose responsibility</option><option value="monitor-spo2">Continuous SpO₂, HR, BP, and RR monitoring</option><option value="insert-probe">Insert the esophageal probe</option><option value="administer-sed">Administer additional sedation</option><option value="read-echo">Interpret the cardiac images</option></select></div>
+      <div class="sort-row" data-answer="airway-management"><strong>SpO₂ drops to 87% during the procedure. Patient's breathing has become shallow and slow.</strong><select><option value="">Choose response</option><option value="monitor-spo2">Continue monitoring — sedation is expected</option><option value="airway-management">Airway intervention — supplemental O₂, jaw thrust, consider reversing sedation</option><option value="insert-probe">Insert the probe deeper for better images</option><option value="read-echo">Note the SpO₂ in the record</option></select></div>
+      <div class="sort-row" data-answer="no-sedation-tee"><strong>Patient asks why they need sedation for TEE but not for a regular (external) echocardiogram.</strong><select><option value="">Choose explanation</option><option value="no-sedation-tee">External echo is non-invasive (no probe swallowing); TEE requires swallowing a probe — uncomfortable and triggers gag reflex without sedation</option><option value="better-images">Sedation improves image quality for external echo too</option><option value="contrast-needed">Sedation is required for contrast administration</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkTeeSort" type="button" style="margin-top:12px">Check TEE RT Role</button>
+    <div class="activity-status" id="teeSortStatus">Complete the TEE responsibility matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 4: PET Scan -->
+<section class="info-card" id="pet">
+  <h2>PET Scan — Metabolic Activity Imaging</h2>
+  <p>Positron Emission Tomography (PET) scans belong to the field of nuclear medicine. Unlike anatomical imaging (CT, MRI, X-ray), PET reveals metabolic activity — making it uniquely powerful for cancer detection, because cancer cells consume far more glucose than normal cells.</p>
+  <img src="PA_2_4_assets/pa-2-4-pet-scan.png" alt="PET scan diagram showing three panels. Left panel shows the mechanism: FDG fluorodeoxyglucose radioactive glucose analog is injected into a vein, cancer cells and other metabolically active cells absorb more FDG than normal tissue, the radioactive fluorine-18 emits positrons which collide with electrons producing gamma rays detected by the PET scanner ring. Middle panel shows a whole-body PET scan image description with areas of high metabolic uptake appearing bright including a primary lung tumor and enlarged mediastinal lymph nodes indicating spread. Right panel shows PET-CT fusion combining metabolic information from PET with anatomical detail from CT to precisely locate metabolically active lesions." style="margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+    <div class="example-box soft-amber">
+      <strong>How PET Works — Nuclear Medicine Principle</strong>
+      <p style="font-size:.9rem;margin:8px 0">A radioactive tracer (most commonly FDG — fluorodeoxyglucose, a radioactive glucose analog) is injected intravenously. Cells that are metabolically active (especially cancer cells) absorb more FDG. The radioactive fluorine-18 emits positrons, which collide with electrons and produce gamma rays detected by the PET scanner ring. Areas of high uptake appear "hot" (bright) on the image.</p>
+    </div>
+    <div class="example-box soft-blue">
+      <strong>Clinical Applications</strong>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem">
+        <li><strong>Cancer staging:</strong> Whole-body survey for metastatic disease — sees all metabolically active cancer at once</li>
+        <li><strong>Treatment response:</strong> Does the tumor still have metabolic activity after chemo/radiation?</li>
+        <li><strong>Recurrence detection:</strong> Distinguish scar tissue from active tumor</li>
+        <li><strong>PET-CT fusion:</strong> Combines metabolic information (PET) with anatomical location (CT) in one study</li>
+        <li><strong>Brain mapping:</strong> Epilepsy focus localization, dementia type differentiation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="example-box soft-coral" style="margin-top:12px">
+    <strong>Important Limitation — False Positives and Negatives:</strong> Any metabolically active tissue can show high FDG uptake — not just cancer. Infection, inflammation, recent surgery, and even normal brain and heart tissue are "hot." Conversely, slow-growing or well-differentiated tumors may show low FDG uptake (false negative). PET findings must always be interpreted in clinical context.
+  </div>
+
+  <article class="quiz-card require-complete" id="pet-check" data-activity-name="PET Scan Check" style="margin-top:14px">
+    <h3>Why Is This Structure "Hot" on a PET Scan?</h3>
+    <p>A patient's whole-body PET scan shows intense FDG uptake in the brain, heart muscle, and several mediastinal lymph nodes. The oncologist is concerned about the lymph nodes but not the brain or heart findings. Why?</p>
+    <div class="quiz-options">
+      <button class="quiz-option pet-opt" data-correct="false" data-feedback="Brain and heart are not normal findings to ignore — but in PET scanning, they are expected to be 'hot' because they are highly metabolically active organs that consume large amounts of glucose normally. The concern about the lymph nodes is because lymph nodes should NOT normally show high FDG uptake — when they do, it suggests malignant involvement.">The brain and heart must be cancerous too — any high uptake is abnormal.</button>
+      <button class="quiz-option pet-opt" data-correct="true" data-feedback="Correct! The brain and heart are the two most metabolically active organs in the body — they consume large amounts of glucose normally and will always show high FDG uptake on a PET scan. This is expected and normal. Lymph nodes, however, should have minimal metabolic activity in a healthy state. When mediastinal lymph nodes show intense FDG uptake, it suggests malignant infiltration — the cancer cells are metabolically active and consuming glucose at a high rate.">The brain and heart are normally metabolically active organs — their uptake is expected. Hot lymph nodes are abnormal because healthy lymph nodes do not consume high amounts of glucose.</button>
+      <button class="quiz-option pet-opt" data-correct="false" data-feedback="The radioactive tracer is systemically distributed — you cannot choose which organs receive it. FDG is taken up proportionally to metabolic activity in all organs. The interpretation depends on understanding which areas of high uptake are expected (brain, heart) vs. unexpected (lymph nodes, soft tissue masses).">PET scans cannot image the brain or heart — these findings must be artifact.</button>
+    </div>
+    <div class="quiz-feedback" id="petFeedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 5: V/Q Scan -->
+<section class="info-card rt" id="vq">
+  <h2>Ventilation/Perfusion (V/Q) Scan — Diagnosing Pulmonary Embolism</h2>
+  <p>The V/Q scan is the primary alternative to CT-PA for pulmonary embolism diagnosis. It directly visualizes the match — or mismatch — between where air goes (ventilation) and where blood flows (perfusion) in the lungs. A classic PE produces a region that is ventilated normally but has absent perfusion.</p>
+  <img src="PA_2_4_assets/pa-2-4-vq-scan.png" alt="V/Q scan diagram showing two panels side by side. Left panel shows Normal V/Q matching: ventilation scan shows even radionuclide distribution throughout both lungs in multiple views, perfusion scan also shows even matching distribution, and the comparison shows all areas ventilated are also perfused resulting in normal matched pattern. Right panel shows Abnormal V/Q mismatch indicating pulmonary embolism: ventilation scan again shows normal even distribution throughout the lungs, but the perfusion scan shows one or more wedge-shaped areas of absent or markedly reduced perfusion that were ventilated normally, creating a mismatch pattern. The mismatch areas are labeled as segmental defects consistent with PE with the explanation that a blood clot in the pulmonary artery prevents blood from reaching ventilated alveoli." style="margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="vq-compare">
+    <div class="vq-panel" style="border-color:var(--pulmo-teal)">
+      <h3 style="color:var(--pulmo-teal);font-size:1.1rem">Ventilation Scan (V)</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0">Patient <strong>inhales</strong> a radioactive gas or aerosol (technetium-99m DTPA aerosol or xenon-133 gas). Images show which areas of the lung are <strong>receiving airflow</strong>.</p>
+      <p style="font-size:.88rem;margin:6px 0"><strong>RT role:</strong> Administer the inhaled radionuclide. Ensure patient compliance with breath-hold instructions. Monitor for respiratory distress.</p>
+      <div class="example-box soft-teal" style="margin-top:8px;font-size:.85rem"><strong>Normal result:</strong> Even, symmetric distribution throughout both lungs in all views.</div>
+    </div>
+    <div class="vq-panel" style="border-color:var(--alert-coral)">
+      <h3 style="color:var(--alert-coral);font-size:1.1rem">Perfusion Scan (Q)</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0">A different radioactive tracer is <strong>injected intravenously</strong> (technetium-99m macroaggregated albumin — MAA). The particles lodge in small pulmonary capillaries proportionally to blood flow. Images show which areas receive <strong>blood flow</strong>.</p>
+      <p style="font-size:.88rem;margin:6px 0"><strong>PE finding:</strong> Wedge-shaped area of absent or reduced perfusion — the clot blocks blood flow to that lung segment while ventilation continues normally.</p>
+      <div class="example-box soft-coral" style="margin-top:8px;font-size:.85rem"><strong>Mismatch = PE:</strong> Area ventilated but NOT perfused → pulmonary embolism until proven otherwise.</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:18px">V/Q Scan Result Interpretation</h3>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:10px">
+    <table>
+      <thead><tr><th>Result</th><th>V/Q Pattern</th><th>Clinical Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Normal</strong></td><td>Ventilation and perfusion match in all areas</td><td>PE is very unlikely. Probability essentially rules out PE as the cause of symptoms.</td></tr>
+        <tr><td><strong>Low probability</strong></td><td>Small mismatches, or matched V/Q defects</td><td>PE possible but low likelihood. Clinical probability and D-dimer guide further workup.</td></tr>
+        <tr><td><strong>Intermediate probability</strong></td><td>Moderate mismatches — non-diagnostic pattern</td><td>Cannot confidently rule in or out PE. Further imaging (CT-PA if feasible) often needed.</td></tr>
+        <tr><td><strong>High probability</strong></td><td>≥2 large segmental mismatches — ventilated but not perfused</td><td>PE is very likely. Treat or pursue pulmonary angiography for confirmation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="V/Q Interpretation Sort" style="margin-top:14px">
+    <h3>Interpret These V/Q Scan Findings</h3>
+    <div class="sort-grid" id="vqSort">
+      <div class="sort-row" data-answer="high-prob-pe"><strong>Ventilation scan: Normal, even distribution both lungs. Perfusion scan: Two large wedge-shaped defects in the right lower lobe — no perfusion to those areas.</strong><select><option value="">Choose interpretation</option><option value="normal-vq">Normal V/Q — PE ruled out</option><option value="low-prob">Low probability — unlikely PE</option><option value="high-prob-pe">High probability — PE very likely (V/Q mismatch)</option><option value="matched-defect">Matched defect — suggests parenchymal disease, not PE</option></select></div>
+      <div class="sort-row" data-answer="matched-defect"><strong>Ventilation scan: Absent ventilation to left lower lobe. Perfusion scan: Also absent perfusion to left lower lobe. Chest X-ray shows left lower lobe consolidation.</strong><select><option value="">Choose interpretation</option><option value="normal-vq">Normal V/Q — PE ruled out</option><option value="low-prob">Low probability — unlikely PE</option><option value="high-prob-pe">High probability — PE very likely (V/Q mismatch)</option><option value="matched-defect">Matched defect — lung disease (pneumonia/atelectasis), not PE</option></select></div>
+      <div class="sort-row" data-answer="normal-vq"><strong>Ventilation scan: Even, symmetric distribution in all projections. Perfusion scan: Even, symmetric distribution matching ventilation in all projections.</strong><select><option value="">Choose interpretation</option><option value="normal-vq">Normal V/Q — PE essentially ruled out</option><option value="low-prob">Low probability — unlikely PE</option><option value="high-prob-pe">High probability — PE very likely</option><option value="matched-defect">Matched defect — lung disease</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkVqSort" type="button" style="margin-top:12px">Check V/Q Interpretation</button>
+    <div class="activity-status" id="vqSortStatus">Complete the V/Q interpretation to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 6: CXR Interpretation -->
+<section class="info-card red" id="cxr">
+  <h2>Chest Radiograph Interpretation — The RT's Most Used Skill</h2>
+  <p>The chest X-ray is the most frequently obtained radiologic study for respiratory patients. Respiratory therapists are expected to review CXRs independently, recognize common pathological findings, and communicate relevant changes to the team. A systematic approach prevents missed findings.</p>
+  <img src="PA_2_4_assets/pa-2-4-cxr-findings.png" alt="Five annotated chest X-ray panels showing common findings. Panel one shows Normal CXR with clear lung fields cardiac silhouette occupying less than 50 percent of the chest width trachea midline and both costophrenic angles sharp. Panel two shows Consolidation or Infiltrate with a white opacification in the right lower lobe described as ground-glass or air-space filling with air bronchograms visible representing pneumonia or aspiration. Panel three shows Pneumothorax with a visible lung edge on the right side with no lung markings beyond that edge representing a collapsed lung with air in the pleural space. Panel four shows Pleural Effusion with blunting of the left costophrenic angle and a meniscus sign representing fluid accumulating in the pleural space. Panel five shows Pulmonary Edema with bilateral butterfly pattern or batwing opacification around the hila with Kerley B lines visible representing fluid overload and cardiogenic edema with an enlarged cardiac silhouette suggesting CHF." style="margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <h3 style="margin-top:18px">The ABCDE Systematic Approach</h3>
+  <div class="component-grid" style="grid-template-columns:repeat(1,1fr);gap:10px;margin-top:12px">
+    <div class="example-box soft-blue"><strong>A — Airway:</strong> Is the trachea midline? Tracheal deviation toward the side of pathology suggests atelectasis/fibrosis. Deviation away suggests tension pneumothorax or large effusion. Check ET tube position — tip should be 3–5 cm above the carina.</div>
+    <div class="example-box soft-teal"><strong>B — Bones and Soft Tissue:</strong> Rib fractures, vertebral abnormalities, soft tissue emphysema (air in subcutaneous tissue), breast shadows, pacemaker leads, surgical clips.</div>
+    <div class="example-box soft-amber"><strong>C — Cardiac:</strong> Cardiothoracic ratio (heart width : chest width). Normal = &lt;50% on PA view. &gt;50% = cardiomegaly. Check cardiac silhouette borders — loss of a border suggests adjacent lung pathology (silhouette sign).</div>
+    <div class="example-box soft-coral"><strong>D — Diaphragm:</strong> Are both hemidiaphragms visible and well-defined? Elevated right hemidiaphragm = atelectasis or subphrenic pathology. Blunted costophrenic angles = pleural effusion or fluid.</div>
+    <div class="example-box" style="background:#F3F0FF;border-radius:12px;padding:12px 14px;font-size:.95rem"><strong>E — Everything Else:</strong> Lung fields — bilateral symmetry? Any opacities, hyperlucencies, or vascular markings changes? Check for tubes, lines, and foreign bodies. Lung margins — is there a visible pleural edge (pneumothorax)?</div>
+  </div>
+
+  <h3 style="margin-top:18px">Key Radiographic Findings</h3>
+
+  <div class="cxr-sim">
+    <div class="cxr-finding">
+      <span class="cxr-badge" style="background:#2980B9">CONSOLIDATION</span>
+      <div>
+        <div style="font-weight:800;color:#7DD3FC;margin-bottom:4px">Airspace filling — white opacity in lung parenchyma</div>
+        <div style="font-size:.88rem;opacity:.9">White (opaque) area within the lung field. Air-space is filled with fluid, pus, blood, or cells. Key finding: <strong>air bronchograms</strong> — dark air-filled bronchi visible within the white opacity (proves the bronchi are patent and it is the alveoli that are filled). Seen in: pneumonia, aspiration, ARDS, hemorrhage, tumor.</div>
+      </div>
+    </div>
+    <div class="cxr-finding">
+      <span class="cxr-badge" style="background:#E74C3C">PNEUMOTHORAX</span>
+      <div>
+        <div style="font-weight:800;color:#FF6B6B;margin-bottom:4px">Air in the pleural space — collapsed lung</div>
+        <div style="font-size:.88rem;opacity:.9">Visible lung edge (visceral pleural line) with no lung markings beyond it. The space between the lung edge and chest wall is darker (air, not lung tissue). Key clinical concern: <strong>tension pneumothorax</strong> — tracheal deviation away from the affected side, distended neck veins, hemodynamic collapse. Emergency needle decompression before waiting for CXR confirmation.</div>
+      </div>
+    </div>
+    <div class="cxr-finding">
+      <span class="cxr-badge" style="background:#27AE60">PLEURAL EFFUSION</span>
+      <div>
+        <div style="font-weight:800;color:#A3E6A0;margin-bottom:4px">Fluid in the pleural space — blunted costophrenic angle</div>
+        <div style="font-size:.88rem;opacity:.9">Blunted (filled-in) costophrenic angle — the sharp V-shape at the lung base is replaced by a curved "meniscus sign." Large effusions show a complete opacification of one hemithorax with tracheal deviation away. Bilateral effusions in CHF appear relatively symmetric. Causes: CHF, pneumonia (parapneumonic), malignancy, TB, trauma, post-cardiac surgery.</div>
+      </div>
+    </div>
+    <div class="cxr-finding">
+      <span class="cxr-badge" style="background:#8E44AD">PULM. EDEMA</span>
+      <div>
+        <div style="font-weight:800;color:#C39AFF;margin-bottom:4px">Bilateral, perihilar/batwing pattern — CHF</div>
+        <div style="font-size:.88rem;opacity:.9">Bilateral interstitial or alveolar opacities with perihilar (around the hila) distribution — "butterfly" or "batwing" pattern. <strong>Kerley B lines:</strong> horizontal lines at the lung bases representing fluid in the interlobular septa. Cardiomegaly (CTR &gt;50%) usually present. Pleural effusions common. Redistribution of blood flow to upper lobes (cephalization) in early CHF.</div>
+      </div>
+    </div>
+    <div class="cxr-finding" style="border:none">
+      <span class="cxr-badge" style="background:#1CA7A8">NORMAL</span>
+      <div>
+        <div style="font-weight:800;color:#A3E6A0;margin-bottom:4px">Normal chest X-ray criteria</div>
+        <div style="font-size:.88rem;opacity:.9">Clear, symmetric lung fields. Trachea midline. Cardiac silhouette &lt;50% of chest width. Sharp costophrenic angles bilaterally. No pleural effusion, pneumothorax, or airspace opacities. Pulmonary vascular markings visible and symmetric. Diaphragm well-defined. ET tube (if present) tip 3–5 cm above carina.</div>
+      </div>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="CXR Finding Sort" style="margin-top:14px">
+    <h3>Identify the Radiographic Finding</h3>
+    <div class="sort-grid" id="cxrSort">
+      <div class="sort-row" data-answer="consolidation"><strong>Right lower lobe shows a white opacity. Air bronchograms are visible within the opacity. Patient has fever, productive cough, and increased WBC.</strong><select><option value="">Choose finding</option><option value="consolidation">Consolidation/infiltrate (pneumonia)</option><option value="pneumothorax">Pneumothorax</option><option value="effusion">Pleural effusion</option><option value="pulm-edema">Pulmonary edema (CHF)</option><option value="normal">Normal CXR</option></select></div>
+      <div class="sort-row" data-answer="pneumothorax"><strong>Left lung shows a clearly visible pleural line with absent lung markings beyond it. Patient just had a central line placed and is now hypoxic.</strong><select><option value="">Choose finding</option><option value="consolidation">Consolidation/infiltrate</option><option value="pneumothorax">Pneumothorax (post-procedure)</option><option value="effusion">Pleural effusion</option><option value="pulm-edema">Pulmonary edema</option><option value="normal">Normal CXR</option></select></div>
+      <div class="sort-row" data-answer="effusion"><strong>Right costophrenic angle is blunted. A curving meniscus-shaped opacity rises from the right base. Patient has recently had pneumonia.</strong><select><option value="">Choose finding</option><option value="consolidation">Consolidation/infiltrate</option><option value="pneumothorax">Pneumothorax</option><option value="effusion">Parapneumonic pleural effusion</option><option value="pulm-edema">Pulmonary edema</option><option value="normal">Normal CXR</option></select></div>
+      <div class="sort-row" data-answer="pulm-edema"><strong>Bilateral perihilar "butterfly" opacities with Kerley B lines at the bases. Heart is enlarged (CTR 58%). Patient has BNP 2200 and ankle edema.</strong><select><option value="">Choose finding</option><option value="consolidation">Consolidation/infiltrate</option><option value="pneumothorax">Pneumothorax</option><option value="effusion">Pleural effusion</option><option value="pulm-edema">Pulmonary edema (CHF)</option><option value="normal">Normal CXR</option></select></div>
+      <div class="sort-row" data-answer="normal"><strong>Clear lung fields bilaterally. Trachea midline. Cardiac silhouette less than 50% chest width. Sharp costophrenic angles. No opacities.</strong><select><option value="">Choose finding</option><option value="consolidation">Consolidation/infiltrate</option><option value="pneumothorax">Pneumothorax</option><option value="effusion">Pleural effusion</option><option value="pulm-edema">Pulmonary edema</option><option value="normal">Normal CXR</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkCxrSort" type="button" style="margin-top:12px">Check CXR Findings</button>
+    <div class="activity-status" id="cxrSortStatus">Complete the CXR finding identification to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 7: Radiation Safety -->
+<section class="info-card board" id="rad-safety">
+  <h2>Radiation Safety — Protecting Yourself and Your Patients</h2>
+  <p>Medical radiation is cumulative over a career. Healthcare workers who are frequently present during X-ray and fluoroscopy procedures face higher occupational exposure than the general public. The three pillars of radiation protection — distance, shielding, and time — must be applied consistently.</p>
+  <img src="PA_2_4_assets/pa-2-4-radiation-safety.png" alt="Radiation safety diagram showing three protection principles. Left panel shows Distance protection with an inverse square law graph demonstrating that doubling the distance from the radiation source reduces exposure to one quarter and the minimum safe distance of 8 feet is marked with a person standing behind a dashed line. Middle panel shows Shielding protection with a healthcare worker wearing a lead apron and thyroid collar shield labeled showing 0.25 to 0.5 mm lead equivalency and the specific protection of the thyroid gland which is highly sensitive to radiation. Right panel shows Barrier protection with a lead glass shield on a mobile stand used during fluoroscopy and continuous bedside imaging showing a person standing behind the barrier while the X-ray source operates. Each panel includes the approximate dose reduction percentage provided by that protection method." style="margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="rad-safety-grid">
+    <div class="rad-card" style="border-color:var(--oxygen-blue)">
+      <div class="rad-icon" style="background:var(--oxygen-blue)">D</div>
+      <div>
+        <strong style="color:var(--oxygen-blue)">Distance — Minimum 8 Feet (2.4 m)</strong>
+        <p style="font-size:.88rem;margin:6px 0">Radiation intensity follows the inverse square law: double the distance = ¼ the exposure. At 8 feet from the primary X-ray beam, occupational exposure drops dramatically. During portable CXRs, all non-essential personnel should stand at least 8 feet away or behind a protective barrier.</p>
+        <div class="example-box soft-blue" style="margin-top:8px;font-size:.85rem"><strong>Practical rule:</strong> If you can reach out and touch the patient during the X-ray, you are too close. Step back — your presence at the patient's side is not needed during the exposure itself.</div>
+      </div>
+    </div>
+
+    <div class="rad-card" style="border-color:var(--clinical-amber)">
+      <div class="rad-icon" style="background:var(--clinical-amber)">L</div>
+      <div>
+        <strong style="color:#7A4B00">Lead Apron with Thyroid Guard</strong>
+        <p style="font-size:.88rem;margin:6px 0">When proximity to the radiation source is unavoidable (fluoroscopy, emergency imaging), lead aprons (0.25–0.5 mm lead equivalency) protect radiosensitive organs (gonads, bone marrow, breast tissue). Thyroid glands are particularly radiosensitive — a thyroid collar/shield must be worn whenever a lead apron is donned.</p>
+        <div class="example-box soft-amber" style="margin-top:8px;font-size:.85rem"><strong>Key point:</strong> Lead aprons do NOT protect the neck and thyroid unless the thyroid collar is also worn. Many radiation-related thyroid cancers in healthcare workers are attributed to inadequate thyroid shielding.</div>
+      </div>
+    </div>
+
+    <div class="rad-card" style="border-color:var(--pulmo-teal)">
+      <div class="rad-icon" style="background:var(--pulmo-teal)">B</div>
+      <div>
+        <strong style="color:var(--pulmo-teal)">Barrier Protectors for Continuous Imaging</strong>
+        <p style="font-size:.88rem;margin:6px 0">During fluoroscopy, interventional procedures, or continuous bedside imaging, portable lead glass barriers provide shielding when stepping back 8 feet is not feasible. The RT stands behind the barrier while managing the airway or monitoring the patient.</p>
+        <div class="example-box soft-teal" style="margin-top:8px;font-size:.85rem"><strong>TEE and fluoroscopy:</strong> When monitoring a patient during an interventional procedure with continuous fluoroscopy, always position yourself behind the barrier unless direct patient intervention is required.</div>
+      </div>
+    </div>
+
+    <div class="rad-card" style="border-color:var(--alert-coral)">
+      <div class="rad-icon" style="background:var(--alert-coral)">C</div>
+      <div>
+        <strong style="color:var(--alert-coral)">Cumulative Exposure — Career Risk</strong>
+        <p style="font-size:.88rem;margin:6px 0">Radiation effects are cumulative. Annual occupational dose limit: 50 mSv/year (whole body). Career limit: 10 mSv × age. Healthcare workers wear dosimetry badges (film badge or TLD) to track exposure over time. Risk assessment is essential — each exposure should be justified by clinical benefit.</p>
+        <div class="example-box soft-coral" style="margin-top:8px;font-size:.85rem"><strong>Patient risk-benefit:</strong> For patients, the risk of diagnostic radiation must be weighed against the benefit of the information obtained. For RT students and staff: consistent protection habits developed early protect you across a 30-year career.</div>
+      </div>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Radiation Safety Sort" style="margin-top:14px">
+    <h3>Apply the Correct Radiation Safety Measure</h3>
+    <div class="sort-grid" id="radSort">
+      <div class="sort-row" data-answer="step-back"><strong>The radiology technician announces "X-ray!" in the ICU. You are standing next to the ventilated patient's bed. What should you do?</strong><select><option value="">Choose action</option><option value="step-back">Step back at least 8 feet or exit the room during the exposure</option><option value="lead-apron">Put on a lead apron and stay at the bedside</option><option value="stay">Stay — your presence is needed for patient safety</option><option value="barrier">Place a barrier between you and the patient</option></select></div>
+      <div class="sort-row" data-answer="lead-thyroid"><strong>You are assisting with a bedside fluoroscopy-guided procedure and cannot leave the room. What personal protective equipment must you wear?</strong><select><option value="">Choose PPE</option><option value="lead-only">Lead apron only</option><option value="lead-thyroid">Lead apron AND thyroid collar shield</option><option value="gloves">Radiation-proof gloves only</option><option value="badge">Dosimetry badge only</option></select></div>
+      <div class="sort-row" data-answer="inverse-sq"><strong>You move from 2 feet to 4 feet from the X-ray source. Your radiation exposure approximately:</strong><select><option value="">Choose answer</option><option value="inverse-sq">Decreases to one-quarter of the original (inverse square law)</option><option value="half">Decreases by half</option><option value="same">Stays the same — distance within 8 feet is equal risk</option><option value="double">Doubles — farther from source = more scatter</option></select></div>
+      <div class="sort-row" data-answer="badge-monitor"><strong>An RT has worked in the cardiac catheterization lab for 15 years. What monitoring tool tracks their cumulative occupational radiation exposure?</strong><select><option value="">Choose tool</option><option value="badge-monitor">Dosimetry badge (film badge or TLD — thermoluminescent dosimeter)</option><option value="lead-apron">Lead apron — the thickness measures exposure</option><option value="annual-ct">Annual CT scan of the body</option><option value="thyroid-check">Annual thyroid ultrasound only</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkRadSort" type="button" style="margin-top:12px">Check Radiation Safety</button>
+    <div class="activity-status" id="radSortStatus">Complete the radiation safety matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 8: Indications Guide -->
+<section class="info-card" id="indications">
+  <h2>Clinical Decision Guide — Selecting the Right Imaging Study</h2>
+  <p>Test selection is a clinical skill. The best imaging study is the one that answers the specific clinical question with the least risk, fastest result, and most appropriate resource use.</p>
+
+  <div class="data-card indication-table" style="font-family:var(--font-body);white-space:normal">
+    <table>
+      <thead><tr><th>Clinical Question</th><th>First-Line Study</th><th>Alternative / If First-Line Unavailable</th><th>RT Role</th></tr></thead>
+      <tbody>
+        <tr><td>ET tube position after intubation</td><td><strong>Portable CXR</strong></td><td>Direct visualization with laryngoscope; waveform capnography</td><td>Order/request CXR; confirm tip position 3–5 cm above carina</td></tr>
+        <tr><td>Suspected pneumothorax</td><td><strong>CXR (upright PA)</strong></td><td>Bedside lung ultrasound (absent lung sliding); clinical diagnosis in tension PTX</td><td>Recognize on CXR; report immediately if tension PTX suspected</td></tr>
+        <tr><td>Pulmonary embolism</td><td><strong>CT-PA</strong></td><td>V/Q scan (renal failure, contrast allergy, pregnancy)</td><td>Administer inhaled radionuclide for V/Q ventilation phase; monitor during procedure</td></tr>
+        <tr><td>Acute MI / Chest pain</td><td><strong>ECG + troponin</strong> (not imaging first)</td><td>Echo for wall motion abnormalities; cardiac MRI for myocarditis</td><td>12-lead ECG, continuous rhythm monitoring</td></tr>
+        <tr><td>Cardiac tamponade</td><td><strong>Bedside Echo (TTE)</strong></td><td>TEE for better visualization if TTE inadequate</td><td>Monitor during TEE — SpO₂, airway, sedation response</td></tr>
+        <tr><td>Cancer staging</td><td><strong>PET-CT</strong></td><td>CT alone; MRI for specific sites (brain, liver)</td><td>General monitoring during procedure if sedation required</td></tr>
+        <tr><td>Brain bleed / Stroke (acute)</td><td><strong>Non-contrast head CT</strong></td><td>MRI (delayed — better for ischemic stroke subacute)</td><td>Transport monitoring; maintain airway during scan</td></tr>
+        <tr><td>Soft tissue / Spinal pathology</td><td><strong>MRI</strong></td><td>CT (less detail); myelogram with CT for metal implants</td><td>Ensure MRI-compatible equipment for ventilated patients</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="example-box soft-amber" style="margin-top:12px">
+    <strong>The RT's Imaging Responsibilities in Summary:</strong> Request/order portable CXRs for ICU patients post-procedure. Identify and report urgent findings (new pneumothorax, ETT malposition, new consolidation). Administer inhaled radionuclide for V/Q scans. Monitor sedation during TEE and interventional procedures. Ensure MRI-compatible equipment before taking ventilated patients to the MRI suite.
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Indications Sort" style="margin-top:14px">
+    <h3>Which Imaging Study Is Indicated?</h3>
+    <div class="sort-grid" id="indicationSort2">
+      <div class="sort-row" data-answer="vq-scan"><strong>28-year-old pregnant woman with suspected pulmonary embolism. CT-PA is being avoided due to fetal radiation concern. What is the alternative?</strong><select><option value="">Choose study</option><option value="cxr">Chest X-ray only</option><option value="ct-pa">CT-PA with contrast</option><option value="vq-scan">V/Q scan (lower fetal radiation than CT-PA)</option><option value="mri">MRI of the chest</option></select></div>
+      <div class="sort-row" data-answer="portable-cxr"><strong>You just intubated a critically ill patient in the ICU at 3 AM. What imaging study confirms ET tube position?</strong><select><option value="">Choose study</option><option value="portable-cxr">Portable AP chest X-ray</option><option value="ct-chest">CT chest</option><option value="mri">MRI</option><option value="bronchoscopy">Bronchoscopy only</option></select></div>
+      <div class="sort-row" data-answer="echo-bedside"><strong>Patient in the ER develops sudden hypotension and pulsus paradoxus. Physician suspects cardiac tamponade. What is the fastest diagnostic study?</strong><select><option value="">Choose study</option><option value="cxr">Chest X-ray</option><option value="echo-bedside">Bedside echocardiogram (TTE) — immediate and non-invasive</option><option value="ct-angio">CT angiography</option><option value="mri">Cardiac MRI</option></select></div>
+      <div class="sort-row" data-answer="mri-compat"><strong>A ventilated ICU patient needs an MRI of the brain. What is the RT's most critical preparation step?</strong><select><option value="">Choose action</option><option value="ct-instead">Order CT instead — ventilated patients cannot have MRI</option><option value="mri-compat">Ensure all equipment (ventilator, IV pumps, monitoring) is MRI-compatible before transport</option><option value="sedation-only">Administer additional sedation only</option><option value="remove-vent">Remove the ventilator during the scan</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkIndicationSort2" type="button" style="margin-top:12px">Check Imaging Indications</button>
+    <div class="activity-status" id="indicationSort2Status">Complete the indications matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 9: Unfolding Case -->
+<section class="case-card require-complete" id="scenario" data-activity-name="PA 2.4 Unfolding Case">
+  <span class="eyebrow">Unfolding Clinical Case</span>
+  <h2>A Shift in Radiology and the ICU</h2>
+  <p>Four clinical situations — one shift. Apply imaging knowledge, CXR interpretation, and radiation safety to each.</p>
+
+  <!-- Stage 1 -->
+  <div class="case-stage" data-case-stage="0">
+    <h3>Situation 1 — The Portable CXR</h3>
+    <p>You just intubated a 68-year-old woman in respiratory failure. The portable CXR arrives. It shows the ET tube tip 7 cm above the carina. Both lungs appear clear. The right costophrenic angle is slightly blunted compared to a CXR from last week.</p>
+    <p><strong>What two findings should you act on, and what are the appropriate actions?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="The ET tube being 7 cm above the carina means it is actually in good position — 3 to 5 cm above the carina is ideal. However, 7 cm is too high — the tube should be pulled back slightly. More urgently, the blunted costophrenic angle suggests new pleural effusion that needs to be recognized and communicated.">The CXR is normal — both lungs are clear. No action needed.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Two findings to act on: (1) ET tube tip 7 cm above the carina is too high — the ideal position is 3-5 cm above the carina. The tube needs to be advanced approximately 2 cm and a repeat CXR ordered to confirm. (2) Blunted right costophrenic angle compared to the prior CXR represents a new right pleural effusion. Report this finding to the physician. Serial CXRs will track whether it is growing.">The ET tube is too far above the carina (advance 2 cm). There is a new right pleural effusion (report to physician).</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Intubation of a mainstem bronchus causes the ET tube to be too FAR DOWN — typically visible on CXR as a tube tip well below the expected position, with the opposite lung showing reduced aeration. Here the tube is 7 cm above the carina — too high, not too low. It needs to be advanced, not withdrawn.">The tube is in the right mainstem bronchus — withdraw it immediately.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Situation 2 →</button></div>
+  </div>
+
+  <!-- Stage 2 -->
+  <div class="case-stage lesson-hidden" data-case-stage="1">
+    <h3>Situation 2 — CXR Finding in the ICU</h3>
+    <p>Later that morning, you review a new CXR on a different patient — a 72-year-old with CHF who developed sudden new dyspnea an hour ago. The CXR shows: bilateral symmetric opacities with perihilar (butterfly) distribution, enlarged cardiac silhouette (CTR 58%), Kerley B lines at both bases, and blunted costophrenic angles bilaterally.</p>
+    <p><strong>What is the radiographic diagnosis and what is the most appropriate clinical response?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Bilateral pneumonia is possible but typically produces asymmetric patchy consolidation, not the symmetric perihilar butterfly pattern with Kerley B lines and cardiomegaly. The combination of all these findings strongly points to cardiogenic pulmonary edema, not infectious etiology.">Bilateral pneumonia — order sputum cultures and start antibiotics.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! This is classic cardiogenic pulmonary edema (acute decompensated CHF). The pattern: butterfly/batwing bilateral perihilar opacities + enlarged cardiac silhouette (CTR 58% > normal 50%) + Kerley B lines (fluid in interlobular septa) + bilateral pleural effusions = CHF-pattern pulmonary edema. Clinical response: supplemental oxygen or NIV (CPAP/BiPAP) to reduce work of breathing and improve oxygenation, diuresis (furosemide IV), and positioning (head of bed elevated). Notify physician immediately.">Cardiogenic pulmonary edema (CHF) — start supplemental oxygen or NIV, notify physician for diuresis.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="ARDS produces bilateral opacities but it is non-cardiogenic (not from heart failure) — it does not cause cardiomegaly or Kerley B lines, and typically follows a triggering event (sepsis, aspiration, trauma). The cardiomegaly and Kerley B lines here clearly point to a cardiac (CHF) origin.">ARDS — the bilateral opacities are non-cardiogenic. No diuresis needed.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Situation 3 →</button></div>
+  </div>
+
+  <!-- Stage 3 -->
+  <div class="case-stage lesson-hidden" data-case-stage="2">
+    <h3>Situation 3 — PE Workup in a Pregnant Patient</h3>
+    <p>The ER calls — a 31-year-old woman at 24 weeks gestation has new onset dyspnea, pleuritic chest pain, and tachycardia. PE is suspected. The ER physician wants to avoid CT-PA to minimize fetal radiation exposure. The patient has no renal disease or contrast allergy. D-dimer is elevated.</p>
+    <p><strong>What imaging modality is most appropriate, and what is the RT's direct role?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="CT-PA delivers approximately 10-70 mGy of fetal radiation. While this may not cause definite harm, V/Q scan delivers considerably lower fetal radiation dose (approximately 0.5 mGy for the perfusion component) while providing equivalent diagnostic accuracy for PE. When CT-PA is being deliberately avoided for radiation concerns, V/Q is the correct alternative.">CT-PA is safe in pregnancy — proceed with CT-PA.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! V/Q scan is the preferred alternative to CT-PA when radiation minimization is a priority (pregnancy, renal failure, contrast allergy). The ventilation phase uses an inhaled radionuclide — this is the RT's direct responsibility. The RT administers the inhaled technetium aerosol or xenon gas to the patient, ensures the patient follows breath-hold instructions, and monitors for any respiratory distress during the ventilation phase. The perfusion phase is then performed by nuclear medicine with an IV injection. The RT may also monitor the patient during the scan if required.">V/Q scan — the RT administers the inhaled radionuclide for the ventilation phase and monitors the patient throughout.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Chest X-ray and ECG are important initial steps in PE workup but are non-diagnostic — they cannot confirm or rule out PE. D-dimer is already elevated, making further imaging necessary. A normal CXR with elevated D-dimer and clinical suspicion still requires definitive imaging.">Chest X-ray and ECG only — no further imaging needed if they are normal.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Situation 4 →</button></div>
+  </div>
+
+  <!-- Stage 4 -->
+  <div class="case-stage lesson-hidden" data-case-stage="3">
+    <h3>Situation 4 — Radiation Safety in the ICU</h3>
+    <p>The radiology technician arrives with the portable X-ray unit for your ICU patient. You are in the middle of adjusting the ventilator. The tech says "everyone back, X-ray!" You are about 3 feet from the patient.</p>
+    <p><strong>What is the appropriate response?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Three feet is far too close for an unshielded RT during a portable X-ray exposure. The minimum safe distance without shielding is 8 feet. At 3 feet, you receive significantly more radiation than at 8 feet (inverse square law: moving from 3 to 6 feet reduces exposure to one-quarter). Your ventilator adjustment can wait 5 seconds.">Stay at the ventilator — patient safety requires your presence during the exposure.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Step back to at least 8 feet (or exit the room if possible) during the X-ray exposure. The exposure takes less than 1 second — your ventilator adjustment can safely wait. If you absolutely cannot leave the room (patient is unstable and requires your continuous presence), don a lead apron WITH thyroid collar and position yourself behind the lead glass barrier if available. Document the exposure on your dosimetry badge. The patient's clinical stability during the 1-second exposure is not meaningfully affected by your temporary step back.">Step back at least 8 feet from the X-ray source during the 1-second exposure — or put on a lead apron with thyroid collar and stand behind the barrier.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="A lead apron alone is not sufficient protection if you are not also wearing a thyroid collar. The thyroid gland is one of the most radiosensitive organs. A lead apron protects the body but not the neck — and many radiation-induced thyroid cancers in healthcare workers are attributed to this oversight. Always pair the lead apron with a thyroid collar.">Put on a lead apron and stay at the bedside — the lead is sufficient protection.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Complete Case →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="4">
+    <h3>Shift Summary — Four Radiologic Decisions</h3>
+    <div class="example-box soft-blue" style="margin-top:8px"><strong>Situation 1 — ET Tube + Effusion:</strong> Tube 7 cm above carina is too high — advance ~2 cm. New blunted costophrenic angle = pleural effusion — report to physician. Repeat CXR after adjustment.</div>
+    <div class="example-box soft-coral" style="margin-top:8px"><strong>Situation 2 — Pulmonary Edema:</strong> Butterfly opacities + cardiomegaly + Kerley B lines + bilateral effusions = cardiogenic pulmonary edema. NIV + oxygen + diuresis. Notify physician.</div>
+    <div class="example-box soft-teal" style="margin-top:8px"><strong>Situation 3 — V/Q for Pregnant PE Suspect:</strong> V/Q scan is preferred over CT-PA in pregnancy. RT administers inhaled radionuclide (ventilation phase) and monitors the patient throughout.</div>
+    <div class="example-box soft-amber" style="margin-top:8px"><strong>Situation 4 — Radiation Safety:</strong> Step back 8 feet during portable CXR. If unable to leave — lead apron AND thyroid collar (never one without the other). Inverse square law: every doubling of distance reduces exposure 4-fold.</div>
+  </div>
+</section>
+
+<!-- SECTION 10: Assignment Practice -->
+<section class="info-card" id="practice">
+  <h2>Assignment Practice Zone</h2>
+  <article class="activity-card require-complete" data-activity-name="PA 2.4 Assignment Practice">
+    <h3>Radiologic Assessment Comprehensive Matching</h3>
+    <div class="sort-grid" id="practiceSort">
+      <div class="sort-row" data-answer="consolidation-ab"><strong>Air bronchograms are visible within a white opacity in the left lower lobe. The opacity has ill-defined borders. Patient has productive cough and fever.</strong><select><option value="">Choose finding</option><option value="consolidation-ab">Consolidation with air bronchograms — pneumonia/aspiration</option><option value="pneumothorax">Pneumothorax — visible pleural line</option><option value="effusion-blunt">Pleural effusion — blunted costophrenic angle</option><option value="edema">Pulmonary edema — bilateral butterfly pattern</option></select></div>
+      <div class="sort-row" data-answer="vq-mismatch"><strong>V/Q scan: Ventilation normal and symmetric. Perfusion: Two wedge-shaped defects in the right upper and lower lobes with absent perfusion. What does this indicate?</strong><select><option value="">Choose interpretation</option><option value="vq-mismatch">V/Q mismatch — high probability for pulmonary embolism</option><option value="vq-match">Matched defect — lung parenchymal disease</option><option value="vq-normal">Normal V/Q scan — PE ruled out</option><option value="pe-excluded">Low probability — clinical correlation only</option></select></div>
+      <div class="sort-row" data-answer="mri-contraind"><strong>A patient with a permanent pacemaker needs brain imaging for possible MS. MRI is ordered. What is the critical consideration?</strong><select><option value="">Choose</option><option value="mri-contraind">Pacemaker is a relative or absolute MRI contraindication — verify pacemaker type; may need head CT instead</option><option value="mri-ok">MRI is always safe regardless of implants</option><option value="contrast-needed">Gadolinium contrast is contraindicated with pacemakers</option><option value="shield-pacemaker">Lead shield the pacemaker and proceed with MRI</option></select></div>
+      <div class="sort-row" data-answer="ctr-enlarged"><strong>Chest X-ray shows the cardiac silhouette measuring 58% of the inner chest width. What does this indicate?</strong><select><option value="">Choose</option><option value="normal-ctr">Normal — cardiothoracic ratio within normal range</option><option value="ctr-enlarged">Cardiomegaly — CTR >50% is abnormal on a PA view</option><option value="pneumothorax-sign">Sign of tension pneumothorax</option><option value="pleural-eff">Pleural effusion causing false appearance</option></select></div>
+      <div class="sort-row" data-answer="distance-8ft"><strong>During a portable X-ray exposure in the ICU, the safest action for the RT who is not shielded is:</strong><select><option value="">Choose</option><option value="distance-8ft">Step back at least 8 feet from the X-ray source</option><option value="lead-only">Put on lead apron and stay at 3 feet</option><option value="turn-away">Turn away from the X-ray machine and stay close</option><option value="hold-patient">Stay at bedside to hold the patient still during exposure</option></select></div>
+      <div class="sort-row" data-answer="rt-tee"><strong>What is the RT's primary responsibility when a patient is undergoing TEE under conscious sedation?</strong><select><option value="">Choose</option><option value="rt-tee">Continuously monitor SpO₂, HR, BP, RR and manage the airway if complications arise</option><option value="rt-probe">Insert and manipulate the esophageal probe</option><option value="rt-echo-images">Interpret the echocardiographic images in real time</option><option value="rt-sedation">Administer sedation medications independently</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkPracticeSort" type="button" style="margin-top:12px">Check Assignment Practice</button>
+    <div class="activity-status" id="practiceSortStatus">Complete the assignment practice to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 11: Knowledge Check -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="PA 2.4 Knowledge Check">
+  <span class="eyebrow">Knowledge Check</span>
+  <h2>Radiologic Assessment Mastery</h2>
+
+  <div class="knowledge-question" data-question-id="kq1">
+    <h3>Question 1</h3>
+    <p>A chest X-ray shows a visible pleural line on the right side, with absent lung markings beyond the line. The trachea appears shifted to the left. The patient is hypotensive and has distended neck veins. What is the diagnosis and what is the immediate action?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Simple pneumothorax causes the visible pleural line and absent lung markings, but does not typically cause hemodynamic instability (hypotension, distended neck veins). The presence of tracheal deviation AWAY from the side of the pneumothorax, along with hemodynamic compromise, indicates tension pneumothorax — a different and more urgent clinical entity.">Simple right pneumothorax — chest tube insertion after confirmation.</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct! Tension pneumothorax: visible pleural line + absent lung markings (pneumothorax) + tracheal deviation AWAY from the affected side + hemodynamic instability (hypotension, distended neck veins) = tension pneumothorax. This is a life-threatening emergency. Treatment: immediate needle decompression (2nd intercostal space, midclavicular line) WITHOUT waiting for further imaging. Then tube thoracostomy. Tension pneumothorax is a clinical diagnosis — do not delay treatment for a CXR in an unstable patient.">Tension pneumothorax — immediate needle decompression without waiting for further imaging. This is a clinical emergency.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Pleural effusion causes blunting of the costophrenic angle and may shift the trachea, but it would cause white (opaque) areas — not the hyperlucent area with a visible pleural line described here. Also, the visible 'pleural line' is the key finding that identifies pneumothorax specifically.">Large pleural effusion — urgent thoracentesis.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq2">
+    <h3>Question 2</h3>
+    <p>What is the fundamental difference between a matched V/Q defect and an unmatched (mismatched) V/Q defect, and what does each suggest clinically?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="A matched defect means both ventilation AND perfusion are absent in the same area — suggesting lung disease (pneumonia, atelectasis, fibrosis) affecting that region rather than a blood clot. Mismatched means only perfusion is absent — suggesting PE. Both patterns require clinical correlation, but the interpretation is the opposite of what's described here.">Matched defect = pulmonary embolism (both V and Q absent). Mismatched = lung disease.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct! Matched defect: both ventilation AND perfusion are reduced in the same area → suggests underlying lung disease (pneumonia, atelectasis) is causing both V and Q to be reduced together. Mismatched (unmatched) defect: normal ventilation in a region with absent perfusion → suggests a blood clot (PE) is blocking blood flow to a normally ventilated lung segment. The concept is intuitive: if the lung is diseased, both air and blood are affected together (matched). If only blood flow is blocked while air gets in normally — a clot is the culprit (mismatch).">Matched defect = lung disease (V and Q both reduced). Mismatched defect = PE (V normal, Q absent — clot blocks blood flow to ventilated lung).</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Both matched and mismatched defects are clinically significant — they just indicate different pathologies. V/Q mismatch indicates PE, while a matched defect indicates lung parenchymal disease. Neither pattern can be ignored.">Both patterns are normal variants — only high-probability patterns require clinical action.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq3">
+    <h3>Question 3</h3>
+    <p>A patient undergoing MRI has a pacemaker. The MRI technologist says "we can proceed if the RT manages the airway." What is the most appropriate response?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Proceeding without verification could be fatal. Most conventional pacemakers are absolute MRI contraindications because the strong magnetic field can cause the pacemaker to malfunction — inhibiting or triggering pacing — and can cause heating of the leads. Some newer MRI-conditional pacemakers can be imaged under specific protocols, but this requires formal pacemaker evaluation, programming changes by cardiology, and strict monitoring — not simply RT airway management.">Proceed — the RT can manage any complications that arise during the scan.</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct! The presence of a pacemaker is a critical MRI safety issue that must be resolved BEFORE the patient enters the MRI suite — it cannot be managed by RT airway oversight alone. The correct action: (1) Verify whether the pacemaker is MRI-conditional or MRI-incompatible (check the pacemaker card or medical records). (2) If MRI-conditional: cardiology must evaluate, reprogram, and monitor the pacemaker before and during the scan per strict protocol. (3) If MRI-incompatible: the scan cannot proceed — consider CT or other alternatives. The RT's role is to ensure this safety check has been completed before accepting a ventilated/monitored patient for transport to MRI.">Halt the procedure — verify pacemaker type and MRI compatibility before the patient enters the MRI suite. This is a critical safety check.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Simply using a stronger field strength does not resolve the pacemaker safety concern — in fact, stronger magnets create larger forces and greater safety risks. The pacemaker type and MRI compatibility must be formally verified before the scan regardless of field strength.">Proceed at a lower field strength — pacemakers are safe at 1.5 Tesla but not 3 Tesla.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq4">
+    <h3>Question 4</h3>
+    <p>On a chest X-ray, where should the tip of a correctly placed endotracheal tube appear?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="The glottis is the most superior anatomical landmark relevant to intubation — but the tube tip should not be visible at the glottis on CXR. The tip must be positioned well below the glottis but well above the carina, ideally 3-5 cm above the carina.">At the level of the glottis (vocal cords).</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct! The ET tube tip should be visible on CXR at 3-5 cm above the carina. The carina is typically visible at approximately the level of the T4/T5 vertebral body (the angle of Louis). If the tip is above this range (>5 cm), the tube is too high — risk of accidental extubation. If the tip is below 3 cm from the carina, the tube may intubate the right mainstem bronchus with head flexion. Neck flexion moves the tube down; neck extension moves it up — re-verify position when patient is repositioned.">3–5 cm above the carina — appearing approximately at the T4/T5 vertebral body level on CXR.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="At the carina means the tube is at or past the bifurcation — extremely high risk for right mainstem intubation with any head flexion. The tube must be withdrawn to 3-5 cm above the carina.">At the level of the carina — confirming the tube is seated securely.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq5">
+    <h3>Question 5</h3>
+    <p>A lead apron is available. Which statement about its use for radiation protection is correct?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="A lead apron alone protects the torso but NOT the neck or thyroid gland. Many radiation-related thyroid cancers in healthcare workers are attributed to wearing a lead apron without a thyroid collar. The thyroid collar must always be worn with the lead apron.">A lead apron alone provides complete radiation protection — the thyroid shield is optional.</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="true" data-feedback="Correct! Lead apron and thyroid collar must be worn together — they protect different body regions. The lead apron protects the radiosensitive organs of the torso (gonads, bone marrow, breast tissue). The thyroid collar protects the highly radiosensitive thyroid gland. Never use one without the other. Additionally, donning a lead apron is warranted only when proximity to the source is unavoidable — if distance (8 feet) can be maintained, that is always preferable.">A lead apron must always be worn with a thyroid collar — one without the other leaves critical radiosensitive structures unprotected.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Lead aprons absorb scattered and primary X-ray radiation, significantly reducing exposure to covered areas. They are real and effective protection when distance is not possible. However, they are an addition to — not a replacement for — distance whenever distance is achievable.">Lead aprons do not actually reduce radiation exposure — only distance protects.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly</div>
+</section>
+
+<!-- SECTION 12: FAQ -->
+<section id="faq">
+  <div><span class="eyebrow">FAQ</span><h2>Radiology Assessment — Common Questions</h2></div>
+  <details class="accordion" open>
+    <summary>What is the "silhouette sign" on a chest X-ray?</summary>
+    <div class="accordion-body"><p>The silhouette sign occurs when two structures of the same radiographic density (whiteness) touch — making the border between them disappear. On a CXR, the heart, aorta, and diaphragm are normally distinct because adjacent aerated lung surrounds them. When air is replaced by fluid, pus, or mass (consolidation), the border of the adjacent structure is lost. Example: Right middle lobe pneumonia causes loss of the right heart border (the right heart and the consolidated RML become the same density and merge). This helps localize which lobe or segment is affected even before CT.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>How is V/Q scan different from CT-PA for diagnosing PE?</summary>
+    <div class="accordion-body"><p>CT-PA (CT Pulmonary Angiography) directly visualizes the pulmonary vessels — a clot is seen as a filling defect in the contrast-enhanced vessel. It is fast, definitive, and allows assessment of clot burden and location. It requires IV iodinated contrast and delivers ~7 mSv of radiation to the chest. V/Q scan indirectly suggests PE by showing areas with normal ventilation but absent perfusion — it doesn't directly see the clot. V/Q delivers lower radiation (especially to the fetus in pregnancy) and can be done without IV contrast. CT-PA is more sensitive and specific and is the first-line study when feasible. V/Q is preferred when CT-PA is contraindicated.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What is the cardiothoracic ratio and how is it measured?</summary>
+    <div class="accordion-body"><p>The cardiothoracic ratio (CTR) is the widest diameter of the cardiac silhouette divided by the widest internal diameter of the chest (measured at the same level). Normal CTR on a PA (posterior-anterior) view: &lt;0.50 (less than 50%). CTR &gt;0.50 = cardiomegaly. Important caveat: AP (anterior-posterior) portable films magnify the heart due to beam divergence — they appear to show cardiomegaly even with a normal heart. The CTR should only be formally assessed on PA films taken in the radiology department, not on portable AP ICU films.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why does cardiac output affect how well the echocardiogram evaluates certain structures?</summary>
+    <div class="accordion-body"><p>Cardiac output significantly impacts echocardiographic findings. Patients with poor cardiac output (cardiogenic shock) may have underestimated ejection fraction because the heart is squeezing against high afterload. Patients who are volume-depleted have very different ventricular filling patterns. Valvular gradients (the pressure difference across a valve) are flow-dependent — a normal cardiac output creates a different gradient than a low output state. The IVC (inferior vena cava) size and how much it collapses with breathing estimates preload (volume status). These dynamic factors require the echocardiographer to integrate the findings with the patient's overall hemodynamic state.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>When should the RT NOT follow the 8-foot distance rule during an X-ray?</summary>
+    <div class="accordion-body"><p>The only justified exception is when direct patient intervention is occurring and cannot be interrupted — for example, if the patient is coding and a portable CXR is taken during resuscitation efforts. In this scenario, the RT managing the airway cannot step back. The solution: don lead apron AND thyroid collar, and position yourself on the side furthest from the primary X-ray beam (behind the patient if possible). However, for routine portable CXRs in stable patients, stepping back 8 feet is always the correct answer and takes less than 5 seconds — clinical care can safely pause for the exposure duration.</p></div>
+  </details>
+</section>
+
+<!-- SECTION 13: Summary -->
+<section class="info-card" id="summary">
+  <h2>Summary — Radiologic Assessment at a Glance</h2>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+    <div class="example-box soft-blue"><strong>Modalities Quick Reference:</strong> X-ray = bones/lungs/tubes. CT = brain bleed/PE/trauma (fast). MRI = soft tissue/spinal cord (slow, no metal). Echo = cardiac function/tamponade (bedside). PET = cancer metabolism. V/Q = PE when CT contraindicated.</div>
+    <div class="example-box soft-teal"><strong>CXR ABCDE:</strong> Airway (trachea, ETT). Bones/Soft tissue. Cardiac (CTR &lt;50%). Diaphragm (costophrenic angles). Everything else (lungs, lines, foreign bodies).</div>
+    <div class="example-box soft-amber"><strong>CXR Findings:</strong> Consolidation = white opacity + air bronchograms. PTX = visible pleural line, absent markings. Effusion = blunted costophrenic angle, meniscus. Edema = bilateral butterfly + cardiomegaly + Kerley B lines.</div>
+    <div class="example-box soft-coral"><strong>Radiation Safety ABCs:</strong> Distance ≥8 feet. Lead apron + thyroid collar (always together). Barrier for continuous imaging. Badge monitors cumulative dose. Inverse square law: double distance = ¼ exposure.</div>
+  </div>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:12px">
+    <table>
+      <thead><tr><th>V/Q Result</th><th>Pattern</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td>Normal</td><td>V and Q match throughout</td><td>PE essentially excluded</td></tr>
+        <tr><td>Matched defect</td><td>V and Q both absent in same area</td><td>Lung disease (not PE)</td></tr>
+        <tr><td>Mismatch (High prob)</td><td>V normal, Q absent (≥2 segments)</td><td>PE highly likely</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 14: Flashcards -->
+<section id="glossary">
+  <div class="glossary-card">
+    <h3>Glossary Flashcard Mastery Deck</h3>
+    <p>Click to flip. Mark known cards to move to the completed pile.</p>
+    <div class="flashcard-shell">
+      <div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" data-view="active">Review Deck</button>
+        <button class="tab-btn" data-view="completed">Completed ✓</button>
+        <button class="tab-btn" data-view="all">All Cards</button>
+      </div>
+      <div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flashcard. Click to flip.">
+        <div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div>
+      </div>
+      <div class="deck-actions">
+        <button class="small-btn" id="revealCard">Flip Card</button>
+        <button class="small-btn primary" id="knowCard">Know It ✓</button>
+        <button class="small-btn" id="reviewAgain">Review Again</button>
+        <button class="small-btn warn" id="resetAll">Reset All</button>
+        <button class="small-btn" id="shuffleDeck">Shuffle Active</button>
+      </div>
+      <div class="completed-list" id="completedList"></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end lesson-stack -->
+</main>
+
+<footer class="footer">
+  <div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div>
+</footer>
+</div>
+
+<script>
+// ── COURSE MENU ────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded",function(){
+  const btn=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+  if(btn&&panel){
+    panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+    const list=document.getElementById("courseMenuList");
+    const courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+    const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+    if(courses.length){list.innerHTML=courses.map(c=>{const file=c.file||c.href||"#";const title=c.title||c.name||file;let sl="Not started",sc="not-started";if(typeof window.getCourseProgress==="function"){const p=window.getCourseProgress(file);if(p&&p.completed){sl="Complete";sc="complete"}else if(p&&p.percent>0){sl="In progress ("+p.percent+"%)";sc="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?"current":"")+'\" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+sc+'">'+sl+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+    btn.onclick=function(e){e.preventDefault();e.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);btn.setAttribute("aria-expanded",String(!isOpen))};
+    document.addEventListener("click",e=>{if(!panel.contains(e.target)&&e.target!==btn){panel.classList.remove("open");btn.setAttribute("aria-expanded","false")}});
+  }
+});
+
+// ── FLASHCARD DECK ─────────────────────────────────────────────────────────
+const glossaryTerms=[
+  {term:"X-Ray Imaging",definition:"Ionizing radiation passes through the body. Dense structures (bone, fluid, metal) absorb X-rays and appear white. Air appears black. Best for: bones, lung opacities (consolidation), pneumothorax, pleural effusion, cardiomegaly, ET tube position. Limited soft tissue detail."},
+  {term:"CT Scan",definition:"Multiple X-ray beams rotate 360° creating transverse cross-sectional slices. Fast (seconds). Best for: brain hemorrhage, PE (CT-PA), aortic dissection, trauma, detailed lung anatomy. Requires IV contrast for vascular studies. ~7 mSv radiation for chest CT."},
+  {term:"MRI",definition:"Magnetic fields align hydrogen protons; radiofrequency pulses create images from energy released on realignment. No ionizing radiation. Best for: soft tissue, brain, spinal cord, tumors. Contraindicated with ferromagnetic metal implants (pacemakers, most cochlear implants). Duration 30-90 minutes. Requires MRI-compatible equipment for ventilated patients."},
+  {term:"Echocardiogram (TTE)",definition:"Ultrasound transducer on chest wall creates real-time images of cardiac motion. Non-invasive, no radiation. Portable — can be done at bedside in emergencies. Best for: EF, wall motion, valve disease, pericardial effusion, tamponade. Image quality limited by obesity, COPD, and chest wall abnormalities."},
+  {term:"TEE (Trans-Esophageal Echo)",definition:"Flexible probe with ultrasound transducer placed in esophagus (directly behind the heart). Superior image quality. Requires conscious sedation. RT responsibilities: continuous SpO₂, HR, BP, RR monitoring; airway management; prepared for respiratory depression from sedation."},
+  {term:"PET Scan",definition:"Radioactive FDG (glucose analog) injected IV. Metabolically active cells (especially cancer) absorb more FDG, emitting detectable gamma rays. Best for: cancer staging, treatment response, recurrence detection. Brain and heart are normally 'hot' (high glucose consumption). Often combined with CT (PET-CT) for anatomical correlation."},
+  {term:"V/Q Scan",definition:"Two-part nuclear medicine study: inhaled radionuclide shows VENTILATION; injected radionuclide shows PERFUSION. V/Q mismatch (ventilated but not perfused) = PE. Used when CT-PA is contraindicated (renal failure, contrast allergy, pregnancy). RT role: administer inhaled radionuclide for ventilation phase; monitor patient."},
+  {term:"V/Q Mismatch",definition:"Normal ventilation in an area with absent or reduced perfusion → highly suggestive of pulmonary embolism. Blood clot blocks pulmonary artery to a segment that continues to receive airflow. High probability V/Q result: ≥2 large segmental mismatches — treat or confirm with pulmonary angiography."},
+  {term:"V/Q Matched Defect",definition:"Both ventilation AND perfusion are reduced in the same lung area. Suggests underlying lung disease (pneumonia, atelectasis, fibrosis) affecting that segment — NOT pulmonary embolism. The disease prevents both air and blood from reaching that area."},
+  {term:"Consolidation (CXR)",definition:"Airspace filling — white opacity in the lung parenchyma. Key finding: air bronchograms (dark air-filled bronchi visible within the white opacity — proves the bronchi are open and alveoli are filled). Causes: pneumonia, aspiration, ARDS, hemorrhage, tumor."},
+  {term:"Pneumothorax (CXR)",definition:"Visible pleural line (visceral pleural edge) with absent lung markings beyond it. Tension pneumothorax: tracheal deviation AWAY from affected side + hemodynamic instability (hypotension, distended neck veins) = immediate needle decompression. Do not wait for CXR in tension PTX — clinical diagnosis and treat immediately."},
+  {term:"Pleural Effusion (CXR)",definition:"Blunted costophrenic angle — the sharp V-shape is filled in. Meniscus sign — curving opacity rising from the lung base. Causes: CHF, parapneumonic (pneumonia), malignancy, TB, trauma. Large effusion can cause tracheal deviation away. Bilateral effusions common in CHF."},
+  {term:"Pulmonary Edema (CXR)",definition:"Cardiogenic: bilateral perihilar 'butterfly/batwing' opacities + enlarged cardiac silhouette (CTR >50%) + Kerley B lines (interlobular septal lines at lung bases) + bilateral pleural effusions. Upper lobe vascular redistribution (cephalization) in early CHF. Cause: elevated pulmonary capillary wedge pressure from left heart failure."},
+  {term:"Cardiothoracic Ratio (CTR)",definition:"Widest cardiac diameter divided by widest inner chest diameter. Normal on PA film: <0.50 (less than 50%). CTR >50% = cardiomegaly. Important: only valid on PA (posterior-anterior) films taken in radiology. Portable AP films magnify the cardiac silhouette — do not formally assess CTR on portable films."},
+  {term:"Air Bronchogram",definition:"Dark (air-filled) bronchi visible within a white (opacified) lung region on CXR. Proves the bronchi are patent and the opacity represents alveolar filling (fluid, pus, blood, cells) rather than pleural fluid or atelectasis. Classic sign of consolidation (pneumonia, aspiration, ARDS)."},
+  {term:"Kerley B Lines",definition:"Short horizontal lines at the lung bases on CXR. Represent fluid in the interlobular septa — edema accumulating in the connective tissue between lung lobules. Classic finding in cardiogenic pulmonary edema (CHF). Indicate elevated pulmonary venous pressure and fluid extravasation into the interstitium."},
+  {term:"ET Tube Position on CXR",definition:"Ideal tip position: 3-5 cm above the carina. Carina is approximately at the T4/T5 vertebral body level. Tube too high (>5 cm above carina): risk of accidental extubation with neck flexion. Tube too low (<3 cm from carina): risk of right mainstem intubation. Always verify after repositioning the patient."},
+  {term:"Radiation Safety — Distance",definition:"Minimum 8 feet (2.4 m) from X-ray source without shielding during exposure. Inverse square law: doubling the distance reduces exposure to one-quarter. During portable CXRs, all non-essential personnel should step back at least 8 feet or exit the room for the <1 second exposure duration."},
+  {term:"Radiation Safety — Lead Apron",definition:"Lead apron (0.25-0.5 mm lead equivalency) protects the torso when proximity to radiation is unavoidable. ALWAYS worn with a thyroid collar — the apron does not protect the neck or thyroid gland. Thyroid is highly radiosensitive. Many RT thyroid cancers are attributed to apron use without thyroid collar."},
+  {term:"Dosimetry Badge",definition:"Personal radiation monitoring device worn by healthcare workers regularly exposed to ionizing radiation. Types: film badge or TLD (thermoluminescent dosimeter). Tracks cumulative occupational exposure over time. Annual occupational limit: 50 mSv whole body. Career limit: 10 mSv × age in years."},
+  {term:"MRI Safety Screening",definition:"All patients and staff must be screened before entering the MRI suite. Ferromagnetic metal implants are contraindications: pacemakers (most types), cochlear implants, aneurysm clips, certain prostheses. Remove: jewelry, piercings, hearing aids, watches, keys. Gadolinium contrast (MRI contrast) is different from CT iodinated contrast — lower allergy risk but contraindicated in severe renal failure."},
+  {term:"CT-PA (CT Pulmonary Angiography)",definition:"Gold standard for diagnosing pulmonary embolism. IV iodinated contrast injected to opacify pulmonary vessels — a clot appears as a filling defect. Fast, definitive, provides anatomical detail of clot location and burden. Contraindicated with iodinated contrast allergy or significant renal impairment. Radiation: ~7 mSv. Alternative when contraindicated: V/Q scan."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:`<div class="empty-state">No cards completed yet.</div>`}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete.";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.addEventListener("click",()=>{currentView=btn.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const opts=Array.from(container.children).filter(c=>c.classList&&c.classList.contains("quiz-option"));for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]]}opts.forEach(o=>container.appendChild(o))})}
+shuffleAnswerOptions();
+
+function markActivityComplete(el){el.dataset.complete="true";el.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+function initSort(rowSel,btnId,statusId){
+  const rows=Array.from(document.querySelectorAll(rowSel));
+  const btn=document.getElementById(btnId);
+  const status=document.getElementById(statusId);
+  const activity=btn?btn.closest(".activity-card"):null;
+  if(!btn||!activity)return;
+  btn.addEventListener("click",()=>{
+    let correct=0;
+    rows.forEach(row=>{const sel=row.querySelector("select");const ok=sel.value===row.dataset.answer;row.classList.toggle("correct",ok);row.classList.toggle("incorrect",sel.value!==""&&!ok);if(ok)correct++});
+    if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}
+    else status.textContent=`${correct} / ${rows.length} correct — review and try again.`;
+  });
+}
+initSort("#modalitySort .sort-row","checkModalitySort","modalitySortStatus");
+initSort("#ctMriSort .sort-row","checkCtMriSort","ctMriSortStatus");
+initSort("#teeSort .sort-row","checkTeeSort","teeSortStatus");
+initSort("#vqSort .sort-row","checkVqSort","vqSortStatus");
+initSort("#cxrSort .sort-row","checkCxrSort","cxrSortStatus");
+initSort("#radSort .sort-row","checkRadSort","radSortStatus");
+initSort("#indicationSort2 .sort-row","checkIndicationSort2","indicationSort2Status");
+initSort("#practiceSort .sort-row","checkPracticeSort","practiceSortStatus");
+
+function initSingleQuiz(sectionId,optClass,feedbackId){
+  const activity=document.getElementById(sectionId);
+  const feedback=document.getElementById(feedbackId);
+  if(!activity)return;
+  activity.querySelectorAll("."+optClass).forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if(activity.dataset.correctAnswered==="true")return;
+      const isCorrect=btn.dataset.correct==="true";
+      activity.querySelectorAll("."+optClass).forEach(b=>b.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        activity.dataset.correctAnswered="true";
+        activity.querySelectorAll("."+optClass).forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=btn.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+        markActivityComplete(activity);
+      }else{
+        btn.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=btn.dataset.feedback+"<br><br><strong>Try again.</strong>";
+      }
+    });
+  });
+}
+initSingleQuiz("pet-check","pet-opt","petFeedback");
+
+(function initCase(){
+  const section=document.getElementById("scenario");
+  const stages=Array.from(section.querySelectorAll(".case-stage"));
+  stages.forEach((stage,i)=>{if(i>0)stage.classList.add("lesson-hidden")});
+  section.querySelectorAll(".case-option").forEach(opt=>{
+    opt.addEventListener("click",()=>{
+      const stage=opt.closest(".case-stage");
+      if(stage.dataset.correctAnswered==="true")return;
+      const feedback=stage.querySelector(".case-feedback");
+      const isCorrect=opt.dataset.caseCorrect==="true";
+      stage.querySelectorAll(".case-option").forEach(b=>b.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        stage.dataset.correctAnswered="true";
+        stage.querySelectorAll(".case-option").forEach(b=>{b.disabled=true;if(b.dataset.caseCorrect==="true")b.classList.add("correct-choice")});
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=opt.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+        const next=stage.querySelector(".case-next button");if(next)next.disabled=false;
+      }else{
+        opt.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=opt.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+      }
+    });
+  });
+  section.querySelectorAll(".case-next button").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const current=button.closest(".case-stage");
+      const idx=stages.indexOf(current);
+      const next=stages[idx+1];
+      if(!next)return;
+      next.classList.remove("lesson-hidden");
+      if(idx+1===stages.length-1)markActivityComplete(section);
+      button.closest(".case-next").remove();
+      next.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+})();
+
+(function initKnowledge(){
+  const section=document.getElementById("knowledge-check");
+  const status=document.getElementById("knowledgeStatus");
+  const answered=new Set();
+  const total=section.querySelectorAll(".knowledge-question").length;
+  section.querySelectorAll(".knowledge-option").forEach(opt=>{
+    opt.addEventListener("click",()=>{
+      const question=opt.closest(".knowledge-question");
+      if(question.dataset.correctAnswered==="true")return;
+      const feedback=question.querySelector(".quiz-feedback");
+      const isCorrect=opt.dataset.correct==="true";
+      question.querySelectorAll(".knowledge-option").forEach(b=>b.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        question.dataset.correctAnswered="true";
+        answered.add(opt.dataset.question);
+        question.querySelectorAll(".knowledge-option").forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=opt.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>";
+      }else{
+        opt.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=opt.dataset.feedback+"<br><br><strong>Try again.</strong>";
+      }
+      status.textContent=`${answered.size} / ${total} questions answered correctly`;
+      if(answered.size===total){status.textContent="Knowledge check complete.";status.classList.add("complete");markActivityComplete(section)}
+    });
+  });
+})();
+
+function initializeProgressiveSections(){
+  const sections=Array.from(document.querySelectorAll(".lesson-stack > section"));
+  const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+  sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+  function getSectionTitle(section){const h=section.querySelector("h2,h3");return h?h.textContent.trim():"Next Section"}
+  function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+  function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+  function updateAll(){sections.forEach(setContinueState)}
+  function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+  function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+  sections.forEach((section,index)=>{
+    if(index>=sections.length-1)return;
+    const next=sections[index+1];
+    const nextTitle=getSectionTitle(next);
+    const wrapper=document.createElement("div");wrapper.className="section-continue";
+    wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+    wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});
+    section.appendChild(wrapper);
+  });
+  navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const cv=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[cv].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+  document.addEventListener("activityComplete",updateAll);
+  const note=document.createElement("span");note.className="section-progress-note";
+  note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";
+  sections[0].appendChild(note);
+  updateNav(0);updateAll();
+}
+initializeProgressiveSections();
+
+window.LESSON_ID="pa_2_4";
+</script>
+<script type="module" src="/PulmoCore-Library/assets/progress-tracker.js"></script>
+</body>
+</html>
