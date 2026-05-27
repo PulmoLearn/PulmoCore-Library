@@ -60,20 +60,22 @@ function getPulmoCoreProgressData() {
 
 function getCourseProgress(courseFile) {
   const progress = getPulmoCoreProgressData();
-  return progress[courseFile] || {
-    completed: false,
-    percent: 0
-  };
+  // Normalize key — try exact match, then without .html, then filename only
+  const fileNoExt = courseFile.replace(/\.html$/i, '').split('/').pop();
+  return progress[courseFile]
+    || progress[fileNoExt]
+    || progress[courseFile.split('/').pop()]
+    || { completed: false, percent: 0 };
 }
 
 function saveCourseProgress(courseFile, percent, completed = false) {
   const progress = getPulmoCoreProgressData();
-
-  progress[courseFile] = {
+  // Normalize key — strip .html and leading path to match Vercel URL format
+  const key = courseFile.replace(/\.html$/i, '').split('/').pop();
+  progress[key] = {
     percent: Math.max(0, Math.min(100, Number(percent) || 0)),
     completed: Boolean(completed)
   };
-
   localStorage.setItem("pulmocoreProgress", JSON.stringify(progress));
 }
 
