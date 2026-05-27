@@ -5,116 +5,77 @@
 
 window.PULMOCORE_COURSE_GROUPS = [
   {
-    id: "diseases",
-    title: "Respiratory Diseases",
-    courses: [
-      { id:"als", title:"ALS", file:"/ALS.html" },
-      { id:"ards", title:"ARDS", file:"/ARDS.html" },
-      { id:"asthma", title:"Asthma", file:"/Asthma.html" },
-      { id:"atelectasis", title:"Atelectasis", file:"/Atelectasis.html" },
-      { id:"bronchiectasis", title:"Bronchiectasis", file:"/Bronchiectasis.html" },
-      { id:"cdh", title:"Congenital Diaphragmatic Hernia", file:"/CDH.html" },
-      { id:"chd", title:"Congenital Heart Disease", file:"/CHD.html" },
-      { id:"cldi", title:"Chronic Lung Disease of Infancy", file:"/CLDI.html" },
-      { id:"copd", title:"COPD", file:"/COPD.html" },
-      { id:"cardiogenic_pulmonary_edema", title:"Cardiogenic Pulmonary Edema", file:"/CardiogenicPulmonaryEdema.html" },
-      { id:"croup", title:"Croup", file:"/Croup.html" },
-      { id:"cystic_fibrosis", title:"Cystic Fibrosis", file:"/CysticFibrosis.html" },
-      { id:"epiglottitis", title:"Epiglottitis", file:"/Epiglottitis.html" },
-      { id:"flail_chest", title:"Flail Chest", file:"/FlailChest.html" },
-      { id:"guillain_barre", title:"Guillain-Barré Syndrome", file:"/GuillainBarre.html" },
-      { id:"interstitial_lung_disease", title:"Interstitial Lung Disease", file:"/InterstitialLungDisease.html" },
-      { id:"kyphoscoliosis", title:"Kyphoscoliosis", file:"/Kyphoscoliosis.html" },
-      { id:"lung_cancer", title:"Lung Cancer", file:"/LungCancer.html" },
-      { id:"mas", title:"Meconium Aspiration Syndrome", file:"/MAS.html" },
-      { id:"myasthenia_gravis", title:"Myasthenia Gravis", file:"/MyastheniaGravis.html" },
-      { id:"near_drowning", title:"Near Drowning", file:"/NearDrowning.html" },
-      { id:"pals", title:"Pulmonary Air Leak Syndrome", file:"/PALS.html" },
-      { id:"pleural_effusion", title:"Pleural Effusion", file:"/PleuralEffusion.html" },
-      { id:"pneumonia", title:"Pneumonia", file:"/Pneumonia.html" },
-      { id:"pneumothorax", title:"Pneumothorax", file:"/Pneumothorax.html" },
-      { id:"pulmonary_embolism", title:"Pulmonary Embolism", file:"/PulmonaryEmbolism.html" },
-      { id:"rds", title:"Respiratory Distress Syndrome", file:"/RDS.html" },
-      { id:"rsv", title:"RSV Bronchiolitis", file:"/RSV.html" },
-      { id:"sleep_apnea", title:"Sleep Apnea", file:"/SleepApnea.html" },
-      { id:"smoke_inhalation", title:"Smoke Inhalation", file:"/SmokeInhalation.html" },
-      { id:"ttn", title:"Transient Tachypnea of the Newborn", file:"/TTN.html" },
-      { id:"tuberculosis", title:"Tuberculosis", file:"/Tuberculosis.html" }
-    ]
-  },
-  {
-    id: "foundations",
-    title: "Foundations of Respiratory Care",
-    courses: [
-      { id:"foundations-1-1", title:"Professional Communication & Conflict Resolution", file:"https://pulmolearn.github.io/Foundations/Foundations_1_1_Student_FULL.html" },
-      { id:"foundations-1-2", title:"Medical Math, Units & Dosage Calculations", file:"https://pulmolearn.github.io/Foundations/Foundations_1_2_Student_REBUILT.html" },
-      { id:"foundations-1-3", title:"Oxygenation & Gas Exchange Calculations", file:"https://pulmolearn.github.io/Foundations/Foundations_1_3_Student_FULL.html" },
-      { id:"foundations-1-4", title:"Introduction to Pulmonary Function Testing", file:"https://pulmolearn.github.io/Foundations/Foundations_1_4_Student_FULL.html" },
-      { id:"foundations-2-1", title:"Oximetry & Capnography", file:"https://pulmolearn.github.io/Foundations/Foundations_2_1_Student_FULL.html" },
-      { id:"foundations-2-2", title:"Interpreting Clinical & Laboratory Data", file:"https://pulmolearn.github.io/Foundations/Foundations_2_2_Student_FULL.html" },
-      { id:"foundations-2-3", title:"ABG Interpretation", file:"https://pulmolearn.github.io/Foundations/Foundations_2_3_Student_FULL.html" },
-      { id:"foundations-2-4", title:"Integrated Respiratory Decision-Making", file:"https://pulmolearn.github.io/Foundations/Foundations_2_4_Student_FULL.html" },
-      { id:"foundations-3-1", title:"Flexible Bronchoscopy: Procedure, Sedation & Airway Assessment", file:"https://pulmolearn.github.io/Foundations/Foundations_3_1_Student_FULL.html" },
-      { id:"foundations-3-2", title:"ECG Interpretation & Cardiac Rhythm Analysis", file:"https://pulmolearn.github.io/Foundations/Foundations_3_2_Student_FULL.html" },
-      { id:"foundations-3-3", title:"Anion Gap, Bicarbonate Gap & Mixed Acid-Base Disorders", file:"https://pulmolearn.github.io/Foundations/Foundations_3_3_Student_FULL.html" },
-      { id:"foundations-3-4", title:"Nutrition, Ethics & Electronic Medical Records", file:"https://pulmolearn.github.io/Foundations/Foundations_3_4_Student_FULL.html" }
-    ]
-  },
-  {
-    id: "physiology",
-    title: "Respiratory Physiology",
-    courses: [
-      { id:"rp-1-1", title:"Airway Defense & Conditioning", file:"https://pulmolearn.github.io/Physiology/RP_1_1_Student.html" },
-      { id:"rp-1-2", title:"Basic Respiratory Anatomy", file:"https://pulmolearn.github.io/Physiology/RP_1_2_Student.html" },
-      { id:"rp-1-3", title:"Mechanics of Ventilation", file:"https://pulmolearn.github.io/Physiology/RP_1_3_Student_FULL.html" },
-      { id:"rp-1-4", title:"Lung Volumes and Capacities", file:"https://pulmolearn.github.io/Physiology/RP_1_4_Student.html" },
-      { id:"rp-2-1", title:"Acid-Base Physiology & Kidney Compensation", file:"https://pulmolearn.github.io/Physiology/RP_2_1_Student.html" },
-      { id:"rp-2-2", title:"Neural Control of Ventilation, Respiratory Drives & V/Q Ratio", file:"https://pulmolearn.github.io/Physiology/RP_2_2_Student.html" },
-      { id:"rp-2-3", title:"Assessment & Treatment of Hypoxia, V/Q Calculations & Physiologic Oxygenation", file:"https://pulmolearn.github.io/Physiology/RP_2_3_Student.html" },
-      { id:"rp-2-4", title:"Sleep-Disordered Breathing, Sleep Studies & Clinical Interpretation", file:"https://pulmolearn.github.io/Physiology/RP_2_4_Student.html" },
-      { id:"rp-3-1", title:"Cardiovascular System & Cardiac Electrophysiology", file:"https://pulmolearn.github.io/Physiology/RP_3_1_Student.html" },
-      { id:"rp-3-2", title:"Cardiac Pathology & Hemodynamics", file:"https://pulmolearn.github.io/Physiology/RP_3_2_Student.html" },
-      { id:"rp-3-3", title:"Fluid Volume Overload", file:"https://pulmolearn.github.io/Physiology/RP_3_3_Student.html" },
-      { id:"rp-3-4", title:"Newborn Assessment & APGAR Scoring", file:"https://pulmolearn.github.io/Physiology/RP_3_4_Student.html" }
-    ]
-  },
-  {
-    id: "assessment",
-    title: "Pulmonary Assessment",
-    courses: [
-      { id:"pa-1-1", title:"Introduction to Pulmonary Assessment", file:"/assessment/PA_1_1_Introduction_to_Respiratory_Patient_Assessment_&_Interviewing.html" },
-      { id:"pa-1-2", title:"Vital Signs & Respiratory Patterns", file:"/assessment/PA_1_2_Physical_Assessment_&_Disease_Differentiation.html" },
-      { id:"pa-1-3", title:"Inspection, Palpation & Chest Assessment", file:"/assessment/PA_1_3_SOAP_Notes_&_Clinical_Documentation.html" },
-      { id:"pa-1-4", title:"Breath Sounds & Lung Auscultation", file:"/assessment/PA_1_4_Pulmonary_Function_Testing_Basics.html" },
-      { id:"pa-2-1", title:"ABG Sampling & Interpretation", file:"/assessment/PA_2_1_Advanced_Blood_Gas.html" },
-      { id:"pa-2-2", title:"Oxygenation Cascade & Hypoxemia", file:"/assessment/PA_2_2_Assessment_of_Oxygen.html" },
-      { id:"pa-2-3", title:"Cardiac Monitoring & ECG Basics", file:"/assessment/PA_2_3_ECG_Assessment.html" },
-      { id:"pa-2-4", title:"Diagnostic Imaging & Pulmonary Diagnostics", file:"/assessment/PA_2_4_Radiologic_Examination.html" },
-      { id:"pa-3-1", title:"Infection Control & Pneumonia Assessment", file:"/assessment/PA_3_1_Diagnostic_Tests_Respiratory_Infections_&_Nosocomial_Prevention.html" },
-      { id:"pa-3-2", title:"Respiratory Documentation & Oxygen Therapy", file:"/assessment/PA_3_2_Therapist-Driven_Protocols.html" },
-      { id:"pa-3-3", title:"Integrated Pulmonary Assessment", file:"/assessment/PA_3_3_Respiratory_Failure.html" },
-      { id:"pa-3-4", title:"HIPAA, Compliance & Professional Communication", file:"/assessment/PA_3_4_Clinical_Documentation_&_HIPAA.html" }
-    ]
-  },
-  {
-    id: "equipment",
-    title: "Equipment & Procedures",
-    courses: [
-      { id:"ep-1-1", title:"Medical Gas Systems & Safety", file:"https://pulmolearn.github.io/Equipment/EP_1_1_Student.html" },
-      { id:"ep-1-2", title:"Oxygen Delivery Devices", file:"https://pulmolearn.github.io/Equipment/EP_1_2_Student.html" },
-      { id:"ep-1-3", title:"MDIs, DPIs & Spacer Devices", file:"https://pulmolearn.github.io/Equipment/EP_1_3_Student.html" },
-      { id:"ep-1-4", title:"Nebulizers & Aerosol Therapy", file:"https://pulmolearn.github.io/Equipment/EP_1_4_Student.html" },
-      { id:"ep-2-1", title:"Humidity & Bland Aerosol Therapy", file:"https://pulmolearn.github.io/Equipment/EP_2_1_Student.html" },
-      { id:"ep-2-2", title:"Lung Expansion Therapy", file:"https://pulmolearn.github.io/Equipment/EP_2_2_Student.html" },
-      { id:"ep-2-3", title:"Airway Clearance Therapy", file:"https://pulmolearn.github.io/Equipment/EP_2_3_Student.html" },
-      { id:"ep-2-4", title:"Suctioning Procedures", file:"https://pulmolearn.github.io/Equipment/EP_2_4_Student.html" },
-      { id:"ep-3-1", title:"Basic Airway Management", file:"https://pulmolearn.github.io/Equipment/EP_3_1_Student.html" },
-      { id:"ep-3-2", title:"Artificial Airways", file:"https://pulmolearn.github.io/Equipment/EP_3_2_Student.html" },
-      { id:"ep-3-3", title:"Mechanical Ventilation Basics", file:"https://pulmolearn.github.io/Equipment/EP_3_3_Student.html" },
-      { id:"ep-3-4", title:"Emergency Respiratory Procedures", file:"https://pulmolearn.github.io/Equipment/EP_3_4_Student.html" }
-    ]
-  }
-];
+  id: "foundations",
+  title: "Foundations of Respiratory Care",
+  courses: [
+    { id:"foundations-1-1", title:"Professional Communication & Conflict Resolution", file:"https://www.pulmolearn.com/foundations/Foundations_1_1_Student_FULL.html" },
+    { id:"foundations-1-2", title:"Medical Math, Units & Dosage Calculations", file:"https://www.pulmolearn.com/foundations/Foundations_1_2_Student_REBUILT.html" },
+    { id:"foundations-1-3", title:"Oxygenation & Gas Exchange Calculations", file:"https://www.pulmolearn.com/foundations/Foundations_1_3_Student_FULL.html" },
+    { id:"foundations-1-4", title:"Introduction to Pulmonary Function Testing", file:"https://www.pulmolearn.com/foundations/Foundations_1_4_Student_FULL.html" },
+    { id:"foundations-2-1", title:"Oximetry & Capnography", file:"https://www.pulmolearn.com/foundations/Foundations_2_1_Student_FULL.html" },
+    { id:"foundations-2-2", title:"Interpreting Clinical & Laboratory Data", file:"https://www.pulmolearn.com/foundations/Foundations_2_2_Student_FULL.html" },
+    { id:"foundations-2-3", title:"ABG Interpretation", file:"https://www.pulmolearn.com/foundations/Foundations_2_3_Student_FULL.html" },
+    { id:"foundations-2-4", title:"Integrated Respiratory Decision-Making", file:"https://www.pulmolearn.com/foundations/Foundations_2_4_Student_FULL.html" },
+    { id:"foundations-3-1", title:"Flexible Bronchoscopy: Procedure, Sedation & Airway Assessment", file:"https://www.pulmolearn.com/foundations/Foundations_3_1_Student_FULL.html" },
+    { id:"foundations-3-2", title:"ECG Interpretation & Cardiac Rhythm Analysis", file:"https://www.pulmolearn.com/foundations/Foundations_3_2_Student_FULL.html" },
+    { id:"foundations-3-3", title:"Anion Gap, Bicarbonate Gap & Mixed Acid-Base Disorders", file:"https://www.pulmolearn.com/foundations/Foundations_3_3_Student_FULL.html" },
+    { id:"foundations-3-4", title:"Nutrition, Ethics & Electronic Medical Records", file:"https://www.pulmolearn.com/foundations/Foundations_3_4_Student_FULL.html" }
+  ]
+},
+{
+  id: "physiology",
+  title: "Respiratory Physiology",
+  courses: [
+    { id:"rp-1-1", title:"Airway Defense & Conditioning", file:"https://www.pulmolearn.com/physiology/RP_1_1_Student.html" },
+    { id:"rp-1-2", title:"Basic Respiratory Anatomy", file:"https://www.pulmolearn.com/physiology/RP_1_2_Student.html" },
+    { id:"rp-1-3", title:"Mechanics of Ventilation", file:"https://www.pulmolearn.com/physiology/RP_1_3_Student_FULL.html" },
+    { id:"rp-1-4", title:"Lung Volumes and Capacities", file:"https://www.pulmolearn.com/physiology/RP_1_4_Student.html" },
+    { id:"rp-2-1", title:"Acid-Base Physiology & Kidney Compensation", file:"https://www.pulmolearn.com/physiology/RP_2_1_Student.html" },
+    { id:"rp-2-2", title:"Neural Control of Ventilation, Respiratory Drives & V/Q Ratio", file:"https://www.pulmolearn.com/physiology/RP_2_2_Student.html" },
+    { id:"rp-2-3", title:"Assessment & Treatment of Hypoxia, V/Q Calculations & Physiologic Oxygenation", file:"https://www.pulmolearn.com/physiology/RP_2_3_Student.html" },
+    { id:"rp-2-4", title:"Sleep-Disordered Breathing, Sleep Studies & Clinical Interpretation", file:"https://www.pulmolearn.com/physiology/RP_2_4_Student.html" },
+    { id:"rp-3-1", title:"Cardiovascular System & Cardiac Electrophysiology", file:"https://www.pulmolearn.com/physiology/RP_3_1_Student.html" },
+    { id:"rp-3-2", title:"Cardiac Pathology & Hemodynamics", file:"https://www.pulmolearn.com/physiology/RP_3_2_Student.html" },
+    { id:"rp-3-3", title:"Fluid Volume Overload", file:"https://www.pulmolearn.com/physiology/RP_3_3_Student.html" },
+    { id:"rp-3-4", title:"Newborn Assessment & APGAR Scoring", file:"https://www.pulmolearn.com/physiology/RP_3_4_Student.html" }
+  ]
+},
+{
+  id: "assessment",
+  title: "Pulmonary Assessment",
+  courses: [
+    { id:"pa-1-1", title:"Introduction to Pulmonary Assessment", file:"https://www.pulmolearn.com/assessment/PA_1_1_Introduction_to_Respiratory_Patient_Assessment_&_Interviewing.html" },
+    { id:"pa-1-2", title:"Vital Signs & Respiratory Patterns", file:"https://www.pulmolearn.com/assessment/PA_1_2_Physical_Assessment_&_Disease_Differentiation.html" },
+    { id:"pa-1-3", title:"Inspection, Palpation & Chest Assessment", file:"https://www.pulmolearn.com/assessment/PA_1_3_SOAP_Notes_&_Clinical_Documentation.html" },
+    { id:"pa-1-4", title:"Breath Sounds & Lung Auscultation", file:"https://www.pulmolearn.com/assessment/PA_1_4_Pulmonary_Function_Testing_Basics.html" },
+    { id:"pa-2-1", title:"ABG Sampling & Interpretation", file:"https://www.pulmolearn.com/assessment/PA_2_1_Advanced_Blood_Gas.html" },
+    { id:"pa-2-2", title:"Oxygenation Cascade & Hypoxemia", file:"https://www.pulmolearn.com/assessment/PA_2_2_Assessment_of_Oxygen.html" },
+    { id:"pa-2-3", title:"Cardiac Monitoring & ECG Basics", file:"https://www.pulmolearn.com/assessment/PA_2_3_ECG_Assessment.html" },
+    { id:"pa-2-4", title:"Diagnostic Imaging & Pulmonary Diagnostics", file:"https://www.pulmolearn.com/assessment/PA_2_4_Radiologic_Examination.html" },
+    { id:"pa-3-1", title:"Infection Control & Pneumonia Assessment", file:"https://www.pulmolearn.com/assessment/PA_3_1_Diagnostic_Tests_Respiratory_Infections_&_Nosocomial_Prevention.html" },
+    { id:"pa-3-2", title:"Respiratory Documentation & Oxygen Therapy", file:"https://www.pulmolearn.com/assessment/PA_3_2_Therapist-Driven_Protocols.html" },
+    { id:"pa-3-3", title:"Integrated Pulmonary Assessment", file:"https://www.pulmolearn.com/assessment/PA_3_3_Respiratory_Failure.html" },
+    { id:"pa-3-4", title:"HIPAA, Compliance & Professional Communication", file:"https://www.pulmolearn.com/assessment/PA_3_4_Clinical_Documentation_&_HIPAA.html" }
+  ]
+},
+{
+  id: "equipment",
+  title: "Equipment & Procedures",
+  courses: [
+    { id:"ep-1-1", title:"Medical Gas Systems & Safety", file:"https://www.pulmolearn.com/equipment/EP_1_1_Student.html" },
+    { id:"ep-1-2", title:"Oxygen Delivery Devices", file:"https://www.pulmolearn.com/equipment/EP_1_2_Student.html" },
+    { id:"ep-1-3", title:"MDIs, DPIs & Spacer Devices", file:"https://www.pulmolearn.com/equipment/EP_1_3_Student.html" },
+    { id:"ep-1-4", title:"Nebulizers & Aerosol Therapy", file:"https://www.pulmolearn.com/equipment/EP_1_4_Student.html" },
+    { id:"ep-2-1", title:"Humidity & Bland Aerosol Therapy", file:"https://www.pulmolearn.com/equipment/EP_2_1_Student.html" },
+    { id:"ep-2-2", title:"Lung Expansion Therapy", file:"https://www.pulmolearn.com/equipment/EP_2_2_Student.html" },
+    { id:"ep-2-3", title:"Airway Clearance Therapy", file:"https://www.pulmolearn.com/equipment/EP_2_3_Student.html" },
+    { id:"ep-2-4", title:"Suctioning Procedures", file:"https://www.pulmolearn.com/equipment/EP_2_4_Student.html" },
+    { id:"ep-3-1", title:"Basic Airway Management", file:"https://www.pulmolearn.com/equipment/EP_3_1_Student.html" },
+    { id:"ep-3-2", title:"Artificial Airways", file:"https://www.pulmolearn.com/equipment/EP_3_2_Student.html" },
+    { id:"ep-3-3", title:"Mechanical Ventilation Basics", file:"https://www.pulmolearn.com/equipment/EP_3_3_Student.html" },
+    { id:"ep-3-4", title:"Emergency Respiratory Procedures", file:"https://www.pulmolearn.com/equipment/EP_3_4_Student.html" }
+  ]
+}
 
 window.PULMOCORE_COURSES = window.PULMOCORE_COURSE_GROUPS.flatMap(group =>
   group.courses.map(course => ({ ...course, groupId: group.id, groupTitle: group.title }))
