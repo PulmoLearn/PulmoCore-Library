@@ -268,6 +268,11 @@ async function saveProgress() {
     console.error('PulmoLearn: Failed to save progress:', error.message)
   } else {
     console.log(`PulmoLearn: Save confirmed — ${lessonId} ${percent}%`)
+    // ── Sync to localStorage so courses.js dropdown stays current ──
+    if (typeof window.saveCourseProgress === 'function') {
+      const fileName = window.location.pathname.split('/').pop()
+      window.saveCourseProgress(fileName, percent, completed)
+    }
     if (completed) showCompletionBanner()
   }
 }
@@ -314,6 +319,12 @@ async function restoreProgress() {
   setTimeout(() => {
     document.dispatchEvent(new CustomEvent('progressRestored'))
   }, 200)
+
+  // ── Sync restored data to localStorage so courses.js dropdown reflects it ──
+  if (typeof window.saveCourseProgress === 'function') {
+    const fileName = window.location.pathname.split('/').pop()
+    window.saveCourseProgress(fileName, data.percent, data.completed)
+  }
 
   if (data.completed) {
     completionShown = false
