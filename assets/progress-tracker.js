@@ -5,7 +5,7 @@
  *   <script type="module" src="/assets/progress-tracker.js"></script>
  */
 
-import { supabase } from '/assets/auth.js'
+import { supabase } from '/PulmoCore-Library/assets/auth.js'
 
 console.log('PulmoLearn: progress-tracker.js v7 loaded')
 
@@ -17,7 +17,7 @@ if (!session) {
 }
 
 const userId = session.user.id
-const lessonId = window.PULMO_LESSON_ID || window.LESSON_ID
+const lessonId = window.LESSON_ID
 
 console.log(`PulmoLearn: lessonId="${lessonId}" userId="${userId}"`)
 
@@ -242,10 +242,7 @@ let saveTimer = null
 let observerPaused = true
 
 function scheduleSave() {
-  if (observerPaused) {
-    console.warn('PulmoLearn: Save requested before observer enabled')
-    return
-  }
+  if (observerPaused) return
   clearTimeout(saveTimer)
   saveTimer = setTimeout(saveProgress, 600)
 }
@@ -365,9 +362,13 @@ observer.observe(document.body, {
 document.addEventListener('activityComplete', scheduleSave)
 
 // ── Init ──
-async function initPulmoProgressTracker() {
-  console.log('PulmoLearn: initPulmoProgressTracker fired')
+window.addEventListener('load', async () => {
+  console.log('PulmoLearn: load event fired')
 
+  // Re-run all lesson init functions now that DOM is fully ready.
+  // These run too early during initial script parse so listeners
+  // don't attach correctly. Running them again on load fixes this.
+  // Each function is guarded so it only runs if it exists in the lesson.
   callInit('initializeProgressiveSections')
   callInit('initializePrecheck')
   callInit('initializeHotspotActivity')
@@ -379,7 +380,7 @@ async function initPulmoProgressTracker() {
   callInit('initializePeakFlowActivity')
   callInit('shuffleAnswerOptions')
   callInit('enableDynamicReorder')
-
+  // Shuffle sequence multiple times for better randomization
   if (typeof shuffleSequence === 'function') {
     shuffleSequence()
     shuffleSequence()
@@ -387,41 +388,66 @@ async function initPulmoProgressTracker() {
     shuffleSequence()
     shuffleSequence()
   }
-
+  
+  
+// ── Review mode — auto-show correct answers ──
   if (new URLSearchParams(window.location.search).get('review') === 'true') {
     console.log('PulmoLearn: Review mode — auto-completing all activities')
     setTimeout(() => {
-      document.querySelectorAll('.quiz-option[data-correct="true"]').forEach(btn => btn.click())
-      document.querySelectorAll('.knowledge-option[data-correct="true"]').forEach(btn => btn.click())
-      document.querySelectorAll('.case-option[data-correct="true"]').forEach(btn => btn.click())
-
-      document.querySelectorAll('.sort-row').forEach(row => {
-        const select = row.querySelector('select')
-        if (select && row.dataset.answer) select.value = row.dataset.answer
+      // Auto-select correct quiz options
+      document.querySelectorAll('.quiz-option[data-correct="true"]').forEach(btn => {
+        if (!btn.closest('[data-correct-answered="true"]')) {
+          btn.click()
+        }
       })
 
+      // Auto-select correct knowledge check options
+      document.querySelectorAll('.knowledge-option[data-correct="true"]').forEach(btn => {
+        if (!btn.closest('[data-correct-answered="true"]')) {
+          btn.click()
+        }
+      })
+
+      // Auto-select correct case options
+      document.querySelectorAll('.case-option[data-correct="true"]').forEach(btn => {
+        if (!btn.closest('[data-correct-answered="true"]')) {
+          btn.click()
+        }
+      })
+
+      // Auto-select correct sort answers
+      document.querySelectorAll('.sort-row').forEach(row => {
+        const select = row.querySelector('select')
+        if (select && row.dataset.answer) {
+          select.value = row.dataset.answer
+        }
+      })
+
+      // Click check buttons to confirm sorts
       document.querySelectorAll('[id^="check"]').forEach(btn => {
         if (btn.tagName === 'BUTTON') btn.click()
       })
 
+      // Click all hotspots
       document.querySelectorAll('.hotspot-btn').forEach(btn => btn.click())
+
     }, 500)
   }
-
+  // Save immediately when user clicks any dashboard link
   document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
-    link.addEventListener('click', async (e) => {
+    link.addEventListener('click', (e) => {
       e.preventDefault()
-      await saveProgress()
+      saveProgress() // fire and forget
       window.location.href = link.href
     })
   })
 
   setTimeout(async () => {
-    console.log('PulmoLearn: delayed init complete — running restore/check')
+    console.log('PulmoLearn: 3500ms delay complete — running init')
 
     const sections2 = getAllSections()
     const hidden2 = Array.from(sections2).filter(s => s.classList.contains('lesson-hidden')).length
-    console.log(`PulmoLearn: ${sections2.length} total, ${hidden2} hidden, ${sections2.length - hidden2} visible`)
+    console.log(`PulmoLearn: After 3500ms — ${sections2.length} total, ${hidden2} hidden, ${sections2.length - hidden2} visible`)
 
     const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
     console.log(`PulmoLearn: isRestart=${isRestart}`)
@@ -434,19 +460,10 @@ async function initPulmoProgressTracker() {
 
     observerPaused = false
     console.log('PulmoLearn: Observer enabled')
+    console.log('PulmoLearn: Ready — waiting for user interaction to save')
+  }, 3500)
+})
 
-    // Force an initial save after observer is enabled
-    await saveProgress()
-
-    console.log('PulmoLearn: Ready — progress tracker active')
-  }, 1500)
-}
-
-if (document.readyState === 'complete') {
-  initPulmoProgressTracker()
-} else {
-  window.addEventListener('load', initPulmoProgressTracker)
-}
 // ── Save on tab close ──
 window.addEventListener('pagehide', () => {
   if (!lessonId || !userId) return
