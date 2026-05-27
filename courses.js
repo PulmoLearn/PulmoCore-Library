@@ -339,32 +339,3 @@ document.addEventListener("DOMContentLoaded", function () {
 window.initializeCourseMenu = initializeCourseMenu;
 window.updateCurrentLessonProgress = updateCurrentLessonProgress;
 window.autoTrackCourseProgress = autoTrackCourseProgress;
-function forcePulmoCoreMenuRebuild() {
-  const panel = getCoursePanel();
-  const button = document.getElementById("courseMenuBtn") || document.getElementById("courseMenuButton");
-  if (!panel || !button) return;
-
-  panel.innerHTML = '<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
-
-  injectCourseMenuStyles();
-  renderCourseMenu();
-
-  button.onclick = function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const isOpen = panel.classList.contains("open") || panel.classList.contains("show");
-    panel.classList.toggle("open", !isOpen);
-    panel.classList.toggle("show", !isOpen);
-    button.setAttribute("aria-expanded", String(!isOpen));
-  };
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(forcePulmoCoreMenuRebuild, 500);
-  setTimeout(forcePulmoCoreMenuRebuild, 1200);
-});
-
-window.addEventListener("load", function () {
-  setTimeout(forcePulmoCoreMenuRebuild, 500);
-});
