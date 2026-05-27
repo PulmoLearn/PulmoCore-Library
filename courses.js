@@ -76,7 +76,7 @@ window.PULMOCORE_COURSE_GROUPS = [
     { id:"ep-3-4", title:"Emergency Respiratory Procedures", file:"https://www.pulmolearn.com/equipment/EP_3_4_Student.html" }
   ]
 }
-
+];
 window.PULMOCORE_COURSES = window.PULMOCORE_COURSE_GROUPS.flatMap(group =>
   group.courses.map(course => ({ ...course, groupId: group.id, groupTitle: group.title }))
 );
