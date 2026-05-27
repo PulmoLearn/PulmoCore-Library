@@ -235,8 +235,12 @@ list.innerHTML = "";
 /* ---------- CURRENT LESSON PROGRESS ---------- */
 
 function updateCurrentLessonProgress() {
-  const currentFile = getCurrentFileName();
-  if (!currentFile) return;
+  const currentLessonId =
+    window.PULMO_LESSON_ID ||
+    window.LESSON_ID ||
+    getCurrentFileName();
+
+  if (!currentLessonId) return;
 
   const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
   if (!sections.length) return;
@@ -248,7 +252,7 @@ function updateCurrentLessonProgress() {
   const percent = Math.round((unlockedSections.length / sections.length) * 100);
   const completed = percent >= 100;
 
-  saveCourseProgress(currentFile, percent, completed);
+  saveCourseProgress(currentLessonId, percent, completed);
   updateCourseMenuStatuses();
 }
 
