@@ -50,20 +50,31 @@
   <span class="eyebrow">Video Overview</span>
   <h2>2-Minute SOAP Notes Overview</h2>
   <p>Watch this quick overview before moving into the lesson.</p>
-  <div style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);background:#000;">
-    <video controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;"
-      onerror="this.closest('div').innerHTML=document.getElementById('video-coming-soon').innerHTML">
+  <div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+    <video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
       <source src="/assessment/PA1_3.mp4" type="video/mp4"/>
       <track default kind="captions" label="English captions" src="/assessment/PA1_3.vtt" srclang="en"/>
     </video>
-  </div>
-  <template id="video-coming-soon">
-    <div style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+    <div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
       <div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
       <div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
       <div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
     </div>
-  </template>
+  </div>
+  <script>
+    (function() {
+      var video = document.getElementById('overviewVideo');
+      var placeholder = document.getElementById('videoPlaceholder');
+      video.addEventListener('canplay', function() {
+        video.style.display = 'block';
+        placeholder.style.display = 'none';
+      });
+      video.addEventListener('error', function() {
+        video.style.display = 'none';
+        placeholder.style.display = 'block';
+      });
+    })();
+  </script>
 </section></div></div>
 <div class="lesson-stack">
 <section class="info-card" id="why"><h2>Why RT Documentation Matters</h2><p>Respiratory therapists document so the care team can understand what the patient reported, what the RT observed, what was done, how the patient responded, and what should happen next. Good documentation is part of safe patient care.</p><div class="three-card-grid" style="margin-top:16px;"><div class="example-box soft-teal"><strong>Communication</strong><br/>Your note helps nurses, providers, and other RTs understand the respiratory picture.</div><div class="example-box soft-blue"><strong>Continuity</strong><br/>The next clinician can see trends and continue care appropriately.</div><div class="example-box soft-amber"><strong>Legal record</strong><br/>The medical record should accurately reflect assessment, treatment, response, and patient education.</div></div><article class="quiz-card require-complete" data-activity-name="Documentation Precheck" style="margin-top:16px;" id="precheck"><h3>Quick Pre-Check</h3><p>Which note is most useful to another RT?</p><div class="quiz-options"><button class="quiz-option" data-correct="false" data-feedback="Not quite. This is too vague. It does not say what was found or how the patient responded.">Patient looked short of breath. Treatment done.</button><button class="quiz-option" data-correct="true" data-feedback="Correct. This note includes a patient report, objective findings, intervention, response, and reassessment plan.">Patient reports dyspnea at rest. RR 30/min, SpO₂ 88% on room air, expiratory wheezes bilaterally. Albuterol neb given; SpO₂ improved to 93% on 2 L NC. Reassess WOB and breath sounds in 15 min.</button><button class="quiz-option" data-correct="false" data-feedback="Not quite. This includes a plan but not enough assessment data or response to care.">Will continue respiratory treatments as ordered.</button></div><div class="quiz-feedback" role="status"></div></article></section>
