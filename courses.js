@@ -37,7 +37,7 @@ window.PULMOCORE_COURSES = [
   { title: "Sleep Apnea", file: "SleepApnea.html" },
   { title: "Smoke Inhalation", file: "SmokeInhalation.html" },
   { title: "Transient Tachypnea of the Newborn", file: "TTN.html" },
-  { title: "Tuberculosis", file: "Tuberculosis.html" }
+  { title: "Tuberculosis", file: "Tuberculosis.html" },
   { title: "Foundations 1.1: Professional Communication & Conflict Resolution", file: "/foundations/Foundations_1_1_Student_FULL.html" },
   { title: "Foundations 1.2: Medical Math, Units & Dosage Calculations", file: "/foundations/Foundations_1_2_Student_REBUILT.html" },
   { title: "Physiology 1.1: Airway Defense & Conditioning", file: "/physiology/RP_1_1_Student.html" },
