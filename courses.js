@@ -60,9 +60,6 @@ function getPulmoCoreProgressData() {
 
 function getCourseProgress(courseFile) {
   const progress = getPulmoCoreProgressData();
-
-    console.log("Progress for", courseFile, progress[courseFile]);
-
   return progress[courseFile] || {
     completed: false,
     percent: 0
@@ -116,15 +113,10 @@ function renderCourseMenu() {
   const courseSource = getCourseSource();
   const list = document.getElementById("courseMenuList");
 
-  console.log("Course list element:", list);  // Log the course list element to verify it's present
-
-  panel.innerHTML = "";  // Clear the panel content first
+  panel.innerHTML = "";
 
   courseSource.forEach(course => {
-    console.log("Rendering course:", course.title);  // Log each course being rendered
-
     const progress = getCourseProgress(course.file);
-    console.log("Progress for", course.title, progress);  // Log the progress for each course
 
     let status = "Not started";
     let statusClass = "not-started";
@@ -153,7 +145,6 @@ function renderCourseMenu() {
       window.location.href = course.file;
     });
 
-    console.log("Appending course:", course.title);  // Log when each course item is appended
     list.appendChild(item);
   });
 }
@@ -186,15 +177,13 @@ function updateCourseMenuStatuses() {
 }
 
 function initializeCourseMenu() {
-  console.log("initializeCourseMenu triggered");
-   
-   const button =
-  document.getElementById("courseMenuBtn") ||
-  document.getElementById("courseMenuButton");
+  const button =
+    document.getElementById("courseMenuBtn") ||
+    document.getElementById("courseMenuButton");
   const panel = getCoursePanel();
-const list = document.getElementById("courseMenuList") || panel;
-if (!panel || !list) return;
-list.innerHTML = "";
+  const list = document.getElementById("courseMenuList") || panel;
+  if (!panel || !list) return;
+  list.innerHTML = "";
 
   renderCourseMenu();
 
@@ -206,8 +195,6 @@ list.innerHTML = "";
       panel.classList.contains("open") ||
       panel.classList.contains("show");
 
-     console.log("Toggling panel visibility", isOpen);
-     
     panel.classList.toggle("open", !isOpen);
     panel.classList.toggle("show", !isOpen);
 
@@ -240,7 +227,8 @@ function updateCurrentLessonProgress() {
   const currentFile = getCurrentFileName();
   if (!currentFile) return;
 
-  const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
+  // ── Support both lesson-stack-top and lesson-stack layouts ──
+  const sections = Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));
   if (!sections.length) return;
 
   const unlockedSections = sections.filter(section =>
@@ -259,7 +247,8 @@ function autoTrackCourseProgress() {
 }
 
 function watchLessonProgressChanges() {
-  const lessonStack = document.querySelector(".lesson-stack");
+  // ── Watch both lesson-stack-top and lesson-stack ──
+  const lessonStack = document.querySelector(".lesson-stack-top, .lesson-stack");
   if (!lessonStack) return;
 
   const observer = new MutationObserver(function () {
