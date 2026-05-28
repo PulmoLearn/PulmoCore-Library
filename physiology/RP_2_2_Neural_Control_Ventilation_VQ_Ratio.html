@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | RP 2.2 Neural Control of Ventilation, Respiratory Drives & V/Q Ratio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0;color:#fff;text-decoration:none}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px;background:#FAFDFF}.course-menu-item:hover,.course-menu-item.current{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status,.course-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.info-card p{margin-bottom:0}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover,.side-nav a.current{background:var(--airway-mint);color:var(--core-navy);font-weight:800}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;min-width:0;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:480px}th,td{text-align:left;padding:9px;vertical-align:top;border-bottom:1px solid var(--soft-border)}thead th{background:#E5F0F6}.case-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}.case-meta div{background:#F7FBFD;border:1px solid var(--soft-border);border-radius:12px;padding:12px}.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#FFF,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px;color:#263f5e}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease,border-color .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(130px,210px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}.image-frame{margin-top:14px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft);overflow:hidden;background:white}.image-frame img{display:block;width:100%}.abg-block{background:var(--core-navy);border-radius:12px;padding:12px 16px;font-family:var(--font-data);font-size:.88rem;color:var(--white);line-height:2;margin:8px 0}.abg-block .ok{color:#A3E6A0}.abg-block .hi{color:var(--alert-coral)}.abg-block .lo{color:var(--oxygen-blue)}.abg-block .warn{color:var(--clinical-amber)}.abg-block .label{opacity:.65;font-size:.78rem}.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px}.cascade-flow{display:grid;gap:0;margin:14px 0}.cascade-step{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:start;padding:8px 10px;position:relative}.cascade-step::after{content:'';position:absolute;left:17px;top:46px;bottom:-4px;width:2px;background:var(--soft-border);z-index:0}.cascade-step:last-child::after{display:none}.cascade-num{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:.85rem;flex-shrink:0;color:var(--white);position:relative;z-index:1}.vq-compare{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.vq-card{border-radius:14px;padding:14px;border:3px solid;background:#fff}.vq-title{font-family:var(--font-heading);font-weight:800;font-size:.95rem;margin-bottom:6px}.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid,.two-col,.vq-compare{grid-template-columns:1fr}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}}@media(max-width:780px){.top-nav{padding:14px 16px;gap:12px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid,.case-meta{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:480px}.cascade-step{grid-template-columns:1fr}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+<header class="top-nav" aria-label="PulmoCore site navigation">
+  <div class="brand" aria-label="PulmoCore brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+    <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Interactive respiratory therapy learning.</div></div>
+  </div>
+  <div class="top-nav-actions">
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" aria-label="Glossary and Flashcards" title="Glossary & Flashcards" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;">📖 Glossary/Flashcards</a>
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+    <div class="course-menu-container course-menu-wrapper">
+      <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+      <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal);">
+  <span class="eyebrow">Respiratory Physiology · Lesson 2.2</span>
+  <h1 style="font-family:var(--font-heading);font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px;">Neural Control of Ventilation, Respiratory Drives & V/Q Ratio</h1>
+  <p style="font-size:1.18rem;max-width:980px;color:#243b55;">The body breathes in response to two independent chemical signals — rising CO₂ via central chemoreceptors (primary, always active) and falling O₂ via peripheral chemoreceptors (secondary, emergency backup). Understanding which drive dominates — and why COPD patients can be harmed by supplemental oxygen — is foundational clinical knowledge. The lesson then connects these drives to V/Q ratio physiology: what it means when ventilation and perfusion are mismatched, and how shunt differs fundamentally from V/Q mismatch in its response to supplemental oxygen.</p>
+  <div class="case-meta" aria-label="Lesson details">
+    <div><strong>Track</strong><br/>Respiratory Physiology</div>
+    <div><strong>Estimated Time</strong><br/>65–80 minutes</div>
+    <div><strong>Level</strong><br/>Intermediate / Clinical Integration</div>
+  </div>
+</section>
+
+<div class="content-layout">
+<aside class="side-nav" aria-label="Lesson navigation">
+  <h3>Lesson Sections</h3>
+  <a href="#objectives">Objectives</a>
+  <a href="#overview-video">Video Overview</a>
+  <a href="#hypercapnic-drive">Hypercapnic Drive</a>
+  <a href="#ccr-detail">Central Chemoreceptors</a>
+  <a href="#hypoxemic-drive">Hypoxemic Drive</a>
+  <a href="#drive-comparison">Drive Comparison</a>
+  <a href="#copd-paradox">COPD Oxygen Paradox</a>
+  <a href="#vq-normal">V/Q — Normal Physiology</a>
+  <a href="#vq-abnormal">Abnormal V/Q States</a>
+  <a href="#shunt-vs-vq">Shunt vs. V/Q Mismatch</a>
+  <a href="#abg-effects">V/Q Effects on ABGs</a>
+  <a href="#vq-causes">Clinical Causes</a>
+  <a href="#integrated-case">Integrated Case</a>
+  <a href="#knowledge-check">Knowledge Check</a>
+  <a href="#faq">FAQ</a>
+  <a href="#summary">Summary</a>
+  <a href="#glossary">Glossary Deck</a>
+</aside>
+
+<div class="lesson-stack-top">
+<section class="info-card" id="objectives">
+  <h2>Learning Objectives</h2>
+  <p>By the end of this lesson, learners should be able to trace the complete hypercapnic drive cascade from rising PaCO₂ through negative feedback, explain why central chemoreceptors sense H⁺ not CO₂ directly, describe the anatomy and function of peripheral chemoreceptors, apply the COPD oxygen paradox clinically including the SpO₂ target rationale, define V/Q ratio and classify high V/Q, low V/Q, and shunt states, distinguish V/Q mismatch from shunt using the 100% oxygen challenge, and interpret P(A-a)O₂ gradient in clinical scenarios.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px;">
+    <div class="example-box soft-teal"><strong>1. Hypercapnic drive cascade</strong><br/>Trace the 7 key steps from rising PaCO₂ → BBB crossing → CSF H⁺ → CCR stimulation → increased ventilation → negative feedback to homeostasis.</div>
+    <div class="example-box soft-blue"><strong>2. Hypoxemic drive and COPD</strong><br/>Identify peripheral chemoreceptor anatomy, explain the PaO₂ &lt;60 mmHg threshold, and apply the COPD paradox with a precise SpO₂ target rationale.</div>
+    <div class="example-box soft-amber"><strong>3. V/Q ratio states</strong><br/>Classify high V/Q (dead space/PE), low V/Q (obstruction/pneumonia), and shunt (zero ventilation) — and their consequences for gas exchange.</div>
+    <div class="example-box soft-coral"><strong>4. Shunt vs. V/Q mismatch</strong><br/>Apply the 100% oxygen challenge to distinguish V/Q mismatch (responsive) from shunt (refractory). Interpret P(A-a)O₂ gradient clinically.</div>
+  </div>
+</section>
+
+<section class="info-card" id="overview-video">
+  <span class="eyebrow">Video Overview</span>
+  <h2>3-Minute Overview: Respiratory Drives and V/Q Ratio</h2>
+  <p>A focused walkthrough of how the brain detects CO₂ and O₂ changes, how the COPD patient loses primary drive, and the clinical meaning of V/Q mismatch versus shunt.</p>
+  <div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/physiology/RP_2_2_Neural_Control.mp4" type="video/mp4">
+<track default kind="captions" label="English captions" src="/physiology/RP_2_2_Neural_Control.vtt" srclang="en">
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+</div><!-- end lesson-stack-top -->
+</div><!-- end content-layout -->
+
+<!-- ── PROGRESSIVE LESSON STACK ─────────────────────────────────────────── -->
+<div class="lesson-stack">
+
+<!-- SECTION 1: Hypercapnic Drive -->
+<section class="info-card" id="hypercapnic-drive">
+  <h2>The Hypercapnic Respiratory Drive — Primary Control of Every Breath</h2>
+  <p>The hypercapnic drive is the body's primary ventilatory control mechanism, operating with every breath, during sleep, at rest, and with exercise. It is a precise negative feedback loop: rising CO₂ drives ventilation up; increased ventilation blows off CO₂; CO₂ falls; ventilation returns to baseline. It never stops.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-hypercapnic-cascade.png" alt="The complete hypercapnic respiratory drive cascade shown as a circular negative feedback loop. Starting at the top with increased metabolic activity or hypoventilation causing PaCO2 to rise above 45 mmHg, then CO2 crossing the blood-brain barrier because it is lipid-soluble, entering the CSF bathing the medulla. Inside the CSF carbonic anhydrase catalyzes CO2 plus H2O to form carbonic acid which immediately dissociates to H-plus and HCO3-minus. The increased H-plus concentration lowers CSF pH below the normal value of 7.32. This decreased pH stimulates the central chemoreceptors on the surface of the medulla oblongata. The central chemoreceptors signal the dorsal respiratory group DRG and ventral respiratory group VRG which increase firing rate to the phrenic nerve at C3-C4-C5 and to intercostal nerves T1-T12. The diaphragm and external intercostals contract more frequently and forcefully increasing respiratory rate and tidal volume and therefore minute ventilation. Enhanced alveolar ventilation creates a larger diffusion gradient for CO2, more CO2 is exhaled, PaCO2 falls, less CO2 crosses the BBB, CSF pH rises, and central chemoreceptor stimulation diminishes completing the negative feedback loop and returning breathing to baseline. Normal values are labeled: PaCO2 35-45 mmHg, RR 12-20 breaths per minute, VE 6-8 liters per minute."/>
+  </div>
+  <h3 style="margin-top:16px;">The Seven-Step Cascade (Compressed)</h3>
+  <div class="cascade-flow">
+    <div class="cascade-step"><div class="cascade-num" style="background:var(--alert-coral);">1</div><div><strong>PaCO₂ rises above 45 mmHg</strong> — from hypoventilation or increased metabolic CO₂ production.</div></div>
+    <div class="cascade-step"><div class="cascade-num" style="background:#E2634A;">2</div><div><strong>CO₂ crosses the blood-brain barrier (BBB)</strong> — CO₂ is lipid-soluble and diffuses freely into the CSF surrounding the medulla. Important: HCO₃⁻ and H⁺ ions cannot cross the BBB freely — only CO₂ gets in.</div></div>
+    <div class="cascade-step"><div class="cascade-num" style="background:var(--clinical-amber);">3</div><div><strong>CO₂ + H₂O → H₂CO₃ → H⁺ + HCO₃⁻</strong> in the CSF — carbonic anhydrase in neural tissue catalyzes this reaction rapidly. Each CO₂ molecule that enters the CSF produces H⁺ ions.</div></div>
+    <div class="cascade-step"><div class="cascade-num" style="background:#B8860B;">4</div><div><strong>CSF pH falls</strong> — H⁺ accumulates, making the CSF more acidic. Normal CSF pH is 7.32 (already more acidic than blood). Even 0.01 unit changes in CSF pH stimulate the central chemoreceptors significantly.</div></div>
+    <div class="cascade-step"><div class="cascade-num" style="background:var(--pulmo-teal);">5</div><div><strong>Central chemoreceptors (CCR) on the medullary surface are stimulated</strong> — they sense H⁺ (not CO₂ directly). CCR signals activate the DRG and VRG, which increase phrenic and intercostal nerve firing frequency.</div></div>
+    <div class="cascade-step"><div class="cascade-num" style="background:var(--pulmo-teal-dark);">6</div><div><strong>Respiratory rate and tidal volume both increase</strong> — minute ventilation (VE = RR × VT) rises. Alveolar ventilation increases, creating a larger diffusion gradient for CO₂. More CO₂ is exhaled per minute.</div></div>
+    <div class="cascade-step"><div class="cascade-num" style="background:var(--oxygen-blue);">7</div><div><strong>Negative feedback: PaCO₂ falls → less CO₂ crosses BBB → CSF H⁺ decreases → CSF pH rises → CCR stimulation diminishes → RR and VT return toward baseline</strong> — homeostasis maintained continuously.</div></div>
+  </div>
+  <div class="example-box soft-teal" style="margin-top:12px;">
+    <strong>Why CO₂ and not O₂?</strong> Central chemoreceptors evolved to sense CO₂/pH — not O₂ — because CO₂ is the direct byproduct of cellular metabolism. Every active cell produces CO₂. It is a more immediate and precisely controllable signal than O₂, which varies based on ambient conditions, hemoglobin capacity, and many other factors.
+  </div>
+  <article class="activity-card require-complete" data-activity-name="Hypercapnic Cascade Sort" style="margin-top:16px;">
+    <h3>Sequence the Hypercapnic Drive Cascade</h3>
+    <p>Match each cascade event to the step it represents. Focus on what is happening at each stage of the negative feedback loop.</p>
+    <div class="sort-grid" id="cascadeSort">
+      <div class="sort-row" data-answer="step4"><strong>CSF pH falls; H⁺ ions accumulate from carbonic acid dissociation in the cerebrospinal fluid</strong><select><option value="">Choose step</option><option value="step1">Step 1 — PaCO₂ rises above 45 mmHg</option><option value="step2">Step 2 — CO₂ crosses the blood-brain barrier into CSF</option><option value="step3">Step 3 — CO₂ + H₂O → H⁺ + HCO₃⁻ in CSF</option><option value="step4">Step 4 — CSF pH falls (H⁺ accumulates)</option><option value="step5">Step 5 — Central chemoreceptors stimulated</option><option value="step6">Step 6 — ↑ RR and VT → ↑ CO₂ exhalation</option><option value="step7">Step 7 — Negative feedback: PaCO₂ falls → CCR stimulation diminishes</option></select></div>
+      <div class="sort-row" data-answer="step2"><strong>CO₂ enters the CSF surrounding the medulla because it is lipid-soluble; HCO₃⁻ and H⁺ cannot cross this barrier freely</strong><select><option value="">Choose step</option><option value="step1">Step 1 — PaCO₂ rises above 45 mmHg</option><option value="step2">Step 2 — CO₂ crosses the blood-brain barrier into CSF</option><option value="step3">Step 3 — CO₂ + H₂O → H⁺ + HCO₃⁻ in CSF</option><option value="step4">Step 4 — CSF pH falls (H⁺ accumulates)</option><option value="step5">Step 5 — Central chemoreceptors stimulated</option><option value="step6">Step 6 — ↑ RR and VT → ↑ CO₂ exhalation</option><option value="step7">Step 7 — Negative feedback: PaCO₂ falls → CCR stimulation diminishes</option></select></div>
+      <div class="sort-row" data-answer="step5"><strong>Medullary surface receptors detect ↑ H⁺ in CSF; signal the DRG and VRG to increase phrenic and intercostal nerve firing frequency</strong><select><option value="">Choose step</option><option value="step1">Step 1 — PaCO₂ rises above 45 mmHg</option><option value="step2">Step 2 — CO₂ crosses the blood-brain barrier into CSF</option><option value="step3">Step 3 — CO₂ + H₂O → H⁺ + HCO₃⁻ in CSF</option><option value="step4">Step 4 — CSF pH falls (H⁺ accumulates)</option><option value="step5">Step 5 — Central chemoreceptors stimulated</option><option value="step6">Step 6 — ↑ RR and VT → ↑ CO₂ exhalation</option><option value="step7">Step 7 — Negative feedback: PaCO₂ falls → CCR stimulation diminishes</option></select></div>
+      <div class="sort-row" data-answer="step7"><strong>PaCO₂ drops back toward 35–45 mmHg; less CO₂ diffuses into the CSF; CSF H⁺ decreases; pH rises back toward normal; CCR send fewer signals; RR and VT return to baseline</strong><select><option value="">Choose step</option><option value="step1">Step 1 — PaCO₂ rises above 45 mmHg</option><option value="step2">Step 2 — CO₂ crosses the blood-brain barrier into CSF</option><option value="step3">Step 3 — CO₂ + H₂O → H⁺ + HCO₃⁻ in CSF</option><option value="step4">Step 4 — CSF pH falls (H⁺ accumulates)</option><option value="step5">Step 5 — Central chemoreceptors stimulated</option><option value="step6">Step 6 — ↑ RR and VT → ↑ CO₂ exhalation</option><option value="step7">Step 7 — Negative feedback: PaCO₂ falls → CCR stimulation diminishes</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkCascadeSort" type="button" style="margin-top:12px;">Check Cascade Steps</button>
+    <div class="activity-status" id="cascadeSortStatus">Complete the cascade matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 2: Central Chemoreceptors in Detail -->
+<section class="info-card rt" id="ccr-detail">
+  <h2>Central Chemoreceptors — The Medulla's pH Sensors</h2>
+  <p>Central chemoreceptors are the key sensors of the hypercapnic drive. Their location, sensitivity, and what they actually detect are commonly tested clinical facts that also have major implications in COPD and neurological disease.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-ccr-detail.png" alt="Detailed anatomy of the central chemoreceptor system. The brainstem is shown in cross-section with the medulla oblongata prominently labeled. Central chemoreceptors are shown on the ventrolateral surface of the medulla oblongata, near the chemoreceptor trigger zone. A magnified inset shows the blood-brain barrier between the capillary and the CSF space, with CO2 molecules freely crossing the lipid bilayer membrane while the charged ions H-plus and HCO3-minus cannot cross. Inside the CSF the carbonic anhydrase reaction produces H-plus which is detected by the chemoreceptor dendrites. Key facts are labeled: CCR are more sensitive than peripheral chemoreceptors for CO2, CCR sense H-plus not CO2 directly, normal CSF pH is 7.32, even 0.01 pH unit change triggers a ventilatory response, and CCR are active continuously including during sleep. A second inset shows the respiratory control centers: DRG in the dorsal medulla and VRG in the ventral medulla receive CCR signals and send increased frequency action potentials down the phrenic nerve to C3-C4-C5 and the intercostal nerves to T1-T12."/>
+  </div>
+  <div class="two-col" style="margin-top:14px;">
+    <div style="border:2px solid var(--pulmo-teal);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:var(--pulmo-teal);font-size:1.05rem;">What Central Chemoreceptors Detect</h3>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem;">
+        <li><strong>Primarily: H⁺ ions in CSF</strong> — not CO₂ directly. The CCR cannot detect CO₂ — they detect the H⁺ produced when CO₂ reacts with water in the CSF.</li>
+        <li><strong>Secondary: pH changes</strong> — even 0.01 unit changes in CSF pH produce measurable ventilatory responses.</li>
+        <li><strong>NOT: peripheral O₂</strong> — central chemoreceptors do not respond to hypoxemia unless it is extreme.</li>
+      </ul>
+      <div class="example-box soft-teal" style="margin-top:8px;font-size:.85rem;"><strong>Clinical implication:</strong> A metabolic acidosis (low pH from, e.g., DKA) also crosses to some degree into the CSF and stimulates CCR — driving hyperventilation (Kussmaul breathing) even without CO₂ retention.</div>
+    </div>
+    <div style="border:2px solid var(--clinical-amber);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:#7A4B00;font-size:1.05rem;">Why the CSF Compartment Is So Important</h3>
+      <p style="font-size:.9rem;margin:6px 0;">Normal CSF pH is 7.32 — already slightly more acidic than blood (7.40). The CSF has limited buffering capacity compared to blood, so CO₂ changes cause faster and larger pH shifts in the CSF than in arterial blood. This makes the medullary environment exquisitely sensitive.</p>
+      <p style="font-size:.88rem;margin:0;color:var(--slate);"><strong>The BBB selectivity matters:</strong> CO₂ crosses freely. H⁺ and HCO₃⁻ do NOT. This means peripheral metabolic acidosis does not immediately reach the CSF — there is a delay in CSF equilibration with metabolic acid-base changes.</p>
+    </div>
+  </div>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px;">
+    <table>
+      <thead><tr><th>Feature</th><th>Central Chemoreceptors</th></tr></thead>
+      <tbody>
+        <tr><td>Location</td><td>Ventrolateral surface of medulla oblongata</td></tr>
+        <tr><td>What they detect</td><td>H⁺ concentration in CSF (pH changes)</td></tr>
+        <tr><td>Normal CSF pH</td><td>7.32 (more acidic than arterial blood 7.40)</td></tr>
+        <tr><td>Stimulus threshold</td><td>0.01 unit pH change produces measurable response</td></tr>
+        <tr><td>Sensitivity</td><td>Very high — most sensitive chemoreceptors</td></tr>
+        <tr><td>Active during</td><td>Every breath, all times including sleep</td></tr>
+        <tr><td>Blunted in</td><td>Chronic CO₂ retention (COPD), sedation, opioids, CNS disease</td></tr>
+        <tr><td>Nerve output</td><td>To DRG → phrenic nerve (C3, C4, C5) + intercostal nerves (T1–T12)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 3: Hypoxemic Drive -->
+<section class="info-card" id="hypoxemic-drive">
+  <h2>The Hypoxemic Respiratory Drive — Emergency Secondary Control</h2>
+  <p>The hypoxemic drive is the body's backup ventilatory system — a safety net that activates only when blood oxygen falls to a critically dangerous level. Unlike the continuously active hypercapnic drive, the hypoxemic drive is threshold-based: minimal effect above PaO₂ 60 mmHg, dramatic effect below it.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-peripheral-chemoreceptors.png" alt="Anatomy of the peripheral chemoreceptor system showing two locations. At the carotid bifurcation in the neck the carotid body is shown as a small highly vascularized structure at the fork where the common carotid artery splits into internal and external carotid arteries. The carotid sinus nerve a branch of the glossopharyngeal nerve CN IX exits the carotid body and travels to the medulla. Near the aortic arch the smaller aortic bodies are shown innervated by the vagus nerve CN X which also travels to the medulla. The main sensory panel shows what peripheral chemoreceptors detect in priority order: first PaO2 as the primary hypoxemic stimulus with a graph showing little response above 60 mmHg and dramatic response below 60 mmHg corresponding to the steep part of the oxyhemoglobin dissociation curve, second PaCO2 levels above 50 to 55 mmHg, and third pH detecting acidemia. The threshold diagram emphasizes that at PaO2 60 mmHg SpO2 is approximately 90 percent marking the inflection point where significant hemoglobin desaturation begins. Below 60 mmHg the peripheral chemoreceptors fire rapidly sending signals to the medullary respiratory centers."/>
+  </div>
+  <div class="two-col" style="margin-top:14px;">
+    <div style="border:2px solid var(--oxygen-blue);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:var(--oxygen-blue);font-size:1.05rem;">Peripheral Chemoreceptor Anatomy</h3>
+      <p style="font-size:.88rem;margin:6px 0;"><strong>Carotid Bodies (primary):</strong> Small clusters of chemosensitive cells at the bifurcation of each common carotid artery. Innervated by the carotid sinus nerve → glossopharyngeal nerve (CN IX) → medulla. Highly vascularized — among the highest blood flow per gram of any body tissue.</p>
+      <p style="font-size:.88rem;margin:0;"><strong>Aortic Bodies (secondary):</strong> Near the aortic arch. Innervated by the vagus nerve (CN X). Less physiologically significant than carotid bodies for hypoxemic drive in humans.</p>
+    </div>
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:var(--alert-coral);font-size:1.05rem;">The PaO₂ &lt;60 mmHg Threshold — Why This Number?</h3>
+      <p style="font-size:.88rem;margin:6px 0;">PaO₂ 60 mmHg corresponds to approximately <strong>SpO₂ 90%</strong> on the oxyhemoglobin dissociation curve — the inflection point where the curve begins its steep downslope. Above 60 mmHg, hemoglobin saturation remains relatively protected. Below 60 mmHg, small further drops in PaO₂ produce large drops in SaO₂ and oxygen content.</p>
+      <p style="font-size:.88rem;margin:0;">This is not an arbitrary cutoff — it is the physiological point where tissue O₂ delivery becomes critically threatened. The peripheral chemoreceptors detect this threshold and trigger the emergency ventilatory response.</p>
+    </div>
+  </div>
+  <h3 style="margin-top:16px;">What Peripheral Chemoreceptors Detect (in priority order)</h3>
+  <div class="three-card-grid" style="margin-top:12px;">
+    <div class="example-box soft-coral">
+      <strong>1st — PaO₂ (PRIMARY hypoxemic stimulus)</strong><br/>
+      Dissolved O₂ in arterial blood, not SpO₂. Only significantly activated when PaO₂ &lt;60 mmHg. Threshold activation — little response above 60, dramatic response below 60. The most important peripheral signal for the hypoxemic drive.
+    </div>
+    <div class="example-box soft-amber">
+      <strong>2nd — PaCO₂ (also detected peripherally)</strong><br/>
+      Peripheral chemoreceptors also respond to rising CO₂, but are less potent than central chemoreceptors. Become significant above ~50–55 mmHg. Serve as a parallel pathway, especially important when central chemoreceptors are blunted.
+    </div>
+    <div class="example-box soft-blue">
+      <strong>3rd — pH (acidemia detection)</strong><br/>
+      Carotid and aortic bodies detect falling blood pH. Less important than the O₂ and CO₂ signals. When severe acidemia is present, peripheral chemoreceptors contribute to driving ventilation alongside the central response.
+    </div>
+  </div>
+  <article class="activity-card require-complete" data-activity-name="Peripheral Chemoreceptor Sort" style="margin-top:16px;">
+    <h3>Peripheral Chemoreceptor — Anatomy and Activation</h3>
+    <div class="sort-grid" id="pcrSort">
+      <div class="sort-row" data-answer="carotid-body"><strong>Primary peripheral chemoreceptor; located at the bifurcation of the common carotid artery; innervated by CN IX (glossopharyngeal nerve)</strong><select><option value="">Choose answer</option><option value="carotid-body">Carotid Body</option><option value="aortic-body">Aortic Body</option><option value="central-ccr">Central Chemoreceptors (medulla)</option><option value="drg">Dorsal Respiratory Group (DRG)</option></select></div>
+      <div class="sort-row" data-answer="below60"><strong>PaO₂ threshold below which the hypoxemic drive significantly activates; corresponds to SpO₂ ≈ 90% on the oxyhemoglobin dissociation curve</strong><select><option value="">Choose threshold</option><option value="below80">PaO₂ &lt; 80 mmHg</option><option value="below60">PaO₂ &lt; 60 mmHg</option><option value="below40">PaO₂ &lt; 40 mmHg</option><option value="below90">PaO₂ &lt; 90 mmHg</option></select></div>
+      <div class="sort-row" data-answer="pao2-primary"><strong>Peripheral chemoreceptors primarily respond to this dissolved blood gas — NOT SpO₂ percent saturation</strong><select><option value="">Choose stimulus</option><option value="pao2-primary">PaO₂ (dissolved oxygen in blood)</option><option value="spo2">SpO₂ (hemoglobin saturation %)</option><option value="paco2-only">PaCO₂ only</option><option value="ph-only">pH only</option></select></div>
+      <div class="sort-row" data-answer="aortic-body"><strong>Secondary peripheral chemoreceptor near the aortic arch; innervated by CN X (vagus nerve); less significant than the carotid body in humans</strong><select><option value="">Choose answer</option><option value="carotid-body">Carotid Body</option><option value="aortic-body">Aortic Body</option><option value="central-ccr">Central Chemoreceptors (medulla)</option><option value="drg">Dorsal Respiratory Group</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkPcrSort" type="button" style="margin-top:12px;">Check Matching</button>
+    <div class="activity-status" id="pcrSortStatus">Complete the matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 4: Drive Comparison -->
+<section class="info-card board" id="drive-comparison">
+  <h2>Hypercapnic vs. Hypoxemic Drive — The Critical Comparison</h2>
+  <p>Knowing the differences between these two drives is foundational to clinical respiratory therapy. The comparison table encodes everything — which is primary, who detects what, when each is active, and what happens when one is lost.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-drive-comparison.png" alt="Side-by-side comparison diagram of hypercapnic and hypoxemic respiratory drives. Left column labeled PRIMARY DRIVE Hypercapnic shows a continuous sinusoidal wave indicating the drive is always active with the label every breath at rest sleep exercise. Central chemoreceptors on the medulla surface are highlighted and the stimulus chain shows CO2 crosses BBB then H-plus forms in CSF then pH falls then CCR fires. Activation threshold is labeled as continuous small changes in PaCO2 trigger response. Right column labeled SECONDARY DRIVE Hypoxemic shows a flat line that suddenly spikes downward only when PaO2 drops below 60 mmHg. Peripheral chemoreceptors at the carotid bifurcation are highlighted and the stimulus chain shows PaO2 drops directly detected by carotid bodies which fire via CN IX. Activation threshold labeled is PaO2 less than 60 mmHg equals SpO2 approximately 90 percent. Between the two columns a danger zone is shown labeled COPD where the hypercapnic drive arrow is faded and blunted showing the medulla has adapted to chronic high CO2 and the hypoxemic drive arrow is the only remaining signal. The COPD zone includes the warning: supplemental oxygen that raises PaO2 above 60 mmHg removes the last remaining drive."/>
+  </div>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px;">
+    <table>
+      <thead><tr><th>Feature</th><th>Hypercapnic Drive (PRIMARY)</th><th>Hypoxemic Drive (SECONDARY)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Status</strong></td><td>Primary — dominant control mechanism</td><td>Secondary — emergency backup only</td></tr>
+        <tr><td><strong>Sensor location</strong></td><td>Central chemoreceptors (medulla surface)</td><td>Peripheral chemoreceptors (carotid &amp; aortic bodies)</td></tr>
+        <tr><td><strong>What is detected</strong></td><td>H⁺ ions in CSF (indirect CO₂ signal)</td><td>PaO₂ directly (dissolved O₂ in blood)</td></tr>
+        <tr><td><strong>Nerve pathway</strong></td><td>DRG/VRG → phrenic (C3-C5) + intercostals</td><td>CN IX (carotid) / CN X (aortic) → medulla → same muscles</td></tr>
+        <tr><td><strong>Activation threshold</strong></td><td>Continuous; responds to ±5 mmHg PaCO₂ changes</td><td>Threshold: PaO₂ &lt;60 mmHg (SpO₂ ≈ 90%)</td></tr>
+        <tr><td><strong>Active during</strong></td><td>Every breath — rest, sleep, exercise, 24/7</td><td>Only during significant hypoxemia</td></tr>
+        <tr><td><strong>Blunted in</strong></td><td>Chronic COPD, opioids, sedatives, CNS damage</td><td>Rarely blunted (this is why it's the "backup")</td></tr>
+        <tr><td><strong>Response speed</strong></td><td>Immediate — adjusts with every breath cycle</td><td>Emergency activation only when threshold crossed</td></tr>
+        <tr><td><strong>Clinical danger</strong></td><td>Loss → hypoventilation, CO₂ retention</td><td>Removing this (O₂ in COPD) → apnea, respiratory failure</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <article class="quiz-card require-complete" data-activity-name="Drive Classification Quiz" style="margin-top:16px;">
+    <h3>Which Drive Is Responsible?</h3>
+    <p>A sleeping patient's SpO₂ is 97% and PaCO₂ is 43 mmHg. Their breathing is smooth, regular, and 14 breaths per minute. Which respiratory drive is primarily maintaining this breathing pattern, and what is the evidence?</p>
+    <div class="quiz-options drive-opts">
+      <button class="quiz-option" data-correct="false" data-feedback="The hypoxemic drive is NOT active here. PaO₂ is well above 60 mmHg (SpO₂ 97% implies PaO₂ approximately 80–95 mmHg). The hypoxemic drive only activates when PaO₂ falls below 60 mmHg. Smooth regular breathing during sleep without hypoxemia is exclusively the hypercapnic drive.">Hypoxemic drive — the carotid bodies are monitoring O₂ continuously.</button>
+      <button class="quiz-option" data-correct="true" data-feedback="Correct. The hypercapnic drive is the primary control of every breath — including during sleep. The evidence: PaCO₂ is 43 mmHg (within normal range), SpO₂ is 97% (PaO₂ well above the 60 mmHg hypoxemic drive threshold), and breathing is regular at 14 breaths per minute. The central chemoreceptors are sensing the normal CSF H⁺ concentration and maintaining the baseline ventilatory rate through continuous negative feedback.">Hypercapnic drive — PaCO₂ 43 mmHg and SpO₂ 97% mean the hypoxemic drive is not activated; only the central chemoreceptor-mediated CO₂/pH control is operating.</button>
+      <button class="quiz-option" data-correct="false" data-feedback="Both drives do not operate simultaneously during normal physiological sleep. The hypoxemic drive has a threshold (PaO₂ &lt;60) that is not met here. Both drives would be active simultaneously only if PaO₂ were also below 60 mmHg — which it is not (SpO₂ 97% = adequate oxygenation).">Both drives — they always work together simultaneously.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 5: COPD Paradox -->
+<section class="info-card red" id="copd-paradox">
+  <h2>The COPD Oxygen Paradox — "Don't Kill Your COPD Patient with Oxygen"</h2>
+  <p>The most famous clinical paradox in respiratory physiology: a disease where the appropriate treatment for one problem (hypoxemia) can be immediately lethal by removing the only remaining mechanism driving the patient to breathe. Understanding this paradox completely — not just the rule "don't give too much O₂" — is essential for safe RT practice.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-copd-paradox.png" alt="Three-panel diagram explaining the COPD oxygen paradox. Left panel Normal Physiology shows a healthy patient with PaCO2 42 mmHg and PaO2 90 mmHg with both drives represented: the hypercapnic drive as the primary large arrow actively controlling breathing and the hypoxemic drive as a small dotted arrow labeled inactive because PaO2 is above 60. Middle panel Chronic COPD Physiology shows PaCO2 chronically elevated at 58 mmHg with the medulla shown adapted and blunted to the chronic CO2 elevation. The hypercapnic drive arrow is crossed out and labeled BLUNTED: medulla reset its setpoint after months of chronically high CO2. The hypoxemic drive arrow is now the large primary arrow labeled ONLY REMAINING DRIVE because PaO2 is 54 mmHg which is below 60 activating peripheral chemoreceptors. Right panel COPD plus High-Flow Oxygen shows the clinician administering high-flow oxygen which raises PaO2 from 54 to 90 mmHg. The hypoxemic drive arrow now disappears with a red X because PaO2 is above 60. The hypercapnic drive is still blunted and crossed out. Both arrows are now eliminated. A large warning icon shows NEITHER DRIVE ACTIVE equals APNEA equals SEVERE CO2 RETENTION equals RESPIRATORY FAILURE."/>
+  </div>
+  <div class="two-col" style="margin-top:14px;">
+    <div style="border:2px solid var(--slate);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:var(--slate);font-size:1.05rem;">How COPD Destroys the Primary Drive</h3>
+      <p style="font-size:.88rem;margin:6px 0;">Chronic CO₂ retention (PaCO₂ persistently 55–70 mmHg) means the CSF is chronically acidic. Over months and years, the medulla biochemically adapts — changing its pH set point. The central chemoreceptors continue firing at this higher CO₂ level without producing increased ventilation. The hypercapnic drive is effectively blunted.</p>
+      <p style="font-size:.88rem;margin:0;"><strong>Physiological resets its threshold:</strong> The same CO₂ level that would cause a normal person to hyperventilate produces no extra response in a chronic COPD patient because their medulla has normalized its response to that level.</p>
+    </div>
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:var(--alert-coral);font-size:1.05rem;">The Clinical Solution — Controlled Low-Flow Oxygen</h3>
+      <p style="font-size:.88rem;margin:6px 0;"><strong>Target SpO₂: 88–92%</strong> (NOT 95–100% as in a normal patient)</p>
+      <p style="font-size:.88rem;margin:6px 0;"><strong>Target PaO₂: ~55–65 mmHg</strong> — enough to prevent dangerous tissue hypoxia, but below the threshold that completely extinguishes the hypoxemic drive.</p>
+      <p style="font-size:.88rem;margin:0;"><strong>Monitoring:</strong> Serial ABGs whenever supplemental O₂ is adjusted. Watch for rising PaCO₂ — a rising PaCO₂ with supplemental O₂ means the hypoxemic drive is being suppressed.</p>
+    </div>
+  </div>
+  <div class="example-box soft-amber" style="margin-top:12px;">
+    <strong>Why SpO₂ 88–92% specifically?</strong> At SpO₂ 88%, PaO₂ ≈ 55 mmHg — below 60, so hypoxemic drive is still active. At SpO₂ 92%, PaO₂ ≈ 60–65 mmHg — right at or slightly above the threshold. This range keeps PaO₂ in the zone where peripheral chemoreceptors are still stimulated while providing enough O₂ to prevent severe tissue hypoxia and myocardial compromise. Going above 92% risks extinguishing all respiratory drive.
+  </div>
+  <article class="quiz-card require-complete" data-activity-name="COPD Oxygen Management Quiz" style="margin-top:16px;">
+    <h3>Managing Oxygen in a COPD Patient</h3>
+    <p>A known chronic COPD patient with baseline PaCO₂ of 58 mmHg arrives in the ER with SpO₂ of 84% on room air. The nurse starts 10L/min O₂ via simple face mask. An hour later, the patient is confused and less arousable. ABG shows pH 7.18, PaCO₂ 84 mmHg, PaO₂ 110 mmHg. What happened and what should have been done instead?</p>
+    <div class="quiz-options copd-opts">
+      <button class="quiz-option" data-correct="false" data-feedback="The patient's confusion is NOT primarily from oxygen toxicity (which is a lung parenchymal issue requiring prolonged very high FiO₂). The acute confusion and rising PaCO₂ are from acute respiratory acidosis caused by suppression of the hypoxemic drive. The patient stopped breathing adequately because the only remaining ventilatory stimulus was removed.">The patient developed oxygen toxicity from high FiO₂ — confusion is from lung damage.</button>
+      <button class="quiz-option" data-correct="true" data-feedback="Correct. This is the classic COPD oxygen toxicity scenario — not pulmonary oxygen toxicity but respiratory drive suppression. The 10L simple mask raised PaO₂ from ~55 to 110 mmHg — far above 60. This extinguished the hypoxemic drive. With the hypercapnic drive already blunted (baseline PaCO₂ 58 means the medulla is adapted), NO respiratory drive remained. The patient reduced their ventilation — PaCO₂ rose catastrophically from 58 to 84 mmHg. The corrective action: should have used 1-2 L/min nasal cannula titrated to SpO₂ 88-92%, targeting PaO₂ 55-65 mmHg. The patient now needs NIV (BiPAP) to correct the acute hypercapnic respiratory failure caused by suppression of drive.">High-flow O₂ raised PaO₂ above 60 mmHg, removing the only remaining (hypoxemic) drive. With hypercapnic drive already blunted, the patient stopped ventilating adequately — PaCO₂ rose from 58 to 84 mmHg causing severe respiratory acidosis and encephalopathy.</button>
+      <button class="quiz-option" data-correct="false" data-feedback="The confusion and rising CO₂ are NOT from CO₂ narcosis as the primary etiology — they are from respiratory failure caused by losing all ventilatory drive. The CO₂ rose because the patient stopped breathing adequately, not because CO₂ itself caused confusion as the first step. The sequence is: O₂ removed drive → patient hypoventilated → CO₂ rose → acidosis → confusion.">The confusion is from CO₂ narcosis — COPD patients always get confused from their chronically high CO₂.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 6: V/Q Normal -->
+<section class="info-card" id="vq-normal">
+  <h2>Ventilation/Perfusion Ratio — Normal Physiology</h2>
+  <p>The V/Q ratio expresses the balance between fresh air reaching an alveolus and blood flowing past it. Optimal gas exchange requires matching — the right amount of both. Gravity naturally creates a vertical gradient in both V and Q through the upright lung, but their ratio remains close to 1.0 throughout.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-vq-normal.png" alt="Normal V/Q physiology diagram. Center panel shows a single alveolus with both an airway delivering ventilation V and a capillary delivering perfusion Q equally matched. Below the alveolus the ideal ratio equation V divided by Q equals 1.0 is labeled with optimal gas exchange. Left side panel shows the effect of gravity on ventilation in the upright lung: the lung apex receives slightly less ventilation than the base because apex alveoli are already more expanded at rest while base alveoli are more collapsed and recruit more easily with inspiration. Right side panel shows the effect of gravity on perfusion: hydrostatic pressure draws blood downward so the lung apex receives considerably less blood flow than the base. Key concept box shows that despite these gradients the ratio of V to Q stays approximately 0.8 to 1.2 throughout the lung because both V and Q increase toward the base in similar proportions. Clinical pearl shows upright position uses gravity to direct both ventilation and perfusion to the same lung zones improving matching and why we position hypoxic patients sitting upright."/>
+  </div>
+  <div class="two-col" style="margin-top:14px;">
+    <div style="border:2px solid var(--pulmo-teal);border-radius:14px;padding:14px;background:#fff;">
+      <h3 style="color:var(--pulmo-teal);font-size:1.05rem;">V/Q = 1.0: The Ideal State</h3>
+      <p style="font-size:.9rem;margin:6px 0;">When V/Q = 1.0, every unit of ventilation is matched perfectly with a unit of perfusion. O₂ is efficiently transferred from inspired air into capillary blood, and CO₂ is efficiently removed. The alveolar-arterial O₂ gradient (P(A-a)O₂) is minimal — about 0–5 mmHg in a young healthy adult.</p>
+    </div>
+    <div style="border:2px solid var(--clinical-amber);border-radius:14px;padding:14px;background:#fff;">
+      <h3 style="color:#7A4B00;font-size:1.05rem;">Gravity and the Clinical Upright Position</h3>
+      <p style="font-size:.9rem;margin:6px 0;">Blood flows to the lung bases (gravity). Alveoli at the bases also recruit more easily with deep inspiration (they start more collapsed). Upright positioning aligns ventilation and perfusion in the same zones. This is why we sit hypoxic patients upright — we are using gravity to enhance V/Q matching.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: Abnormal V/Q States -->
+<section class="info-card rt" id="vq-abnormal">
+  <h2>Abnormal V/Q States — Three Patterns, Three Consequences</h2>
+  <p>When ventilation and perfusion are mismatched, gas exchange fails. The direction and degree of the mismatch determines whether supplemental oxygen can help, and what treatment is needed.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-vq-abnormal.png" alt="Three-panel comparison of abnormal V/Q states arranged side by side. Left panel labeled HIGH V/Q shows an alveolus with a large ventilation arrow but a very small or absent perfusion arrow. The ratio V/Q is greater than 1.2 approaching infinity if perfusion equals zero. This is called dead space ventilation. Examples shown include pulmonary embolism blocking the capillary with a blood clot and pulmonary vasoconstriction. Consequence text reads: ventilation is wasted, blood cannot pick up oxygen from this alveolus because there is no blood flowing past it. Middle panel labeled NORMAL V/Q shows equal ventilation and perfusion arrows with ratio 1.0 and optimal gas exchange. Right panel labeled LOW V/Q shows an alveolus with a small or absent ventilation arrow but a large perfusion arrow. The ratio V/Q is less than 0.8 approaching zero if ventilation equals zero. This is called shunt physiology when complete. Examples shown include asthma bronchospasm blocking the airway, pneumonia consolidation filling the alveolus, atelectasis from alveolar collapse, and pulmonary edema flooding the alveolus. Consequence text reads: blood passes through without adequate oxygenation, returns to systemic circulation poorly saturated causing hypoxemia. An inset box at the bottom compares response to supplemental oxygen: Low V/Q with some ventilation responds to O2 because adding more oxygen to the available airspace can improve saturation. True shunt V/Q equals zero does not respond because no air reaches the alveolus regardless of FiO2."/>
+  </div>
+  <div class="vq-compare" style="margin-top:14px;">
+    <div class="vq-card" style="border-color:var(--oxygen-blue)">
+      <div class="vq-title" style="color:var(--oxygen-blue)">HIGH V/Q (&gt;1.2)</div>
+      <p style="font-size:.85rem;color:var(--slate);margin:4px 0;">More ventilation than perfusion. Extreme = V/Q → ∞ (dead space).</p>
+      <p style="font-size:.85rem;margin:4px 0;"><strong>Causes:</strong> Pulmonary embolism (clot blocks perfusion), pulmonary vasoconstriction, emphysema (capillary bed destruction)</p>
+      <p style="font-size:.85rem;margin:0;"><strong>Consequence:</strong> Ventilation is wasted — fresh air reaches alveoli but there is no blood to oxygenate. Dead space increases. PaO₂ falls. ETCO₂ falls (wide arterial-ETCO₂ gradient).</p>
+    </div>
+    <div class="vq-card" style="border-color:var(--pulmo-teal)">
+      <div class="vq-title" style="color:var(--pulmo-teal)">NORMAL V/Q (0.8–1.2)</div>
+      <p style="font-size:.85rem;color:var(--slate);margin:4px 0;">Matched ventilation and perfusion. V/Q ≈ 1.0.</p>
+      <p style="font-size:.85rem;margin:4px 0;">Optimal gas exchange. P(A-a)O₂ = 0–5 mmHg. Blood leaves pulmonary capillaries fully saturated.</p>
+      <p style="font-size:.85rem;margin:0;"><strong>Maintained by:</strong> Normal airway patency, normal vascular tone, upright positioning, deep breathing.</p>
+    </div>
+    <div class="vq-card" style="border-color:var(--alert-coral)">
+      <div class="vq-title" style="color:var(--alert-coral)">LOW V/Q (&lt;0.8)</div>
+      <p style="font-size:.85rem;color:var(--slate);margin:4px 0;">More perfusion than ventilation. Extreme = V/Q = 0 (true shunt).</p>
+      <p style="font-size:.85rem;margin:4px 0;"><strong>Causes:</strong> Airway obstruction (asthma, COPD), pneumonia, atelectasis, pulmonary edema, mucus plugging</p>
+      <p style="font-size:.85rem;margin:0;"><strong>Consequence:</strong> Blood passes through poorly ventilated alveoli without adequate oxygenation. Mixed venous blood enters systemic circulation — hypoxemia. <em>If V = 0: true shunt — O₂ cannot help.</em></p>
+    </div>
+  </div>
+  <article class="activity-card require-complete" data-activity-name="V/Q State Classification" style="margin-top:16px;">
+    <h3>Classify the V/Q State</h3>
+    <div class="sort-grid" id="vqSort">
+      <div class="sort-row" data-answer="high-vq"><strong>Blood clot lodges in the right pulmonary artery. Alveoli in the right lung continue to receive ventilation, but no blood can flow past the blocked vessels.</strong><select><option value="">Choose V/Q state</option><option value="high-vq">HIGH V/Q — dead space (ventilation without perfusion)</option><option value="normal-vq">NORMAL V/Q — matched</option><option value="low-vq">LOW V/Q — ventilation less than perfusion</option><option value="shunt">SHUNT — V/Q = 0 (zero ventilation)</option></select></div>
+      <div class="sort-row" data-answer="shunt"><strong>Severe ARDS patient with bilateral atelectasis. Large areas of lung are completely collapsed — no air reaches these alveoli — but pulmonary blood continues to perfuse them.</strong><select><option value="">Choose V/Q state</option><option value="high-vq">HIGH V/Q — dead space</option><option value="normal-vq">NORMAL V/Q — matched</option><option value="low-vq">LOW V/Q — ventilation less than perfusion</option><option value="shunt">SHUNT — V/Q = 0 (zero ventilation, still perfused)</option></select></div>
+      <div class="sort-row" data-answer="low-vq"><strong>Acute asthma exacerbation. Severe bronchospasm reduces airflow to many alveoli but does not completely block them. Perfusion continues to these partially obstructed areas.</strong><select><option value="">Choose V/Q state</option><option value="high-vq">HIGH V/Q — dead space</option><option value="normal-vq">NORMAL V/Q — matched</option><option value="low-vq">LOW V/Q — partial obstruction reduces ventilation below perfusion</option><option value="shunt">SHUNT — V/Q = 0 (complete obstruction)</option></select></div>
+      <div class="sort-row" data-answer="high-vq"><strong>A patient receives mechanical ventilation at high tidal volumes. Some alveoli are "over-ventilated" relative to their capillary perfusion — wasted ventilation in those zones.</strong><select><option value="">Choose V/Q state</option><option value="high-vq">HIGH V/Q — over-ventilated relative to perfusion</option><option value="normal-vq">NORMAL V/Q — matched</option><option value="low-vq">LOW V/Q — ventilation less than perfusion</option><option value="shunt">SHUNT — zero ventilation</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkVqSort" type="button" style="margin-top:12px;">Check V/Q Classification</button>
+    <div class="activity-status" id="vqSortStatus">Complete the V/Q classification to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 8: Shunt vs V/Q Mismatch -->
+<section class="info-card" id="shunt-vs-vq">
+  <h2>Shunt vs. V/Q Mismatch — The 100% Oxygen Test</h2>
+  <p>This distinction is the single most important clinical V/Q concept. V/Q mismatch (some ventilation, low V/Q) responds to supplemental oxygen because the oxygen can reach the alveolus. Shunt (zero ventilation, V/Q = 0) is completely unresponsive to oxygen — no matter how much you give, if no air reaches the alveolus, the blood cannot be oxygenated.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-shunt-test.png" alt="The 100 percent oxygen shunt test diagram. A two-path decision tree is shown. Starting point: Patient has hypoxemia with SpO2 below 90 percent. Action: Administer 100 percent FiO2 via non-rebreather mask for 10 to 15 minutes then recheck SpO2. Left branch SpO2 improves to above 95 percent: Interpretation V/Q MISMATCH is the cause. Mechanism explanation: some ventilation is reaching the alveoli just not enough at the original FiO2. By raising FiO2 to 1.0 more O2 molecules reach the partially-ventilated alveoli and diffuse into the blood. Treatment direction: improve ventilation to affected alveoli using bronchodilators for bronchospasm deep breathing and positioning, supplemental oxygen IS effective. Right branch SpO2 remains below 90 percent despite 100 percent O2: Interpretation SIGNIFICANT SHUNT is present. Mechanism explanation: affected alveoli have zero ventilation so no oxygen can reach them regardless of FiO2. Blood passing through these collapsed or flooded alveoli never contacts any inspired gas. Treatment direction: must restore ventilation to unventilated alveoli using CPAP BiPAP or mechanical ventilation for recruitment airway clearance for mucus plugs and PEEP, supplemental oxygen alone CANNOT fix this."/>
+  </div>
+  <div class="two-col" style="margin-top:14px;">
+    <div style="border:2px solid var(--pulmo-teal);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:var(--pulmo-teal);font-size:1.05rem;">V/Q Mismatch — Responds to O₂ (V &gt; 0)</h3>
+      <p style="font-size:.88rem;margin:6px 0;">Even in low V/Q areas, some air IS reaching the alveolus. When FiO₂ is raised to 1.0, more O₂ molecules enter that limited airspace. The concentration gradient for O₂ across the alveolar-capillary membrane increases. Enough O₂ reaches the blood to improve saturation.</p>
+      <div class="example-box soft-teal" style="margin-top:8px;font-size:.85rem;"><strong>Examples:</strong> Asthma, COPD (partial obstruction), mild pneumonia, early pulmonary edema. SpO₂ improves with supplemental O₂. Treat the underlying cause to improve ventilation distribution.</div>
+    </div>
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px;background:#fff;">
+      <h3 style="color:var(--alert-coral);font-size:1.05rem;">True Shunt — Refractory to O₂ (V = 0)</h3>
+      <p style="font-size:.88rem;margin:6px 0;">When alveoli receive ZERO ventilation — collapsed (atelectasis), flooded (severe pneumonia/ARDS), or completely obstructed — no inspired gas reaches the alveolar surface. Even breathing 100% O₂, the blood passing through these areas never contacts any fresh gas. Adding more O₂ to the inspired air accomplishes nothing.</p>
+      <div class="example-box soft-coral" style="margin-top:8px;font-size:.85rem;"><strong>Examples:</strong> Severe ARDS, complete airway collapse, intracardiac shunt. SpO₂ remains low despite FiO₂ 1.0. Must restore ventilation — CPAP, PEEP, bronchoscopy for mucus plugs, treat the cause.</div>
+    </div>
+  </div>
+  <article class="quiz-card require-complete" data-activity-name="Shunt Quiz" style="margin-top:16px;">
+    <h3>Shunt or V/Q Mismatch?</h3>
+    <p>A patient with severe ARDS is on mechanical ventilation with FiO₂ 0.80. SpO₂ is 84%. The team increases FiO₂ to 1.0. Thirty minutes later, SpO₂ is 86%. CXR shows bilateral complete white-out. What is the primary mechanism of hypoxemia and what should be done?</p>
+    <div class="quiz-options shunt-opts">
+      <button class="quiz-option" data-correct="false" data-feedback="V/Q mismatch would respond to increased FiO₂ — SpO₂ would improve significantly (typically to >95%) because some ventilation is reaching the alveoli. Here, SpO₂ barely changed from 84% to 86% despite raising FiO₂ from 0.80 to 1.0. That minimal response indicates significant shunt — alveoli with zero ventilation are perfused, and no amount of inspired O₂ can reach them.">V/Q mismatch — the supplemental oxygen helped somewhat; continue to increase FiO₂.</button>
+      <button class="quiz-option" data-correct="true" data-feedback="Correct. The minimal SpO₂ response (84% → 86%) to a major FiO₂ increase (0.80 → 1.0) is the hallmark of significant shunt — refractory hypoxemia. The bilateral white-out on CXR confirms diffuse alveolar collapse and fluid (ARDS). These alveoli are completely unventilated — no amount of inspired O₂ can reach them because they receive zero air flow. The treatment must focus on recruiting unventilated alveoli: increase PEEP (positive end-expiratory pressure to prevent and reverse atelectasis), consider prone positioning, optimize fluid balance to reduce edema, and treat the underlying ARDS cause. Simply raising FiO₂ further risks oxygen toxicity without meaningful benefit.">Significant shunt — refractory hypoxemia despite high FiO₂ indicates alveoli with zero ventilation perfused by blood. Must recruit unventilated alveoli with PEEP and prone positioning; increasing FiO₂ alone will not help.</button>
+      <button class="quiz-option" data-correct="false" data-feedback="Hypoventilation would show elevated PaCO₂ and the patient is on mechanical ventilation — their ventilation rate is controlled. The bilateral white-out and FiO₂-refractory hypoxemia are not explained by hypoventilation alone. True shunt from diffuse atelectasis and ARDS-related alveolar flooding is the primary mechanism here.">Hypoventilation — the ventilator rate needs to be increased to blow off more CO₂.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 9: V/Q Effects on ABGs -->
+<section class="info-card board" id="abg-effects">
+  <h2>V/Q Mismatch — Effects on Arterial Blood Gas</h2>
+  <p>V/Q mismatch creates a characteristic ABG pattern driven by the interplay between hypoxemia and the compensatory hyperventilation it triggers. Understanding this pattern allows the RT to recognize V/Q mismatch from the ABG alone — before imaging is available.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-vq-abg.png" alt="V/Q mismatch ABG effects diagram. Starting with a patient who has significant V/Q mismatch: low V/Q areas contribute poorly oxygenated blood to the systemic circulation, mixing with blood from normal V/Q areas to produce a lower overall PaO2. This hypoxemia is shown triggering peripheral chemoreceptors at PaO2 below 60 mmHg. The peripheral chemoreceptors fire via CN IX to the medullary respiratory centers causing tachypnea and hyperventilation. The hyperventilation sequence is shown: increased RR and tidal volume drives PaCO2 down below 35 mmHg. Because CO2 has 20 times the diffusion capacity of O2 the well-ventilated alveoli efficiently blow off CO2 even though they cannot fully compensate for the O2 deficit in the low V/Q zones. This produces the characteristic V/Q mismatch ABG pattern labeled: decreased PaO2 hypoxemia, decreased PaCO2 from hyperventilation respiratory alkalosis, increased pH from respiratory alkalosis, and widened P A-a O2 gradient. A formula box shows P A-a O2 equals PA O2 minus Pa O2 with normal value 0 to 5 mmHg and V/Q mismatch value greater than 10 mmHg. A second box shows the clinical clue for PE: hypoxemia plus decreased PaCO2 plus normal CXR equals think pulmonary embolism."/>
+  </div>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px;">
+    <table>
+      <thead><tr><th>ABG Parameter</th><th>Change in V/Q Mismatch</th><th>Mechanism</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PaO₂</strong></td><td>↓ (hypoxemia)</td><td>Low V/Q areas contribute poorly oxygenated blood to arterial circulation; mixing effect lowers overall PaO₂</td></tr>
+        <tr><td><strong>PaCO₂</strong></td><td>↓ (hypocapnia)</td><td>Hypoxemia triggers peripheral chemoreceptors → hyperventilation → CO₂ blown off from well-ventilated alveoli; CO₂ diffuses 20× more easily than O₂</td></tr>
+        <tr><td><strong>pH</strong></td><td>↑ (respiratory alkalosis)</td><td>Low PaCO₂ from hyperventilation shifts equilibrium leftward → less H⁺ produced → alkalemia</td></tr>
+        <tr><td><strong>P(A-a)O₂</strong></td><td>↑↑ (widened gradient)</td><td>PAO₂ is normal (alveoli are ventilated) but PaO₂ is low (blood poorly oxygenated from low V/Q zones) → wide gap</td></tr>
+        <tr><td><strong>SpO₂ response to O₂</strong></td><td>Improves (if V/Q, not shunt)</td><td>Adding O₂ reaches the partially-ventilated alveoli and compensates for low V/Q; shunt does NOT respond</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="example-box soft-coral" style="margin-top:12px;">
+    <strong>The PE Clinical Clue — Memorize This:</strong> Acute pulmonary embolism produces HIGH V/Q (dead space). The classic ABG: ↓ PaO₂ + ↓ PaCO₂ (from hyperventilation) + normal or near-normal CXR. The lungs look radiographically normal because the alveoli are still ventilated — the problem is absent perfusion. Hypoxemia + respiratory alkalosis + normal CXR = think PE until proven otherwise.
+  </div>
+  <article class="info-card rt" style="margin-top:14px;">
+    <h3>The P(A-a)O₂ Gradient — Quantifying V/Q Failure</h3>
+    <p>The alveolar-arterial O₂ gradient compares the O₂ in the alveolus (PAO₂ — calculated) to the O₂ in arterial blood (PaO₂ — measured). A wide gradient means the lungs are failing to transfer O₂ from air to blood — the fingerprint of V/Q mismatch, diffusion impairment, or shunt.</p>
+    <div style="background:#F3F0FF;border-radius:12px;padding:12px 16px;font-family:var(--font-data);font-size:.9rem;margin:10px 0;color:#1A1A2E;border-left:4px solid #8B5CF6;">
+      P(A-a)O₂ = PAO₂ − PaO₂ &nbsp;|&nbsp; Normal = 0–5 mmHg (young adult) &nbsp;|&nbsp; Abnormal &gt; 10 mmHg<br/>
+      PAO₂ = (FiO₂ × 713) − (PaCO₂ / 0.8) &nbsp;[on room air: PAO₂ ≈ 150 − (PaCO₂/0.8)]
+    </div>
+    <p style="font-size:.9rem;margin:8px 0;"><strong>Practical example:</strong> PaO₂ = 65 mmHg, PaCO₂ = 28 mmHg, FiO₂ = 0.21 (room air).<br/>PAO₂ = 150 − (28/0.8) = 150 − 35 = 115 mmHg. P(A-a)O₂ = 115 − 65 = <strong>50 mmHg (markedly elevated)</strong> → significant V/Q mismatch or shunt present.</p>
+  </article>
+</section>
+
+<!-- SECTION 10: Clinical Causes -->
+<section class="info-card" id="vq-causes">
+  <h2>Clinical Causes of V/Q Mismatch — Disease-by-Disease</h2>
+  <p>Most hypoxemia in clinical respiratory therapy traces to V/Q mismatch or shunt. Understanding which disease produces which pattern guides both the diagnosis and the specific intervention.</p>
+  <div class="image-frame">
+    <img src="/physiology/RP_2_2_assets/rp-2-2-vq-causes.png" alt="Six disease panels arranged in a grid each showing V/Q state and mechanism. COPD panel shows mixed pattern with both high V/Q from emphysema destroying alveolar capillary beds and low V/Q from chronic airway obstruction causing a complex mixed picture with chronic hypoxemia and CO2 retention. Asthma panel shows acute low V/Q from severe bronchospasm blocking airflow to perfused alveoli, rapidly reversible with bronchodilators, responds well to supplemental O2. Pneumonia panel shows low V/Q approaching shunt from inflammatory exudate consolidation filling alveoli with fluid and pus, partial response to O2 depending on severity, improves with antibiotics. Pulmonary Embolism panel shows classic high V/Q approaching dead space from blood clot blocking perfusion while ventilation continues, acute onset, hypoxemia plus normal CXR plus low PaCO2 equals classic triad. Pulmonary Fibrosis panel shows impaired diffusion with alveolar-capillary membrane thickening reducing gas transfer, progressive worsening with exertion, restrictive PFT pattern. Pulmonary Hypertension panel shows high V/Q from vasoconstriction and vessel remodeling reducing perfusion while ventilation is relatively preserved, worsened by exercise when pulmonary vascular resistance increases further."/>
+  </div>
+  <article class="activity-card require-complete" data-activity-name="Clinical Causes Sort" style="margin-top:16px;">
+    <h3>Match the Disease to Its V/Q Mechanism</h3>
+    <div class="sort-grid" id="causesSort">
+      <div class="sort-row" data-answer="high-vq-pe"><strong>Blood clot in the right pulmonary artery. Classic presentation: sudden dyspnea, pleuritic chest pain, hypoxemia, normal CXR, low PaCO₂.</strong><select><option value="">Choose mechanism</option><option value="high-vq-pe">HIGH V/Q — dead space (PE blocks perfusion, ventilation continues)</option><option value="low-vq-asthma">LOW V/Q — bronchospasm blocks ventilation (asthma)</option><option value="shunt-ards">SHUNT — zero ventilation to perfused alveoli (ARDS/atelectasis)</option><option value="mixed-copd">MIXED — both high and low V/Q areas (COPD)</option></select></div>
+      <div class="sort-row" data-answer="shunt-ards"><strong>Severe bilateral pneumonia. SpO₂ 82% on 100% FiO₂ non-rebreather — does not improve. CXR shows bilateral complete opacification.</strong><select><option value="">Choose mechanism</option><option value="high-vq-pe">HIGH V/Q — dead space (PE)</option><option value="low-vq-asthma">LOW V/Q — partial airway obstruction (asthma/COPD)</option><option value="shunt-ards">SHUNT — alveoli completely filled/flooded, zero ventilation despite perfusion</option><option value="mixed-copd">MIXED — both high and low V/Q (COPD)</option></select></div>
+      <div class="sort-row" data-answer="low-vq-asthma"><strong>Acute asthma exacerbation. SpO₂ 88% improves to 96% with 40% Venturi mask. Bronchospasm partially obstructs airways but does not completely block them.</strong><select><option value="">Choose mechanism</option><option value="high-vq-pe">HIGH V/Q — dead space</option><option value="low-vq-asthma">LOW V/Q — partial bronchospasm reduces ventilation, perfusion intact; responds to O₂</option><option value="shunt-ards">SHUNT — zero ventilation, refractory to O₂</option><option value="mixed-copd">MIXED — COPD pattern</option></select></div>
+      <div class="sort-row" data-answer="mixed-copd"><strong>COPD patient with emphysematous destruction of alveolar walls (losing capillary beds) AND chronic airway obstruction from mucus and inflammation (blocking airflow to other areas).</strong><select><option value="">Choose mechanism</option><option value="high-vq-pe">Pure HIGH V/Q only (PE pattern)</option><option value="low-vq-asthma">Pure LOW V/Q only (asthma pattern)</option><option value="shunt-ards">SHUNT only</option><option value="mixed-copd">MIXED — areas of high V/Q (destroyed capillaries) AND low V/Q (airway obstruction)</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkCausesSort" type="button" style="margin-top:12px;">Check Clinical Causes</button>
+    <div class="activity-status" id="causesSortStatus">Complete the clinical causes matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 11: Integrated Clinical Case -->
+<section class="case-card require-complete" id="integrated-case" data-activity-name="Integrated Clinical Case">
+  <span class="eyebrow">Integrated Clinical Case</span>
+  <h2>Three Patients, Three Problems — One Lesson</h2>
+
+  <!-- Stage 1 -->
+  <div class="case-stage" data-case-stage="0">
+    <h3>Patient A — Acute Asthma</h3>
+    <p>22-year-old with acute asthma exacerbation. SpO₂ 89% on room air. RR 28, HR 118, wheezing bilaterally. ABG: pH 7.50, PaCO₂ 28, PaO₂ 58.</p>
+    <div class="abg-block">
+      pH <span class="hi">7.50</span> | PaCO₂ <span class="lo">28</span> | PaO₂ <span class="lo">58</span><br>
+      <span class="label">Normal: pH 7.35–7.45 | PaCO₂ 35–45 | PaO₂ 80–100</span>
+    </div>
+    <p><strong>Which respiratory drive is responsible for the tachypnea and hyperventilation, and what does the low PaCO₂ tell you about the direction of the V/Q problem?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="The hypercapnic drive would produce respiratory stimulation in response to HIGH CO₂ — but here PaCO₂ is 28 (very low). The hypercapnic drive is actually less active than normal because CO₂ has been blown off. The hyperventilation here is driven by the hypoxemic stimulus (PaO₂ 58 < 60 mmHg threshold).">Hypercapnic drive — PaCO₂ is very high causing the hyperventilation.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! PaO₂ = 58 mmHg — just below the 60 mmHg threshold — has activated the peripheral chemoreceptors (carotid bodies → CN IX → medulla). This drives the tachypnea and hyperventilation. The hyperventilation blows off CO₂ aggressively (PaCO₂ 28 — much lower than normal 40). Low PaCO₂ + hypoxemia is the classic V/Q MISMATCH pattern: bronchospasm creates low V/Q areas → hypoxemia → peripheral chemoreceptors → hyperventilation → CO₂ blown off. The SpO₂ improves with supplemental O₂ (V/Q mismatch, not shunt). The LOW PaCO₂ confirms this is NOT ventilatory failure — the patient is actually over-ventilating the functioning areas.">Hypoxemic drive — PaO₂ 58 &lt; 60 mmHg activates peripheral chemoreceptors. The resulting hyperventilation drives PaCO₂ to 28. Low PaCO₂ + hypoxemia = classic V/Q mismatch from bronchospasm.</button>
+      <button class="quiz-option" data-case-correct="false" data-feedback="The CO₂ is not being retained — it is being blown off (PaCO₂ 28, well below normal). This pattern (low PaO₂ + low PaCO₂) is the classic hypoxemia plus hyperventilation pattern of V/Q mismatch. CO₂ retention would produce HIGH PaCO₂ and usually low pH." style="border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy);">CO₂ is being retained — the patient needs BiPAP immediately.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button">Patient B →</button></div>
+  </div>
+
+  <!-- Stage 2 -->
+  <div class="case-stage lesson-hidden" data-case-stage="1">
+    <h3>Patient B — Chronic COPD with Acute Deterioration</h3>
+    <p>68-year-old with severe COPD (baseline PaCO₂ 60 mmHg). Arrives with SpO₂ 82%, using accessory muscles. The paramedic gave 15L/min O₂ during transport. On arrival: SpO₂ 99%, confused, RR 8. ABG: pH 7.15, PaCO₂ 92, PaO₂ 280.</p>
+    <div class="abg-block">
+      pH <span class="hi">7.15</span> | PaCO₂ <span class="hi">92</span> | PaO₂ <span class="ok">280</span><br>
+      <span class="label">Baseline PaCO₂ was 60. SpO₂ 99% = PaO₂ much above 60 — hypoxemic drive eliminated.</span>
+    </div>
+    <p><strong>What sequence of events occurred from the moment high-flow O₂ was applied, and what should the immediate management be?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="The confusion in this patient is from acute respiratory acidosis (pH 7.15) caused by CO₂ retention from loss of respiratory drive — not from the original hypoxemia. The original SpO₂ was 82% — low, but the response was to over-correct the oxygen, not to address the drive issue. The sequence is: high O₂ → removed hypoxemic drive → hypoventilated → CO₂ rose from 60 to 92 → severe acidosis → confusion.">The confusion is from the original hypoxemia — more oxygen was the right decision.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Sequence: (1) COPD patient's hypercapnic drive was already blunted from chronic CO₂ retention at 60 mmHg baseline. (2) Hypoxemic drive (PaO₂ 55-ish, PO₂ below 60) was the ONLY remaining ventilatory stimulus. (3) High-flow O₂ raised PaO₂ to 280 mmHg — far above 60. (4) Hypoxemic drive eliminated — no drive remaining. (5) Patient hypoventilated: PaCO₂ rose from 60 to 92 mmHg. (6) pH crashed to 7.15 — severe hypercapnic respiratory acidosis. Management: IMMEDIATELY reduce O₂ to target SpO₂ 88-92%. Start BiPAP to mechanically support ventilation and correct acute hypercapnia. Monitor ABGs serially. This patient may need intubation if BiPAP fails.">Sequence: high O₂ removed the only remaining (hypoxemic) drive → patient hypoventilated → PaCO₂ rose from 60 to 92 → pH 7.15 (severe respiratory acidosis) → confusion. Management: reduce O₂ to SpO₂ 88-92% AND start BiPAP to support ventilation.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Continuing high-flow O₂ would perpetuate the problem — the hypoxemic drive is already eliminated (PaO₂ 280). The patient needs LESS oxygen (titrated to SpO₂ 88-92%) AND ventilatory support (BiPAP) to correct the CO₂ retention. Intubating without first trying BiPAP would be premature if the patient can cooperate.">Continue high-flow O₂ and immediately intubate — this is a respiratory emergency.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button">Patient C →</button></div>
+  </div>
+
+  <!-- Stage 3 -->
+  <div class="case-stage lesson-hidden" data-case-stage="2">
+    <h3>Patient C — Suspected Pulmonary Embolism</h3>
+    <p>45-year-old, 3 days post-total knee replacement. Sudden onset shortness of breath and right-sided pleuritic chest pain. SpO₂ 88% on room air. HR 118. CXR: essentially normal. ABG: pH 7.52, PaCO₂ 27, PaO₂ 62. Started on 4L NC → SpO₂ improved to 95%.</p>
+    <div class="abg-block">
+      pH <span class="hi">7.52</span> | PaCO₂ <span class="lo">27</span> | PaO₂ <span class="lo">62</span><br>
+      <span class="label">Classic V/Q mismatch pattern from PE: hypoxemia + low CO₂ + normal CXR</span>
+    </div>
+    <p><strong>Explain the complete physiology connecting the PE to each ABG finding, and what does the response to supplemental O₂ tell you about the V/Q state?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="In PE, the alveoli ARE ventilated — the problem is that perfusion is blocked by the clot. This creates HIGH V/Q (dead space) — ventilation without perfusion. Blood cannot pick up O₂ from the ventilated alveoli because no blood flows past them. The O₂ response (SpO₂ improved from 88% to 95% on 4L) actually supports V/Q MISMATCH (which can respond to O₂) rather than pure shunt. Adding more O₂ helps the other, perfused alveoli compensate.">Low V/Q shunt — alveoli are not ventilated because the clot blocks airflow.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Complete physiology: (1) Clot in pulmonary artery → blood flow to downstream alveoli stops → HIGH V/Q (dead space). (2) Blood is shunted from unperfused alveoli and must flow through still-perfused areas → mixed venous blood enters systemic circulation → hypoxemia. (3) PaO₂ ~62 (just above 60) → peripheral chemoreceptors partially activated → hyperventilation → PaCO₂ blown down to 27 → respiratory alkalosis (pH 7.52). (4) Normal CXR: alveoli ARE ventilated and structurally intact — they look normal. The problem is absent perfusion, not structure. (5) SpO₂ improved with supplemental O₂: confirms V/Q MISMATCH (high V/Q variant), NOT shunt — the remaining perfused alveoli respond to higher FiO₂.">HIGH V/Q dead space: clot stops perfusion while ventilation continues → wasted ventilation, hypoxemia. Hyperventilation from hypoxemia drives PaCO₂ to 27 and pH to 7.52. Normal CXR because alveoli are structurally intact. O₂ response confirms V/Q mismatch not shunt.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="The CXR is normal here — meaning the lung structure is intact. Pneumonia produces an abnormal CXR (consolidation/infiltrates) and causes LOW V/Q (air blocked from reaching alveoli). This patient has normal CXR + sudden onset + PE risk factor (recent surgery) + classic high V/Q pattern (hypoxemia + very low PaCO₂ + normal CXR) = suspect PE.">Low V/Q from pneumonia — the consolidation is causing the hypoxemia.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button">Case Complete →</button></div>
+  </div>
+
+  <!-- Wrap-up -->
+  <div class="case-stage lesson-hidden" data-case-stage="3">
+    <h3>Three-Patient Summary</h3>
+    <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px;">
+      <div class="example-box soft-teal"><strong>Patient A — Asthma:</strong> Hypoxemic drive (PaO₂ 58 &lt; 60) → hyperventilation → low PaCO₂. LOW V/Q from bronchospasm. Responds to O₂ + bronchodilators.</div>
+      <div class="example-box soft-coral"><strong>Patient B — COPD + O₂ disaster:</strong> High-flow O₂ removed the only remaining hypoxemic drive. PaCO₂ rose 60 → 92. Treat: titrate O₂ to SpO₂ 88-92% + BiPAP for hypercapnic support.</div>
+      <div class="example-box soft-amber"><strong>Patient C — PE:</strong> HIGH V/Q (dead space). Classic: hypoxemia + very low PaCO₂ + normal CXR. Responds partially to O₂ (V/Q mismatch, not shunt). Treat: anticoagulation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 12: Knowledge Check -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Neural Control Knowledge Check">
+  <span class="eyebrow">Knowledge Check</span>
+  <h2>Board-Style Practice</h2>
+
+  <div class="knowledge-question" data-question-id="kq1">
+    <h3>Question 1</h3>
+    <p>A nurse asks: "If a patient's PaCO₂ rises, doesn't the central chemoreceptor directly detect the CO₂ to increase breathing?" How do you correctly explain the central chemoreceptor mechanism?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Central chemoreceptors detect H⁺ ions (pH changes) in the CSF — not CO₂ directly. CO₂ itself does not activate the receptor; the H⁺ produced when CO₂ reacts with water in the CSF is what the receptor detects. This distinction matters because it explains why metabolic acidosis (which also produces H⁺) can also stimulate the CCR.">Yes — central chemoreceptors detect CO₂ directly in the cerebrospinal fluid.</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. CO₂ crosses the blood-brain barrier freely (it is lipid-soluble). Once in the CSF, carbonic anhydrase catalyzes CO₂ + H₂O → H₂CO₃ → H⁺ + HCO₃⁻. The resulting H⁺ ions decrease CSF pH. The central chemoreceptors on the medullary surface detect this H⁺ accumulation (the pH change) — NOT the CO₂ molecule itself. This is why the sensors are sensitive to anything that changes CSF H⁺ concentration, including respiratory AND metabolic disorders.">No — central chemoreceptors detect H⁺ ions (pH changes) in the CSF, not CO₂ directly. CO₂ crosses the BBB and then reacts to produce H⁺, which is what the receptors sense.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Central chemoreceptors are on the surface of the medulla oblongata — inside the brain — not in the peripheral circulation. Peripheral O₂ detection is done by the carotid and aortic bodies. Central chemoreceptors are not sensitive to peripheral O₂ levels under normal circumstances.">Central chemoreceptors detect both CO₂ and O₂ in the peripheral blood.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq2">
+    <h3>Question 2</h3>
+    <p>Why is the target SpO₂ 88–92% for a chronic COPD patient receiving supplemental oxygen, rather than the standard adult target of 95–100%?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Oxygen is not more toxic to COPD lungs than to normal lungs at therapeutic doses. The reason for the lower SpO₂ target is physiological — maintaining the hypoxemic drive — not about lung tissue toxicity.">COPD lungs are more susceptible to oxygen toxicity, so lower FiO₂ is necessary.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Chronic COPD patients with CO₂ retention have a blunted hypercapnic drive (the medulla has adapted to chronically elevated CO₂). Their only remaining ventilatory stimulus is the hypoxemic drive — activated by PaO₂ below 60 mmHg (SpO₂ ≈90%). Targeting SpO₂ 88-92% maintains PaO₂ in the 55-65 mmHg range — below the 60 mmHg threshold that keeps peripheral chemoreceptors firing. If SpO₂ rises above 92-95%, PaO₂ exceeds 60-70 mmHg, peripheral chemoreceptors go silent, and the patient may stop breathing adequately — CO₂ accumulates and severe respiratory acidosis develops.">SpO₂ 88–92% maintains PaO₂ around 55–65 mmHg — below 60 mmHg so the hypoxemic drive (the only remaining drive in COPD) remains active. Higher SpO₂ removes this stimulus and can cause hypoventilation.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="COPD patients do not have reduced oxygen-carrying capacity compared to normal patients on the basis of COPD alone. Anemia (low Hb) would reduce O₂ content, but that is separate from COPD physiology. The reason for the 88-92% target is the hypoxemic drive dependence.">COPD patients have reduced hemoglobin and can tolerate lower SpO₂ values.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq3">
+    <h3>Question 3</h3>
+    <p>A patient is given 100% FiO₂ for 15 minutes. SpO₂ goes from 86% to 87%. CXR shows bilateral complete opacification. P(A-a)O₂ is markedly elevated. What is the diagnosis and why doesn't oxygen help?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="V/Q mismatch (some ventilation) would respond to 100% O₂ — SpO₂ would improve significantly (usually to >95%) because the O₂ CAN reach the partially-ventilated alveoli. Here, SpO₂ barely changed despite maximum FiO₂. This is refractory hypoxemia — the hallmark of shunt, not V/Q mismatch.">V/Q mismatch — continue to increase FiO₂ further and SpO₂ will improve.</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. The minimal SpO₂ response (86% → 87%) to FiO₂ 1.0 is refractory hypoxemia — the hallmark of significant shunt. The bilateral opacification confirms diffuse alveolar flooding (ARDS, severe pneumonia) — these alveoli have ZERO ventilation (V = 0). Blood still perfuses them (Q continues), but no inspired gas ever contacts the blood. Even 100% O₂ cannot help if the air never reaches the alveolar surface. The treatment must recruit the unventilated alveoli — PEEP, prone positioning, airway clearance — not just increase FiO₂.">Significant shunt (V/Q = 0) — bilateral opacification means alveoli are flooded with zero ventilation. Blood perfuses unventilated alveoli and returns unoxygenated. 100% O₂ cannot help because no air reaches the alveolar surface regardless of FiO₂.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Hypoventilation would produce elevated PaCO₂ and the P(A-a)O₂ gradient would be normal (because the lungs are not failing to transfer O₂ when ventilated — there's just less ventilation overall). The markedly elevated P(A-a)O₂ gradient indicates the lungs ARE failing to transfer O₂ even when ventilated — pointing to V/Q mismatch or shunt, not hypoventilation.">Hypoventilation — the patient needs increased ventilatory support to blow off CO₂.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq4">
+    <h3>Question 4</h3>
+    <p>A patient with sudden dyspnea has ABG: pH 7.52, PaCO₂ 26, PaO₂ 68. CXR is normal. Leg is swollen. What is the most likely diagnosis and what V/Q state does this represent?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Asthma would typically produce an abnormal chest exam (wheezing) and would show improvement with bronchodilators. The CXR might show air trapping. More importantly, asthma produces LOW V/Q (bronchospasm prevents air from reaching alveoli). This patient has a normal CXR and swollen leg — a PE risk factor. The pattern (hypoxemia + low PaCO₂ + normal CXR) is the classic PE triad.">Asthma — low V/Q from bronchospasm; start bronchodilators.</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct! Classic PE presentation: (1) Sudden dyspnea. (2) Swollen leg = DVT (deep vein thrombosis = PE source). (3) Normal CXR — alveoli are structurally intact because the problem is absent perfusion, not airway disease. (4) Hypoxemia + very low PaCO₂ (hyperventilation from hypoxemic drive activation) + respiratory alkalosis (pH 7.52). V/Q state: HIGH V/Q → dead space. The clot blocks perfusion to ventilated alveoli, creating wasted ventilation. Blood is shunted to other areas, returning less oxygenated. Treatment: anticoagulation (heparin), supplemental O₂ (V/Q mismatch responds to O₂), workup with CTPA or V/Q scan.">Pulmonary Embolism — HIGH V/Q (dead space) from clot blocking perfusion. Classic triad: hypoxemia + ↓ PaCO₂ (hyperventilation) + normal CXR. Swollen leg = DVT source.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Pneumonia produces LOW V/Q (alveoli filled with fluid) and typically shows infiltrates on CXR (not normal). The inflammatory consolidation fills alveoli, preventing air from reaching them. This patient's normal CXR argues against pneumonia. The normal CXR with hypoxemia + low PaCO₂ is pathognomonic for PE.">Pneumonia — low V/Q from consolidation; CXR is likely normal early in the infection.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq5">
+    <h3>Question 5</h3>
+    <p>Which nerve carries sensory signals from the carotid body to the medullary respiratory centers, and which cranial nerve carries signals from the aortic body?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="CN X (vagus) innervates the AORTIC bodies, not the carotid bodies. CN XI is the accessory nerve — it does not have a sensory chemoreceptor function. The carotid body is innervated by CN IX (glossopharyngeal) via the carotid sinus branch.">Carotid body: CN X (vagus); Aortic body: CN XI (accessory)</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="true" data-feedback="Correct! Carotid sinus nerve (branch of CN IX glossopharyngeal) → carries hypoxemic signals from carotid bodies to the medulla. Vagus nerve (CN X) → carries signals from the aortic bodies to the medulla. A memory aid: 'C for Carotid and Cranial nerve IX' and 'Aortic bodies use the vAgus.' The carotid bodies are clinically more important in humans for the hypoxemic respiratory drive.">Carotid body: CN IX (glossopharyngeal) via carotid sinus nerve; Aortic body: CN X (vagus)</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="CN II is the optic nerve (vision). CN V is the trigeminal nerve (facial sensation and mastication). Neither carries chemoreceptor information to respiratory centers. The peripheral chemoreceptors use CN IX and CN X.">Carotid body: CN II (optic); Aortic body: CN V (trigeminal)</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="activity-status" id="knowledgeStatus">0 / 5 questions answered</div>
+</section>
+
+<!-- SECTION 13: FAQ -->
+<section id="faq">
+  <div><span class="eyebrow">FAQ</span><h2>Common Student Questions</h2></div>
+  <details class="accordion" open>
+    <summary>If CO₂ rises, why does the brain sense H⁺ and not CO₂ directly?</summary>
+    <div class="accordion-body"><p>The central chemoreceptors evolved to detect H⁺ because H⁺ is the actual molecule that disrupts cellular chemistry at the enzyme and protein level. CO₂ itself does not directly interact with the chemoreceptor proteins — but CO₂ is the precursor that generates H⁺ via the carbonic anhydrase reaction in the CSF. The elegance of this system is that it detects the real danger (excess H⁺ disrupting cellular function) rather than the intermediate molecule (CO₂). This also explains why a metabolic acidosis (such as DKA) can directly stimulate the central chemoreceptors through the H⁺ ions crossing into the CSF — it's the same sensor responding to the same signal, regardless of whether H⁺ came from CO₂ or from ketoacid dissociation.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Can the hypoxemic drive activate even if PaCO₂ is normal?</summary>
+    <div class="accordion-body"><p>Yes. The hypoxemic drive operates independently of the CO₂/pH system. If PaO₂ drops below 60 mmHg regardless of PaCO₂, the carotid bodies fire and drive increased ventilation. In fact, the resulting hyperventilation will LOWER PaCO₂ (blowing off extra CO₂). This is exactly the pattern seen in PE (normal or low PaCO₂ + hypoxemia) — the hypoxemic drive is active because PaO₂ is low, and the resulting hyperventilation blows CO₂ down despite PaCO₂ being normal at the outset.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>If shunt doesn't respond to oxygen, what does treat it?</summary>
+    <div class="accordion-body"><p>Treatment must restore ventilation to the collapsed or flooded alveoli — this is the key principle. Specific interventions depend on the cause: (1) PEEP (positive end-expiratory pressure) physically prevents alveolar collapse at end-expiration and can recruit previously collapsed alveoli. (2) CPAP/BiPAP applies continuous positive pressure to keep alveoli open non-invasively. (3) Prone positioning in ARDS redistributes perfusion to better-ventilated anterior lung regions. (4) Airway clearance (suctioning, bronchoscopy) removes mucus plugs causing complete obstruction. (5) Treating the underlying cause: diuretics for pulmonary edema, antibiotics for pneumonia. Once alveoli are ventilated again (even a little), supplemental oxygen becomes useful because O₂ can now reach the alveolar surface.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why does V/Q mismatch cause hypocapnia but shunt causes normal or elevated CO₂?</summary>
+    <div class="accordion-body"><p>CO₂ is 20× more diffusible than O₂ across the alveolar-capillary membrane. In V/Q mismatch, the hypoxemia triggers hyperventilation. This hyperventilation blows off CO₂ very efficiently from the well-ventilated alveoli — CO₂ clearance is maintained or even enhanced even though O₂ transfer remains impaired. The result: hypoxemia (O₂ problem) + hypocapnia (CO₂ being over-cleared). In severe shunt, so much blood bypasses ventilation entirely that even the well-ventilated alveoli cannot compensate for the enormous amount of un-oxygenated blood — CO₂ starts rising. The body then cannot hyperventilate enough to clear the additional CO₂ burden. So severe shunt with respiratory fatigue produces both hypoxemia AND hypercapnia (mixed respiratory failure).</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What is the P(A-a)O₂ gradient and why does it increase in V/Q mismatch?</summary>
+    <div class="accordion-body"><p>The P(A-a)O₂ gradient is PAO₂ − PaO₂ — it compares the oxygen in the alveolus (calculated from the alveolar gas equation) to the oxygen actually in arterial blood (measured). In healthy young adults on room air, this gap is 0–5 mmHg because the lungs efficiently transfer O₂ from alveolar air to blood. In V/Q mismatch, some alveoli are ventilated (so PAO₂ is maintained at ~100 mmHg) but the blood passing through poorly-ventilated alveoli returns poorly oxygenated. When this poorly-oxygenated blood mixes with blood from better-ventilated areas, PaO₂ drops — but PAO₂ from the ventilated alveoli is still calculated normally. So the gap between what the alveoli contain (PAO₂) and what the blood actually carries (PaO₂) widens. Normal = 0–5 mmHg; V/Q mismatch = &gt;10 mmHg; severe shunt = &gt;25 mmHg or more.</p></div>
+  </details>
+</section>
+
+<!-- SECTION 14: Summary -->
+<section class="info-card" id="summary">
+  <h2>Summary & Clinical Pearls</h2>
+  <p>Two drives, one V/Q ratio — understanding how they interact explains the physiology behind most of respiratory therapy's clinical decisions.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px;">
+    <div class="example-box soft-teal"><strong>Hypercapnic drive (PRIMARY):</strong> CO₂ → BBB → CSF → H₂CO₃ → H⁺ → ↓ CSF pH → CCR → ↑ RR & VT → ↓ CO₂ → negative feedback. Active every breath, even during sleep.</div>
+    <div class="example-box soft-blue"><strong>Hypoxemic drive (SECONDARY):</strong> PaO₂ &lt;60 mmHg → carotid body (CN IX) → medulla → ↑ RR, HR, depth. Emergency backup only. SpO₂ ~90% = inflection point of oxyhemoglobin curve.</div>
+    <div class="example-box soft-amber"><strong>COPD paradox:</strong> Chronic CO₂ retention blunts hypercapnic drive. Patient depends on hypoxemic drive. Target SpO₂ 88–92% (PaO₂ 55–65 mmHg). Above 92% risks extinguishing all drive → hypoventilation → CO₂ crisis.</div>
+    <div class="example-box soft-coral"><strong>Shunt vs. V/Q mismatch:</strong> Low V/Q (some air reaches alveolus) → responds to O₂. Shunt (zero air) → refractory to O₂. 100% O₂ challenge: improves = V/Q; stays low = shunt. Treat shunt with PEEP/CPAP to recruit alveoli.</div>
+  </div>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px;">
+    <table>
+      <thead><tr><th>Scenario</th><th>pH</th><th>PaCO₂</th><th>PaO₂</th><th>V/Q State</th><th>O₂ Response</th></tr></thead>
+      <tbody>
+        <tr><td>Acute Asthma</td><td>↑</td><td>↓ (hypervent)</td><td>↓</td><td>Low V/Q</td><td>Responds</td></tr>
+        <tr><td>Pulmonary Embolism</td><td>↑</td><td>↓↓ (hypervent)</td><td>↓</td><td>High V/Q (dead space)</td><td>Partially responds</td></tr>
+        <tr><td>Severe ARDS</td><td>↓</td><td>↑ (fatigue)</td><td>↓↓</td><td>Shunt (V=0)</td><td>Refractory</td></tr>
+        <tr><td>COPD (chronic)</td><td>normal (comp)</td><td>↑↑ (chronic)</td><td>↓</td><td>Mixed</td><td>Careful titration</td></tr>
+        <tr><td>PE Classic</td><td>↑</td><td>↓</td><td>↓</td><td>High V/Q</td><td>Responds + treat clot</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 15: Glossary -->
+<section id="glossary">
+  <div class="glossary-card">
+    <h3>Glossary Flashcard Mastery Deck</h3>
+    <p>Click the card to flip it. Mark known cards to move them into the completed pile. Use the mode tabs to practice in either direction.</p>
+    <div class="flashcard-shell">
+      <div aria-live="polite" class="progress-row">
+        <strong id="progressText">Progress: 0 / 0 mastered</strong>
+        <div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" data-view="active">Review Deck</button>
+        <button class="tab-btn" data-view="completed">Completed ✓</button>
+        <button class="tab-btn" data-view="all">All Cards</button>
+      </div>
+      <div class="tabs" role="group">
+        <button class="tab-btn active" data-mode="term">Term → Definition</button>
+        <button class="tab-btn" data-mode="definition">Definition → Term</button>
+      </div>
+      <div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flashcard. Click to flip.">
+        <div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div>
+      </div>
+      <div class="deck-actions">
+        <button class="small-btn" id="revealCard">Flip Card</button>
+        <button class="small-btn primary" id="knowCard">Know It ✓</button>
+        <button class="small-btn" id="reviewAgain">Review Again</button>
+        <button class="small-btn warn" id="resetAll">Reset All</button>
+        <button class="small-btn" id="shuffleDeck">Shuffle Active</button>
+      </div>
+      <div class="completed-list" id="completedList"></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end lesson-stack -->
+</main>
+
+<footer class="footer">
+  <div><strong>Pulmo<span>Core</span></strong><br/>Interactive respiratory therapy learning.</div>
+  <div>Respiratory Physiology · Board Prep · Glossary Decks · Practice</div>
+</footer>
+</div>
+
+<script>
+// ── COURSE MENU ────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded",function(){
+  const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+  if(button&&panel){
+    panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+    const list=document.getElementById("courseMenuList");
+    const courses=window.PULMOCORE_COURSES||[];
+    const currentFile=(window.location.pathname.split("/").pop()||"").toLowerCase();
+    list.innerHTML=courses.map(function(course){
+      var progress=typeof window.getCourseProgress==="function"?window.getCourseProgress(course.file):null;
+      var statusLabel="Not started",statusClass="not-started";
+      if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}
+      else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}
+      var isCurrent=course.file.toLowerCase()===currentFile;
+      return'<a class="course-menu-item '+(isCurrent?"current":"")+'\" href="'+course.file+'" role="menuitem"><span class="course-menu-title">'+course.title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'
+    }).join("");
+    button.onclick=function(event){event.preventDefault();event.stopPropagation();var isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+    document.addEventListener("click",function(e){if(!panel.contains(e.target)&&!button.contains(e.target)){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}})
+  }
+});
+
+// ── GLOSSARY ───────────────────────────────────────────────────────────────
+const glossaryTerms=[
+  {term:"Hypercapnic Respiratory Drive",definition:"PRIMARY ventilatory control mechanism. CO₂ rises → crosses BBB → forms H⁺ in CSF → CSF pH falls → central chemoreceptors stimulated → DRG/VRG increase output → ↑ RR and VT → CO₂ exhaled → PaCO₂ falls → negative feedback. Active continuously with every breath including during sleep."},
+  {term:"Blood-Brain Barrier (BBB) Selectivity",definition:"CO₂ is lipid-soluble and freely crosses the BBB into the CSF. H⁺ and HCO₃⁻ ions cannot freely cross the BBB. This selectivity means the CSF rapidly reflects changes in PaCO₂ but not immediately in metabolic acid-base changes — creating a slight delay in renal/metabolic compensation reaching the medullary sensors."},
+  {term:"Central Chemoreceptors (CCR)",definition:"Located on the ventrolateral surface of the medulla oblongata. Detect H⁺ ions (pH) in the CSF — NOT CO₂ directly. Extremely sensitive: 0.01 pH unit changes stimulate measurable ventilatory responses. Normal CSF pH = 7.32. Active continuously. Blunted in chronic CO₂ retention, opioids, sedatives, and CNS injury."},
+  {term:"Hypoxemic Respiratory Drive",definition:"SECONDARY ventilatory control mechanism. Emergency backup only. Activated when PaO₂ falls below 60 mmHg (SpO₂ ≈90%). Detected by peripheral chemoreceptors (carotid and aortic bodies). Produces tachypnea, tachycardia, and sympathetic activation. Normally inactive — activates only when tissue oxygenation is critically threatened."},
+  {term:"Carotid Body",definition:"Primary peripheral chemoreceptor. Located at the bifurcation of the common carotid artery. Innervated by the carotid sinus nerve — a branch of the glossopharyngeal nerve (CN IX) — which carries signals to the medullary respiratory centers. Highly vascularized. Detects PaO₂, PaCO₂, and pH. Most important peripheral chemoreceptor in humans."},
+  {term:"Aortic Body",definition:"Secondary peripheral chemoreceptor. Located near the aortic arch. Innervated by the vagus nerve (CN X). Less physiologically significant than carotid bodies for the human hypoxemic respiratory drive. Also detects PaO₂, PaCO₂, and pH — provides redundancy."},
+  {term:"PaO₂ <60 mmHg Threshold",definition:"The activation threshold for the hypoxemic respiratory drive. Below 60 mmHg, significant hemoglobin desaturation occurs (SpO₂ ≈90% — the inflection point of the oxyhemoglobin dissociation curve). Peripheral chemoreceptors respond dramatically below this threshold. Above 60 mmHg, minimal hypoxemic drive activation occurs."},
+  {term:"COPD Hypercapnic Drive Blunting",definition:"In chronic CO₂ retention, the medulla biochemically adapts — resetting its pH set point. Chronically elevated PaCO₂ (50-70 mmHg) no longer stimulates increased ventilation because the CCR have normalized to the chronic CSF acidosis. The hypercapnic drive becomes ineffective. This is the mechanism behind COPD oxygen dependence on the hypoxemic drive."},
+  {term:"COPD SpO₂ Target 88-92%",definition:"Target SpO₂ for chronic COPD patients with CO₂ retention receiving supplemental oxygen. Maintains PaO₂ ≈55-65 mmHg — below the 60 mmHg threshold that keeps peripheral chemoreceptors firing. Prevents complete removal of the hypoxemic drive. Above 92%, PaO₂ may exceed 60-70 mmHg, extinguishing the hypoxemic drive and risking hypoventilation, CO₂ retention, and acute respiratory acidosis."},
+  {term:"V/Q Ratio",definition:"Ventilation/Perfusion ratio. Expresses the balance between air reaching an alveolus (V) and blood perfusing it (Q). Ideal = 1.0. Normal range 0.8-1.2. When V/Q = 1.0, optimal gas exchange occurs. Deviations from 1.0 impair oxygenation and/or CO₂ removal depending on the direction of mismatch."},
+  {term:"High V/Q (Dead Space)",definition:"V/Q ratio > 1.2 — more ventilation than perfusion. Extreme = V/Q → ∞ when Q = 0. Fresh air reaches the alveolus but no blood flows past it → wasted (dead space) ventilation. Causes: pulmonary embolism (clot blocks perfusion), pulmonary vasoconstriction, emphysema (capillary bed destruction). Classic ABG: ↓ PaO₂, ↓ PaCO₂ (hyperventilation), ↑ pH, ↑ P(A-a)O₂."},
+  {term:"Low V/Q",definition:"V/Q ratio < 0.8 — more perfusion than ventilation. Air reaches the alveolus but inadequately relative to blood flow. Blood passes through incompletely oxygenated → hypoxemia. Extreme case is shunt (V = 0). Causes: bronchospasm (asthma), partial airway obstruction (COPD), early pneumonia, pulmonary edema. Responds to supplemental oxygen (some air is present)."},
+  {term:"Shunt (V/Q = 0)",definition:"Extreme low V/Q where alveoli receive zero ventilation while still perfused. Deoxygenated blood passes through completely unventilated alveoli and returns to systemic circulation. Key feature: REFRACTORY to supplemental oxygen — no amount of inspired O₂ can help because no air reaches the alveolar surface. Causes: complete atelectasis, ARDS, severe pneumonia consolidation, intracardiac defects."},
+  {term:"100% Oxygen Shunt Test",definition:"Diagnostic challenge to distinguish shunt from V/Q mismatch. Administer FiO₂ 1.0 for 10-15 minutes then recheck SpO₂. SpO₂ improves significantly (to >95%) = V/Q mismatch (some air reaches alveoli; more O₂ helps). SpO₂ remains below 90% = significant shunt (zero ventilation; no amount of O₂ can reach alveolar surface). Treatment: V/Q → improve ventilation; Shunt → recruit alveoli (PEEP, CPAP)."},
+  {term:"P(A-a)O₂ Gradient",definition:"Alveolar-Arterial oxygen gradient. P(A-a)O₂ = PAO₂ − PaO₂. Measures how well the lungs are transferring oxygen. Normal: 0-5 mmHg (young adult). Abnormal: >10 mmHg = V/Q mismatch, diffusion impairment, or shunt. Elevated because PAO₂ (alveolar O₂) is normal but PaO₂ (arterial O₂) is low due to poorly-oxygenated blood from mismatched alveoli mixing with better-oxygenated blood."},
+  {term:"Minute Ventilation (VE)",definition:"VE = RR × VT. Total air moved per minute. Normal: 12-20 breaths/min × 500 mL = 6-8 L/min. Increases in response to both hypercapnic and hypoxemic drives. The hypercapnic drive response can increase VE 2-3× during compensation. VE determines alveolar ventilation (VA = (VT − dead space) × RR) which determines CO₂ elimination."},
+  {term:"Alveolar Ventilation (VA)",definition:"The portion of minute ventilation that participates in gas exchange. VA = (VT − Dead Space) × RR. Dead space = ~150 mL normally. VA is more clinically relevant than VE because only ventilated alveoli with perfusion contribute to gas exchange. Increased in hypercapnic/hypoxemic drive responses. Low VA leads to CO₂ retention and hypoxemia."},
+  {term:"PE Classic ABG Pattern",definition:"Pulmonary embolism produces HIGH V/Q (dead space). Classic ABG: ↓ PaO₂ (hypoxemia from V/Q mismatch), ↓ PaCO₂ (hyperventilation from hypoxemic drive), ↑ pH (respiratory alkalosis), wide P(A-a)O₂ gradient, NORMAL CXR (alveoli ventilated, just not perfused). Clinical triad: hypoxemia + respiratory alkalosis + normal CXR = think PE. Responds to supplemental O₂ (V/Q mismatch, not shunt)."},
+  {term:"Gravity and V/Q Distribution",definition:"Upright lung: perfusion is greatest at the bases (gravity pulls blood down). Ventilation is also greatest at the bases (apex alveoli are already expanded at rest). This matching keeps V/Q close to 1.0 throughout. Clinical application: upright positioning enhances V/Q matching. Supine positioning makes distribution more uniform (gravity effect minimized) but can worsen V/Q matching in diseased lungs by directing blood to atelectatic posterior lung regions."},
+  {term:"Refractory Hypoxemia",definition:"Hypoxemia that does not improve significantly despite high FiO₂ supplementation. The hallmark of significant intrapulmonary shunt. When SpO₂ remains below 90% despite FiO₂ 0.8-1.0, shunt is the likely mechanism — blood is perfusing alveoli with zero ventilation so no inspired O₂ can reach the blood. Distinguished from V/Q mismatch which shows SpO₂ improvement with supplemental oxygen."}
+];
+
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(child=>child.classList&&child.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(option=>container.appendChild(option))})}
+shuffleAnswerOptions();
+
+function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+function initSimpleQuiz(optionsClass){
+  document.querySelectorAll("."+optionsClass).forEach(optionContainer=>{
+    const activity=optionContainer.closest(".quiz-card");
+    if(!activity||!activity.classList.contains("require-complete"))return;
+    optionContainer.querySelectorAll(".quiz-option").forEach(button=>{
+      button.addEventListener("click",()=>{
+        if(activity.dataset.correctAnswered==="true")return;
+        const feedback=activity.querySelector(".quiz-feedback");
+        const isCorrect=button.dataset.correct==="true";
+        activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+        if(isCorrect){
+          activity.dataset.correctAnswered="true";
+          activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+          feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+          feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+          markActivityComplete(activity)
+        }else{
+          button.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+          feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the correct answer to continue."
+        }
+      })
+    })
+  })
+}
+initSimpleQuiz("drive-opts");
+initSimpleQuiz("copd-opts");
+initSimpleQuiz("shunt-opts");
+
+function initSort(activitySelector,buttonId,statusId){
+  const activity=document.querySelector(activitySelector),button=document.getElementById(buttonId),status=document.getElementById(statusId);
+  if(!activity||!button)return;
+  button.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    let correctCount=0;
+    rows.forEach(row=>{const select=row.querySelector("select");const correct=select.value===row.dataset.answer;row.classList.toggle("correct",correct);row.classList.toggle("incorrect",select.value!==""&&!correct);if(correct)correctCount++});
+    status.textContent=`${correctCount} / ${rows.length} correct`;
+    if(correctCount===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}
+  })
+}
+initSort("#hypercapnic-drive .activity-card.require-complete","checkCascadeSort","cascadeSortStatus");
+initSort("#hypoxemic-drive .activity-card.require-complete","checkPcrSort","pcrSortStatus");
+initSort("#vq-abnormal .activity-card.require-complete","checkVqSort","vqSortStatus");
+initSort("#vq-causes .activity-card.require-complete","checkCausesSort","causesSortStatus");
+
+function initializeGuidedCase(){
+  const caseSection=document.getElementById("integrated-case");
+  if(!caseSection)return;
+  const caseStages=Array.from(caseSection.querySelectorAll(".case-stage"));
+  caseStages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});
+  caseSection.querySelectorAll(".case-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const stage=option.closest(".case-stage");
+      if(stage.dataset.correctAnswered==="true")return;
+      const feedback=stage.querySelector(".case-feedback");
+      const isCorrect=option.dataset.caseCorrect==="true";
+      stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        stage.dataset.correctAnswered="true";
+        stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+        const nextButton=stage.querySelector(".case-next button");if(nextButton)nextButton.disabled=false
+      }else{
+        option.classList.add("incorrect-choice");feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again:</strong> Choose the best answer before continuing.";
+        const nextButton=stage.querySelector(".case-next button");if(nextButton)nextButton.disabled=true
+      }
+    })
+  });
+  caseSection.querySelectorAll(".case-next button").forEach(button=>{
+    button.disabled=true;
+    button.addEventListener("click",()=>{
+      const currentStage=button.closest(".case-stage");
+      const currentIndex=caseStages.indexOf(currentStage);
+      const nextStage=caseStages[currentIndex+1];
+      if(!nextStage)return;
+      nextStage.classList.remove("lesson-hidden");
+      if(currentIndex+1===caseStages.length-1)markActivityComplete(caseSection);
+      const caseContinue=button.closest(".case-next");if(caseContinue)caseContinue.remove();
+      nextStage.scrollIntoView({behavior:"smooth",block:"start"})
+    })
+  })
+}
+initializeGuidedCase();
+
+function initializeKnowledgeCheck(){
+  const section=document.getElementById("knowledge-check"),status=document.getElementById("knowledgeStatus");
+  if(!section)return;
+  const answered=new Set(),total=section.querySelectorAll(".knowledge-question").length;
+  document.querySelectorAll(".knowledge-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const question=option.closest(".knowledge-question");
+      if(question.dataset.correctAnswered==="true")return;
+      const feedback=question.querySelector(".quiz-feedback");
+      const isCorrect=option.dataset.correct==="true";
+      question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        question.dataset.correctAnswered="true";answered.add(option.dataset.question);
+        question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>"
+      }else{
+        option.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again:</strong> Select the correct answer."
+      }
+      status.textContent=`${answered.size} / ${total} questions answered`;
+      if(answered.size===total){status.textContent="Knowledge check complete.";status.classList.add("complete");markActivityComplete(section)}
+    })
+  })
+}
+initializeKnowledgeCheck();
+
+// ── FLASHCARDS (dual-mode) ─────────────────────────────────────────────────
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",cardMode="term",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete.";cardBack.textContent="Use Reset All to move completed terms back into review.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=cardMode==="term"?card.term:card.definition;cardBack.textContent=cardMode==="term"?card.definition:card.term;cardFront.className=cardMode==="term"?"term":"definition";cardBack.className=cardMode==="term"?"definition":"term"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){const deck=getVisibleDeck();if(!deck.length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:`<div class="empty-state">No cards have been marked completed yet.</div>`}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+document.querySelectorAll(".tab-btn[data-mode]").forEach(button=>button.addEventListener("click",()=>{cardMode=button.dataset.mode;currentIndex=0;document.querySelectorAll(".tab-btn[data-mode]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+// ── PROGRESSIVE REVEAL ────────────────────────────────────────────────────
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+  const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section,.lesson-stack > section"));
+  const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+  if(!sections.length)return;
+  sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+  function getSectionTitle(section){const h=section.querySelector("h2,h3");return h?h.textContent.trim():"Next Section"}
+  function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+  function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requiresCompletion=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requiresCompletion){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+  function updateAllContinueStates(){sections.forEach(setContinueState)}
+  function updateNavState(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const isVisible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!isVisible);link.classList.toggle("current",targetIndex===currentIndex)})}
+  function revealThrough(targetIndex,shouldScroll=true){const currentVisible=sections.reduce((highest,section,index)=>!section.classList.contains("lesson-hidden")?index:highest,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNavState(targetIndex);updateAllContinueStates();if(shouldScroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+  sections.forEach((section,index)=>{
+    if(index>=sections.length-1)return;
+    const nextTitle=getSectionTitle(sections[index+1]);
+    const wrapper=document.createElement("div");wrapper.className="section-continue";
+    wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+    wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});
+    section.appendChild(wrapper)
+  });
+  navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((highest,section,index)=>!section.classList.contains("lesson-hidden")?index:highest,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+  document.addEventListener("activityComplete",()=>updateAllContinueStates());
+  const firstSection=sections[0];
+  if(firstSection){const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";firstSection.appendChild(note)}
+  updateNavState(0);updateAllContinueStates()
+}
+initializeProgressiveSections();
+</script>
+<script>
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+window.LESSON_ID='rp_2_2'</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>
