@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Foundations 3.4</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status,.course-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete,.course-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress,.course-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint);color:var(--core-navy)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:420px}th,td{text-align:left;padding:9px;vertical-align:top;border-bottom:1px solid var(--soft-border)}thead th{background:#E5F0F6}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease,border-color .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,240px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px;color:#263f5e}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:repeat(2,minmax(220px,1fr))}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:380px}.home-button{width:42px;height:42px}.course-menu-button{padding:9px 12px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}table{min-width:340px}}
+
+/* ── 3.4-specific styles ───────────────────────────────────────────────── */
+.ethics-principle{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border:1px solid var(--soft-border);border-radius:14px;background:#fff;margin-bottom:10px}
+.ethics-number{width:44px;height:44px;border-radius:50%;background:var(--core-navy);color:var(--white);display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:1.1rem;flex-shrink:0}
+.scenario-card{border-left:5px solid;border-radius:14px;padding:16px;margin-bottom:12px;background:#fff}
+.scenario-label{font-size:.78rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+.scenario-answer{background:#F8FBFD;border-radius:10px;padding:10px;margin-top:10px;font-size:.92rem;border:1px solid var(--soft-border)}
+.nutrient-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.nutrient-card{border-radius:14px;padding:14px;border:2px solid}
+.verify-step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border-radius:14px;margin-bottom:10px}
+.verify-num{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:1.1rem;flex-shrink:0;color:var(--white)}
+.diet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.diet-card{border-radius:14px;padding:14px;border:2px solid}
+@media(max-width:900px){.nutrient-grid,.diet-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.nutrient-grid,.diet-grid{grid-template-columns:1fr}.ethics-principle,.verify-step{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<!-- ── NAV ─────────────────────────────────────────────────────────────── -->
+<header class="top-nav" aria-label="PulmoCore site navigation">
+  <div class="brand" aria-label="PulmoCore brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+    <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+  </div>
+  <div class="top-nav-actions">
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" aria-label="Glossary and Flashcards" title="Glossary & Flashcards" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+    <div class="course-menu-container course-menu-wrapper">
+      <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+      <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+  <span class="eyebrow">Foundations of Respiratory Care · Lesson 3.4</span>
+  <h1 style="font-family:var(--font-heading);font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Nutrition, Ethics & Electronic Medical Records</h1>
+  <p style="font-size:1.18rem;max-width:980px;color:#243b55">Respiratory therapists are not just clinicians — they are patient advocates, ethical practitioners, and healthcare team members. This lesson connects nutritional support for cardiac and pulmonary patients to the ethical and documentation standards that protect every patient we serve.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>Course Track</strong><br>Foundations of Respiratory Care</div>
+    <div class="example-box soft-blue"><strong>Estimated Time</strong><br>55–70 minutes</div>
+    <div class="example-box soft-amber"><strong>Level</strong><br>Foundational — clinical, ethical, and systems knowledge</div>
+  </div>
+</section>
+
+<div class="content-layout">
+<aside aria-label="Lesson quick navigation" class="side-nav">
+  <h3>Lesson Sections</h3>
+  <a href="#objectives">Objectives</a>
+  <a href="#overview-video">Video</a>
+  <a href="#cardiac-nutrition">Cardiac Nutrition</a>
+  <a href="#copd-nutrition">COPD Nutrition</a>
+  <a href="#nutrients">Key Nutrients</a>
+  <a href="#nutrition-signs">Clinical Signs</a>
+  <a href="#ethics-10">Code of Ethics</a>
+  <a href="#ethics-scenarios">Ethics Scenarios</a>
+  <a href="#ehr">EMR vs EHR</a>
+  <a href="#hipaa">HIPAA</a>
+  <a href="#verification">Patient Verification</a>
+  <a href="#scenario">Unfolding Case</a>
+  <a href="#practice">Assignment Practice</a>
+  <a href="#knowledge-check">Knowledge Check</a>
+  <a href="#faq">FAQ</a>
+  <a href="#summary">Summary</a>
+  <a href="#glossary">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+<section class="info-card" id="objectives">
+  <h2>Learning Objectives</h2>
+  <p>By the end of this lesson, you will be able to describe dietary needs for cardiac and COPD patients, explain how dyspnea affects eating and metabolism, apply the AARC Code of Ethics to clinical scenarios, distinguish EMR from EHR, follow patient verification steps, and understand HIPAA requirements.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>1. Nutritional assessment</strong><br>Identify appropriate dietary strategies for CHF, CAD, and COPD patients and explain why dyspnea complicates eating.</div>
+    <div class="example-box soft-blue"><strong>2. Key nutrients for RT patients</strong><br>Connect protein, sodium, calcium, magnesium, potassium, and fluid to respiratory function and cardiac health.</div>
+    <div class="example-box soft-amber"><strong>3. Ethical decision-making</strong><br>Apply the AARC Code of Ethics Top 10 principles to real-world clinical scenarios with correct professional responses.</div>
+    <div class="example-box soft-coral"><strong>4. EHR and patient safety</strong><br>Distinguish EMR from EHR, explain HIPAA protections, and perform the 5-step patient verification process correctly.</div>
+  </div>
+</section>
+
+<section class="info-card" id="overview-video">
+  <span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Nutrition, Ethics & the RT Role</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/foundations/Foundations_3_4.mp4" type="video/mp4"/>
+<track default kind="captions" label="English captions" src="/foundations/Foundations_3_4.vtt" srclang="en"/>
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+
+<!-- ── PROGRESSIVE LESSON STACK ─────────────────────────────────────────── -->
+<div class="lesson-stack">
+
+<!-- SECTION 1: Cardiac Nutrition -->
+<section class="info-card" id="cardiac-nutrition">
+  <h2>Nutrition for Cardiac Patients</h2>
+  <p>For patients with CHF and CAD, diet is a direct contributor to cardiac workload and fluid balance. The respiratory therapist assesses these patients at the bedside — understanding the dietary context helps you interpret what you see clinically.</p>
+  <img src="/foundations/Foundations_3_4_assets/foundations-3-4-cardiac-nutrition.png" alt="Side-by-side comparison showing CHF dietary requirements (low sodium less than 2000mg, fluid restriction 64oz maximum, daily weight monitoring, low-fat foods) and CAD requirements (low sodium, low saturated fat, cholesterol reduction) with Mediterranean DASH and plant-based diet options listed" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--alert-coral)">CHF — Congestive Heart Failure</h3>
+      <p style="font-size:.9rem;color:var(--slate);margin:8px 0">Heart cannot pump efficiently → fluid backs up into lungs → shortness of breath and fluid overload.</p>
+      <ul style="padding-left:20px;margin:8px 0;font-size:.92rem">
+        <li>Sodium &lt; 2,000 mg daily (reduces fluid retention)</li>
+        <li>Fluid restriction ≤ 64 oz / 2,000 mL daily</li>
+        <li>Daily weight monitoring (early fluid retention alert)</li>
+        <li>Avoid high-fat foods (increase cardiac workload)</li>
+      </ul>
+      <div class="example-box soft-coral" style="margin-top:10px;font-size:.88rem"><strong>Clinical connection:</strong> Crackles on auscultation + S3 heart sound + leg edema = fluid overload. Low-sodium diet prevents this buildup.</div>
+    </div>
+    <div style="border:2px solid var(--clinical-amber);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:#7A4B00">CAD — Coronary Artery Disease</h3>
+      <p style="font-size:.9rem;color:var(--slate);margin:8px 0">Narrowed arteries reduce blood flow to the heart — diet directly impacts plaque formation and vessel health.</p>
+      <ul style="padding-left:20px;margin:8px 0;font-size:.92rem">
+        <li>Low sodium intake (reduces fluid retention and BP)</li>
+        <li>Low saturated fats (reduces plaque formation)</li>
+        <li>Cholesterol reduction (decreases arterial inflammation)</li>
+        <li>Focus on heart-healthy whole foods</li>
+      </ul>
+      <div class="example-box soft-amber" style="margin-top:10px;font-size:.88rem"><strong>Clinical connection:</strong> RT may encounter CAD patients post-MI or with angina. Poor diet is a modifiable risk factor for recurrent events.</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px">Approved Cardiac Diets</h3>
+  <div class="diet-grid">
+    <div class="diet-card" style="border-color:var(--pulmo-teal);background:var(--airway-mint)">
+      <strong style="color:var(--pulmo-teal)">Mediterranean Diet</strong>
+      <p style="font-size:.88rem;margin:6px 0">Fruits, vegetables, whole grains, fish, olive oil, nuts. Minimizes processed and salty foods. Heart-protective anti-inflammatory profile.</p>
+    </div>
+    <div class="diet-card" style="border-color:var(--oxygen-blue);background:#E6F3FF">
+      <strong style="color:var(--oxygen-blue)">DASH Diet</strong>
+      <p style="font-size:.88rem;margin:6px 0">Dietary Approaches to Stop Hypertension. Low-fat dairy, meatless meals, reduced sodium. Specifically designed for blood pressure management.</p>
+    </div>
+    <div class="diet-card" style="border-color:#8B5CF6;background:#F3F0FF">
+      <strong style="color:#8B5CF6">Plant-Based Diet</strong>
+      <p style="font-size:.88rem;margin:6px 0">Avoids animal products to eliminate saturated fat and dietary cholesterol. Reduces cardiovascular risk markers over time.</p>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Cardiac Diet Match" style="margin-top:16px">
+    <h3>Match the Dietary Restriction to Its Reason</h3>
+    <div class="sort-grid" id="cardiacSort">
+      <div class="sort-row" data-answer="sodium"><strong>Most important dietary restriction for CHF — directly reduces fluid retention and blood pressure.</strong><select><option value="">Choose restriction</option><option value="sodium">Low sodium (&lt;2,000 mg)</option><option value="fluid">Fluid restriction (≤64 oz)</option><option value="fat">Low saturated fat</option><option value="weight">Daily weight monitoring</option></select></div>
+      <div class="sort-row" data-answer="fluid"><strong>CHF patient limit — prevents additional fluid loading when heart cannot pump efficiently.</strong><select><option value="">Choose restriction</option><option value="sodium">Low sodium (&lt;2,000 mg)</option><option value="fluid">Fluid restriction (≤64 oz)</option><option value="fat">Low saturated fat</option><option value="weight">Daily weight monitoring</option></select></div>
+      <div class="sort-row" data-answer="weight"><strong>Detects early fluid retention in CHF — a sudden gain of 2+ lbs overnight is often fluid, not fat.</strong><select><option value="">Choose restriction</option><option value="sodium">Low sodium (&lt;2,000 mg)</option><option value="fluid">Fluid restriction (≤64 oz)</option><option value="fat">Low saturated fat</option><option value="weight">Daily weight monitoring</option></select></div>
+      <div class="sort-row" data-answer="fat"><strong>Primary CAD dietary strategy — reduces plaque formation and cholesterol-driven arterial inflammation.</strong><select><option value="">Choose restriction</option><option value="sodium">Low sodium (&lt;2,000 mg)</option><option value="fluid">Fluid restriction (≤64 oz)</option><option value="fat">Low saturated fat</option><option value="weight">Daily weight monitoring</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkCardiacSort" type="button" style="margin-top:12px">Check Cardiac Diet Match</button>
+    <div class="activity-status" id="cardiacSortStatus">Complete the cardiac diet matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 2: COPD Nutrition -->
+<section class="info-card rt" id="copd-nutrition">
+  <h2>Nutrition for COPD Patients</h2>
+  <p>COPD creates a vicious cycle where breathing difficulty leads to malnutrition, and malnutrition worsens breathing. Breaking this cycle requires specific dietary strategies that account for how dyspnea affects every aspect of eating.</p>
+  <img src="/foundations/Foundations_3_4_assets/foundations-3-4-copd-nutrition.png" alt="Circular diagram showing the COPD malnutrition cycle: increased work of breathing raises caloric needs, shortness of breath reduces appetite and eating ability, resulting in malnutrition which causes muscle wasting and weakened immunity, which worsens breathing, completing the cycle. Four solution panels surround the cycle showing eating position, small frequent meals, soft food textures, and oxygen during meals." style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="example-box soft-coral" style="margin-top:14px">
+    <strong>The Vicious Cycle:</strong> Increased work of breathing → higher caloric needs + difficulty eating → malnutrition → muscle wasting + weakened immunity → worsened breathing → even harder to eat. Breaking this cycle is a clinical priority.
+  </div>
+
+  <h3 style="margin-top:20px">Dyspnea's Direct Impact on Eating</h3>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px">
+    <div class="example-box soft-blue">
+      <strong>Breathing and swallowing compete.</strong> Both use the throat. It is impossible to swallow and breathe simultaneously — COPD patients must pause breathing to swallow, which is exhausting and leads to reduced intake.
+    </div>
+    <div class="example-box soft-amber">
+      <strong>Aspiration risk is significant.</strong> 20–40% of COPD patients experience aspiration. Inhaling food or liquid can cause aspiration pneumonia — increased mucus, fever, decreased O₂, confusion, respiratory failure.
+    </div>
+  </div>
+
+  <details class="accordion" style="margin-top:16px">
+    <summary><strong>Making Foods Easier to Chew and Swallow</strong></summary>
+    <div class="accordion-body">
+      <ul style="padding-left:20px;margin:0">
+        <li>Cook vegetables until soft</li>
+        <li>Mince or grind meats (less chewing effort)</li>
+        <li>Dip breads in liquid to soften</li>
+        <li>Choose pasta, mashed potatoes, thick soups, casseroles</li>
+        <li>Smoothies and milkshakes (including non-dairy) provide dense nutrition with minimal chewing</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Reducing Shortness of Breath During Meals</strong></summary>
+    <div class="accordion-body">
+      <ul style="padding-left:20px;margin:0">
+        <li>Rest 30 minutes before eating</li>
+        <li>Use pursed-lips breathing during and between bites</li>
+        <li>Sit upright — lean forward with elbows on table, feet flat on floor</li>
+        <li>Ask provider about increasing O₂ flow rate during meals</li>
+        <li>Reduce anxiety before eating (anxiety increases SOB)</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Reducing Fatigue During Meals</strong></summary>
+    <div class="accordion-body">
+      <ul style="padding-left:20px;margin:0">
+        <li>Eat <strong>6 small meals daily</strong> instead of 3 large ones — digestion requires oxygen, so smaller meals reduce the O₂ demand spike</li>
+        <li>Eat larger meals earlier in the day (more energy available)</li>
+        <li>Rest before eating but do NOT lie down after meals (raises diaphragm)</li>
+        <li>Use "Meals on Wheels" or similar services to reduce prep effort</li>
+        <li><strong>Avoid simple carbohydrates</strong> (sweets, cookies, pastries) — they cause higher CO₂ production per calorie metabolized</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Reducing Bloating (Gas Causes Diaphragm Pressure)</strong></summary>
+    <div class="accordion-body">
+      <ul style="padding-left:20px;margin:0">
+        <li>Don't eat when very short of breath — gulping air worsens bloating</li>
+        <li>Don't rush meals (air swallowing increases with rapid eating)</li>
+        <li>Drink fluids <strong>1 hour before and after meals</strong>, not during</li>
+        <li>Avoid bloating foods: onions, cabbage, sauerkraut, broccoli, Brussels sprouts, beer</li>
+        <li>Limit fried or fatty foods (slow gastric emptying)</li>
+        <li>Consider avoiding lactose (milk, yogurt, cottage cheese) if GI sensitivity exists</li>
+        <li>Add fiber and fluids to prevent constipation (straining raises intrathoracic pressure)</li>
+      </ul>
+    </div>
+  </details>
+
+  <article class="activity-card require-complete" data-activity-name="COPD Eating Strategy Sort" style="margin-top:16px">
+    <h3>Which COPD Eating Strategy Addresses This Problem?</h3>
+    <div class="sort-grid" id="copdSort">
+      <div class="sort-row" data-answer="small"><strong>Patient says they feel exhausted and out of breath by the time they finish a meal.</strong><select><option value="">Choose strategy</option><option value="small">6 small meals daily instead of 3 large</option><option value="position">Sit upright, lean forward, elbows on table</option><option value="carbs">Avoid simple carbohydrates</option><option value="fluids">Drink fluids 1 hour before/after meals</option><option value="soft">Soft or minced food textures</option></select></div>
+      <div class="sort-row" data-answer="position"><strong>Patient is hunched over in bed eating, complaining of shortness of breath during meals.</strong><select><option value="">Choose strategy</option><option value="small">6 small meals daily instead of 3 large</option><option value="position">Sit upright, lean forward, elbows on table</option><option value="carbs">Avoid simple carbohydrates</option><option value="fluids">Drink fluids 1 hour before/after meals</option><option value="soft">Soft or minced food textures</option></select></div>
+      <div class="sort-row" data-answer="carbs"><strong>Patient's ABG shows rising CO₂. Diet review shows high intake of sweets and baked goods.</strong><select><option value="">Choose strategy</option><option value="small">6 small meals daily instead of 3 large</option><option value="position">Sit upright, lean forward, elbows on table</option><option value="carbs">Avoid simple carbohydrates</option><option value="fluids">Drink fluids 1 hour before/after meals</option><option value="soft">Soft or minced food textures</option></select></div>
+      <div class="sort-row" data-answer="fluids"><strong>Patient complains of uncomfortable bloating after meals that worsens breathing.</strong><select><option value="">Choose strategy</option><option value="small">6 small meals daily instead of 3 large</option><option value="position">Sit upright, lean forward, elbows on table</option><option value="carbs">Avoid simple carbohydrates</option><option value="fluids">Drink fluids 1 hour before/after meals</option><option value="soft">Soft or minced food textures</option></select></div>
+      <div class="sort-row" data-answer="soft"><strong>Patient has difficulty chewing and must stop to breathe after each bite of solid food.</strong><select><option value="">Choose strategy</option><option value="small">6 small meals daily instead of 3 large</option><option value="position">Sit upright, lean forward, elbows on table</option><option value="carbs">Avoid simple carbohydrates</option><option value="fluids">Drink fluids 1 hour before/after meals</option><option value="soft">Soft or minced food textures</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkCopdSort" type="button" style="margin-top:12px">Check COPD Strategies</button>
+    <div class="activity-status" id="copdSortStatus">Complete the COPD strategy matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 3: Key Nutrients -->
+<section class="info-card" id="nutrients">
+  <h2>Key Nutrients for Respiratory Patients</h2>
+  <p>Six nutrients have direct impact on respiratory function, cardiac health, and muscle performance. Respiratory therapists need to recognize how deficiencies or excesses in each nutrient affect clinical findings.</p>
+  <img src="/foundations/Foundations_3_4_assets/foundations-3-4-key-nutrients.png" alt="Six nutrient cards arranged in a grid: Protein (antibody production and muscle maintenance), Fluids (thin secretions and prevent constipation), Sodium (fluid retention risk if excess), Calcium (lung function and bone density especially with steroids), Magnesium (breathing muscle fuel), and Potassium (cardiac muscle rhythm). Each card shows normal and abnormal clinical connections." style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="nutrient-grid">
+    <div class="nutrient-card" style="border-color:var(--pulmo-teal)">
+      <strong style="color:var(--pulmo-teal)">Protein</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Why it matters:</strong> Produces antibodies, maintains respiratory muscle mass, supports immune function.</p>
+      <p style="font-size:.85rem;color:var(--slate);margin:0"><strong>Sources:</strong> Beans, nuts, eggs, dairy, fish, meat, soy (tofu, tempeh)</p>
+    </div>
+    <div class="nutrient-card" style="border-color:var(--oxygen-blue)">
+      <strong style="color:var(--oxygen-blue)">Fluids</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Why it matters:</strong> Thin and clear lung secretions, prevent constipation, maintain hydration status.</p>
+      <p style="font-size:.85rem;color:var(--slate);margin:0"><strong>Good choices:</strong> Water, fruit juices, decaf coffee/tea, milk. Note: some patients are fluid-restricted.</p>
+    </div>
+    <div class="nutrient-card" style="border-color:var(--alert-coral)">
+      <strong style="color:var(--alert-coral)">Sodium</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Why it matters:</strong> Excess sodium causes fluid retention → increased blood pressure and SOB. Limit to &lt;2,000 mg daily.</p>
+      <p style="font-size:.85rem;color:var(--slate);margin:0"><strong>Avoid:</strong> Cured meats, canned goods, frozen meals, pickles, processed cheese, soy sauce, MSG</p>
+    </div>
+    <div class="nutrient-card" style="border-color:var(--clinical-amber)">
+      <strong style="color:#7A4B00">Calcium</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Why it matters:</strong> Supports lung function, muscle contraction, bone strength. Corticosteroids accelerate calcium loss → osteoporosis risk.</p>
+      <p style="font-size:.85rem;color:var(--slate);margin:0"><strong>Sources:</strong> Dairy, dark leafy greens, dried fruits, nuts, seeds. Vitamin D aids absorption.</p>
+    </div>
+    <div class="nutrient-card" style="border-color:#8B5CF6">
+      <strong style="color:#8B5CF6">Magnesium</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Why it matters:</strong> "Fuel" for muscle function — including breathing muscles. Low levels weaken respiratory muscles.</p>
+      <p style="font-size:.85rem;color:var(--slate);margin:0"><strong>Sources:</strong> Dark greens, whole grains, beans/lentils, tofu, seafood, chocolate. Refined flour has 80% less than whole grain.</p>
+    </div>
+    <div class="nutrient-card" style="border-color:#F472B6">
+      <strong style="color:#be185d">Potassium</strong>
+      <p style="font-size:.88rem;margin:6px 0"><strong>Why it matters:</strong> Essential for muscle contractions, especially the heart muscle. High OR low levels cause irregular heartbeat.</p>
+      <p style="font-size:.85rem;color:var(--slate);margin:0"><strong>Sources:</strong> Milk, yogurt, squash, bananas, oranges, potatoes, spinach, tomatoes. Note: diuretics deplete potassium.</p>
+    </div>
+  </div>
+
+  <div class="example-box soft-amber" style="margin-top:14px">
+    <strong>Clinical Note — Dairy and Mucus:</strong> It is a common myth that milk causes extra mucus production. Milk may leave a filmy coating in the throat/mouth (from fat content), but it does not increase mucus secretion. Dairy provides calcium, protein, vitamins A, D, B-12, and riboflavin — valuable for COPD patients. Non-dairy alternatives can provide the same nutrients.
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Nutrient-Function Match" style="margin-top:16px">
+    <h3>Match Each Nutrient to Its Primary Clinical Concern</h3>
+    <div class="sort-grid" id="nutrientSort">
+      <div class="sort-row" data-answer="sodium"><strong>A patient with CHF is gaining 2 lbs per day. The RT suspects diet-related fluid retention.</strong><select><option value="">Choose nutrient concern</option><option value="sodium">Excess sodium — fluid retention</option><option value="potassium">Potassium — irregular heartbeat</option><option value="calcium">Calcium — steroid-induced bone loss</option><option value="magnesium">Magnesium — weak breathing muscles</option><option value="protein">Protein — immune weakness</option></select></div>
+      <div class="sort-row" data-answer="potassium"><strong>Patient on furosemide develops an irregular ECG rhythm. Lab values are pending.</strong><select><option value="">Choose nutrient concern</option><option value="sodium">Excess sodium — fluid retention</option><option value="potassium">Potassium — irregular heartbeat</option><option value="calcium">Calcium — steroid-induced bone loss</option><option value="magnesium">Magnesium — weak breathing muscles</option><option value="protein">Protein — immune weakness</option></select></div>
+      <div class="sort-row" data-answer="calcium"><strong>COPD patient on long-term prednisone develops hip pain. DEXA scan ordered.</strong><select><option value="">Choose nutrient concern</option><option value="sodium">Excess sodium — fluid retention</option><option value="potassium">Potassium — irregular heartbeat</option><option value="calcium">Calcium — steroid-induced bone loss</option><option value="magnesium">Magnesium — weak breathing muscles</option><option value="protein">Protein — immune weakness</option></select></div>
+      <div class="sort-row" data-answer="magnesium"><strong>COPD patient has poor respiratory muscle strength. Diet analysis shows mainly white bread, white rice, and processed foods.</strong><select><option value="">Choose nutrient concern</option><option value="sodium">Excess sodium — fluid retention</option><option value="potassium">Potassium — irregular heartbeat</option><option value="calcium">Calcium — steroid-induced bone loss</option><option value="magnesium">Magnesium — weak breathing muscles</option><option value="protein">Protein — immune weakness</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkNutrientSort" type="button" style="margin-top:12px">Check Nutrient Match</button>
+    <div class="activity-status" id="nutrientSortStatus">Complete the nutrient matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 4: Clinical Signs of Nutritional Changes -->
+<section class="info-card board" id="nutrition-signs">
+  <h2>Observable Signs of Nutritional Changes</h2>
+  <p>As a respiratory therapist, you may be the first to notice signs of nutritional problems at the bedside. These clinical findings connect directly to what the patient is eating — or not eating.</p>
+  <img src="/foundations/Foundations_3_4_assets/foundations-3-4-nutrition-signs.png" alt="Clinical assessment diagram showing eight observable findings that relate to nutritional status: breathing mechanics affected by cachexia and obesity, increased coughing from poor nutrition, sputum viscosity from fluid imbalance, lung crackles from fluid overload or protein loss, wheezing from food intolerances and aspiration, heart sounds S3 from CHF and S4 from severe anemia, pulmonary function FVC and FEV1 decrease with malnutrition, and ABG changes showing PaCO2 increases with excess glucose" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+    <table>
+      <thead><tr><th>What You Observe</th><th>Nutritional Connection</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Breathing mechanics altered</strong></td><td>Cachexia (wasting) weakens respiratory muscles. Obesity raises diaphragm and increases work of breathing. Pregnancy similarly restricts diaphragm movement.</td></tr>
+        <tr><td><strong>Increased coughing</strong></td><td>May indicate poor nutritional status contributing to weakened airway clearance mechanisms and immune function.</td></tr>
+        <tr><td><strong>Thick/tenacious sputum</strong></td><td>Suggests inadequate fluid intake or fluid imbalance — dehydration concentrates secretions.</td></tr>
+        <tr><td><strong>Lung crackles (wet)</strong></td><td>May indicate fluid overload (excess sodium intake) or protein loss (low albumin → third-spacing of fluid).</td></tr>
+        <tr><td><strong>Wheezing</strong></td><td>Can be triggered by food intolerances, alcohol ingestion, or aspiration of food/liquids.</td></tr>
+        <tr><td><strong>S3 heart sound</strong></td><td>Associated with CHF and fluid imbalance — may worsen with high sodium intake.</td></tr>
+        <tr><td><strong>S4 heart sound</strong></td><td>Associated with severe anemia — worsened by protein and iron deficiency.</td></tr>
+        <tr><td><strong>FVC / FEV₁ decrease</strong></td><td>Pulmonary function declines with severe malnutrition due to weakened respiratory muscles.</td></tr>
+        <tr><td><strong>Rising PaCO₂</strong></td><td>Excess carbohydrate (especially simple sugars) produces more CO₂ per calorie metabolized — can worsen hypercapnia in COPD patients.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <article class="quiz-card require-complete" id="nutrition-signs-check" data-activity-name="Nutrition Signs Check" style="margin-top:16px">
+    <h3>Rising PaCO₂ — Nutrition Connection</h3>
+    <p>A COPD patient's PaCO₂ has been rising over two days. The clinical team notes no change in ventilation, oxygen delivery, or medications. A diet review shows the patient has been eating primarily white bread, pastries, fruit juice, and desserts. What is the most likely nutritional contributor?</p>
+    <div class="quiz-options">
+      <button class="quiz-option nutri-option" data-correct="false" data-feedback="Insufficient protein can weaken respiratory muscles, but it would not cause a direct rise in PaCO₂ within 48 hours. The connection between excess carbohydrates and CO₂ production is more direct and rapid.">Insufficient protein intake reducing respiratory muscle strength.</button>
+      <button class="quiz-option nutri-option" data-correct="true" data-feedback="Correct! Carbohydrates have the highest respiratory quotient (RQ) of all macronutrients — they produce more CO₂ per unit of oxygen consumed compared to fats or proteins. In a COPD patient who already struggles to blow off CO₂, a high carbohydrate diet can significantly worsen hypercapnia. The simple carbohydrates in this patient's diet are the most likely driver.">Excess simple carbohydrates increasing CO₂ production per calorie.</button>
+      <button class="quiz-option nutri-option" data-correct="false" data-feedback="While sodium excess causes fluid retention and could worsen pulmonary edema, it would not directly raise PaCO₂ in this pattern. The CO₂ rise is more directly tied to carbohydrate metabolism.">High sodium intake causing pulmonary edema.</button>
+    </div>
+    <div class="quiz-feedback" id="nutriFeedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 5: Code of Ethics -->
+<section class="info-card" id="ethics-10">
+  <h2>AARC Code of Ethics — Top 10 Principles</h2>
+  <p>The American Association for Respiratory Care (AARC) has established a Code of Ethics that defines the professional standards every RT must uphold. These are not just guidelines — violations can result in loss of credentials, termination, or legal consequences.</p>
+  <img src="/foundations/Foundations_3_4_assets/foundations-3-4-ethics-principles.png" alt="Ten numbered ethics principles displayed in two columns with icons and color coding: 1 Integrity and objectivity (teal), 2 Lifelong learning (blue), 3 Scope of practice (amber), 4 Patient privacy (coral), 5 No discrimination (purple), 6 Disease prevention (teal), 7 No illegal actions (red), 8 Comply with laws (blue), 9 Avoid conflicts of interest (amber), 10 Stewardship of resources (slate)" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div style="margin-top:16px">
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--pulmo-teal)">1</div><div><strong>Be Objective, Trustworthy & Reflect Integrity</strong><br><span style="font-size:.9rem;color:var(--slate)">Be honest in all dealings. Maintain strong moral principles. Build trust with patients and colleagues. Honesty includes reporting errors, not hiding them.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--oxygen-blue)">2</div><div><strong>Never Stop Learning</strong><br><span style="font-size:.9rem;color:var(--slate)">Lifelong education is required. Stay current with new techniques, equipment, evidence-based practice, and clinical standards. Credentialing bodies require continuing education.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--clinical-amber)">3</div><div><strong>Provide Care Within Your Scope of Practice</strong><br><span style="font-size:.9rem;color:var(--slate)">Stay within professional and credential boundaries. Do not perform procedures you are not trained or authorized to perform. Scope varies by state and institution.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--alert-coral)">4</div><div><strong>Protect the Personal Rights of Patients</strong><br><span style="font-size:.9rem;color:var(--slate)">Keep all patient information private. Never share PHI without consent unless legally required. Patient confidentiality is both an ethical and legal obligation (HIPAA).</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:#8B5CF6)">5</div><div><strong>Do Not Discriminate</strong><br><span style="font-size:.9rem;color:var(--slate)">Treat every patient with equal dignity and quality care regardless of background, lifestyle, socioeconomic status, or health choices. Provide care as if the patient is family.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--pulmo-teal)">6</div><div><strong>Promote Disease Prevention and Wellness</strong><br><span style="font-size:.9rem;color:var(--slate)">Perform hand hygiene before and after every patient contact. Use appropriate PPE. Follow infection control protocols consistently — not just when supervised.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--alert-coral)">7</div><div><strong>Do Not Do Illegal Things at Work</strong><br><span style="font-size:.9rem;color:var(--slate)">Do not steal from employer, use hospital resources for personal benefit, or work under the influence of alcohol or drugs. Use sound judgment in all situations.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--oxygen-blue)">8</div><div><strong>Comply with State and Federal Laws</strong><br><span style="font-size:.9rem;color:var(--slate)">Maintain valid, current credentials required to practice. Never practice on an expired license. Some state laws vary from federal — know both.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--clinical-amber)">9</div><div><strong>Avoid Conduct Creating Conflicts of Interest</strong><br><span style="font-size:.9rem;color:var(--slate)">When personal financial interest could influence professional judgment — disclose it. Example: owning stock in an equipment company you are recommending to your hospital.</span></div></div>
+    <div class="ethics-principle"><div class="ethics-number" style="background:var(--slate)">10</div><div><strong>Promote Stewardship of Resources</strong><br><span style="font-size:.9rem;color:var(--slate)">Use equipment and supplies responsibly. Minimize waste. Maximize patient benefit per resource used. Don't over-treat or waste supplies that other patients may need.</span></div></div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Ethics Principle Match" style="margin-top:16px">
+    <h3>Which Ethics Principle Applies?</h3>
+    <div class="sort-grid" id="ethicsSort">
+      <div class="sort-row" data-answer="4"><strong>An RT discusses a patient's COVID-19 status with friends during a break in the cafeteria.</strong><select><option value="">Principle #</option><option value="1">1 — Integrity &amp; honesty</option><option value="3">3 — Scope of practice</option><option value="4">4 — Protect patient privacy</option><option value="7">7 — No illegal actions</option><option value="8">8 — Comply with laws</option><option value="9">9 — Avoid conflicts of interest</option><option value="10">10 — Resource stewardship</option></select></div>
+      <div class="sort-row" data-answer="8"><strong>An RT's state license expired two weeks ago. Short-staffed tonight, they come in anyway without renewing.</strong><select><option value="">Principle #</option><option value="1">1 — Integrity &amp; honesty</option><option value="3">3 — Scope of practice</option><option value="4">4 — Protect patient privacy</option><option value="7">7 — No illegal actions</option><option value="8">8 — Comply with laws</option><option value="9">9 — Avoid conflicts of interest</option><option value="10">10 — Resource stewardship</option></select></div>
+      <div class="sort-row" data-answer="9"><strong>An RT owns stock in a ventilator company and advocates strongly for that brand in a hospital purchasing meeting.</strong><select><option value="">Principle #</option><option value="1">1 — Integrity &amp; honesty</option><option value="3">3 — Scope of practice</option><option value="4">4 — Protect patient privacy</option><option value="7">7 — No illegal actions</option><option value="8">8 — Comply with laws</option><option value="9">9 — Avoid conflicts of interest</option><option value="10">10 — Resource stewardship</option></select></div>
+      <div class="sort-row" data-answer="3"><strong>A colleague asks the RT to perform an arterial blood gas that the RT is not credentialed or trained to do.</strong><select><option value="">Principle #</option><option value="1">1 — Integrity &amp; honesty</option><option value="3">3 — Scope of practice</option><option value="4">4 — Protect patient privacy</option><option value="7">7 — No illegal actions</option><option value="8">8 — Comply with laws</option><option value="9">9 — Avoid conflicts of interest</option><option value="10">10 — Resource stewardship</option></select></div>
+      <div class="sort-row" data-answer="1"><strong>An RT accidentally gives a medication to the wrong patient and hesitates to report it because they fear consequences.</strong><select><option value="">Principle #</option><option value="1">1 — Integrity &amp; honesty</option><option value="3">3 — Scope of practice</option><option value="4">4 — Protect patient privacy</option><option value="7">7 — No illegal actions</option><option value="8">8 — Comply with laws</option><option value="9">9 — Avoid conflicts of interest</option><option value="10">10 — Resource stewardship</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkEthicsSort" type="button" style="margin-top:12px">Check Ethics Principles</button>
+    <div class="activity-status" id="ethicsSortStatus">Complete the ethics principle matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 6: Ethics Scenarios -->
+<section class="info-card red" id="ethics-scenarios">
+  <h2>Applying Ethics to Clinical Scenarios</h2>
+  <p>The AARC Code of Ethics is not abstract — it applies to daily situations in clinical practice. Knowing the principle is not enough; you must also know the correct professional response.</p>
+
+  <details class="accordion" style="margin-top:16px">
+    <summary><strong>Medication Error — Wrong Patient</strong></summary>
+    <div class="accordion-body">
+      <p><strong>Situation:</strong> You accidentally gave a scheduled nebulizer treatment to the wrong patient. You notice the error after finishing.</p>
+      <p><strong>Ethical action:</strong> Immediately notify your supervisor and the patient's physician. Monitor the patient for any adverse effects. Document the incident accurately and completely. Complete an incident report per institutional protocol. Do NOT falsify documentation or conceal the error.</p>
+      <p><strong>Principles involved:</strong> #1 Integrity, #3 Scope of practice (follow protocols), #8 Comply with laws</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Scope of Practice — Colleague's Request</strong></summary>
+    <div class="accordion-body">
+      <p><strong>Situation:</strong> A nurse asks you to draw an arterial blood gas. Your state license permits ABG draws, but your current hospital has not credentialed you for this procedure.</p>
+      <p><strong>Ethical action:</strong> Politely decline. Explain that while you have state authorization, the hospital requires additional credentialing before you can perform this procedure. Suggest the nurse contact a credentialed RT or physician. Do not compromise patient safety or your professional standing.</p>
+      <p><strong>Principle involved:</strong> #3 Scope of practice</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Patient Bias — Challenging Patient</strong></summary>
+    <div class="accordion-body">
+      <p><strong>Situation:</strong> A homeless patient who smokes and has multiple hospital readmissions is frustrating to care for. You feel your time is being wasted.</p>
+      <p><strong>Ethical action:</strong> Recognize the personal bias. Provide the same quality of care you would provide to any other patient. Show empathy and respect. Address the patient's barriers to care (housing, resources, support). Avoid judgment — your role is to treat the medical condition, not evaluate the patient's life choices.</p>
+      <p><strong>Principle involved:</strong> #5 No discrimination</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Taking Hospital Equipment Home</strong></summary>
+    <div class="accordion-body">
+      <p><strong>Situation:</strong> Your family member needs a nebulizer at home. You consider taking a spare one from the hospital supply closet since there seem to be extras.</p>
+      <p><strong>Ethical action:</strong> Do not take hospital equipment without authorization. Suggest your family member obtain equipment through proper channels (prescription, home health). Equipment counted as "extra" may be needed for another patient. Taking hospital property without authorization is theft — a violation of #7 and potentially #8.</p>
+      <p><strong>Principles involved:</strong> #7 No illegal actions, #10 Resource stewardship</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Working with Expired Credentials</strong></summary>
+    <div class="accordion-body">
+      <p><strong>Situation:</strong> Your RT license expired 3 days ago. The unit is short-staffed and you'll leave others scrambling if you call in.</p>
+      <p><strong>Ethical action:</strong> Do NOT come to work. Practicing on an expired license is illegal and unethical — regardless of staffing needs. Call your supervisor before the shift begins. Patient safety supersedes staffing convenience. Notify your supervisor of the license renewal status so they can plan accordingly. If your license expires, the institution is also legally liable for allowing you to practice.</p>
+      <p><strong>Principles involved:</strong> #8 Comply with laws, #1 Integrity</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Conflict of Interest — Financial</strong></summary>
+    <div class="accordion-body">
+      <p><strong>Situation:</strong> You own stock in a medical equipment company. During a hospital purchasing meeting, you advocate strongly for their ventilator line without disclosing this.</p>
+      <p><strong>Ethical action:</strong> Disclose the financial interest to your employer before the meeting. Recuse yourself from the purchasing decision. Do not allow personal financial gain to influence clinical recommendations that affect patient care and hospital spending. If discovered later, it may result in termination and damage your professional reputation.</p>
+      <p><strong>Principle involved:</strong> #9 Avoid conflicts of interest</p>
+    </div>
+  </details>
+
+  <article class="quiz-card require-complete" id="ethics-scenario-check" data-activity-name="Ethics Scenario Check" style="margin-top:16px">
+    <h3>What Is the Correct Response?</h3>
+    <p>A nurse pages you saying she needs help with a patient. When you arrive, she asks you to start an IV line — something you have never been trained to do and that is not within the respiratory therapy scope of practice at your institution. The nurse says "it's an emergency, just try." What should you do?</p>
+    <div class="quiz-options">
+      <button class="quiz-option ethics-option" data-correct="false" data-feedback="Attempting a procedure you are not trained or credentialed to perform is a violation of scope of practice regardless of the emergency circumstances. If you cause harm performing a procedure outside your scope, you have no legal protection. The correct response is to decline and escalate.">Attempt the IV because the patient's need overrides scope limits.</button>
+      <button class="quiz-option ethics-option" data-correct="true" data-feedback="Correct! Politely but firmly decline. Explain that IV placement is outside your scope and training. Immediately help find the right person — the nurse, another available IV-trained clinician, or a rapid response team member. The emergency nature does not override scope of practice. Taking action outside your scope can cause additional harm and exposes you to legal liability. Patient safety is best served by getting the right person, not the nearest person.">Decline, explain scope, and immediately help locate the qualified person.</button>
+      <button class="quiz-option ethics-option" data-correct="false" data-feedback="Leaving a patient in an emergency without attempting to help find an appropriate solution is also an ethical violation. You should decline the specific procedure but stay and actively help resolve the situation by finding the right person.">Decline and leave the room — not your responsibility.</button>
+    </div>
+    <div class="quiz-feedback" id="ethicsFeedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 7: EMR vs EHR -->
+<section class="info-card" id="ehr">
+  <h2>Electronic Medical Records: EMR vs. EHR</h2>
+  <p>As respiratory therapists move between departments, hospitals, and care settings, understanding how patient records flow — and where they don't — directly impacts patient safety and care coordination.</p>
+  <img src="/foundations/Foundations_3_4_assets/foundations-3-4-emr-ehr.png" alt="Side-by-side comparison diagram showing EMR on the left as a single building with records staying within one practice, and EHR on the right as a network of multiple hospitals and clinics sharing records. Benefits of EHR listed include easier chart access, better care coordination, improved data security, controlled access with audit trails, and patient access to own information." style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div style="border:2px solid var(--oxygen-blue);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--oxygen-blue)">EMR — Electronic Medical Records</h3>
+      <p style="font-size:.9rem;color:var(--slate);margin:8px 0">Records from <strong>one practice or one hospital only</strong>. Does not travel with the patient to other facilities. Limited interoperability.</p>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem">
+        <li>Single-facility scope</li>
+        <li>Cannot be shared across systems</li>
+        <li>Primary documentation tool within a facility</li>
+      </ul>
+    </div>
+    <div style="border:2px solid var(--pulmo-teal);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--pulmo-teal)">EHR — Electronic Health Records</h3>
+      <p style="font-size:.9rem;color:var(--slate);margin:8px 0">Records from <strong>multiple practices and hospitals</strong>. Travels with the patient across care systems. Designed for interoperability.</p>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem">
+        <li>Easier access to full patient history</li>
+        <li>Better care coordination between providers</li>
+        <li>Improved data security vs. paper charts</li>
+        <li>Controlled access with detailed audit trails</li>
+        <li>Patient access to their own information</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="example-box soft-coral" style="margin-top:14px">
+    <strong>Patient Safety Risk — Auto-Refresh Error:</strong> Poor EHR design can create real hazards. Example: A physician was viewing one patient's chest X-ray when the screen auto-refreshed to a different patient's image. The pneumonia was missed because the wrong image was read. EHR usability is a patient safety issue, not just a convenience issue.
+  </div>
+
+  <article class="quiz-card require-complete" id="ehr-check" data-activity-name="EMR vs EHR Check" style="margin-top:16px">
+    <h3>EMR or EHR?</h3>
+    <p>A patient transferred from a rural clinic to your hospital. When you access their records, you can see not only the clinic's notes but also records from a specialist they saw at a different hospital last year. What type of system is this?</p>
+    <div class="quiz-options">
+      <button class="quiz-option ehr-option" data-correct="false" data-feedback="An EMR stays within one facility. If you can see records from multiple different facilities and providers, that is not an EMR — it is an EHR designed for interoperability across care settings.">EMR — Electronic Medical Records</button>
+      <button class="quiz-option ehr-option" data-correct="true" data-feedback="Correct! An EHR (Electronic Health Record) travels with the patient across multiple care settings. Being able to see records from the rural clinic AND a different hospital = EHR interoperability. This is one of the key benefits — better care coordination because providers can see the full picture.">EHR — Electronic Health Records</button>
+    </div>
+    <div class="quiz-feedback" id="ehrFeedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 8: HIPAA -->
+<section class="info-card rt" id="hipaa">
+  <h2>HIPAA — Protecting Patient Health Information</h2>
+  <p>The Health Insurance Portability and Accountability Act (1996) established the legal framework for protecting patient health information in the digital age. Every RT must understand HIPAA requirements — violations can result in fines, termination, and criminal prosecution.</p>
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+    <div class="example-box soft-teal">
+      <strong>What HIPAA Requires:</strong>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem">
+        <li>Monitor access to patient data</li>
+        <li>Implement administrative safeguards</li>
+        <li>Implement technical safeguards (encryption, firewalls)</li>
+        <li>Document all activity in audit trails</li>
+        <li>Allow patients access to their own information</li>
+      </ul>
+    </div>
+    <div class="example-box soft-blue">
+      <strong>EHR Security Advantages:</strong>
+      <ul style="padding-left:18px;margin:8px 0;font-size:.9rem">
+        <li>Improved data security vs. paper records</li>
+        <li>Role-based access control (only see what your role needs)</li>
+        <li>Detailed audit trails — who accessed what and when</li>
+        <li>Password and authentication requirements</li>
+        <li>Regular security audits and monitoring</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="example-box soft-coral" style="margin-top:12px">
+    <strong>HIPAA in Daily Practice:</strong> Always log out when leaving a computer. Never leave a patient's chart open and unattended. Never discuss PHI (Protected Health Information) in public areas. Never share your login credentials. Never text patient information on personal phones. Always use secure, encrypted hospital communication systems.
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="HIPAA Violations Sort" style="margin-top:14px">
+    <h3>HIPAA Violation or Acceptable Practice?</h3>
+    <div class="sort-grid" id="hipaaSort">
+      <div class="sort-row" data-answer="violation"><strong>An RT texts a photo of a patient's ABG result to their personal phone to show a colleague later.</strong><select><option value="">Choose</option><option value="violation">HIPAA Violation</option><option value="acceptable">Acceptable Practice</option></select></div>
+      <div class="sort-row" data-answer="acceptable"><strong>An RT logs out of the EHR before leaving the nursing station to help another patient.</strong><select><option value="">Choose</option><option value="violation">HIPAA Violation</option><option value="acceptable">Acceptable Practice</option></select></div>
+      <div class="sort-row" data-answer="violation"><strong>An RT discusses a patient's diagnosis with a family member without the patient's written consent.</strong><select><option value="">Choose</option><option value="violation">HIPAA Violation</option><option value="acceptable">Acceptable Practice</option></select></div>
+      <div class="sort-row" data-answer="acceptable"><strong>An RT accesses only the respiratory therapy orders and assessment notes they need for their patient assignment.</strong><select><option value="">Choose</option><option value="violation">HIPAA Violation</option><option value="acceptable">Acceptable Practice</option></select></div>
+      <div class="sort-row" data-answer="violation"><strong>An RT shares their EHR login credentials with a student so the student can look up patients faster.</strong><select><option value="">Choose</option><option value="violation">HIPAA Violation</option><option value="acceptable">Acceptable Practice</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkHipaaSort" type="button" style="margin-top:12px">Check HIPAA Practices</button>
+    <div class="activity-status" id="hipaaSortStatus">Complete the HIPAA sorting to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 9: Patient Verification -->
+<section class="info-card board" id="verification">
+  <h2>The 5-Step Patient Verification Process</h2>
+  <p>Wrong-patient errors are among the most preventable — and most serious — medical errors. Every RT must follow the complete patient verification sequence before every treatment. Skipping steps, even under time pressure, is never acceptable.</p>
+  <img src="/foundations/Foundations_3_4_assets/foundations-3-4-patient-verification.png" alt="Five-step numbered flowchart for patient verification: Step 1 open EHR and verify active orders in patient room, Step 2 view patient wristband and match with chart and active orders, Step 3 ask patient their last name and date of birth and verify against ID band, Step 4 scan wristband and medication barcode in EHR system, Step 5 before charting verify you are in the correct patient chart. Each step shows what to do and what the step prevents." style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div style="margin-top:16px">
+    <div class="verify-step" style="background:var(--airway-mint);border:1px solid #86D9C8"><div class="verify-num" style="background:var(--pulmo-teal)">1</div><div><strong>Open EHR in the patient's room and verify active orders</strong><br><span style="font-size:.9rem;color:var(--slate)">Confirm you have the right chart and the treatment is currently ordered before doing anything. Orders can change between when you printed your assignment sheet and when you arrive.</span></div></div>
+    <div class="verify-step" style="background:#E6F3FF;border:1px solid #93C5FD;margin-top:8px"><div class="verify-num" style="background:var(--oxygen-blue)">2</div><div><strong>View the patient's wristband and match it with the chart and active orders</strong><br><span style="font-size:.9rem;color:var(--slate)">Wristbands are the physical link between the patient and their chart. A mismatch here — wrong name, different medical record number — must stop the treatment.</span></div></div>
+    <div class="verify-step" style="background:#FFF4DF;border:1px solid #F4B860;margin-top:8px"><div class="verify-num" style="background:var(--clinical-amber)">3</div><div><strong>Ask the patient their last name and date of birth; verify against ID band</strong><br><span style="font-size:.9rem;color:var(--slate)">Use open-ended identification: "What is your last name and date of birth?" Not "Are you Mr. Smith?" — patients sometimes confirm incorrectly due to sedation, confusion, or hearing issues.</span></div></div>
+    <div class="verify-step" style="background:#FDE9E9;border:1px solid #F2B5B5;margin-top:8px"><div class="verify-num" style="background:var(--alert-coral)">4</div><div><strong>Scan the patient's wristband and the medication barcode in the chart</strong><br><span style="font-size:.9rem;color:var(--slate)">Barcode scanning provides an electronic safety check that catches errors the human eye might miss, especially with similar-sounding names or sequential room assignments.</span></div></div>
+    <div class="verify-step" style="background:#F3F0FF;border:1px solid #C4B5FD;margin-top:8px"><div class="verify-num" style="background:#8B5CF6">5</div><div><strong>Before charting, verify you are documenting in the correct patient's chart</strong><br><span style="font-size:.9rem;color:var(--slate)">Documentation errors are as dangerous as treatment errors. Charting in the wrong chart delays care for the actual patient and may cause unnecessary interventions for the wrong one.</span></div></div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Verification Step Order" style="margin-top:16px">
+    <h3>Put the Verification Steps in the Correct Order</h3>
+    <div class="sort-grid" id="verifySort">
+      <div class="sort-row" data-answer="2"><strong>View the patient's wristband and match it to the chart and active orders.</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+      <div class="sort-row" data-answer="4"><strong>Scan the patient's wristband and medication barcode in the EHR system.</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+      <div class="sort-row" data-answer="1"><strong>Open the EHR in the patient's room and verify active orders.</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+      <div class="sort-row" data-answer="5"><strong>Before charting, confirm you are in the correct patient's chart.</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+      <div class="sort-row" data-answer="3"><strong>Ask the patient their last name and date of birth; verify against the ID band.</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkVerifySort" type="button" style="margin-top:12px">Check Verification Order</button>
+    <div class="activity-status" id="verifySortStatus">Complete the verification step ordering to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 10: Unfolding Case -->
+<section class="case-card require-complete" id="scenario" data-activity-name="3.4 Unfolding Case">
+  <span class="eyebrow">Unfolding Clinical Case</span>
+  <h2>A Shift Full of Decisions</h2>
+  <p>Work through four situations an RT might encounter on a single shift — applying nutrition knowledge, ethical principles, and patient verification correctly.</p>
+
+  <div class="case-stage" data-case-stage="0">
+    <h3>Stage 1 — Dietary Assessment</h3>
+    <p>You arrive to do a nebulizer treatment on a CHF patient. Their weight this morning is 4 lbs above yesterday's weight. They mention they had a large salt-heavy dinner last night and drank extra fluids because they were thirsty.</p>
+    <p><strong>What is the most likely cause of the weight gain, and what dietary guidance is appropriate?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Gaining 4 lbs of fat would require consuming approximately 14,000 extra calories. This is physiologically impossible overnight. The weight gain is almost certainly fluid.">The patient gained 4 lbs of fat from the large dinner.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! 4 lbs overnight is fluid retention driven by excess sodium intake. Sodium causes water retention — every gram of extra sodium can cause the body to retain about 200 mL of water. For CHF patients, dietary sodium must stay under 2,000 mg daily. The RT should reinforce this with the patient and document the weight change in the chart.">Fluid retention from excess sodium — reinforce sodium &lt;2,000 mg daily limit.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Fluid restriction is part of CHF management, but the primary driver of this specific overnight weight gain is excess sodium intake (which caused the thirst and extra fluid drinking). Address the root cause: sodium.">Excess fluid intake only — remove fluid restriction.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Stage 2 →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="1">
+    <h3>Stage 2 — Ethical Dilemma</h3>
+    <p>Later in your shift, a colleague approaches you. She says she is behind on treatments and asks if you can chart some of her patients' nebulizer treatments as "complete" even though you haven't been to their rooms yet — she promises she'll go soon.</p>
+    <p><strong>What is the correct ethical response?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="False documentation of treatments creates a serious patient safety risk. If the treatment is charted as complete but was not given, another provider might not follow up. If the patient deteriorates, the chart shows treatment was provided when it wasn't. This is falsification of medical records — a legal violation.">Agree — chart them as done since she'll go soon anyway.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! You must refuse. Charting treatments that have not been given is falsification of medical records — a violation of Principle #1 (integrity), #7 (no illegal actions), and #8 (comply with laws). Offer to genuinely help by covering some of her patient load yourself if you have capacity, or by helping her prioritize. Involve the charge RT if needed. Never put your license on the line for someone else's workload problem.">Refuse — falsifying treatment records is illegal and unethical. Offer to help her prioritize or cover patients if possible.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Walking away without addressing the situation doesn't resolve the ethical issue or ensure patient safety. A better response is to decline clearly, explain why, and offer a legitimate solution.">Walk away without responding.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Stage 3 →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="2">
+    <h3>Stage 3 — Patient Verification</h3>
+    <p>You go to Room 412 for a new patient treatment. You open the EHR from the hallway before entering. In the room, you greet the patient and ask "Are you Mr. Garcia?" The patient nods yes. You begin setting up the treatment.</p>
+    <p><strong>What patient verification step was performed incorrectly?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Opening the EHR to verify active orders is actually Step 1 and is correct. However, it should be done IN the patient's room, not from the hallway — auto-refresh errors or accidental wrong chart access can occur at the hallway workstation.">Opening the EHR before entering the room.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Asking 'Are you Mr. Garcia?' is a leading question — the patient can nod yes even if confused, hard of hearing, or heavily sedated. The correct open-ended identification is: 'Can you tell me your last name and date of birth?' This prevents wrong-patient errors from confused or compliant patients. The RT also didn't verify the wristband or scan the barcode.">Asking a leading identification question instead of open-ended verification.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Beginning treatment setup after greeting the patient is fine — the problem is the QUALITY of identification used, not the timing of setup. The leading yes/no question bypasses proper verification.">Beginning setup before finishing the conversation.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Stage 4 →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="3">
+    <h3>Stage 4 — COPD Nutrition Consultation</h3>
+    <p>A COPD patient's PaO₂ is 58 mmHg on 2L nasal cannula. They are malnourished and haven't eaten a real meal in three days because eating makes them too short of breath. They have a history of aspiration.</p>
+    <p><strong>Which combination of recommendations is most appropriate for this patient?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Three large meals would worsen dyspnea and fatigue during eating, and would cause significant digestion-related O₂ demand spikes. Large meals are contraindicated in COPD. Lying down after eating raises the diaphragm and worsens breathing.">Three larger meals a day and lying down to rest after eating.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Six small meals reduces the per-meal O₂ demand of digestion. Soft/minced foods are easier to manage with less aspiration risk. Sitting upright with elbows on the table (tripod position) optimizes diaphragm position. Asking the provider about O₂ during meals directly addresses the hypoxemia that worsens with eating. Consider referring to a speech-language pathologist for formal swallowing evaluation given the aspiration history.">Six small meals, soft textures, sit upright in tripod position, ask provider about O₂ flow during meals.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="While fasting may reduce short-term aspiration risk, it causes malnutrition, worsens muscle wasting, and weakens respiratory muscles — making the patient's breathing worse over time. Fasting is not the solution. Safe feeding strategies and appropriate positioning should be implemented.">Recommend the patient stop eating until breathing improves.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Complete Case →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="4">
+    <h3>Shift Complete — Key Takeaways</h3>
+    <div class="example-box soft-teal" style="margin-top:8px"><strong>Stage 1 — CHF nutrition:</strong> 4 lbs overnight = fluid, not fat. Sodium excess is the driver. Reinforce &lt;2,000 mg sodium limit. Document and report the weight change.</div>
+    <div class="example-box soft-coral" style="margin-top:8px"><strong>Stage 2 — Documentation ethics:</strong> Never falsify records for any reason. Offer genuine help. Involve charge staff if needed. Your license is your responsibility — protect it.</div>
+    <div class="example-box soft-amber" style="margin-top:8px"><strong>Stage 3 — Patient verification:</strong> Never use leading yes/no questions. Always use open-ended identification: "What is your last name and date of birth?" Complete all 5 verification steps every time.</div>
+    <div class="example-box soft-blue" style="margin-top:8px"><strong>Stage 4 — COPD nutrition:</strong> Small frequent meals, soft textures, upright tripod position, O₂ during meals, aspiration precautions. Never recommend fasting — it worsens the respiratory muscle malnutrition cycle.</div>
+  </div>
+</section>
+
+<!-- SECTION 11: Assignment Practice -->
+<section class="info-card" id="practice">
+  <h2>Assignment Practice Zone</h2>
+  <p>This section mirrors the essay question and matching format used in the Unit 3.4 assignment.</p>
+  <article class="activity-card require-complete" data-activity-name="3.4 Assignment Practice">
+    <h3>Match Each Clinical Situation to the Best Response</h3>
+    <div class="sort-grid" id="practiceSort">
+      <div class="sort-row" data-answer="sodium"><strong>Why is a low-sodium diet prescribed for both CHF and CAD patients?</strong><select><option value="">Choose reason</option><option value="sodium">Reduces fluid retention, blood pressure, and cardiac workload</option><option value="fluid">Replaces fluid lost through diuretics</option><option value="protein">Maintains immune function during cardiac stress</option><option value="calcium">Prevents steroid-induced bone loss</option></select></div>
+      <div class="sort-row" data-answer="malnutrition"><strong>What vicious cycle does COPD create with nutrition?</strong><select><option value="">Choose description</option><option value="malnutrition">Breathing difficulty reduces intake while increased work raises caloric needs — leading to malnutrition that worsens breathing</option><option value="fluid">Excess fluid causes SOB which reduces appetite for fluids</option><option value="bloating">Eating causes bloating which displaces the diaphragm upward</option><option value="aspiration">All COPD patients aspirate so eating is always unsafe</option></select></div>
+      <div class="sort-row" data-answer="scope"><strong>Correct ethical response when asked to perform a procedure outside your credentials.</strong><select><option value="">Choose action</option><option value="scope">Politely decline, explain scope limitations, find the qualified person</option><option value="try">Attempt it — patient need outweighs credential limits</option><option value="ignore">Ignore the request and walk away</option><option value="document">Document that you were asked and file a complaint</option></select></div>
+      <div class="sort-row" data-answer="ehr"><strong>Which records system travels with the patient across multiple facilities and care settings?</strong><select><option value="">Choose system</option><option value="emr">EMR — Electronic Medical Records</option><option value="ehr">EHR — Electronic Health Records</option><option value="hipaa">HIPAA compliance system</option><option value="audit">Audit trail system</option></select></div>
+      <div class="sort-row" data-answer="openended"><strong>Correct way to verbally verify patient identity before a treatment.</strong><select><option value="">Choose method</option><option value="openended">Ask open-ended: "What is your last name and date of birth?"</option><option value="leading">Ask leading: "Are you Mr. Johnson?" and confirm the nod</option><option value="room">Verify by room number only — patients don't move rooms</option><option value="chart">Verify by checking the chart — no need to ask the patient</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkPracticeSort" type="button" style="margin-top:12px">Check Assignment Practice</button>
+    <div class="activity-status" id="practiceSortStatus">Complete the practice matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 12: Knowledge Check -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Foundations 3.4 Knowledge Check">
+  <span class="eyebrow">Knowledge Check</span>
+  <h2>Nutrition, Ethics & EHR Mastery</h2>
+  <p>Answer each question correctly to complete this activity.</p>
+
+  <div class="knowledge-question" data-question-id="kq1">
+    <h3>Question 1</h3>
+    <p>What is the most critical dietary strategy for a patient with congestive heart failure, and why?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="High protein is important for COPD patients to maintain muscle mass and immune function, but it is not the most critical CHF strategy. CHF requires sodium restriction to prevent fluid overload.">High protein diet to prevent muscle wasting.</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct! Low sodium (&lt;2,000 mg daily) is the most critical CHF dietary strategy because excess sodium causes fluid retention. In CHF, the heart cannot pump efficiently — retained fluid backs up into the lungs, worsening shortness of breath and causing pulmonary edema. Sodium restriction directly reduces this fluid burden.">Low sodium (&lt;2,000 mg daily) — reduces fluid retention and prevents pulmonary congestion.</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Low saturated fat is important for CAD (coronary artery disease), not CHF. The primary concern in CHF is fluid retention driven by excess sodium.">Low saturated fat diet to prevent plaque formation.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq2">
+    <h3>Question 2</h3>
+    <p>Why do COPD patients experience malnutrition even when food is available?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Medication side effects can impact appetite, but this is not the primary reason COPD patients are malnourished. The vicious cycle of increased caloric demands plus dyspnea-limited eating is the core mechanism.">COPD medications suppress appetite.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct! COPD creates a vicious cycle: increased work of breathing raises caloric needs significantly, while shortness of breath makes eating exhausting and difficult (breathing and swallowing share the throat). The result is chronic inadequate intake + increased expenditure = malnutrition, muscle wasting, weakened immunity, and worsened breathing.">Increased caloric needs from work of breathing plus difficulty eating due to dyspnea creates a malnutrition cycle.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="While COPD patients may be on lower incomes, the malnutrition is primarily physiological — driven by dyspnea limiting eating and high caloric expenditure — not financial barriers alone.">COPD patients cannot afford adequate food on fixed incomes.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq3">
+    <h3>Question 3</h3>
+    <p>Which EHR security feature allows administrators to determine exactly who accessed a patient's records and when?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Password protection prevents unauthorized access, but it doesn't track access events after login. Audit trails specifically record the who, what, and when of every access.">Password protection and authentication requirements.</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct! Audit trails are the HIPAA-required record of every access event in the EHR — who logged in, which patient records were viewed, what changes were made, and when. This creates accountability and helps detect unauthorized access or HIPAA violations. Audit trails are one of the key advantages of EHR over paper records.">Audit trails — detailed records of who accessed what records and when.</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Role-based access limits what users can see, but it doesn't track what they actually accessed within their permitted scope. Audit trails do that tracking.">Role-based access control limiting what each user can view.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq4">
+    <h3>Question 4</h3>
+    <p>An RT's license expired 5 days ago. The unit is short-staffed and the supervisor asks them to work the shift anyway. What is the ethical and legal response?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Staffing needs do not override legal requirements. Practicing on an expired license is illegal regardless of the circumstances or who asks. The supervisor asking does not make it acceptable — the RT is personally liable.">Work the shift since a supervisor approved it.</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct! Practicing on an expired license is illegal under state law — AARC Principle #8. It is also an integrity violation (Principle #1) and potentially endangers patients. No amount of staffing need justifies practicing without valid credentials. The RT should decline firmly, notify the supervisor of the license status, and initiate renewal immediately. Both the RT and the institution could face legal consequences if harm occurs.">Decline to work — practicing with an expired license is illegal regardless of staffing needs.</button>
+      <button class="quiz-option knowledge-option" data-correct="false" data-feedback="Working a partial shift doesn't fix the legal problem. An expired license means no licensed practice is permitted — even for a few hours. There is no partial exception to licensure requirements.">Work the first half of the shift, then leave to begin renewal.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq5">
+    <h3>Question 5</h3>
+    <p>A COPD patient complains of significant bloating after meals that worsens their shortness of breath. Which dietary recommendation directly addresses this problem?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="High protein is important for COPD muscle maintenance, but it does not directly address bloating. Some high-protein foods (beans, lentils) can actually worsen bloating.">Increase protein intake to strengthen respiratory muscles.</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="Small frequent meals reduce per-meal O₂ demand and fatigue, but they don't specifically target the bloating mechanism. The most direct anti-bloating strategies are timing fluids and avoiding gas-producing foods.">Eat 6 small meals throughout the day.</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="true" data-feedback="Correct! Drinking fluids 1 hour before and after meals (not during) reduces air swallowing and the volume of material in the stomach during digestion, which reduces bloating. Additionally, avoiding gas-producing foods (onions, cabbage, sauerkraut, broccoli, Brussels sprouts, beer) and not eating when very short of breath (which causes air swallowing) directly target bloating in COPD patients.">Drink fluids 1 hour before and after meals, and avoid gas-producing foods.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly</div>
+</section>
+
+<!-- SECTION 13: FAQ -->
+<section id="faq">
+  <div><span class="eyebrow">FAQ</span><h2>Common Questions — Nutrition, Ethics & EHR</h2></div>
+  <details class="accordion" open>
+    <summary>Why does eating cause problems specifically for COPD patients?</summary>
+    <div class="accordion-body"><p>Breathing and swallowing share the same anatomical space — the pharynx. They are mechanically incompatible — you cannot do both simultaneously. For healthy people, this is a brief pause. For COPD patients who are already working hard to breathe, that pause to swallow is exhausting. Over a full meal, dozens or hundreds of these pauses accumulate into significant fatigue and dyspnea. Add in early satiety from a depressed diaphragm (air trapping), and you see why malnutrition is so common.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why do simple carbohydrates worsen hypercapnia in COPD patients?</summary>
+    <div class="accordion-body"><p>Different macronutrients produce different amounts of CO₂ relative to oxygen consumed — this ratio is the respiratory quotient (RQ). Carbohydrates have an RQ of 1.0 (equal CO₂ produced to O₂ consumed). Fats have an RQ of 0.7 (less CO₂ per O₂). Proteins are intermediate at 0.8. A COPD patient who already struggles to exhale CO₂ is better served by a diet higher in fat than in simple carbohydrates — fewer calories produce the same energy with less CO₂ generated. High carbohydrate diets can directly worsen hypercapnia.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What does "scope of practice" actually mean for a respiratory therapist?</summary>
+    <div class="accordion-body"><p>Scope of practice has two levels: (1) your state license defines what RTs are legally permitted to do in that state, and (2) your institutional credentialing defines what you are authorized to do in that specific hospital. You must meet BOTH. You can be licensed by the state for ABG draws but not credentialed by your hospital — in which case you cannot draw ABGs at that facility. Scope violations expose you to professional liability, license disciplinary action, and civil/criminal liability if harm results.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What is the difference between HIPAA and general patient confidentiality?</summary>
+    <div class="accordion-body"><p>General patient confidentiality is a broad ethical obligation to keep patient information private. HIPAA is a specific federal law (1996) that standardizes exactly how protected health information (PHI) must be handled, stored, and shared. HIPAA creates enforceable legal requirements with financial penalties (up to $1.5 million per violation category per year) and potential criminal prosecution. General confidentiality is the ethical foundation; HIPAA is the legal framework built on top of it.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why can't I just ask "Are you Mr. Garcia?" for patient verification?</summary>
+    <div class="accordion-body"><p>Three patient populations commonly give incorrect affirmative answers to leading yes/no questions: (1) Heavily sedated or altered patients who respond to any voice stimulus with nodding; (2) Hard-of-hearing patients who didn't hear the question but nod to be agreeable; (3) Patients who are confused and may answer to any name. Open-ended identification ("What is your last name and date of birth?") requires the patient to actively produce the correct information rather than simply affirm what you suggest. It is a more reliable safety check.</p></div>
+  </details>
+</section>
+
+<!-- SECTION 14: Summary -->
+<section class="info-card" id="summary">
+  <h2>Summary & Clinical Pearls</h2>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>CHF/CAD Nutrition:</strong><br>CHF: sodium &lt;2,000 mg, fluid ≤64 oz, daily weight. CAD: low sodium, low saturated fat. Diets: Mediterranean, DASH, plant-based.</div>
+    <div class="example-box soft-blue"><strong>COPD Nutrition:</strong><br>6 small meals. Soft textures. Sit upright (tripod). Avoid simple carbs (CO₂ production). Fluids 1 hour before/after. Avoid gas-producing foods. O₂ during meals if needed.</div>
+    <div class="example-box soft-amber"><strong>AARC Ethics Top 3:</strong><br>#1 Integrity — report errors. #4 Protect privacy — never share PHI. #8 Comply with laws — never work with expired credentials. Know all 10 principles.</div>
+    <div class="example-box soft-coral"><strong>EHR & HIPAA:</strong><br>EMR = one facility. EHR = multiple facilities. HIPAA = federal law protecting PHI. Audit trails track every access. Log out every time. No sharing credentials.</div>
+  </div>
+  <div class="example-box soft-teal" style="margin-top:14px">
+    <strong>Patient Verification — Every Time, Every Patient:</strong> (1) Open EHR, verify orders. (2) Check wristband vs. chart. (3) Ask open-ended ID: "Last name and date of birth?" (4) Scan wristband and barcode. (5) Confirm correct chart before charting. Never skip steps.
+  </div>
+</section>
+
+<!-- SECTION 15: Flashcards -->
+<section id="glossary">
+  <div class="glossary-card">
+    <h3>Glossary Flashcard Mastery Deck</h3>
+    <p>Click the card to flip it. Mark known cards to move them to the completed pile.</p>
+    <div class="flashcard-shell">
+      <div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+      <div class="tabs" role="tablist" aria-label="Flashcard deck view">
+        <button class="tab-btn active" data-view="active">Review Deck</button>
+        <button class="tab-btn" data-view="completed">Completed ✓</button>
+        <button class="tab-btn" data-view="all">All Cards</button>
+      </div>
+      <div aria-label="Current flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0">
+        <div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div>
+      </div>
+      <div class="deck-actions">
+        <button class="small-btn" id="revealCard">Flip Card</button>
+        <button class="small-btn primary" id="knowCard">Know It ✓</button>
+        <button class="small-btn" id="reviewAgain">Review Again</button>
+        <button class="small-btn warn" id="resetAll">Reset All</button>
+        <button class="small-btn" id="shuffleDeck">Shuffle Active</button>
+      </div>
+      <div class="completed-list" id="completedList"></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end lesson-stack -->
+</main>
+
+<footer class="footer">
+  <div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div>
+</footer>
+</div>
+
+<script>
+// ── COURSE MENU ────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded",function(){
+  const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+  if(button&&panel){
+    panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+    const list=document.getElementById("courseMenuList");
+    const courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+    const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+    if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?'current':'')+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+    button.onclick=function(e){e.preventDefault();e.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+    document.addEventListener("click",e=>{if(!panel.contains(e.target)&&e.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}});
+  }
+});
+
+// ── FLASHCARD DECK ─────────────────────────────────────────────────────────
+const glossaryTerms=[
+  {term:"CHF Sodium Limit",definition:"Patients with congestive heart failure should limit sodium to less than 2,000 mg daily. Excess sodium causes fluid retention, which backs up into the lungs and worsens shortness of breath."},
+  {term:"CHF Fluid Restriction",definition:"CHF patients typically limit fluid intake to no more than 64 oz (2,000 mL) daily. Daily weight monitoring (same time each morning) detects early fluid retention — a gain of 2+ lbs may indicate fluid buildup."},
+  {term:"Mediterranean Diet",definition:"Heart-healthy diet emphasizing fruits, vegetables, whole grains, fish, olive oil, and nuts. Minimizes processed and salty foods. Reduces cardiovascular inflammation."},
+  {term:"DASH Diet",definition:"Dietary Approaches to Stop Hypertension. Includes low-fat dairy, meatless meals, and reduced sodium. Specifically designed to reduce blood pressure."},
+  {term:"COPD Malnutrition Cycle",definition:"Increased work of breathing raises caloric needs while dyspnea makes eating exhausting and difficult. The result: chronic inadequate intake + high caloric expenditure = malnutrition, which worsens respiratory muscle function."},
+  {term:"Aspiration Pneumonia",definition:"Lung infection caused by inhaling food or liquids into the airways. Affects 20-40% of COPD patients. Causes increased mucus, fever, decreased O₂, confusion, and can lead to respiratory failure."},
+  {term:"Simple Carbohydrates and CO₂",definition:"Simple carbohydrates (sugars, white bread, pastries) have a high respiratory quotient — they produce more CO₂ per calorie metabolized than fats. In COPD patients with hypercapnia, high carbohydrate intake worsens CO₂ retention."},
+  {term:"Tripod Position for COPD Eating",definition:"Sit upright, lean slightly forward, elbows resting on the table, feet flat on the floor. This position optimizes diaphragm position and accessory muscle use during eating, reducing dyspnea."},
+  {term:"6 Small Meals for COPD",definition:"Eating 6 small meals daily instead of 3 large ones reduces the per-meal oxygen demand of digestion. Large meals cause significant digestion-related O₂ demand spikes that COPD patients cannot meet."},
+  {term:"Corticosteroids and Calcium",definition:"Long-term corticosteroid use (common in COPD) accelerates calcium loss from bones, increasing osteoporosis risk. Calcium supplementation and vitamin D (which aids absorption) should be monitored."},
+  {term:"Magnesium and Breathing Muscles",definition:"Magnesium is essential fuel for muscle function, including breathing muscles. Low magnesium weakens respiratory muscles. Refined flour has 80% less magnesium than whole grain flour — a common dietary gap."},
+  {term:"Potassium and Cardiac Rhythm",definition:"Both high and low potassium levels cause irregular heartbeats. Diuretics (furosemide) commonly deplete potassium — providers must monitor levels and may supplement. Sources: bananas, oranges, potatoes, yogurt, spinach."},
+  {term:"AARC Code of Ethics",definition:"Ten professional standards for respiratory therapists published by the American Association for Respiratory Care. Covers integrity, learning, scope of practice, privacy, non-discrimination, disease prevention, legality, compliance, conflicts of interest, and resource stewardship."},
+  {term:"Scope of Practice",definition:"The range of procedures and responsibilities an RT is legally and institutionally authorized to perform. Defined by state licensure AND hospital credentialing — both must be met. Violations create legal liability."},
+  {term:"Conflict of Interest",definition:"When personal interest (financial, relational, or otherwise) could improperly influence professional judgment. Example: owning stock in a medical equipment company you recommend to your hospital. Must be disclosed and recused."},
+  {term:"EMR vs EHR",definition:"EMR (Electronic Medical Records) = records from one facility only. EHR (Electronic Health Records) = records that travel with the patient across multiple facilities and care systems."},
+  {term:"HIPAA",definition:"Health Insurance Portability and Accountability Act (1996). Federal law standardizing protection of patient health information (PHI). Requires monitoring access, technical safeguards, audit trails, and patient access to their own records."},
+  {term:"Audit Trail (EHR)",definition:"HIPAA-required electronic record of every access event in the EHR — who logged in, which records were viewed, what changes were made, and when. Creates accountability and detects unauthorized access."},
+  {term:"Patient Verification — 5 Steps",definition:"(1) Open EHR in room, verify orders. (2) View wristband, match to chart. (3) Ask open-ended ID: last name and date of birth. (4) Scan wristband and barcode. (5) Confirm correct chart before charting. Never skip steps."},
+  {term:"Open-Ended Patient Identification",definition:"Asking 'What is your last name and date of birth?' instead of 'Are you Mr. Smith?' Prevents wrong-patient errors with sedated, confused, or hearing-impaired patients who may nod yes to any question."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:`<div class="empty-state">No cards completed yet.</div>`}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete.";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(c=>c.classList&&c.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(o=>container.appendChild(o))})}
+shuffleAnswerOptions();
+
+function markActivityComplete(el){el.dataset.complete="true";el.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+function initSort(containerSel,btnId,statusId){
+  const activity=document.querySelector(containerSel+" .activity-card.require-complete");
+  const btn=document.getElementById(btnId);
+  const status=document.getElementById(statusId);
+  if(!activity||!btn)return;
+  btn.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    let correct=0;
+    rows.forEach(row=>{const sel=row.querySelector("select");const ok=sel.value===row.dataset.answer;row.classList.toggle("correct",ok);row.classList.toggle("incorrect",sel.value!==""&&!ok);if(ok)correct++});
+    if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}
+    else status.textContent=`${correct} / ${rows.length} correct — review and try again.`;
+  });
+}
+initSort("#cardiac-nutrition","checkCardiacSort","cardiacSortStatus");
+initSort("#copd-nutrition","checkCopdSort","copdSortStatus");
+initSort("#nutrients","checkNutrientSort","nutrientSortStatus");
+initSort("#ethics-10","checkEthicsSort","ethicsSortStatus");
+initSort("#hipaa","checkHipaaSort","hipaaSortStatus");
+initSort("#verification","checkVerifySort","verifySortStatus");
+initSort("#practice","checkPracticeSort","practiceSortStatus");
+
+function initSingleQuiz(sectionId,optionClass,feedbackId){
+  const activity=document.getElementById(sectionId);
+  const feedback=document.getElementById(feedbackId);
+  if(!activity)return;
+  activity.querySelectorAll("."+optionClass).forEach(button=>{
+    button.addEventListener("click",()=>{
+      if(activity.dataset.correctAnswered==="true")return;
+      const isCorrect=button.dataset.correct==="true";
+      activity.querySelectorAll("."+optionClass).forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        activity.dataset.correctAnswered="true";
+        activity.querySelectorAll("."+optionClass).forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+        markActivityComplete(activity);
+      }else{
+        button.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again.</strong>";
+      }
+    });
+  });
+}
+initSingleQuiz("nutrition-signs-check","nutri-option","nutriFeedback");
+initSingleQuiz("ethics-scenario-check","ethics-option","ethicsFeedback");
+initSingleQuiz("ehr-check","ehr-option","ehrFeedback");
+
+(function initCase(){
+  const section=document.getElementById("scenario");
+  const stages=Array.from(section.querySelectorAll(".case-stage"));
+  stages.forEach((stage,i)=>{if(i>0)stage.classList.add("lesson-hidden")});
+  section.querySelectorAll(".case-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const stage=option.closest(".case-stage");
+      if(stage.dataset.correctAnswered==="true")return;
+      const feedback=stage.querySelector(".case-feedback");
+      const isCorrect=option.dataset.caseCorrect==="true";
+      stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        stage.dataset.correctAnswered="true";
+        stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+        const next=stage.querySelector(".case-next button");if(next)next.disabled=false;
+      }else{
+        option.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+      }
+    });
+  });
+  section.querySelectorAll(".case-next button").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const current=button.closest(".case-stage");
+      const idx=stages.indexOf(current);
+      const next=stages[idx+1];
+      if(!next)return;
+      next.classList.remove("lesson-hidden");
+      if(idx+1===stages.length-1)markActivityComplete(section);
+      button.closest(".case-next").remove();
+      next.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+})();
+
+(function initKnowledge(){
+  const section=document.getElementById("knowledge-check");
+  const status=document.getElementById("knowledgeStatus");
+  const answered=new Set();
+  const total=section.querySelectorAll(".knowledge-question").length;
+  section.querySelectorAll(".knowledge-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const question=option.closest(".knowledge-question");
+      if(question.dataset.correctAnswered==="true")return;
+      const feedback=question.querySelector(".quiz-feedback");
+      const isCorrect=option.dataset.correct==="true";
+      question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        question.dataset.correctAnswered="true";
+        answered.add(option.dataset.question);
+        question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>";
+      }else{
+        option.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again.</strong>";
+      }
+      status.textContent=`${answered.size} / ${total} questions answered correctly`;
+      if(answered.size===total){status.textContent="Knowledge check complete.";status.classList.add("complete");markActivityComplete(section)}
+    });
+  });
+})();
+
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+  const sections=Array.from(document.querySelectorAll(".lesson-stack > section"));
+  const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+  sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+  function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
+  function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+  function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+  function updateAll(){sections.forEach(setContinueState)}
+  function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+  function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+  sections.forEach((section,index)=>{
+    if(index>=sections.length-1)return;
+    const next=sections[index+1];
+    const nextTitle=getSectionTitle(next);
+    const wrapper=document.createElement("div");wrapper.className="section-continue";
+    wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+    wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});
+    section.appendChild(wrapper);
+  });
+  navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+  document.addEventListener("activityComplete",updateAll);
+  const note=document.createElement("span");note.className="section-progress-note";
+  note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";
+  sections[0].appendChild(note);
+  updateNav(0);updateAll();
+}
+initializeProgressiveSections();
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+
+window.LESSON_ID="foundations_3_4";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>

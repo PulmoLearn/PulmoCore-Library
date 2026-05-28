@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Foundations 3.1</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status,.course-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete,.course-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress,.course-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint);color:var(--core-navy)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:620px}th,td{text-align:left;padding:8px;vertical-align:top}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease,border-color .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,220px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px;color:#263f5e}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:repeat(2,minmax(220px,1fr))}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:560px}.home-button{width:42px;height:42px}.course-menu-button{padding:9px 12px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}table{min-width:520px}}
+.mallampati-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:14px}
+.mallampati-card{border:2px solid var(--soft-border);border-radius:14px;background:#fff;padding:14px;text-align:center;cursor:pointer;transition:all .2s ease}
+.mallampati-card:hover{border-color:var(--pulmo-teal);background:var(--airway-mint)}
+.mallampati-card.selected{border-color:var(--pulmo-teal);background:var(--airway-mint)}
+.mallampati-card.wrong{border-color:var(--alert-coral);background:#FDE9E9}
+.mallampati-class{font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:var(--core-navy);margin-bottom:6px}
+.mallampati-desc{font-size:.9rem;color:var(--slate)}
+.monitoring-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:14px}
+.monitor-tile{border:1px solid var(--soft-border);border-radius:14px;background:#fff;padding:14px;text-align:center}
+.monitor-value{font-family:var(--font-data);font-size:1.5rem;font-weight:800;color:var(--core-navy)}
+.monitor-label{font-size:.8rem;color:var(--slate);margin-top:4px;font-weight:800}
+.monitor-tile.normal{border-color:#86D9C8;background:var(--airway-mint)}
+.monitor-tile.warning{border-color:#F4B860;background:#FFF4DF}
+.monitor-tile.critical{border-color:#E85D5D;background:#FDE9E9}
+@media(max-width:900px){.mallampati-grid{grid-template-columns:repeat(2,1fr)}.monitoring-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+<header class="top-nav" aria-label="PulmoCore site navigation">
+  <div class="brand" aria-label="PulmoCore brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+    <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+  </div>
+  <div class="top-nav-actions">
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" aria-label="Glossary and Flashcards" title="Glossary & Flashcards" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+    <div class="course-menu-container course-menu-wrapper">
+      <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+      <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu">
+        <div class="course-menu-heading">PulmoCore Courses</div>
+        <div id="courseMenuList"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+<!-- HERO -->
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+  <span class="eyebrow">Foundations of Respiratory Care · Lesson 3.1</span>
+  <h1 style="font-family:var(--font-heading);font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Flexible Bronchoscopy: Procedure, Sedation & Airway Assessment</h1>
+  <p style="font-size:1.18rem;max-width:980px;color:#243b55">Respiratory therapists prepare patients, monitor conscious sedation, assist with diagnostic sampling, and help select therapeutic interventions during flexible bronchoscopy. This lesson builds the clinical reasoning skills needed to support bronchoscopy safely and confidently.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>Course Track</strong><br>Foundations of Respiratory Care</div>
+    <div class="example-box soft-blue"><strong>Estimated Time</strong><br>50–70 minutes</div>
+    <div class="example-box soft-amber"><strong>Level</strong><br>Beginner RT — procedural awareness and clinical decision support</div>
+  </div>
+</section>
+
+<div class="content-layout">
+
+<!-- SIDE NAV -->
+<aside aria-label="Lesson quick navigation" class="side-nav">
+  <h3>Lesson Sections</h3>
+  <a href="#objectives">Objectives</a>
+  <a href="#overview-video">Video</a>
+  <a href="#what-is-bronch">What Is Bronchoscopy?</a>
+  <a href="#mallampati">Mallampati Assessment</a>
+  <a href="#patient-prep">Patient Preparation</a>
+  <a href="#sedation">Sedation Monitoring</a>
+  <a href="#hypoventilation">Hypoventilation</a>
+  <a href="#diagnostic">Diagnostic Procedures</a>
+  <a href="#therapeutic">Therapeutic Procedures</a>
+  <a href="#scenario">Unfolding Case</a>
+  <a href="#practice">Assignment Practice</a>
+  <a href="#knowledge-check">Knowledge Check</a>
+  <a href="#faq">FAQ</a>
+  <a href="#summary">Summary</a>
+  <a href="#glossary">Flashcards</a>
+</aside>
+
+<!-- OBJECTIVES + VIDEO (lesson-stack-top) -->
+<div class="lesson-stack-top">
+
+<section class="info-card" id="objectives">
+  <h2>Learning Objectives</h2>
+  <p>By the end of this lesson, you will be able to describe bronchoscopy types, assess airway risk using the Mallampati scale, prepare patients for the procedure, monitor conscious sedation, manage hypoventilation, and distinguish the purpose and clinical use of each diagnostic and therapeutic bronchoscopy technique.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>1. Describe bronchoscopy types</strong><br>Explain the difference between diagnostic and therapeutic bronchoscopy and why each is used.</div>
+    <div class="example-box soft-blue"><strong>2. Assess airway risk</strong><br>Use the Mallampati classification to identify patients at higher risk of difficult intubation.</div>
+    <div class="example-box soft-amber"><strong>3. Monitor sedation</strong><br>Identify the five parameters monitored during conscious sedation and recognize hypoventilation.</div>
+    <div class="example-box soft-coral"><strong>4. Match procedures to situations</strong><br>Select the correct diagnostic sampling technique and therapeutic bronchoscopy approach for a given clinical scenario.</div>
+  </div>
+</section>
+
+<section class="info-card" id="overview-video">
+  <span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: What Is Flexible Bronchoscopy?</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/foundations/Foundations_3_1.mp4" type="video/mp4"/>
+<track default kind="captions" label="English captions" src="/foundations/Foundations_3_1.vtt" srclang="en"/>
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+
+</div><!-- end lesson-stack-top -->
+</div><!-- end content-layout -->
+
+<!-- MAIN PROGRESSIVE LESSON STACK -->
+<div class="lesson-stack">
+
+<!-- SECTION: What Is Bronchoscopy -->
+<section class="info-card" id="what-is-bronch">
+  <h2>What Is Flexible Bronchoscopy?</h2>
+  <p>A flexible bronchoscope is a thin, flexible tube with a miniature camera and a working channel that allows the RT and physician team to see directly inside the airways and perform procedures. It is inserted through the nose or mouth, passes through the larynx, and advances into the tracheobronchial tree.</p>
+  <img src="/foundations/Foundations_3_1_assets/foundations-3-1-bronchoscopy-overview.png" alt="Diagram showing flexible bronchoscope passing through the nose and into the airway, with physician and RT roles indicated" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+    <table>
+      <tr><th>Feature</th><th>Diagnostic Bronchoscopy</th><th>Therapeutic Bronchoscopy</th></tr>
+      <tr><td><strong>Primary Goal</strong></td><td>Visualize airways and collect samples</td><td>Treat obstruction or airway problem</td></tr>
+      <tr><td><strong>Samples Taken?</strong></td><td>Yes — washing, lavage, brushing, biopsy</td><td>Not usually the primary goal</td></tr>
+      <tr><td><strong>FiO₂ Consideration</strong></td><td>Can use lower supplemental oxygen</td><td>May need higher FiO₂ depending on technique</td></tr>
+      <tr><td><strong>Common Uses</strong></td><td>Infection workup, cancer evaluation, hemoptysis source</td><td>Tumor removal, stent placement, difficult intubation</td></tr>
+      <tr><td><strong>Sedation Level</strong></td><td>Moderate conscious sedation typical</td><td>May require deeper sedation for longer interventions</td></tr>
+    </table>
+  </div>
+  <article class="activity-card require-complete" data-activity-name="Bronchoscopy Type Match" style="margin-top:16px">
+    <h3>Diagnostic or Therapeutic?</h3>
+    <p>Select whether each situation calls for diagnostic or therapeutic bronchoscopy.</p>
+    <div class="sort-grid" id="bronchTypeSort">
+      <div class="sort-row" data-answer="diagnostic"><strong>A patient has a new lung infiltrate and fever. The team wants a sample to identify the organism.</strong><select><option value="">Choose</option><option value="diagnostic">Diagnostic</option><option value="therapeutic">Therapeutic</option></select></div>
+      <div class="sort-row" data-answer="therapeutic"><strong>A patient has an endobronchial tumor causing airway obstruction and needs the blockage reduced.</strong><select><option value="">Choose</option><option value="diagnostic">Diagnostic</option><option value="therapeutic">Therapeutic</option></select></div>
+      <div class="sort-row" data-answer="therapeutic"><strong>A patient has a Class 4 Mallampati and needs intubation guided by direct visualization of the airway.</strong><select><option value="">Choose</option><option value="diagnostic">Diagnostic</option><option value="therapeutic">Therapeutic</option></select></div>
+      <div class="sort-row" data-answer="diagnostic"><strong>Hemoptysis workup — the physician wants to identify the bleeding source in the airways.</strong><select><option value="">Choose</option><option value="diagnostic">Diagnostic</option><option value="therapeutic">Therapeutic</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkBronchType" type="button" style="margin-top:12px">Check Answers</button>
+    <div class="activity-status" id="bronchTypeStatus">Complete the sorting activity to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION: Mallampati -->
+<section class="info-card" id="mallampati">
+  <h2>Mallampati Airway Assessment</h2>
+  <p>Before sedation, the RT and care team assess the patient's airway using the Mallampati classification. This tells you how much of the pharynx is visible when the patient opens wide and sticks out their tongue. The harder it is to see the airway, the harder emergency intubation may be if complications develop during sedation.</p>
+  <img src="/foundations/Foundations_3_1_assets/foundations-3-1-mallampati-classes.png" alt="Four mouth images side by side showing Mallampati Class 1 through 4, with decreasing pharyngeal visibility from left to right" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:16px">
+    <table>
+      <tr><th>Class</th><th>What the RT Sees</th><th>Intubation Risk</th></tr>
+      <tr><td><strong>Class 1</strong></td><td>Full view: soft palate, uvula, tonsils, fauces all visible</td><td>Easy — low risk</td></tr>
+      <tr><td><strong>Class 2</strong></td><td>Soft palate and uvula visible; tonsils and fauces partly hidden</td><td>Easy — low-moderate risk</td></tr>
+      <tr><td><strong>Class 3</strong></td><td>Only soft palate and base of uvula visible</td><td>Moderate difficulty — prepare backup</td></tr>
+      <tr><td><strong>Class 4</strong></td><td>Only soft palate visible — uvula, tonsils, and fauces not visible</td><td>Difficult — HIGH RISK, have emergency plan ready</td></tr>
+    </table>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Mallampati Identification" style="margin-top:16px">
+    <h3>Which Patient Has the Highest Intubation Risk?</h3>
+    <p>Based on the Mallampati classification, click the class that represents the HIGHEST risk of difficult intubation.</p>
+    <div class="mallampati-grid" id="mallampatiGrid">
+      <div class="mallampati-card" data-answer="wrong" data-feedback="Class 1 is the easiest airway — full view of palate, uvula, and tonsils. Low risk.">
+        <div class="mallampati-class">Class 1</div>
+        <div class="mallampati-desc">Full view: palate, uvula, tonsils visible</div>
+      </div>
+      <div class="mallampati-card" data-answer="wrong" data-feedback="Class 2 shows soft palate and uvula but tonsils are partially hidden. Low-moderate risk.">
+        <div class="mallampati-class">Class 2</div>
+        <div class="mallampati-desc">Soft palate and uvula visible; tonsils partly hidden</div>
+      </div>
+      <div class="mallampati-card" data-answer="wrong" data-feedback="Class 3 shows only the soft palate and base of uvula. Moderate difficulty — plan ahead, but not the highest risk.">
+        <div class="mallampati-class">Class 3</div>
+        <div class="mallampati-desc">Only soft palate and base of uvula visible</div>
+      </div>
+      <div class="mallampati-card" data-answer="correct" data-feedback="Correct! Class 4 is the highest risk. Only the soft palate is visible — the uvula, tonsils, and fauces are all hidden. Emergency intubation may be extremely difficult.">
+        <div class="mallampati-class">Class 4</div>
+        <div class="mallampati-desc">Only soft palate visible — uvula and tonsils not visible</div>
+      </div>
+    </div>
+    <div class="quiz-feedback" id="mallampatiResult"></div>
+    <div class="activity-status" id="mallampatiStatus">Click the class with the HIGHEST intubation risk to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION: Patient Preparation -->
+<section class="info-card" id="patient-prep">
+  <h2>Preparing the Patient for Bronchoscopy</h2>
+  <p>Before inserting the scope, the airway must be numbed with topical anesthesia (lidocaine) to reduce discomfort, coughing, and the gag reflex. The method used depends on whether the patient already has an artificial airway or is awake and breathing on their own.</p>
+  <img src="/foundations/Foundations_3_1_assets/foundations-3-1-patient-prep.png" alt="Four preparation methods shown: nasal lidocaine gel, lidocaine gargle, nebulized lidocaine, and instillation through ET tube" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal">
+      <strong>Non-Intubated Patient (Awake Procedure)</strong><br>
+      <ol style="padding-left:18px;margin:8px 0">
+        <li><strong>Lidocaine gel 2%</strong> — squeezed into nasal passages with sterile cotton swabs to numb the nares</li>
+        <li><strong>Lidocaine gargle 2%</strong> — patient gargles and swallows to numb the pharynx and throat</li>
+        <li><strong>Lidocaine nebulizer 4%</strong> — patient inhales nebulized lidocaine to numb the larynx, trachea, and proximal bronchi</li>
+      </ol>
+    </div>
+    <div class="example-box soft-blue">
+      <strong>Intubated Patient (Already Has Airway)</strong><br>
+      <ul style="padding-left:18px;margin:8px 0">
+        <li><strong>Lidocaine 1–2% instilled directly</strong> into the ET tube or tracheostomy before scope insertion</li>
+        <li>This numbs airways distal to the artificial airway</li>
+        <li>No nasal or throat preparation needed — airway is already secured</li>
+        <li>Reduces cough during scope advancement</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="example-box soft-amber" style="margin-top:14px">
+    <strong>Clinical Note — Lidocaine Toxicity:</strong> Monitor total lidocaine dose during preparation. Symptoms of toxicity include perioral tingling, dizziness, tinnitus, seizures, and cardiac effects. Your facility protocol will specify maximum safe dose (often 4–4.5 mg/kg).
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Patient Prep Match" style="margin-top:16px">
+    <h3>Match the Preparation Method to the Patient</h3>
+    <div class="sort-grid" id="prepSort">
+      <div class="sort-row" data-answer="instill"><strong>Patient is already intubated and on the ventilator. Scope will be passed through the ET tube.</strong><select><option value="">Choose</option><option value="gel">Lidocaine gel into nares</option><option value="gargle">Lidocaine gargle</option><option value="neb">Lidocaine nebulizer 4%</option><option value="instill">Lidocaine instilled into ET tube</option></select></div>
+      <div class="sort-row" data-answer="neb"><strong>Awake patient needs airway distal to the larynx numbed before nasal scope insertion. No artificial airway.</strong><select><option value="">Choose</option><option value="gel">Lidocaine gel into nares</option><option value="gargle">Lidocaine gargle</option><option value="neb">Lidocaine nebulizer 4%</option><option value="instill">Lidocaine instilled into ET tube</option></select></div>
+      <div class="sort-row" data-answer="gel"><strong>The scope will enter through the nose. The nasal passage must be numbed and lubricated first.</strong><select><option value="">Choose</option><option value="gel">Lidocaine gel into nares</option><option value="gargle">Lidocaine gargle</option><option value="neb">Lidocaine nebulizer 4%</option><option value="instill">Lidocaine instilled into ET tube</option></select></div>
+      <div class="sort-row" data-answer="gargle"><strong>The patient needs their posterior pharynx and throat numbed before scope passes through the mouth.</strong><select><option value="">Choose</option><option value="gel">Lidocaine gel into nares</option><option value="gargle">Lidocaine gargle</option><option value="neb">Lidocaine nebulizer 4%</option><option value="instill">Lidocaine instilled into ET tube</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkPrepSort" type="button" style="margin-top:12px">Check Preparation Match</button>
+    <div class="activity-status" id="prepSortStatus">Complete the preparation match to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION: Sedation Monitoring -->
+<section class="info-card" id="sedation">
+  <h2>Conscious Sedation Monitoring</h2>
+  <p>During bronchoscopy, the patient receives conscious sedation — they are drowsy but still breathing on their own. The RT's job is continuous monitoring of five essential parameters. Any change in these values may indicate the patient is drifting toward hypoventilation or other complications.</p>
+  <img src="/foundations/Foundations_3_1_assets/foundations-3-1-sedation-monitoring.png" alt="Monitor screen showing five parameters: SpO2 95%, HR 82, RR 14, BP 128/74, and ETCO2 40 mmHg labeled with normal ranges and alert thresholds" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <h3 style="margin-top:20px">The Five Essential Monitoring Parameters</h3>
+  <div class="monitoring-grid">
+    <div class="monitor-tile normal">
+      <div class="monitor-value">SpO₂</div>
+      <div class="monitor-label">Oxygen Saturation<br><em>Target ≥ 95%</em></div>
+    </div>
+    <div class="monitor-tile normal">
+      <div class="monitor-value">HR</div>
+      <div class="monitor-label">Heart Rate<br><em>Normal 60–100 bpm</em></div>
+    </div>
+    <div class="monitor-tile normal">
+      <div class="monitor-value">RR</div>
+      <div class="monitor-label">Respiratory Rate<br><em>Normal 12–20/min</em></div>
+    </div>
+    <div class="monitor-tile normal">
+      <div class="monitor-value">BP</div>
+      <div class="monitor-label">Blood Pressure<br><em>Within 20% of baseline</em></div>
+    </div>
+    <div class="monitor-tile normal">
+      <div class="monitor-value">ETCO₂</div>
+      <div class="monitor-label">End-Tidal CO₂<br><em>Normal 35–45 mmHg</em></div>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Monitoring Parameters Sort" style="margin-top:16px">
+    <h3>Which Parameters Are Routinely Monitored During Conscious Sedation?</h3>
+    <p>Mark each parameter as either <strong>Routinely Monitored</strong> or <strong>Not Routinely Monitored</strong> during conscious sedation bronchoscopy.</p>
+    <div class="sort-grid" id="monitorSort">
+      <div class="sort-row" data-answer="yes"><strong>SpO₂ (Pulse Oximetry)</strong><select><option value="">Choose</option><option value="yes">Routinely Monitored</option><option value="no">Not Routinely Monitored</option></select></div>
+      <div class="sort-row" data-answer="yes"><strong>ETCO₂ (Capnography)</strong><select><option value="">Choose</option><option value="yes">Routinely Monitored</option><option value="no">Not Routinely Monitored</option></select></div>
+      <div class="sort-row" data-answer="no"><strong>ABG (Arterial Blood Gas)</strong><select><option value="">Choose</option><option value="yes">Routinely Monitored</option><option value="no">Not Routinely Monitored</option></select></div>
+      <div class="sort-row" data-answer="yes"><strong>Heart Rate (Cardiac Monitor)</strong><select><option value="">Choose</option><option value="yes">Routinely Monitored</option><option value="no">Not Routinely Monitored</option></select></div>
+      <div class="sort-row" data-answer="yes"><strong>Respiratory Rate</strong><select><option value="">Choose</option><option value="yes">Routinely Monitored</option><option value="no">Not Routinely Monitored</option></select></div>
+      <div class="sort-row" data-answer="no"><strong>Chest X-Ray (CXR)</strong><select><option value="">Choose</option><option value="yes">Routinely Monitored</option><option value="no">Not Routinely Monitored</option></select></div>
+      <div class="sort-row" data-answer="yes"><strong>Blood Pressure</strong><select><option value="">Choose</option><option value="yes">Routinely Monitored</option><option value="no">Not Routinely Monitored</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkMonitorSort" type="button" style="margin-top:12px">Check Monitoring Parameters</button>
+    <div class="activity-status" id="monitorSortStatus">Complete the monitoring sort to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION: Hypoventilation -->
+<section class="info-card red" id="hypoventilation">
+  <h2>Recognizing and Managing Hypoventilation During Sedation</h2>
+  <p>The most common complication of conscious sedation is hypoventilation — the patient's breathing becomes too slow or shallow to adequately ventilate. The RT must recognize the warning signs and act immediately.</p>
+
+  <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px">
+    <div class="example-box soft-coral"><strong>Warning Signs</strong><br>Respiratory rate dropping below 10, rising ETCO₂ above 50 mmHg, SpO₂ declining, patient difficult to rouse</div>
+    <div class="example-box soft-amber"><strong>Immediate Response</strong><br>Stop the procedure, stimulate the patient, reposition airway, prepare to assist ventilation</div>
+    <div class="example-box soft-teal"><strong>Airway Maneuvers</strong><br>Chin-lift opens the airway by lifting the soft tissues. Jaw-thrust advances the mandible to relieve obstruction. Both are hands-on interventions.</div>
+  </div>
+
+  <article class="quiz-card require-complete" id="hypovent-check" data-activity-name="Hypoventilation Intervention Check" style="margin-top:16px">
+    <h3>Which Intervention Does NOT Correct Hypoventilation During Conscious Sedation?</h3>
+    <div class="quiz-options">
+      <button class="quiz-option hypo-option" data-correct="false" data-feedback="The chin-lift maneuver opens the airway by lifting the chin forward. This IS an appropriate intervention for hypoventilation.">Chin-lift maneuver</button>
+      <button class="quiz-option hypo-option" data-correct="false" data-feedback="The jaw-thrust maneuver moves the mandible forward to open the airway without extending the neck. This IS an appropriate intervention.">Jaw-thrust maneuver</button>
+      <button class="quiz-option hypo-option" data-correct="false" data-feedback="Manual ventilation with a bag-valve-mask provides positive pressure to assist breathing. This IS an appropriate intervention when the patient cannot maintain adequate ventilation.">Manual ventilation with BVM</button>
+      <button class="quiz-option hypo-option" data-correct="true" data-feedback="Correct! The supine position WORSENS hypoventilation. It causes the tongue and soft tissues to fall back into the airway, increasing obstruction. The correct position is head elevated 30° or more. Never lay a hypoventilating sedated patient flat.">Placing the patient in a supine position</button>
+    </div>
+    <div class="quiz-feedback" id="hypoFeedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION: Diagnostic Bronchoscopy -->
+<section class="info-card" id="diagnostic">
+  <h2>Diagnostic Bronchoscopy Sampling Techniques</h2>
+  <p>Diagnostic bronchoscopy allows the team to collect samples from the airway or lungs to identify infections, evaluate tumors, and diagnose lung disease. There are five techniques, each suited to a different clinical need.</p>
+  <img src="/foundations/Foundations_3_1_assets/foundations-3-1-diagnostic-techniques.png" alt="Five diagnostic bronchoscopy sampling techniques illustrated: BAL shows scope wedged into small airway; bronchial washing shows saline in larger airway; brushing shows flexible brush on lesion surface; biopsy forceps grasping tissue; needle tip aspirating from lymph node" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <details class="accordion" style="margin-top:16px">
+    <summary><strong>Bronchoalveolar Lavage (BAL)</strong></summary>
+    <div class="accordion-body">
+      <p><strong>What happens:</strong> The scope is wedged into a small subsegmental bronchus, sealing it off. Saline is instilled into the airway beyond the scope tip, then suctioned back to collect cells from the alveolar level — the deepest part of the lung.</p>
+      <p><strong>Best for:</strong> Suspected infections in immunocompromised patients, pneumocystis jiroveci (PCP), fungal infections, interstitial lung disease. Reaches the deepest sample of any bronchoscopy technique.</p>
+      <p><strong>Key detail:</strong> The scope must be WEDGED (occluding the airway) to obtain a true BAL. If not wedged, it becomes bronchial washing instead.</p>
+    </div>
+  </details>
+  <details class="accordion">
+    <summary><strong>Bronchial Washing</strong></summary>
+    <div class="accordion-body">
+      <p><strong>What happens:</strong> Small amounts of saline are instilled into a larger airway (segmental or lobar bronchus) and suctioned back as a sample. The scope is NOT wedged.</p>
+      <p><strong>Best for:</strong> Initial infection screening, sputum-equivalent samples from patients who cannot produce sputum, general airway sampling when a specific segment is suspected.</p>
+      <p><strong>Key detail:</strong> Samples larger airways. Less specific than BAL but easier to perform and useful as a first step.</p>
+    </div>
+  </details>
+  <details class="accordion">
+    <summary><strong>Bronchial Brushing</strong></summary>
+    <div class="accordion-body">
+      <p><strong>What happens:</strong> A thin flexible brush catheter is advanced through the working channel of the scope. The brush is extended and rubbed directly across the surface of a visible lesion or suspicious area to collect cells.</p>
+      <p><strong>Best for:</strong> Visible endobronchial lesions — collecting surface cells from a tumor or abnormality for cytology.</p>
+      <p><strong>Key detail:</strong> Collects cells from the surface only — does not penetrate into the tissue. Best combined with biopsy for complete evaluation of a lesion.</p>
+    </div>
+  </details>
+  <details class="accordion">
+    <summary><strong>Endobronchial Biopsy</strong></summary>
+    <div class="accordion-body">
+      <p><strong>What happens:</strong> Flexible biopsy forceps are advanced through the scope's working channel and used to pinch and remove small pieces of tissue from a visible lesion.</p>
+      <p><strong>Best for:</strong> Getting actual tissue architecture — this is the gold standard for diagnosing endobronchial tumors and confirming malignancy type.</p>
+      <p><strong>Key detail:</strong> Forceps only work on VISIBLE lesions. Requires intact tissue — this tells the pathologist not just what cells are present, but how they are organized. Small bleeding risk at the biopsy site.</p>
+    </div>
+  </details>
+  <details class="accordion">
+    <summary><strong>Transbronchial Needle Aspiration (TBNA)</strong></summary>
+    <div class="accordion-body">
+      <p><strong>What happens:</strong> A needle tip is passed through the scope's working channel and pushed through the airway wall to aspirate cells from adjacent structures — lymph nodes, mediastinal masses, or tumors adjacent to central airways.</p>
+      <p><strong>Best for:</strong> Sampling areas that cannot be directly seen — mediastinal lymph nodes (important for lung cancer staging), paratracheal masses.</p>
+      <p><strong>Key detail:</strong> Unlike biopsy, TBNA goes THROUGH the airway wall. Modern EBUS (endobronchial ultrasound)-guided TBNA uses real-time imaging to precisely target nodes.</p>
+    </div>
+  </details>
+
+  <article class="activity-card require-complete" data-activity-name="Diagnostic Technique Match" style="margin-top:16px">
+    <h3>Match the Diagnostic Technique to Its Description</h3>
+    <div class="sort-grid" id="diagnosticSort">
+      <div class="sort-row" data-answer="bal"><strong>Wedge scope into small airways, instill saline into airway below and suction into sample.</strong><select><option value="">Choose</option><option value="bal">Bronchoalveolar Lavage</option><option value="washing">Bronchial Washing</option><option value="brushing">Bronchial Brushing</option><option value="biopsy">Endobronchial Biopsy</option><option value="tbna">Transbronchial Needle Aspiration</option></select></div>
+      <div class="sort-row" data-answer="washing"><strong>Instill small amounts of saline into larger airways and suction into sample.</strong><select><option value="">Choose</option><option value="bal">Bronchoalveolar Lavage</option><option value="washing">Bronchial Washing</option><option value="brushing">Bronchial Brushing</option><option value="biopsy">Endobronchial Biopsy</option><option value="tbna">Transbronchial Needle Aspiration</option></select></div>
+      <div class="sort-row" data-answer="brushing"><strong>Brushing the surface of a visible lesion with a flexible brush.</strong><select><option value="">Choose</option><option value="bal">Bronchoalveolar Lavage</option><option value="washing">Bronchial Washing</option><option value="brushing">Bronchial Brushing</option><option value="biopsy">Endobronchial Biopsy</option><option value="tbna">Transbronchial Needle Aspiration</option></select></div>
+      <div class="sort-row" data-answer="biopsy"><strong>Use flexible forceps to obtain a tissue sample from a visible lesion.</strong><select><option value="">Choose</option><option value="bal">Bronchoalveolar Lavage</option><option value="washing">Bronchial Washing</option><option value="brushing">Bronchial Brushing</option><option value="biopsy">Endobronchial Biopsy</option><option value="tbna">Transbronchial Needle Aspiration</option></select></div>
+      <div class="sort-row" data-answer="tbna"><strong>Use a needle tip to aspirate tissue from a central airway or adjacent lymph node.</strong><select><option value="">Choose</option><option value="bal">Bronchoalveolar Lavage</option><option value="washing">Bronchial Washing</option><option value="brushing">Bronchial Brushing</option><option value="biopsy">Endobronchial Biopsy</option><option value="tbna">Transbronchial Needle Aspiration</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkDiagnosticSort" type="button" style="margin-top:12px">Check Diagnostic Match</button>
+    <div class="activity-status" id="diagnosticSortStatus">Complete the diagnostic technique match to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION: Therapeutic Bronchoscopy -->
+<section class="info-card rt" id="therapeutic">
+  <h2>Therapeutic Bronchoscopy Procedures</h2>
+  <p>Therapeutic bronchoscopy is used when airway obstruction or pathology needs active treatment rather than just sampling. A CT scan is usually done first to map all areas of obstruction before the procedure begins.</p>
+  <img src="/foundations/Foundations_3_1_assets/foundations-3-1-therapeutic-overview.png" alt="Six therapeutic bronchoscopy procedures illustrated: thermal ablation showing heat applied to tumor, cryotherapy showing cold probe, brachytherapy showing radiation wires, endobronchial stent in compressed airway, bronchial thermoplasty catheter, and bronchoscope guiding ET tube placement" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:16px">
+    <table>
+      <tr><th>Procedure</th><th>Mechanism</th><th>Critical FiO₂ Detail</th><th>Best Used For</th></tr>
+      <tr><td><strong>Thermal Ablation</strong></td><td>Heat (electrocautery or laser) burns away lesion</td><td><strong>LOW FiO₂</strong> — heat + high oxygen = fire risk</td><td>Endobronchial tumors causing obstruction</td></tr>
+      <tr><td><strong>Cryotherapy</strong></td><td>Extreme cold freezes and destroys tissue</td><td><strong>HIGH FiO₂ is safe</strong> — no fire risk with cold</td><td>Obstruction when patient needs high supplemental oxygen</td></tr>
+      <tr><td><strong>Brachytherapy</strong></td><td>Radioactive source placed directly adjacent to tumor</td><td>No specific FiO₂ restriction</td><td>Lung cancer — targeted internal radiation therapy</td></tr>
+      <tr><td><strong>Endobronchial Stenting</strong></td><td>Expandable device mechanically holds airway open</td><td>No specific FiO₂ restriction</td><td>External tumor compression of airway; airway stenosis</td></tr>
+      <tr><td><strong>Bronchial Thermoplasty</strong></td><td>Controlled radiofrequency energy reduces smooth muscle mass</td><td>Standard precautions apply</td><td>Severe persistent asthma not controlled by medications</td></tr>
+      <tr><td><strong>Assisted Airway Placement</strong></td><td>Scope used to directly visualize airway for intubation or tracheostomy placement</td><td>Standard precautions apply</td><td>Difficult airway, failed conventional intubation, tracheostomy guidance</td></tr>
+    </table>
+  </div>
+
+  <div class="example-box soft-amber" style="margin-top:14px">
+    <strong>The FiO₂ Rule for Ablation vs. Cryotherapy:</strong> Thermal ablation uses HEAT. High oxygen is flammable. Use LOW FiO₂. Cryotherapy uses COLD. Cold cannot start a fire. HIGH FiO₂ is safe. This distinction is a classic NBRC-style decision point.
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Therapeutic Procedure Match" style="margin-top:16px">
+    <h3>Match the Therapeutic Procedure to Its Description</h3>
+    <div class="sort-grid" id="therapeuticSort">
+      <div class="sort-row" data-answer="ablation"><strong>Use of heat to reduce or remove lesions obstructing the airway — must be used with low FiO₂.</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="brachy">Brachytherapy</option><option value="stent">Endobronchial Stenting</option><option value="thermoplasty">Bronchial Thermoplasty</option><option value="airway">Assisted Airway Placement</option></select></div>
+      <div class="sort-row" data-answer="cryo"><strong>Use of cold to freeze airway obstructions — safe when patient requires high FiO₂.</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="brachy">Brachytherapy</option><option value="stent">Endobronchial Stenting</option><option value="thermoplasty">Bronchial Thermoplasty</option><option value="airway">Assisted Airway Placement</option></select></div>
+      <div class="sort-row" data-answer="brachy"><strong>Use of radiation delivered directly adjacent to lung cancer tumor cells.</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="brachy">Brachytherapy</option><option value="stent">Endobronchial Stenting</option><option value="thermoplasty">Bronchial Thermoplasty</option><option value="airway">Assisted Airway Placement</option></select></div>
+      <div class="sort-row" data-answer="stent"><strong>Insertion of a device to secure patency of the airway when compressed from an external tumor.</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="brachy">Brachytherapy</option><option value="stent">Endobronchial Stenting</option><option value="thermoplasty">Bronchial Thermoplasty</option><option value="airway">Assisted Airway Placement</option></select></div>
+      <div class="sort-row" data-answer="thermoplasty"><strong>Use of thermal energy to treat smooth muscle airway constriction in severe asthma.</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="brachy">Brachytherapy</option><option value="stent">Endobronchial Stenting</option><option value="thermoplasty">Bronchial Thermoplasty</option><option value="airway">Assisted Airway Placement</option></select></div>
+      <div class="sort-row" data-answer="airway"><strong>Visualizing anatomical structures through the scope to guide ET tube or tracheostomy placement.</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="brachy">Brachytherapy</option><option value="stent">Endobronchial Stenting</option><option value="thermoplasty">Bronchial Thermoplasty</option><option value="airway">Assisted Airway Placement</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkTherapeuticSort" type="button" style="margin-top:12px">Check Therapeutic Match</button>
+    <div class="activity-status" id="therapeuticSortStatus">Complete the therapeutic procedure match to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION: Unfolding Case -->
+<section class="case-card require-complete" id="scenario" data-activity-name="Bronchoscopy Unfolding Case">
+  <span class="eyebrow">Unfolding Clinical Case</span>
+  <h2>The RT and the Bronchoscopy Team</h2>
+  <p>Work through this case as a respiratory therapist supporting a bronchoscopy procedure from pre-procedure assessment through therapeutic decision-making.</p>
+
+  <div class="case-stage" data-case-stage="0">
+    <h3>Stage 1 — Pre-Procedure Airway Assessment</h3>
+    <p>A 67-year-old male is scheduled for bronchoscopy. He opens his mouth and sticks out his tongue. The RT can only see the soft palate — the uvula, tonsils, and fauces are not visible.</p>
+    <p><strong>What Mallampati class does this represent, and what does it mean for the procedure?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Class 2 shows the soft palate and uvula. This patient's uvula is NOT visible — that rules out Class 2.">Class 2 — moderate view, low-moderate risk.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Class 3 shows soft palate and the base of the uvula. In this patient, even the base of the uvula is hidden — more restricted than Class 3.">Class 3 — partial view, moderate risk.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Class 4 — only the soft palate is visible. This is the highest Mallampati risk level. The team should have emergency airway equipment immediately available and a clear plan if the airway must be secured emergently.">Class 4 — only soft palate visible. Highest risk. Emergency airway plan required.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Class 1 means full visibility — soft palate, uvula, and tonsils all visible. This patient's airway is much more restricted than Class 1.">Class 1 — full view, easy intubation expected.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue Case →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="1">
+    <h3>Stage 2 — Patient Preparation</h3>
+    <p>The patient is awake and will have the scope passed nasally. He does not have an ET tube or tracheostomy.</p>
+    <p><strong>Which airway preparation approach is correct for this patient?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! For an awake non-intubated patient, all three steps are used: (1) lidocaine gel 2% in nares, (2) lidocaine gargle 2% for the pharynx, and (3) lidocaine nebulizer 4% for the larynx and trachea.">Lidocaine gel to nares, lidocaine gargle, then lidocaine nebulizer.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Instilling lidocaine through an ET tube is the preparation for an intubated patient. This patient does not have an artificial airway.">Instill lidocaine 1–2% directly into ET tube.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Lidocaine nebulizer alone may not adequately numb the nasal passage or pharynx. All three preparation steps are used for non-intubated patients to ensure complete topical anesthesia.">Lidocaine nebulizer only.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue Case →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="2">
+    <h3>Stage 3 — Mid-Procedure Monitoring Alert</h3>
+    <p>Twenty minutes into the diagnostic procedure, you notice: RR has fallen to 8 breaths/min, ETCO₂ has risen to 58 mmHg, and SpO₂ is drifting down to 90%.</p>
+    <p><strong>What is happening, and what should you do FIRST?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="This is NOT a stable pattern. Rising ETCO₂ plus falling RR and SpO₂ indicates hypoventilation is developing. Continuing without intervention puts the patient at risk.">Continue the procedure — these are normal sedation variations.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! The pattern — rising ETCO₂, low RR, declining SpO₂ — is hypoventilation. Alert the physician, stop advancing the scope, stimulate the patient, elevate the head, and prepare airway maneuvers or BVM assistance. Do NOT place the patient supine.">Alert the team — hypoventilation developing. Stop procedure, stimulate patient, elevate head, prepare airway support.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Placing the patient supine WORSENS hypoventilation. Tongue and soft tissues fall back into the airway, increasing obstruction. Head elevation is the correct position.">Lay the patient supine to rest their airway muscles.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue Case →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="3">
+    <h3>Stage 4 — Diagnostic Sample Selection</h3>
+    <p>The procedure restarts after stabilization. The CT showed a new lower-lobe infiltrate in an immunocompromised patient. The physician wants the sample that reaches the deepest lung tissue to screen for fungal and PCP infection.</p>
+    <p><strong>Which diagnostic technique is the best choice?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Bronchial washing samples larger proximal airways — not deep enough to optimally evaluate alveolar-level pathogens like PCP.">Bronchial washing.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Endobronchial biopsy requires a visible lesion. An infiltrate on CT is not typically a visible lesion accessible by forceps.">Endobronchial biopsy.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! BAL — bronchoalveolar lavage — is the gold standard for deep lung sampling in immunocompromised patients. The scope is wedged into a subsegmental bronchus and saline is instilled to collect cells from the alveolar level. This is the best technique for PCP and fungal organism detection.">Bronchoalveolar lavage (BAL).</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="TBNA samples through the airway wall into adjacent structures. It is not used for alveolar-level lung sampling.">Transbronchial needle aspiration (TBNA).</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue Case →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="4">
+    <h3>Case Complete — Key Takeaways</h3>
+    <div class="example-box soft-teal" style="margin-top:8px"><strong>Mallampati:</strong> Class 4 = only soft palate visible = highest risk. Always prepare emergency airway plan before sedation.</div>
+    <div class="example-box soft-blue" style="margin-top:8px"><strong>Preparation:</strong> Non-intubated patients need gel + gargle + nebulizer. Intubated patients need instillation through artificial airway only.</div>
+    <div class="example-box soft-coral" style="margin-top:8px"><strong>Hypoventilation:</strong> Rising ETCO₂ + falling RR + declining SpO₂ = act immediately. Never place supine. Head up, airway maneuvers, BVM ready.</div>
+    <div class="example-box soft-amber" style="margin-top:8px"><strong>BAL:</strong> Best for deepest lung tissue sampling — immunocompromised, PCP, fungal. Scope must be wedged to perform true BAL.</div>
+  </div>
+</section>
+
+<!-- SECTION: Assignment Practice -->
+<section class="info-card" id="practice">
+  <h2>Assignment Practice Zone</h2>
+  <p>This section mirrors the style of the Unit 3.1 assignment. Choose the best answer for each clinical situation.</p>
+  <article class="activity-card require-complete" data-activity-name="Assignment Practice 3.1">
+    <h3>Procedure and Situation Matching</h3>
+    <div class="sort-grid" id="practiceSort">
+      <div class="sort-row" data-answer="cryo"><strong>Patient with endobronchial tumor obstruction requires 50% FiO₂ to maintain SpO₂ ≥ 92%. Which therapeutic technique is appropriate?</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="stent">Endobronchial Stenting</option><option value="brachy">Brachytherapy</option></select></div>
+      <div class="sort-row" data-answer="ablation"><strong>Patient with low FiO₂ requirements and an endobronchial tumor causing partial airway obstruction. Which procedure uses heat to remove the lesion?</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="stent">Endobronchial Stenting</option><option value="brachy">Brachytherapy</option></select></div>
+      <div class="sort-row" data-answer="stent"><strong>An external tumor is compressing the right mainstem bronchus. There is no endobronchial lesion to ablate. How is airway patency maintained?</strong><select><option value="">Choose</option><option value="ablation">Thermal Ablation</option><option value="cryo">Cryotherapy</option><option value="stent">Endobronchial Stenting</option><option value="brachy">Brachytherapy</option></select></div>
+      <div class="sort-row" data-answer="false"><strong>TRUE or FALSE: Placing a hypoventilating sedated patient in a supine position opens the airway and corrects breathing.</strong><select><option value="">Choose</option><option value="true">True</option><option value="false">False</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkPracticeSort" type="button" style="margin-top:12px">Check Assignment Practice</button>
+    <div class="activity-status" id="practiceSortStatus">Complete the assignment practice to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION: Knowledge Check -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Foundations 3.1 Knowledge Check">
+  <span class="eyebrow">Knowledge Check</span>
+  <h2>Flexible Bronchoscopy Mastery</h2>
+  <p>Answer each question correctly to complete this activity.</p>
+
+  <div class="knowledge-question" data-question-id="kq1">
+    <h3>Question 1</h3>
+    <p>According to the Mallampati classification, which class indicates the HIGHEST risk of difficult intubation?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Class 1 shows the best airway view — soft palate, uvula, and tonsils all visible. This is the lowest intubation risk.">Class 1</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Class 2 shows soft palate and uvula with tonsils partially hidden. Moderate view — low-moderate risk.">Class 2</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Class 3 shows only soft palate and base of uvula — moderate difficulty. Not the highest risk.">Class 3</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct! Class 4 — only the soft palate is visible. The uvula, tonsils, and fauces are all hidden. This indicates the highest risk of difficult intubation and requires emergency airway preparation.">Class 4</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq2">
+    <h3>Question 2</h3>
+    <p>An intubated patient is going to bronchoscopy. How should the airway be prepared with topical anesthesia?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Lidocaine gel into the nares is for patients having nasal scope insertion without an artificial airway. An intubated patient does not need nasal preparation.">Numb nares with lidocaine gel.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Gargling is for awake patients without an artificial airway to numb the pharynx. An intubated patient does not need gargling.">Have patient gargle lidocaine.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Nebulization is used for awake non-intubated patients. An intubated patient already has a secured airway — the scope goes through the ET tube.">Nebulize lidocaine 4%.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct! For intubated patients, lidocaine 1–2% is instilled directly into the ET tube or tracheostomy. This numbs the airway distal to the tube and reduces coughing as the scope is advanced.">Instill lidocaine 1–2% directly into the ET tube.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq3">
+    <h3>Question 3</h3>
+    <p>Which intervention does NOT correct hypoventilation during conscious sedation?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="The chin-lift maneuver opens the airway by lifting the soft tissues forward. This IS an appropriate intervention for hypoventilation.">Chin-lift maneuver</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="The jaw-thrust advances the mandible and opens the airway. This IS an appropriate intervention, especially when neck extension is not safe.">Jaw-thrust maneuver</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct! The supine position WORSENS hypoventilation. Soft tissues and the tongue fall backward, increasing airway obstruction. The correct position is head of bed elevated 30° or greater. Never lay a hypoventilating sedated patient flat.">Supine positioning</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Manual ventilation with BVM provides positive pressure assistance when the patient cannot adequately breathe. This IS an appropriate escalation for severe hypoventilation.">Manual ventilation with bag-valve-mask</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq4">
+    <h3>Question 4</h3>
+    <p>True or False: Diagnostic bronchoscopy is used to clear the airway of obstructions, and therapeutic bronchoscopy is used to obtain sputum samples.</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="This is incorrect — the definitions are reversed. Diagnostic bronchoscopy is for visualization and sample collection. Therapeutic bronchoscopy is for intervention and treatment of obstruction.">True</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct! This statement is FALSE. Diagnostic bronchoscopy is used for visualization and sample collection. Therapeutic bronchoscopy is used to intervene and treat obstructions — not to collect samples. The definitions were swapped in the statement.">False</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq5">
+    <h3>Question 5</h3>
+    <p>A patient with a malignant endobronchial obstruction requires 60% FiO₂ throughout the procedure. Which therapeutic technique should be selected?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="Thermal ablation uses heat — high oxygen is flammable and creates fire risk. Thermal ablation should only be used when FiO₂ can be kept LOW.">Thermal ablation</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="true" data-feedback="Correct! Cryotherapy uses extreme cold to freeze and destroy tissue. Cold does not create a fire risk. It is the safest choice when the patient requires high supplemental oxygen. This is a frequently tested clinical distinction.">Cryotherapy</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="Brachytherapy is internal radiation therapy used for lung cancer treatment. It is not the primary technique for reducing acute airway obstruction with high FiO₂.">Brachytherapy</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="Endobronchial stenting provides mechanical support for external compression. It does not reduce an internal tumor obstruction and is not the primary answer here.">Endobronchial stenting</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq">
+  <div><span class="eyebrow">FAQ</span><h2>Common Bronchoscopy Questions</h2></div>
+  <details class="accordion" open>
+    <summary>Is a patient fully asleep during bronchoscopy?</summary>
+    <div class="accordion-body"><p>Not usually. Most bronchoscopies use conscious sedation — the patient is drowsy and comfortable but still breathing independently. General anesthesia may be used for complex therapeutic procedures. The RT monitors breathing continuously because sedation can suppress the respiratory drive.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why does Mallampati matter if the patient is already sedated?</summary>
+    <div class="accordion-body"><p>The Mallampati score predicts how hard it will be to intubate the patient IF something goes wrong during sedation. If the patient becomes apneic or has severe hypoventilation, the team may need to secure the airway emergently. Knowing the class ahead of time means equipment and personnel are ready before any crisis develops.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What is the difference between BAL and bronchial washing?</summary>
+    <div class="accordion-body"><p>Both use saline to collect cells from the airways, but the key difference is scope position and depth. In BAL, the scope is wedged into a small subsegmental bronchus, sealing it off and collecting cells from the deepest alveolar level. In bronchial washing, the scope is NOT wedged, and saline is instilled into larger, more proximal airways. BAL reaches deeper and is the preferred technique for immunocompromised patients with suspected deep lung infections.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why can you only use thermal ablation with low FiO₂?</summary>
+    <div class="accordion-body"><p>Thermal ablation uses electrocautery or laser energy to generate heat inside the airway. At high oxygen concentrations (high FiO₂), the airway becomes an oxygen-enriched environment where any spark or ignition can cause a fire or explosion. This is not a theoretical risk — airway fires during laser bronchoscopy are a documented serious complication. The team reduces FiO₂ to the minimum safe level before activating thermal energy.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What happens after a diagnostic bronchoscopy?</summary>
+    <div class="accordion-body"><p>Patients are monitored in recovery for 1–2 hours while sedation wears off. The throat numbness from lidocaine typically resolves within 1–2 hours. Patients must not eat or drink until the numbness is fully gone to prevent aspiration. Once cleared, outpatients can go home. Follow-up is usually 1 week later to discuss results.</p></div>
+  </details>
+</section>
+
+<!-- SECTION: Summary -->
+<section class="info-card" id="summary">
+  <h2>Summary & Clinical Pearls</h2>
+  <p>Flexible bronchoscopy is a direct visualization procedure used for both diagnostic sampling and therapeutic intervention. The RT's role spans assessment before sedation, continuous monitoring during the procedure, and post-procedure recovery management.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>Mallampati Rule:</strong><br>Classes 1 and 2 are easy. Class 3 is moderate. Class 4 is highest risk — only soft palate visible. ALWAYS prepare emergency airway equipment before sedating any Class 3 or 4 patient.</div>
+    <div class="example-box soft-blue"><strong>Sedation Pearl:</strong><br>Monitor SpO₂, HR, RR, BP, and ETCO₂ continuously. Rising ETCO₂ + falling RR + dropping SpO₂ = hypoventilation developing. Intervene immediately. Never position patient supine.</div>
+    <div class="example-box soft-amber"><strong>Diagnostic Pearl:</strong><br>BAL = deepest (alveolar level, scope wedged). Washing = larger airways. Brushing = lesion surface cells. Biopsy = full tissue architecture. TBNA = needle through wall for lymph nodes.</div>
+    <div class="example-box soft-coral"><strong>Therapeutic Pearl:</strong><br>Heat (ablation) = LOW FiO₂ required (fire risk). Cold (cryo) = HIGH FiO₂ is safe. Stent = external compression. Thermoplasty = asthma smooth muscle. Know these distinctions for the NBRC.</div>
+  </div>
+</section>
+
+<!-- SECTION: Flashcards -->
+<section id="glossary">
+  <div class="glossary-card">
+    <h3>Glossary Flashcard Mastery Deck</h3>
+    <p>Click the card to flip it. Mark known cards to move them to the completed pile.</p>
+    <div class="flashcard-shell">
+      <div aria-live="polite" class="progress-row">
+        <strong id="progressText">Progress: 0 / 0 mastered</strong>
+        <div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Flashcard deck view">
+        <button class="tab-btn active" data-view="active">Review Deck</button>
+        <button class="tab-btn" data-view="completed">Completed ✓</button>
+        <button class="tab-btn" data-view="all">All Cards</button>
+      </div>
+      <div aria-label="Current flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0">
+        <div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div>
+      </div>
+      <div class="deck-actions">
+        <button class="small-btn" id="revealCard">Flip Card</button>
+        <button class="small-btn primary" id="knowCard">Know It ✓</button>
+        <button class="small-btn" id="reviewAgain">Review Again</button>
+        <button class="small-btn warn" id="resetAll">Reset All</button>
+        <button class="small-btn" id="shuffleDeck">Shuffle Active</button>
+      </div>
+      <div class="completed-list" id="completedList"></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end lesson-stack -->
+</main>
+
+<footer class="footer">
+  <div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div>
+
+</footer>
+</div><!-- end page-shell -->
+
+<script>
+// ─── COURSE MENU ───────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function () {
+  const button = document.getElementById("courseMenuButton"), panel = document.getElementById("courseMenuPanel");
+  if (button && panel) {
+    panel.innerHTML = '<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+    const list = document.getElementById("courseMenuList");
+    const courses = window.PULMOCORE_COURSES || window.pulmoCoreCourses || [];
+    const currentFile = window.location.pathname.split("/").pop().toLowerCase();
+    if (courses.length) {
+      list.innerHTML = courses.map(course => {
+        const file = course.file || course.href || "#";
+        const title = course.title || course.name || file;
+        let statusLabel = "Not started", statusClass = "not-started";
+        if (typeof window.getCourseProgress === "function") {
+          const progress = window.getCourseProgress(file);
+          if (progress && progress.completed) { statusLabel = "Complete"; statusClass = "complete"; }
+          else if (progress && progress.percent > 0) { statusLabel = "In progress (" + progress.percent + "%)"; statusClass = "in-progress"; }
+        }
+        const isCurrent = file.toLowerCase() === currentFile;
+        return '<a class="course-menu-item ' + (isCurrent ? 'current' : '') + '" href="' + file + '" role="menuitem"><span class="course-menu-title">' + title + '</span><span class="course-menu-status ' + statusClass + '">' + statusLabel + '</span></a>';
+      }).join("");
+    } else {
+      list.innerHTML = '<div class="empty-state">Course list loads when courses.js is available.</div>';
+    }
+    button.onclick = function (event) {
+      event.preventDefault(); event.stopPropagation();
+      const isOpen = panel.classList.contains("open");
+      panel.classList.toggle("open", !isOpen);
+      button.setAttribute("aria-expanded", String(!isOpen));
+    };
+    document.addEventListener("click", event => {
+      if (!panel.contains(event.target) && event.target !== button) {
+        panel.classList.remove("open"); button.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+});
+
+// ─── FLASHCARD DECK ─────────────────────────────────────────────────────────
+const glossaryTerms = [
+  { term: "Flexible Bronchoscopy", definition: "A minimally invasive procedure using a thin flexible tube with a camera to directly visualize the tracheobronchial tree and perform diagnostic or therapeutic interventions." },
+  { term: "Diagnostic Bronchoscopy", definition: "Bronchoscopy used for visualization and sample collection — identifying infection, evaluating masses, and locating bleeding sources." },
+  { term: "Therapeutic Bronchoscopy", definition: "Bronchoscopy used to actively treat airway problems — removing obstructions, placing stents, or guiding difficult intubation." },
+  { term: "Mallampati Classification", definition: "A 4-class airway assessment score based on pharyngeal visibility when the patient opens wide. Higher class = more restricted view = higher intubation risk." },
+  { term: "Class 4 Mallampati", definition: "Only the soft palate is visible — uvula, tonsils, and fauces are hidden. Highest risk of difficult intubation. Emergency airway plan required." },
+  { term: "Conscious Sedation", definition: "A sedation level where the patient is drowsy and comfortable but still breathing spontaneously. Requires continuous RT monitoring during bronchoscopy." },
+  { term: "ETCO₂ (End-Tidal CO₂)", definition: "Capnography measurement of exhaled CO₂. Normal 35–45 mmHg. Rising ETCO₂ during sedation indicates hypoventilation." },
+  { term: "Hypoventilation", definition: "Inadequate breathing during sedation — slow rate, shallow depth, or both. Recognized by rising ETCO₂, falling RR, and declining SpO₂." },
+  { term: "Bronchoalveolar Lavage (BAL)", definition: "Scope wedged into small airway; saline instilled and suctioned back to collect cells from the alveolar (deepest) level. Best for immunocompromised infection workup." },
+  { term: "Bronchial Washing", definition: "Saline instilled into larger airways without wedging the scope. Samples proximal airways. Less invasive than BAL." },
+  { term: "Bronchial Brushing", definition: "A flexible brush passed through the scope's working channel and rubbed on the surface of a visible lesion to collect surface cells for cytology." },
+  { term: "Endobronchial Biopsy", definition: "Flexible forceps used to pinch tissue directly from a visible lesion. Provides full tissue architecture — gold standard for cancer diagnosis." },
+  { term: "Transbronchial Needle Aspiration (TBNA)", definition: "A needle passed through the scope and through the airway wall to aspirate cells from adjacent lymph nodes or masses not directly visible." },
+  { term: "Thermal Ablation", definition: "Heat (electrocautery or laser) used to destroy endobronchial obstructions. Must use LOW FiO₂ — fire risk with high oxygen." },
+  { term: "Cryotherapy", definition: "Extreme cold used to freeze and destroy airway obstructions. Safe with HIGH FiO₂ — no fire risk with cold-based energy." },
+  { term: "Brachytherapy", definition: "Internal radiation therapy — radioactive source placed directly adjacent to lung cancer tumor cells via bronchoscopic catheter." },
+  { term: "Endobronchial Stenting", definition: "Expandable device placed inside the airway to mechanically hold it open when external tumor compression causes stenosis." },
+  { term: "Bronchial Thermoplasty", definition: "Radiofrequency energy applied to reduce airway smooth muscle mass in patients with severe persistent asthma not controlled by medications." },
+  { term: "Assisted Airway Placement", definition: "Using the bronchoscope to directly visualize airway anatomy and guide placement of an ET tube or tracheostomy — especially useful in difficult airways." },
+  { term: "Jaw-Thrust Maneuver", definition: "An airway maneuver where the mandible is advanced forward to relieve soft tissue airway obstruction without neck extension — used for hypoventilation." }
+];
+
+let activeDeck = [...glossaryTerms], completedDeck = [], currentIndex = 0, currentView = "active", answerShown = false;
+const flashcard = document.getElementById("flashcard"), cardFront = document.getElementById("cardFront"), cardBack = document.getElementById("cardBack"),
+  progressText = document.getElementById("progressText"), progressFill = document.getElementById("progressFill"), completedList = document.getElementById("completedList");
+
+function getVisibleDeck() { if (currentView === "completed") return completedDeck; if (currentView === "all") return [...activeDeck, ...completedDeck]; return activeDeck; }
+function updateProgress() { const total = glossaryTerms.length, mastered = completedDeck.length, percent = total ? (mastered / total) * 100 : 0; progressText.textContent = `Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`; progressFill.style.width = `${percent}%`; }
+function renderCompletedList() { completedList.innerHTML = completedDeck.length ? `<strong>Completed Cards:</strong><ul>${completedDeck.map(item => `<li>${item.term}</li>`).join("")}</ul>` : `<div class="empty-state">No cards completed yet.</div>`; }
+function renderFlashcard() { const deck = getVisibleDeck(); answerShown = false; cardBack.hidden = true; completedList.classList.toggle("show", currentView === "completed"); if (!deck.length) { cardFront.textContent = currentView === "completed" ? "No completed cards yet." : "Deck complete."; cardBack.textContent = "Use Reset All to review again."; cardBack.hidden = false; } else { if (currentIndex >= deck.length) currentIndex = 0; const card = deck[currentIndex]; cardFront.textContent = card.term; cardBack.textContent = card.definition; cardFront.className = "term"; cardBack.className = "definition"; } updateProgress(); renderCompletedList(); }
+function flipCurrentCard() { if (!getVisibleDeck().length) return; answerShown = !answerShown; cardBack.hidden = !answerShown; }
+function advanceCard() { const deck = getVisibleDeck(); if (!deck.length) return; currentIndex = (currentIndex + 1) % deck.length; renderFlashcard(); }
+document.getElementById("revealCard").addEventListener("click", flipCurrentCard);
+flashcard.addEventListener("click", flipCurrentCard);
+flashcard.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flipCurrentCard(); } });
+document.getElementById("knowCard").addEventListener("click", () => { if (currentView !== "active" || !activeDeck.length) return; const [known] = activeDeck.splice(currentIndex, 1); completedDeck.push(known); if (currentIndex >= activeDeck.length) currentIndex = 0; renderFlashcard(); });
+document.getElementById("reviewAgain").addEventListener("click", advanceCard);
+document.getElementById("resetAll").addEventListener("click", () => { activeDeck = [...glossaryTerms]; completedDeck = []; currentIndex = 0; currentView = "active"; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === "active")); renderFlashcard(); });
+document.getElementById("shuffleDeck").addEventListener("click", () => { for (let i = activeDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]]; } currentIndex = 0; renderFlashcard(); });
+document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEventListener("click", () => { currentView = button.dataset.view; currentIndex = 0; document.querySelectorAll(".tab-btn[data-view]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); }));
+renderFlashcard();
+
+// ─── ANSWER SHUFFLER ─────────────────────────────────────────────────────────
+function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); }
+shuffleAnswerOptions();
+
+// ─── ACTIVITY COMPLETE HELPER ────────────────────────────────────────────────
+function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
+
+// ─── SORTING ACTIVITIES ──────────────────────────────────────────────────────
+function initSort(containerSelector, buttonId, statusId) {
+  const activity = document.querySelector(containerSelector + " .activity-card.require-complete");
+  const button = document.getElementById(buttonId);
+  const status = document.getElementById(statusId);
+  if (!activity || !button) return;
+  button.addEventListener("click", () => {
+    const rows = Array.from(activity.querySelectorAll(".sort-row"));
+    let correct = 0;
+    rows.forEach(row => {
+      const select = row.querySelector("select");
+      const isCorrect = select.value === row.dataset.answer;
+      row.classList.toggle("correct", isCorrect);
+      row.classList.toggle("incorrect", select.value !== "" && !isCorrect);
+      if (isCorrect) correct++;
+    });
+    if (correct === rows.length) {
+      status.textContent = "Activity complete.";
+      status.classList.add("complete");
+      markActivityComplete(activity);
+    } else {
+      status.textContent = `${correct} / ${rows.length} correct — review and try again.`;
+    }
+  });
+}
+initSort("#what-is-bronch", "checkBronchType", "bronchTypeStatus");
+initSort("#patient-prep", "checkPrepSort", "prepSortStatus");
+initSort("#sedation", "checkMonitorSort", "monitorSortStatus");
+initSort("#diagnostic", "checkDiagnosticSort", "diagnosticSortStatus");
+initSort("#therapeutic", "checkTherapeuticSort", "therapeuticSortStatus");
+initSort("#practice", "checkPracticeSort", "practiceSortStatus");
+
+// ─── MALLAMPATI INTERACTIVE ──────────────────────────────────────────────────
+(function initMallampati() {
+  const activity = document.querySelector("#mallampati .activity-card.require-complete");
+  const status = document.getElementById("mallampatiStatus");
+  const result = document.getElementById("mallampatiResult");
+  const cards = document.querySelectorAll(".mallampati-card");
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+      if (activity.dataset.complete === "true") return;
+      cards.forEach(c => c.classList.remove("selected", "wrong"));
+      const isCorrect = card.dataset.answer === "correct";
+      card.classList.add(isCorrect ? "selected" : "wrong");
+      result.textContent = card.dataset.feedback;
+      result.classList.add("show");
+      result.style.background = isCorrect ? "var(--airway-mint)" : "#FDE9E9";
+      if (isCorrect) {
+        status.textContent = "Correct! Class 4 is the highest intubation risk.";
+        status.classList.add("complete");
+        markActivityComplete(activity);
+      } else {
+        status.textContent = "Not correct — review the descriptions and try again.";
+      }
+    });
+  });
+})();
+
+// ─── SINGLE-QUESTION QUIZ (hypoventilation) ──────────────────────────────────
+(function initHypovent() {
+  const activity = document.getElementById("hypovent-check");
+  const feedback = document.getElementById("hypoFeedback");
+  activity.querySelectorAll(".hypo-option").forEach(button => {
+    button.addEventListener("click", () => {
+      if (activity.dataset.correctAnswered === "true") return;
+      const isCorrect = button.dataset.correct === "true";
+      activity.querySelectorAll(".hypo-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+      if (isCorrect) {
+        activity.dataset.correctAnswered = "true";
+        activity.querySelectorAll(".hypo-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); });
+        feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)";
+        feedback.innerHTML = button.dataset.feedback + "<br><br><strong>You may continue.</strong>";
+        markActivityComplete(activity);
+      } else {
+        button.classList.add("incorrect-choice");
+        feedback.className = "quiz-feedback show"; feedback.style.background = "#FDE9E9";
+        feedback.innerHTML = button.dataset.feedback + "<br><br><strong>Try again:</strong> Select the option that WORSENS hypoventilation.";
+      }
+    });
+  });
+})();
+
+// ─── UNFOLDING CASE ───────────────────────────────────────────────────────────
+(function initCase() {
+  const section = document.getElementById("scenario");
+  const stages = Array.from(section.querySelectorAll(".case-stage"));
+  stages.forEach((stage, index) => { if (index > 0) stage.classList.add("lesson-hidden"); });
+  section.querySelectorAll(".case-option").forEach(option => {
+    option.addEventListener("click", () => {
+      const stage = option.closest(".case-stage");
+      if (stage.dataset.correctAnswered === "true") return;
+      const feedback = stage.querySelector(".case-feedback");
+      const isCorrect = option.dataset.caseCorrect === "true";
+      stage.querySelectorAll(".case-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+      if (isCorrect) {
+        stage.dataset.correctAnswered = "true";
+        stage.querySelectorAll(".case-option").forEach(btn => { btn.disabled = true; if (btn.dataset.caseCorrect === "true") btn.classList.add("correct-choice"); });
+        feedback.className = "quiz-feedback case-feedback show"; feedback.style.background = "var(--airway-mint)";
+        feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>You may continue.</strong>";
+        const next = stage.querySelector(".case-next button");
+        if (next) next.disabled = false;
+      } else {
+        option.classList.add("incorrect-choice");
+        feedback.className = "quiz-feedback case-feedback show"; feedback.style.background = "#FDE9E9";
+        feedback.innerHTML = option.dataset.caseFeedback + "<br><br><strong>Try again.</strong>";
+        const next = stage.querySelector(".case-next button");
+        if (next) next.disabled = true;
+      }
+    });
+  });
+  section.querySelectorAll(".case-next button").forEach(button => {
+    button.addEventListener("click", () => {
+      const current = button.closest(".case-stage");
+      const idx = stages.indexOf(current);
+      const next = stages[idx + 1];
+      if (!next) return;
+      next.classList.remove("lesson-hidden");
+      if (idx + 1 === stages.length - 1) markActivityComplete(section);
+      button.closest(".case-next").remove();
+      next.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+})();
+
+// ─── KNOWLEDGE CHECK ─────────────────────────────────────────────────────────
+(function initKnowledge() {
+  const section = document.getElementById("knowledge-check");
+  const status = document.getElementById("knowledgeStatus");
+  const answered = new Set();
+  const total = section.querySelectorAll(".knowledge-question").length;
+  section.querySelectorAll(".knowledge-option").forEach(option => {
+    option.addEventListener("click", () => {
+      const question = option.closest(".knowledge-question");
+      if (question.dataset.correctAnswered === "true") return;
+      const feedback = question.querySelector(".quiz-feedback");
+      const isCorrect = option.dataset.correct === "true";
+      question.querySelectorAll(".knowledge-option").forEach(btn => btn.classList.remove("incorrect-choice"));
+      if (isCorrect) {
+        question.dataset.correctAnswered = "true";
+        answered.add(option.dataset.question);
+        question.querySelectorAll(".knowledge-option").forEach(btn => { btn.disabled = true; if (btn.dataset.correct === "true") btn.classList.add("correct-choice"); });
+        feedback.className = "quiz-feedback show"; feedback.style.background = "var(--airway-mint)";
+        feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Correct answer locked in.</strong>";
+      } else {
+        option.classList.add("incorrect-choice");
+        feedback.className = "quiz-feedback show"; feedback.style.background = "#FDE9E9";
+        feedback.innerHTML = option.dataset.feedback + "<br><br><strong>Try again:</strong> Select the correct answer.";
+      }
+      status.textContent = `${answered.size} / ${total} questions answered correctly`;
+      if (answered.size === total) { status.textContent = "Knowledge check complete."; status.classList.add("complete"); markActivityComplete(section); }
+    });
+  });
+})();
+
+// ─── PROGRESSIVE SECTION REVEAL ─────────────────────────────────────────────
+function initializeProgressiveSections() {
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+  const sections = Array.from(document.querySelectorAll(".lesson-stack > section"));
+  const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+  sections.forEach((section, index) => { section.dataset.sectionIndex = index; if (index > 0) section.classList.add("lesson-hidden"); });
+  function getSectionTitle(section) { const heading = section.querySelector("h2,h3"); return heading ? heading.textContent.trim() : "Next Section"; }
+  function isSectionComplete(section) { const required = Array.from(section.querySelectorAll(".require-complete")); if (section.classList.contains("require-complete")) required.push(section); return required.every(item => item.dataset.complete === "true"); }
+  function setContinueState(section) { const button = section.querySelector(":scope > .section-continue button"); if (!button) return; const requires = section.classList.contains("require-complete") || section.querySelector(".require-complete"); if (!requires) { button.disabled = false; return; } const complete = isSectionComplete(section); button.disabled = !complete; button.textContent = complete ? button.dataset.readyText : "Complete activity to continue"; }
+  function updateAll() { sections.forEach(setContinueState); }
+  function updateNav(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const visible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !visible); link.classList.toggle("current", targetIndex === currentIndex); }); }
+  function revealThrough(targetIndex, scroll = true) { const currentVisible = sections.reduce((h, s, i) => !s.classList.contains("lesson-hidden") ? i : h, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNav(targetIndex); updateAll(); if (scroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
+  sections.forEach((section, index) => {
+    if (index >= sections.length - 1) return;
+    const next = sections[index + 1];
+    const nextTitle = getSectionTitle(next);
+    const wrapper = document.createElement("div");
+    wrapper.className = "section-continue";
+    wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+    wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); });
+    section.appendChild(wrapper);
+  });
+  navLinks.forEach(link => {
+    link.addEventListener("click", event => {
+      const target = document.querySelector(link.getAttribute("href"));
+      if (!target || target.dataset.sectionIndex === undefined) return;
+      event.preventDefault();
+      if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((h, s, i) => !s.classList.contains("lesson-hidden") ? i : h, 0); sections[currentVisible].scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+      revealThrough(Number(target.dataset.sectionIndex));
+    });
+  });
+  document.addEventListener("activityComplete", updateAll);
+  const note = document.createElement("span");
+  note.className = "section-progress-note";
+  note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";
+  sections[0].appendChild(note);
+  updateNav(0); updateAll();
+}
+initializeProgressiveSections();
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+
+window.LESSON_ID = "foundations_3_1";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>

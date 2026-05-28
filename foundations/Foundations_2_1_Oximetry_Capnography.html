@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Foundations 2.1</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status,.course-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete,.course-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress,.course-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint);color:var(--core-navy)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:620px}th,td{text-align:left;padding:8px;vertical-align:top}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease,border-color .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,220px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}.email-builder{display:grid;gap:12px}.email-builder label{font-weight:800}.email-builder input,.email-builder textarea{border:1px solid var(--soft-border);border-radius:12px;padding:12px;width:100%;min-width:0}.email-builder textarea{min-height:110px;resize:vertical}.score-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.score-pill{border-radius:999px;padding:8px 10px;text-align:center;font-weight:800;background:#EEF4F8;color:var(--slate)}.score-pill.good{background:var(--airway-mint);color:var(--core-navy)}.score-pill.warn{background:#FFF4DF;color:#7A4B00}.score-pill.bad{background:#FDE9E9;color:#8A1C1C}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px;color:#263f5e}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:repeat(2,minmax(220px,1fr))}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid,.score-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:560px}.home-button{width:42px;height:42px}.course-menu-button{padding:9px 12px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}table{min-width:520px}}
+
+.wave-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.wave-card{border:1px solid var(--soft-border);border-radius:16px;background:#fff;padding:14px}
+.input-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.input-grid label{font-weight:800}
+.input-grid input,.input-grid select{width:100%;border:1px solid var(--soft-border);border-radius:12px;padding:11px;background:#fff}
+.monitor-badge{display:inline-flex;align-items:center;border-radius:999px;background:#EEF4F8;color:var(--slate);font-weight:800;padding:6px 10px;margin:3px}
+.hint-box{border-left:6px solid var(--clinical-amber);background:#FFF4DF;border-radius:14px;padding:14px;margin-top:14px}
+@media(max-width:900px){.wave-grid,.input-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+<header class="top-nav" aria-label="PulmoCore site navigation">
+<div class="brand" aria-label="PulmoCore brand">
+<div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+<div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory care learning for future RTs.</div></div>
+</div>
+<div class="top-nav-actions">
+<a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" aria-label="Glossary and Flashcards" title="Glossary & Flashcards" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+<a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+<div class="course-menu-container course-menu-wrapper"><button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div></div>
+</div>
+</header>
+
+<main class="main-content">
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+<span class="eyebrow">Foundations of Respiratory Care · Lesson 2.1</span>
+<h1 style="font-family:var(--font-heading);font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Oximetry & Capnography</h1>
+<p style="font-size:1.18rem;max-width:980px;color:#243b55">Monitoring devices help respiratory therapists trend oxygenation, ventilation, perfusion, airway placement, and resuscitation quality. This lesson teaches pulse oximetry, co-oximetry, colorimetric detectors, waveform capnography, capnogram patterns, and bedside troubleshooting.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Course Track</strong><br>Foundations of Respiratory Care</div>
+<div class="example-box soft-blue"><strong>Estimated Time</strong><br>45-60 minutes</div>
+<div class="example-box soft-amber"><strong>Level</strong><br>Beginner monitoring + clinical decisions</div>
+</div>
+</section>
+
+<div class="content-layout">
+<aside aria-label="Lesson quick navigation" class="side-nav">
+<h3>Lesson Sections</h3>
+<a href="#objectives">Objectives</a>
+<a href="#overview-video">Video</a>
+<a href="#monitoring">Monitoring Big Picture</a>
+<a href="#pulse-ox">Pulse Oximetry</a>
+<a href="#troubleshooting">Troubleshooting SpO₂</a>
+<a href="#overnight">Overnight Oximetry</a>
+<a href="#coox">Co-Oximetry</a>
+<a href="#capno">Capnography Basics</a>
+<a href="#waveforms">Waveform Patterns</a>
+<a href="#airway-cpr">Airway + CPR Use</a>
+<a href="#scenario">Guided Scenario</a>
+<a href="#practice">Assignment Practice</a>
+<a href="#knowledge-check">Knowledge Check</a>
+<a href="#faq">FAQ</a>
+<a href="#summary">Summary</a>
+<a href="#glossary">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+<section class="info-card" id="objectives">
+<h2>Learning Objectives</h2>
+<p>By the end of this lesson, you should be able to describe how pulse oximetry, co-oximetry, and capnography are used, troubleshoot inaccurate readings, identify common capnogram patterns, and apply ETCO₂ trends during airway placement and resuscitation.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>1. Explain SpO₂ monitoring</strong><br>Describe what pulse oximetry measures and when readings can be misleading.</div>
+<div class="example-box soft-blue"><strong>2. Troubleshoot inaccurate readings</strong><br>Check the patient, perfusion, probe site, oxygen delivery, and artifact sources.</div>
+<div class="example-box soft-amber"><strong>3. Interpret ETCO₂ trends</strong><br>Connect rising and falling ETCO₂ to ventilation, perfusion, metabolism, and dead space.</div>
+<div class="example-box soft-coral"><strong>4. Identify waveforms</strong><br>Recognize obstruction, leak, rebreathing, inspiratory effort, apnea/arrest, and ROSC patterns.</div>
+</div>
+</section>
+
+<section class="info-card" id="overview-video">
+<span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Monitors Are Clues, Not the Whole Patient</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/foundations/Foundations_2_1.mp4" type="video/mp4"/>
+<track default kind="captions" label="English captions" src="/foundations/Foundations_2_1.vtt" srclang="en"/>
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+
+<div class="lesson-stack">
+
+<section class="info-card" id="monitoring">
+<h2>Monitoring Gas Exchange: Oxygenation, Ventilation, and Perfusion</h2>
+<p>Pulse oximetry and capnography answer different questions. Pulse oximetry estimates oxygen saturation. Capnography measures exhaled carbon dioxide and displays a waveform. Co-oximetry directly measures hemoglobin species such as O₂Hb and COHb.</p>
+<img src="/foundations/Foundations_2_1_assets/foundations-2-1-monitoring-overview.png" alt="Gas exchange monitoring overview showing SpO2, co-oximetry, ETCO2, and waveform interpretation" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Pulse ox</strong><br>Noninvasive oxygen saturation trend.</div>
+<div class="example-box soft-blue"><strong>Co-oximetry</strong><br>Direct blood measurement of O₂Hb, COHb, and other hemoglobin species.</div>
+<div class="example-box soft-amber"><strong>Capnography</strong><br>Exhaled CO₂ number and waveform pattern.</div>
+</div>
+<article class="activity-card require-complete" data-activity-name="Monitoring Match" style="margin-top:16px">
+<h3>Match the Monitor to the Question</h3>
+<p>Choose the best monitoring tool for each clinical question.</p>
+<div class="sort-grid" id="monitorSort">
+<div class="sort-row" data-answer="pulseox"><strong>What is the patient’s estimated oxygen saturation right now?</strong><select><option value="">Choose</option><option value="pulseox">Pulse oximeter</option><option value="coox">Co-oximeter</option><option value="capno">Capnograph</option></select></div>
+<div class="sort-row" data-answer="coox"><strong>Does this patient have carbon monoxide poisoning?</strong><select><option value="">Choose</option><option value="pulseox">Pulse oximeter</option><option value="coox">Co-oximeter</option><option value="capno">Capnograph</option></select></div>
+<div class="sort-row" data-answer="capno"><strong>Is exhaled CO₂ suddenly dropping during CPR?</strong><select><option value="">Choose</option><option value="pulseox">Pulse oximeter</option><option value="coox">Co-oximeter</option><option value="capno">Capnograph</option></select></div>
+</div>
+<button class="small-btn primary" id="checkMonitorSort" type="button" style="margin-top:12px">Check Match</button>
+<div class="activity-status" id="monitorSortStatus">Complete the matching activity to continue.</div>
+</article>
+</section>
+
+<section class="info-card" id="pulse-ox">
+<h2>Pulse Oximetry</h2>
+<p>Pulse oximetry is a noninvasive way to continuously monitor SpO₂ and pulse. A probe sends light through pulsating capillary blood and estimates oxygen saturation based on light absorption by oxygenated and deoxygenated hemoglobin.</p>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Pulse Ox Strength</th><th>Limitation</th><th>RT Meaning</th></tr>
+<tr><td>Fast, continuous, noninvasive.</td><td>Does not measure PaO₂ or ventilation.</td><td>A normal SpO₂ does not guarantee normal ventilation or normal COHb.</td></tr>
+<tr><td>Useful during rest, activity, sleep screening, and oxygen titration.</td><td>Accuracy can be affected by motion, perfusion, light, nail polish, skin changes, and dyshemoglobins.</td><td>Always assess the patient, not just the number.</td></tr>
+</table>
+</div>
+<article class="quiz-card require-complete" id="pulseox-check" data-activity-name="Pulse Ox Check" style="margin-top:16px">
+<h3>Pulse Ox Concept Check</h3>
+<p>Which statement is safest?</p>
+<div class="quiz-options">
+<button class="quiz-option pulse-option" data-correct="true" data-feedback="Correct. A pulse oximeter provides a useful trend, but the patient assessment comes first.">A pulse oximeter is a helpful trend, but abnormal readings must be compared with patient condition.</button>
+<button class="quiz-option pulse-option" data-correct="false" data-feedback="Not quite. A normal SpO2 can be misleading in carbon monoxide poisoning.">SpO₂ of 100% always means oxygenation is normal.</button>
+<button class="quiz-option pulse-option" data-correct="false" data-feedback="Not quite. Pulse oximetry does not measure ventilation or PaCO2.">Pulse oximetry directly measures ventilation.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<section class="info-card" id="troubleshooting">
+<h2>Troubleshooting Inaccurate SpO₂ Readings</h2>
+<p>If the monitor suddenly changes but the patient does not look different, do not assume the number is wrong or right. Work through a safe troubleshooting sequence.</p>
+<img src="/foundations/Foundations_2_1_assets/foundations-2-1-pulse-ox-troubleshooting.png" alt="Pulse oximetry troubleshooting steps: check patient, pulse, perfusion, oxygen device, and probe" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+<article class="activity-card require-complete" data-activity-name="Pulse Ox Troubleshooting" style="margin-top:16px">
+<h3>What Should You Check?</h3>
+<p>Select safe troubleshooting steps for an unexpected low SpO₂.</p>
+<div class="quiz-options">
+<button class="quiz-option troubleshooting-option" data-good="true">Check the patient for distress first.</button>
+<button class="quiz-option troubleshooting-option" data-good="true">Compare the displayed pulse with a palpated pulse.</button>
+<button class="quiz-option troubleshooting-option" data-good="true">Check probe placement, perfusion, nail polish, and ambient light.</button>
+<button class="quiz-option troubleshooting-option" data-good="false">Ignore the patient because the monitor is always more accurate.</button>
+<button class="quiz-option troubleshooting-option" data-good="false">Immediately remove oxygen without assessing.</button>
+</div>
+<div class="activity-status" id="troubleshootingStatus">Select the safe actions and identify unsafe assumptions.</div>
+</article>
+</section>
+
+<section class="info-card" id="overnight">
+<h2>Overnight Pulse Oximetry</h2>
+<p>Overnight pulse oximetry records saturation and pulse during sleep. It can identify desaturation episodes and help determine whether a patient needs a full sleep study.</p>
+<div class="component-grid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Description</strong><br>Continuous overnight SpO₂ and pulse recording.</div>
+<div class="example-box soft-blue"><strong>Indication</strong><br>Screening for sleep-related breathing disorders.</div>
+<div class="example-box soft-amber"><strong>Finding</strong><br>Desaturation episodes or baseline drops.</div>
+<div class="example-box soft-coral"><strong>Next step</strong><br>Recommend polysomnography when indicated.</div>
+</div>
+<article class="quiz-card require-complete" id="overnight-check" data-activity-name="Overnight Oximetry Check" style="margin-top:16px">
+<h3>Overnight Oximetry Check</h3>
+<p>If desaturation episodes are detected during overnight pulse oximetry, what should the RT recommend?</p>
+<div class="quiz-options">
+<button class="quiz-option overnight-option" data-correct="true" data-feedback="Correct. Desaturation episodes during overnight oximetry should prompt recommendation for polysomnography when clinically appropriate.">Polysomnography</button>
+<button class="quiz-option overnight-option" data-correct="false" data-feedback="Not quite. Echocardiography may be useful for cardiac questions, but sleep-related desaturations are evaluated with polysomnography.">Echocardiography</button>
+<button class="quiz-option overnight-option" data-correct="false" data-feedback="Not quite. Mechanical ventilation is not the default recommendation for sleep-screening desaturations.">Mechanical ventilation</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<section class="info-card" id="coox">
+<h2>Co-Oximetry and Carbon Monoxide Poisoning</h2>
+<p>A co-oximeter uses a blood sample and multiple wavelengths of light to directly measure oxyhemoglobin, carboxyhemoglobin, methemoglobin, and other hemoglobin species. It is especially important when carbon monoxide poisoning is suspected.</p>
+<img src="/foundations/Foundations_2_1_assets/foundations-2-1-co-oximetry.png" alt="Co-oximetry visual contrasting pulse ox SpO2 with direct co-oximeter O2Hb and COHb measurements" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+<div class="hint-box"><strong>Key safety point:</strong> COHb can make SpO₂ appear falsely normal or high. If O₂Hb is low and COHb is high, treat with 100% oxygen and escalate per facility protocol.</div>
+<article class="quiz-card require-complete" id="coox-check" data-activity-name="Co-Oximetry Check" style="margin-top:16px">
+<h3>CO Poisoning Check</h3>
+<p>A patient has SpO₂ 100%, O₂Hb 70%, and COHb 30%. What should you recommend?</p>
+<div class="quiz-options">
+<button class="quiz-option coox-option" data-correct="true" data-feedback="Correct. High COHb with low O2Hb requires 100% oxygen to help displace CO from hemoglobin.">Initiate oxygen therapy with 100% oxygen.</button>
+<button class="quiz-option coox-option" data-correct="false" data-feedback="Not quite. 2 L nasal cannula is not enough for significant carbon monoxide poisoning.">Start 2 L nasal cannula only.</button>
+<button class="quiz-option coox-option" data-correct="false" data-feedback="Not quite. The SpO2 is misleading because COHb is high and O2Hb is low.">Send the patient home because SpO₂ is 100%.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<section class="info-card" id="capno">
+<h2>Capnography Basics</h2>
+<p>Capnography measures exhaled carbon dioxide and displays a waveform. ETCO₂ depends on CO₂ production, blood flow carrying CO₂ to the lungs, ventilation moving CO₂ out, and equipment that samples the exhaled gas.</p>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>ETCO₂ Change</th><th>Possible Meaning</th><th>Examples</th></tr>
+<tr><td>Increasing ETCO₂</td><td>Less CO₂ elimination or more CO₂ production.</td><td>Hypoventilation, oversedation, COPD/asthma exacerbation, increased metabolism.</td></tr>
+<tr><td>Decreasing ETCO₂</td><td>More ventilation, less perfusion, or more dead space.</td><td>Hyperventilation, hypovolemia, pulmonary embolism, falling cardiac output.</td></tr>
+<tr><td>Zero ETCO₂</td><td>No detected exhaled CO₂.</td><td>Apnea, cardiac arrest, disconnection, esophageal intubation.</td></tr>
+</table>
+</div>
+<article class="activity-card require-complete" data-activity-name="ETCO2 Trend Sorting" style="margin-top:16px">
+<h3>Sort ETCO₂ Trends</h3>
+<p>Choose the best interpretation.</p>
+<div class="sort-grid" id="etco2Sort">
+<div class="sort-row" data-answer="increase"><strong>ETCO₂ rises from 32 to 50 mmHg.</strong><select><option value="">Choose</option><option value="increase">Possible hypoventilation</option><option value="decrease">Possible hyperventilation/perfusion loss</option><option value="zero">Possible apnea/arrest/disconnection</option></select></div>
+<div class="sort-row" data-answer="decrease"><strong>ETCO₂ falls from 32 to 22 mmHg.</strong><select><option value="">Choose</option><option value="increase">Possible hypoventilation</option><option value="decrease">Possible hyperventilation/perfusion loss</option><option value="zero">Possible apnea/arrest/disconnection</option></select></div>
+<div class="sort-row" data-answer="zero"><strong>ETCO₂ reads zero after intubation.</strong><select><option value="">Choose</option><option value="increase">Possible hypoventilation</option><option value="decrease">Possible hyperventilation/perfusion loss</option><option value="zero">Possible apnea/arrest/disconnection</option></select></div>
+</div>
+<button class="small-btn primary" id="checkETCO2Sort" type="button" style="margin-top:12px">Check Trends</button>
+<div class="activity-status" id="etco2SortStatus">Complete the trend sorting activity to continue.</div>
+</article>
+</section>
+
+<section class="info-card" id="waveforms">
+<h2>Capnography Waveform Patterns</h2>
+<p>A waveform helps identify problems that a single number may miss. Look at the baseline, upstroke, plateau, downstroke, height, and trend over time.</p>
+<img src="/foundations/Foundations_2_1_assets/foundations-2-1-capnogram-patterns.png" alt="Capnography waveform comparison showing normal waveform and airway obstruction shark fin waveform" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Waveform Clue</th><th>Likely Meaning</th></tr>
+<tr><td>Shark-fin shape</td><td>Airway obstruction such as asthma, COPD, or mucus plugging.</td></tr>
+<tr><td>Loss of plateau / sloping down</td><td>Leak in cuff or circuit.</td></tr>
+<tr><td>Notch in plateau</td><td>Inspiratory effort/curare cleft.</td></tr>
+<tr><td>Elevated baseline</td><td>Rebreathing CO₂.</td></tr>
+<tr><td>Sudden loss to zero</td><td>Apnea, arrest, disconnection, or tube displacement.</td></tr>
+</table>
+</div>
+<article class="activity-card require-complete" data-activity-name="Waveform Match" style="margin-top:16px">
+<h3>Waveform Pattern Match</h3>
+<div class="sort-grid" id="waveSort">
+<div class="sort-row" data-answer="obstruction"><strong>Slanted shark-fin upstroke</strong><select><option value="">Choose</option><option value="obstruction">Airway obstruction</option><option value="leak">Cuff/circuit leak</option><option value="rebreathing">Rebreathing CO₂</option></select></div>
+<div class="sort-row" data-answer="leak"><strong>Loss of plateau with downward slope</strong><select><option value="">Choose</option><option value="obstruction">Airway obstruction</option><option value="leak">Cuff/circuit leak</option><option value="rebreathing">Rebreathing CO₂</option></select></div>
+<div class="sort-row" data-answer="rebreathing"><strong>Baseline does not return to zero</strong><select><option value="">Choose</option><option value="obstruction">Airway obstruction</option><option value="leak">Cuff/circuit leak</option><option value="rebreathing">Rebreathing CO₂</option></select></div>
+</div>
+<button class="small-btn primary" id="checkWaveSort" type="button" style="margin-top:12px">Check Waveforms</button>
+<div class="activity-status" id="waveSortStatus">Complete the waveform match to continue.</div>
+</article>
+</section>
+
+<section class="info-card" id="airway-cpr">
+<h2>Airway Placement and CPR Quality</h2>
+<p>A colorimetric detector changes color when CO₂ is present and can help quickly confirm tracheal tube placement. Waveform capnography is preferred as soon as available because it shows both ETCO₂ values and waveform trends.</p>
+<img src="/foundations/Foundations_2_1_assets/foundations-2-1-cpr-etco2.png" alt="ETCO2 during CPR showing low values and sudden rise suggesting ROSC" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Airway placement</strong><br>CO₂ color change or waveform supports tracheal placement.</div>
+<div class="example-box soft-blue"><strong>CPR quality</strong><br>ETCO₂ less than about 10-15 mmHg suggests poor perfusion/compressions.</div>
+<div class="example-box soft-amber"><strong>ROSC clue</strong><br>Sudden ETCO₂ rise may indicate return of circulation.</div>
+</div>
+<article class="quiz-card require-complete" id="cpr-check" data-activity-name="CPR Capnography Check" style="margin-top:16px">
+<h3>CPR Capnography Check</h3>
+<p>During chest compressions, ETCO₂ suddenly rises from 5 to 30 mmHg. What does this suggest?</p>
+<div class="quiz-options">
+<button class="quiz-option cpr-option" data-correct="true" data-feedback="Correct. A sudden ETCO2 rise during CPR can indicate return of spontaneous circulation.">Return of spontaneous circulation.</button>
+<button class="quiz-option cpr-option" data-correct="false" data-feedback="Not quite. A sudden rise is not usually a sign to make compressions worse; it may mean perfusion has returned.">The compressor must press shallower.</button>
+<button class="quiz-option cpr-option" data-correct="false" data-feedback="Not quite. It is not automatically a device malfunction; assess for pulse/ROSC.">Capnography is useless during CPR.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<section class="case-card require-complete" id="scenario" data-activity-name="Guided Monitoring Scenario">
+<span class="eyebrow">Guided Scenario</span>
+<h2>The Intubated Patient With Changing Monitors</h2>
+<p>This case integrates pulse oximetry, co-oximetry, capnography, airway placement, and CPR quality.</p>
+<div class="case-stage" data-case-stage="0">
+<h3>Stage 1: After Intubation</h3>
+<p>The patient is intubated during cardiac arrest. The colorimetric detector turns yellow after ventilation.</p>
+<p><strong>Decision:</strong> What does this most likely indicate?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Yellow color change indicates CO2 is detected, supporting tracheal placement.">CO₂ is detected, supporting tracheal tube placement.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. No CO2/color change would raise concern for esophageal placement or no perfusion/ventilation.">The tube is definitely in the esophagus.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A colorimetric detector evaluates CO2, not oxygen saturation.">SpO₂ is guaranteed normal.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+<div class="case-stage lesson-hidden" data-case-stage="1">
+<h3>Stage 2: CPR Quality</h3>
+<p>Waveform capnography is placed. ETCO₂ stays at 8 mmHg during compressions.</p>
+<p><strong>Decision:</strong> What should be recommended?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Very low ETCO2 during CPR suggests poor perfusion and may indicate the need for deeper compressions and compressor rotation.">Improve CPR quality with deeper compressions and compressor rotation.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Increasing oxygen does not directly fix poor perfusion from ineffective compressions.">Only increase FiO₂.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Stopping compressions would worsen perfusion unless a pulse is confirmed.">Stop compressions immediately without pulse check.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+<div class="case-stage lesson-hidden" data-case-stage="2">
+<h3>Case Wrap-Up</h3>
+<div class="example-box soft-teal"><strong>Takeaway:</strong> Monitoring tools must be interpreted with patient assessment. ETCO₂ can confirm ventilation, trend perfusion, guide CPR quality, and suggest ROSC.</div>
+<div class="example-box soft-amber" style="margin-top:12px"><strong>Assignment connection:</strong> This mirrors the 2.1 quiz focus: troubleshooting SpO₂, recognizing CO poisoning, identifying capnogram patterns, confirming airway placement, and using ETCO₂ during CPR.</div>
+</div>
+</section>
+
+<section class="info-card" id="practice">
+<h2>Assignment Practice Zone</h2>
+<p>This section mirrors the assignment style for oximetry and capnography.</p>
+<article class="activity-card require-complete" data-activity-name="Monitoring Assignment Practice">
+<h3>Mixed Monitoring Practice</h3>
+<div class="input-grid">
+<label>High COHb is best measured by:
+<select id="practice1"><option value="">Choose</option><option value="coox">Co-oximetry</option><option value="pulseox">Pulse oximetry</option><option value="ecg">ECG</option></select></label>
+<label>Shark-fin capnogram suggests:
+<select id="practice2"><option value="">Choose</option><option value="obstruction">Airway obstruction</option><option value="leak">Circuit leak only</option><option value="normal">Normal</option></select></label>
+<label>ETCO₂ below 10 during CPR suggests:
+<select id="practice3"><option value="">Choose</option><option value="compressions">Improve compression quality</option><option value="sendhome">Normal finding</option><option value="decrease">Decrease compressions</option></select></label>
+</div>
+<button class="small-btn primary" id="checkPractice" type="button" style="margin-top:12px">Check Practice</button>
+<div class="activity-status" id="practiceStatus">Complete the mixed practice to continue.</div>
+</article>
+</section>
+
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Foundations 2.1 Knowledge Check">
+<span class="eyebrow">Knowledge Check</span>
+<h2>Oximetry & Capnography Mastery</h2>
+<p>Answer each question correctly to complete this activity.</p>
+
+<div class="knowledge-question" data-question-id="kq1">
+<h3>Question 1</h3>
+<p>Which condition can make pulse oximetry falsely reassuring?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct. COHb can make SpO2 falsely high while O2Hb is low.">Carbon monoxide poisoning.</button>
+<button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Eupnea does not usually make pulse oximetry falsely high by itself.">Eupnea breathing pattern.</button>
+<button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Incorrect. Clear fingernails are not a typical false-high cause.">Clean fingernails.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="kq2">
+<h3>Question 2</h3>
+<p>A decreasing ETCO₂ can indicate all of the following EXCEPT:</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct. Hypoventilation usually increases ETCO2, not decreases it.">Hypoventilation.</button>
+<button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Hyperventilation can decrease ETCO2.">Hyperventilation.</button>
+<button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Incorrect. Pulmonary embolism can decrease ETCO2 by increasing dead space and impairing perfusion.">Pulmonary embolism.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="kq3">
+<h3>Question 3</h3>
+<p>Which waveform suggests airway obstruction?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct. Airway obstruction classically creates a shark-fin capnogram.">Shark-fin waveform.</button>
+<button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. Elevated baseline suggests rebreathing CO2.">Elevated baseline only.</button>
+<button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Incorrect. A sudden increase during CPR may indicate ROSC.">Sudden rise during CPR only.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="activity-status" id="knowledgeStatus">0 / 3 questions answered correctly</div>
+</section>
+
+<section id="faq">
+<div class="section-heading"><span class="eyebrow">FAQ</span><h2>Common Monitoring Questions</h2></div>
+<details class="accordion" open><summary>Is pulse oximetry the same as oxygenation?</summary><div class="accordion-body"><p>Pulse oximetry estimates saturation, but it does not measure PaO₂, ventilation, or nonfunctional hemoglobin. It is a trend that must be interpreted with patient assessment.</p></div></details>
+<details class="accordion"><summary>Why use co-oximetry for carbon monoxide poisoning?</summary><div class="accordion-body"><p>Pulse oximetry cannot reliably distinguish O₂Hb from COHb. Co-oximetry directly measures hemoglobin species.</p></div></details>
+<details class="accordion"><summary>What does ETCO₂ tell us?</summary><div class="accordion-body"><p>ETCO₂ reflects CO₂ production, pulmonary perfusion, ventilation, and equipment sampling. It is especially useful for trending ventilation and perfusion changes.</p></div></details>
+<details class="accordion"><summary>Why is waveform capnography preferred over colorimetry?</summary><div class="accordion-body"><p>Colorimetry gives a quick CO₂ color change, but waveform capnography provides continuous numeric and waveform data.</p></div></details>
+</section>
+
+<section class="info-card" id="summary">
+<h2>Summary & Clinical Pearls</h2>
+<p>Pulse oximetry trends oxygen saturation. Co-oximetry directly measures hemoglobin species and is essential in suspected CO poisoning. Capnography trends ventilation and perfusion, confirms airway placement, supports CPR quality monitoring, and helps identify airway or circuit problems through waveform shape.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Must know:</strong><br>Always check the patient before treating the monitor.</div>
+<div class="example-box soft-blue"><strong>CO pearl:</strong><br>SpO₂ may look normal when COHb is high.</div>
+<div class="example-box soft-amber"><strong>Capno pearl:</strong><br>Shark fin = airway obstruction until proven otherwise.</div>
+<div class="example-box soft-coral"><strong>CPR pearl:</strong><br>Low ETCO₂ suggests poor perfusion; sudden rise suggests ROSC.</div>
+</div>
+</section>
+
+<section id="glossary">
+<div class="glossary-card">
+<h3>Glossary Flashcard Mastery Deck</h3>
+<p>Click the card to flip it. Mark known cards to move them into the completed pile.</p>
+<div class="flashcard-shell">
+<div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+<div aria-label="Current flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0"><div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div></div>
+<div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+<div class="completed-list" id="completedList"></div>
+</div>
+</div>
+</section>
+
+</div>
+</main>
+<footer class="footer"><div><strong>Pulmo<span>Core</span></strong><br>Core respiratory care learning for future RTs.</div><div>Foundations · Physiology · Assessment · Equipment</div></footer>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");if(button&&panel){panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';const list=document.getElementById("courseMenuList"),courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];const currentFile=window.location.pathname.split("/").pop().toLowerCase();if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return '<a class="course-menu-item '+(isCurrent?'current':'')+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}button.onclick=function(event){event.preventDefault();event.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};document.addEventListener("click",event=>{if(!panel.contains(event.target)&&event.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}})}
+});
+const glossaryTerms=[
+{term:"Pulse oximetry",definition:"A noninvasive method for estimating oxygen saturation and pulse using light transmission through pulsatile blood."},
+{term:"SpO2",definition:"Peripheral oxygen saturation estimated by pulse oximetry."},
+{term:"Co-oximetry",definition:"Direct blood measurement of hemoglobin species such as O2Hb, COHb, and MetHb."},
+{term:"Carboxyhemoglobin",definition:"Hemoglobin bound to carbon monoxide, which reduces oxygen carrying capacity and can falsely elevate SpO2."},
+{term:"Capnography",definition:"Measurement and waveform display of exhaled carbon dioxide."},
+{term:"ETCO2",definition:"End-tidal carbon dioxide, measured at the end of exhalation."},
+{term:"Shark-fin waveform",definition:"A capnography pattern commonly associated with airway obstruction."},
+{term:"Colorimetric detector",definition:"A CO2 detector that changes color when carbon dioxide is present."},
+{term:"ROSC",definition:"Return of spontaneous circulation after cardiac arrest."},
+{term:"Rebreathing",definition:"Inhaling previously exhaled carbon dioxide, often seen as an elevated capnogram baseline."}
+];
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:`<div class="empty-state">No cards completed yet.</div>`}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete.";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);flashcard.addEventListener("click",flipCurrentCard);flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));renderFlashcard();
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(child=>child.classList&&child.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(option=>container.appendChild(option))})}
+shuffleAnswerOptions();
+function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+function setStatus(id,text,ok){const s=document.getElementById(id);s.textContent=text;if(ok)s.classList.add("complete")}
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}function updateAll(){sections.forEach(setContinueState)}function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}sections.forEach((section,index)=>{if(index>=sections.length-1)return;const next=sections[index+1];const nextTitle=getSectionTitle(next);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});document.addEventListener("activityComplete",updateAll);const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";sections[0].appendChild(note);updateNav(0);updateAll()}
+initializeProgressiveSections();
+
+function initSort(sectionSelector,buttonId,statusId){const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");const button=document.getElementById(buttonId);const status=document.getElementById(statusId);if(!activity||!button)return;button.addEventListener("click",()=>{const rows=Array.from(activity.querySelectorAll(".sort-row"));let correct=0;rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});status.textContent=`${correct} / ${rows.length} correct`;if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}})}
+initSort("#monitoring","checkMonitorSort","monitorSortStatus");
+initSort("#capno","checkETCO2Sort","etco2SortStatus");
+initSort("#waveforms","checkWaveSort","waveSortStatus");
+
+function initQuizOptions(selector){const activity=document.querySelector(selector);if(!activity)return;activity.querySelectorAll(".quiz-option").forEach(button=>{button.addEventListener("click",()=>{if(activity.dataset.correctAnswered==="true")return;const feedback=activity.querySelector(".quiz-feedback");const isCorrect=button.dataset.correct==="true";activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){activity.dataset.correctAnswered="true";activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";markActivityComplete(activity)}else{button.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."}})})}
+["#pulseox-check","#overnight-check","#coox-check","#cpr-check"].forEach(initQuizOptions);
+
+function initTroubleshooting(){const activity=document.querySelector("#troubleshooting .activity-card.require-complete");const status=document.getElementById("troubleshootingStatus");const options=activity.querySelectorAll(".troubleshooting-option");options.forEach(btn=>btn.addEventListener("click",()=>{const good=btn.dataset.good==="true";btn.classList.toggle(good?"correct-choice":"incorrect-choice");const selectedGood=Array.from(options).filter(o=>o.dataset.good==="true"&&o.classList.contains("correct-choice")).length;const selectedBad=Array.from(options).filter(o=>o.dataset.good==="false"&&o.classList.contains("incorrect-choice")).length;status.textContent=`${selectedGood} / 3 safe actions selected; ${selectedBad} unsafe assumptions identified`;if(selectedGood===3&&selectedBad===2){status.textContent="Troubleshooting activity complete.";status.classList.add("complete");markActivityComplete(activity)}}))}
+initTroubleshooting();
+
+function initPractice(){const activity=document.querySelector("#practice .activity-card.require-complete");document.getElementById("checkPractice").addEventListener("click",()=>{const ok=practice1.value==="coox"&&practice2.value==="obstruction"&&practice3.value==="compressions";setStatus("practiceStatus",ok?"Mixed monitoring practice complete.":"Review: COHb = co-oximetry; shark fin = obstruction; ETCO2 <10 during CPR = improve compression quality.",ok);if(ok)markActivityComplete(activity)})}
+initPractice();
+
+function initCase(){const section=document.getElementById("scenario");const stages=Array.from(section.querySelectorAll(".case-stage"));stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});section.querySelectorAll(".case-option").forEach(option=>option.addEventListener("click",()=>{const stage=option.closest(".case-stage");if(stage.dataset.correctAnswered==="true")return;const feedback=stage.querySelector(".case-feedback");const isCorrect=option.dataset.caseCorrect==="true";stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){stage.dataset.correctAnswered="true";stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";const next=stage.querySelector(".case-next button");if(next)next.disabled=false}else{option.classList.add("incorrect-choice");feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";const next=stage.querySelector(".case-next button");if(next)next.disabled=true}}));section.querySelectorAll(".case-next button").forEach(button=>{button.disabled=true;button.addEventListener("click",()=>{const current=button.closest(".case-stage");const idx=stages.indexOf(current);const next=stages[idx+1];if(!next)return;next.classList.remove("lesson-hidden");if(idx+1===stages.length-1)markActivityComplete(section);button.closest(".case-next").remove();next.scrollIntoView({behavior:"smooth",block:"start"})})})}
+initCase();
+
+function initKnowledge(){const section=document.getElementById("knowledge-check");const status=document.getElementById("knowledgeStatus");const answered=new Set();const total=section.querySelectorAll(".knowledge-question").length;section.querySelectorAll(".knowledge-option").forEach(option=>option.addEventListener("click",()=>{const question=option.closest(".knowledge-question");if(question.dataset.correctAnswered==="true")return;const feedback=question.querySelector(".quiz-feedback");const isCorrect=option.dataset.correct==="true";question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){question.dataset.correctAnswered="true";answered.add(option.dataset.question);question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>"}else{option.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again:</strong> Select the correct answer to complete this question."}status.textContent=`${answered.size} / ${total} questions answered correctly`;if(answered.size===total){status.textContent="Knowledge check complete.";status.classList.add("complete");markActivityComplete(section)}}))}
+initKnowledge();
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+
+window.LESSON_ID="foundations_2_1";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>

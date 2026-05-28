@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Foundations 3.2</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status,.course-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete,.course-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress,.course-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint);color:var(--core-navy)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:560px}th,td{text-align:left;padding:8px;vertical-align:top}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease,border-color .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,220px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px;color:#263f5e}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:repeat(2,minmax(220px,1fr))}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:520px}.home-button{width:42px;height:42px}.course-menu-button{padding:9px 12px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}table{min-width:480px}}
+
+/* ── ECG-specific styles ───────────────────────────────────────────────── */
+.ecg-paper{background:#fff8f8;border:1px solid #f5c6c6;border-radius:14px;padding:16px;overflow-x:auto;position:relative}
+.ecg-grid{display:grid;grid-template-columns:repeat(30,1fr);gap:0;border:1px solid #f5c6c6;border-radius:8px;overflow:hidden;min-width:560px}
+.ecg-cell{height:18px;border-right:1px solid #ffd5d5;border-bottom:1px solid #ffd5d5}
+.ecg-cell:nth-child(5n){border-right:2px solid #e88}
+.ecg-cell:nth-child(5n+1){border-left:2px solid #e88}
+.rhythm-tag{display:inline-flex;align-items:center;border-radius:999px;padding:5px 12px;font-size:.82rem;font-weight:800;margin:3px}
+.rhythm-sinus{background:#DDF7F2;color:#0B1F33}
+.rhythm-atrial{background:#E6F3FF;color:#0B1F33}
+.rhythm-ventricular{background:#FFF4DF;color:#7A4B00}
+.rhythm-deadly{background:#FDE9E9;color:#8A1C1C}
+.wave-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:14px}
+.wave-card{border:2px solid var(--soft-border);border-radius:14px;background:#fff;padding:14px;text-align:center}
+.wave-letter{font-family:var(--font-heading);font-size:2rem;font-weight:800}
+.rate-calc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.rate-card{border:1px solid var(--soft-border);border-radius:14px;background:#fff;padding:16px}
+.rate-formula{font-family:var(--font-data);background:#F8FBFD;border-radius:10px;padding:10px;margin:8px 0;font-size:1rem;text-align:center;border:1px solid var(--soft-border)}
+.rhythm-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.rhythm-card{border-radius:14px;padding:16px;border:2px solid}
+@media(max-width:900px){.wave-grid{grid-template-columns:repeat(3,1fr)}.rate-calc-grid,.rhythm-summary-grid{grid-template-columns:1fr}}
+.hs-ts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.hs-ts-card{border-radius:12px;padding:14px}
+.calc-practice{display:grid;gap:10px;margin-top:14px}
+.calc-row{display:grid;grid-template-columns:minmax(0,1fr) 140px 120px;gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px}
+.calc-row input{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;text-align:center;font-family:var(--font-data);font-size:1rem}
+.calc-row.correct-calc{border-color:#86D9C8;background:var(--airway-mint)}
+.calc-row.incorrect-calc{border-color:#F2B5B5;background:#FDE9E9}
+@media(max-width:780px){.calc-row{grid-template-columns:1fr}.hs-ts-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<!-- ── NAV ───────────────────────────────────────────────────────────────── -->
+<header class="top-nav" aria-label="PulmoCore site navigation">
+  <div class="brand" aria-label="PulmoCore brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+    <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+  </div>
+  <div class="top-nav-actions">
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" aria-label="Glossary and Flashcards" title="Glossary & Flashcards" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+    <div class="course-menu-container course-menu-wrapper">
+      <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+      <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+  <span class="eyebrow">Foundations of Respiratory Care · Lesson 3.2</span>
+  <h1 style="font-family:var(--font-heading);font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">ECG Interpretation & Cardiac Rhythm Analysis</h1>
+  <p style="font-size:1.18rem;max-width:980px;color:#243b55">Respiratory therapists must recognize normal and life-threatening cardiac rhythms, calculate heart rate, and understand when to escalate care. This lesson builds systematic ECG reading skills — from paper basics through deadly rhythms and clinical decision-making.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>Course Track</strong><br>Foundations of Respiratory Care</div>
+    <div class="example-box soft-blue"><strong>Estimated Time</strong><br>60–80 minutes</div>
+    <div class="example-box soft-amber"><strong>Level</strong><br>Beginner RT — pattern recognition and clinical response</div>
+  </div>
+</section>
+
+<!-- ── LAYOUT ─────────────────────────────────────────────────────────────── -->
+<div class="content-layout">
+<aside aria-label="Lesson quick navigation" class="side-nav">
+  <h3>Lesson Sections</h3>
+  <a href="#objectives">Objectives</a>
+  <a href="#overview-video">Video</a>
+  <a href="#ecg-paper">ECG Paper & Waveforms</a>
+  <a href="#four-step">4-Step Analysis</a>
+  <a href="#rate-calc">Rate Calculation</a>
+  <a href="#sinus">Sinus Rhythms</a>
+  <a href="#atrial">Atrial Rhythms</a>
+  <a href="#ventricular">Ventricular Rhythms</a>
+  <a href="#deadly">Deadly Rhythms</a>
+  <a href="#scenario">Clinical Scenarios</a>
+  <a href="#practice">Assignment Practice</a>
+  <a href="#knowledge-check">Knowledge Check</a>
+  <a href="#faq">FAQ</a>
+  <a href="#summary">Summary</a>
+  <a href="#glossary">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+
+<!-- OBJECTIVES -->
+<section class="info-card" id="objectives">
+  <h2>Learning Objectives</h2>
+  <p>By the end of this lesson, you will be able to identify ECG waveforms and intervals, calculate heart rate using multiple methods, classify sinus, atrial, and ventricular rhythms, recognize life-threatening rhythms, and select the correct clinical intervention for each rhythm.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>1. Read ECG paper</strong><br>Name each waveform, measure intervals, and convert boxes to time values.</div>
+    <div class="example-box soft-blue"><strong>2. Calculate heart rate</strong><br>Apply the six-second, large box, small box, and sequence methods correctly.</div>
+    <div class="example-box soft-amber"><strong>3. Classify rhythms</strong><br>Identify sinus, atrial, and ventricular rhythms by their key characteristics.</div>
+    <div class="example-box soft-coral"><strong>4. Match intervention to rhythm</strong><br>Select the correct response — from oxygen to defibrillation — based on the clinical situation.</div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="info-card" id="overview-video">
+  <span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Reading an ECG Strip</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/foundations/Foundations_3_2.mp4" type="video/mp4"/>
+<track default kind="captions" label="English captions" src="/foundations/Foundations_3_2.vtt" srclang="en"/>
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+
+</div><!-- end lesson-stack-top -->
+</div><!-- end content-layout -->
+
+<!-- ── PROGRESSIVE LESSON STACK ──────────────────────────────────────────── -->
+<div class="lesson-stack">
+
+<!-- SECTION 1: ECG Paper & Waveforms -->
+<section class="info-card" id="ecg-paper">
+  <h2>ECG Paper, Waveforms & Intervals</h2>
+  <p>An ECG records electrical activity through the heart as a series of waves on graph paper. Understanding the paper grid and what each waveform represents is the foundation of rhythm interpretation.</p>
+  <img src="/foundations/Foundations_3_2_assets/foundations-3-2-ecg-paper-waveforms.png" alt="ECG paper grid showing small boxes, large boxes, and a labeled PQRST complex with PR interval, QRS duration, ST segment, and QT interval marked" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <h3 style="margin-top:22px">ECG Paper Time Values</h3>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:10px">
+    <table>
+      <thead><tr><th>Measurement</th><th>Time Value</th><th>Visual Cue</th></tr></thead>
+      <tbody>
+        <tr><td>1 small box</td><td><strong>0.04 seconds</strong></td><td>Thin grid line</td></tr>
+        <tr><td>5 small boxes = 1 large box</td><td><strong>0.20 seconds</strong></td><td>Thick red/dark line</td></tr>
+        <tr><td>5 large boxes</td><td><strong>1 second</strong></td><td>5 thick lines</td></tr>
+        <tr><td>30 large boxes</td><td><strong>6 seconds</strong></td><td>Full strip for rate counting</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:22px">The Five ECG Waveforms</h3>
+  <div class="wave-grid">
+    <div class="wave-card">
+      <div class="wave-letter" style="color:var(--pulmo-teal)">P</div>
+      <strong>Atrial Depolarization</strong>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0 0">Small rounded hump before QRS. Should be upright and uniform.</p>
+    </div>
+    <div class="wave-card">
+      <div class="wave-letter" style="color:var(--oxygen-blue)">Q</div>
+      <strong>Initial Septal Depolarization</strong>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0 0">Small downward deflection at start of QRS. May be absent normally.</p>
+    </div>
+    <div class="wave-card">
+      <div class="wave-letter" style="color:var(--core-navy)">R</div>
+      <strong>Ventricular Depolarization</strong>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0 0">Tall upward peak. The tallest wave in the QRS complex.</p>
+    </div>
+    <div class="wave-card">
+      <div class="wave-letter" style="color:var(--slate)">S</div>
+      <strong>Late Ventricular Depolarization</strong>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0 0">Downward deflection after R wave. Completes the QRS.</p>
+    </div>
+    <div class="wave-card">
+      <div class="wave-letter" style="color:var(--clinical-amber)">T</div>
+      <strong>Ventricular Repolarization</strong>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0 0">Rounded hump after QRS. Should be upright and not too tall.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:22px">Key Intervals & Segments</h3>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:10px">
+    <table>
+      <thead><tr><th>Interval / Segment</th><th>Location</th><th>Normal Value</th><th>Clinical Significance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PR Interval</strong></td><td>Start of P wave → start of QRS</td><td>0.12–0.20 sec (3–5 small boxes)</td><td>AV conduction time. Prolonged = heart block.</td></tr>
+        <tr><td><strong>QRS Complex</strong></td><td>Start of Q → end of S</td><td>&lt;0.12 sec (&lt;3 small boxes)</td><td>Ventricular activation. Wide QRS = ventricular origin or bundle branch block.</td></tr>
+        <tr><td><strong>ST Segment</strong></td><td>End of S → start of T</td><td>At baseline (isoelectric)</td><td>Elevation = possible MI. Depression = ischemia or digoxin effect.</td></tr>
+        <tr><td><strong>QT Interval</strong></td><td>Start of QRS → end of T</td><td>0.39–0.46 sec (10–12 small boxes)</td><td>Prolonged (&gt;0.45 sec) = risk for torsades / ventricular arrhythmia.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="ECG Box-to-Time Match" style="margin-top:16px">
+    <h3>Match the Box Count to Its Time Value</h3>
+    <div class="sort-grid" id="ecgTimeSort">
+      <div class="sort-row" data-answer="0.04"><strong>1 small box</strong><select><option value="">Choose time</option><option value="0.04">0.04 seconds</option><option value="0.20">0.20 seconds</option><option value="1.0">1.0 second</option><option value="6.0">6.0 seconds</option><option value="0.24">0.24 seconds</option><option value="1.4">1.4 seconds</option></select></div>
+      <div class="sort-row" data-answer="0.20"><strong>1 large box (5 small boxes)</strong><select><option value="">Choose time</option><option value="0.04">0.04 seconds</option><option value="0.20">0.20 seconds</option><option value="1.0">1.0 second</option><option value="6.0">6.0 seconds</option><option value="0.24">0.24 seconds</option><option value="1.4">1.4 seconds</option></select></div>
+      <div class="sort-row" data-answer="1.0"><strong>5 large boxes</strong><select><option value="">Choose time</option><option value="0.04">0.04 seconds</option><option value="0.20">0.20 seconds</option><option value="1.0">1.0 second</option><option value="6.0">6.0 seconds</option><option value="0.24">0.24 seconds</option><option value="1.4">1.4 seconds</option></select></div>
+      <div class="sort-row" data-answer="6.0"><strong>30 large boxes</strong><select><option value="">Choose time</option><option value="0.04">0.04 seconds</option><option value="0.20">0.20 seconds</option><option value="1.0">1.0 second</option><option value="6.0">6.0 seconds</option><option value="0.24">0.24 seconds</option><option value="1.4">1.4 seconds</option></select></div>
+      <div class="sort-row" data-answer="0.24"><strong>6 small boxes</strong><select><option value="">Choose time</option><option value="0.04">0.04 seconds</option><option value="0.20">0.20 seconds</option><option value="1.0">1.0 second</option><option value="6.0">6.0 seconds</option><option value="0.24">0.24 seconds</option><option value="1.4">1.4 seconds</option></select></div>
+      <div class="sort-row" data-answer="1.4"><strong>7 large boxes</strong><select><option value="">Choose time</option><option value="0.04">0.04 seconds</option><option value="0.20">0.20 seconds</option><option value="1.0">1.0 second</option><option value="6.0">6.0 seconds</option><option value="0.24">0.24 seconds</option><option value="1.4">1.4 seconds</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkEcgTime" type="button" style="margin-top:12px">Check Time Values</button>
+    <div class="activity-status" id="ecgTimeStatus">Complete the time matching activity to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 2: 4-Step Analysis -->
+<section class="info-card" id="four-step">
+  <h2>The Four-Step Systematic Analysis</h2>
+  <p>Every ECG strip should be read using the same four steps in order. This prevents missed findings and ensures consistent, accurate interpretation every time.</p>
+  <img src="/foundations/Foundations_3_2_assets/foundations-3-2-four-step-analysis.png" alt="Four steps of ECG analysis shown as numbered flow diagram: Step 1 Rate, Step 2 Waveforms, Step 3 Intervals, Step 4 Interpretation" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal" style="border-left:4px solid var(--pulmo-teal)">
+      <strong>Step 1 — Assess Rate</strong><br>
+      Determine atrial rate and ventricular rate. Is the rhythm fast, slow, or normal? Use one of the four rate calculation methods (covered in next section).
+    </div>
+    <div class="example-box soft-blue" style="border-left:4px solid var(--oxygen-blue)">
+      <strong>Step 2 — Identify Waveforms</strong><br>
+      Are P waves present? Upright and uniform? Is there one P before each QRS? Are QRS complexes present and similar in shape? Are T waves normal?
+    </div>
+    <div class="example-box soft-amber" style="border-left:4px solid var(--clinical-amber)">
+      <strong>Step 3 — Measure Intervals & Segments</strong><br>
+      Measure PR interval, QRS duration, and QT interval. Check ST segment — is it at baseline, elevated, or depressed?
+    </div>
+    <div class="example-box soft-coral" style="border-left:4px solid var(--alert-coral)">
+      <strong>Step 4 — Interpret & State Clinical Significance</strong><br>
+      Name the rhythm. Include pacemaker site and mechanism. Example: <em>"Sinus bradycardia at 38 beats/min — patient is hypotensive, intervention needed."</em>
+    </div>
+  </div>
+
+  <div class="example-box soft-teal" style="margin-top:14px">
+    <strong>Regularity Check:</strong> Before naming the rhythm, check R-R intervals. If they differ by <strong>2 small boxes or less</strong> — the rhythm is <strong>regular</strong>. If they differ by <strong>more than 2 small boxes</strong> — the rhythm is <strong>irregular</strong>. This changes which rate calculation method you use.
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="4-Step Order" style="margin-top:16px">
+    <h3>Which Step Comes Next?</h3>
+    <p>Place the four analysis steps in the correct order.</p>
+    <div class="sort-grid" id="stepSort">
+      <div class="sort-row" data-answer="1"><strong>Assess atrial and ventricular rate — fast, slow, or normal?</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option></select></div>
+      <div class="sort-row" data-answer="3"><strong>Measure PR interval, QRS duration, QT interval and assess ST segment.</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option></select></div>
+      <div class="sort-row" data-answer="2"><strong>Look for P waves, QRS complexes, and T waves — present? Normal appearance?</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option></select></div>
+      <div class="sort-row" data-answer="4"><strong>Name the rhythm, state pacemaker site, and describe clinical significance.</strong><select><option value="">Step #</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkStepSort" type="button" style="margin-top:12px">Check Step Order</button>
+    <div class="activity-status" id="stepSortStatus">Complete the step ordering to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 3: Rate Calculation -->
+<section class="info-card" id="rate-calc">
+  <h2>Heart Rate Calculation Methods</h2>
+  <p>There are four methods for calculating heart rate from an ECG strip. The correct method depends on whether the rhythm is <strong>regular</strong> (consistent R-R intervals) or <strong>irregular</strong> (varying R-R intervals).</p>
+  <img src="/foundations/Foundations_3_2_assets/foundations-3-2-rate-calculation.png" alt="Four rate calculation methods shown with ECG strip examples: six-second method counting QRS complexes, large box method dividing 300, small box method dividing 1500, and sequence method with 300-150-100-75-60-50" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="rate-calc-grid">
+    <div class="rate-card">
+      <strong style="color:var(--pulmo-teal)">Six-Second Method</strong>
+      <p style="margin:6px 0;font-size:.9rem;color:var(--slate)">Best for: <strong>Irregular rhythms</strong> or any rhythm</p>
+      <div class="rate-formula">Count QRS complexes in 6 sec × 10</div>
+      <p style="font-size:.88rem;color:var(--slate)">Count QRS complexes in a 6-second strip (30 large boxes), then multiply by 10 to get beats per minute.</p>
+    </div>
+    <div class="rate-card">
+      <strong style="color:var(--oxygen-blue)">Large Box Method</strong>
+      <p style="margin:6px 0;font-size:.9rem;color:var(--slate)">Best for: <strong>Regular rhythms only</strong></p>
+      <div class="rate-formula">300 ÷ large boxes between R-R</div>
+      <p style="font-size:.88rem;color:var(--slate)">Count large boxes between two consecutive R waves. Divide 300 by that number. Example: 4 large boxes = 300 ÷ 4 = <strong>75 bpm</strong>.</p>
+    </div>
+    <div class="rate-card">
+      <strong style="color:var(--clinical-amber)">Small Box Method</strong>
+      <p style="margin:6px 0;font-size:.9rem;color:var(--slate)">Best for: <strong>Regular rhythms</strong> (precise)</p>
+      <div class="rate-formula">1500 ÷ small boxes between R-R</div>
+      <p style="font-size:.88rem;color:var(--slate)">Count small boxes between two consecutive R waves. Divide 1500 by that number. Example: 18 small boxes = 1500 ÷ 18 = <strong>83 bpm</strong>.</p>
+    </div>
+    <div class="rate-card">
+      <strong style="color:var(--alert-coral)">Sequence Method</strong>
+      <p style="margin:6px 0;font-size:.9rem;color:var(--slate)">Best for: <strong>Regular rhythms</strong> (fastest)</p>
+      <div class="rate-formula">300 → 150 → 100 → 75 → 60 → 50</div>
+      <p style="font-size:.88rem;color:var(--slate)">Place R wave on a dark line. Count the next dark lines as 300, 150, 100, 75, 60, 50. The number at the next R wave is the rate.</p>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Rate Calculation Practice" style="margin-top:16px">
+    <h3>Heart Rate Calculation Practice</h3>
+    <p>Type your calculated answer for each scenario. Round to the nearest whole number.</p>
+    <div class="calc-practice" id="calcPractice">
+      <div class="calc-row" data-answer="83" data-method="small">
+        <span><strong>Small box method:</strong> There are 18 small boxes between R-R intervals. What is the heart rate?</span>
+        <select class="calc-method-display" disabled style="border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:#F8FBFD;color:var(--slate);font-size:.85rem">
+          <option>1500 ÷ 18 = ?</option>
+        </select>
+        <input type="number" placeholder="bpm" min="1" max="400">
+      </div>
+      <div class="calc-row" data-answer="75" data-method="large">
+        <span><strong>Large box method:</strong> There are 4 large boxes between R-R intervals. What is the heart rate?</span>
+        <select class="calc-method-display" disabled style="border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:#F8FBFD;color:var(--slate);font-size:.85rem">
+          <option>300 ÷ 4 = ?</option>
+        </select>
+        <input type="number" placeholder="bpm" min="1" max="400">
+      </div>
+      <div class="calc-row" data-answer="60" data-method="six">
+        <span><strong>Six-second method:</strong> You count 6 QRS complexes in a 6-second strip. What is the heart rate?</span>
+        <select class="calc-method-display" disabled style="border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:#F8FBFD;color:var(--slate);font-size:.85rem">
+          <option>QRS count × 10 = ?</option>
+        </select>
+        <input type="number" placeholder="bpm" min="1" max="400">
+      </div>
+      <div class="calc-row" data-answer="100" data-method="large">
+        <span><strong>Large box method:</strong> There are 3 large boxes between R-R intervals. What is the heart rate?</span>
+        <select class="calc-method-display" disabled style="border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:#F8FBFD;color:var(--slate);font-size:.85rem">
+          <option>300 ÷ 3 = ?</option>
+        </select>
+        <input type="number" placeholder="bpm" min="1" max="400">
+      </div>
+    </div>
+    <button class="small-btn primary" id="checkCalc" type="button" style="margin-top:12px">Check Calculations</button>
+    <div class="activity-status" id="calcStatus">Complete all rate calculations to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 4: Sinus Rhythms -->
+<section class="info-card" id="sinus">
+  <h2>Sinus Rhythms</h2>
+  <p>Sinus rhythms originate in the sinoatrial (SA) node — the heart's natural pacemaker. All sinus rhythms share a key feature: <strong>a P wave before every QRS complex</strong>, meaning the impulse follows the normal conduction pathway.</p>
+  <img src="/foundations/Foundations_3_2_assets/foundations-3-2-sinus-rhythms.png" alt="Three ECG strips side by side: Normal Sinus Rhythm at 75 bpm, Sinus Bradycardia at 45 bpm, and Sinus Tachycardia at 120 bpm with key features labeled" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <details class="accordion" style="margin-top:16px">
+    <summary><strong>Normal Sinus Rhythm (NSR)</strong> <span class="rhythm-tag rhythm-sinus" style="margin-left:8px">60–100 bpm</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Rate</td><td>Regular; 60–100 bpm (both atrial and ventricular)</td></tr>
+          <tr><td>P waves</td><td>Present before every QRS; uniform; upright</td></tr>
+          <tr><td>QRS</td><td>Normal (&lt;0.12 sec); unchanged</td></tr>
+          <tr><td>PR interval</td><td>0.12–0.20 sec (normal)</td></tr>
+        </table>
+      </div>
+      <p><strong>Clinical significance:</strong> Normal. Continue monitoring. No intervention needed unless clinical signs suggest otherwise.</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Sinus Bradycardia</strong> <span class="rhythm-tag rhythm-sinus" style="margin-left:8px">&lt;60 bpm</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Rate</td><td>Regular; <strong>&lt;60 bpm</strong></td></tr>
+          <tr><td>P waves</td><td>Present before every QRS; uniform; upright</td></tr>
+          <tr><td>QRS</td><td>Normal (&lt;0.12 sec); unchanged</td></tr>
+          <tr><td>PR interval</td><td>0.12–0.20 sec (normal)</td></tr>
+        </table>
+      </div>
+      <p><strong>Common causes:</strong> Vagal stimulation, vomiting, hypokalemia, hypothyroidism, hypoxia, beta-blockers, athletic training, right ventricular MI, sleep.</p>
+      <p><strong>Management:</strong> Give oxygen. If vagal cause — give <strong>atropine</strong>. If unstable — transcutaneous pacing, epinephrine, or dopamine drip.</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Sinus Tachycardia</strong> <span class="rhythm-tag rhythm-sinus" style="margin-left:8px">&gt;100 bpm</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Rate</td><td>Regular; <strong>&gt;100 bpm</strong></td></tr>
+          <tr><td>P waves</td><td>Present before every QRS; may merge with preceding T wave at high rates</td></tr>
+          <tr><td>QRS</td><td>Normal (&lt;0.12 sec); unchanged</td></tr>
+          <tr><td>PR interval</td><td>0.12–0.20 sec (may shorten at high rates)</td></tr>
+        </table>
+      </div>
+      <p><strong>Common causes:</strong> Exercise, pain, anxiety, fever, hypoxia, bleeding, hypovolemia, heart failure, PE, MI, anemia, thyrotoxicosis, shock, sympathomimetic drugs.</p>
+      <p><strong>Management:</strong> Give oxygen. Try vagal maneuver (if stable). Treat underlying cause. If HR &gt;150 and unstable — synchronized cardioversion.</p>
+    </div>
+  </details>
+
+  <article class="activity-card require-complete" data-activity-name="Sinus Rhythm Match" style="margin-top:16px">
+    <h3>Identify the Sinus Rhythm</h3>
+    <div class="sort-grid" id="sinusSort">
+      <div class="sort-row" data-answer="nsr"><strong>Rate 78 bpm, regular, P wave before every QRS, PR interval 0.16 sec, QRS &lt;0.12 sec.</strong><select><option value="">Choose rhythm</option><option value="nsr">Normal Sinus Rhythm</option><option value="brady">Sinus Bradycardia</option><option value="tachy">Sinus Tachycardia</option></select></div>
+      <div class="sort-row" data-answer="brady"><strong>Rate 48 bpm, regular, P wave before every QRS, normal intervals. Patient on beta-blocker medication.</strong><select><option value="">Choose rhythm</option><option value="nsr">Normal Sinus Rhythm</option><option value="brady">Sinus Bradycardia</option><option value="tachy">Sinus Tachycardia</option></select></div>
+      <div class="sort-row" data-answer="tachy"><strong>Rate 118 bpm, regular, P waves present but merging with T waves at this rate. Patient febrile.</strong><select><option value="">Choose rhythm</option><option value="nsr">Normal Sinus Rhythm</option><option value="brady">Sinus Bradycardia</option><option value="tachy">Sinus Tachycardia</option></select></div>
+      <div class="sort-row" data-answer="brady"><strong>Patient just performed Valsalva maneuver. Rate drops to 52 bpm with normal P waves and QRS.</strong><select><option value="">Choose rhythm</option><option value="nsr">Normal Sinus Rhythm</option><option value="brady">Sinus Bradycardia</option><option value="tachy">Sinus Tachycardia</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkSinusSort" type="button" style="margin-top:12px">Check Sinus Rhythms</button>
+    <div class="activity-status" id="sinusSortStatus">Complete the sinus rhythm identification to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 5: Atrial Rhythms -->
+<section class="info-card rt" id="atrial">
+  <h2>Atrial Rhythms</h2>
+  <p>Atrial rhythms originate outside the SA node but still within the atria. The key distinction: <strong>P waves are abnormal, absent, or replaced by flutter or fibrillation waves</strong>. QRS complexes are usually narrow unless there is also a bundle branch block.</p>
+  <img src="/foundations/Foundations_3_2_assets/foundations-3-2-atrial-rhythms.png" alt="Three ECG strips: Atrial Flutter showing sawtooth F waves with 2:1 block, Atrial Fibrillation showing irregular baseline with no visible P waves, and SVT showing rapid narrow QRS at 180 bpm" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <details class="accordion" style="margin-top:16px">
+    <summary><strong>Atrial Flutter</strong> <span class="rhythm-tag rhythm-atrial" style="margin-left:8px">Atrial 250–400 bpm / Ventricular 60–150 bpm</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Atrial rate</td><td>Regular; <strong>250–400 bpm</strong></td></tr>
+          <tr><td>Ventricular rate</td><td>Irregular; usually 60–150 bpm (depends on AV block ratio)</td></tr>
+          <tr><td>P waves</td><td><strong>Absent</strong> — replaced by <strong>sawtooth "F" waves</strong></td></tr>
+          <tr><td>QRS</td><td>Normal (&lt;0.12 sec) unless aberrant conduction</td></tr>
+          <tr><td>PR interval</td><td>Not measurable</td></tr>
+        </table>
+      </div>
+      <p><strong>Key identifier:</strong> The sawtooth (zigzag) baseline between QRS complexes — those are flutter (F) waves firing rapidly from the atria. The AV node only lets some through (often 2:1 or 4:1 block).</p>
+      <p><strong>Management:</strong> Synchronized cardioversion if serious. Patients may complain of palpitations, difficulty breathing, fatigue, or chest discomfort.</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Atrial Fibrillation (AFib)</strong> <span class="rhythm-tag rhythm-atrial" style="margin-left:8px">Irregularly Irregular</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Atrial rate</td><td>Cannot be measured — chaotic fibrillation ("f") waves only</td></tr>
+          <tr><td>Ventricular rate</td><td><strong>Irregularly irregular</strong> — R-R intervals constantly vary</td></tr>
+          <tr><td>P waves</td><td><strong>Absent</strong> — replaced by small chaotic "f" waves creating a wavy baseline</td></tr>
+          <tr><td>QRS</td><td>Normal (&lt;0.12 sec) unless aberrant conduction</td></tr>
+          <tr><td>PR interval</td><td>Not measurable</td></tr>
+        </table>
+      </div>
+      <p><strong>Risk:</strong> Blood pools in the fibrillating atria → clot formation → stroke/embolism risk. Long-term management includes anticoagulation.</p>
+      <p><strong>Causes:</strong> Cardiovascular disease, alcohol, diabetes, hyperthyroidism, obesity, COPD, sleep apnea, PE.</p>
+      <p><strong>Management:</strong> Rate control (slow ventricular rate) OR rhythm control (restore sinus rhythm). Synchronized cardioversion if serious.</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Supraventricular Tachycardia (SVT)</strong> <span class="rhythm-tag rhythm-atrial" style="margin-left:8px">150–250 bpm</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Rate</td><td>Regular; <strong>150–250 bpm</strong></td></tr>
+          <tr><td>P waves</td><td>Difficult to see or hidden behind QRS at high rates</td></tr>
+          <tr><td>QRS</td><td>Normal (&lt;0.12 sec) — narrow QRS distinguishes SVT from ventricular tachycardia</td></tr>
+          <tr><td>PR interval</td><td>Not measurable</td></tr>
+        </table>
+      </div>
+      <p><strong>Key identifier:</strong> Very fast rate (150–250 bpm) with <strong>narrow QRS complexes</strong>. P waves hidden in or immediately after QRS. Rate is too fast to fill ventricles adequately — can cause hemodynamic compromise.</p>
+      <p><strong>Management:</strong> Give oxygen. Try vagal maneuver. Give <strong>adenosine</strong> if stable. Synchronized cardioversion if unstable.</p>
+    </div>
+  </details>
+
+  <article class="activity-card require-complete" data-activity-name="Atrial Rhythm Key Features" style="margin-top:16px">
+    <h3>Match the Atrial Rhythm to Its Key Identifier</h3>
+    <div class="sort-grid" id="atrialSort">
+      <div class="sort-row" data-answer="flutter"><strong>Sawtooth baseline between QRS complexes. Atrial rate 300 bpm, ventricular rate 75 bpm (4:1 block).</strong><select><option value="">Choose rhythm</option><option value="flutter">Atrial Flutter</option><option value="afib">Atrial Fibrillation</option><option value="svt">SVT</option></select></div>
+      <div class="sort-row" data-answer="afib"><strong>Irregularly irregular rhythm. No visible P waves. Wavy, chaotic baseline. Ventricular rate varies beat-to-beat.</strong><select><option value="">Choose rhythm</option><option value="flutter">Atrial Flutter</option><option value="afib">Atrial Fibrillation</option><option value="svt">SVT</option></select></div>
+      <div class="sort-row" data-answer="svt"><strong>Rate 190 bpm, narrow QRS, no visible P waves, perfectly regular. Patient reports sudden palpitations.</strong><select><option value="">Choose rhythm</option><option value="flutter">Atrial Flutter</option><option value="afib">Atrial Fibrillation</option><option value="svt">SVT</option></select></div>
+      <div class="sort-row" data-answer="afib"><strong>Patient has COPD and sleep apnea. ECG shows R-R intervals that are never the same. No distinct P waves visible.</strong><select><option value="">Choose rhythm</option><option value="flutter">Atrial Flutter</option><option value="afib">Atrial Fibrillation</option><option value="svt">SVT</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkAtrialSort" type="button" style="margin-top:12px">Check Atrial Rhythms</button>
+    <div class="activity-status" id="atrialSortStatus">Complete the atrial rhythm matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 6: Ventricular Rhythms -->
+<section class="info-card board" id="ventricular">
+  <h2>Ventricular Rhythms</h2>
+  <p>Ventricular rhythms originate below the AV node in the ventricles. Because the impulse does not follow the normal His-Purkinje pathway, QRS complexes are <strong>wide and bizarre</strong> (≥0.12 sec). P waves are absent or hidden. These rhythms always demand immediate attention.</p>
+  <img src="/foundations/Foundations_3_2_assets/foundations-3-2-ventricular-rhythms.png" alt="Two ECG strips: Monomorphic VT showing regular wide bizarre QRS complexes all the same shape, and Polymorphic VT showing irregular chaotic wide QRS complexes of varying shapes and amplitudes" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <details class="accordion" style="margin-top:16px">
+    <summary><strong>Monomorphic Ventricular Tachycardia (MVT)</strong> <span class="rhythm-tag rhythm-ventricular" style="margin-left:8px">&gt;150 bpm, Wide QRS</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Rate</td><td>Regular; <strong>&gt;150 bpm</strong></td></tr>
+          <tr><td>P waves</td><td>Obscured — buried in wide QRS</td></tr>
+          <tr><td>QRS</td><td><strong>Wide and bizarre (≥0.12 sec)</strong>; all QRS complexes the same shape (monomorphic)</td></tr>
+          <tr><td>PR interval</td><td>Absent</td></tr>
+        </table>
+      </div>
+      <p><strong>Causes:</strong> Acid-base imbalance, acute coronary syndromes, cardiomyopathy, cocaine, digitalis toxicity, hypokalemia, hyperkalemia, shock.</p>
+      <p><strong>Signs/symptoms:</strong> Altered mental status, chest pain, hypotension, acute heart failure, pulmonary congestion, SOB.</p>
+      <p><strong>Management:</strong> If pulseless — CPR + defibrillation. If stable but symptomatic — O₂ + <strong>amiodarone</strong>. If unstable (HR ≥150) — O₂, IV access, sedation, <strong>synchronized cardioversion</strong>.</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>Polymorphic Ventricular Tachycardia (PMVT)</strong> <span class="rhythm-tag rhythm-ventricular" style="margin-left:8px">250–350 bpm, Variable QRS</span></summary>
+    <div class="accordion-body">
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-bottom:12px">
+        <table>
+          <tr><th>Feature</th><th>Finding</th></tr>
+          <tr><td>Rate</td><td>Irregular/chaotic; <strong>250–350 bpm</strong></td></tr>
+          <tr><td>P waves</td><td>Obscured</td></tr>
+          <tr><td>QRS</td><td><strong>Wide, bizarre, variable</strong> — QRS complexes are NOT identical (polymorphic = many shapes)</td></tr>
+          <tr><td>PR interval</td><td>Absent</td></tr>
+        </table>
+      </div>
+      <p><strong>Key distinction from MVT:</strong> QRS complexes change shape and amplitude — they are not all the same. Includes Torsades de Pointes (associated with prolonged QT interval).</p>
+      <p><strong>Management:</strong> Rarely hemodynamically stable. Defibrillation if pulseless or unstable. Different underlying causes require different specific treatments.</p>
+    </div>
+  </details>
+
+  <article class="quiz-card require-complete" id="vt-check" data-activity-name="VT vs SVT Check" style="margin-top:16px">
+    <h3>VT vs. SVT — Which Is It?</h3>
+    <p>A patient suddenly develops a regular tachycardia at 170 bpm. The QRS complexes are wide and bizarre (0.16 sec). P waves are not visible. What rhythm is this, and what does it tell you?</p>
+    <div class="quiz-options">
+      <button class="quiz-option vt-option" data-correct="false" data-feedback="SVT has a NARROW QRS complex because the impulse follows normal conduction pathways. Wide, bizarre QRS rules out SVT.">SVT — the rapid rate is the key finding.</button>
+      <button class="quiz-option vt-option" data-correct="true" data-feedback="Correct! Wide, bizarre QRS + rapid rate + no visible P waves = Ventricular Tachycardia. The wide QRS tells you the impulse originates in the ventricles, NOT in the atria or SA node. This requires immediate intervention — assess for pulse first.">Ventricular Tachycardia — wide, bizarre QRS is the key finding.</button>
+      <button class="quiz-option vt-option" data-correct="false" data-feedback="Atrial Flutter typically has a sawtooth baseline and narrow QRS complexes at rates around 150 bpm (with 2:1 block). Wide QRS points away from atrial flutter.">Atrial Flutter — the rate around 150 is the key finding.</button>
+    </div>
+    <div class="quiz-feedback" id="vtFeedback" role="status"></div>
+  </article>
+</section>
+
+<!-- SECTION 7: Deadly Rhythms -->
+<section class="info-card red" id="deadly">
+  <h2>Deadly Rhythms — Ventricular Fibrillation & Asystole</h2>
+  <p>These two rhythms produce <strong>no cardiac output</strong>. The patient is unresponsive, apneic, and pulseless. Recognition must be immediate — every second without CPR worsens outcome.</p>
+  <img src="/foundations/Foundations_3_2_assets/foundations-3-2-deadly-rhythms.png" alt="Two ECG strips: Ventricular Fibrillation showing completely chaotic irregular waveforms of varying shape and amplitude with no organized QRS complexes, and Asystole showing a flat straight line with minimal artifact" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--alert-coral)">Ventricular Fibrillation (VFib)</h3>
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin:10px 0">
+        <table style="min-width:0">
+          <tr><td><strong>Rate</strong></td><td>Absent — no organized rhythm</td></tr>
+          <tr><td><strong>P waves</strong></td><td>Absent</td></tr>
+          <tr><td><strong>QRS</strong></td><td>Absent — chaotic waveforms only</td></tr>
+        </table>
+      </div>
+      <p style="font-size:.9rem"><strong>What you see:</strong> Completely disorganized, chaotic waveforms of constantly varying shape and amplitude. The heart muscle is quivering — not contracting.</p>
+      <div class="example-box soft-coral" style="margin-top:10px"><strong>Treatment: CPR + DEFIBRILLATION</strong><br>Defibrillation delivers unsynchronized shock to reset the chaotic electrical activity.</div>
+    </div>
+    <div style="border:2px solid var(--slate);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--slate)">Asystole</h3>
+      <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin:10px 0">
+        <table style="min-width:0">
+          <tr><td><strong>Rate</strong></td><td>Absent</td></tr>
+          <tr><td><strong>P waves</strong></td><td>Absent</td></tr>
+          <tr><td><strong>QRS</strong></td><td>Absent — flatline</td></tr>
+        </table>
+      </div>
+      <p style="font-size:.9rem"><strong>What you see:</strong> A flat line (isoelectric line) with no electrical activity. This is true asystole — no impulse generation anywhere in the heart.</p>
+      <div class="example-box soft-coral" style="margin-top:10px"><strong>Treatment: CPR ONLY (NOT defibrillation)</strong><br>Defibrillation does NOT work on asystole. Check for lead disconnect if no pulse is found.</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px">Reversible Causes — The 5 Hs and 5 Ts</h3>
+  <p>Before or during resuscitation, consider and treat reversible causes. Memorizing these is an NBRC and ACLS requirement.</p>
+  <div class="hs-ts-grid">
+    <div class="hs-ts-card" style="background:#E6F3FF;border:1px solid var(--oxygen-blue)">
+      <strong style="color:var(--oxygen-blue)">5 Hs</strong>
+      <ul style="margin:8px 0;padding-left:20px">
+        <li><strong>H</strong>ypovolemia</li>
+        <li><strong>H</strong>ypoxia</li>
+        <li><strong>H</strong>ypothermia</li>
+        <li><strong>H</strong>ypo- / Hyperkalemia</li>
+        <li><strong>H</strong>ydrogen ion (Acidosis)</li>
+      </ul>
+    </div>
+    <div class="hs-ts-card" style="background:#FDE9E9;border:1px solid var(--alert-coral)">
+      <strong style="color:var(--alert-coral)">5 Ts</strong>
+      <ul style="margin:8px 0;padding-left:20px">
+        <li><strong>T</strong>amponade (cardiac)</li>
+        <li><strong>T</strong>ension pneumothorax</li>
+        <li><strong>T</strong>hrombosis — lungs (PE)</li>
+        <li><strong>T</strong>hrombosis — coronary (MI)</li>
+        <li><strong>T</strong>ablets / toxins (overdose)</li>
+      </ul>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Deadly Rhythm Intervention" style="margin-top:16px">
+    <h3>Defibrillation or CPR Only?</h3>
+    <p>Match each scenario to the correct immediate action.</p>
+    <div class="sort-grid" id="deadlySort">
+      <div class="sort-row" data-answer="defib"><strong>Patient is unresponsive and pulseless. ECG shows chaotic, disorganized waveforms of varying shape — no QRS complexes visible.</strong><select><option value="">Choose action</option><option value="cpr">CPR only (no defibrillation)</option><option value="defib">CPR + Defibrillation</option></select></div>
+      <div class="sort-row" data-answer="cpr"><strong>Patient is unresponsive and pulseless. ECG shows a straight flat line — no electrical activity at all.</strong><select><option value="">Choose action</option><option value="cpr">CPR only (no defibrillation)</option><option value="defib">CPR + Defibrillation</option></select></div>
+      <div class="sort-row" data-answer="defib"><strong>Patient collapses during ambulation. Monitor shows irregular chaotic waveforms. No palpable pulse.</strong><select><option value="">Choose action</option><option value="cpr">CPR only (no defibrillation)</option><option value="defib">CPR + Defibrillation</option></select></div>
+      <div class="sort-row" data-answer="cpr"><strong>Flatline on monitor. You confirm the leads are properly attached. No pulse. No breathing.</strong><select><option value="">Choose action</option><option value="cpr">CPR only (no defibrillation)</option><option value="defib">CPR + Defibrillation</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkDeadlySort" type="button" style="margin-top:12px">Check Deadly Rhythm Responses</button>
+    <div class="activity-status" id="deadlySortStatus">Complete the deadly rhythm intervention matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 8: Clinical Scenarios (Unfolding Case) -->
+<section class="case-card require-complete" id="scenario" data-activity-name="ECG Clinical Scenarios">
+  <span class="eyebrow">Unfolding Clinical Scenarios</span>
+  <h2>Three Patient Scenarios — Rhythm Recognition & Response</h2>
+  <p>Work through each scenario as the RT on duty. Identify the rhythm and select the correct intervention from the word bank.</p>
+
+  <!-- Scenario 1 -->
+  <div class="case-stage" data-case-stage="0">
+    <h3>Scenario 1A — Patient on Bedside Commode</h3>
+    <p>A 68-year-old male is using the bedside commode. He tells you he feels dizzy and light-headed. The bedside monitor shows a regular rhythm at <strong>48 bpm</strong> with a normal P wave before every QRS. PR interval is 0.18 sec. QRS is 0.10 sec.</p>
+    <p><strong>What rhythm is this, and what is the appropriate response?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Normal sinus rhythm is 60-100 bpm. This rate is 48 bpm — below the lower limit. It is not normal.">Normal Sinus Rhythm — continue monitoring.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Rate of 48 bpm, regular, P wave before every QRS, normal intervals = Sinus Bradycardia. First action: give oxygen. The dizziness suggests possible decreased cerebral perfusion. Vagal cause possible (straining on commode). Atropine is the pharmacologic intervention for symptomatic bradycardia.">Sinus Bradycardia — give oxygen and atropine.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Sinus tachycardia is rate greater than 100 bpm. This patient's rate is 48 bpm — well below that threshold.">Sinus Tachycardia — oxygen and vagal maneuver.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue to Scenario 1B →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="1">
+    <h3>Scenario 1B — Same Patient, 10 Minutes Later</h3>
+    <p>After treatment, the patient feels better. The monitor now shows a regular rhythm at <strong>102 bpm</strong> with P waves before every QRS. Normal intervals throughout. Patient is alert and talking.</p>
+    <p><strong>What rhythm is this now, and what is appropriate?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="102 bpm is just above the normal range of 60-100 bpm — this is mild sinus tachycardia, not normal sinus rhythm.">Normal Sinus Rhythm — no action needed.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Rate of 102 bpm, regular, P waves before every QRS = Sinus Tachycardia. The atropine may have slightly overcorrected, or the patient is still mildly stressed. Since the patient is stable and alert, the correct action is to continue monitoring and re-evaluate. No immediate intervention needed.">Sinus Tachycardia — continue monitoring and re-evaluate.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Synchronized cardioversion is for unstable tachycardias above 150 bpm or causing hemodynamic compromise. A rate of 102 with a stable alert patient does not warrant cardioversion.">Sinus Tachycardia — synchronized cardioversion immediately.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue to Scenario 2 →</button></div>
+  </div>
+
+  <!-- Scenario 2 -->
+  <div class="case-stage lesson-hidden" data-case-stage="2">
+    <h3>Scenario 2A — Unresponsive Patient, No Pulse</h3>
+    <p>A code blue is called. You arrive to find a patient who is unresponsive, apneic, and pulseless. The monitor shows a completely flat line — no P waves, no QRS complexes, no activity of any kind.</p>
+    <p><strong>What rhythm is this, and what do you do FIRST?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Defibrillation works by delivering a shock to chaotic electrical activity (like VFib). Asystole has NO electrical activity — there is nothing to shock. Defibrillation does not work on asystole and is not indicated.">Ventricular Fibrillation — CPR and defibrillation.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Flatline with no P waves, no QRS, no activity = Asystole. CPR is started immediately. Defibrillation is NOT used for asystole. Also check leads are properly attached — lead disconnect can mimic asystole. Consider the 5 Hs and 5 Ts for reversible causes.">Asystole — begin chest compressions immediately.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Sinus bradycardia has a flat line between recognizable QRS complexes. Asystole has no QRS complexes at all. These are very different rhythms with different treatments.">Sinus Bradycardia — oxygen and atropine.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue to Scenario 2B →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="3">
+    <h3>Scenario 2B — During CPR, Rhythm Changes</h3>
+    <p>After 2 minutes of high-quality CPR, a rhythm check shows completely chaotic, disorganized waveforms of varying shape and amplitude — no recognizable P waves or QRS complexes. Patient remains pulseless.</p>
+    <p><strong>What rhythm is this, and what is the correct action?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Asystole is a flatline — no electrical activity. This strip shows chaotic, disorganized waveforms. That is not asystole — that is VFib.">Asystole — continue CPR only.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Chaotic, disorganized waveforms with no organized QRS = Ventricular Fibrillation. VFib IS a shockable rhythm. Defibrillation is indicated. Resume CPR immediately after the shock. This is a key ACLS principle — recognize shockable vs non-shockable rhythms.">Ventricular Fibrillation — defibrillation.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="SVT has a narrow, regular QRS at 150-250 bpm. The chaotic, completely disorganized waveforms described here are VFib, not SVT.">SVT — synchronized cardioversion.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue to Scenario 3 →</button></div>
+  </div>
+
+  <!-- Scenario 3 -->
+  <div class="case-stage lesson-hidden" data-case-stage="4">
+    <h3>Scenario 3A — Chest Pain, Stable Vitals</h3>
+    <p>A 54-year-old female is alert, responsive, and reporting chest discomfort. Vitals: BP 92/60, HR 165 bpm. The monitor shows a regular rhythm at 165 bpm with wide, bizarre QRS complexes (0.14 sec), all the same shape. No P waves visible.</p>
+    <p><strong>What rhythm is this, and what is the correct action?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="SVT has NARROW QRS complexes because conduction is supraventricular. Wide, bizarre QRS complexes point to a ventricular origin. This is VT, not SVT.">SVT — give adenosine.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Atrial flutter has a narrow QRS and sawtooth flutter waves. This rhythm has wide, bizarre QRS complexes — that points to ventricular tachycardia, not atrial flutter.">Atrial Flutter — synchronized cardioversion.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Regular rate >150 bpm + wide bizarre QRS all the same shape + no P waves = Monomorphic Ventricular Tachycardia. The patient is symptomatic but has a pulse and is conscious. O2 and amiodarone are appropriate for stable VT with a pulse. If she deteriorates, move to synchronized cardioversion.">Ventricular Tachycardia — oxygen and amiodarone.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue to Scenario 3B →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="5">
+    <h3>Scenario 3B — Patient Deteriorates</h3>
+    <p>The patient suddenly loses consciousness. The monitor shows chaotic, disorganized waveforms — no recognizable QRS. She is pulseless.</p>
+    <p><strong>What is happening, and what is the IMMEDIATE action?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! VT has deteriorated into Ventricular Fibrillation. The patient is pulseless with chaotic waveforms = VFib. Defibrillation is the treatment. This is one of the most common cardiac arrest progressions — VT → VFib. Defibrillate now, resume CPR immediately after.">VFib — CPR and defibrillation immediately.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Asystole is a flatline with no electrical activity. Chaotic, disorganized waveforms are VFib — not asystole. Different rhythms, different response. VFib is shockable; asystole is not.">Asystole — CPR only, no defibrillation.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Amiodarone can be given during resuscitation, but the first priority is CPR + defibrillation for pulseless VFib. Medications come after the shock.">Continue amiodarone infusion and monitor.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Continue to Final Stage →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="6">
+    <h3>Scenario 3C — Return of Spontaneous Circulation</h3>
+    <p>After defibrillation and CPR, the monitor shows a regular rhythm at 82 bpm with a P wave before every QRS. Normal PR interval. Normal QRS duration. Patient has a palpable pulse and is beginning to respond.</p>
+    <p><strong>What rhythm is this, and what is the appropriate next action?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Sinus bradycardia is less than 60 bpm. This patient's rate is 82 bpm — within the normal range.">Sinus Bradycardia — give atropine.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Rate 82 bpm, regular, P waves before every QRS, normal intervals = Normal Sinus Rhythm. This represents Return of Spontaneous Circulation (ROSC) — the defibrillation worked. Continue monitoring closely, re-evaluate frequently, and initiate post-cardiac arrest care. NSR after resuscitation is the goal.">Normal Sinus Rhythm — continue monitoring and re-evaluate.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="VT has wide, bizarre QRS complexes and a rate greater than 150 bpm. This rhythm has narrow normal QRS complexes at 82 bpm — this is normal sinus rhythm.">VT — give amiodarone again.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Scenarios Complete →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="7">
+    <h3>Scenarios Complete — Key Takeaways</h3>
+    <div class="example-box soft-teal" style="margin-top:8px"><strong>Scenario 1 lesson:</strong> Sinus bradycardia → oxygen + atropine. After treatment, mild sinus tachycardia → monitor and re-evaluate. Not every fast rhythm needs immediate intervention.</div>
+    <div class="example-box soft-blue" style="margin-top:8px"><strong>Scenario 2 lesson:</strong> Asystole → CPR only (not defibrillation). VFib during CPR → immediately defibrillate. Know your shockable vs. non-shockable rhythms cold.</div>
+    <div class="example-box soft-amber" style="margin-top:8px"><strong>Scenario 3 lesson:</strong> Stable VT with pulse → oxygen + amiodarone. VT deteriorates to VFib → defibrillate. ROSC restores NSR → continue monitoring. This is the classic VT → VFib → ROSC progression.</div>
+    <div class="example-box soft-coral" style="margin-top:8px"><strong>Core rule:</strong> Shockable rhythms = VFib and pulseless VT. Non-shockable rhythms = Asystole and PEA. Only defibrillate when you have a shockable rhythm.</div>
+  </div>
+</section>
+
+<!-- SECTION 9: Assignment Practice -->
+<section class="info-card" id="practice">
+  <h2>Assignment Practice Zone</h2>
+  <p>This section mirrors the rhythm and intervention matching format used in the Unit 3.2 assignment.</p>
+  <article class="activity-card require-complete" data-activity-name="Rhythm-to-Intervention Match">
+    <h3>Match Each Rhythm to Its Correct Intervention</h3>
+    <div class="sort-grid" id="practiceSort">
+      <div class="sort-row" data-answer="defib"><strong>Ventricular Fibrillation (pulseless)</strong><select><option value="">Choose intervention</option><option value="cpr">Chest Compressions only</option><option value="defib">CPR + Defibrillation</option><option value="cardio">Synchronized Cardioversion</option><option value="atropine">Oxygen + Atropine</option><option value="amio">Oxygen + Amiodarone</option><option value="monitor">Continue Monitoring</option></select></div>
+      <div class="sort-row" data-answer="cpr"><strong>Asystole (pulseless, flatline)</strong><select><option value="">Choose intervention</option><option value="cpr">Chest Compressions only</option><option value="defib">CPR + Defibrillation</option><option value="cardio">Synchronized Cardioversion</option><option value="atropine">Oxygen + Atropine</option><option value="amio">Oxygen + Amiodarone</option><option value="monitor">Continue Monitoring</option></select></div>
+      <div class="sort-row" data-answer="atropine"><strong>Sinus Bradycardia (symptomatic, hypotensive, vagal cause)</strong><select><option value="">Choose intervention</option><option value="cpr">Chest Compressions only</option><option value="defib">CPR + Defibrillation</option><option value="cardio">Synchronized Cardioversion</option><option value="atropine">Oxygen + Atropine</option><option value="amio">Oxygen + Amiodarone</option><option value="monitor">Continue Monitoring</option></select></div>
+      <div class="sort-row" data-answer="amio"><strong>Ventricular Tachycardia (stable, pulse present, symptomatic)</strong><select><option value="">Choose intervention</option><option value="cpr">Chest Compressions only</option><option value="defib">CPR + Defibrillation</option><option value="cardio">Synchronized Cardioversion</option><option value="atropine">Oxygen + Atropine</option><option value="amio">Oxygen + Amiodarone</option><option value="monitor">Continue Monitoring</option></select></div>
+      <div class="sort-row" data-answer="cardio"><strong>SVT (unstable, HR 210, hypotensive, altered mental status)</strong><select><option value="">Choose intervention</option><option value="cpr">Chest Compressions only</option><option value="defib">CPR + Defibrillation</option><option value="cardio">Synchronized Cardioversion</option><option value="atropine">Oxygen + Atropine</option><option value="amio">Oxygen + Amiodarone</option><option value="monitor">Continue Monitoring</option></select></div>
+      <div class="sort-row" data-answer="monitor"><strong>Normal Sinus Rhythm (after successful resuscitation, patient alert)</strong><select><option value="">Choose intervention</option><option value="cpr">Chest Compressions only</option><option value="defib">CPR + Defibrillation</option><option value="cardio">Synchronized Cardioversion</option><option value="atropine">Oxygen + Atropine</option><option value="amio">Oxygen + Amiodarone</option><option value="monitor">Continue Monitoring</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkPracticeSort" type="button" style="margin-top:12px">Check Intervention Match</button>
+    <div class="activity-status" id="practiceSortStatus">Complete the rhythm-to-intervention matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 10: Knowledge Check -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Foundations 3.2 Knowledge Check">
+  <span class="eyebrow">Knowledge Check</span>
+  <h2>ECG & Rhythm Analysis Mastery</h2>
+  <p>Answer each question correctly to complete this activity.</p>
+
+  <div class="knowledge-question" data-question-id="kq1">
+    <h3>Question 1</h3>
+    <p>A patient has a regular rhythm with R-R intervals measuring 18 small boxes. Using the small box method, what is the heart rate?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="300 is the numerator used for the LARGE box method. The small box method divides 1500 by the number of small boxes.">300 ÷ 18 = 17 bpm</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct! Small box method: 1500 ÷ 18 = 83 bpm. Remember: 1500 for small boxes, 300 for large boxes.">1500 ÷ 18 = 83 bpm</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="This is not a standard rate calculation formula. The small box method divides 1500 by the number of small boxes between R waves.">18 × 10 = 180 bpm</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="Close — but 1500 ÷ 18 = 83.3, which rounds to 83 bpm, not 84.">1500 ÷ 18 = 84 bpm</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq2">
+    <h3>Question 2</h3>
+    <p>How long in seconds does 1 large box on ECG paper represent?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="0.04 seconds is the value of 1 SMALL box. A large box contains 5 small boxes: 5 × 0.04 = 0.20 seconds.">0.04 seconds</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct! 1 large box = 5 small boxes × 0.04 seconds each = 0.20 seconds. Five large boxes = 1 second. Thirty large boxes = 6 seconds.">0.20 seconds</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="1 second = 5 large boxes. One large box is one-fifth of a second = 0.20 seconds.">1.0 second</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="0.12 seconds = 3 small boxes. That is not the value of one large box.">0.12 seconds</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq3">
+    <h3>Question 3</h3>
+    <p>A patient's ECG shows an irregularly irregular rhythm with no visible P waves and a chaotic, wavy baseline. Which rhythm does this describe?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Atrial flutter has a REGULAR sawtooth baseline (F waves) — not an irregular chaotic baseline. The ventricular rate is also more predictable in flutter.">Atrial Flutter</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct! Irregularly irregular rhythm + absent P waves + chaotic wavy baseline = Atrial Fibrillation. The 'irregularly irregular' description is the classic identifier for AFib — the R-R intervals are never consistent.">Atrial Fibrillation</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="SVT is REGULAR — not irregularly irregular. It also has no chaotic baseline; it has a flat baseline with rapid narrow QRS complexes.">Supraventricular Tachycardia</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Normal sinus rhythm is regular with visible, uniform P waves before each QRS. That is the opposite of what is described here.">Normal Sinus Rhythm</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq4">
+    <h3>Question 4</h3>
+    <p>A patient is pulseless. The monitor shows a flat line. Which is true about the correct treatment?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Defibrillation does NOT work on asystole. There is no chaotic electrical activity to reset. Defibrillating asystole is incorrect and wastes critical time.">Defibrillation should be given immediately.</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct! Asystole is NOT a shockable rhythm. Begin CPR immediately. Also check that ECG leads are properly attached — lead disconnect can mimic asystole. The 5 Hs and 5 Ts should be considered for reversible causes.">Begin CPR. Defibrillation is not indicated for asystole.</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Atropine can be given during resuscitation, but the first priority is always high-quality CPR. Atropine is not the primary response to asystole.">Give atropine as the first intervention.</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="A flat line on the monitor with a pulseless patient is treated with CPR — not monitoring. However, always verify lead placement to rule out artifact before concluding it is true asystole.">Continue monitoring — this is normal.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq5">
+    <h3>Question 5</h3>
+    <p>An ECG shows a regular rhythm at 190 bpm with narrow QRS complexes. P waves are hidden. The patient has sudden palpitations but is hemodynamically stable. What rhythm is this and what is the first intervention?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="VT has WIDE, bizarre QRS complexes. Narrow QRS at this rate points to a supraventricular origin — SVT. Amiodarone is used for VT, not SVT.">Ventricular Tachycardia — oxygen and amiodarone.</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="Defibrillation is used for pulseless VFib or pulseless VT. This patient is stable with a pulse. Defibrillation is not the first response for stable SVT.">Ventricular Fibrillation — CPR and defibrillation.</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="true" data-feedback="Correct! Rate 150-250 bpm + narrow QRS + hidden P waves + sudden onset = SVT. First intervention for stable SVT is oxygen and vagal maneuver. If that fails, adenosine is the drug of choice. Synchronized cardioversion is reserved for unstable SVT.">SVT — oxygen and vagal maneuver (then adenosine if needed).</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="Atrial flutter typically presents with a sawtooth baseline at an atrial rate of 250-400 bpm and a ventricular rate around 150 bpm with a block ratio. This description fits SVT more closely.">Atrial Flutter — synchronized cardioversion.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly</div>
+</section>
+
+<!-- SECTION 11: FAQ -->
+<section id="faq">
+  <div><span class="eyebrow">FAQ</span><h2>Common ECG Questions</h2></div>
+  <details class="accordion" open>
+    <summary>What is the difference between defibrillation and synchronized cardioversion?</summary>
+    <div class="accordion-body"><p>Defibrillation delivers an unsynchronized shock — it fires immediately without regard to where the heart is in its cycle. It is used for pulseless rhythms (VFib, pulseless VT) where there is no organized rhythm to synchronize with. Synchronized cardioversion times the shock to coincide with the QRS complex, avoiding the vulnerable T-wave period. It is used for organized but unstable rhythms where the patient still has a pulse (unstable SVT, unstable AFib, unstable VT with pulse).</p></div>
+  </details>
+  <details class="accordion">
+    <summary>How do I tell VT from SVT on the strip?</summary>
+    <div class="accordion-body"><p>The key differentiator is the QRS width. SVT comes from above the ventricles — it follows normal conduction pathways, so the QRS is NARROW (&lt;0.12 sec). VT comes from the ventricles — it bypasses the normal His-Purkinje system, so the QRS is WIDE and BIZARRE (≥0.12 sec). Both can be fast and regular, so always check the QRS width first.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why can't you defibrillate asystole?</summary>
+    <div class="accordion-body"><p>Defibrillation works by delivering a massive shock that simultaneously depolarizes all cardiac cells — essentially "resetting" the heart so the SA node can take over. For this to work, there must be some chaotic electrical activity happening (like VFib). Asystole means there is NO electrical activity at all — there is nothing to reset. Shocking a flat line won't create activity; it can only reset existing chaotic activity. Always check leads are connected before concluding true asystole.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What does "irregularly irregular" mean for AFib?</summary>
+    <div class="accordion-body"><p>In most arrhythmias, even irregular ones, there is some pattern to the irregularity. AFib is different — the R-R intervals have NO pattern. They are completely random. No two consecutive R-R intervals are the same length, and there is no repeating cycle. This "irregularly irregular" pattern is the hallmark of AFib and how you distinguish it from other irregular rhythms like second-degree heart block.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why does the sequence method use 300, 150, 100, 75, 60, 50?</summary>
+    <div class="accordion-body"><p>These numbers come from dividing 300 by whole numbers (300÷1=300, 300÷2=150, 300÷3=100, 300÷4=75, 300÷5=60, 300÷6=50). Since one large box = 0.20 seconds and 5 large boxes = 1 second, there are 300 large boxes in a minute. So if there is 1 large box between R waves, the rate is 300 bpm; 2 large boxes = 150 bpm; and so on. It is the large box method expressed as a memorized sequence.</p></div>
+  </details>
+</section>
+
+<!-- SECTION 12: Summary -->
+<section class="info-card" id="summary">
+  <h2>Summary & Clinical Pearls</h2>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>ECG Paper:</strong><br>1 small box = 0.04 sec. 1 large box = 0.20 sec. 5 large boxes = 1 sec. 30 large = 6 sec (rate strip).</div>
+    <div class="example-box soft-blue"><strong>Rate Formulas:</strong><br>Small boxes: 1500 ÷ boxes. Large boxes: 300 ÷ boxes. Six-sec: QRS count × 10. Irregular → use six-second method.</div>
+    <div class="example-box soft-amber"><strong>Sinus Rhythms:</strong><br>P before every QRS. Brady &lt;60 → atropine. Tachy &gt;100 → treat cause. NSR 60–100 → monitor.</div>
+    <div class="example-box soft-coral"><strong>Atrial Rhythms:</strong><br>Flutter = sawtooth F waves. AFib = irregularly irregular, no P waves. SVT = narrow QRS, 150–250 bpm.</div>
+    <div class="example-box soft-teal"><strong>Ventricular Rhythms:</strong><br>Wide bizarre QRS ≥0.12 sec. Mono VT (regular) → amiodarone if pulse. Poly VT (irregular) → defibrillation.</div>
+    <div class="example-box soft-coral"><strong>Deadly Rhythms:</strong><br>VFib = chaotic, no QRS → SHOCK. Asystole = flatline, no activity → CPR ONLY. Know the 5 Hs and 5 Ts.</div>
+  </div>
+  <div class="example-box soft-amber" style="margin-top:14px">
+    <strong>NBRC Exam Tip — Shockable vs. Non-Shockable:</strong> VFib and pulseless VT = Shockable (defibrillation). Asystole and PEA = Non-shockable (CPR only). This distinction is tested directly on the NBRC exam and in every ACLS scenario.
+  </div>
+</section>
+
+<!-- SECTION 13: Flashcards -->
+<section id="glossary">
+  <div class="glossary-card">
+    <h3>Glossary Flashcard Mastery Deck</h3>
+    <p>Click the card to flip it. Mark known cards to move them to the completed pile.</p>
+    <div class="flashcard-shell">
+      <div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+      <div class="tabs" role="tablist" aria-label="Flashcard deck view">
+        <button class="tab-btn active" data-view="active">Review Deck</button>
+        <button class="tab-btn" data-view="completed">Completed ✓</button>
+        <button class="tab-btn" data-view="all">All Cards</button>
+      </div>
+      <div aria-label="Current flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0">
+        <div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div>
+      </div>
+      <div class="deck-actions">
+        <button class="small-btn" id="revealCard">Flip Card</button>
+        <button class="small-btn primary" id="knowCard">Know It ✓</button>
+        <button class="small-btn" id="reviewAgain">Review Again</button>
+        <button class="small-btn warn" id="resetAll">Reset All</button>
+        <button class="small-btn" id="shuffleDeck">Shuffle Active</button>
+      </div>
+      <div class="completed-list" id="completedList"></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end lesson-stack -->
+</main>
+
+<footer class="footer">
+  <div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div>
+</footer>
+</div><!-- end page-shell -->
+
+<script>
+// ── COURSE MENU ────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded",function(){
+  const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+  if(button&&panel){
+    panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+    const list=document.getElementById("courseMenuList");
+    const courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+    const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+    if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?'current':'')+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+    button.onclick=function(event){event.preventDefault();event.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+    document.addEventListener("click",event=>{if(!panel.contains(event.target)&&event.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}});
+  }
+});
+
+// ── FLASHCARD DECK ─────────────────────────────────────────────────────────
+const glossaryTerms=[
+  {term:"P Wave",definition:"Represents atrial depolarization — the electrical activation of the atria before they contract. Should be upright and uniform."},
+  {term:"QRS Complex",definition:"Represents ventricular depolarization. Duration normally less than 0.12 seconds. Wide/bizarre QRS indicates ventricular origin or bundle branch block."},
+  {term:"T Wave",definition:"Represents ventricular repolarization — the electrical reset of the ventricles. Should be upright and not excessively tall."},
+  {term:"PR Interval",definition:"Measured from start of P wave to start of QRS. Normal: 0.12-0.20 sec (3-5 small boxes). Prolonged PR suggests AV conduction delay."},
+  {term:"ST Segment",definition:"Isoelectric line between end of QRS (S wave) and start of T wave. Elevation = possible MI; Depression = possible ischemia."},
+  {term:"QT Interval",definition:"Measured from start of QRS to end of T wave. Normal: 0.39-0.46 sec. Prolonged QT (>0.45 sec) increases risk of Torsades/ventricular arrhythmia."},
+  {term:"Six-Second Method",definition:"Rate calculation for ANY rhythm: count QRS complexes in a 6-second strip (30 large boxes) and multiply by 10."},
+  {term:"Large Box Method",definition:"Rate calculation for REGULAR rhythms: divide 300 by the number of large boxes between two R waves. Example: 4 boxes = 75 bpm."},
+  {term:"Small Box Method",definition:"Rate calculation for REGULAR rhythms (precise): divide 1500 by the number of small boxes between two R waves. Example: 18 boxes = 83 bpm."},
+  {term:"Normal Sinus Rhythm",definition:"Regular rhythm at 60-100 bpm with a P wave before every QRS complex. PR interval 0.12-0.20 sec. QRS less than 0.12 sec."},
+  {term:"Sinus Bradycardia",definition:"Regular sinus rhythm with rate less than 60 bpm. P wave before every QRS. Common causes: vagal stimulation, beta-blockers, hypothyroidism, hypoxia. Treatment: oxygen, atropine if symptomatic."},
+  {term:"Sinus Tachycardia",definition:"Regular sinus rhythm with rate greater than 100 bpm. P wave before every QRS. Common causes: pain, fever, hypoxia, hypovolemia. Treatment: oxygen, treat underlying cause."},
+  {term:"Atrial Flutter",definition:"Atrial rate 250-400 bpm creating sawtooth F waves. Ventricular rate depends on AV block ratio. No true P waves. Treatment: synchronized cardioversion if serious."},
+  {term:"Atrial Fibrillation",definition:"Irregularly irregular rhythm with no visible P waves — replaced by chaotic fibrillation (f) waves. High stroke risk due to blood pooling. Management: rate control or rhythm control."},
+  {term:"SVT (Supraventricular Tachycardia)",definition:"Regular rapid rhythm at 150-250 bpm with NARROW QRS complexes. P waves hidden. Treatment: vagal maneuver, then adenosine if stable. Synchronized cardioversion if unstable."},
+  {term:"Ventricular Tachycardia (VT)",definition:"Regular rhythm >150 bpm with WIDE, BIZARRE QRS complexes (≥0.12 sec). No visible P waves. Pulseless VT = defibrillation. Stable VT with pulse = amiodarone."},
+  {term:"Ventricular Fibrillation (VFib)",definition:"Completely chaotic, disorganized waveforms — no P waves, no QRS, no organized rhythm. Patient is pulseless. Treatment: CPR + DEFIBRILLATION (shockable rhythm)."},
+  {term:"Asystole",definition:"Flatline on the monitor — no electrical activity. Patient is pulseless. Treatment: CPR ONLY. Defibrillation does NOT work on asystole (non-shockable). Check lead placement."},
+  {term:"Defibrillation",definition:"Unsynchronized electrical shock used for pulseless VFib and pulseless VT. Depolarizes all cardiac cells simultaneously to allow SA node to resume control."},
+  {term:"Synchronized Cardioversion",definition:"Timed electrical shock synchronized with the QRS complex. Used for unstable rhythms with a pulse: unstable SVT, AFib, atrial flutter, stable VT."},
+  {term:"5 Hs and 5 Ts",definition:"Reversible causes of cardiac arrest: Hs = Hypovolemia, Hypoxia, Hypothermia, Hypo/Hyperkalemia, Hydrogen ion (acidosis). Ts = Tamponade, Tension pneumo, Thrombosis (PE), Thrombosis (MI), Tablets/toxins."},
+  {term:"Shockable Rhythms",definition:"Rhythms treated with defibrillation: Ventricular Fibrillation (VFib) and Pulseless Ventricular Tachycardia. Both have electrical activity that can be reset with a shock."},
+  {term:"Non-Shockable Rhythms",definition:"Rhythms NOT treated with defibrillation: Asystole and PEA (Pulseless Electrical Activity). No chaotic electrical activity to reset. Treat with CPR and address reversible causes."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:`<div class="empty-state">No cards completed yet.</div>`}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete.";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+// ── ANSWER SHUFFLER ────────────────────────────────────────────────────────
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(child=>child.classList&&child.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(option=>container.appendChild(option))})}
+shuffleAnswerOptions();
+
+// ── MARK COMPLETE ──────────────────────────────────────────────────────────
+function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+// ── SORT ACTIVITIES ────────────────────────────────────────────────────────
+function initSort(containerSel,btnId,statusId){
+  const activity=document.querySelector(containerSel+" .activity-card.require-complete");
+  const button=document.getElementById(btnId);
+  const status=document.getElementById(statusId);
+  if(!activity||!button)return;
+  button.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    let correct=0;
+    rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});
+    if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}
+    else{status.textContent=`${correct} / ${rows.length} correct — review and try again.`}
+  });
+}
+initSort("#ecg-paper","checkEcgTime","ecgTimeStatus");
+initSort("#four-step","checkStepSort","stepSortStatus");
+initSort("#sinus","checkSinusSort","sinusSortStatus");
+initSort("#atrial","checkAtrialSort","atrialSortStatus");
+initSort("#deadly","checkDeadlySort","deadlySortStatus");
+initSort("#practice","checkPracticeSort","practiceSortStatus");
+
+// ── RATE CALCULATION PRACTICE ──────────────────────────────────────────────
+(function initCalc(){
+  const activity=document.querySelector("#rate-calc .activity-card.require-complete");
+  const status=document.getElementById("calcStatus");
+  document.getElementById("checkCalc").addEventListener("click",()=>{
+    const rows=Array.from(document.querySelectorAll(".calc-row"));
+    let correct=0;
+    rows.forEach(row=>{
+      const input=row.querySelector("input");
+      const answer=parseInt(row.dataset.answer);
+      const val=parseInt(input.value);
+      const isCorrect=val===answer;
+      row.classList.toggle("correct-calc",isCorrect);
+      row.classList.toggle("incorrect-calc",input.value!==""&&!isCorrect);
+      if(isCorrect)correct++;
+    });
+    if(correct===rows.length){status.textContent="All calculations correct!";status.classList.add("complete");markActivityComplete(activity)}
+    else{status.textContent=`${correct} / ${rows.length} correct — check your formulas and try again.`}
+  });
+})();
+
+// ── SINGLE-ANSWER QUIZ (VT check) ─────────────────────────────────────────
+(function initVtCheck(){
+  const activity=document.getElementById("vt-check");
+  const feedback=document.getElementById("vtFeedback");
+  activity.querySelectorAll(".vt-option").forEach(button=>{
+    button.addEventListener("click",()=>{
+      if(activity.dataset.correctAnswered==="true")return;
+      const isCorrect=button.dataset.correct==="true";
+      activity.querySelectorAll(".vt-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        activity.dataset.correctAnswered="true";
+        activity.querySelectorAll(".vt-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+        markActivityComplete(activity);
+      }else{
+        button.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again.</strong>";
+      }
+    });
+  });
+})();
+
+// ── UNFOLDING CASE ─────────────────────────────────────────────────────────
+(function initCase(){
+  const section=document.getElementById("scenario");
+  const stages=Array.from(section.querySelectorAll(".case-stage"));
+  stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});
+  section.querySelectorAll(".case-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const stage=option.closest(".case-stage");
+      if(stage.dataset.correctAnswered==="true")return;
+      const feedback=stage.querySelector(".case-feedback");
+      const isCorrect=option.dataset.caseCorrect==="true";
+      stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        stage.dataset.correctAnswered="true";
+        stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+        const next=stage.querySelector(".case-next button");if(next)next.disabled=false;
+      }else{
+        option.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+        const next=stage.querySelector(".case-next button");if(next)next.disabled=true;
+      }
+    });
+  });
+  section.querySelectorAll(".case-next button").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const current=button.closest(".case-stage");
+      const idx=stages.indexOf(current);
+      const next=stages[idx+1];
+      if(!next)return;
+      next.classList.remove("lesson-hidden");
+      if(idx+1===stages.length-1)markActivityComplete(section);
+      button.closest(".case-next").remove();
+      next.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+})();
+
+// ── KNOWLEDGE CHECK ────────────────────────────────────────────────────────
+(function initKnowledge(){
+  const section=document.getElementById("knowledge-check");
+  const status=document.getElementById("knowledgeStatus");
+  const answered=new Set();
+  const total=section.querySelectorAll(".knowledge-question").length;
+  section.querySelectorAll(".knowledge-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const question=option.closest(".knowledge-question");
+      if(question.dataset.correctAnswered==="true")return;
+      const feedback=question.querySelector(".quiz-feedback");
+      const isCorrect=option.dataset.correct==="true";
+      question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        question.dataset.correctAnswered="true";
+        answered.add(option.dataset.question);
+        question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>";
+      }else{
+        option.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again.</strong>";
+      }
+      status.textContent=`${answered.size} / ${total} questions answered correctly`;
+      if(answered.size===total){status.textContent="Knowledge check complete.";status.classList.add("complete");markActivityComplete(section)}
+    });
+  });
+})();
+
+// ── PROGRESSIVE SECTION REVEAL ─────────────────────────────────────────────
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+  const sections=Array.from(document.querySelectorAll(".lesson-stack > section"));
+  const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+  sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+  function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
+  function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+  function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+  function updateAll(){sections.forEach(setContinueState)}
+  function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+  function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+  sections.forEach((section,index)=>{
+    if(index>=sections.length-1)return;
+    const next=sections[index+1];
+    const nextTitle=getSectionTitle(next);
+    const wrapper=document.createElement("div");wrapper.className="section-continue";
+    wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+    wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});
+    section.appendChild(wrapper);
+  });
+  navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+  document.addEventListener("activityComplete",updateAll);
+  const note=document.createElement("span");note.className="section-progress-note";
+  note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";
+  sections[0].appendChild(note);
+  updateNav(0);updateAll();
+}
+initializeProgressiveSections();
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+
+window.LESSON_ID="foundations_3_2";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>

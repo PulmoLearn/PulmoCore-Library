@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Foundations 3.3</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status,.course-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete,.course-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress,.course-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint);color:var(--core-navy)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:480px}th,td{text-align:left;padding:9px;vertical-align:top;border-bottom:1px solid var(--soft-border)}thead th{background:#E5F0F6}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease,border-color .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,230px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px;color:#263f5e}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:repeat(2,minmax(220px,1fr))}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:420px}.home-button{width:42px;height:42px}.course-menu-button{padding:9px 12px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}table{min-width:380px}}
+
+/* ── 3.3-specific styles ───────────────────────────────────────────────── */
+.formula-box{font-family:var(--font-data);background:var(--core-navy);color:var(--white);border-radius:14px;padding:18px 22px;font-size:1.15rem;text-align:center;margin:14px 0;letter-spacing:.02em;line-height:1.8}
+.formula-box span{color:var(--clinical-amber)}
+.formula-box em{color:var(--pulmo-teal);font-style:normal}
+.calc-step-grid{display:grid;gap:12px;margin-top:14px}
+.calc-step{border:1px solid var(--soft-border);border-radius:14px;background:#FAFDFF;padding:14px}
+.calc-step-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.step-badge{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.9rem;flex-shrink:0;color:var(--white)}
+.calc-row-inline{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:10px;align-items:center;margin-top:8px}
+.calc-row-inline input{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;text-align:center;font-family:var(--font-data);font-size:1rem}
+.calc-row-inline.correct-calc input{border-color:#86D9C8;background:var(--airway-mint)}
+.calc-row-inline.incorrect-calc input{border-color:#F2B5B5;background:#FDE9E9}
+.interp-band{border-radius:12px;padding:12px 16px;margin:6px 0;display:flex;align-items:center;gap:12px;font-weight:700}
+.interp-band .band-value{font-family:var(--font-data);font-size:1.1rem;min-width:80px;text-align:center}
+.mixed-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.mixed-card{border-radius:14px;padding:16px;border:2px solid}
+.arrow-chain{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0;font-size:.9rem}
+.arrow-chain span{background:#F0F5FA;border-radius:8px;padding:3px 8px}
+.arrow-chain .arr{color:var(--slate);font-weight:800}
+@media(max-width:780px){.mixed-grid{grid-template-columns:1fr}.calc-row-inline{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<!-- ── NAV ─────────────────────────────────────────────────────────────── -->
+<header class="top-nav" aria-label="PulmoCore site navigation">
+  <div class="brand" aria-label="PulmoCore brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div>
+    <div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory disease learning for future RTs.</div></div>
+  </div>
+  <div class="top-nav-actions">
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" aria-label="Glossary and Flashcards" title="Glossary & Flashcards" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+    <a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+    <div class="course-menu-container course-menu-wrapper">
+      <button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button>
+      <div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+  <span class="eyebrow">Foundations of Respiratory Care · Lesson 3.3</span>
+  <h1 style="font-family:var(--font-heading);font-size:clamp(2.4rem,5vw,4.3rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Anion Gap, Bicarbonate Gap & Mixed Acid-Base Disorders</h1>
+  <p style="font-size:1.18rem;max-width:980px;color:#243b55">When metabolic acidosis is present, the anion gap tells you WHY. The bicarbonate gap reveals whether a second hidden disorder is also present. This lesson builds the step-by-step calculation skills and clinical reasoning needed to interpret complex acid-base scenarios.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>Course Track</strong><br>Foundations of Respiratory Care</div>
+    <div class="example-box soft-blue"><strong>Estimated Time</strong><br>55–70 minutes</div>
+    <div class="example-box soft-amber"><strong>Level</strong><br>Intermediate RT — ABG interpretation with calculations</div>
+  </div>
+</section>
+
+<div class="content-layout">
+<aside aria-label="Lesson quick navigation" class="side-nav">
+  <h3>Lesson Sections</h3>
+  <a href="#objectives">Objectives</a>
+  <a href="#overview-video">Video</a>
+  <a href="#be-lactate">Base Excess & Lactate</a>
+  <a href="#acidosis-types">Acidosis Types</a>
+  <a href="#anion-gap">Anion Gap</a>
+  <a href="#ketoaci">Ketoacidosis</a>
+  <a href="#bicarb-gap">Bicarbonate Gap</a>
+  <a href="#mixed">Mixed Disorders</a>
+  <a href="#scenario">Unfolding Case</a>
+  <a href="#practice">Assignment Practice</a>
+  <a href="#knowledge-check">Knowledge Check</a>
+  <a href="#faq">FAQ</a>
+  <a href="#summary">Summary</a>
+  <a href="#glossary">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+<section class="info-card" id="objectives">
+  <h2>Learning Objectives</h2>
+  <p>By the end of this lesson, you will be able to explain base excess and lactate, calculate the anion gap and bicarbonate gap, distinguish AGMA from NAGMA, identify the cause of metabolic acidosis from clinical clues, and recognize mixed acid-base disorders from clinical scenarios.</p>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>1. Interpret Base Excess & Lactate</strong><br>Understand what these values reflect and when elevated lactate is clinically significant.</div>
+    <div class="example-box soft-blue"><strong>2. Calculate Anion Gap</strong><br>Apply AG = Na⁺ - (Cl⁻ + HCO₃⁻) and classify the result as AGMA or NAGMA.</div>
+    <div class="example-box soft-amber"><strong>3. Calculate Bicarbonate Gap</strong><br>Apply the 3-step BG calculation to detect hidden mixed disorders.</div>
+    <div class="example-box soft-coral"><strong>4. Identify Mixed Disorders</strong><br>Match clinical scenarios to the correct combination of respiratory and metabolic disturbances.</div>
+  </div>
+</section>
+
+<section class="info-card" id="overview-video">
+  <span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Anion Gap & Bicarbonate Gap</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/foundations/Foundations_3_3.mp4" type="video/mp4"/>
+<track default kind="captions" label="English captions" src="/foundations/Foundations_3_3.vtt" srclang="en"/>
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+
+<!-- ── PROGRESSIVE LESSON STACK ─────────────────────────────────────────── -->
+<div class="lesson-stack">
+
+<!-- SECTION 1: Base Excess & Lactate -->
+<section class="info-card" id="be-lactate">
+  <h2>Additional ABG Tools: Base Excess & Lactate</h2>
+  <p>Before calculating anion gaps, two supporting ABG values help confirm metabolic acid-base status: <strong>base excess</strong> and <strong>lactate</strong>. Understanding what they reflect — and their limitations — prepares you to interpret complex clinical situations.</p>
+  <img src="/foundations/Foundations_3_3_assets/foundations-3-3-be-lactate.png" alt="Side-by-side panels showing Base Excess interpretation (positive in alkalosis, negative in acidosis) and Lactate metabolism pathway (pyruvate to acetyl-CoA normally vs pyruvate to lactate in hypoxia) with normal ranges and clinical significance" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div style="border:2px solid var(--oxygen-blue);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--oxygen-blue)">Base Excess (BE)</h3>
+      <p style="font-size:.9rem;color:var(--slate)">A calculated value derived from pH and PaCO₂ — it reflects the metabolic component of acid-base status after accounting for the respiratory contribution.</p>
+      <div class="interp-band" style="background:var(--airway-mint);border:1px solid #86D9C8">
+        <span class="band-value" style="color:var(--pulmo-teal)">Positive</span>
+        <span>Metabolic alkalosis present</span>
+      </div>
+      <div class="interp-band" style="background:#F8FBFD;border:1px solid var(--soft-border)">
+        <span class="band-value" style="color:var(--slate)">-2 to +2</span>
+        <span>Normal range</span>
+      </div>
+      <div class="interp-band" style="background:#FDE9E9;border:1px solid #F2B5B5">
+        <span class="band-value" style="color:var(--alert-coral)">Negative</span>
+        <span>Metabolic acidosis present</span>
+      </div>
+      <div class="example-box soft-amber" style="margin-top:10px;font-size:.85rem"><strong>Limitation:</strong> BE does not tell you whether the metabolic change is primary or a compensation for a respiratory disorder. Interpret with the full clinical picture.</div>
+    </div>
+
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px;background:#fff">
+      <h3 style="color:var(--alert-coral)">Lactate</h3>
+      <p style="font-size:.9rem;color:var(--slate)">Produced when cells switch from aerobic to anaerobic metabolism. The liver normally clears lactate; when production overwhelms clearance, lactic acidosis develops.</p>
+      <div class="interp-band" style="background:var(--airway-mint);border:1px solid #86D9C8">
+        <span class="band-value" style="color:var(--pulmo-teal)">&lt;2 mmol/L</span>
+        <span>Normal lactate</span>
+      </div>
+      <div class="interp-band" style="background:#FDE9E9;border:1px solid #F2B5B5">
+        <span class="band-value" style="color:var(--alert-coral)">&gt;2 mmol/L</span>
+        <span>Elevated — tissue hypoxia or other cause</span>
+      </div>
+      <p style="font-size:.88rem;color:var(--slate);margin-top:10px"><strong>Normal pathway:</strong> Pyruvate → Acetyl-CoA → Krebs cycle (aerobic)</p>
+      <p style="font-size:.88rem;color:var(--slate);margin-top:4px"><strong>Abnormal pathway (low O₂):</strong> Pyruvate → Lactate (via lactate dehydrogenase) → lactic acidosis</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:22px">Five Types of Hyperlactatemia</h3>
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:10px">
+    <table>
+      <thead><tr><th>Type</th><th>Mechanism</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Type A</strong></td><td>Reduced tissue oxygen delivery</td><td>Shock, cardiac arrest, severe hypoxia, severe anemia, CO poisoning, severe asthma</td></tr>
+        <tr><td><strong>Type B1</strong></td><td>Underlying disease</td><td>Liver failure, sepsis, thiamine deficiency, leukemia, lymphoma</td></tr>
+        <tr><td><strong>Type B2</strong></td><td>Drugs and toxins</td><td>Metformin, epinephrine, beta-2 agonists, cyanide, NRTIs</td></tr>
+        <tr><td><strong>Type B3</strong></td><td>Inborn errors of metabolism</td><td>Pyruvate dehydrogenase deficiency</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Lactate Type Match" style="margin-top:16px">
+    <h3>Match the Clinical Finding to the Lactate Type</h3>
+    <div class="sort-grid" id="lactateSort">
+      <div class="sort-row" data-answer="a"><strong>Patient in cardiogenic shock with BP 70/40 and SpO₂ 84%. Lactate 8 mmol/L.</strong><select><option value="">Choose type</option><option value="a">Type A — Low O₂ delivery</option><option value="b1">Type B1 — Underlying disease</option><option value="b2">Type B2 — Drugs / toxins</option></select></div>
+      <div class="sort-row" data-answer="b2"><strong>Patient on metformin for type 2 diabetes develops elevated lactate without hypoxia or hemodynamic instability.</strong><select><option value="">Choose type</option><option value="a">Type A — Low O₂ delivery</option><option value="b1">Type B1 — Underlying disease</option><option value="b2">Type B2 — Drugs / toxins</option></select></div>
+      <div class="sort-row" data-answer="b1"><strong>Patient with fulminant liver failure. Lactate rising — liver unable to clear lactate from blood.</strong><select><option value="">Choose type</option><option value="a">Type A — Low O₂ delivery</option><option value="b1">Type B1 — Underlying disease</option><option value="b2">Type B2 — Drugs / toxins</option></select></div>
+      <div class="sort-row" data-answer="a"><strong>Patient 30 minutes post-cardiac arrest, still hypotensive. Lactate 12 mmol/L due to global tissue hypoperfusion.</strong><select><option value="">Choose type</option><option value="a">Type A — Low O₂ delivery</option><option value="b1">Type B1 — Underlying disease</option><option value="b2">Type B2 — Drugs / toxins</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkLactateSort" type="button" style="margin-top:12px">Check Lactate Types</button>
+    <div class="activity-status" id="lactateSortStatus">Complete the lactate type matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 2: Acidosis Types -->
+<section class="info-card" id="acidosis-types">
+  <h2>Two Types of Metabolic Acidosis</h2>
+  <p>When the ABG shows metabolic acidosis (low pH, low HCO₃⁻), your next question is: <em>why is the bicarbonate low?</em> There are two fundamentally different answers, and the anion gap tells you which one is occurring.</p>
+  <img src="/foundations/Foundations_3_3_assets/foundations-3-3-acidosis-types.png" alt="Two-panel comparison diagram: Left panel AGMA showing acid being added to blood increasing the anion gap; Right panel NAGMA showing bicarbonate being lost from blood with the anion gap remaining normal. Both panels show electrolyte balance diagrams." style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:18px;background:#fff">
+      <h3 style="color:var(--alert-coral)">AGMA — Anion Gap Metabolic Acidosis</h3>
+      <p style="margin:8px 0"><strong>Cause:</strong> Excess acid is <em>added</em> to the blood.</p>
+      <p style="margin:8px 0;font-size:.9rem;color:var(--slate)">The acid displaces bicarbonate — but the acid's anion (unmeasured negative ion) stays in the blood, raising the anion gap above normal.</p>
+      <div class="example-box soft-coral" style="margin-top:10px">
+        <strong>AG &gt; 12 = AGMA</strong><br>
+        Common causes: Lactic acidosis, DKA, AKA, uremia, salicylate, methanol
+      </div>
+    </div>
+    <div style="border:2px solid var(--oxygen-blue);border-radius:14px;padding:18px;background:#fff">
+      <h3 style="color:var(--oxygen-blue)">NAGMA — Non-Anion Gap Metabolic Acidosis</h3>
+      <p style="margin:8px 0"><strong>Cause:</strong> Bicarbonate is <em>lost</em> from the body.</p>
+      <p style="margin:8px 0;font-size:.9rem;color:var(--slate)">When bicarbonate leaves (through GI tract or kidneys), chloride rises to maintain electrical balance — so the anion gap stays normal.</p>
+      <div class="example-box soft-blue" style="margin-top:10px">
+        <strong>AG ≤ 12 = NAGMA</strong><br>
+        Common causes: Diarrhea, vomiting, renal tubular acidosis, excess saline
+      </div>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="AGMA vs NAGMA Sort" style="margin-top:16px">
+    <h3>AGMA or NAGMA?</h3>
+    <p>Based on the clinical clue, classify each scenario as AGMA or NAGMA.</p>
+    <div class="sort-grid" id="agmaSort">
+      <div class="sort-row" data-answer="agma"><strong>Patient with type 1 diabetes, glucose 450, elevated ketones. Metabolic acidosis on ABG.</strong><select><option value="">Choose type</option><option value="agma">AGMA — excess acid added</option><option value="nagma">NAGMA — bicarbonate lost</option></select></div>
+      <div class="sort-row" data-answer="nagma"><strong>Patient with severe diarrhea for 4 days. Metabolic acidosis on ABG. Anion gap calculated at 11.</strong><select><option value="">Choose type</option><option value="agma">AGMA — excess acid added</option><option value="nagma">NAGMA — bicarbonate lost</option></select></div>
+      <div class="sort-row" data-answer="agma"><strong>Patient in septic shock. Lactate 8 mmol/L. Metabolic acidosis with anion gap of 22.</strong><select><option value="">Choose type</option><option value="agma">AGMA — excess acid added</option><option value="nagma">NAGMA — bicarbonate lost</option></select></div>
+      <div class="sort-row" data-answer="nagma"><strong>Post-surgical patient who received 6 liters of normal saline. Metabolic acidosis with normal anion gap.</strong><select><option value="">Choose type</option><option value="agma">AGMA — excess acid added</option><option value="nagma">NAGMA — bicarbonate lost</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkAgmaSort" type="button" style="margin-top:12px">Check Acidosis Types</button>
+    <div class="activity-status" id="agmaSortStatus">Complete the AGMA vs NAGMA sorting to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 3: Anion Gap Calculation -->
+<section class="info-card" id="anion-gap">
+  <h2>Calculating the Anion Gap</h2>
+  <p>The anion gap is calculated from three electrolytes that are routinely measured in a basic metabolic panel. It reflects the presence of unmeasured anions (acids) in the blood.</p>
+  <img src="/foundations/Foundations_3_3_assets/foundations-3-3-anion-gap-calc.png" alt="Visual diagram showing the anion gap formula AG = Na+ minus (Cl- plus HCO3-) with a bar chart showing normal electrolyte balance and an increased anion gap bar chart showing the gap that appears when unmeasured anions are present" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="formula-box">
+    <span>AG</span> = <em>Na⁺</em> − ( <em>Cl⁻</em> + <em>HCO₃⁻</em> )
+    <br><span style="font-size:.85rem;opacity:.8">Normal AG = 12 ± 4 &nbsp;|&nbsp; Normal range: 8–16 &nbsp;|&nbsp; High AG &gt; 12</span>
+  </div>
+
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+    <table>
+      <thead><tr><th>AG Result</th><th>Classification</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>≤ 12</strong></td><td>Normal AG</td><td>NAGMA — bicarbonate has been lost, not excess acid</td></tr>
+        <tr><td><strong>&gt; 12</strong></td><td>High AG</td><td>AGMA — unmeasured acid is present in the blood</td></tr>
+        <tr><td><strong>&gt; 16</strong></td><td>Markedly high AG</td><td>Strongly suggests lactic acidosis, DKA, or uremia</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:20px">Worked Examples</h3>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px">
+    <div class="example-box soft-teal">
+      <strong>Example A — Normal AG</strong><br>
+      Na⁺ = 140 &nbsp;|&nbsp; Cl⁻ = 104 &nbsp;|&nbsp; HCO₃⁻ = 24<br>
+      <code style="display:block;margin:8px 0;background:rgba(0,0,0,.06);padding:6px;border-radius:6px">AG = 140 − (104 + 24) = 12</code>
+      <strong>Result: Normal AG → NAGMA</strong>
+    </div>
+    <div class="example-box soft-coral">
+      <strong>Example B — High AG</strong><br>
+      Na⁺ = 140 &nbsp;|&nbsp; Cl⁻ = 104 &nbsp;|&nbsp; HCO₃⁻ = 16<br>
+      <code style="display:block;margin:8px 0;background:rgba(0,0,0,.06);padding:6px;border-radius:6px">AG = 140 − (104 + 16) = 20</code>
+      <strong>Result: High AG → AGMA</strong>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Anion Gap Calculation Practice" style="margin-top:16px">
+    <h3>Calculate the Anion Gap</h3>
+    <p>Use the formula AG = Na⁺ − (Cl⁻ + HCO₃⁻) to calculate each anion gap and enter your answer.</p>
+    <div class="calc-step-grid" id="agCalcPractice">
+      <div class="calc-step" data-answer="20" data-classification="agma">
+        <div class="calc-step-header"><div class="step-badge" style="background:var(--alert-coral)">1</div><strong>Na⁺ = 140, Cl⁻ = 104, HCO₃⁻ = 16</strong></div>
+        <div class="calc-row-inline">
+          <span style="font-family:var(--font-data)">AG = 140 − (104 + 16) = ?</span>
+          <input type="number" placeholder="AG" min="0" max="60">
+        </div>
+      </div>
+      <div class="calc-step" data-answer="12" data-classification="nagma">
+        <div class="calc-step-header"><div class="step-badge" style="background:var(--pulmo-teal)">2</div><strong>Na⁺ = 140, Cl⁻ = 104, HCO₃⁻ = 24</strong></div>
+        <div class="calc-row-inline">
+          <span style="font-family:var(--font-data)">AG = 140 − (104 + 24) = ?</span>
+          <input type="number" placeholder="AG" min="0" max="60">
+        </div>
+      </div>
+      <div class="calc-step" data-answer="34" data-classification="agma">
+        <div class="calc-step-header"><div class="step-badge" style="background:var(--alert-coral)">3</div><strong>Na⁺ = 128, Cl⁻ = 90, HCO₃⁻ = 4</strong></div>
+        <div class="calc-row-inline">
+          <span style="font-family:var(--font-data)">AG = 128 − (90 + 4) = ?</span>
+          <input type="number" placeholder="AG" min="0" max="60">
+        </div>
+      </div>
+      <div class="calc-step" data-answer="24" data-classification="agma">
+        <div class="calc-step-header"><div class="step-badge" style="background:var(--alert-coral)">4</div><strong>Na⁺ = 128, Cl⁻ = 100, HCO₃⁻ = 4</strong></div>
+        <div class="calc-row-inline">
+          <span style="font-family:var(--font-data)">AG = 128 − (100 + 4) = ?</span>
+          <input type="number" placeholder="AG" min="0" max="60">
+        </div>
+      </div>
+    </div>
+    <button class="small-btn primary" id="checkAgCalc" type="button" style="margin-top:12px">Check Anion Gaps</button>
+    <div class="activity-status" id="agCalcStatus">Calculate all four anion gaps to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 4: Ketoacidosis -->
+<section class="info-card rt" id="ketoaci">
+  <h2>Types of Ketoacidosis & AGMA Causes</h2>
+  <p>When the anion gap is elevated (AGMA), the next step is identifying the cause. The most common causes of high anion gap metabolic acidosis have specific clinical clues that help confirm them.</p>
+  <img src="/foundations/Foundations_3_3_assets/foundations-3-3-ketoacidosis.png" alt="Three-column comparison chart showing DKA, AKA, and Starvation Ketoacidosis side by side with glucose levels, ketone findings, history, and confirming clues for each type. Fourth column shows Lactic Acidosis with lactate level and hypoxia signs." style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+    <table>
+      <thead><tr><th>AGMA Cause</th><th>AG</th><th>Key Confirming Clues</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lactic Acidosis</strong></td><td>&gt;16</td><td>Signs of hypoxia or hypoperfusion; Lactate &gt;2 mmol/L</td></tr>
+        <tr><td><strong>DKA (Diabetic Ketoacidosis)</strong></td><td>&gt;16</td><td>Glucose <strong>&gt;300 mg%</strong>; elevated ketones; type 1 diabetes history; fruity breath</td></tr>
+        <tr><td><strong>AKA (Alcohol Ketoacidosis)</strong></td><td>&gt;16</td><td>Glucose <strong>&lt;300 mg%</strong>; elevated ketones; ETOH history; starvation component</td></tr>
+        <tr><td><strong>SKA (Starvation Ketoacidosis)</strong></td><td>Elevated</td><td>No food intake for 3–14 days; glucose &lt;300 mg%; elevated ketones</td></tr>
+        <tr><td><strong>NAGMA</strong></td><td>8–16</td><td>Diarrhea, vomiting, excessive sweating — bicarbonate lost, not excess acid</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details class="accordion" style="margin-top:16px">
+    <summary><strong>DKA in Depth — Diabetic Ketoacidosis</strong></summary>
+    <div class="accordion-body">
+      <p>In DKA, the body cannot use insulin (type 1) or lacks sufficient insulin (type 2) to convert glucose to energy. The liver converts fat to ketones as an alternative energy source. Ketones are acidic — when they accumulate, they drop blood pH, causing metabolic acidosis with a high anion gap.</p>
+      <p><strong>Signs and symptoms:</strong> Glucose &gt;300 mg%, extreme thirst, frequent urination, fatigue, confusion, stomach pain, nausea, <strong>fruity-smelling breath</strong> (key clinical clue — acetone), blurry vision, fainting.</p>
+      <p><strong>Why fruity breath?</strong> Acetone (a ketone) is volatile and exhaled through the lungs. This is a bedside clue for the RT during assessment.</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary><strong>AKA vs. DKA — Key Distinguishing Feature</strong></summary>
+    <div class="accordion-body">
+      <p>Both DKA and AKA show elevated ketones and high anion gap metabolic acidosis. The differentiator is glucose level:</p>
+      <ul style="padding-left:20px">
+        <li><strong>DKA: Glucose &gt;300 mg%</strong> — hyperglycemia is the trigger</li>
+        <li><strong>AKA: Glucose &lt;300 mg%</strong> — alcohol + starvation is the trigger, not high glucose</li>
+      </ul>
+      <p>AKA typically occurs after a period of heavy alcohol use followed by starvation (not eating). The patient's history of alcohol use (ETOH) combined with normal or low glucose and elevated ketones is the diagnostic pattern.</p>
+    </div>
+  </details>
+
+  <article class="activity-card require-complete" data-activity-name="AGMA Cause Match" style="margin-top:16px">
+    <h3>Identify the Cause of the AGMA</h3>
+    <div class="sort-grid" id="agmaCauseSort">
+      <div class="sort-row" data-answer="dka"><strong>Glucose 450 mg%, elevated ketones, fruity breath, type 1 diabetic who missed insulin doses.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="aka">AKA</option><option value="ska">Starvation Ketoacidosis</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="lactic"><strong>Patient in septic shock. SpO₂ 84%, BP 70/40. Lactate 10 mmol/L. Metabolic acidosis with AG of 24.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="aka">AKA</option><option value="ska">Starvation Ketoacidosis</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="aka"><strong>Glucose 120 mg%, elevated ketones, significant alcohol history, hasn't eaten in 3 days.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="aka">AKA</option><option value="ska">Starvation Ketoacidosis</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="ska"><strong>Patient reports eating nothing for 10 days. Normal glucose. Elevated ketones. No alcohol use.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="aka">AKA</option><option value="ska">Starvation Ketoacidosis</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="nagma"><strong>Profuse diarrhea for 5 days. Metabolic acidosis with AG = 11. Normal lactate. Normal glucose.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="aka">AKA</option><option value="ska">Starvation Ketoacidosis</option><option value="nagma">NAGMA</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkAgmaCauseSort" type="button" style="margin-top:12px">Check AGMA Causes</button>
+    <div class="activity-status" id="agmaCauseSortStatus">Complete the cause matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 5: Bicarbonate Gap -->
+<section class="info-card board" id="bicarb-gap">
+  <h2>The Bicarbonate Gap — Detecting Hidden Mixed Disorders</h2>
+  <p>Once you have confirmed AGMA, the bicarbonate gap (also called the delta gap or corrected bicarbonate) answers a second question: <strong>Is there an additional hidden metabolic disorder on top of the AGMA?</strong></p>
+  <p>The key insight is this: in a pure AGMA, every mole of acid added should consume exactly one mole of bicarbonate. If the bicarbonate is lower or higher than expected, a second process must be occurring.</p>
+  <img src="/foundations/Foundations_3_3_assets/foundations-3-3-bicarb-gap.png" alt="Three-step flow diagram for bicarbonate gap calculation: Step 1 Calculate AG, Step 2 Calculate Delta AG by subtracting 12, Step 3 Add Delta AG to patient HCO3 to get BG. Three horizontal result bands show BG less than 20 indicating AGMA plus NAGMA, BG 22-26 indicating pure AGMA, and BG greater than 28 indicating AGMA plus metabolic alkalosis." style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="formula-box" style="margin-top:16px">
+    <span>Step 1:</span> &nbsp; <em>AG</em> = Na⁺ − (Cl⁻ + HCO₃⁻)
+    <br><span>Step 2:</span> &nbsp; <em>Δ AG</em> = Measured AG − 12
+    <br><span>Step 3:</span> &nbsp; <em>BG</em> = Patient HCO₃⁻ + Δ AG
+    <br><span style="font-size:.82rem;opacity:.7">Normal BG = 22–26</span>
+  </div>
+
+  <h3 style="margin-top:20px">Bicarbonate Gap Interpretation</h3>
+  <div style="margin-top:12px;display:grid;gap:10px">
+    <div class="interp-band" style="background:#FDE9E9;border:2px solid var(--alert-coral)">
+      <span class="band-value" style="color:var(--alert-coral)">&lt; 20</span>
+      <div><strong>AGMA + NAGMA</strong> — Hidden bicarbonate loss. A second process is consuming HCO₃⁻ beyond what the AGMA alone would explain.</div>
+    </div>
+    <div class="interp-band" style="background:var(--airway-mint);border:2px solid #86D9C8">
+      <span class="band-value" style="color:var(--pulmo-teal)">22 – 26</span>
+      <div><strong>Pure AGMA only</strong> — The bicarbonate deficit matches what the anion gap rise would predict. No hidden second disorder.</div>
+    </div>
+    <div class="interp-band" style="background:#FFF4DF;border:2px solid var(--clinical-amber)">
+      <span class="band-value" style="color:#7A4B00">&gt; 28</span>
+      <div><strong>AGMA + Metabolic Alkalosis</strong> — The bicarbonate is higher than expected, meaning metabolic alkalosis (HCO₃⁻ excess) is also present alongside the AGMA.</div>
+    </div>
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Bicarbonate Gap Step-by-Step" style="margin-top:18px">
+    <h3>Bicarbonate Gap — Step-by-Step Calculation</h3>
+    <p>Complete each step of both calculations. Use the formulas above.</p>
+
+    <!-- Problem A -->
+    <div style="border:2px solid var(--oxygen-blue);border-radius:14px;padding:16px;margin-bottom:14px">
+      <strong style="color:var(--oxygen-blue)">Problem A:</strong> pH 7.10, PaCO₂ 14, HCO₃⁻ = 4, Na⁺ = 128, Cl⁻ = 90
+      <div class="calc-step-grid" style="margin-top:12px">
+        <div class="calc-step" data-bg-problem="a" data-step="ag" data-answer="34">
+          <div class="calc-step-header"><div class="step-badge" style="background:var(--pulmo-teal)">1</div><strong>Calculate Anion Gap</strong></div>
+          <p style="font-size:.88rem;color:var(--slate);margin:4px 0 8px">AG = 128 − (90 + 4) = ?</p>
+          <div class="calc-row-inline"><span style="font-family:var(--font-data)">AG = ?</span><input type="number" placeholder="AG" min="0" max="80" class="bg-input"></div>
+        </div>
+        <div class="calc-step" data-bg-problem="a" data-step="dag" data-answer="22">
+          <div class="calc-step-header"><div class="step-badge" style="background:var(--oxygen-blue)">2</div><strong>Calculate Δ AG (AG − 12)</strong></div>
+          <p style="font-size:.88rem;color:var(--slate);margin:4px 0 8px">Δ AG = Measured AG − 12 = ?</p>
+          <div class="calc-row-inline"><span style="font-family:var(--font-data)">Δ AG = ?</span><input type="number" placeholder="Δ AG" min="0" max="80" class="bg-input"></div>
+        </div>
+        <div class="calc-step" data-bg-problem="a" data-step="bg" data-answer="26">
+          <div class="calc-step-header"><div class="step-badge" style="background:var(--clinical-amber)">3</div><strong>Calculate Bicarbonate Gap (HCO₃⁻ + Δ AG)</strong></div>
+          <p style="font-size:.88rem;color:var(--slate);margin:4px 0 8px">BG = Patient HCO₃⁻ (4) + Δ AG = ?</p>
+          <div class="calc-row-inline"><span style="font-family:var(--font-data)">BG = ?</span><input type="number" placeholder="BG" min="0" max="60" class="bg-input"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problem B -->
+    <div style="border:2px solid var(--alert-coral);border-radius:14px;padding:16px">
+      <strong style="color:var(--alert-coral)">Problem B:</strong> pH 7.10, PaCO₂ 14, HCO₃⁻ = 4, Na⁺ = 128, Cl⁻ = 100
+      <div class="calc-step-grid" style="margin-top:12px">
+        <div class="calc-step" data-bg-problem="b" data-step="ag" data-answer="24">
+          <div class="calc-step-header"><div class="step-badge" style="background:var(--pulmo-teal)">1</div><strong>Calculate Anion Gap</strong></div>
+          <p style="font-size:.88rem;color:var(--slate);margin:4px 0 8px">AG = 128 − (100 + 4) = ?</p>
+          <div class="calc-row-inline"><span style="font-family:var(--font-data)">AG = ?</span><input type="number" placeholder="AG" min="0" max="80" class="bg-input"></div>
+        </div>
+        <div class="calc-step" data-bg-problem="b" data-step="dag" data-answer="12">
+          <div class="calc-step-header"><div class="step-badge" style="background:var(--oxygen-blue)">2</div><strong>Calculate Δ AG (AG − 12)</strong></div>
+          <p style="font-size:.88rem;color:var(--slate);margin:4px 0 8px">Δ AG = Measured AG − 12 = ?</p>
+          <div class="calc-row-inline"><span style="font-family:var(--font-data)">Δ AG = ?</span><input type="number" placeholder="Δ AG" min="0" max="80" class="bg-input"></div>
+        </div>
+        <div class="calc-step" data-bg-problem="b" data-step="bg" data-answer="16">
+          <div class="calc-step-header"><div class="step-badge" style="background:var(--clinical-amber)">3</div><strong>Calculate Bicarbonate Gap (HCO₃⁻ + Δ AG)</strong></div>
+          <p style="font-size:.88rem;color:var(--slate);margin:4px 0 8px">BG = Patient HCO₃⁻ (4) + Δ AG = ?</p>
+          <div class="calc-row-inline"><span style="font-family:var(--font-data)">BG = ?</span><input type="number" placeholder="BG" min="0" max="60" class="bg-input"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="small-btn primary" id="checkBgCalc" type="button" style="margin-top:14px">Check All Steps</button>
+    <div class="activity-status" id="bgCalcStatus">Complete both problems, all steps, to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 6: Mixed Disorders -->
+<section class="info-card" id="mixed">
+  <h2>Mixed Respiratory & Metabolic Disorders</h2>
+  <p>Mixed disorders occur when two separate acid-base disturbances are present simultaneously — one respiratory and one metabolic, or two metabolic processes. These are identified when the compensation is more or less than expected, or when clinical context reveals two competing pathologies.</p>
+  <img src="/foundations/Foundations_3_3_assets/foundations-3-3-mixed-disorders.png" alt="Five clinical scenario panels showing mixed acid-base disorders: Resp Acidosis plus Metabolic Acidosis from pulmonary edema post-MI, Resp Alkalosis plus Metabolic Alkalosis from cirrhosis with diuretics, Resp Acidosis plus Metabolic Alkalosis from COPD with diuretics, Resp Alkalosis plus Metabolic Acidosis from renal failure with anxiety, and Metabolic Acidosis plus Metabolic Alkalosis from renal failure with vomiting" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
+
+  <div class="mixed-grid">
+
+    <div class="mixed-card" style="border-color:var(--alert-coral);background:#fff">
+      <h3 style="color:var(--alert-coral);font-size:1.1rem">Resp. Acidosis + Metabolic Acidosis</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0"><em>Example: Acute pulmonary edema after MI</em></p>
+      <div class="arrow-chain">
+        <span>Poor cardiac output</span><span class="arr">→</span>
+        <span>Tissue hypoxia</span><span class="arr">→</span>
+        <span>Lactic acidosis</span>
+      </div>
+      <div class="arrow-chain">
+        <span>Pulmonary edema</span><span class="arr">→</span>
+        <span>Poor alveolar ventilation</span><span class="arr">→</span>
+        <span>CO₂ retention</span>
+      </div>
+      <div class="example-box soft-coral" style="margin-top:8px;font-size:.88rem"><strong>Both disorders drive pH DOWN. Severe acidemia possible.</strong></div>
+    </div>
+
+    <div class="mixed-card" style="border-color:var(--pulmo-teal);background:#fff">
+      <h3 style="color:var(--pulmo-teal);font-size:1.1rem">Resp. Alkalosis + Metabolic Alkalosis</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0"><em>Example: Hepatic cirrhosis + diuretics</em></p>
+      <div class="arrow-chain">
+        <span>Hepatopulmonary syndrome</span><span class="arr">→</span>
+        <span>Dyspnea</span><span class="arr">→</span>
+        <span>Resp. alkalosis</span>
+      </div>
+      <div class="arrow-chain">
+        <span>Diuretics</span><span class="arr">→</span>
+        <span>Renin-angiotensin activation</span><span class="arr">→</span>
+        <span>HCO₃⁻ retention</span>
+      </div>
+      <div class="example-box soft-teal" style="margin-top:8px;font-size:.88rem"><strong>Both disorders drive pH UP. Severe alkalemia possible.</strong></div>
+    </div>
+
+    <div class="mixed-card" style="border-color:var(--clinical-amber);background:#fff">
+      <h3 style="color:#7A4B00;font-size:1.1rem">Resp. Acidosis + Metabolic Alkalosis</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0"><em>Example: COPD patient given diuretics for CHF</em></p>
+      <div class="arrow-chain">
+        <span>Chronic COPD</span><span class="arr">→</span>
+        <span>CO₂ retention</span><span class="arr">→</span>
+        <span>Resp. acidosis</span>
+      </div>
+      <div class="arrow-chain">
+        <span>Diuretics</span><span class="arr">→</span>
+        <span>H⁺ + Cl⁻ loss</span><span class="arr">→</span>
+        <span>HCO₃⁻ rise</span>
+      </div>
+      <div class="example-box soft-amber" style="margin-top:8px;font-size:.88rem"><strong>Disorders oppose each other — pH may be near normal despite two active processes.</strong></div>
+    </div>
+
+    <div class="mixed-card" style="border-color:var(--oxygen-blue);background:#fff">
+      <h3 style="color:var(--oxygen-blue);font-size:1.1rem">Resp. Alkalosis + Metabolic Acidosis</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0"><em>Example: Chronic renal failure + anxiety</em></p>
+      <div class="arrow-chain">
+        <span>Chronic renal failure</span><span class="arr">→</span>
+        <span>Uremia</span><span class="arr">→</span>
+        <span>Metabolic acidosis</span>
+      </div>
+      <div class="arrow-chain">
+        <span>Anxiety / pain</span><span class="arr">→</span>
+        <span>Hyperventilation</span><span class="arr">→</span>
+        <span>CO₂ blown off</span>
+      </div>
+      <div class="example-box soft-blue" style="margin-top:8px;font-size:.88rem"><strong>Disorders oppose each other — pH depends on which process dominates.</strong></div>
+    </div>
+
+    <div class="mixed-card" style="border-color:#8B5CF6;background:#fff;grid-column:1/-1">
+      <h3 style="color:#8B5CF6;font-size:1.1rem">Metabolic Acidosis + Metabolic Alkalosis</h3>
+      <p style="font-size:.88rem;color:var(--slate);margin:6px 0"><em>Example: Chronic renal failure + vomiting</em></p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="arrow-chain">
+          <span>Chronic renal failure</span><span class="arr">→</span>
+          <span>Cannot excrete acids</span><span class="arr">→</span>
+          <span>Metabolic acidosis</span>
+        </div>
+        <div class="arrow-chain">
+          <span>Vomiting</span><span class="arr">→</span>
+          <span>H⁺ and Cl⁻ lost</span><span class="arr">→</span>
+          <span>Metabolic alkalosis</span>
+        </div>
+      </div>
+      <div class="example-box soft-teal" style="margin-top:8px;font-size:.88rem"><strong>Two metabolic processes in opposite directions — bicarbonate gap helps unmask the NAGMA component.</strong></div>
+    </div>
+
+  </div>
+
+  <article class="activity-card require-complete" data-activity-name="Mixed Disorder Match" style="margin-top:16px">
+    <h3>Match the Clinical Scenario to the Mixed Disorder</h3>
+    <div class="sort-grid" id="mixedSort">
+      <div class="sort-row" data-answer="ra-ma"><strong>Patient has pulmonary edema after acute MI. Lactate is 6. PaCO₂ is rising due to poor gas exchange.</strong><select><option value="">Choose disorder pair</option><option value="ra-ma">Resp. Acidosis + Metabolic Acidosis</option><option value="ralk-malk">Resp. Alkalosis + Metabolic Alkalosis</option><option value="ra-malk">Resp. Acidosis + Metabolic Alkalosis</option><option value="ralk-ma">Resp. Alkalosis + Metabolic Acidosis</option></select></div>
+      <div class="sort-row" data-answer="ra-malk"><strong>COPD patient with CO₂ retention is started on furosemide for CHF. HCO₃⁻ rises over next 48 hours.</strong><select><option value="">Choose disorder pair</option><option value="ra-ma">Resp. Acidosis + Metabolic Acidosis</option><option value="ralk-malk">Resp. Alkalosis + Metabolic Alkalosis</option><option value="ra-malk">Resp. Acidosis + Metabolic Alkalosis</option><option value="ralk-ma">Resp. Alkalosis + Metabolic Acidosis</option></select></div>
+      <div class="sort-row" data-answer="ralk-ma"><strong>Patient with chronic renal failure (uremia) becomes very anxious and begins hyperventilating in the ER.</strong><select><option value="">Choose disorder pair</option><option value="ra-ma">Resp. Acidosis + Metabolic Acidosis</option><option value="ralk-malk">Resp. Alkalosis + Metabolic Alkalosis</option><option value="ra-malk">Resp. Acidosis + Metabolic Alkalosis</option><option value="ralk-ma">Resp. Alkalosis + Metabolic Acidosis</option></select></div>
+      <div class="sort-row" data-answer="ralk-malk"><strong>Patient with hepatic cirrhosis is on long-term diuretics. Complains of shortness of breath (hepatopulmonary syndrome).</strong><select><option value="">Choose disorder pair</option><option value="ra-ma">Resp. Acidosis + Metabolic Acidosis</option><option value="ralk-malk">Resp. Alkalosis + Metabolic Alkalosis</option><option value="ra-malk">Resp. Acidosis + Metabolic Alkalosis</option><option value="ralk-ma">Resp. Alkalosis + Metabolic Acidosis</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkMixedSort" type="button" style="margin-top:12px">Check Mixed Disorders</button>
+    <div class="activity-status" id="mixedSortStatus">Complete the mixed disorder matching to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 7: Unfolding Case -->
+<section class="case-card require-complete" id="scenario" data-activity-name="Anion Gap Unfolding Case">
+  <span class="eyebrow">Unfolding Clinical Case</span>
+  <h2>Connecting the Calculations — Step by Step</h2>
+  <p>Work through this patient case performing each calculation and clinical interpretation in sequence.</p>
+
+  <div class="case-stage" data-case-stage="0">
+    <h3>Stage 1 — Classify the ABG</h3>
+    <p>ABG results: <strong>pH 7.10, PaCO₂ 14 mmHg, HCO₃⁻ = 4 mEq/L</strong></p>
+    <p>The pH is 7.10 (acidic). PaCO₂ is 14 (very low — blowing off CO₂). HCO₃⁻ is 4 (very low).</p>
+    <p><strong>What is the primary acid-base disorder?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Respiratory acidosis = high PaCO₂ + low pH. Here PaCO₂ is 14 — very LOW, not high. The respiratory system is actually trying to compensate by blowing off CO₂.">Respiratory acidosis — CO₂ is retained.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! Metabolic acidosis: pH 7.10 (acidic) + HCO₃⁻ only 4 (very low bicarbonate) = primary metabolic acidosis. The low PaCO₂ is compensatory respiratory alkalosis — the lungs are blowing off CO₂ to try to correct the acidic pH.">Metabolic acidosis — bicarbonate is severely depleted.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Metabolic alkalosis = high pH + high HCO₃⁻. This patient has low pH and very low HCO₃⁻ — the opposite of alkalosis.">Metabolic alkalosis — bicarbonate is high.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Stage 2: Calculate Anion Gap →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="1">
+    <h3>Stage 2 — Calculate the Anion Gap</h3>
+    <p>Electrolytes: <strong>Na⁺ = 128, Cl⁻ = 90, HCO₃⁻ = 4</strong></p>
+    <p>Using AG = Na⁺ − (Cl⁻ + HCO₃⁻), the anion gap is 128 − (90 + 4) = 128 − 94 = <strong>34</strong>.</p>
+    <p><strong>How do you classify an anion gap of 34?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Normal anion gap is 8-16. An AG of 34 is nearly three times the upper normal limit. This is a markedly elevated anion gap.">Normal — AG is within the 8–16 range.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! AG = 34 is markedly elevated (normal ≤ 12–16). This confirms AGMA — anion gap metabolic acidosis. An unmeasured acid is present in the blood. Possible causes: lactic acidosis, DKA, AKA, uremia. You need more clinical context to confirm the cause.">AGMA — markedly elevated anion gap confirms excess acid.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="NAGMA occurs when the anion gap is normal (≤ 12). An AG of 34 is far above normal — this is definitely AGMA.">NAGMA — the anion gap is normal, so bicarbonate was lost.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Stage 3: Calculate Bicarbonate Gap →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="2">
+    <h3>Stage 3 — Calculate the Bicarbonate Gap</h3>
+    <p>AG = 34 &nbsp;|&nbsp; Normal AG = 12 &nbsp;|&nbsp; Patient HCO₃⁻ = 4</p>
+    <p><strong>Step 2:</strong> Δ AG = 34 − 12 = 22</p>
+    <p><strong>Step 3:</strong> BG = HCO₃⁻ + Δ AG = 4 + 22 = <strong>26</strong></p>
+    <p><strong>A bicarbonate gap of 26 falls in which range?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="BG less than 20 would indicate AGMA + NAGMA. This patient's BG is 26 — within the normal range of 22-26.">BG &lt; 20 — AGMA + NAGMA mixed disorder.</button>
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! BG = 26 falls within the normal bicarbonate gap range (22-26), confirming this is PURE AGMA with no additional hidden metabolic disorder. The bicarbonate deficit is entirely explained by the anion gap rise — one-for-one acid addition.">BG 22–26 — Pure AGMA, no hidden second disorder.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="BG greater than 28 would indicate AGMA + metabolic alkalosis. A BG of 26 is within normal range — no metabolic alkalosis present.">BG &gt; 28 — AGMA + Metabolic Alkalosis.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Stage 4: Change the Scenario →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="3">
+    <h3>Stage 4 — Same Patient, Different Chloride</h3>
+    <p>Now repeat the bicarbonate gap calculation but with <strong>Cl⁻ = 100</strong> instead of 90. Everything else stays the same (Na⁺ = 128, HCO₃⁻ = 4).</p>
+    <p>AG = 128 − (100 + 4) = <strong>24</strong>. &nbsp; Δ AG = 24 − 12 = <strong>12</strong>. &nbsp; BG = 4 + 12 = <strong>16</strong>.</p>
+    <p><strong>With a bicarbonate gap of 16, what does this mean?</strong></p>
+    <div class="quiz-options case-options">
+      <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct! BG = 16 is less than 20, indicating AGMA + NAGMA. The bicarbonate is lower than what the anion gap rise alone would predict — meaning a second process (bicarbonate loss — NAGMA) is also depleting HCO₃⁻. This could be diarrhea, vomiting, or renal wasting of bicarbonate occurring alongside the primary AGMA.">BG &lt; 20 — AGMA + NAGMA. Hidden bicarbonate loss is also present.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Normal BG range is 22-26. A BG of 16 falls below that range, indicating an additional process is consuming bicarbonate — NAGMA is hidden behind the AGMA.">BG 22–26 — Pure AGMA only.</button>
+      <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="BG greater than 28 indicates metabolic alkalosis alongside AGMA. A BG of 16 is below the normal range — the opposite finding.">BG &gt; 28 — AGMA + Metabolic Alkalosis.</button>
+    </div>
+    <div class="quiz-feedback case-feedback" role="status"></div>
+    <div class="section-continue case-next"><button class="btn btn-primary" type="button" disabled>Complete Case →</button></div>
+  </div>
+
+  <div class="case-stage lesson-hidden" data-case-stage="4">
+    <h3>Case Summary — Key Calculation Insights</h3>
+    <div class="example-box soft-teal" style="margin-top:8px"><strong>Problem A (Cl⁻ = 90):</strong> AG = 34, Δ AG = 22, BG = 26. → Pure AGMA only. The bicarbonate deficit is fully explained by the high anion gap.</div>
+    <div class="example-box soft-coral" style="margin-top:8px"><strong>Problem B (Cl⁻ = 100):</strong> AG = 24, Δ AG = 12, BG = 16. → AGMA + NAGMA. The higher chloride (lower bicarbonate) reveals a hidden second process also consuming HCO₃⁻.</div>
+    <div class="example-box soft-amber" style="margin-top:8px"><strong>Key insight:</strong> The bicarbonate gap catches what the anion gap alone misses. Two patients can both have AGMA — but only one also has hidden NAGMA. The BG calculation makes that visible.</div>
+  </div>
+</section>
+
+<!-- SECTION 8: Assignment Practice -->
+<section class="info-card" id="practice">
+  <h2>Assignment Practice Zone</h2>
+  <p>These questions mirror the style and content of the Unit 3.3 assignment.</p>
+  <article class="activity-card require-complete" data-activity-name="3.3 Assignment Practice">
+    <h3>Match Each Clinical Finding to Its Acid-Base Classification</h3>
+    <div class="sort-grid" id="practiceSort">
+      <div class="sort-row" data-answer="lactic"><strong>Severe tissue hypoxia (shock, cardiac arrest, severe anemia). Lactate &gt;2 mmol/L.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="ska">Starvation Ketoacidosis</option><option value="aka">AKA</option><option value="agma">AGMA (general)</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="dka"><strong>Blood glucose level of 600 mg%. Elevated ketones. Fruity-smelling breath.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="ska">Starvation Ketoacidosis</option><option value="aka">AKA</option><option value="agma">AGMA (general)</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="ska"><strong>Nothing to eat for 10 days. Elevated ketones. Normal glucose. No alcohol history.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="ska">Starvation Ketoacidosis</option><option value="aka">AKA</option><option value="agma">AGMA (general)</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="aka"><strong>Heavy alcohol use + starvation. Glucose 110 mg%. Elevated ketones.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="ska">Starvation Ketoacidosis</option><option value="aka">AKA</option><option value="agma">AGMA (general)</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="nagma"><strong>Anion gap of 12 on metabolic panel. Patient has severe diarrhea and vomiting.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="ska">Starvation Ketoacidosis</option><option value="aka">AKA</option><option value="agma">AGMA (general)</option><option value="nagma">NAGMA</option></select></div>
+      <div class="sort-row" data-answer="agma"><strong>Anion gap of 32 on metabolic panel with metabolic acidosis on ABG.</strong><select><option value="">Choose cause</option><option value="lactic">Lactic Acidosis</option><option value="dka">DKA</option><option value="ska">Starvation Ketoacidosis</option><option value="aka">AKA</option><option value="agma">AGMA (general)</option><option value="nagma">NAGMA</option></select></div>
+    </div>
+    <button class="small-btn primary" id="checkPracticeSort" type="button" style="margin-top:12px">Check Assignment Practice</button>
+    <div class="activity-status" id="practiceSortStatus">Complete the assignment practice to continue.</div>
+  </article>
+</section>
+
+<!-- SECTION 9: Knowledge Check -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Foundations 3.3 Knowledge Check">
+  <span class="eyebrow">Knowledge Check</span>
+  <h2>Anion Gap & Bicarbonate Gap Mastery</h2>
+  <p>Answer each question correctly to complete this activity.</p>
+
+  <div class="knowledge-question" data-question-id="kq1">
+    <h3>Question 1</h3>
+    <p>A patient has metabolic acidosis. Anion gap = 12. What type of metabolic acidosis is this, and what is the most likely mechanism?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="true" data-feedback="Correct! AG = 12 is at the upper limit of normal (8-16). A normal anion gap with metabolic acidosis = NAGMA. The mechanism is loss of bicarbonate — most commonly from diarrhea, vomiting, or renal tubular acidosis. No excess acid has been added.">NAGMA — normal anion gap indicates bicarbonate was lost.</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="AGMA requires an elevated anion gap (>12). An AG of exactly 12 is at the upper limit of normal — this is NAGMA, not AGMA.">AGMA — elevated anion gap indicates acid was added.</button>
+      <button class="quiz-option knowledge-option" data-question="kq1" data-correct="false" data-feedback="DKA causes AGMA with a markedly elevated anion gap (typically >16). An AG of 12 does not fit DKA.">DKA — glucose and ketones are always present.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq2">
+    <h3>Question 2</h3>
+    <p>A patient presents with metabolic acidosis and an anion gap of 32. Which combination of findings would confirm DKA specifically?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Lactate elevation confirms lactic acidosis, not DKA. DKA is confirmed by elevated glucose and elevated ketones, not lactate.">Lactate &gt; 2 mmol/L and signs of tissue hypoxia.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="true" data-feedback="Correct! DKA = AGMA + glucose >300 mg% + elevated ketones. The high glucose confirms the diabetic component, and ketones confirm fat is being converted to acidic ketone bodies. This distinguishes DKA from AKA (which has glucose <300) and lactic acidosis (which has elevated lactate, not ketones).">Glucose &gt; 300 mg% and elevated ketones in blood.</button>
+      <button class="quiz-option knowledge-option" data-question="kq2" data-correct="false" data-feedback="Starvation ketoacidosis has elevated ketones but glucose is typically <300 mg% and there is no insulin deficiency. DKA requires glucose >300 mg%.">Normal glucose and ketones present — starvation history.</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq3">
+    <h3>Question 3</h3>
+    <p>Calculate the bicarbonate gap for: Na⁺ = 128, Cl⁻ = 100, HCO₃⁻ = 4. What does this BG indicate?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="true" data-feedback="Correct! Step 1: AG = 128 - (100+4) = 24. Step 2: Δ AG = 24-12 = 12. Step 3: BG = 4+12 = 16. BG = 16 is less than 20 → AGMA + NAGMA. A hidden bicarbonate loss (NAGMA) is occurring alongside the anion gap metabolic acidosis.">BG = 16 → AGMA + NAGMA (hidden bicarbonate loss)</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="Let's check: AG = 128-(100+4) = 24. Δ AG = 24-12 = 12. BG = 4+12 = 16. That is 16 — not 26. Recalculate carefully.">BG = 26 → Pure AGMA only</button>
+      <button class="quiz-option knowledge-option" data-question="kq3" data-correct="false" data-feedback="BG greater than 28 would indicate metabolic alkalosis alongside AGMA. The calculated BG here is 16 — below normal, indicating hidden NAGMA, not alkalosis.">BG = 30 → AGMA + Metabolic Alkalosis</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq4">
+    <h3>Question 4</h3>
+    <p>A COPD patient with chronic CO₂ retention is started on furosemide for CHF. Over two days, HCO₃⁻ rises to 38 mEq/L. What mixed disorder has developed?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Respiratory acidosis + metabolic acidosis would both lower the pH. Here, COPD causes respiratory acidosis, but the diuretic causes HCO₃⁻ retention (alkalosis), not acidosis.">Respiratory Acidosis + Metabolic Acidosis</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct! COPD → chronic CO₂ retention → respiratory acidosis. Furosemide → volume depletion → renin-angiotensin-aldosterone activation → H⁺ and K⁺ lost at the distal tubule → HCO₃⁻ rises → metabolic alkalosis. The two disorders partially oppose each other — pH may be closer to normal than either disorder alone would produce.">Respiratory Acidosis + Metabolic Alkalosis</button>
+      <button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="COPD causes CO₂ retention = respiratory ACIDOSIS, not alkalosis. The furosemide component is correct (metabolic alkalosis), but the respiratory component is acidosis, not alkalosis.">Respiratory Alkalosis + Metabolic Alkalosis</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="knowledge-question" data-question-id="kq5">
+    <h3>Question 5</h3>
+    <p>A patient with DKA (glucose 500, elevated ketones) develops severe vomiting. Which bicarbonate gap result would you expect?</p>
+    <div class="quiz-options">
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="BG less than 20 would indicate AGMA + NAGMA (bicarbonate loss). While vomiting does cause some HCO₃⁻ changes, in DKA + vomiting, vomiting causes metabolic alkalosis (H⁺ loss), not NAGMA. The BG would trend higher, not lower.">BG &lt; 20 → AGMA + NAGMA</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="false" data-feedback="BG 22-26 indicates pure AGMA with no mixed disorder. Adding significant vomiting to DKA introduces a metabolic alkalosis component that would push the BG above 26.">BG 22–26 → Pure AGMA only</button>
+      <button class="quiz-option knowledge-option" data-question="kq5" data-correct="true" data-feedback="Correct! Vomiting causes loss of H⁺ and Cl⁻ → metabolic alkalosis (HCO₃⁻ rises). This alkalosis component stacks on top of the DKA-driven AGMA, pushing the bicarbonate gap above 28 → AGMA + Metabolic Alkalosis. The vomiting partially compensates the acidosis but introduces a second metabolic problem.">BG &gt; 28 → AGMA + Metabolic Alkalosis</button>
+    </div>
+    <div class="quiz-feedback" role="status"></div>
+  </div>
+
+  <div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly</div>
+</section>
+
+<!-- SECTION 10: FAQ -->
+<section id="faq">
+  <div><span class="eyebrow">FAQ</span><h2>Common Questions — Anion & Bicarbonate Gap</h2></div>
+  <details class="accordion" open>
+    <summary>Why does the bicarbonate fall when acid is added to the blood?</summary>
+    <div class="accordion-body"><p>When an acid (H⁺) is added, it immediately reacts with bicarbonate (HCO₃⁻) as a buffer: H⁺ + HCO₃⁻ → H₂CO₃ → CO₂ + H₂O. The bicarbonate is consumed in neutralizing the acid. This is why metabolic acidosis — regardless of whether it is AGMA or NAGMA — always shows a low bicarbonate on the ABG.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>What makes AGMA different from NAGMA if bicarbonate falls in both?</summary>
+    <div class="accordion-body"><p>In AGMA, an acid enters the blood with its own anion (a negatively charged particle). When the acid reacts with bicarbonate, the acid's anion remains unmeasured in the blood — this is what raises the anion gap. In NAGMA, bicarbonate simply leaves the body (through stool or urine). No new acid anion enters, so the anion gap stays normal. Chloride rises to fill the charge balance instead.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>Why is the normal anion gap set at 12?</summary>
+    <div class="accordion-body"><p>Even in a healthy person, there are unmeasured anions in the blood — albumin, phosphate, sulfate, and organic acids. These naturally create a small gap between the measured cation (Na⁺) and the measured anions (Cl⁻ + HCO₃⁻). The normal value of 12 (range 8–16) reflects these always-present unmeasured anions. A gap above 16 means abnormal unmeasured anions (like lactate or ketones) have been added.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>When would I actually calculate the bicarbonate gap in clinical practice?</summary>
+    <div class="accordion-body"><p>Only after you have already confirmed AGMA. If the anion gap is normal (NAGMA), there is no reason to calculate the bicarbonate gap. But once you find a high anion gap, the bicarbonate gap answers: "Is there ALSO a hidden second metabolic disorder?" This matters clinically because a patient with DKA who is also having severe diarrhea needs treatment for both, not just DKA. The bicarbonate gap surfaces that hidden NAGMA component.</p></div>
+  </details>
+  <details class="accordion">
+    <summary>How do I tell DKA from AKA if both have elevated ketones?</summary>
+    <div class="accordion-body"><p>The glucose level is the key distinguishing feature. DKA: glucose &gt;300 mg% (hyperglycemia is the trigger — insulin deficiency prevents glucose from entering cells). AKA: glucose &lt;300 mg% (starvation + alcohol means the patient has not been eating — glucose may even be low). Both will have elevated ketones and high anion gap metabolic acidosis. Add the patient history — ETOH use and starvation = AKA; diabetes + missed insulin = DKA.</p></div>
+  </details>
+</section>
+
+<!-- SECTION 11: Summary -->
+<section class="info-card" id="summary">
+  <h2>Summary & Clinical Pearls</h2>
+  <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+    <div class="example-box soft-teal"><strong>Anion Gap Formula:</strong><br>AG = Na⁺ − (Cl⁻ + HCO₃⁻)<br>Normal: 8–16 (±4)<br>≤ 12 = NAGMA &nbsp;|&nbsp; &gt; 12 = AGMA</div>
+    <div class="example-box soft-blue"><strong>Bicarbonate Gap Formula:</strong><br>Step 1: AG = Na − (Cl + HCO₃)<br>Step 2: Δ AG = AG − 12<br>Step 3: BG = HCO₃ + Δ AG</div>
+    <div class="example-box soft-amber"><strong>BG Interpretation:</strong><br>BG &lt; 20 → AGMA + NAGMA<br>BG 22–26 → Pure AGMA<br>BG &gt; 28 → AGMA + Metabolic Alkalosis</div>
+    <div class="example-box soft-coral"><strong>AGMA Cause Clues:</strong><br>Lactate &gt;2 → Lactic acidosis<br>Glucose &gt;300 + ketones → DKA<br>Glucose &lt;300 + ETOH + ketones → AKA<br>Starvation + ketones → SKA</div>
+  </div>
+  <div class="example-box soft-teal" style="margin-top:14px">
+    <strong>NBRC Exam Tip:</strong> You will see ABG scenarios that ask you to identify the disorder OR calculate the anion/bicarbonate gap. Memorize both formulas cold. Know the three BG ranges and what each means. Know that lactate &gt;2 = tissue hypoxia, glucose &gt;300 + ketones = DKA, and diarrhea/vomiting = NAGMA.
+  </div>
+</section>
+
+<!-- SECTION 12: Flashcards -->
+<section id="glossary">
+  <div class="glossary-card">
+    <h3>Glossary Flashcard Mastery Deck</h3>
+    <p>Click the card to flip it. Mark known cards to move them to the completed pile.</p>
+    <div class="flashcard-shell">
+      <div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+      <div class="tabs" role="tablist" aria-label="Flashcard deck view">
+        <button class="tab-btn active" data-view="active">Review Deck</button>
+        <button class="tab-btn" data-view="completed">Completed ✓</button>
+        <button class="tab-btn" data-view="all">All Cards</button>
+      </div>
+      <div aria-label="Current flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0">
+        <div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div>
+      </div>
+      <div class="deck-actions">
+        <button class="small-btn" id="revealCard">Flip Card</button>
+        <button class="small-btn primary" id="knowCard">Know It ✓</button>
+        <button class="small-btn" id="reviewAgain">Review Again</button>
+        <button class="small-btn warn" id="resetAll">Reset All</button>
+        <button class="small-btn" id="shuffleDeck">Shuffle Active</button>
+      </div>
+      <div class="completed-list" id="completedList"></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end lesson-stack -->
+</main>
+
+<footer class="footer">
+  <div><strong>Pulmo<span>Core</span></strong><br>Core respiratory disease learning for future RTs.</div>
+</footer>
+</div>
+
+<script>
+// ── COURSE MENU ────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded",function(){
+  const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+  if(button&&panel){
+    panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+    const list=document.getElementById("courseMenuList");
+    const courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+    const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+    if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?'current':'')+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+    button.onclick=function(e){e.preventDefault();e.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+    document.addEventListener("click",e=>{if(!panel.contains(e.target)&&e.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}});
+  }
+});
+
+// ── FLASHCARD DECK ─────────────────────────────────────────────────────────
+const glossaryTerms=[
+  {term:"Anion Gap (AG)",definition:"AG = Na⁺ − (Cl⁻ + HCO₃⁻). Normal range: 8–16 (typically ≤12 used as cutoff). Reflects unmeasured anions in blood. High AG = excess acid present (AGMA)."},
+  {term:"AGMA",definition:"Anion Gap Metabolic Acidosis. AG > 12. Caused by addition of acid to the blood. Common causes: lactic acidosis, DKA, AKA, SKA, uremia, salicylates."},
+  {term:"NAGMA",definition:"Non-Anion Gap Metabolic Acidosis. AG ≤ 12. Caused by loss of bicarbonate from the body. Common causes: diarrhea, vomiting, renal tubular acidosis, excess saline."},
+  {term:"Bicarbonate Gap (BG)",definition:"BG = Patient HCO₃⁻ + Δ AG (where Δ AG = Measured AG − 12). Normal range: 22–26. Detects mixed disorders hidden within AGMA."},
+  {term:"BG < 20",definition:"Bicarbonate Gap less than 20 = AGMA + NAGMA. A hidden bicarbonate loss is occurring alongside the anion gap metabolic acidosis."},
+  {term:"BG 22–26",definition:"Bicarbonate Gap 22-26 = Pure AGMA only. The bicarbonate deficit is fully explained by the anion gap rise. No hidden second metabolic disorder."},
+  {term:"BG > 28",definition:"Bicarbonate Gap greater than 28 = AGMA + Metabolic Alkalosis. Bicarbonate is higher than the anion gap rise predicts — a metabolic alkalosis process is also present."},
+  {term:"Base Excess (BE)",definition:"Calculated ABG value reflecting the metabolic component. Positive = metabolic alkalosis. Negative (deficit) = metabolic acidosis. Normal: −2 to +2."},
+  {term:"Lactate",definition:"Byproduct of anaerobic metabolism. Normal: <2 mmol/L. Elevated >2 mmol/L = tissue hypoxia or impaired clearance. Confirms lactic acidosis when elevated with AGMA."},
+  {term:"DKA (Diabetic Ketoacidosis)",definition:"AGMA caused by insulin deficiency → fat converted to ketones → blood becomes acidic. Key clues: glucose >300 mg%, elevated ketones, fruity breath."},
+  {term:"AKA (Alcohol Ketoacidosis)",definition:"AGMA caused by alcohol + starvation. Key clues: glucose <300 mg%, elevated ketones, ETOH history. Distinguished from DKA by lower glucose."},
+  {term:"SKA (Starvation Ketoacidosis)",definition:"AGMA caused by 3-14 days without food. Elevated ketones, glucose <300 mg%, no alcohol history. The body burns fat for energy, producing ketones."},
+  {term:"Lactic Acidosis",definition:"AGMA caused by elevated lactate >2 mmol/L. Most common Type A (reduced O₂ delivery): shock, cardiac arrest, severe hypoxia, severe anemia, CO poisoning."},
+  {term:"Type A Hyperlactatemia",definition:"Lactate elevation from reduced tissue oxygen delivery. Examples: shock, cardiac arrest, severe hypoxia, severe anemia, carbon monoxide poisoning."},
+  {term:"Type B Hyperlactatemia",definition:"Lactate elevation without reduced O₂ delivery. B1 = underlying disease (liver failure, sepsis). B2 = drugs/toxins (metformin, beta-agonists). B3 = inborn errors."},
+  {term:"Delta AG (Δ AG)",definition:"The change in anion gap from normal. Calculated as: Measured AG − 12. Used in Step 2 of the bicarbonate gap calculation."},
+  {term:"Resp. Acidosis + Metabolic Acidosis",definition:"Both disorders lower pH. Example: acute MI causing pulmonary edema (poor ventilation → CO₂ retention) + lactic acidosis (poor cardiac output → tissue hypoxia)."},
+  {term:"Resp. Acidosis + Metabolic Alkalosis",definition:"Opposing disorders. Example: COPD with CO₂ retention + diuretics causing HCO₃⁻ retention. pH may be near normal despite two active processes."},
+  {term:"Resp. Alkalosis + Metabolic Acidosis",definition:"Opposing disorders. Example: chronic renal failure (uremia → metabolic acidosis) + anxiety hyperventilation (blows off CO₂ → respiratory alkalosis)."},
+  {term:"Resp. Alkalosis + Metabolic Alkalosis",definition:"Both disorders raise pH. Example: hepatic cirrhosis with hepatopulmonary syndrome (dyspnea → hyperventilation) + diuretics (HCO₃⁻ retention)."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:`<div class="empty-state">No cards completed yet.</div>`}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete.";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(c=>c.classList&&c.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(o=>container.appendChild(o))})}
+shuffleAnswerOptions();
+
+function markActivityComplete(el){el.dataset.complete="true";el.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+// ── SORT ACTIVITIES ────────────────────────────────────────────────────────
+function initSort(containerSel,btnId,statusId){
+  const activity=document.querySelector(containerSel+" .activity-card.require-complete");
+  const btn=document.getElementById(btnId);
+  const status=document.getElementById(statusId);
+  if(!activity||!btn)return;
+  btn.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    let correct=0;
+    rows.forEach(row=>{const sel=row.querySelector("select");const ok=sel.value===row.dataset.answer;row.classList.toggle("correct",ok);row.classList.toggle("incorrect",sel.value!==""&&!ok);if(ok)correct++});
+    if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}
+    else status.textContent=`${correct} / ${rows.length} correct — review and try again.`;
+  });
+}
+initSort("#be-lactate","checkLactateSort","lactateSortStatus");
+initSort("#acidosis-types","checkAgmaSort","agmaSortStatus");
+initSort("#ketoaci","checkAgmaCauseSort","agmaCauseSortStatus");
+initSort("#mixed","checkMixedSort","mixedSortStatus");
+initSort("#practice","checkPracticeSort","practiceSortStatus");
+
+// ── ANION GAP CALCULATION PRACTICE ────────────────────────────────────────
+(function initAgCalc(){
+  const activity=document.querySelector("#anion-gap .activity-card.require-complete");
+  const status=document.getElementById("agCalcStatus");
+  document.getElementById("checkAgCalc").addEventListener("click",()=>{
+    const steps=Array.from(document.querySelectorAll("#agCalcPractice .calc-step"));
+    let correct=0;
+    steps.forEach(step=>{
+      const input=step.querySelector("input");
+      const answer=parseInt(step.dataset.answer);
+      const val=parseInt(input.value);
+      const ok=val===answer;
+      step.querySelector(".calc-row-inline").classList.toggle("correct-calc",ok);
+      step.querySelector(".calc-row-inline").classList.toggle("incorrect-calc",input.value!==""&&!ok);
+      if(ok)correct++;
+    });
+    if(correct===steps.length){status.textContent="All anion gaps correct!";status.classList.add("complete");markActivityComplete(activity)}
+    else status.textContent=`${correct} / ${steps.length} correct — check your arithmetic.`;
+  });
+})();
+
+// ── BICARBONATE GAP STEP-BY-STEP ──────────────────────────────────────────
+(function initBgCalc(){
+  const activity=document.querySelector("#bicarb-gap .activity-card.require-complete");
+  const status=document.getElementById("bgCalcStatus");
+  document.getElementById("checkBgCalc").addEventListener("click",()=>{
+    const steps=Array.from(document.querySelectorAll("[data-bg-problem]"));
+    let correct=0;
+    steps.forEach(step=>{
+      const input=step.querySelector("input");
+      const answer=parseInt(step.dataset.answer);
+      const val=parseInt(input.value);
+      const ok=val===answer;
+      const row=step.querySelector(".calc-row-inline");
+      row.classList.toggle("correct-calc",ok);
+      row.classList.toggle("incorrect-calc",input.value!==""&&!ok);
+      if(ok)correct++;
+    });
+    if(correct===steps.length){status.textContent="All steps correct — both problems complete!";status.classList.add("complete");markActivityComplete(activity)}
+    else status.textContent=`${correct} / ${steps.length} steps correct — recheck calculations.`;
+  });
+})();
+
+// ── UNFOLDING CASE ─────────────────────────────────────────────────────────
+(function initCase(){
+  const section=document.getElementById("scenario");
+  const stages=Array.from(section.querySelectorAll(".case-stage"));
+  stages.forEach((stage,i)=>{if(i>0)stage.classList.add("lesson-hidden")});
+  section.querySelectorAll(".case-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const stage=option.closest(".case-stage");
+      if(stage.dataset.correctAnswered==="true")return;
+      const feedback=stage.querySelector(".case-feedback");
+      const isCorrect=option.dataset.caseCorrect==="true";
+      stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        stage.dataset.correctAnswered="true";
+        stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+        const next=stage.querySelector(".case-next button");if(next)next.disabled=false;
+      }else{
+        option.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+      }
+    });
+  });
+  section.querySelectorAll(".case-next button").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const current=button.closest(".case-stage");
+      const idx=stages.indexOf(current);
+      const next=stages[idx+1];
+      if(!next)return;
+      next.classList.remove("lesson-hidden");
+      if(idx+1===stages.length-1)markActivityComplete(section);
+      button.closest(".case-next").remove();
+      next.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+})();
+
+// ── KNOWLEDGE CHECK ────────────────────────────────────────────────────────
+(function initKnowledge(){
+  const section=document.getElementById("knowledge-check");
+  const status=document.getElementById("knowledgeStatus");
+  const answered=new Set();
+  const total=section.querySelectorAll(".knowledge-question").length;
+  section.querySelectorAll(".knowledge-option").forEach(option=>{
+    option.addEventListener("click",()=>{
+      const question=option.closest(".knowledge-question");
+      if(question.dataset.correctAnswered==="true")return;
+      const feedback=question.querySelector(".quiz-feedback");
+      const isCorrect=option.dataset.correct==="true";
+      question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+      if(isCorrect){
+        question.dataset.correctAnswered="true";
+        answered.add(option.dataset.question);
+        question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+        feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>";
+      }else{
+        option.classList.add("incorrect-choice");
+        feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+        feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again.</strong>";
+      }
+      status.textContent=`${answered.size} / ${total} questions answered correctly`;
+      if(answered.size===total){status.textContent="Knowledge check complete.";status.classList.add("complete");markActivityComplete(section)}
+    });
+  });
+})();
+
+// ── PROGRESSIVE REVEAL ─────────────────────────────────────────────────────
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+  const sections=Array.from(document.querySelectorAll(".lesson-stack > section"));
+  const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+  sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+  function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
+  function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+  function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+  function updateAll(){sections.forEach(setContinueState)}
+  function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+  function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+  sections.forEach((section,index)=>{
+    if(index>=sections.length-1)return;
+    const next=sections[index+1];
+    const nextTitle=getSectionTitle(next);
+    const wrapper=document.createElement("div");wrapper.className="section-continue";
+    wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+    wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});
+    section.appendChild(wrapper);
+  });
+  navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+  document.addEventListener("activityComplete",updateAll);
+  const note=document.createElement("span");note.className="section-progress-note";
+  note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";
+  sections[0].appendChild(note);
+  updateNav(0);updateAll();
+}
+initializeProgressiveSections();
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+
+window.LESSON_ID="foundations_3_3";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>
