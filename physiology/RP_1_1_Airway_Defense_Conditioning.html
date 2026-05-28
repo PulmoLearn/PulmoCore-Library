@@ -9,7 +9,28 @@
 
 
 .lesson-media{margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft);overflow:hidden;background:#fff}.lesson-media img{display:block;width:100%}.video-placeholder{margin-top:16px;border-radius:var(--radius-lg);border:1px dashed var(--oxygen-blue);background:linear-gradient(135deg,#0B1F33,#102A43);color:#fff;padding:26px;box-shadow:var(--shadow-soft)}.video-placeholder strong{color:#DDF7F2}.media-caption{font-size:.92rem;color:#415A77;margin-top:8px}.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.mini-tag{display:inline-flex;border-radius:999px;padding:4px 9px;background:#E5F0F6;color:#415A77;font-weight:800;font-size:.78rem}.check-grid{display:grid;gap:10px;margin-top:14px}.check-item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--soft-border);border-radius:12px;background:#FAFDFF;padding:12px}.check-item.correct{background:var(--airway-mint);border-color:#BCEFE5}.check-item.incorrect{background:#FDE9E9;border-color:#F2B5B5}.check-item input{margin-top:5px;transform:scale(1.25)}.sequence-card{border:1px solid var(--soft-border);border-radius:14px;padding:12px;background:#FAFDFF}.scenario-box{border-radius:16px;border:1px solid var(--soft-border);background:#F8FBFD;padding:16px;margin-top:14px}.audio-placeholder{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--soft-border);border-radius:14px;background:#FAFDFF;padding:12px;margin-top:10px}.audio-placeholder audio{width:220px;max-width:100%}@media(max-width:780px){.audio-placeholder{grid-template-columns:1fr}.audio-placeholder audio{width:100%}}
-</style></head>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style></head>
 <body><div class="page-shell"><header class="top-nav" aria-label="PulmoCore site navigation"><div class="brand" aria-label="PulmoCore brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg></div><div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Interactive respiratory therapy learning.</div></div></div><div class="top-nav-actions"><a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" aria-label="Glossary and Flashcards" title="Glossary & Flashcards" style="width:auto; padding:0 14px; gap:8px; font-size:.88rem; font-weight:800; color:#fff; text-decoration:none;">📖 Glossary/Flashcards</a><a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home" title="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a><div class="course-menu-container course-menu-wrapper"><button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu" aria-label="PulmoCore course menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div></div></div></header>
 <main class="main-content"><section class="case-card" id="top" style="border-top-color: var(--pulmo-teal);"><span class="eyebrow">Respiratory Physiology · Lesson 1.1</span><h1 style="font-family: var(--font-heading); font-size: clamp(2.35rem,5vw,4.15rem); line-height:1.05; letter-spacing:-0.055em; margin:8px 0 14px;">Airway Defense & Conditioning</h1><p style="font-size:1.16rem; max-width:980px; color:#243b55;">This beginner physiology lesson explains how the respiratory system protects, cleans, warms, and humidifies inspired air before it reaches the alveoli.</p><div class="case-meta" aria-label="Lesson details"><div><strong>Course</strong><br>Respiratory Physiology</div><div><strong>Estimated Time</strong><br>30–45 minutes</div><div><strong>Level</strong><br>Beginner / No prior medical knowledge assumed</div></div></section><div class="content-layout"><aside class="side-nav" aria-label="Lesson quick navigation"><h3>Lesson Sections</h3><a href="#objectives">Objectives</a>
 <a href="#overview-video">Video Overview</a>
@@ -314,4 +335,74 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function(event){ if (!panel.contains(event.target) && !button.contains(event.target)) { panel.classList.remove("open","show"); button.setAttribute("aria-expanded","false"); }});
 });
 </script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body></html>
