@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Humidity &amp; Bland Aerosol Therapy</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:400px}th,td{text-align:left;padding:9px 10px;vertical-align:top;border-bottom:1px solid var(--soft-border)}th{background:#F4FAFC;font-family:var(--font-heading);font-size:.92rem}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,240px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.equip-badge{display:inline-block;background:var(--core-navy);color:var(--white);font-family:var(--font-heading);font-size:.75rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.04em;margin-bottom:8px}
+.formula-box{background:var(--core-navy);color:var(--white);border-radius:14px;padding:16px 20px;font-family:var(--font-data);margin:12px 0;text-align:center}.formula-main{font-size:1.05rem;font-weight:700;margin-bottom:6px}.formula-label{font-size:.83rem;opacity:.78}
+.isb-diagram{background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:16px;margin:14px 0;overflow-x:auto}
+.ah-rh-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.ah-rh-card{border-radius:14px;padding:18px;border:2px solid}.ah-rh-card h4{font-family:var(--font-heading);margin-bottom:8px}
+.pearl-list{list-style:none;padding:0;margin:14px 0;display:grid;gap:10px}.pearl-list li{padding:10px 14px;border-radius:12px;background:var(--airway-mint);border-left:4px solid var(--pulmo-teal);font-size:.97rem}.trap-list li{background:#FFF4DF;border-left-color:var(--clinical-amber)}.danger-list li{background:#FDE9E9;border-left-color:var(--alert-coral)}
+.hme-contraindications{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.hme-con{border-radius:12px;padding:12px 14px;background:#FDE9E9;border-left:4px solid var(--alert-coral);font-size:.93rem}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:1fr}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}.ah-rh-compare{grid-template-columns:1fr}.hme-contraindications{grid-template-columns:1fr}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:360px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<header class="top-nav" aria-label="PulmoCore site navigation">
+<div class="brand">
+<div class="brand-mark" aria-hidden="true">
+<svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg>
+</div>
+<div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory care learning for future RTs.</div></div>
+</div>
+<div class="top-nav-actions">
+<a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+<a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+<div class="course-menu-container course-menu-wrapper"><button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div></div>
+</div>
+</header>
+
+<main class="main-content">
+
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+<span class="eyebrow">Respiratory Equipment &amp; Procedures</span>
+<h1 style="font-family:var(--font-heading);font-size:clamp(2rem,4.5vw,3.8rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Humidity &amp; Bland Aerosol Therapy — Humidifiers, HMEs, LVNs &amp; Condensation Management</h1>
+<p style="font-size:1.15rem;max-width:980px;color:#243b55">The upper airway's job is to condition inspired gas — warming, humidifying, and filtering it before it reaches the lungs. When that natural conditioning is bypassed or compromised, the RT must replace it artificially. This lesson covers the physics, the devices, and the clinical decision-making behind humidity and bland aerosol therapy.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Course Track</strong><br>Respiratory Equipment &amp; Procedures</div>
+<div class="example-box soft-blue"><strong>Estimated Time</strong><br>55–70 minutes</div>
+<div class="example-box soft-amber"><strong>NBRC Focus</strong><br>AH vs RH · ISB · HME contraindications · Active vs passive · Device selection</div>
+</div>
+</section>
+
+<div class="content-layout">
+<aside aria-label="Lesson quick navigation" class="side-nav">
+<h3>Sections</h3>
+<a href="#objectives">Objectives</a>
+<a href="#overview-video">Video</a>
+<a href="#intro">Humidity vs Aerosol</a>
+<a href="#humidity-types">AH vs RH</a>
+<a href="#condensation">Condensation</a>
+<a href="#physiology">Airway Physiology</a>
+<a href="#isb">ISB</a>
+<a href="#indications">Indications</a>
+<a href="#active-passive">Active vs Passive</a>
+<a href="#bubble">Bubble Humidifier</a>
+<a href="#passover">Passover Humidifier</a>
+<a href="#heated">Heated Humidifier</a>
+<a href="#lvn">Large-Volume Nebulizer</a>
+<a href="#bland-aerosol">Bland Aerosol</a>
+<a href="#hme">HME</a>
+<a href="#device-selection">Device Selection</a>
+<a href="#nbrc-traps">NBRC Traps</a>
+<a href="#scenario">Case Study</a>
+<a href="#knowledge-check">Knowledge Check</a>
+<a href="#faq">FAQ</a>
+<a href="#summary">Summary</a>
+<a href="#flashcards">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+
+<!-- 1. OBJECTIVES -->
+<section class="info-card" id="objectives">
+<h2>Learning Objectives</h2>
+<ol style="padding-left:20px;margin:14px 0;display:grid;gap:8px">
+<li>Differentiate humidity from aerosol and explain why the distinction matters clinically.</li>
+<li>Define absolute humidity and relative humidity and explain how temperature affects each.</li>
+<li>Describe heat and moisture exchange in the upper airway and the role of the isothermic saturation boundary (ISB).</li>
+<li>Explain when and why the ISB shifts deeper into the airways.</li>
+<li>Classify humidifiers as active or passive and identify the only passive humidification device.</li>
+<li>Set up, indicate, and troubleshoot bubble humidifiers, passover humidifiers, heated humidifiers, and LVNs.</li>
+<li>State the indications and contraindications for the HME and explain why it cannot be used simultaneously with aerosol or heated humidity.</li>
+<li>Select the appropriate humidification or bland aerosol device for a given clinical situation.</li>
+<li>Manage condensation safely in humidification circuits.</li>
+<li>Apply humidity therapy principles to NBRC-style clinical scenarios.</li>
+</ol>
+<div class="example-box soft-amber" style="margin-top:4px"><strong>NBRC Emphasis:</strong> The ISB, HME contraindications, the active/passive distinction, and the difference between humidity and aerosol are consistently tested in clinical reasoning questions.</div>
+</section>
+
+
+<!-- OVERVIEW VIDEO -->
+<section class="info-card" id="overview-video">
+<span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Humidity & Aerosol Therapy</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/equipment/RE_HumidityAerosol.mp4" type="video/mp4">
+<track default kind="captions" label="English captions" src="/equipment/RE_HumidityAerosol.vtt" srclang="en">
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+<!-- 2. HUMIDITY VS AEROSOL -->
+<section class="info-card" id="intro">
+<h2>Humidity vs. Aerosol — The Foundational Distinction</h2>
+<span class="equip-badge">VERY HIGH-YIELD — NBRC TESTED</span>
+<div class="component-grid" style="grid-template-columns:1fr 1fr;margin-top:14px;gap:16px">
+<div class="example-box" style="background:#EFF6FF;border:2px solid #93C5FD">
+<strong style="color:var(--oxygen-blue)">💧 Humidity</strong><br>
+Water in the <em>vapor (gas) state</em> — individual water molecules dissolved in gas. Invisible to the naked eye. Cannot be seen or felt as droplets. Measured in mg/L or mg H₂O/L gas.<br><br>
+<em>Think of it as:</em> the "humidity" in the air on a hot day — invisible moisture you feel but cannot see.
+</div>
+<div class="example-box" style="background:#F0FDF8;border:2px solid #86D9C8">
+<strong style="color:var(--pulmo-teal)">🌫️ Aerosol</strong><br>
+Suspension of <em>solid or liquid particles</em> in a gas — actual droplets of water suspended in the gas stream. Visible as mist or fog. Measured in particle size (µm).<br><br>
+<em>Think of it as:</em> the visible mist from a nebulizer — you can see the particles suspended in the air.
+</div>
+</div>
+<div class="example-box soft-amber" style="margin-top:12px"><strong>Why This Matters Clinically:</strong> Humidity adds molecular water vapor to gas — it conditions gas without adding visible particles. Bland aerosol delivers actual liquid droplets to the upper airway or secretions. They serve different purposes and require different equipment. Confusing them on the NBRC leads to incorrect device selection.</div>
+<h3 style="margin-top:18px">Temperature and Water Vapor</h3>
+<p>The amount of water vapor a gas can hold is directly related to its temperature. Higher temperature = faster molecular movement = more capacity to hold water vapor.</p>
+<div class="component-grid" style="grid-template-columns:1fr 1fr;margin-top:12px;gap:14px">
+<div class="example-box soft-coral" style="text-align:center;border:2px solid #FCA5A5">
+<strong>Temperature ↑</strong><br>
+<span style="font-size:1.4rem">→ Gas can hold MORE water vapor</span><br>
+If AH stays constant: Relative Humidity <strong>DECREASES</strong>
+</div>
+<div class="example-box soft-teal" style="text-align:center;border:2px solid #86D9C8">
+<strong>Temperature ↓</strong><br>
+<span style="font-size:1.4rem">→ Gas can hold LESS water vapor</span><br>
+If AH stays constant: Relative Humidity <strong>INCREASES</strong>
+</div>
+</div>
+</section>
+
+<!-- 3. AH vs RH -->
+<section class="info-card" id="humidity-types">
+<h2>Absolute Humidity vs. Relative Humidity</h2>
+<span class="equip-badge">VERY HIGH-YIELD</span>
+<div class="ah-rh-compare">
+<div class="ah-rh-card" style="border-color:#93C5FD;background:#EFF6FF">
+<h4 style="color:var(--oxygen-blue)">Absolute Humidity (AH)</h4>
+<p>The <em>actual mass of water vapor</em> in a given volume of gas. Measured in <strong>mg/L</strong> (milligrams of water per liter of gas). AH is independent of temperature — if you heat the gas, the amount of water doesn't change, only the gas's capacity to hold more.</p>
+<p style="margin-top:8px"><em>Analogy:</em> If a room has 10 kg of water vapor in it and you heat the room, the water vapor content stays at 10 kg — the room just has the ability to hold more.</p>
+<p style="margin-top:8px;font-family:var(--font-data);font-size:.92rem">Body humidity = 44 mg/L at 37°C, 100% RH</p>
+</div>
+<div class="ah-rh-card" style="border-color:#86D9C8;background:#F0FDF8">
+<h4 style="color:var(--pulmo-teal)">Relative Humidity (RH)</h4>
+<p>The percentage of the gas's <em>total capacity</em> that is currently filled with water vapor. RH changes with temperature even if AH stays the same. Measured as a percentage (%).</p>
+<p style="margin-top:8px"><em>Analogy:</em> If a container is 50% full, and you make the container bigger (heat), it becomes less than 50% full — even though the same amount of water is present.</p>
+<p style="margin-top:8px;font-family:var(--font-data);font-size:.92rem">RH = (AH ÷ Capacity) × 100%</p>
+</div>
+</div>
+<div class="formula-box" style="margin-top:16px">
+<div class="formula-label">BODY HUMIDITY FORMULA</div>
+<div class="formula-main">Body Humidity (%) = (Absolute Humidity ÷ 44 mg/L) × 100</div>
+<div class="formula-label" style="margin-top:6px">HUMIDITY DEFICIT = 44 mg/L − Absolute Humidity of delivered gas</div>
+</div>
+<div class="example-box soft-amber" style="margin-top:12px"><strong>NBRC Application:</strong> A gas delivered at 22 mg/L AH has a humidity deficit of 44 − 22 = 22 mg/L. The body's airways must make up this deficit by contributing heat and moisture from the mucosa — this is the physiologic cost of poorly humidified gas delivery.</div>
+</section>
+
+<!-- 4. CONDENSATION -->
+<section class="info-card" id="condensation">
+<h2>Condensation</h2>
+<p>Condensation occurs when a gas that is fully saturated with water vapor (100% RH) is then cooled. As temperature drops, the gas can hold less water vapor — the excess water converts from vapor to liquid droplets, forming condensation ("rainout").</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Why It Happens in Circuits</strong><br>Hot, humidified gas leaves the humidifier and travels through tubing that is cooler than the humidifier. As the gas cools in the tubing, it releases water as droplets that collect in the tubing — especially at low points.</div>
+<div class="example-box soft-amber"><strong>Why It's Dangerous</strong><br>Condensate can: obstruct gas flow in the circuit · accidentally drain toward the patient if tubing isn't properly positioned · serve as a reservoir for bacterial growth · increase airway resistance in ventilated patients.</div>
+<div class="example-box soft-coral"><strong>Management</strong><br>Water traps at the lowest circuit points. Heated-wire circuits (reduce temperature gradient between gas and tubing, reducing condensation formation). Always drain condensate away from the patient — never shake it back toward the patient or humidifier.</div>
+</div>
+</section>
+
+<!-- 5. PHYSIOLOGY -->
+<section class="info-card" id="physiology">
+<h2>Airway Physiology — Heat &amp; Moisture Exchange</h2>
+<p>The upper airway performs a critical conditioning function for every breath — warming, humidifying, and filtering inspired gas before it reaches the delicate lung tissue. Understanding this physiology explains why humidification matters and when the RT must intervene.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>During Inspiration</strong><br>The upper airway (nasal passages, pharynx, trachea) adds heat and moisture to inspired gas. Mucosa gives up water and warmth to the gas as it passes by. By the time gas reaches the alveoli, it should be 37°C and 100% RH (44 mg/L AH).</div>
+<div class="example-box soft-blue"><strong>During Exhalation</strong><br>The upper airway recovers some of the heat and moisture from exhaled gas as it passes back through. This is why exhaled gas feels warm and moist — the airway acts as a heat exchanger in both directions.</div>
+<div class="example-box soft-amber"><strong>Nose vs. Mouth</strong><br>The nasal passages are far more efficient humidifiers than the mouth. The turbinates create turbulent flow that maximizes contact between air and moist mucosa. Mouth breathing bypasses this and delivers drier, cooler air deeper into the airways.</div>
+<div class="example-box soft-coral"><strong>Clinical Relevance</strong><br>When patients breathe through an endotracheal tube or tracheostomy, the entire natural upper airway conditioning system is bypassed. The RT must provide 100% of the conditioning that would normally happen in the nose and upper airway.</div>
+</div>
+</section>
+
+<!-- 6. ISB -->
+<section class="info-card" id="isb">
+<h2>Isothermic Saturation Boundary (ISB)</h2>
+<span class="equip-badge">VERY HIGH-YIELD — NBRC TESTED</span>
+<p>The ISB is the point in the airway where inspired gas reaches <strong>body temperature (37°C)</strong> and <strong>100% relative humidity (44 mg/L AH)</strong>. At the ISB, the gas is fully conditioned — no further warming or humidification occurs beyond this point. In a normal, healthy adult breathing through the nose, the ISB is located approximately <strong>5 cm below the carina</strong>.</p>
+
+<div class="isb-diagram">
+<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ISB airway diagram">
+<rect width="560" height="200" fill="#F8FBFD" rx="12"/>
+<!-- Airway labels -->
+<text x="30" y="28" font-family="Montserrat,sans-serif" font-size="11" font-weight="800" fill="#0B1F33">NOSE/MOUTH</text>
+<text x="30" y="44" font-family="Montserrat,sans-serif" font-size="9" fill="#415A77">Gas enters: room temp, low RH</text>
+<!-- Arrow right -->
+<line x1="140" y1="55" x2="200" y2="55" stroke="#1CA7A8" stroke-width="2.5" marker-end="url(#arr)"/>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1CA7A8"/></marker></defs>
+<text x="155" y="45" font-family="Montserrat,sans-serif" font-size="9" fill="#415A77">warming +</text>
+<text x="155" y="56" font-family="Montserrat,sans-serif" font-size="9" fill="#415A77">humidifying</text>
+<!-- Upper airway box -->
+<rect x="200" y="30" width="110" height="50" rx="8" fill="#DDF7F2" stroke="#1CA7A8" stroke-width="2"/>
+<text x="255" y="52" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="10" font-weight="800" fill="#0B1F33">UPPER AIRWAY</text>
+<text x="255" y="65" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="9" fill="#415A77">Trachea / Carina</text>
+<!-- Arrow right -->
+<line x1="310" y1="55" x2="370" y2="55" stroke="#1CA7A8" stroke-width="2.5" marker-end="url(#arr)"/>
+<!-- ISB marker -->
+<rect x="370" y="20" width="140" height="70" rx="8" fill="#0B1F33" stroke="#1CA7A8" stroke-width="2"/>
+<text x="440" y="42" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="11" font-weight="800" fill="#1CA7A8">⭐ ISB</text>
+<text x="440" y="56" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="10" fill="#FFFFFF">37°C · 100% RH</text>
+<text x="440" y="70" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="10" fill="#FFFFFF">44 mg/L AH</text>
+<text x="440" y="84" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="9" fill="#93C5FD">~5 cm below carina</text>
+<!-- Bottom section: shifts deeper -->
+<rect x="30" y="120" width="500" height="65" rx="10" fill="#FFF4DF" stroke="#F4B860" stroke-width="2"/>
+<text x="280" y="140" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="11" font-weight="800" fill="#7A4B00">⚠️ ISB SHIFTS DEEPER WHEN:</text>
+<text x="280" y="155" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="10" fill="#0B1F33">Mouth breathing · Cold dry air · Artificial airway (ET tube / trach) · High minute ventilation</text>
+<text x="280" y="172" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="10" fill="#7A4B00">→ Airways below ISB dry out → mucosal damage → impaired mucociliary clearance → inspissated secretions</text>
+</svg>
+</div>
+
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-coral"><strong>Consequences of ISB Shifting Deeper</strong><br>When the ISB shifts deeper into the tracheobronchial tree: airways below the new ISB level must do the conditioning work normally done by the upper airway → the mucosa dries out → mucociliary clearance is impaired → secretions thicken and inspissate → potential for airway obstruction, atelectasis, and infection.</div>
+<div class="example-box soft-amber"><strong>Clinical Implication</strong><br>An intubated patient has no upper airway — the ET tube bypasses everything from nose to subglottis. The ISB is completely eliminated. Without active humidification, the patient's trachea and bronchi must condition every breath of inspired gas — rapidly drying out and damaging the mucosa.</div>
+</div>
+</section>
+
+<!-- 7. INDICATIONS -->
+<section class="info-card" id="indications">
+<h2>Indications, Contraindications &amp; Hazards</h2>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Primary Indications</strong><br>Artificial airways (ETT, tracheostomy) — critical indication · Thick or inspissated secretions · Medical gas delivery at flows >4 L/min via nasal cannula · Mechanical ventilation · Cold-air bronchospasm · Conditions where mucociliary clearance is impaired</div>
+<div class="example-box soft-amber"><strong>Goals of Humidification</strong><br>Humidify dry medical gases that have no natural water vapor · Overcome the humidity deficit of inspired gas · Support mucociliary transport · Prevent airway damage from dry gas · Maintain secretion consistency for clearance</div>
+<div class="example-box soft-coral"><strong>Hazards</strong><br>Bacterial contamination (especially from standing water) · Bronchospasm from bland aerosol · Overhydration (bland aerosol in patients with marginal fluid status) · Hypothermia or hyperthermia · Condensate obstruction · Electrical hazards from heated devices · Circuit contamination from condensate</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:12px"><strong>AARC Recommended Airway Conditions During MV:</strong> Temperature at airway inlet: 33°C ± 2°C. Minimum absolute humidity: 30 mg/L. These standards reflect the minimum acceptable conditioning for artificially ventilated patients.</div>
+</section>
+
+<!-- 8. ACTIVE vs PASSIVE -->
+<section class="info-card" id="active-passive">
+<h2>Active vs. Passive Humidifiers</h2>
+<span class="equip-badge">VERY HIGH-YIELD — HME IS THE ONLY PASSIVE DEVICE</span>
+<div class="component-grid" style="grid-template-columns:1fr 1fr;margin-top:14px;gap:16px">
+<div class="example-box soft-teal" style="border:2px solid #86D9C8">
+<strong>Active Humidifiers</strong><br>Add heat and/or water to the inspired gas from an external source (water reservoir, heating element). Require electricity, water, and maintenance. Examples:<br>• Bubble humidifier<br>• Passover humidifier<br>• Heated humidifier (with heated wire)<br>• Large-volume nebulizer (LVN)
+</div>
+<div class="example-box soft-coral" style="border:2px solid #FCA5A5">
+<strong>Passive Humidifier — ONE device only</strong><br>Recycles the patient's own exhaled heat and moisture — nothing is added from an external source. The HME (Heat Moisture Exchanger / "artificial nose") is the <em>only</em> passive humidification device.<br><br>
+<em>HME can return up to 70% of the exhaled heat and humidity to the next inhalation.</em>
+</div>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Active vs Passive Sort" style="margin-top:18px">
+<h3>Activity: Active or Passive Humidifier?</h3>
+<p>Classify each device as an active or passive humidifier.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="active"><span>Bubble humidifier — bubbles gas through a water reservoir to add moisture</span><select><option value="">Select type…</option><option value="active">Active humidifier</option><option value="passive">Passive humidifier</option></select></div>
+<div class="sort-row" data-answer="passive"><span>HME (Heat Moisture Exchanger) — traps exhaled heat/moisture and returns it during the next breath; nothing is added externally</span><select><option value="">Select type…</option><option value="active">Active humidifier</option><option value="passive">Passive humidifier</option></select></div>
+<div class="sort-row" data-answer="active"><span>Heated humidifier — uses a heating element and water chamber to actively add heat and humidity</span><select><option value="">Select type…</option><option value="active">Active humidifier</option><option value="passive">Passive humidifier</option></select></div>
+<div class="sort-row" data-answer="active"><span>Passover humidifier — gas flows over a water surface or saturated wick to pick up moisture</span><select><option value="">Select type…</option><option value="active">Active humidifier</option><option value="passive">Passive humidifier</option></select></div>
+<div class="sort-row" data-answer="active"><span>Large-volume nebulizer — generates bland aerosol particles from a liquid reservoir using a gas jet</span><select><option value="">Select type…</option><option value="active">Active humidifier</option><option value="passive">Passive humidifier</option></select></div>
+</div>
+<button class="small-btn primary" id="checkActivePassiveSort" type="button" style="margin-top:14px">Check Answers</button>
+<div class="activity-status" id="activePassiveSortStatus">Classify all five devices to continue.</div>
+</article>
+</section>
+
+<!-- 9. BUBBLE HUMIDIFIER -->
+<section class="info-card" id="bubble">
+<h2>Bubble Humidifier</h2>
+<span class="equip-badge">EQUIPMENT: Bubble Humidifier</span>
+<p>Gas from the flowmeter is directed downward through a tube and bubbled through a water reservoir. As gas bubbles up through the water, it picks up moisture. Simple, inexpensive, and widely used for nasal cannula oxygen.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Indications</strong><br>Nasal cannula at flows &gt;4 L/min where nasal dryness is a concern · Simple face mask oxygen delivery · Home oxygen therapy at moderate flows</div>
+<div class="example-box soft-coral"><strong>Contraindications</strong><br>Artificial airways (ETT, trach) — insufficient humidity output · Thick, inspissated secretions — not adequate · Flows &gt;10 L/min — less effective · Use with mechanical ventilation — not appropriate</div>
+<div class="example-box soft-amber"><strong>Troubleshooting</strong><br>No bubbling: check flow is on; bottle disconnected or empty → refill/reconnect. Water in delivery tubing: drain condensate. Pressure relief valve activating: obstruction downstream → check tubing and patient interface.</div>
+</div>
+</section>
+
+<!-- 10. PASSOVER HUMIDIFIER -->
+<section class="info-card" id="passover">
+<h2>Passover Humidifier</h2>
+<p>Gas flows over (not through) a water surface or saturated wick/membrane, picking up water vapor through evaporation. Several types exist based on the evaporation surface design.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Simple Reservoir</strong><br>Gas flows over a water surface. Relatively low humidity output compared to heated versions. Used in some low-flow applications.</div>
+<div class="example-box soft-blue"><strong>Wick / Membrane</strong><br>Water is absorbed into a porous wick or membrane — greatly increasing the surface area for evaporation. Much higher humidity output than simple reservoir. Used in Vapotherm-style HFNC systems.</div>
+<div class="example-box soft-amber"><strong>Vapotherm</strong><br>A heated membrane passover humidifier capable of high-flow delivery (up to 40 L/min). Used for HFNC therapy. Provides fully conditioned, heated, humidified gas through large-bore nasal cannulas.</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>Hazards:</strong> Electrical shock (heated models) · Hyperthermia or hypothermia if temperature controls malfunction · Bacterial contamination · Condensate accumulation in circuits</div>
+</section>
+
+<!-- 11. HEATED HUMIDIFIER -->
+<section class="info-card" id="heated">
+<h2>Heated Humidifier</h2>
+<span class="equip-badge">VERY HIGH-YIELD — STANDARD FOR MECHANICAL VENTILATION</span>
+<p>A heated humidifier actively adds heat and water vapor to inspired gas by heating a water-filled chamber through which gas passes. Heating dramatically increases the absolute humidity output — warm air holds far more water vapor than cool air.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Heating Mechanisms</strong><br>Hot plate (below chamber) · Wraparound element · Immersion heater · Heated-wire circuits (reduces condensation in delivery tubing by keeping the gas warm all the way to the patient).</div>
+<div class="example-box soft-blue"><strong>Indications</strong><br>Mechanical ventilation (primary indication) · Artificial airways requiring high humidity output · Long-term ventilation (&gt;72 hours) · Patients with thick secretions where HME is contraindicated · High minute ventilation states.</div>
+<div class="example-box soft-coral"><strong>Hazards</strong><br>Thermal burns if temperature too high · Hypothermia if heater fails · Excess condensation in cool circuits (use heated wire) · Tubing meltdown if incompatible tubing is used · Electrical hazard · Overhydration risk.</div>
+</div>
+<h3 style="margin-top:18px">Heated Humidifier Setup</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Fill chamber with sterile water to the fill line — never use tap water</li>
+<li>Connect the heated circuit from humidifier to patient airway (ET tube or mask)</li>
+<li>Set the temperature target (typically 37°C at airway inlet for MV)</li>
+<li>Confirm alarm settings are enabled (high/low temperature alarms)</li>
+<li>Allow the system to reach target temperature before connecting to patient</li>
+<li>Monitor for condensation in the circuit; drain water traps regularly</li>
+</ol>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Problem</th><th>Likely Cause</th><th>RT Action</th></tr>
+<tr><td>Excess condensation in circuit</td><td>Temperature gradient: gas cooling in tubing</td><td>Use heated-wire circuit; ensure water traps are drained; check temperature settings</td></tr>
+<tr><td>No humidity/dry secretions</td><td>Empty water chamber; heater failure</td><td>Refill chamber with sterile water; check heating element; verify power</td></tr>
+<tr><td>High temperature alarm</td><td>Heater malfunction; incorrect temperature setting</td><td>Check heater setting; reduce temperature; assess patient for thermal injury</td></tr>
+<tr><td>Tubing melting or warped</td><td>Incompatible tubing used with heated wire</td><td>Replace with manufacturer-approved circuit components immediately</td></tr>
+</table>
+</div>
+
+<article class="quiz-card require-complete" id="heatedQuiz" data-activity-name="Heated Humidifier Clinical Check" style="margin-top:18px">
+<h3>Clinical Check: Humidifier Selection for MV</h3>
+<p>A patient is intubated and placed on mechanical ventilation for ARDS. On day 2, the RT notices secretions are becoming increasingly thick and difficult to suction. The patient is currently using an HME. What is the most appropriate change in humidification?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Changing the HME more frequently does not resolve the fundamental issue — the HME only returns exhaled moisture and cannot add additional water content beyond what the patient exhales. When secretions become thick despite HME use, the humidification needs to be upgraded, not the frequency of device changes.">Change the HME more frequently — thickening secretions indicate the HME needs to be replaced daily instead of every 3–5 days.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. Thick, inspissated secretions are a direct contraindication for HME use. The HME can only return a fraction (up to 70%) of the patient's own exhaled humidity — it cannot compensate when patients have increased secretion volume, high minute ventilation, or inadequate humidification reserve. A heated humidifier actively adds heat and water to inspired gas, achieving full humidification at 37°C and 44 mg/L AH — the gold standard for mechanically ventilated patients with secretion problems.">Replace the HME with a heated humidifier — thick secretions are a contraindication for HME; the heated humidifier provides active, full humidification.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Combining a heated humidifier with an HME is not only unnecessary — it is contraindicated. The HME and heated humidifier must never be used simultaneously. The HME would become saturated by the already-humidified gas from the heated humidifier, increasing circuit resistance and potentially leading to circuit obstruction.">Use both the HME and a heated humidifier simultaneously for maximum humidity output.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Increasing suction frequency addresses a symptom (secretion accumulation) but does not address the root cause (inadequate humidification causing secretion thickening). Frequent suctioning without improving humidification will continue to produce thickening secretions. The humidification must be upgraded.">Increase suction frequency — thick secretions are expected during mechanical ventilation and require no humidification change.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 12. LVN -->
+<section class="info-card" id="lvn">
+<h2>Large-Volume Nebulizer (LVN)</h2>
+<span class="equip-badge">VERY HIGH-YIELD — BLAND AEROSOL DELIVERY</span>
+<p>The LVN generates bland (nonmedicated) aerosol for humidification of the upper airway and to help mobilize secretions. It operates on the Bernoulli/Venturi principle — high-velocity gas through a jet orifice creates low pressure that draws fluid up a siphon tube, shattering it into aerosol particles.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Key Components</strong><br>Jet orifice (creates high-velocity gas stream) · Siphon tube (draws fluid up) · Baffle (sizes particles — breaks up large droplets) · Large fluid reservoir (≥250 mL) · Aerosol tubing and patient interface (mask, T-tube, aerosol collar)</div>
+<div class="example-box soft-blue"><strong>Indications</strong><br>Upper airway edema · Post-extubation stridor · Croup / laryngotracheobronchitis · Secretion mobilization in patients with artificial airways · Sputum induction (with hypertonic saline) · Humidification via tracheostomy collar or T-piece</div>
+<div class="example-box soft-coral"><strong>Troubleshooting</strong><br>Poor/weak mist: increase gas flow to 6–15 L/min. No aerosol: check jet orifice for obstruction → clean. Excess rainout (water in tubing): drain tubing away from patient; ensure tubing is at lowest point. Bronchospasm: stop treatment; assess patient.</div>
+</div>
+<div class="example-box soft-amber" style="margin-top:12px"><strong>Flow Requirement:</strong> LVNs typically require 6–15 L/min to generate adequate aerosol. For patients with high inspiratory flow demand (distress, trach patients), the total flow must meet or exceed inspiratory demand — otherwise the patient will dilute the aerosol by entraining room air around the interface. Use large-bore aerosol tubing to reduce resistance and maintain flow delivery.</div>
+</section>
+
+<!-- 13. BLAND AEROSOL -->
+<section class="info-card" id="bland-aerosol">
+<h2>Bland Aerosol Therapy &amp; Aerosol Interfaces</h2>
+<p>Bland aerosol delivers actual liquid droplets (not just vapor) to the upper airway. The liquid droplets provide hydration directly to the mucosa and help mobilize secretions. The solution used affects the clinical effect.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Sterile Water</strong><br>Hypotonic relative to body fluids. Provides maximum moisture but can cause bronchospasm in reactive airway patients (hypotonic solution is most irritating). Commonly used for upper airway edema and post-extubation management.</div>
+<div class="example-box soft-blue"><strong>Normal Saline (0.9%)</strong><br>Isotonic — matches body fluid tonicity. Least likely to cause bronchospasm. Standard for most bland aerosol applications. Used with tracheostomy collars, face tents, and aerosol masks.</div>
+<div class="example-box soft-amber"><strong>Hypertonic Saline (3–10%)</strong><br>Draws fluid into the airway lumen through osmosis, thinning secretions. Used specifically for sputum induction and CF mucus clearance. Highest bronchospasm risk — always monitor carefully; SABA available.</div>
+</div>
+<h3 style="margin-top:18px">Aerosol Interfaces</h3>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal"><strong>Aerosol Face Mask</strong><br>Short-term bland aerosol for spontaneously breathing patients with intact upper airways. Standard for post-extubation croup management. Must fit well for adequate aerosol delivery.</div>
+<div class="example-box soft-blue"><strong>Tracheostomy Mask / Aerosol Collar</strong><br>Placed over a tracheostomy opening to deliver bland aerosol or humidification to patients with trach tubes. The standard long-term interface for trach patients requiring airway conditioning.</div>
+<div class="example-box soft-amber"><strong>Face Tent</strong><br>For patients who cannot tolerate a face mask — covers the lower face without sealing. Provides less concentrated aerosol but more comfort. Acceptable for mild humidification needs.</div>
+<div class="example-box soft-coral"><strong>T-Tube / T-Piece</strong><br>Used with tracheostomy or ETT patients — connects directly to the airway. Large-bore tubing delivers aerosol directly into the artificial airway. Must have adequate flow (often with reservoir limb) to meet inspiratory demand.</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:12px"><strong>Large-Bore Tubing Principle:</strong> Aerosol delivery systems use large-bore corrugated tubing (typically 22 mm ID) rather than small-bore oxygen tubing. Large-bore tubing: reduces aerosol particle impaction on tubing walls · decreases flow resistance · allows more aerosol to reach the patient · reduces condensate obstruction risk.</div>
+</section>
+
+<!-- 14. HME -->
+<section class="info-card" id="hme">
+<h2>Heat Moisture Exchanger (HME) — "Artificial Nose"</h2>
+<span class="equip-badge">VERY HIGH-YIELD — CONTRAINDICATIONS ARE NBRC CRITICAL</span>
+<p>The HME is a passive humidification device placed between the ventilator circuit and the patient's artificial airway (ETT or trach tube). During exhalation, the HME traps exhaled heat and moisture in a hydroscopic or hygroscopic element. During the next inhalation, the gas passes through the element and recovers up to 70% of the captured heat and moisture.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Indications</strong><br>Patient transport (no electricity needed — passive device) · Anesthesia circuits · Short-term mechanical ventilation (&lt;72 hours) · Low-volume, uncomplicated ventilated patients without secretion problems · When heated humidifier is unavailable during transport</div>
+<div class="example-box soft-blue"><strong>Advantages</strong><br>No electricity or water required · Simple setup · Reduces circuit condensation significantly · Lightweight and portable · Lower cost than heated humidification circuits · Reduces circuit contamination risk</div>
+</div>
+<h3 style="margin-top:18px">HME Contraindications — ALL Are Critical</h3>
+<div class="hme-contraindications">
+<div class="hme-con"><strong>Thick or bloody secretions</strong> — HME becomes clogged; inadequate humidity for secretion management</div>
+<div class="hme-con"><strong>Hypothermia</strong> — not enough exhaled warmth for the HME to recycle; will not provide adequate conditioning</div>
+<div class="hme-con"><strong>High minute ventilation</strong> — exhaled moisture is diluted; HME cannot keep up with the demand</div>
+<div class="hme-con"><strong>Small tidal volume</strong> — insufficient gas to adequately load the HME hygroscopic element</div>
+<div class="hme-con"><strong>HME cannot be used with heated humidification</strong> — humidified gas saturates the HME element, increasing resistance and defeating the purpose of both devices</div>
+<div class="hme-con"><strong>HME cannot be used with aerosol therapy</strong> — nebulized particles clog the HME filter element; device becomes obstructed</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:14px"><strong>HME Hazards:</strong> Secretion thickening (inadequate humidification for prolonged use) · Increased dead space (the HME volume becomes part of the patient's anatomical dead space — approximately 30–90 mL depending on the device) · Airway obstruction from secretions in the element · Hypothermia from inadequate heat recovery.</div>
+
+<article class="quiz-card require-complete" id="hmeQuiz" data-activity-name="HME Contraindication Check" style="margin-top:18px">
+<h3>Clinical Check: HME — Appropriate Use?</h3>
+<p>An intubated patient on day 5 of mechanical ventilation has large amounts of blood-tinged secretions following bronchoscopy. The RT checks the ventilator circuit and notes the patient is using an HME. The HME appears partially obstructed. What is the correct action?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Replacing the HME with a new one does not solve the underlying problem. Bloody, thick secretions are a direct contraindication for HME use — any HME will quickly become obstructed in this clinical situation. Frequent changes are not an adequate solution.">Replace the HME with a new one — change HMEs more frequently when secretions are copious.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. Thick or bloody secretions are a contraindication for HME use. An obstructed HME increases circuit resistance, worsens the patient's work of breathing against the ventilator, and provides inadequate humidification — further thickening the secretions. The correct action is to remove the HME entirely and replace it with a heated humidifier circuit, which actively provides full humidification and will not become obstructed by secretions.">Remove the HME and replace the circuit with a heated humidifier — bloody, thick secretions are a contraindication for HME use.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Running aerosol therapy through the HME would clog the HME filter element, dramatically increasing airway resistance. HME and aerosol therapy are incompatible and must never be combined. The HME must be removed first.">Add aerosol therapy through the HME to help thin the secretions and prevent further obstruction.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Suctioning addresses current secretion accumulation, but does not fix the primary problem: an obstructed HME with inadequate humidification is making secretions thicker, not thinner. The humidification device itself must be changed to a heated humidifier.">Continue with the current HME and increase suction frequency to manage the secretion burden.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 15. DEVICE SELECTION -->
+<section class="info-card" id="device-selection">
+<h2>Humidification Device Selection Guide</h2>
+<p>Selecting the correct humidification or bland aerosol device requires matching the clinical situation to device capabilities and contraindications.</p>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Clinical Situation</th><th>Best Device</th><th>Rationale</th></tr>
+<tr><td>NC &gt;4 L/min, patient reports nasal dryness</td><td>Bubble humidifier</td><td>Simple, adequate for low-flow oxygen humidification</td></tr>
+<tr><td>Mechanically ventilated patient, day 1 (no secretion issues)</td><td>HME</td><td>Simple, adequate for short-term uncomplicated MV; saves setup time</td></tr>
+<tr><td>Mechanically ventilated patient, thick secretions or &gt;72 hours</td><td>Heated humidifier</td><td>Active humidification; overcomes HME limitations</td></tr>
+<tr><td>Intubated patient being transported to CT scan (short trip)</td><td>HME</td><td>No power needed; portable; appropriate if no secretion contraindications</td></tr>
+<tr><td>Post-extubation patient with stridor / upper airway edema</td><td>LVN via aerosol face mask</td><td>Bland aerosol reaches upper airway; reduces edema and promotes comfort</td></tr>
+<tr><td>Tracheostomy patient requiring long-term airway conditioning</td><td>Heated humidifier or LVN via trach collar</td><td>Bypassed upper airway requires full conditioning; trach collar delivers aerosol directly</td></tr>
+<tr><td>Infant requiring bland aerosol humidification</td><td>Mist hood/tent or pediatric aerosol mask</td><td>Enclosure provides humidified environment for infants who cannot cooperate with mask therapy</td></tr>
+</table>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Device Selection Sort" style="margin-top:18px">
+<h3>Activity: Select the Best Device</h3>
+<p>Match each clinical situation to the most appropriate humidification or aerosol device.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="bubble"><span>Adult patient on 5 L/min nasal cannula for COPD — reports nasal dryness and discomfort</span><select><option value="">Select device…</option><option value="bubble">Bubble humidifier</option><option value="heated">Heated humidifier</option><option value="hme">HME</option><option value="lvn">LVN / Aerosol collar</option><option value="tent">Mist hood / tent</option></select></div>
+<div class="sort-row" data-answer="heated"><span>Mechanically ventilated ARDS patient, day 4, with copious thick secretions and high minute ventilation</span><select><option value="">Select device…</option><option value="bubble">Bubble humidifier</option><option value="heated">Heated humidifier</option><option value="hme">HME</option><option value="lvn">LVN / Aerosol collar</option><option value="tent">Mist hood / tent</option></select></div>
+<div class="sort-row" data-answer="hme"><span>Intubated patient, day 2, thin secretions, being transported to MRI for 30 minutes</span><select><option value="">Select device…</option><option value="bubble">Bubble humidifier</option><option value="heated">Heated humidifier</option><option value="hme">HME</option><option value="lvn">LVN / Aerosol collar</option><option value="tent">Mist hood / tent</option></select></div>
+<div class="sort-row" data-answer="lvn"><span>Patient 2 hours post-extubation with mild stridor and upper airway edema</span><select><option value="">Select device…</option><option value="bubble">Bubble humidifier</option><option value="heated">Heated humidifier</option><option value="hme">HME</option><option value="lvn">LVN / Aerosol collar</option><option value="tent">Mist hood / tent</option></select></div>
+<div class="sort-row" data-answer="tent"><span>6-month-old infant with croup needing continuous bland aerosol humidification</span><select><option value="">Select device…</option><option value="bubble">Bubble humidifier</option><option value="heated">Heated humidifier</option><option value="hme">HME</option><option value="lvn">LVN / Aerosol collar</option><option value="tent">Mist hood / tent</option></select></div>
+</div>
+<button class="small-btn primary" id="checkDeviceSort" type="button" style="margin-top:14px">Check Answers</button>
+<div class="activity-status" id="deviceSortStatus">Match all five clinical situations to the correct device to continue.</div>
+</article>
+</section>
+
+<!-- 16. NBRC TRAPS -->
+<section class="info-card board" id="nbrc-traps">
+<h2>Common NBRC Traps — Humidity &amp; Aerosol</h2>
+<ul class="pearl-list trap-list" style="margin-top:14px">
+<li><strong>Confusing humidity with aerosol.</strong> Humidity = invisible molecular water vapor. Aerosol = visible liquid droplets suspended in gas. They are not interchangeable — different equipment, different purposes, different clinical effects.</li>
+<li><strong>Stating that the HME is an active humidifier.</strong> The HME is the ONLY passive humidifier. It adds nothing from an external source — it only recycles the patient's own exhaled heat and moisture. All other humidifiers (bubble, passover, heated, LVN) are active.</li>
+<li><strong>Using an HME when contraindications are present.</strong> Thick secretions, hypothermia, high minute ventilation, and small tidal volumes all contraindicate HME use. These are consistently tested NBRC scenarios.</li>
+<li><strong>Combining a heated humidifier with an HME.</strong> These two devices must NEVER be used simultaneously. The already-humidified gas from the heated humidifier saturates the HME element, drastically increasing resistance. Only one active humidification method is used at a time.</li>
+<li><strong>Using aerosol therapy through an HME.</strong> Nebulized medication particles clog the HME filter element, obstructing gas flow. The HME must be removed and bypassed whenever aerosol therapy is administered to a ventilated patient.</li>
+<li><strong>Using a bubble humidifier for an intubated patient.</strong> Bubble humidifiers provide insufficient absolute humidity output for patients with artificial airways — the entire upper airway conditioning system is bypassed. A heated humidifier is required for artificial airways.</li>
+<li><strong>Draining condensate back into the humidifier or toward the patient.</strong> Condensate must always be drained away from the patient — into water traps or waste containers. Drainage toward the patient risks aspiration; drainage back into the humidifier reintroduces contaminants.</li>
+<li><strong>Forgetting that relative humidity changes with temperature.</strong> If you heat a gas, RH decreases (even if AH stays the same) because the gas's capacity increases. If you cool a gas, RH increases — which is how condensation forms.</li>
+</ul>
+</section>
+
+<!-- 17. CASE STUDY -->
+<section class="case-card require-complete" id="scenario" data-activity-name="HME Failure Case Study">
+<span class="eyebrow">Guided Unfolding Case</span>
+<h2>Ventilated Patient — Thickening Secretions on HME</h2>
+
+<div class="case-stage" data-case-stage="0">
+<h3>Stage 1: Identifying the Problem</h3>
+<p><strong>Situation:</strong> A 58-year-old patient has been on mechanical ventilation for 4 days following pneumonia. She is on volume-control ventilation with VT 500 mL, RR 18, minute ventilation 9 L/min. An HME is in place. Over the last 12 hours, the RT has noted progressively thicker secretions that are increasingly difficult to suction. The nurse reports more frequent suction alarms on the ventilator.</p>
+<p><strong>Decision:</strong> What is the most likely primary cause of the thickening secretions?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. While a new respiratory infection could cause thicker secretions, the clinical picture here is more consistent with an equipment-related cause. The patient has been on an HME for 4 days — exceeding the typical recommended duration — and the progressive thickening correlates with inadequate humidification rather than a sudden infectious process.">A new secondary respiratory infection is causing the secretion changes.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The HME has been in use for 4 days (beyond the typical 3–5 day replacement interval), but more importantly, the patient's clinical situation has changed: thicker secretions are a direct contraindication for HME use. The HME can only return exhaled humidity — it cannot overcome the increasing humidity deficit as secretions thicken. Additionally, the patient's minute ventilation of 9 L/min represents a significant respiratory load — high minute ventilation limits the HME's effectiveness. The inadequate humidification is likely the primary driver.">Inadequate humidification — the HME cannot meet this patient's humidification needs, causing progressive secretion thickening.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Dehydration can contribute to thick secretions, but the primary issue here is the humidification device. The HME has contraindications (thick secretions, developing), and addressing hydration without upgrading the humidifier will not resolve the problem. The equipment must be changed.">Systemic dehydration — increase IV fluids to thin secretions.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="1">
+<h3>Stage 2: Device Change</h3>
+<p><strong>Update:</strong> The RT recommends switching from the HME to a heated humidifier. The physician agrees. As the RT changes the circuit, the physician asks whether the HME should be left in the circuit alongside the heated humidifier "for extra humidity."</p>
+<p><strong>Decision:</strong> How should the RT respond?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Adding both devices simultaneously is not appropriate and is specifically contraindicated. The already-humidified gas from the heated humidifier will fully saturate the HME element, increasing circuit resistance significantly. This creates an obstruction that increases work of breathing against the ventilator and can cause pressure-triggered alarms.">Agree — using both devices simultaneously provides maximum humidification for severe cases.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The HME and heated humidifier are mutually exclusive — they must never be used simultaneously. The heated humidifier provides fully humidified gas at 100% RH. When this gas passes through the HME, the already-saturated gas provides no additional humidity recovery, but the element becomes waterlogged and dramatically increases resistance. Remove the HME completely and use the heated humidifier alone.">Respectfully explain that the HME and heated humidifier cannot be used simultaneously — the HME must be completely removed from the circuit.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. While the HME is not appropriate here, the reasoning is not about saving the HME for future use. The correct explanation is that combining an HME with a heated humidifier creates dangerous circuit resistance by saturating the HME element with already-humidified gas. The HME must be removed, not saved.">Remove the HME and store it for future use when the heated humidifier is not needed.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="2">
+<h3>Stage 3: Condensation Management</h3>
+<p><strong>Update:</strong> The heated humidifier is in place and functioning. Within 2 hours, significant condensate has collected in the ventilator circuit tubing, especially in the dependent loop near the patient. A nursing assistant suggests "shaking the tube to clear the water back into the humidifier."</p>
+<p><strong>Decision:</strong> What is the correct way to manage the condensate?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Shaking the tubing would move condensate toward both the humidifier and potentially toward the patient. Condensate contains bacteria from the patient's respiratory tract. Draining it back toward the humidifier introduces contaminants; draining toward the patient could cause aspiration, infection, and circuit flooding.">Shake the circuit tubing to drain condensate back into the humidifier reservoir — this recycles clean water.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Condensate must always be drained away from the patient — into water traps at the lowest circuit points, then discarded. It should never be drained back toward the patient (aspiration risk) or back into the humidifier (contamination risk). For the future, a heated-wire circuit can be installed to reduce condensate formation by maintaining the gas temperature throughout the tubing, reducing the temperature gradient that causes condensation.">Drain condensate at the water trap away from the patient and discard it — consider upgrading to a heated-wire circuit to reduce condensate formation.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Disconnecting the humidifier would leave the patient without humidification — worsening the secretion problem the team just worked to address. Condensate is a manageable issue that should be handled through proper drainage, not by eliminating humidification.">Disconnect the heated humidifier — the condensate indicates it is providing too much humidity for this patient.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="example-box soft-teal" style="margin-top:16px"><strong>Case Summary:</strong> This case illustrates three key humidity therapy decisions: recognizing when the HME has reached the limit of its clinical utility (thick secretions), correctly managing the HME-to-heated humidifier transition (never combine them), and safely managing condensate (always away from the patient). These three scenarios appear repeatedly in NBRC clinical reasoning questions.</div>
+</div>
+</section>
+
+<!-- 18. KNOWLEDGE CHECK -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Humidity Therapy Knowledge Check">
+<span class="eyebrow">Knowledge Check</span>
+<h2>NBRC-Style Practice Questions</h2>
+
+<div class="knowledge-question" data-question-id="ht1" style="margin-bottom:20px">
+<h3>Question 1</h3>
+<p>A patient in an ICU room has their room temperature decreased from 24°C to 18°C overnight. The absolute humidity of the room air remains unchanged. What happens to the relative humidity of the room air?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ht1" data-correct="false" data-feedback="Incorrect. If temperature decreases, the air's capacity to hold water vapor decreases. Since the same amount of water (AH) is now in a smaller-capacity container, the relative humidity increases — not decreases.">Relative humidity decreases because cooler air always contains less moisture.</button>
+<button class="quiz-option knowledge-option" data-question="ht1" data-correct="true" data-feedback="Correct. Relative humidity is the ratio of actual water vapor content (AH) to the maximum water vapor the gas can hold at that temperature. When temperature decreases, the gas's capacity decreases — so the same AH now represents a higher percentage of the reduced capacity. RH increases. This is also why dew forms at night when temperatures drop — the air's RH reaches 100% and condensation occurs.">Relative humidity increases — lower temperature reduces gas capacity, so the same AH now represents a higher percentage of that reduced capacity.</button>
+<button class="quiz-option knowledge-option" data-question="ht1" data-correct="false" data-feedback="Incorrect. A change in temperature absolutely affects relative humidity, even if absolute humidity doesn't change. Relative humidity = AH ÷ capacity × 100. When temperature decreases, capacity decreases, so RH increases.">Relative humidity remains unchanged — it only changes if absolute humidity changes.</button>
+<button class="quiz-option knowledge-option" data-question="ht1" data-correct="false" data-feedback="Incorrect. Relative humidity does not reach 100% simply by decreasing temperature unless the temperature drops to the dew point. In this scenario, RH increases but may or may not reach 100% depending on the starting values. The key concept is that RH increases with decreasing temperature (when AH is constant).">Relative humidity increases until it reaches exactly 100%, then stops changing.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ht2" style="margin-bottom:20px">
+<h3>Question 2</h3>
+<p>Which of the following clinical situations represents the most critical indication for active humidification in a mechanically ventilated patient?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ht2" data-correct="false" data-feedback="Incorrect. While patient comfort is important, it is not the most critical clinical indication. The presence of an artificial airway that bypasses the entire upper airway conditioning system is the most urgent humidification indication.">The patient reports nasal dryness and discomfort with the ventilator circuit.</button>
+<button class="quiz-option knowledge-option" data-question="ht2" data-correct="true" data-feedback="Correct. An endotracheal tube bypasses the entire upper airway — the nose, pharynx, and larynx — eliminating all natural warming, humidifying, and filtering functions. Every breath of inspired gas must now be conditioned below the ET tube tip. Without active humidification, the tracheal mucosa rapidly dries out, mucociliary clearance fails, secretions thicken and inspissate, and airway obstruction becomes a serious risk within hours. Active humidification for artificial airways is critical and non-optional.">The patient has an endotracheal tube that bypasses the entire upper airway — all natural humidification is eliminated.</button>
+<button class="quiz-option knowledge-option" data-question="ht2" data-correct="false" data-feedback="Incorrect. While room air with low relative humidity can cause dryness, the patient's own upper airway can provide conditioning. This represents a mild indication for humidification. The bypass of the entire upper airway by an artificial airway is a far more critical indication.">The patient is breathing room air with a relative humidity of 30% in a dry climate.</button>
+<button class="quiz-option knowledge-option" data-question="ht2" data-correct="false" data-feedback="Incorrect. High oxygen flow is an indication for humidification (dry gas delivery), but it is not as critical as artificial airway bypass. At standard oxygen flows via nasal cannula, the upper airway still provides partial conditioning. The ET tube bypasses all of it.">The patient is receiving high-flow oxygen at 8 L/min via nasal cannula.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ht3" style="margin-bottom:20px">
+<h3>Question 3</h3>
+<p>The isothermic saturation boundary (ISB) shifts deeper into the airways during which of the following conditions?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ht3" data-correct="false" data-feedback="Incorrect. Nasal breathing is the most effective upper airway conditioning mechanism — the nasal turbinates warm and humidify gas efficiently, keeping the ISB close to the carina. Nasal breathing actually keeps the ISB in its normal position or moves it more proximally (shallower).">Nasal breathing at normal tidal volumes in a warm, humid environment.</button>
+<button class="quiz-option knowledge-option" data-question="ht3" data-correct="true" data-feedback="Correct. An endotracheal tube bypasses the entire upper airway, eliminating all natural warming and humidification. Gas entering the trachea is room temperature and dry — the trachea and bronchi must do all the conditioning work. This shifts the ISB dramatically deeper (distally) into the airways, causing significant mucosal drying and damage. Mouth breathing (less efficient than nasal), cold dry air, and high minute ventilation also shift the ISB deeper.">Endotracheal intubation — the entire upper airway is bypassed, eliminating proximal warming and humidification.</button>
+<button class="quiz-option knowledge-option" data-question="ht3" data-correct="false" data-feedback="Incorrect. Heated, humidified gas enters the airway already conditioned — the ISB moves proximally (closer to the mouth or airway inlet) because the gas reaches full saturation sooner. Heated humidification moves the ISB toward the upper airway, protecting the distal airways.">Using a heated humidifier with fully conditioned gas at 37°C and 100% RH.</button>
+<button class="quiz-option knowledge-option" data-question="ht3" data-correct="false" data-feedback="Incorrect. Quiet breathing through the nose at rest allows the upper airway to efficiently warm and humidify inspired gas. The ISB remains in its normal position approximately 5 cm below the carina. It is when the upper airway is bypassed or overwhelmed that the ISB shifts deeper.">Quiet nasal breathing at rest in a temperate, humid environment.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ht4" style="margin-bottom:20px">
+<h3>Question 4</h3>
+<p>A patient with a tracheostomy is receiving bland aerosol via a tracheostomy collar with large-bore tubing. After 30 minutes, the RT notices the aerosol has significantly diminished and the tubing has large water puddles. What is the most likely cause and the correct action?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ht4" data-correct="false" data-feedback="Incorrect. Running out of medication would produce no aerosol from an SVN, but a bland aerosol LVN with a large reservoir typically runs for extended periods. The description of water puddles in the tubing more specifically indicates condensate obstruction.">The medication reservoir is empty — refill with sterile water and reconnect.</button>
+<button class="quiz-option knowledge-option" data-question="ht4" data-correct="false" data-feedback="Incorrect. Increasing gas flow is appropriate when the issue is low flow to the nebulizer. The issue here is condensate in the tubing (water puddles), which is obstructing the aerosol flow. Increasing flow alone will not resolve the condensate obstruction.">Increase the gas flow — the LVN requires higher flow to maintain adequate aerosol output.</button>
+<button class="quiz-option knowledge-option" data-question="ht4" data-correct="true" data-feedback="Correct. The water puddles in the tubing represent condensate (rainout) from warm, humidified aerosol cooling in the tubing. This condensate can partially or completely obstruct aerosol flow to the patient. The correct action is to drain the condensate at a water trap or low point in the tubing, directing it away from the patient. After draining, verify that aerosol output resumes. The tubing should be positioned to drain naturally away from the patient toward a collection point.">Condensate is obstructing the tubing — drain the water at the lowest point away from the patient to restore aerosol flow.</button>
+<button class="quiz-option knowledge-option" data-question="ht4" data-correct="false" data-feedback="Incorrect. Replacing the LVN may eventually be needed for maintenance, but the immediate issue — condensate obstructing the tubing — should be addressed by draining first. Replacing the device without draining the existing circuit will produce the same problem in the new tubing.">Replace the LVN entirely — condensate indicates the device is malfunctioning.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ht5" style="margin-bottom:20px">
+<h3>Question 5</h3>
+<p>An RT is ordered to administer a bronchodilator via SVN to a mechanically ventilated patient who has an HME in the circuit. What is the correct approach?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ht5" data-correct="false" data-feedback="Incorrect. Nebulized medication particles will clog the HME filter element, dramatically increasing airway resistance. The aerosol must not be delivered through the HME. Additionally, the HME is designed for humidity recovery — it is not a medication delivery pathway.">Administer the SVN treatment through the HME — the nebulizer connects to the inspiratory limb before the HME.</button>
+<button class="quiz-option knowledge-option" data-question="ht5" data-correct="true" data-feedback="Correct. The HME must be removed from the circuit and bypassed before any aerosol medication is administered. Nebulized particles — both medication and water — will obstruct the HME hygroscopic filter element, significantly increasing circuit resistance and work of breathing against the ventilator. After the SVN treatment is complete, the HME can be reinstalled. If aerosol therapy is frequent or ongoing, a heated humidifier circuit should replace the HME entirely.">Remove the HME from the circuit before administering SVN therapy — aerosol particles obstruct the HME element; reinstall after treatment completion.</button>
+<button class="quiz-option knowledge-option" data-question="ht5" data-correct="false" data-feedback="Incorrect. While the HME and SVN are contraindicated together, delivery is possible — the HME must simply be removed first. The correct approach is to remove the HME, administer the aerosol treatment, and then replace the HME. Choosing a different medication route for this reason alone is not the standard of care.">Use a different route of medication delivery — nebulizers cannot be used with mechanical ventilators.</button>
+<button class="quiz-option knowledge-option" data-question="ht5" data-correct="false" data-feedback="Incorrect. The SVN does not need to be placed before the HME — placing it after the HME (closer to the patient) still results in aerosol contacting and clogging the HME on exhalation. The HME must be removed from the circuit entirely during aerosol therapy, regardless of nebulizer placement.">Place the SVN in the circuit after the HME (between the HME and the patient) to prevent filter obstruction.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly.</div>
+</section>
+
+<!-- 19. FAQ -->
+<section id="faq">
+<span class="eyebrow">FAQ</span>
+<h2 style="font-family:var(--font-heading);font-size:clamp(1.9rem,3vw,3rem);letter-spacing:-.035em;margin:8px 0 16px">Common Questions</h2>
+<details class="accordion" open>
+<summary>What is the difference between humidity and aerosol?</summary>
+<div class="accordion-body"><p>Humidity refers to water in the vapor (gas) state — individual water molecules dissolved in the gas. You cannot see humidity; it is invisible. Aerosol refers to actual liquid droplets or particles suspended in a gas. You can see aerosol — it appears as a visible mist or fog. Different equipment produces each: humidifiers produce vapor; nebulizers produce aerosol. They serve different clinical purposes: humidity conditions inspired gas; aerosol delivers medication or topical liquid to the airway surface.</p></div>
+</details>
+<details class="accordion">
+<summary>Why does cooling gas cause condensation?</summary>
+<div class="accordion-body"><p>When gas is fully saturated with water vapor (100% RH), it holds as much water as it can at that temperature. If the gas is then cooled, its capacity to hold water vapor decreases. The excess water vapor that the cooler gas can no longer hold is forced to change phase — from vapor (invisible) to liquid droplets (condensate). This is exactly what happens in humidified ventilator circuits: hot, fully humidified gas leaves the humidifier and travels through tubing that is cooler than the humidifier. As the gas cools, condensate forms in the tubing.</p></div>
+</details>
+<details class="accordion">
+<summary>Why can the HME never be used with a heated humidifier?</summary>
+<div class="accordion-body"><p>A heated humidifier delivers gas at 100% relative humidity — it is already completely saturated with water vapor. When this fully humidified gas enters the HME, the HME's hygroscopic element becomes immediately saturated with liquid water — it cannot absorb any additional moisture because the gas is already at maximum saturation. The result is a waterlogged HME element that dramatically increases airway resistance. Additionally, the HME has no more moisture to return to the patient during inhalation (since it only returns what was deposited during exhalation), making it functionless while simultaneously creating dangerous resistance.</p></div>
+</details>
+<details class="accordion">
+<summary>When should I switch from an HME to a heated humidifier?</summary>
+<div class="accordion-body"><p>Switch from HME to heated humidifier when: (1) secretions become thick or bloody — direct contraindication; (2) the patient develops hypothermia — insufficient exhaled warmth for the HME to recycle; (3) minute ventilation is very high — dilutes the humidity available for the HME to capture; (4) the patient has been on mechanical ventilation for more than 72 hours, especially if secretion quality is declining; (5) aerosol therapy is planned. The HME is appropriate for short-term, uncomplicated mechanical ventilation — the heated humidifier is the workhorse for longer-term and more complex patients.</p></div>
+</details>
+<details class="accordion">
+<summary>Why does the ISB shift deeper in intubated patients?</summary>
+<div class="accordion-body"><p>The isothermic saturation boundary (ISB) represents the point where inspired gas reaches 37°C and 100% RH. Normally, the upper airway (nasal passages, pharynx, larynx, trachea) conditions gas progressively, and the ISB is reached approximately 5 cm below the carina. When a patient is intubated, the ETT bypasses everything from the lips to the subglottis — the entire upper airway conditioning system is eliminated. Room temperature, dry gas enters directly at the trachea. The trachea and main bronchi must now do all the conditioning work that the entire upper airway normally performed. The ISB shifts much deeper — to the level of the smaller bronchi — causing those airways to dry out rapidly. This is why artificial airway humidification is not optional: it is preventing rapid mucosal damage.</p></div>
+</details>
+</section>
+
+<!-- 20. SUMMARY -->
+<section class="info-card" id="summary">
+<h2>Summary &amp; Board-Prep Reminders</h2>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Humidity vs Aerosol</strong><br>Humidity = invisible vapor. Aerosol = visible droplets. Body humidity at 37°C = 44 mg/L AH = 100% RH. Humidity deficit = 44 mg/L − AH of delivered gas.</div>
+<div class="example-box soft-blue"><strong>ISB Facts</strong><br>37°C · 100% RH · 44 mg/L · ~5 cm below carina. Shifts deeper with: mouth breathing, cold air, artificial airway, high minute ventilation. Deeper ISB = mucosal drying = thick secretions.</div>
+<div class="example-box soft-amber"><strong>HME Rules (Critical)</strong><br>ONLY passive humidifier. Contraindicated: thick secretions, hypothermia, high VE, small VT. NEVER combine with heated humidifier or aerosol therapy. HME adds dead space to circuit.</div>
+<div class="example-box soft-coral"><strong>Condensate Management</strong><br>Always drain AWAY from patient. Never shake back toward patient or humidifier. Water traps at lowest circuit points. Heated-wire circuits reduce condensate formation.</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:14px"><strong>NBRC Must-Know List:</strong> HME = only passive device · Bubble humidifier ≠ appropriate for ETT · HME + heated humidifier = contraindicated together · HME + aerosol = clogged filter · ISB shifts deeper with artificial airway · Body humidity = 44 mg/L at 37°C · Temperature ↑ → RH ↓ (capacity increases) · Condensate always drains away from patient · Hypertonic saline = bronchospasm risk</div>
+</section>
+
+<!-- 21. FLASHCARDS -->
+<section id="flashcards">
+<div class="glossary-card">
+<h3>Glossary &amp; Flashcard Mastery Deck</h3>
+<p>Click any card to flip it. Includes all ISB facts, HME rules, and device contraindications for rapid NBRC review.</p>
+<div class="flashcard-shell">
+<div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<div class="tabs" role="tablist"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+<div aria-label="Flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0"><div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div></div>
+<div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+<div class="completed-list" id="completedList"></div>
+</div>
+</div>
+</section>
+
+</div>
+</div>
+</main>
+<footer class="footer">
+<div><strong>Pulmo<span>Core</span></strong><br>Core respiratory care learning for future RTs.</div>
+<div>Respiratory Equipment &amp; Procedures · Humidity &amp; Bland Aerosol Therapy</div>
+</footer>
+</div>
+
+<script>
+/* ── COURSE MENU ── */
+document.addEventListener("DOMContentLoaded",function(){
+const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+if(button&&panel){
+panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+const list=document.getElementById("courseMenuList"),courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?"current":"")+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+button.onclick=function(event){event.preventDefault();event.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+document.addEventListener("click",event=>{if(!panel.contains(event.target)&&event.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}})
+}
+});
+
+/* ── GLOSSARY ── */
+const glossaryTerms=[
+{term:"Humidity",definition:"Water in the vapor (gas) state — individual water molecules dissolved in gas. Invisible. Measured in mg/L (absolute humidity) or as a percentage of maximum capacity (relative humidity). Not the same as aerosol."},
+{term:"Aerosol",definition:"Suspension of solid or liquid particles in a gas — visible as mist or fog. Actual droplets, not vapor. Generated by nebulizers and LVNs. Different from humidity — uses different equipment and serves different clinical purposes."},
+{term:"Absolute Humidity (AH)",definition:"The actual mass of water vapor in a given volume of gas. Measured in mg/L. Not affected by temperature — it represents the actual amount of water present. Body humidity = 44 mg/L at 37°C, 100% RH."},
+{term:"Relative Humidity (RH)",definition:"The percentage of the gas's current water vapor content relative to its maximum capacity at that temperature. RH changes with temperature even if AH stays constant. Decreases when temperature increases (capacity expands). Increases when temperature decreases (capacity shrinks). RH = (AH ÷ Capacity) × 100%."},
+{term:"Isothermic Saturation Boundary (ISB)",definition:"The point in the airway where inspired gas reaches body temperature (37°C) and 100% relative humidity (44 mg/L AH). Normally located approximately 5 cm below the carina. Shifts deeper with mouth breathing, cold/dry air, artificial airways, and high minute ventilation."},
+{term:"Humidity Deficit",definition:"The difference between body humidity (44 mg/L) and the absolute humidity of delivered gas. Humidity Deficit = 44 − AH. The RT must overcome this deficit to prevent airway damage from dry inspired gas."},
+{term:"Condensation",definition:"Liquid water that forms when saturated gas is cooled and can no longer hold its water vapor in gaseous form. Forms in humidifier circuits as gas travels through cooler tubing. Must be drained away from the patient — never toward the patient or back into the humidifier."},
+{term:"Active Humidifier",definition:"A humidifier that adds heat and/or water to inspired gas from an external source. Examples: bubble humidifier, passover humidifier, heated humidifier, LVN. All humidifiers EXCEPT the HME are active devices."},
+{term:"Passive Humidifier",definition:"A humidifier that recycles the patient's own exhaled heat and moisture without adding any from an external source. The HME (Heat Moisture Exchanger) is the ONLY passive humidification device. Can return up to 70% of exhaled heat and humidity."},
+{term:"HME",definition:"Heat Moisture Exchanger ('artificial nose'). The only passive humidifier. Placed between the ventilator circuit and ETT/trach. Traps exhaled heat/moisture; returns it during inhalation. Contraindicated with: thick secretions, hypothermia, high VE, small VT. Cannot be combined with heated humidifier or aerosol therapy."},
+{term:"HME Contraindications",definition:"Thick or bloody secretions · Hypothermia · High minute ventilation · Small tidal volume · Do not combine with heated humidifier (both devices become ineffective; HME element floods) · Do not combine with aerosol therapy (particles clog HME filter element)."},
+{term:"Bubble Humidifier",definition:"Gas is bubbled through a water reservoir to add moisture. Simple and inexpensive. Appropriate for nasal cannula >4 L/min and face mask oxygen. Contraindicated for artificial airways (insufficient humidity output) and high flows >10 L/min."},
+{term:"Heated Humidifier",definition:"Active humidifier using a heating element and water chamber to add heat and water vapor to inspired gas. Gold standard for mechanical ventilation. Required for artificial airways with thick secretions or prolonged ventilation (>72 hours). Uses heated-wire circuits to reduce condensation. Sterile water only."},
+{term:"Large-Volume Nebulizer (LVN)",definition:"Generates bland aerosol via Bernoulli/Venturi principle — high-velocity gas jet draws fluid up a siphon tube, shattering it into droplets. Used for post-extubation stridor, upper airway edema, trach collar aerosol, and sputum induction. Requires 6–15 L/min flow."},
+{term:"Bland Aerosol",definition:"Aerosol therapy using nonmedicated solutions (sterile water, normal saline 0.9%, hypertonic saline 3–10%). Delivers liquid droplets to upper airway for humidification, edema reduction, and secretion mobilization. Hypertonic saline carries highest bronchospasm risk."},
+{term:"Heated-Wire Circuit",definition:"A ventilator breathing circuit with electrically heated wires running through the inspiratory and/or expiratory tubing. Maintains gas temperature throughout the circuit, reducing the temperature gradient that causes condensation. Significantly reduces 'rainout' in humidified ventilator circuits."},
+{term:"Sputum Induction",definition:"Administration of hypertonic saline aerosol (3–10%) to stimulate coughing and produce a sputum specimen for diagnosis (TB, PCP). Hypertonic saline draws fluid into the airway lumen osmotically, thinning secretions and triggering cough. Highest bronchospasm risk — have SABA available."},
+{term:"Water Trap",definition:"A device placed at the lowest point(s) of a humidified breathing circuit to collect condensate and allow it to be drained safely away from the patient. Essential for managing rainout in heated humidifier circuits. Condensate from the trap is discarded — never reused."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:'<div class="empty-state">No cards completed yet.</div>'}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete!";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+/* ── SHUFFLE ── */
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(c=>c.classList&&c.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(o=>container.appendChild(o))})}
+shuffleAnswerOptions();
+
+/* ── MARK COMPLETE ── */
+function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+/* ── PROGRESSIVE SECTIONS ── */
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));
+const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
+function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+function updateAll(){sections.forEach(setContinueState)}
+function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+sections.forEach((section,index)=>{if(index>=sections.length-1)return;const next=sections[index+1];const nextTitle=getSectionTitle(next);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});
+navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+document.addEventListener("activityComplete",updateAll);
+const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";sections[0].appendChild(note);
+updateNav(0);updateAll()
+}
+initializeProgressiveSections();
+
+/* ── SORT ACTIVITIES ── */
+function initSort(sectionSelector,buttonId,statusId){
+const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");
+const button=document.getElementById(buttonId);
+const status=document.getElementById(statusId);
+if(!activity||!button)return;
+button.addEventListener("click",()=>{
+const rows=Array.from(activity.querySelectorAll(".sort-row"));
+let correct=0;
+rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});
+status.textContent=`${correct} / ${rows.length} correct`;
+if(correct===rows.length){status.textContent="Activity complete!";status.classList.add("complete");markActivityComplete(activity)}
+})
+}
+initSort("#active-passive","checkActivePassiveSort","activePassiveSortStatus");
+initSort("#device-selection","checkDeviceSort","deviceSortStatus");
+
+/* ── QUIZ ACTIVITIES ── */
+function initQuizOptions(selector){
+const activity=document.querySelector(selector);
+if(!activity)return;
+activity.querySelectorAll(".quiz-option").forEach(button=>{
+button.addEventListener("click",()=>{
+if(activity.dataset.correctAnswered==="true")return;
+const feedback=activity.querySelector(".quiz-feedback");
+const isCorrect=button.dataset.correct==="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+activity.dataset.correctAnswered="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+markActivityComplete(activity)
+}else{
+button.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."
+}
+})
+})
+}
+["#heatedQuiz","#hmeQuiz"].forEach(initQuizOptions);
+
+/* ── CASE STUDY ── */
+function initCase(){
+const section=document.getElementById("scenario");
+if(!section)return;
+const stages=Array.from(section.querySelectorAll(".case-stage"));
+stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});
+section.querySelectorAll(".case-option").forEach(option=>option.addEventListener("click",()=>{
+const stage=option.closest(".case-stage");
+if(stage.dataset.correctAnswered==="true")return;
+const feedback=stage.querySelector(".case-feedback");
+const isCorrect=option.dataset.caseCorrect==="true";
+stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+stage.dataset.correctAnswered="true";
+stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=false
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=true
+}
+}));
+section.querySelectorAll(".case-next button").forEach(button=>{
+button.disabled=true;
+button.addEventListener("click",()=>{
+const current=button.closest(".case-stage");
+const idx=stages.indexOf(current);
+const next=stages[idx+1];
+if(!next)return;
+next.classList.remove("lesson-hidden");
+if(idx+1===stages.length-1)markActivityComplete(section);
+button.closest(".case-next").remove();
+next.scrollIntoView({behavior:"smooth",block:"start"})
+})
+})
+}
+initCase();
+
+/* ── KNOWLEDGE CHECK ── */
+function initKnowledge(){
+const section=document.getElementById("knowledge-check");
+if(!section)return;
+const status=document.getElementById("knowledgeStatus");
+const answered=new Set();
+const total=section.querySelectorAll(".knowledge-question").length;
+section.querySelectorAll(".knowledge-option").forEach(option=>option.addEventListener("click",()=>{
+const question=option.closest(".knowledge-question");
+if(question.dataset.correctAnswered==="true")return;
+const feedback=question.querySelector(".quiz-feedback");
+const isCorrect=option.dataset.correct==="true";
+question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+question.dataset.correctAnswered="true";
+answered.add(option.dataset.question);
+question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>"
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again:</strong> Select the correct answer."
+}
+status.textContent=`${answered.size} / ${total} questions answered correctly`;
+if(answered.size===total){status.textContent="Knowledge check complete!";status.classList.add("complete");markActivityComplete(section)}
+}))
+}
+initKnowledge();
+
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+window.LESSON_ID="re_humidity_aerosol";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>

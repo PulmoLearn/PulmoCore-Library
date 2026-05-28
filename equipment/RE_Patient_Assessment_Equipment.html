@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | RT Patient Assessment Equipment &amp; Procedures</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status,.course-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete,.course-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress,.course-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.info-card.red{border-left-color:var(--alert-coral)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint);color:var(--core-navy)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:480px}th,td{text-align:left;padding:9px 10px;vertical-align:top;border-bottom:1px solid var(--soft-border)}th{background:#F4FAFC;font-family:var(--font-heading);font-size:.92rem}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease,border-color .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px;background:var(--airway-mint);color:var(--core-navy)}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,240px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px;color:#263f5e}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.equip-profile{background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:18px;margin-top:14px}.equip-profile h4{font-family:var(--font-heading);color:var(--core-navy);margin-bottom:8px;font-size:1rem}.equip-badge{display:inline-block;background:var(--core-navy);color:var(--white);font-family:var(--font-heading);font-size:.75rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.04em;margin-bottom:8px}
+.pearl-list{list-style:none;padding:0;margin:14px 0;display:grid;gap:10px}.pearl-list li{padding:10px 14px;border-radius:12px;background:var(--airway-mint);border-left:4px solid var(--pulmo-teal);font-size:.97rem}.trap-list li{background:#FFF4DF;border-left-color:var(--clinical-amber)}.red-list li{background:#FDE9E9;border-left-color:var(--alert-coral)}
+.ippa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}.ippa-card{border-radius:14px;padding:14px;text-align:center}.ippa-num{font-family:var(--font-heading);font-size:2rem;font-weight:800;line-height:1}.ippa-label{font-family:var(--font-heading);font-size:.95rem;font-weight:800;margin-top:4px}.ippa-sub{font-size:.82rem;margin-top:4px;color:#243b55}
+.sound-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}.sound-card{border-radius:14px;padding:14px;border:2px solid}.sound-card h4{font-family:var(--font-heading);font-size:.95rem;margin-bottom:6px}.sound-card p{font-size:.88rem;margin:0;color:#243b55}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:1fr}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}.ippa-grid{grid-template-columns:repeat(2,1fr)}.sound-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}.ippa-grid{grid-template-columns:repeat(2,1fr)}.sound-grid{grid-template-columns:1fr}table{min-width:440px}.home-button{width:42px;height:42px}.course-menu-button{padding:9px 12px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}.ippa-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<!-- ═══ TOP NAV ═══ -->
+<header class="top-nav" aria-label="PulmoCore site navigation">
+<div class="brand">
+<div class="brand-mark" aria-hidden="true">
+<svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg>
+</div>
+<div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory care learning for future RTs.</div></div>
+</div>
+<div class="top-nav-actions">
+<a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+<a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+<div class="course-menu-container course-menu-wrapper"><button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div></div>
+</div>
+</header>
+
+<main class="main-content">
+
+<!-- HERO -->
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+<span class="eyebrow">Respiratory Equipment &amp; Procedures</span>
+<h1 style="font-family:var(--font-heading);font-size:clamp(2.2rem,5vw,4rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">RT Patient Assessment Equipment &amp; Procedures</h1>
+<p style="font-size:1.18rem;max-width:980px;color:#243b55">The NBRC does not just ask what is normal — it asks what equipment to use, how to use it correctly, what abnormal findings mean, and what to do next. This lesson builds clinical assessment competency from the ground up: every device, every technique, every escalation trigger.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Course Track</strong><br>Respiratory Equipment &amp; Procedures</div>
+<div class="example-box soft-blue"><strong>Estimated Time</strong><br>60–80 minutes</div>
+<div class="example-box soft-amber"><strong>Focus</strong><br>Equipment profiles · Procedures · Abnormal findings · Escalation</div>
+</div>
+</section>
+
+<div class="content-layout">
+
+<!-- SIDE NAV -->
+<aside aria-label="Lesson quick navigation" class="side-nav">
+<h3>Sections</h3>
+<a href="#objectives">Objectives</a>
+<a href="#overview-video">Video</a>
+<a href="#intro">Introduction</a>
+<a href="#assessment-sequence">IPPA Framework</a>
+<a href="#inspection">Inspection</a>
+<a href="#palpation">Palpation</a>
+<a href="#percussion">Percussion</a>
+<a href="#stethoscope">Stethoscope</a>
+<a href="#pulseox">Pulse Oximeter</a>
+<a href="#bpcuff">Blood Pressure</a>
+<a href="#thermometer">Temperature</a>
+<a href="#pulse-assessment">Pulse Assessment</a>
+<a href="#rr-assessment">Respiratory Rate</a>
+<a href="#abnormal">Abnormal Findings</a>
+<a href="#escalation">Escalation</a>
+<a href="#nbrc-traps">NBRC Traps</a>
+<a href="#scenario">Case Study</a>
+<a href="#knowledge-check">Knowledge Check</a>
+<a href="#faq">FAQ</a>
+<a href="#summary">Summary</a>
+<a href="#flashcards">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+
+<!-- 1. OBJECTIVES -->
+<section class="info-card" id="objectives">
+<h2>Learning Objectives</h2>
+<p>By the end of this lesson, you should be able to:</p>
+<ol style="padding-left:20px;margin:14px 0;display:grid;gap:8px">
+<li>Identify the components and clinical purpose of each RT assessment tool: stethoscope, pulse oximeter, BP cuff, and thermometer.</li>
+<li>Demonstrate proper setup and use of each device, following competency-aligned procedure steps.</li>
+<li>Explain the correct sequence of physical assessment: inspection → palpation → percussion → auscultation.</li>
+<li>Perform auscultation technique correctly and identify normal and adventitious breath sounds.</li>
+<li>Match abnormal percussion notes to likely clinical conditions.</li>
+<li>Accurately assess pulse rate, rhythm, and strength, and respiratory rate.</li>
+<li>Recognize the limitations and common failure modes of each piece of equipment.</li>
+<li>Troubleshoot equipment problems and apply corrective actions.</li>
+<li>Identify assessment findings that require immediate escalation.</li>
+<li>Apply assessment equipment knowledge to NBRC-style clinical scenarios.</li>
+</ol>
+<div class="example-box soft-amber" style="margin-top:4px"><strong>NBRC Emphasis:</strong> Board questions test equipment selection, correct use, troubleshooting, interpretation of findings, and escalation decisions — not just definitions. Every section of this lesson is built around that question framework.</div>
+</section>
+
+
+<!-- OVERVIEW VIDEO -->
+<section class="info-card" id="overview-video">
+<span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Patient Assessment Equipment</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/equipment/RE_PatientAssessmentEquipment.mp4" type="video/mp4">
+<track default kind="captions" label="English captions" src="/equipment/RE_PatientAssessmentEquipment.vtt" srclang="en">
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+<!-- 2. INTRODUCTION -->
+<section class="info-card" id="intro">
+<h2>Why Equipment-First Assessment?</h2>
+<p>Assessment in respiratory care is not a passive process. Every technique requires a specific tool, a specific method, and a specific set of interpretive skills. Knowing <em>that</em> breath sounds exist is not enough — you need to know how to hear them, what they mean, and what to do when they are abnormal.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>The RT Assessment Role</strong><br>RTs conduct patient assessments independently before every treatment, during every clinical visit, and at every bedside response. Your assessment findings — not the chart — drive your immediate clinical decisions.</div>
+<div class="example-box soft-blue"><strong>Equipment Is the Tool; Skill Is the Point</strong><br>A stethoscope in the wrong hands is useless. A pulse oximeter misread can cause harm. The goal of this lesson is not to memorize devices — it is to develop clinical competence with each one.</div>
+<div class="example-box soft-amber"><strong>Assessment Drives Escalation</strong><br>The most important outcome of a thorough assessment is knowing when something is wrong. Every abnormal finding covered in this lesson has a corresponding escalation pathway that a practicing RT must know by reflex.</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:14px"><strong>For Every Device in This Lesson:</strong> What is it? → Why does the RT use it? → How is it set up and used correctly? → What are common mistakes? → What do abnormal findings mean? → When do you escalate?</div>
+</section>
+
+<!-- 3. IPPA FRAMEWORK -->
+<section class="info-card" id="assessment-sequence">
+<h2>The Physical Assessment Framework: IPPA</h2>
+<p>Physical assessment follows a systematic, ordered approach. The four techniques are always performed in the same sequence — and that sequence matters. Auscultating before percussion, for example, changes what you hear.</p>
+<div class="ippa-grid">
+<div class="ippa-card" style="background:#EFF6FF;border:2px solid #93C5FD"><div class="ippa-num" style="color:var(--oxygen-blue)">I</div><div class="ippa-label">Inspection</div><div class="ippa-sub">Eyes — observe before touching. Distress, color, posture, symmetry, breathing effort.</div></div>
+<div class="ippa-card" style="background:#F0FDF8;border:2px solid #86D9C8"><div class="ippa-num" style="color:var(--pulmo-teal)">P</div><div class="ippa-label">Palpation</div><div class="ippa-sub">Hands — feel chest expansion, tactile fremitus, crepitus, and tenderness.</div></div>
+<div class="ippa-card" style="background:#FFF7ED;border:2px solid #FCA5A5"><div class="ippa-num" style="color:#E85D5D">P</div><div class="ippa-label">Percussion</div><div class="ippa-sub">Fingers — tap to assess underlying tissue density and air vs. fluid.</div></div>
+<div class="ippa-card" style="background:#F9F0FF;border:2px solid #C084FC"><div class="ippa-num" style="color:#9333EA">A</div><div class="ippa-label">Auscultation</div><div class="ippa-sub">Stethoscope — listen to breath sounds, quality, and symmetry.</div></div>
+</div>
+<div class="example-box soft-amber" style="margin-top:16px"><strong>Why This Order?</strong> Percussion and palpation can alter the sounds you hear. Inspection orients you before you touch anything. Auscultation comes last so earlier findings inform what you are listening for. The sequence is not arbitrary — it is optimized for accuracy.</div>
+
+<article class="activity-card require-complete" data-activity-name="IPPA Sequence" style="margin-top:18px">
+<h3>Activity: Put Assessment in Order</h3>
+<p>Assign each assessment technique its correct position in the IPPA sequence. All four must be correct to continue.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="1"><span>Visually observe the patient for distress, posture, cyanosis, accessory muscle use, and chest symmetry — before touching anything</span><select><option value="">Select position…</option><option value="1">1st — Inspection</option><option value="2">2nd — Palpation</option><option value="3">3rd — Percussion</option><option value="4">4th — Auscultation</option></select></div>
+<div class="sort-row" data-answer="2"><span>Use both hands to assess chest wall movement, tactile fremitus, and any crepitus or tenderness</span><select><option value="">Select position…</option><option value="1">1st — Inspection</option><option value="2">2nd — Palpation</option><option value="3">3rd — Percussion</option><option value="4">4th — Auscultation</option></select></div>
+<div class="sort-row" data-answer="3"><span>Systematically tap fingers over the chest wall, comparing side to side, to assess tissue density</span><select><option value="">Select position…</option><option value="1">1st — Inspection</option><option value="2">2nd — Palpation</option><option value="3">3rd — Percussion</option><option value="4">4th — Auscultation</option></select></div>
+<div class="sort-row" data-answer="4"><span>Place stethoscope directly on skin and listen to breath sounds at each lung field, comparing side to side</span><select><option value="">Select position…</option><option value="1">1st — Inspection</option><option value="2">2nd — Palpation</option><option value="3">3rd — Percussion</option><option value="4">4th — Auscultation</option></select></div>
+</div>
+<button class="small-btn primary" id="checkAssessmentSort" type="button" style="margin-top:14px">Check Sequence</button>
+<div class="activity-status" id="assessmentSortStatus">Assign the correct order to all four techniques to continue.</div>
+</article>
+</section>
+
+<!-- 4. INSPECTION -->
+<section class="info-card" id="inspection">
+<h2>Inspection — Your Eyes as Clinical Equipment</h2>
+<span class="equip-badge">EQUIPMENT: Eyes · Clinical Observation</span>
+<p>Inspection begins the moment you enter the room — before you open your bag or touch the patient. A skilled RT extracts significant clinical information from observation alone.</p>
+<h3 style="margin-top:16px">What to Assess During Inspection</h3>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal"><strong>General Appearance &amp; Distress</strong><br>Anxious? Comfortable? Alert vs. confused? Tripod position? Unable to speak in full sentences? These are immediate signs of severity.</div>
+<div class="example-box soft-blue"><strong>Skin Color</strong><br>Cyanosis (blue) = hypoxemia. Pallor = anemia or shock. Flushing = fever or CO₂ retention. Assess lips, fingertips, and mucous membranes.</div>
+<div class="example-box soft-amber"><strong>Chest Symmetry &amp; Shape</strong><br>Barrel chest = air trapping (COPD, emphysema). Pectus excavatum/carinatum = congenital deformity. Kyphoscoliosis = restrictive impact. Check for equal rise bilaterally.</div>
+<div class="example-box soft-coral"><strong>Breathing Effort &amp; Pattern</strong><br>Accessory muscle use (SCM, trapezius, intercostals) = increased work of breathing. Nasal flaring, retractions, pursed-lip breathing. Rate and rhythm — tachypnea, bradypnea, Cheyne-Stokes.</div>
+<div class="example-box soft-teal"><strong>Posture &amp; Position</strong><br>Orthopnea (must sit upright) = CHF or severe COPD. Tripod position (leaning forward on hands) = severe respiratory distress. Patient preference often reveals disease severity.</div>
+<div class="example-box soft-blue"><strong>Sputum &amp; Airway Secretions</strong><br>Note amount, color, consistency. Clear/white = benign. Yellow/green = possible infection. Rust-colored = pneumonia (pneumococcal). Pink/frothy = pulmonary edema. Blood = hemoptysis — always escalate.</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:14px"><strong>NBRC Principle:</strong> Inspection findings that require immediate escalation include: central cyanosis, severe accessory muscle use, inability to speak, altered mental status, and paradoxical chest wall movement (flail chest).</div>
+</section>
+
+<!-- 5. PALPATION -->
+<section class="info-card" id="palpation">
+<h2>Palpation — Hands as Assessment Tools</h2>
+<span class="equip-badge">EQUIPMENT: Hands and Fingers</span>
+<p>Palpation provides information that cannot be seen or heard. It confirms chest symmetry, detects abnormal masses or crepitus, and assesses the transmission of voice vibrations through lung tissue.</p>
+<h3 style="margin-top:16px">Key Palpation Assessments</h3>
+<div class="three-card-grid" style="margin-top:12px">
+<div class="example-box soft-teal"><strong>Chest Expansion</strong><br>Place hands symmetrically on the posterior chest with thumbs at the midline. Ask patient to inhale deeply. Thumbs should move apart equally. Unequal expansion = unilateral disease (pneumothorax, consolidation, effusion, mainstem intubation).</div>
+<div class="example-box soft-amber"><strong>Tactile (Vocal) Fremitus</strong><br>Place palm or ulnar edge of hand on chest. Ask patient to say "99" or "blue moon." Normal: gentle vibration transmitted through lung. <em>Increased fremitus</em> = consolidation. <em>Decreased/absent fremitus</em> = pleural effusion, pneumothorax, or emphysema.</div>
+<div class="example-box soft-coral"><strong>Crepitus &amp; Tenderness</strong><br>Crepitus (subcutaneous emphysema): a crackling sensation felt under skin — indicates air escaping into tissue. Often means pneumothorax or barotrauma. Chest wall tenderness: palpate for rib fractures, especially post-trauma. Escalate both immediately.</div>
+</div>
+
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:16px">
+<table>
+<tr><th>Palpation Finding</th><th>Likely Condition</th><th>RT Action</th></tr>
+<tr><td>Unequal chest expansion</td><td>Pneumothorax, consolidation, mainstem intubation</td><td>Notify provider immediately; assess further</td></tr>
+<tr><td>Increased tactile fremitus</td><td>Pneumonia (consolidation)</td><td>Correlate with percussion and auscultation</td></tr>
+<tr><td>Decreased/absent tactile fremitus</td><td>Pleural effusion, pneumothorax, emphysema</td><td>Correlate with percussion; report findings</td></tr>
+<tr><td>Crepitus (subcutaneous emphysema)</td><td>Pneumothorax, barotrauma, post-intubation</td><td>Escalate immediately — notify provider</td></tr>
+<tr><td>Tracheal deviation</td><td>Tension pneumothorax (toward unaffected side), atelectasis (toward affected side)</td><td>Emergent finding — escalate immediately</td></tr>
+</table>
+</div>
+</section>
+
+<!-- 6. PERCUSSION -->
+<section class="info-card" id="percussion">
+<h2>Percussion — Mapping Tissue Density</h2>
+<span class="equip-badge">EQUIPMENT: Dominant Middle Finger · Non-dominant Middle Finger as Strike Surface</span>
+<p>Percussion uses sound produced by tapping to assess what lies beneath the chest wall. The sound quality reveals whether the underlying tissue contains air, fluid, or solid material.</p>
+<h3 style="margin-top:16px">Proper Percussion Technique</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Place the non-dominant middle finger flat against the chest wall (hyperextend it)</li>
+<li>Strike the distal interphalangeal joint (first joint below fingertip) with the dominant middle fingertip</li>
+<li>Use a quick, sharp wrist-flick — the strike, not a sustained press</li>
+<li>Move systematically from apex to base, comparing left and right at each level</li>
+<li>Percuss at least 4–6 levels bilaterally: posterior, lateral, and anterior</li>
+</ol>
+<div class="example-box soft-teal" style="margin-top:8px"><strong>Comparison Is Everything:</strong> Always compare the same anatomical level on the left vs. right. A dull note on the right where the left is resonant is the finding — not the dull note alone.</div>
+
+<h3 style="margin-top:20px">Percussion Notes &amp; Their Meanings</h3>
+<div class="sound-grid" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+<div class="sound-card" style="border-color:#86D9C8;background:#F0FDF8"><h4>Resonance</h4><p>Hollow, drum-like. Normal lung tissue. Low-pitched, moderate duration.</p></div>
+<div class="sound-card" style="border-color:#93C5FD;background:#EFF6FF"><h4>Hyperresonance</h4><p>Loud, booming. Air-trapping (emphysema) or pneumothorax. Lower pitch, longer duration than resonance.</p></div>
+<div class="sound-card" style="border-color:#FCA5A5;background:#FFF1F2"><h4>Dullness</h4><p>Thud-like, muffled. Fluid (pleural effusion) or solid tissue (consolidation, tumor).</p></div>
+<div class="sound-card" style="border-color:#F4B860;background:#FFF4DF"><h4>Flatness</h4><p>Extremely muffled, no resonance. Massive atelectasis, dense consolidation, or large effusion.</p></div>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Percussion Notes Matching" style="margin-top:20px">
+<h3>Activity: Match the Percussion Note</h3>
+<p>For each clinical description, select the correct percussion note. All must be correct to continue.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="resonance"><span>Normal hollow, drum-like sound produced by air-filled healthy lung tissue</span><select><option value="">Select note…</option><option value="resonance">Resonance</option><option value="hyper">Hyperresonance</option><option value="dull">Dullness</option><option value="flat">Flatness</option></select></div>
+<div class="sort-row" data-answer="hyper"><span>Loud, exaggerated booming note heard over a pneumothorax or severely emphysematous lung</span><select><option value="">Select note…</option><option value="resonance">Resonance</option><option value="hyper">Hyperresonance</option><option value="dull">Dullness</option><option value="flat">Flatness</option></select></div>
+<div class="sort-row" data-answer="dull"><span>A shortened, muffled thud heard over a pleural effusion or consolidated pneumonia</span><select><option value="">Select note…</option><option value="resonance">Resonance</option><option value="hyper">Hyperresonance</option><option value="dull">Dullness</option><option value="flat">Flatness</option></select></div>
+<div class="sort-row" data-answer="flat"><span>An extremely muffled, completely non-resonant note heard over massive atelectasis or a large solid mass</span><select><option value="">Select note…</option><option value="resonance">Resonance</option><option value="hyper">Hyperresonance</option><option value="dull">Dullness</option><option value="flat">Flatness</option></select></div>
+</div>
+<button class="small-btn primary" id="checkPercussionSort" type="button" style="margin-top:14px">Check Answers</button>
+<div class="activity-status" id="percussionSortStatus">Match all four percussion notes to continue.</div>
+</article>
+</section>
+
+<!-- 7. STETHOSCOPE -->
+<section class="info-card" id="stethoscope">
+<h2>The Stethoscope</h2>
+<span class="equip-badge">HIGH-YIELD DEVICE</span>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Purpose</strong><br>Amplifies body sounds — breath sounds, heart sounds, and bowel sounds. The RT's most-used assessment tool. Should be on your person at all times in the lab and clinical setting.</div>
+<div class="example-box soft-blue"><strong>Key Components</strong><br><em>Diaphragm</em> (flat side): high-pitched sounds — breath sounds, normal heart sounds.<br><em>Bell</em> (concave side): low-pitched sounds — heart murmurs, certain adventitious sounds.<br><em>Tubing, binaurals, earpieces.</em></div>
+<div class="example-box soft-amber"><strong>Infection Control</strong><br>Clean the diaphragm and bell with an alcohol wipe <em>between every patient</em>. Stethoscopes are a known vector for cross-contamination, especially with MRSA. Never share without disinfecting first.</div>
+</div>
+
+<h3 style="margin-top:20px">Proper Auscultation Technique</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Clean the diaphragm with an alcohol wipe before use</li>
+<li>Angle earpieces forward (toward your nose) — backward earpieces produce silence</li>
+<li>Use the diaphragm for lung sounds — press firmly but not painfully against bare skin</li>
+<li>Place directly on skin, never over clothing — clothing creates artifact noise</li>
+<li>Listen at each lung field systematically: apex, mid-lung, base — bilateral comparison at each level</li>
+<li>Ask patient to breathe slowly and deeply through the mouth during auscultation</li>
+<li>Note quality (clear, diminished, absent), pattern (equal bilaterally?), and any adventitious sounds</li>
+</ol>
+
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:16px">
+<table>
+<tr><th>Problem</th><th>Cause</th><th>RT Action</th></tr>
+<tr><td>Cannot hear any sounds</td><td>Earpieces angled backward</td><td>Rotate earpieces forward (toward face)</td></tr>
+<tr><td>Sounds muffled or weak</td><td>Stethoscope over clothing; poor seal</td><td>Place directly on skin; reposition earpieces</td></tr>
+<tr><td>Crackling/rustling artifact</td><td>Tubing rubbing against gown, bed rail, or fingers</td><td>Hold tubing still; keep away from surfaces</td></tr>
+<tr><td>Asymmetric or unclear findings</td><td>Patient breathing shallowly or through nose</td><td>Coach patient: "Open mouth, breathe slowly and deeply"</td></tr>
+</table>
+</div>
+
+<h3 style="margin-top:22px">Breath Sound Reference</h3>
+<div class="sound-grid">
+<div class="sound-card" style="border-color:#86D9C8;background:#F0FDF8"><h4>Vesicular (Normal)</h4><p>Soft, low-pitched, heard over peripheral lung fields. Inspiration &gt; expiration. The baseline — any deviation is abnormal.</p></div>
+<div class="sound-card" style="border-color:#93C5FD;background:#EFF6FF"><h4>Bronchial (Normal over trachea)</h4><p>Loud, high-pitched, hollow sound. Normal over trachea only. If heard over peripheral lung, indicates consolidation.</p></div>
+<div class="sound-card" style="border-color:#86D9C8;background:#F0FDF8"><h4>Bronchovesicular (Normal)</h4><p>Combination of bronchial and vesicular. Normal over main bronchi (sternal angle, between scapulae). Equal I:E ratio.</p></div>
+<div class="sound-card" style="border-color:#FCA5A5;background:#FFF1F2"><h4>Crackles (Rales)</h4><p>Discontinuous, popping sounds. Fine = alveolar (CHF, fibrosis). Coarse = large airway secretions. Early inspiration = distal; late inspiration = alveoli.</p></div>
+<div class="sound-card" style="border-color:#FCA5A5;background:#FFF1F2"><h4>Rhonchi</h4><p>Coarse, low-pitched, continuous sounds from secretions in large airways. Often clears with coughing. Associated with COPD, bronchitis.</p></div>
+<div class="sound-card" style="border-color:#F4B860;background:#FFF4DF"><h4>Wheeze</h4><p>High-pitched, continuous, musical sound. Usually expiratory. Indicates airway narrowing — asthma, COPD, bronchospasm.</p></div>
+<div class="sound-card" style="border-color:#F4B860;background:#FFF4DF"><h4>Stridor</h4><p>Loud, high-pitched, monophonic inspiratory sound. Audible WITHOUT a stethoscope. Indicates upper airway obstruction — emergent finding.</p></div>
+<div class="sound-card" style="border-color:#E85D5D;background:#FDE9E9"><h4>Pleural Friction Rub</h4><p>Coarse, scratching/grating sound on both inspiration and expiration. Inflamed pleural surfaces. Associated with pleuritis, PE.</p></div>
+<div class="sound-card" style="border-color:#E85D5D;background:#FDE9E9"><h4>Absent / Diminished</h4><p>No breath sounds where they should be. Indicates severe obstruction, pneumothorax, large effusion, or mainstem intubation. Always escalate.</p></div>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Lung Sound Matching" style="margin-top:20px">
+<h3>Activity: Identify the Lung Sound</h3>
+<p>For each description, select the correct adventitious or abnormal breath sound. All must be correct to continue.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="crackles"><span>Fine, discontinuous popping sounds on late inspiration — like slowly separating Velcro; associated with pulmonary fibrosis or early pulmonary edema</span><select><option value="">Select sound…</option><option value="crackles">Fine Crackles</option><option value="rhonchi">Rhonchi</option><option value="wheeze">Wheeze</option><option value="stridor">Stridor</option><option value="friction">Pleural Friction Rub</option><option value="absent">Absent Breath Sounds</option></select></div>
+<div class="sort-row" data-answer="rhonchi"><span>Coarse, low-pitched, continuous sounds that often clear after the patient coughs; caused by secretions in large airways</span><select><option value="">Select sound…</option><option value="crackles">Fine Crackles</option><option value="rhonchi">Rhonchi</option><option value="wheeze">Wheeze</option><option value="stridor">Stridor</option><option value="friction">Pleural Friction Rub</option><option value="absent">Absent Breath Sounds</option></select></div>
+<div class="sort-row" data-answer="wheeze"><span>Continuous, high-pitched musical sound on expiration; associated with bronchospasm, asthma, or COPD</span><select><option value="">Select sound…</option><option value="crackles">Fine Crackles</option><option value="rhonchi">Rhonchi</option><option value="wheeze">Wheeze</option><option value="stridor">Stridor</option><option value="friction">Pleural Friction Rub</option><option value="absent">Absent Breath Sounds</option></select></div>
+<div class="sort-row" data-answer="stridor"><span>A harsh, high-pitched inspiratory sound audible without a stethoscope; indicates upper airway obstruction and requires immediate action</span><select><option value="">Select sound…</option><option value="crackles">Fine Crackles</option><option value="rhonchi">Rhonchi</option><option value="wheeze">Wheeze</option><option value="stridor">Stridor</option><option value="friction">Pleural Friction Rub</option><option value="absent">Absent Breath Sounds</option></select></div>
+<div class="sort-row" data-answer="friction"><span>A rough, scraping or grating sound present on both inspiration and expiration; caused by inflamed pleural surfaces rubbing together</span><select><option value="">Select sound…</option><option value="crackles">Fine Crackles</option><option value="rhonchi">Rhonchi</option><option value="wheeze">Wheeze</option><option value="stridor">Stridor</option><option value="friction">Pleural Friction Rub</option><option value="absent">Absent Breath Sounds</option></select></div>
+<div class="sort-row" data-answer="absent"><span>Complete silence where breath sounds should be heard; may indicate pneumothorax, large pleural effusion, or complete airway obstruction</span><select><option value="">Select sound…</option><option value="crackles">Fine Crackles</option><option value="rhonchi">Rhonchi</option><option value="wheeze">Wheeze</option><option value="stridor">Stridor</option><option value="friction">Pleural Friction Rub</option><option value="absent">Absent Breath Sounds</option></select></div>
+</div>
+<button class="small-btn primary" id="checkLungSoundSort" type="button" style="margin-top:14px">Check Answers</button>
+<div class="activity-status" id="lungSoundSortStatus">Identify all six breath sounds to continue.</div>
+</article>
+
+<article class="quiz-card require-complete" id="stethoscopeQuiz" data-activity-name="Stethoscope Escalation Check" style="margin-top:18px">
+<h3>Clinical Check: Silent Chest</h3>
+<p>An RT is auscultating a patient in the emergency department with a known history of severe asthma who is in obvious respiratory distress. Despite widespread expiratory wheezing on arrival, the RT now hears <em>no breath sounds at all</em> bilaterally. What does this finding indicate, and what is the immediate action?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Bilateral absence of breath sounds in an acute asthma attack is not a reassuring sign. It does not mean the patient is relaxing — it means airflow may be too limited to generate audible sound.">The patient is relaxing — absence of wheezing is an improvement.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Repositioning the stethoscope is appropriate when technical failure is suspected, but in the context of severe distress and no bilateral breath sounds, the finding is likely real and requires escalation, not retrying.">This is likely a stethoscope malfunction — reposition and retry before notifying anyone.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. A 'silent chest' in an acute asthma exacerbation indicates near-complete airway obstruction with minimal airflow — it is a life-threatening emergency. The wheezing that was present has stopped because not enough air is moving to generate sound. Immediate escalation, potential intubation preparation, and emergent physician notification are required.">Silent chest — a life-threatening finding indicating severe airflow obstruction. Escalate immediately for emergency intervention.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Auscultation over clothing is a technique error that reduces sound quality, but bilateral silence in a distressed patient is unlikely to be solely a technique issue. The clinical context makes this a critical finding requiring escalation.">The stethoscope was placed over clothing — repeat with direct skin contact before escalating.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 8. PULSE OXIMETER -->
+<section class="info-card" id="pulseox">
+<h2>Pulse Oximetry</h2>
+<span class="equip-badge">HIGH-YIELD DEVICE</span>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>What It Measures</strong><br>SpO₂ — the percentage of hemoglobin saturated with oxygen, measured noninvasively. It also displays pulse rate and a waveform (plethysmograph) reflecting peripheral perfusion quality.</div>
+<div class="example-box soft-blue"><strong>Probe Types</strong><br><em>Finger probe:</em> most common; standard for most patients. <em>Forehead probe:</em> better during hypoperfusion (vasoconstriction). <em>Ear probe:</em> used when fingers are unavailable or when faster response is needed.</div>
+<div class="example-box soft-amber"><strong>Normal Values</strong><br>SpO₂ ≥95% = normal in most adults. SpO₂ 90–94% = may require supplemental O₂. SpO₂ &lt;90% = hypoxemia requiring intervention. SpO₂ &lt;88% = significant hypoxemia requiring escalation.</div>
+</div>
+
+<h3 style="margin-top:20px">Proper Setup and Use</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Select the appropriate probe type for the patient and clinical situation</li>
+<li>Ensure the probe site is clean — remove nail polish if present; assess skin perfusion</li>
+<li>Apply probe correctly: finger probe aligns with the LED/detector on opposite sides of the fingertip</li>
+<li>Verify waveform quality — a clean, regular plethysmographic waveform indicates reliable perfusion signal</li>
+<li>Wait for a stable reading (typically 5–10 seconds) before recording</li>
+<li>Correlate clinically: does the SpO₂ match the patient's appearance and symptoms?</li>
+</ol>
+
+<h3 style="margin-top:18px">Limitations — Critical for NBRC</h3>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-coral"><strong>Carbon Monoxide Poisoning</strong><br>The most dangerous limitation. Pulse oximetry CANNOT distinguish carboxyhemoglobin (COHb) from oxyhemoglobin. A CO-poisoned patient may show SpO₂ 98–100% while actually being severely hypoxic. Always obtain ABG with CO-oximetry when CO exposure is suspected.</div>
+<div class="example-box soft-coral"><strong>Dyshemoglobinemias</strong><br>Methemoglobinemia causes SpO₂ to read approximately 85% regardless of true O₂ saturation. Sickle cell and other hemoglobin variants may also affect accuracy. Confirm with ABG when clinical picture doesn't match SpO₂.</div>
+<div class="example-box soft-amber"><strong>Poor Peripheral Perfusion</strong><br>Cold extremities, shock, vasoconstriction, and peripheral vascular disease reduce the signal. A weak or absent waveform = unreliable reading. Warm the hand, try a different probe site, or use forehead/ear probe.</div>
+<div class="example-box soft-amber"><strong>Motion Artifact &amp; Other Factors</strong><br>Patient movement creates false waveforms. Bright ambient light (especially fluorescent) can interfere. Nail polish (especially dark colors) absorbs light and reduces accuracy. Remove polish or use the side of the finger.</div>
+</div>
+
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:16px">
+<table>
+<tr><th>Problem</th><th>Cause</th><th>RT Action</th></tr>
+<tr><td>Low SpO₂ with good waveform</td><td>True hypoxemia</td><td>Apply/increase O₂; notify provider; consider ABG</td></tr>
+<tr><td>Fluctuating waveform and SpO₂</td><td>Motion artifact</td><td>Stabilize hand; reposition probe; wait for signal</td></tr>
+<tr><td>No signal or flat waveform</td><td>Probe misplaced; severe hypoperfusion</td><td>Reposition; try alternate site; check circulation</td></tr>
+<tr><td>Normal SpO₂, cyanotic patient</td><td>CO poisoning; methemoglobinemia</td><td>Obtain ABG with CO-oximetry immediately</td></tr>
+<tr><td>SpO₂ reads ~85% regardless of O₂</td><td>Methemoglobinemia</td><td>Obtain ABG; notify provider; methylene blue may be needed</td></tr>
+</table>
+</div>
+
+<article class="quiz-card require-complete" id="pulseoxQuiz" data-activity-name="Pulse Oximeter Clinical Check" style="margin-top:18px">
+<h3>Clinical Check: Pulse Oximeter Limitation</h3>
+<p>A firefighter is brought to the ED after rescue from a structure fire. He is confused, has a headache, and appears flushed. The pulse oximeter reads SpO₂ 99% with a strong, regular waveform. What is the most appropriate RT action?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. A SpO₂ of 99% does not rule out carbon monoxide poisoning. The pulse oximeter cannot differentiate between oxyhemoglobin and carboxyhemoglobin — it will read both as 'saturated.' This patient's symptoms (confusion, headache, flush, smoke exposure) are classic for CO poisoning.">Accept the SpO₂ as accurate — 99% is normal and no further action is needed.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Repositioning the probe will not help here — the waveform is already strong and regular. The issue is not equipment error; it is a fundamental limitation of pulse oximetry with carbon monoxide.">Reposition the probe — the signal may be inaccurate due to poor placement.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. Carbon monoxide poisoning is a critical limitation of pulse oximetry. COHb is read as oxyhemoglobin, producing falsely elevated SpO₂ values. The diagnosis requires ABG with co-oximetry (which measures COHb directly). Immediate high-flow O₂ via non-rebreather mask (100% FiO₂) should also be initiated. This patient's presentation is classic CO poisoning despite the normal SpO₂.">Obtain ABG with CO-oximetry and apply 100% O₂ via non-rebreather — pulse oximetry is unreliable with CO poisoning.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. The symptoms described — confusion, headache, flushing, smoke exposure — are classic carbon monoxide poisoning. This cannot be safely monitored with pulse oximetry alone.">Document the reading and continue monitoring with pulse oximetry — the SpO₂ confirms adequate oxygenation.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 9. BLOOD PRESSURE CUFF -->
+<section class="info-card" id="bpcuff">
+<h2>Blood Pressure Assessment</h2>
+<span class="equip-badge">EQUIPMENT: Sphygmomanometer · Stethoscope · Blood Pressure Cuff</span>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Purpose in RT Practice</strong><br>BP provides hemodynamic context for respiratory interventions. Hypotension during NIV, HFNC, or MV can indicate hemodynamic compromise. Hypertension may worsen pulmonary edema. The RT must know how to obtain and interpret BP accurately.</div>
+<div class="example-box soft-blue"><strong>Manual vs. Automatic</strong><br><em>Manual (auscultatory):</em> RT listens for Korotkoff sounds with stethoscope. More accurate in arrhythmias and hypoperfusion states. <em>Automatic (oscillometric):</em> Convenient but inaccurate in irregular rhythms, movement, and certain low-flow states. Always confirm manual when automatic seems wrong.</div>
+<div class="example-box soft-amber"><strong>Cuff Sizing — Critical</strong><br>The bladder should encircle 80% of the arm circumference. Too-small cuff = <em>falsely elevated</em> reading. Too-large cuff = <em>falsely lowered</em> reading. Pediatric, standard adult, large adult, and thigh cuffs are available. Always select the correct size first.</div>
+</div>
+
+<h3 style="margin-top:20px">Manual BP Procedure (Competency-Aligned)</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Position patient seated or supine with arm at heart level, palm up, supported</li>
+<li>Select correct cuff size — check that bladder covers 80% of arm circumference</li>
+<li>Wrap cuff snugly 2–3 cm above the antecubital fossa; cuff should fit two fingers underneath</li>
+<li>Locate brachial artery by palpation</li>
+<li>Place stethoscope diaphragm over brachial artery (not under cuff)</li>
+<li>Inflate cuff 20–30 mmHg above expected systolic pressure (or until pulse disappears)</li>
+<li>Deflate slowly at 2–3 mmHg per second</li>
+<li>Record first Korotkoff sound as systolic; muffling or disappearance as diastolic</li>
+</ol>
+
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:16px">
+<table>
+<tr><th>Problem</th><th>Cause</th><th>RT Action</th></tr>
+<tr><td>Falsely high reading</td><td>Cuff too small for arm; deflating too quickly; patient talking or tense</td><td>Replace with larger cuff; repeat; ensure patient at rest</td></tr>
+<tr><td>Falsely low reading</td><td>Cuff too large; arm above heart level; deflating too slowly</td><td>Use correct cuff size; reposition arm</td></tr>
+<tr><td>Auscultatory gap</td><td>Korotkoff sounds disappear and reappear — common in hypertension</td><td>Inflate higher than expected; do not interpret gap as diastolic</td></tr>
+<tr><td>Cannot hear Korotkoff sounds</td><td>Background noise; hypoperfusion; stethoscope placement</td><td>Move to quiet area; use Doppler; try palpatory method</td></tr>
+</table>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>Escalation Triggers:</strong> Systolic &lt;90 mmHg (hypotension — possible shock); Systolic &gt;180 or diastolic &gt;120 (hypertensive crisis); any BP with concurrent respiratory distress, altered mental status, or diaphoresis.</div>
+
+<article class="quiz-card require-complete" id="bpcuffQuiz" data-activity-name="BP Cuff Clinical Check" style="margin-top:18px">
+<h3>Clinical Check: Cuff Sizing Error</h3>
+<p>An RT measures the blood pressure of a patient with a large arm circumference using a standard adult cuff. The reading is 186/102 mmHg. The RT is about to document this as hypertension. What should be considered first?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. The reading may be artificially elevated due to cuff size, not true hypertension. Administering antihypertensives based on an inaccurate reading could cause dangerous hypotension.">Document the reading and prepare to assist with antihypertensive medication.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. A large arm circumference with a standard adult cuff produces a falsely ELEVATED reading, not a falsely lowered one. The cuff being too small requires more pressure to compress the brachial artery, artificially raising the recorded value.">A standard cuff on a large arm produces a falsely low reading — this may be higher than documented.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. A cuff too small for the arm produces a falsely elevated BP reading. The correct action is to obtain a large adult cuff, repeat the measurement, and document using the appropriately sized equipment. A single BP reading using incorrect equipment should never drive clinical decisions.">The standard cuff is likely too small — obtain a large adult cuff and repeat the measurement before drawing conclusions.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Repeating with the same cuff will produce the same error. The cuff size is the variable that needs to change — not just the repetition.">Repeat the measurement twice more with the same cuff and average the three readings.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 10. TEMPERATURE -->
+<section class="info-card" id="thermometer">
+<h2>Temperature Assessment</h2>
+<span class="equip-badge">EQUIPMENT: Thermometer · Probe Cover</span>
+<div class="component-grid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Oral</strong><br>Most common. Place under tongue. Patient must be NPO for 15–20 min beforehand. Normal: 36.5–37.5°C (97.7–99.5°F).</div>
+<div class="example-box soft-blue"><strong>Tympanic</strong><br>Fast, convenient. Gently pull auricle upward and back (adults). Insert probe snugly. Affected by cerumen and technique.</div>
+<div class="example-box soft-amber"><strong>Temporal Artery</strong><br>Scan across forehead. Non-contact or soft contact. Widely used in inpatient settings. Accurate when technique is correct.</div>
+<div class="example-box soft-coral"><strong>Axillary</strong><br>Least accurate — approximately 0.5°C below core temperature. Use only when other routes are contraindicated. Hold arm firmly against body for full duration.</div>
+</div>
+<h3 style="margin-top:18px">RT Clinical Significance</h3>
+<p>Temperature provides critical context for respiratory conditions. Fever drives increased oxygen demand and may worsen hypoxemia. Hypothermia depresses respiratory drive and can lead to bradypnea and CO₂ retention.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-coral"><strong>Fever (&gt;38°C / 100.4°F)</strong><br>Increases metabolic rate and O₂ demand. Suggests infection, inflammatory process, or drug reaction. Assess for sepsis in the RT patient with new hypoxemia + fever.</div>
+<div class="example-box soft-amber"><strong>Hypothermia (&lt;35°C / 95°F)</strong><br>Depresses respiratory drive. May cause bradypnea, CO₂ retention. Masks sepsis (elderly patients can be septic without fever). Escalate.</div>
+<div class="example-box soft-blue"><strong>Sepsis Screening</strong><br>RTs should recognize the SIRS criteria: HR &gt;90, RR &gt;20, Temp &gt;38 or &lt;36, WBC abnormal. A patient meeting these criteria with an identified infection source needs urgent evaluation.</div>
+</div>
+</section>
+
+<!-- 11. PULSE ASSESSMENT -->
+<section class="info-card" id="pulse-assessment">
+<h2>Pulse Assessment</h2>
+<span class="equip-badge">EQUIPMENT: Index and Middle Fingers · Watch / Timer</span>
+<h3 style="margin-top:14px">Radial Pulse — Standard Technique</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Use index and middle fingers — never the thumb (thumb has its own pulse)</li>
+<li>Place fingers over the radial artery at the wrist (lateral aspect, just medial to the radial styloid)</li>
+<li>Apply gentle but firm pressure until the pulse is felt</li>
+<li>Count beats for a full 60 seconds if the rhythm is irregular; 30 seconds × 2 if regular; 15 seconds × 4 only in stable, regular patients</li>
+<li>Assess simultaneously: rate, rhythm, and strength (amplitude)</li>
+</ol>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Rate</strong><br>Normal: 60–100 bpm. Tachycardia (&gt;100) = hypoxemia, fever, anxiety, bronchodilator overdose, pain. Bradycardia (&lt;60) = vagal response, beta-blockers, severe hypoxia.</div>
+<div class="example-box soft-amber"><strong>Rhythm</strong><br>Regular vs. irregular. Regularly irregular (e.g., PVCs) vs. irregularly irregular (atrial fibrillation). An irregular pulse warrants cardiac monitoring and provider notification.</div>
+<div class="example-box soft-blue"><strong>Strength (Amplitude)</strong><br>Strong and bounding = fever, hyperdynamic states. Weak and thready = low cardiac output, shock, severe hypotension. Pulsus paradoxus (drops &gt;10 mmHg on inspiration) = severe asthma, cardiac tamponade.</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>NBRC Trap:</strong> Counting a pulse for only 15 seconds in a patient with an irregular rhythm produces a significantly inaccurate rate. Always count for a full 60 seconds when rhythm is irregular.</div>
+</section>
+
+<!-- 12. RESPIRATORY RATE -->
+<section class="info-card" id="rr-assessment">
+<h2>Respiratory Rate Assessment</h2>
+<span class="equip-badge">EQUIPMENT: Eyes · Watch / Timer</span>
+<p>Respiratory rate is the vital sign most frequently measured inaccurately — and one of the most sensitive early indicators of clinical deterioration. An abnormal RR detected before SpO₂ drops can prevent a respiratory emergency.</p>
+<h3 style="margin-top:14px">Proper RR Assessment Technique</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Observe <em>secretly</em> when possible — patients who know their breathing is being watched will consciously alter their rate</li>
+<li>Continue holding the wrist after pulse assessment as a natural transition (patient thinks you are still counting the pulse)</li>
+<li>Count one full respiratory cycle (rise AND fall = 1 breath)</li>
+<li>Count for a full <strong>60 seconds</strong> in unstable patients or when rate is irregular; 30 seconds × 2 minimum</li>
+<li>Observe breathing effort simultaneously: depth, use of accessory muscles, nasal flaring, pursed-lip breathing</li>
+</ol>
+<div class="component-grid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Normal Adult</strong><br>12–20 breaths/min at rest. Varies with age (children higher).</div>
+<div class="example-box soft-coral"><strong>Tachypnea</strong><br>&gt;20 breaths/min. Early sign of hypoxemia, fever, sepsis, anxiety, acidosis, PE.</div>
+<div class="example-box soft-amber"><strong>Bradypnea</strong><br>&lt;12 breaths/min. Opioid overdose, CNS depression, severe fatigue. Can lead to CO₂ retention and respiratory failure.</div>
+<div class="example-box soft-blue"><strong>Apnea</strong><br>Absence of breathing for &gt;20 seconds. Requires immediate intervention — airway support and provider notification.</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>NBRC Trap:</strong> Counting RR for only 15 seconds in an unstable patient is a documented source of clinical error — especially with irregular breathing patterns. In a patient with Cheyne-Stokes respirations or irregular patterns, 15-second counts can be off by more than 50%. The NBRC expects 60-second counts for clinical accuracy in unstable patients.</div>
+</section>
+
+<!-- 13. ABNORMAL FINDINGS -->
+<section class="info-card" id="abnormal">
+<h2>Abnormal Assessment Findings — Quick Reference</h2>
+<p>This reference table integrates all assessment techniques to show which findings correlate with which conditions. Use this for board prep and clinical rotation reference.</p>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Condition</th><th>Inspection</th><th>Palpation</th><th>Percussion</th><th>Auscultation</th></tr>
+<tr><td><strong>Pneumonia (Consolidation)</strong></td><td>Fever, productive cough, tachypnea</td><td>Increased tactile fremitus</td><td>Dullness over affected lobe</td><td>Bronchial sounds over periphery; crackles; egophony</td></tr>
+<tr><td><strong>Pneumothorax</strong></td><td>Asymmetric chest rise, tracheal deviation (tension), distress</td><td>Decreased expansion; absent fremitus; crepitus if subcutaneous air</td><td>Hyperresonance</td><td>Absent or severely diminished breath sounds unilaterally</td></tr>
+<tr><td><strong>Pleural Effusion</strong></td><td>Dullness; may have tracheal deviation away</td><td>Decreased expansion; absent fremitus</td><td>Dullness to flatness</td><td>Absent or diminished; egophony at fluid border</td></tr>
+<tr><td><strong>COPD / Emphysema</strong></td><td>Barrel chest; pursed-lip breathing; use of accessory muscles; cyanosis</td><td>Decreased expansion bilaterally; decreased fremitus</td><td>Hyperresonance bilaterally</td><td>Decreased breath sounds; prolonged expiration; rhonchi; wheezes</td></tr>
+<tr><td><strong>Asthma (Acute)</strong></td><td>Accessory muscle use; tachypnea; tripod position; unable to speak</td><td>Normal or decreased expansion</td><td>Hyperresonance (air trapping)</td><td>Diffuse expiratory wheezes; silent chest = emergency</td></tr>
+<tr><td><strong>Pulmonary Edema (CHF)</strong></td><td>Diaphoresis; orthopnea; JVD; pink frothy sputum</td><td>Normal to decreased expansion</td><td>Dullness at bases</td><td>Bilateral basilar crackles (fine, late inspiratory)</td></tr>
+<tr><td><strong>Atelectasis</strong></td><td>Decreased chest wall movement unilaterally; tachypnea</td><td>Decreased expansion; fremitus decreased</td><td>Dullness; flatness over large area</td><td>Absent or diminished; crackles that may clear with deep breaths</td></tr>
+</table>
+</div>
+</section>
+
+<!-- 14. ESCALATION -->
+<section class="info-card rt" id="escalation">
+<h2>Escalation — When Assessment Findings Demand Action</h2>
+<p>Assessment is only valuable if you act on what you find. These findings require immediate escalation — document as you notify, not before.</p>
+<h3 style="margin-top:14px">Immediate Escalation Triggers</h3>
+<ul class="pearl-list red-list" style="margin-top:4px;--pulmo-teal:var(--alert-coral)">
+<li><strong>SpO₂ &lt;90%</strong> persistent despite repositioning probe — apply supplemental O₂ and notify provider immediately</li>
+<li><strong>Silent chest</strong> in an acute asthma exacerbation — emergent intervention, possible intubation</li>
+<li><strong>Stridor</strong> — upper airway obstruction; have airway equipment at bedside; notify immediately</li>
+<li><strong>Absent unilateral breath sounds</strong> + hyperresonance — pneumothorax until proven otherwise</li>
+<li><strong>Tracheal deviation</strong> — tension pneumothorax; emergent needle decompression may be needed</li>
+<li><strong>Crepitus (subcutaneous emphysema)</strong> — pneumothorax or barotrauma; escalate immediately</li>
+<li><strong>Central cyanosis</strong> — severe hypoxemia; airway and oxygenation support</li>
+<li><strong>Altered mental status + any respiratory abnormality</strong> — possible respiratory failure or CO₂ narcosis</li>
+<li><strong>Systolic BP &lt;90 mmHg</strong> + respiratory distress — possible cardiogenic shock or tension pneumothorax</li>
+<li><strong>RR &gt;30 breaths/min</strong> with distress — impending respiratory failure; prepare for escalation to NIV or intubation</li>
+</ul>
+<div class="example-box soft-teal" style="margin-top:12px"><strong>Escalation Rule:</strong> When in doubt, notify first — then continue assessing. A brief call to the nurse or physician with "I found X and I'm concerned about Y — please come evaluate" is never wrong. Waiting for certainty can cost minutes you do not have.</div>
+</section>
+
+<!-- 15. NBRC TRAPS -->
+<section class="info-card board" id="nbrc-traps">
+<h2>Common NBRC Assessment Traps</h2>
+<ul class="pearl-list trap-list" style="margin-top:14px">
+<li><strong>Accepting a normal SpO₂ as proof of adequate oxygenation in a smoke-inhalation patient.</strong> CO poisoning produces normal SpO₂ on standard pulse oximetry. Always obtain ABG with CO-oximetry when CO exposure is suspected.</li>
+<li><strong>Interpreting bilateral wheezing that suddenly disappears as improvement.</strong> A silent chest in acute asthma is a life-threatening emergency — not a sign of relief. The wheezing stopped because airflow is insufficient to generate sound.</li>
+<li><strong>Counting respiratory rate for 15 seconds in an unstable patient.</strong> In irregular breathing patterns (Cheyne-Stokes, Biot's) or tachypneic patients, 15-second counts introduce significant error. Count for 60 seconds.</li>
+<li><strong>Using a too-small BP cuff and treating the artificially elevated result.</strong> Cuff too small = falsely high BP. Always select cuff by arm circumference before recording or acting on the reading.</li>
+<li><strong>Assuming unilateral absent breath sounds means equipment failure.</strong> Absent sounds unilaterally, especially with hyperresonance, suggest pneumothorax or mainstem intubation. Investigate clinically — do not just reposition the stethoscope.</li>
+<li><strong>Placing the stethoscope over clothing during auscultation.</strong> Clothing produces artifact that can completely mask real sounds and create false sounds. Always auscultate on bare skin.</li>
+<li><strong>Using the thumb to assess a pulse.</strong> The thumb has its own pulsation from the princeps pollicis artery. Use index and middle fingers only for pulse assessment.</li>
+</ul>
+</section>
+
+<!-- 16. CASE STUDY -->
+<section class="case-card require-complete" id="scenario" data-activity-name="Assessment Case Study">
+<span class="eyebrow">Guided Unfolding Case</span>
+<h2>Worsening Dyspnea in a COPD Patient</h2>
+<p>This case progressively reveals information. Answer each stage correctly to unlock the next.</p>
+
+<div class="case-stage" data-case-stage="0">
+<h3>Stage 1: Arriving at the Bedside</h3>
+<p><strong>Situation:</strong> You are called to evaluate a 66-year-old male with a history of COPD who is on 2 L/min O₂ via nasal cannula. The bedside nurse reports he has been "not quite right" for the past hour. He is sitting upright in bed, leaning forward with his hands on his knees. His lips appear slightly blue. He is speaking in 3–4 word sentences.</p>
+<p><strong>Decision:</strong> Based on your initial visual inspection, what is your immediate assessment priority?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Reviewing the chart is a secondary action. This patient shows multiple visual signs of significant respiratory distress during inspection — tripod position, central cyanosis, inability to speak in full sentences. These findings demand immediate clinical action before chart review.">Review the patient's chart and recent labs before approaching the patient.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Your inspection has already revealed critical findings: tripod position indicates severe dyspnea, central cyanosis suggests significant hypoxemia, and fragmented speech indicates high work of breathing. Apply supplemental O₂ immediately, apply your pulse oximeter to get a baseline SpO₂, and begin your full IPPA assessment. This patient needs urgent evaluation.">Apply pulse oximetry immediately and increase supplemental O₂ while beginning IPPA assessment — inspection already shows critical signs.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A pulmonary function test (spirometry) is not an appropriate immediate intervention for a patient in acute distress. Assessment findings must be gathered first, and life-threatening abnormalities addressed before any non-urgent testing.">Perform a bedside spirometry test to assess the severity of the COPD exacerbation.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="1">
+<h3>Stage 2: Assessment Findings</h3>
+<p><strong>Findings:</strong> SpO₂ 84% with a strong, regular waveform. RR 32 breaths/min counted over 60 seconds. HR 118, BP 144/88. Temperature 38.3°C. Auscultation reveals decreased breath sounds bilaterally with diffuse expiratory wheezes. On the right, breath sounds are significantly more diminished than the left. Percussion of the right chest produces a dull note at the base.</p>
+<p><strong>Decision:</strong> The combination of right-sided diminished breath sounds and <em>dullness</em> to percussion suggests which of the following?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Pneumothorax produces hyperresonance (not dullness) on percussion, because the space is filled with air. This patient's dullness at the right base indicates fluid or solid tissue — not free air.">Pneumothorax on the right — hyperresonance and absent sounds are expected.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The combination of decreased breath sounds, dullness to percussion at the base, and a clinical picture of fever and productive cough strongly suggests right-sided pleural effusion or pneumonia (consolidation). Both produce dullness. Correlate with chest X-ray. The COPD exacerbation may be infection-triggered.">Pleural effusion or consolidation (pneumonia) at the right base — dullness indicates fluid or solid tissue, not air.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Normal lungs in a healthy person produce resonance, not dullness — and certainly would not explain diminished breath sounds in a patient in acute distress. These findings are clearly abnormal and require correlation with chest imaging.">Normal percussion finding for a patient with COPD — no further investigation needed.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="2">
+<h3>Stage 3: Escalation Decision</h3>
+<p><strong>Update:</strong> SpO₂ remains 88% after increasing to 4 L/min via nasal cannula. RR is 30. The patient is fatiguing — his sentences are now shorter and he is becoming slightly less responsive.</p>
+<p><strong>Decision:</strong> What is the most appropriate next action?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Increasing nasal cannula flow beyond 6 L/min provides limited benefit and does not address the underlying issue of worsening respiratory failure. This patient needs escalation of respiratory support, not just higher flows through the same device.">Continue increasing nasal cannula flow — try 6 L/min and recheck SpO₂ in 15 minutes.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. This patient is showing signs of impending respiratory failure: SpO₂ 88% despite supplemental O₂, RR 30, increasing fatigue, and declining responsiveness. The correct action is immediate provider notification and preparation for escalation — likely non-invasive ventilation (BiPAP) for the COPD exacerbation, or potentially intubation if mental status continues to decline. Do not wait.">Notify the physician/provider immediately — this patient requires escalation to non-invasive ventilation or higher-level respiratory support.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Administering a bronchodilator may be part of the treatment plan, but the patient's declining status demands immediate provider notification first. Treating a symptom while a patient deteriorates without notifying the team is not appropriate clinical practice.">Administer a nebulizer treatment to address the wheezing before notifying the provider.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="example-box soft-teal" style="margin-top:16px"><strong>Case Summary:</strong> This patient's IPPA assessment revealed a complete clinical picture: inspection showed distress and cyanosis; auscultation identified diminished sounds and wheezes; percussion identified right-sided dullness suggesting pleural effusion or pneumonia. His worsening SpO₂ and fatigue represented impending respiratory failure — caught by assessment, escalated appropriately.</div>
+</div>
+</section>
+
+<!-- 17. KNOWLEDGE CHECK -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Assessment Equipment Knowledge Check">
+<span class="eyebrow">Knowledge Check</span>
+<h2>NBRC-Style Practice Questions</h2>
+<p>Answer each question correctly to complete this section. Rationales are provided after each correct answer.</p>
+
+<div class="knowledge-question" data-question-id="ae1" style="margin-bottom:20px">
+<h3>Question 1</h3>
+<p>An RT performs percussion on a patient's left chest and notes a hyperresonant note. The same area had resonant sounds two hours earlier. This change is most consistent with:</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ae1" data-correct="false" data-feedback="Incorrect. Pneumonia (consolidation) produces dullness, not hyperresonance. Solid or fluid-filled tissue decreases percussion sounds — it does not increase them.">Development of a right-sided pneumonia.</button>
+<button class="quiz-option knowledge-option" data-question="ae1" data-correct="false" data-feedback="Incorrect. Pulmonary edema produces dullness to percussion at the bases, not hyperresonance. Fluid in the alveoli and pleural space increases density, reducing resonance.">Pulmonary edema developing at the left base.</button>
+<button class="quiz-option knowledge-option" data-question="ae1" data-correct="true" data-feedback="Correct. Hyperresonance indicates increased air in a space where normal tissue density is expected. In this clinical context — a new hyperresonant note on the left where resonance was present two hours earlier — pneumothorax is the primary concern until proven otherwise. This requires immediate escalation and chest X-ray or bedside ultrasound.">Possible left-sided pneumothorax — new hyperresonance suggests abnormal air accumulation.</button>
+<button class="quiz-option knowledge-option" data-question="ae1" data-correct="false" data-feedback="Incorrect. Pleural effusion produces dullness to flatness — not hyperresonance. Fluid increases tissue density and dampens percussion sounds.">Left pleural effusion.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ae2" style="margin-bottom:20px">
+<h3>Question 2</h3>
+<p>When assessing a patient's radial pulse, the RT notes the rhythm is irregular — some beats occur earlier than expected. The most appropriate action is to:</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ae2" data-correct="false" data-feedback="Incorrect. Multiplying a 15-second count by 4 is acceptable for a regular rhythm, but introduces significant error for an irregular rhythm. Each beat pattern may not repeat evenly across 15 seconds.">Count for 15 seconds and multiply by 4 for a quick rate estimate.</button>
+<button class="quiz-option knowledge-option" data-question="ae2" data-correct="false" data-feedback="Incorrect. Documenting a rate without noting the irregular rhythm misses critical clinical information. Rhythm documentation is as important as the rate, especially when irregularity could indicate a dysrhythmia like atrial fibrillation or PVCs.">Document the rate only — rhythm assessment is outside the RT's scope.</button>
+<button class="quiz-option knowledge-option" data-question="ae2" data-correct="true" data-feedback="Correct. An irregular pulse requires a full 60-second count for accurate rate determination. The rhythm abnormality should also be documented and reported. An irregular pulse may indicate atrial fibrillation, PVCs, or other dysrhythmias that warrant provider notification and cardiac monitoring review.">Count for a full 60 seconds, document the irregularity, and notify the provider or nurse.</button>
+<button class="quiz-option knowledge-option" data-question="ae2" data-correct="false" data-feedback="Incorrect. Dismissing an irregular pulse finding delays potentially important clinical information. An irregular rhythm detected during assessment should be documented and communicated to the care team.">Assume the irregularity is due to the patient's movement and repeat the pulse count once.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ae3" style="margin-bottom:20px">
+<h3>Question 3</h3>
+<p>During auscultation, an RT hears fine, late-inspiratory crackles bilaterally at the lung bases. The patient has a history of heart failure and is reporting orthopnea. These findings are most consistent with:</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ae3" data-correct="false" data-feedback="Incorrect. COPD with bronchospasm typically produces expiratory wheezes and rhonchi — not fine, late-inspiratory crackles. And COPD exacerbations do not produce the bilateral basilar pattern with orthopnea classic for CHF.">COPD exacerbation with bronchospasm.</button>
+<button class="quiz-option knowledge-option" data-question="ae3" data-correct="false" data-feedback="Incorrect. Pleural effusion typically produces absent or diminished breath sounds — not crackles. Large effusions may produce dullness to percussion and decreased fremitus, not adventitious crackles.">Bilateral pleural effusions causing absent breath sounds.</button>
+<button class="quiz-option knowledge-option" data-question="ae3" data-correct="true" data-feedback="Correct. Fine, late-inspiratory crackles that are bilateral and basilar, combined with orthopnea and a history of heart failure, are the classic presentation of acute pulmonary edema (CHF exacerbation). The crackles are produced by fluid-filled alveoli snapping open during late inspiration. Notify the provider; the patient may require diuresis, NIV (BiPAP), and oxygen therapy.">Acute pulmonary edema (CHF exacerbation) — bilateral basilar crackles with orthopnea are classic findings.</button>
+<button class="quiz-option knowledge-option" data-question="ae3" data-correct="false" data-feedback="Incorrect. Pneumothorax produces absent or diminished unilateral breath sounds with hyperresonance — not bilateral basilar crackles. The presentation described is bilateral and associated with CHF history, not a unilateral air-leak process.">Bilateral pneumothoraces with absent breath sounds.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ae4" style="margin-bottom:20px">
+<h3>Question 4</h3>
+<p>A patient is being monitored with continuous pulse oximetry showing SpO₂ 96%. The RT enters the room and observes the patient to be unresponsive and deeply cyanotic. The most appropriate immediate action is:</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ae4" data-correct="false" data-feedback="Incorrect. While repositioning the probe is appropriate when the reading seems artifactual, a cyanotic and unresponsive patient requires immediate clinical action — not a probe adjustment first. The clinical presentation overrides the monitor reading.">Reposition the pulse oximeter probe — the reading does not match the clinical picture.</button>
+<button class="quiz-option knowledge-option" data-question="ae4" data-correct="false" data-feedback="Incorrect. Documenting findings and calling a nurse are not the immediate priority when a patient is unresponsive and cyanotic. This patient requires immediate assessment and potentially emergent intervention.">Document the SpO₂ reading and alert the charge nurse at the nursing station.</button>
+<button class="quiz-option knowledge-option" data-question="ae4" data-correct="true" data-feedback="Correct. When the clinical presentation (unresponsive, cyanotic) directly contradicts the monitor reading (SpO₂ 96%), always trust your clinical assessment. This patient requires immediate hands-on assessment (responsiveness, breathing, pulse) and likely a code call. CO poisoning, methemoglobinemia, or monitor failure could explain the discrepancy. Machines can malfunction or be unreliable — the patient cannot lie to you.">Immediately assess the patient's responsiveness and call for emergency help — the clinical presentation overrides the monitor reading.</button>
+<button class="quiz-option knowledge-option" data-question="ae4" data-correct="false" data-feedback="Incorrect. Assuming the monitor is correct while ignoring obvious clinical signs of hypoxemia (cyanosis, unresponsiveness) is a critical patient safety error. SpO₂ monitors have known limitations and can fail.">Trust the SpO₂ reading — 96% is normal and the patient is likely sleeping.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="ae5" style="margin-bottom:20px">
+<h3>Question 5</h3>
+<p>An RT is assessing chest expansion by placing hands symmetrically on a patient's posterior chest. The left thumb moves significantly farther from midline than the right during inhalation. This finding suggests:</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="ae5" data-correct="false" data-feedback="Incorrect. Normal chest expansion is symmetric — equal movement on both sides. Unequal expansion is an abnormal finding indicating a problem on the side with reduced movement.">Normal bilateral chest expansion — minor differences between sides are expected.</button>
+<button class="quiz-option knowledge-option" data-question="ae5" data-correct="true" data-feedback="Correct. Unequal chest expansion — where one side moves less than the other — indicates reduced lung expansion on the side with less movement (right, in this case). Causes include pneumothorax, pleural effusion, consolidation, mainstem bronchus intubation, or phrenic nerve palsy on that side. This finding must be correlated with percussion, auscultation, and clinical context — and the provider must be notified.">Reduced right-sided expansion — the right lung is not inflating as fully as the left; escalation is warranted.</button>
+<button class="quiz-option knowledge-option" data-question="ae5" data-correct="false" data-feedback="Incorrect. A palpation technique error could cause findings to seem asymmetric, but if the hands are placed symmetrically and the finding is reproducible, the finding is real. Clinical correlation — not just repeat palpation — is the appropriate next step.">The RT's hands were positioned incorrectly — repeat palpation before drawing conclusions.</button>
+<button class="quiz-option knowledge-option" data-question="ae5" data-correct="false" data-feedback="Incorrect. Increased bilateral expansion (not unilateral) would more likely be associated with emphysema. Unequal expansion means one lung is expanding less — which is a unilateral abnormality.">Bilateral hyperinflation consistent with emphysema.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly.</div>
+</section>
+
+<!-- 18. FAQ -->
+<section id="faq">
+<span class="eyebrow">FAQ</span>
+<h2 style="font-family:var(--font-heading);font-size:clamp(1.9rem,3vw,3rem);letter-spacing:-.035em;margin:8px 0 16px">Common Questions</h2>
+<details class="accordion" open>
+<summary>Why does the stethoscope need to be placed directly on skin?</summary>
+<div class="accordion-body"><p>Clothing creates friction artifact — a rustling noise that can mask true breath sounds and create false sounds that mimic crackles. A stethoscope placed over a hospital gown produces unreliable, sometimes completely uninterpretable auscultation. Always lift or open the gown and auscultate on bare skin. If a patient cannot be repositioned, at minimum open the gown anteriorly and posteriorly at each assessment site.</p></div>
+</details>
+<details class="accordion">
+<summary>When should I trust the pulse oximeter and when should I not?</summary>
+<div class="accordion-body"><p>Trust the pulse ox when: the waveform is strong and regular, the clinical picture matches the reading, and there is no reason to suspect a dyshemoglobinemia. Do NOT trust the pulse ox when: the clinical picture contradicts the reading (patient looks cyanotic but reads 96%), carbon monoxide or methemoglobinemia is possible, the waveform is weak or irregular (poor perfusion), or the probe cannot be properly placed. When in doubt, obtain an ABG with co-oximetry — it is the gold standard.</p></div>
+</details>
+<details class="accordion">
+<summary>Does percussion actually change what I do clinically?</summary>
+<div class="accordion-body"><p>Yes — particularly for differentiating pneumothorax from consolidation/effusion at the bedside before imaging. In an emergent situation (patient deteriorating rapidly), percussion takes 30 seconds and can give you enough information to escalate. On the NBRC, percussion findings are heavily tested in clinical scenario questions precisely because they differentiate conditions that look similar on inspection and auscultation. Hyperresonance + absent sounds = pneumothorax (not effusion). Dullness + absent sounds = effusion or consolidation (not pneumothorax). That distinction matters.</p></div>
+</details>
+<details class="accordion">
+<summary>Why can't I use my thumb to check a pulse?</summary>
+<div class="accordion-body"><p>The thumb has its own arterial pulsation from the princeps pollicis artery — a branch of the radial artery. When you press your thumb against a patient's radial artery, you may feel your own thumb pulsation instead of the patient's pulse, producing a falsely present or misleadingly different rate. This is a real clinical error that has been documented in practice. Use the index and middle finger tips, which are more sensitive and do not have this interference.</p></div>
+</details>
+<details class="accordion">
+<summary>How do I count respiratory rate without the patient noticing?</summary>
+<div class="accordion-body"><p>The most effective technique is to continue holding the patient's wrist after you finish counting their pulse, as if you are still counting. The patient believes you are still counting their heart rate. With your eyes on their chest (without staring obviously), count respiratory cycles for 30–60 seconds. Alternatively, you can observe chest movement while reviewing the patient's chart. Patients who know their breathing is being watched consistently alter their rate — the clinical finding becomes the watched rate, not the resting rate.</p></div>
+</details>
+<details class="accordion">
+<summary>What is tactile fremitus and why does it matter?</summary>
+<div class="accordion-body"><p>Tactile (vocal) fremitus is the vibration felt on the chest wall when the patient speaks. When a patient says "99" or "blue moon," the vibration travels through the lung tissue and is transmitted through the chest wall. In normal lung tissue, you feel a gentle buzz. In consolidated lung (pneumonia), the vibration increases — solid tissue transmits sound better. In pleural effusion or pneumothorax, the vibration decreases or disappears — fluid and air block transmission. It provides the same information as egophony on auscultation, but is assessed by touch rather than sound.</p></div>
+</details>
+</section>
+
+<!-- 19. SUMMARY -->
+<section class="info-card" id="summary">
+<h2>Summary &amp; High-Yield Reminders</h2>
+<p>Assessment is the starting point of every RT intervention. The equipment you carry and the techniques you master determine whether you catch problems early or late. The following are the highest-yield points from this lesson:</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>IPPA — Always in Order</strong><br>Inspect → Palpate → Percuss → Auscultate. Never skip steps. The sequence protects the validity of your findings.</div>
+<div class="example-box soft-blue"><strong>Stethoscope on Bare Skin</strong><br>Forward earpieces. Diaphragm for lung sounds. Bilateral comparison at every level. Silent chest = emergency.</div>
+<div class="example-box soft-amber"><strong>Pulse Ox Has Limits</strong><br>CO poisoning produces falsely normal SpO₂. Clinical assessment always overrides the monitor. Weak waveform = unreliable reading.</div>
+<div class="example-box soft-coral"><strong>Cuff Size Is Not Optional</strong><br>Too small = falsely high. Too large = falsely low. Always size before recording. Incorrect BP readings drive incorrect treatment decisions.</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:14px"><strong>High-Yield NBRC Reminders:</strong> Silent chest = emergency · CO poisoning defeats pulse ox · Hyperresonance = air (pneumothorax) · Dullness = fluid or solid · Count RR for 60 seconds in unstable patients · Cyanosis + normal SpO₂ = obtain ABG · Use index/middle finger — never thumb for pulse · Unequal expansion = unilateral pathology</div>
+</section>
+
+<!-- 20. FLASHCARDS -->
+<section id="flashcards">
+<div class="glossary-card">
+<h3>Glossary &amp; Flashcard Mastery Deck</h3>
+<p>Click any card to flip it. Mark cards you know to move them to the completed pile.</p>
+<div class="flashcard-shell">
+<div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<div class="tabs" role="tablist" aria-label="Flashcard deck view"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+<div aria-label="Current flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0"><div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div></div>
+<div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+<div class="completed-list" id="completedList"></div>
+</div>
+</div>
+</section>
+
+</div><!-- end lesson-stack-top -->
+</div><!-- end content-layout -->
+</main>
+
+<footer class="footer">
+<div><strong>Pulmo<span>Core</span></strong><br>Core respiratory care learning for future RTs.</div>
+<div>Respiratory Equipment &amp; Procedures · Patient Assessment</div>
+</footer>
+</div><!-- end page-shell -->
+
+<script>
+/* ── COURSE MENU ── */
+document.addEventListener("DOMContentLoaded",function(){
+const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+if(button&&panel){
+panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+const list=document.getElementById("courseMenuList"),courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?"current":"")+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+button.onclick=function(event){event.preventDefault();event.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+document.addEventListener("click",event=>{if(!panel.contains(event.target)&&event.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}})
+}
+});
+
+/* ── GLOSSARY / FLASHCARDS ── */
+const glossaryTerms=[
+{term:"Inspection",definition:"The first step of IPPA physical assessment. Visual observation of the patient for distress, color, posture, breathing effort, chest symmetry, and other clinical signs — performed before touching the patient."},
+{term:"Palpation",definition:"The second step of IPPA. Using hands to physically assess the chest: chest expansion symmetry, tactile fremitus, crepitus, and tenderness. Unequal expansion is always abnormal."},
+{term:"Percussion",definition:"The third step of IPPA. Tapping the chest wall to assess underlying tissue density. Produces notes: resonance (normal), hyperresonance (air/pneumothorax), dullness (fluid/consolidation), and flatness (dense tissue/effusion)."},
+{term:"Auscultation",definition:"The fourth and final step of IPPA. Listening with a stethoscope to breath sounds, quality, and symmetry. Always performed on bare skin; bilateral comparison at each level."},
+{term:"Crackles (Rales)",definition:"Discontinuous, popping breath sounds. Fine crackles (late inspiratory) = alveolar disease (pulmonary edema, fibrosis). Coarse crackles = large airway secretions. Do not clear with coughing (fine) vs. may clear (coarse)."},
+{term:"Rhonchi",definition:"Coarse, low-pitched, continuous sounds from secretions in large airways. Often clear or change with coughing. Associated with COPD exacerbation and bronchitis."},
+{term:"Wheeze",definition:"Continuous, high-pitched musical sound, typically on expiration. Indicates airway narrowing — asthma, COPD, bronchospasm. Bilateral = diffuse airway disease. Unilateral = localized obstruction."},
+{term:"Stridor",definition:"A harsh, high-pitched, monophonic inspiratory sound audible without a stethoscope. Indicates upper airway obstruction. Always an emergent finding requiring immediate intervention."},
+{term:"Silent Chest",definition:"Complete absence of breath sounds in an acute asthma attack. Does NOT indicate improvement — it indicates near-complete airway obstruction with insufficient airflow to generate sound. Life-threatening emergency."},
+{term:"Pleural Friction Rub",definition:"A coarse, scratching, or grating sound on both inspiration and expiration. Caused by inflamed pleural surfaces rubbing together. Associated with pleuritis and pulmonary embolism."},
+{term:"Tactile Fremitus",definition:"Vibrations felt on the chest wall when a patient speaks. Increased = consolidation (pneumonia). Decreased or absent = pleural effusion, pneumothorax, or emphysema. Assessed with the ulnar edge or palm of the hand."},
+{term:"Hyperresonance",definition:"A loud, booming percussion note indicating excess air in the chest. Heard over pneumothorax or severely emphysematous/air-trapping lungs. Lower-pitched and longer duration than normal resonance."},
+{term:"SpO₂",definition:"Peripheral oxygen saturation measured by pulse oximetry. Normal ≥95%. Unreliable in CO poisoning, methemoglobinemia, poor perfusion, and motion artifact. Clinical assessment always takes priority over SpO₂ reading."},
+{term:"Pulsus Paradoxus",definition:"An exaggerated drop in systolic BP (>10 mmHg) during inspiration. Associated with severe asthma exacerbation, cardiac tamponade, and tension pneumothorax. Detected by BP cuff or arterial line monitoring."},
+{term:"Tachypnea",definition:"Respiratory rate greater than 20 breaths/min in adults. An early, sensitive indicator of hypoxemia, sepsis, fever, anxiety, acidosis, or pulmonary embolism. Requires evaluation of underlying cause."},
+{term:"Bradypnea",definition:"Respiratory rate less than 12 breaths/min in adults. Causes include opioid overdose, CNS depression, and severe respiratory muscle fatigue. Can lead to CO₂ retention and respiratory failure."},
+{term:"Sphygmomanometer",definition:"The device used to measure blood pressure. Consists of an inflatable cuff, a pressure gauge (mercury or aneroid), and in manual use, a stethoscope to auscultate Korotkoff sounds. Cuff size must match arm circumference."},
+{term:"Subcutaneous Emphysema (Crepitus)",definition:"Air trapped in the subcutaneous tissue, felt as a crackling or popping sensation under the skin. Indicates air-leak from the lungs — caused by pneumothorax, barotrauma, or tracheal injury. Always escalate immediately."},
+{term:"Egophony",definition:"A change in transmitted voice sounds heard on auscultation. When the patient says 'E' it sounds like 'A' through the stethoscope — heard over areas of lung consolidation (pneumonia). Indicates increased sound transmission through solid tissue."},
+{term:"Korotkoff Sounds",definition:"The sounds heard through the stethoscope during manual blood pressure measurement. The first sound heard as the cuff deflates = systolic pressure. The last sound heard (muffling or disappearance) = diastolic pressure."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:'<div class="empty-state">No cards completed yet.</div>'}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete!";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+/* ── SHUFFLE ANSWER OPTIONS ── */
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(child=>child.classList&&child.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(option=>container.appendChild(option))})}
+shuffleAnswerOptions();
+
+/* ── MARK ACTIVITY COMPLETE ── */
+function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+/* ── PROGRESSIVE SECTIONS ── */
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));
+const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
+function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+function updateAll(){sections.forEach(setContinueState)}
+function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+sections.forEach((section,index)=>{if(index>=sections.length-1)return;const next=sections[index+1];const nextTitle=getSectionTitle(next);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});
+navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+document.addEventListener("activityComplete",updateAll);
+const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";sections[0].appendChild(note);
+updateNav(0);updateAll()
+}
+initializeProgressiveSections();
+
+/* ── SORT ACTIVITIES ── */
+function initSort(sectionSelector,buttonId,statusId){
+const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");
+const button=document.getElementById(buttonId);
+const status=document.getElementById(statusId);
+if(!activity||!button)return;
+button.addEventListener("click",()=>{
+const rows=Array.from(activity.querySelectorAll(".sort-row"));
+let correct=0;
+rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});
+status.textContent=`${correct} / ${rows.length} correct`;
+if(correct===rows.length){status.textContent="Activity complete!";status.classList.add("complete");markActivityComplete(activity)}
+})
+}
+initSort("#assessment-sequence","checkAssessmentSort","assessmentSortStatus");
+initSort("#percussion","checkPercussionSort","percussionSortStatus");
+initSort("#stethoscope","checkLungSoundSort","lungSoundSortStatus");
+
+/* ── SINGLE-QUESTION QUIZ ACTIVITIES ── */
+function initQuizOptions(selector){
+const activity=document.querySelector(selector);
+if(!activity)return;
+activity.querySelectorAll(".quiz-option").forEach(button=>{
+button.addEventListener("click",()=>{
+if(activity.dataset.correctAnswered==="true")return;
+const feedback=activity.querySelector(".quiz-feedback");
+const isCorrect=button.dataset.correct==="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+activity.dataset.correctAnswered="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+markActivityComplete(activity)
+}else{
+button.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."
+}
+})
+})
+}
+["#stethoscopeQuiz","#pulseoxQuiz","#bpcuffQuiz"].forEach(initQuizOptions);
+
+/* ── CASE STUDY ── */
+function initCase(){
+const section=document.getElementById("scenario");
+if(!section)return;
+const stages=Array.from(section.querySelectorAll(".case-stage"));
+stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});
+section.querySelectorAll(".case-option").forEach(option=>option.addEventListener("click",()=>{
+const stage=option.closest(".case-stage");
+if(stage.dataset.correctAnswered==="true")return;
+const feedback=stage.querySelector(".case-feedback");
+const isCorrect=option.dataset.caseCorrect==="true";
+stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+stage.dataset.correctAnswered="true";
+stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=false
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--soft-coral)";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=true
+}
+}));
+section.querySelectorAll(".case-next button").forEach(button=>{
+button.disabled=true;
+button.addEventListener("click",()=>{
+const current=button.closest(".case-stage");
+const idx=stages.indexOf(current);
+const next=stages[idx+1];
+if(!next)return;
+next.classList.remove("lesson-hidden");
+if(idx+1===stages.length-1)markActivityComplete(section);
+button.closest(".case-next").remove();
+next.scrollIntoView({behavior:"smooth",block:"start"})
+})
+})
+}
+initCase();
+
+/* ── KNOWLEDGE CHECK ── */
+function initKnowledge(){
+const section=document.getElementById("knowledge-check");
+if(!section)return;
+const status=document.getElementById("knowledgeStatus");
+const answered=new Set();
+const total=section.querySelectorAll(".knowledge-question").length;
+section.querySelectorAll(".knowledge-option").forEach(option=>option.addEventListener("click",()=>{
+const question=option.closest(".knowledge-question");
+if(question.dataset.correctAnswered==="true")return;
+const feedback=question.querySelector(".quiz-feedback");
+const isCorrect=option.dataset.correct==="true";
+question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+question.dataset.correctAnswered="true";
+answered.add(option.dataset.question);
+question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>"
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again:</strong> Select the correct answer to complete this question."
+}
+status.textContent=`${answered.size} / ${total} questions answered correctly`;
+if(answered.size===total){status.textContent="Knowledge check complete!";status.classList.add("complete");markActivityComplete(section)}
+}))
+}
+initKnowledge();
+
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+window.LESSON_ID="re_patient_assessment_equipment";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | PFT, Spirometry, Peak Flow &amp; Respiratory Pressure Devices</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:440px}th,td{text-align:left;padding:9px 10px;vertical-align:top;border-bottom:1px solid var(--soft-border)}th{background:#F4FAFC;font-family:var(--font-heading);font-size:.92rem}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,240px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.equip-badge{display:inline-block;background:var(--core-navy);color:var(--white);font-family:var(--font-heading);font-size:.75rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.04em;margin-bottom:8px}
+.zone-bar{border-radius:10px;padding:10px 14px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center}.zone-green{background:#1a7f52;color:#fff}.zone-yellow{background:#b87d00;color:#fff}.zone-red{background:#c0392b;color:#fff}
+.pearl-list{list-style:none;padding:0;margin:14px 0;display:grid;gap:10px}.pearl-list li{padding:10px 14px;border-radius:12px;background:var(--airway-mint);border-left:4px solid var(--pulmo-teal);font-size:.97rem}.trap-list li{background:#FFF4DF;border-left-color:var(--clinical-amber)}
+.fvl-container{background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:16px;margin-top:14px;overflow-x:auto}.lung-vol-stack{display:flex;flex-direction:column;gap:3px;max-width:360px;margin:14px auto}.lvol-bar{border-radius:8px;padding:9px 14px;font-size:.88rem;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+.interp-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.interp-card{border-radius:14px;padding:18px;border:2px solid}.interp-card h4{font-family:var(--font-heading);margin-bottom:10px}
+.formula-box{background:var(--core-navy);color:var(--white);border-radius:14px;padding:16px 20px;font-family:var(--font-data);margin:14px 0;text-align:center}.formula-main{font-size:1.1rem;font-weight:700;margin-bottom:6px}.formula-label{font-size:.83rem;opacity:.78}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:1fr}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}.interp-cards{grid-template-columns:1fr}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}table{min-width:400px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<header class="top-nav" aria-label="PulmoCore site navigation">
+<div class="brand">
+<div class="brand-mark" aria-hidden="true">
+<svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg>
+</div>
+<div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory care learning for future RTs.</div></div>
+</div>
+<div class="top-nav-actions">
+<a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+<a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+<div class="course-menu-container course-menu-wrapper"><button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div></div>
+</div>
+</header>
+
+<main class="main-content">
+
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+<span class="eyebrow">Respiratory Equipment &amp; Procedures</span>
+<h1 style="font-family:var(--font-heading);font-size:clamp(2rem,4.5vw,3.8rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Pulmonary Function Testing, Spirometry, Peak Flow &amp; Respiratory Pressure Devices</h1>
+<p style="font-size:1.15rem;max-width:980px;color:#243b55">Pulmonary function testing is the respiratory therapist's diagnostic window into lung mechanics. This lesson covers every device, every maneuver, every coaching technique, and every interpretation principle — from bedside peak flow to body plethysmography — with full NBRC alignment throughout.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Course Track</strong><br>Respiratory Equipment &amp; Procedures</div>
+<div class="example-box soft-blue"><strong>Estimated Time</strong><br>65–85 minutes</div>
+<div class="example-box soft-amber"><strong>NBRC Focus</strong><br>Spirometry · Obstructive vs Restrictive · Calibration · Coaching · Peak Flow · MIP/MEP</div>
+</div>
+</section>
+
+<div class="content-layout">
+<aside aria-label="Lesson quick navigation" class="side-nav">
+<h3>Sections</h3>
+<a href="#objectives">Objectives</a>
+<a href="#overview-video">Video</a>
+<a href="#intro">Introduction</a>
+<a href="#accuracy">Accuracy &amp; Precision</a>
+<a href="#spirometers">Spirometer Types</a>
+<a href="#poc-spirometers">Point-of-Care Setup</a>
+<a href="#calibration">Calibration</a>
+<a href="#peak-flow">Peak Flow Meters</a>
+<a href="#pneumotach">Pneumotachographs</a>
+<a href="#maneuvers">Spirometry Maneuvers</a>
+<a href="#interpretation">FEV₁ &amp; Interpretation</a>
+<a href="#lung-volumes">Lung Volumes</a>
+<a href="#body-box">Body Plethysmography</a>
+<a href="#gas-dilution">Gas Dilution Techniques</a>
+<a href="#pressure-devices">Pressure Devices</a>
+<a href="#troubleshooting">Troubleshooting</a>
+<a href="#escalation">Escalation &amp; Pearls</a>
+<a href="#nbrc-traps">NBRC Traps</a>
+<a href="#scenario">Case Study</a>
+<a href="#knowledge-check">Knowledge Check</a>
+<a href="#faq">FAQ</a>
+<a href="#summary">Summary</a>
+<a href="#flashcards">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+
+<!-- 1. OBJECTIVES -->
+<section class="info-card" id="objectives">
+<h2>Learning Objectives</h2>
+<ol style="padding-left:20px;margin:14px 0;display:grid;gap:8px">
+<li>Explain the purpose of pulmonary function testing and identify what each type of PFT measures.</li>
+<li>Differentiate volume, flow, and pressure measurements and the equipment used for each.</li>
+<li>Identify common PFT equipment and accessories including spirometers, nose clips, mouthpieces, and filters.</li>
+<li>Perform and coach a proper FVC spirometry maneuver following competency-aligned steps.</li>
+<li>Calibrate a spirometer using the 3-L calibration syringe and interpret the result.</li>
+<li>Use a peak flow meter correctly and classify peak flow results using the zone system.</li>
+<li>Define FVC, FEV₁, PEF, RV, TLC, and MIP/MEP and state normal values for each.</li>
+<li>Differentiate obstructive and restrictive spirometry patterns using FEV₁/FVC ratio logic.</li>
+<li>Explain the purpose and procedure of body plethysmography and gas dilution techniques.</li>
+<li>Measure maximum inspiratory and expiratory pressures using an aneroid manometer.</li>
+<li>Troubleshoot inaccurate PFT results and distinguish equipment error from poor patient effort.</li>
+<li>Apply PFT knowledge to NBRC-style clinical scenarios involving asthma and COPD.</li>
+</ol>
+<div class="example-box soft-amber" style="margin-top:4px"><strong>NBRC Emphasis:</strong> The most frequently tested PFT skills are FEV₁/FVC interpretation, recognizing poor effort vs. true obstruction, calibration protocol, and knowing that RV cannot be measured by bedside spirometry.</div>
+</section>
+
+
+<!-- OVERVIEW VIDEO -->
+<section class="info-card" id="overview-video">
+<span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Pulmonary Function Testing</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/equipment/RE_PulmonaryFunctionTesting.mp4" type="video/mp4">
+<track default kind="captions" label="English captions" src="/equipment/RE_PulmonaryFunctionTesting.vtt" srclang="en">
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+<!-- 2. INTRODUCTION -->
+<section class="info-card" id="intro">
+<h2>Introduction to Pulmonary Function Testing</h2>
+<p>Pulmonary function tests provide objective measurements of how well the lungs work. Unlike assessment findings (which are subjective and observer-dependent), PFT data is quantifiable, reproducible, and comparable to predicted normal values based on age, height, sex, and ethnicity.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>What PFTs Are Used For</strong><br>Diagnose lung disease (asthma, COPD, fibrosis) · Monitor disease progression · Assess response to bronchodilator therapy · Evaluate surgical risk · Screen high-risk occupational exposures · Confirm disability claims</div>
+<div class="example-box soft-blue"><strong>What PFTs Measure</strong><br><em>Volume</em> — in liters (L) or milliliters (mL): how much air the lungs hold or move. <em>Flow</em> — in L/sec or L/min: how fast air moves. <em>Pressure</em> — in cmH₂O: the strength of respiratory muscles.</div>
+<div class="example-box soft-amber"><strong>The RT's Role</strong><br>RTs perform, coach, and quality-check PFT maneuvers. The validity of results depends as much on RT coaching skill as on the patient's effort. A perfectly functioning spirometer still produces invalid data from poor technique.</div>
+</div>
+</section>
+
+<!-- 3. ACCURACY VS PRECISION -->
+<section class="info-card" id="accuracy">
+<h2>Accuracy vs. Precision in PFT</h2>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Accuracy</strong><br>How close a measurement is to the true value. A spirometer that consistently reads 2.7 L when the actual volume is 3.0 L is <em>inaccurate</em> — even if it reads 2.7 L every time. Calibration corrects inaccuracy.</div>
+<div class="example-box soft-blue"><strong>Precision (Reproducibility)</strong><br>How consistently a measurement is repeated. A spirometer that reads 3.0, 2.9, and 3.1 on the same input is <em>precise</em>. PFT validity requires both accuracy (verified by calibration) and precision (verified by repeated acceptable maneuvers).</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>Clinical Relevance:</strong> Poor patient effort reduces <em>accuracy</em> — the result doesn't reflect true lung function. If two of three FVC maneuvers differ by more than 150 mL, the test lacks <em>reproducibility</em>. Both must be met for a valid PFT report. The RT's coaching and quality control determine whether data is usable or discardable.</div>
+</section>
+
+<!-- 4. SPIROMETER TYPES -->
+<section class="info-card" id="spirometers">
+<h2>Spirometer Types</h2>
+<span class="equip-badge">HIGH-YIELD EQUIPMENT OVERVIEW</span>
+<h3 style="margin-top:14px">Volume-Displacement Spirometers</h3>
+<p>These measure volume directly by tracking physical displacement — a bell rising, bellows expanding, or a piston moving. They were the gold standard before electronic flow sensors.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal"><strong>Water-Sealed Spirometer</strong><br>A lightweight bell floats on water. As the patient exhales, the bell rises. Volume is read from the bell's displacement. Accurate but bulky, requires level surface, not portable. Classic reference device.</div>
+<div class="example-box soft-blue"><strong>Wedge Bellows Spirometer</strong><br>A wedge-shaped bellows expands as air is exhaled into it. Volume is calculated from bellows displacement. More portable than water-sealed. Still gravity-dependent — must remain upright.</div>
+<div class="example-box soft-amber"><strong>Dry Rolling Seal Spirometer</strong><br>A piston moves inside a cylinder sealed by a rolling plastic membrane. Can measure both volumes and expiratory flow rates. Portable, reliable, minimal maintenance compared to wet-seal systems.</div>
+</div>
+<h3 style="margin-top:20px">Flow-Sensing Spirometers</h3>
+<p>These measure airflow electronically and integrate the signal over time to calculate volume. They are the most common type in modern clinical and office spirometry.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal"><strong>Pneumotachograph</strong><br>Measures pressure drop across a resistance element to calculate flow. Highly accurate. Used in most modern spirometers and ventilators. Covered in detail in a later section.</div>
+<div class="example-box soft-blue"><strong>Turbine (Vane) Flowmeter</strong><br>A rotating vane spins as air passes through. Rotation rate = flow rate. Low resistance, portable. Must be kept clean — debris impairs vane rotation. Can be damaged at very high flow rates (&gt;300 L/min).</div>
+<div class="example-box soft-amber"><strong>Ultrasonic Flowmeter</strong><br>Uses ultrasonic signals crossing the airstream at an angle. Flow rate alters signal travel time. No moving parts — highly durable and infection-resistant. Used in many modern portable spirometers.</div>
+</div>
+</section>
+
+<!-- 5. POINT-OF-CARE SPIROMETERS -->
+<section class="info-card" id="poc-spirometers">
+<h2>Point-of-Care Spirometry &amp; Accessories</h2>
+<span class="equip-badge">EQUIPMENT: Bedside Spirometer System</span>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Indications</strong><br>Asthma monitoring · COPD assessment · Preoperative screening · Office-based pulmonary evaluation · Bedside assessment in ICU or step-down. Not appropriate when patient cannot follow commands or produce effort.</div>
+<div class="example-box soft-coral"><strong>Contraindications</strong><br>Recent thoracic or abdominal surgery (forced maneuvers increase intrathoracic pressure) · Hemoptysis of unknown origin · Active pneumothorax · Unstable cardiovascular status · Severe respiratory distress.</div>
+<div class="example-box soft-blue"><strong>Complete Setup</strong><br>Handheld spirometer body · Disposable mouthpiece · Bacterial/viral filter · Connecting tubing · Nose clips · Patient data entry (age, sex, height, ethnicity for predicted values) · Calibration verification.</div>
+</div>
+
+<h3 style="margin-top:20px">Accessories — Equipment Profiles</h3>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal"><strong>Nose Clips</strong><br>Pinch nose closed to prevent air escaping during maneuvers. Applied before the patient seals the mouthpiece. Must be snug but not painful. If a patient has nasal anatomy that prevents seal, have them pinch their nose manually. Without nose clips, exhaled air leaks through the nose, artificially lowering measured FVC and FEV₁.</div>
+<div class="example-box soft-amber"><strong>Disposable Mouthpieces</strong><br>Provide a sealed pathway from patient to sensor. Patient must: seal lips completely around the mouthpiece · keep tongue out of the opening · not bite down or block the lumen. A partial seal or blocked mouthpiece is the most common cause of falsely low spirometry values on the NBRC.</div>
+<div class="example-box soft-blue"><strong>Bacterial/Viral Filters</strong><br>Placed between the mouthpiece and the spirometer to prevent cross-contamination of the sensor and patient-to-patient pathogen transmission. Essential after COVID-era aerosol precaution changes. Replace between patients. A clogged or wet filter increases resistance and falsely lowers measured flows.</div>
+</div>
+</section>
+
+<!-- 6. CALIBRATION — VERY HIGH-YIELD -->
+<section class="info-card" id="calibration">
+<h2>Calibration — The 3-Liter Syringe</h2>
+<span class="equip-badge">VERY HIGH-YIELD — CALIBRATE BEFORE EVERY SESSION</span>
+<p>Spirometer calibration uses a precision 3-liter syringe (sometimes called the "super syringe") to verify that the spirometer's volume measurement is accurate. This must be performed <strong>before patient testing</strong> every day and after any maintenance or transport.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Why 3 Liters?</strong><br>3 L is within the clinical range of expected lung volumes and is large enough to reveal sensor drift or leaks. ATS/ERS standards require calibration within ±3.5% of the syringe volume, meaning the spirometer must read between 2.895 L and 3.105 L.</div>
+<div class="example-box soft-blue"><strong>Why Multiple Flow Rates?</strong><br>Spirometers must be accurate across the full range of clinical flow rates — from a slow, controlled exhalation to a maximal forced effort. Calibration at slow, medium, and fast flows reveals whether the sensor is accurate throughout the patient's expected effort range.</div>
+<div class="example-box soft-amber"><strong>Calibration Failure — Next Steps</strong><br>If any flow rate fails (reading outside ±3.5%), the spirometer must not be used for patient testing. Repeat calibration after checking tubing connections and ensuring the syringe is not leaking. If failure persists, remove device from service and report to biomedical engineering.</div>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Calibration Sequence" style="margin-top:18px">
+<h3>Activity: Spirometer Calibration Procedure</h3>
+<p>Put each calibration step in the correct order. All must be correct to continue.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="1"><span>Power on the spirometer and allow adequate warm-up time; verify patient data is cleared</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="2"><span>Attach the 3-L calibration syringe firmly to the spirometer inlet (no patient mouthpiece)</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="3"><span>Inject the full 3-liter volume three times — at a slow, medium, and fast flow rate</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="4"><span>Verify all readings fall within ±3.5% of 3.00 L (acceptable range: 2.895–3.105 L)</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="5"><span>Document calibration results; if failed, remove device from service before any patient testing</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+</div>
+<button class="small-btn primary" id="checkCalibrationSort" type="button" style="margin-top:14px">Check Sequence</button>
+<div class="activity-status" id="calibrationSortStatus">Put all five steps in the correct order to continue.</div>
+</article>
+</section>
+
+<!-- 7. PEAK FLOW METERS -->
+<section class="info-card" id="peak-flow">
+<h2>Peak Flow Meters</h2>
+<span class="equip-badge">HIGH-YIELD — ASTHMA MANAGEMENT DEVICE</span>
+<p>Peak flow meters measure Peak Expiratory Flow (PEF) — the maximum speed of air expelled during a forced exhalation. They are simple, inexpensive, and extremely practical for asthma monitoring in both clinical and home settings.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Components</strong><br>Mouthpiece · Sliding indicator marker · Graduated scale (L/min) · Vane or orifice mechanism that resists airflow and measures peak flow. No batteries required — purely mechanical.</div>
+<div class="example-box soft-blue"><strong>Indications</strong><br>Home asthma monitoring · Emergency assessment of asthma severity · Tracking response to bronchodilator therapy · Identifying patterns of diurnal variation (morning dips common in asthma). Not a replacement for spirometry.</div>
+</div>
+<h3 style="margin-top:18px">Correct Peak Flow Technique</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Reset the sliding marker to zero before each attempt</li>
+<li>Patient stands upright if possible (or sits erect)</li>
+<li>Take the largest breath possible — maximal inhalation</li>
+<li>Seal lips tightly around the mouthpiece</li>
+<li>Blast air out as hard and fast as possible in a single short burst — PEF is a PEAK, not a sustained effort</li>
+<li>Record the value shown by the sliding marker</li>
+<li>Repeat 3 times; record the <strong>best</strong> (highest) of three acceptable attempts</li>
+</ol>
+
+<h3 style="margin-top:18px">The Asthma Zone System</h3>
+<p>Compare current PEF to the patient's personal best (established during a well period). The percentage determines the management zone.</p>
+<div class="formula-box">
+<div class="formula-label">PEAK FLOW PERCENTAGE</div>
+<div class="formula-main">% of Personal Best = (Current PEF ÷ Personal Best PEF) × 100</div>
+<div class="formula-label" style="margin-top:6px">Example: 300 L/min ÷ 450 L/min × 100 = 67% → Yellow Zone</div>
+</div>
+<div style="display:grid;gap:8px;margin-top:14px">
+<div class="zone-bar zone-green">🟢 Green Zone: 80–100% of personal best — Lungs are functioning well. Continue regular medications.</div>
+<div class="zone-bar zone-yellow">🟡 Yellow Zone: 50–79% — Caution. Asthma is not well controlled. Add rescue inhaler; contact provider.</div>
+<div class="zone-bar zone-red">🔴 Red Zone: &lt;50% — Emergency. Severe airway obstruction. Administer bronchodilator; seek emergency care immediately.</div>
+</div>
+
+<article class="quiz-card require-complete" id="peakflowQuiz" data-activity-name="Peak Flow Zone Check" style="margin-top:18px">
+<h3>Clinical Check: Peak Flow Zone</h3>
+<p>A patient with asthma has a documented personal best peak flow of 500 L/min. During an acute visit she reports severe shortness of breath. Her current peak flow reads <strong>215 L/min</strong>. What zone does this fall into, and what is the immediate action?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Let's calculate: 215 ÷ 500 × 100 = 43%. This is well below the yellow zone threshold (50%). This patient is in the red zone, indicating severe airway obstruction requiring immediate intervention.">Yellow zone (50–79%) — advise the patient to use her rescue inhaler at home and call her doctor.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. The green zone is 80–100% of personal best, which would require a reading ≥400 L/min. At 215 L/min (43% of personal best), this patient's airway obstruction is severe, not mild.">Green zone (80–100%) — her peak flow is acceptable for her height and age.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. 215 ÷ 500 × 100 = 43% — this is red zone (&lt;50%). Red zone indicates a medical emergency. The RT should immediately administer a bronchodilator (typically albuterol), reassess peak flow after treatment, and prepare for escalation including possible nebulizer treatments, supplemental oxygen, systemic corticosteroids, or emergency department transfer.">Red zone (&lt;50%) — immediate bronchodilator therapy and emergency evaluation; this represents severe airway obstruction.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. At 215 L/min with a personal best of 500 L/min, there is more than enough information to classify this patient's zone. The calculation: 215 ÷ 500 × 100 = 43% → red zone. Always calculate zone status for acute asthma presentations — the number drives the clinical response.">The zone cannot be determined without knowing the patient's FEV₁/FVC ratio.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 8. PNEUMOTACHOGRAPHS -->
+<section class="info-card" id="pneumotach">
+<h2>Pneumotachographs &amp; Flow Sensors</h2>
+<span class="equip-badge">EQUIPMENT: Pneumotachograph</span>
+<p>A pneumotachograph (pneumotach) measures airflow by detecting the pressure difference across a known resistance element. Flow is directly proportional to pressure drop. The flow signal is integrated electronically over time to calculate volume.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Fleisch Pneumotachograph</strong><br>A bundle of brass capillary tubes creates resistance. Heated to prevent condensation. Measures bidirectional flow (inspiration and expiration). High accuracy — used in research-grade spirometers and ventilators. Requires careful cleaning.</div>
+<div class="example-box soft-blue"><strong>Screen (Lilly) Pneumotachograph</strong><br>A fine wire mesh screen creates resistance. Less expensive, often disposable. Unidirectional flow (expiration only in some designs). Common in modern disposable spirometer heads — one screen per patient eliminates cross-contamination risk.</div>
+<div class="example-box soft-amber"><strong>Variable Orifice Pneumotachograph</strong><br>A flap or cone creates variable resistance proportional to flow. Bidirectional. Less accurate at very low and very high flows. Used in some portable spirometers and ventilators as a compromise between cost and performance.</div>
+<div class="example-box soft-coral"><strong>Ultrasonic/Vortex Flowmeter</strong><br>Ultrasonic signals cross the airstream at an angle. Flow alters signal transit time — calculated electronically. No moving parts, no heat required, no cleaning concerns. High durability. Used in premium portable spirometers.</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:12px"><strong>RT Clinical Note:</strong> In modern practice, the RT rarely needs to identify the internal sensor type — but understanding how each works helps troubleshoot. A wet or condensation-blocked Fleisch pneumotach will read inaccurately. A damaged screen in a screen pneumotach produces turbulence and flow measurement errors.</div>
+</section>
+
+<!-- 9. SPIROMETRY MANEUVERS -->
+<section class="info-card" id="maneuvers">
+<h2>Spirometry Maneuvers &amp; Patient Coaching</h2>
+<span class="equip-badge">VERY HIGH-YIELD — COACHING IS EVERYTHING</span>
+<p>Spirometry is entirely effort-dependent. A technically perfect setup with a calibrated spirometer and cooperative patient can still produce invalid results if the RT does not coach the maneuver correctly. Coaching technique is a testable RT competency.</p>
+
+<h3 style="margin-top:14px">The FVC Maneuver — Coaching Script</h3>
+<div class="example-box soft-teal" style="margin-top:10px">
+<strong>What to say — in order:</strong><br>
+"Take the biggest breath in you possibly can — fill your lungs completely…" (pause while patient inhales)<br>
+"Now BLAST it out! HARD! FAST! Keep going! Keep blowing! Don't stop! Blow, blow, BLOW!"<br>
+"Good — that's it! You can stop now."<br>
+After 3 acceptable maneuvers: "You did great — rest for a moment."
+</div>
+
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Common Error</th><th>Cause</th><th>What the RT Should Do</th></tr>
+<tr><td>Hesitation before blast (submaximal start)</td><td>Patient not ready; poor coaching</td><td>Repeat: "When I say go, blast immediately — don't wait!"</td></tr>
+<tr><td>Early termination (&lt;6 seconds)</td><td>Fatigue; misunderstanding</td><td>"Keep going even when it feels empty — blow until I say stop!"</td></tr>
+<tr><td>Coughing during maneuver</td><td>Airway irritation; high effort</td><td>Discard that attempt; allow rest; try again</td></tr>
+<tr><td>Air leak around mouthpiece</td><td>Poor lip seal; anatomic difficulty</td><td>Reposition mouthpiece; coach lip seal; try nose clip tighter</td></tr>
+<tr><td>Tongue blocking mouthpiece</td><td>Patient unfamiliar with device</td><td>Demonstrate visually; "keep your tongue down and out of the way"</td></tr>
+</table>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="FVC Maneuver Steps" style="margin-top:18px">
+<h3>Activity: FVC Maneuver Sequence</h3>
+<p>Put the steps of a correct FVC spirometry maneuver in the right order.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="1"><span>Instruct the patient to inhale as deeply and completely as possible — maximum inspiration before starting</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="2"><span>Have the patient seal lips tightly around the mouthpiece (nose clips already applied)</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="3"><span>Coach the patient to blast air out immediately — as hard and as fast as possible from the first instant</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="4"><span>Actively coach continued exhalation: "Keep going! Keep blowing! Don't stop!" until effort is complete</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="5"><span>Maintain the effort for at least 6 seconds (or until a volume plateau &lt;25 mL over 1 second) before ending</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+</div>
+<button class="small-btn primary" id="checkManeuverSort" type="button" style="margin-top:14px">Check Sequence</button>
+<div class="activity-status" id="maneuverSortStatus">Order all five FVC steps to continue.</div>
+</article>
+</section>
+
+<!-- 10. INTERPRETATION — VERY HIGH-YIELD -->
+<section class="info-card" id="interpretation">
+<h2>FEV₁, FVC &amp; Spirometry Interpretation</h2>
+<span class="equip-badge">VERY HIGH-YIELD — NBRC EXAM CORE</span>
+
+<h3 style="margin-top:14px">Key Spirometry Values</h3>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:10px">
+<table>
+<tr><th>Parameter</th><th>Definition</th><th>Typical Normal (Adult)</th></tr>
+<tr><td><strong>FVC</strong></td><td>Forced Vital Capacity — total air expelled during a maximal forced exhalation</td><td>3–5 L (varies by demographics)</td></tr>
+<tr><td><strong>FEV₁</strong></td><td>Forced Expiratory Volume in 1 second — volume exhaled in the first second of FVC</td><td>2.5–4.5 L</td></tr>
+<tr><td><strong>FEV₁/FVC Ratio</strong></td><td>The fraction of FVC exhaled in the first second — the obstruction indicator</td><td>&gt;0.70 (70%)</td></tr>
+<tr><td><strong>PEF</strong></td><td>Peak Expiratory Flow — the highest flow rate achieved during the FVC maneuver</td><td>350–700 L/min (varies)</td></tr>
+</table>
+</div>
+
+<h3 style="margin-top:20px">Obstructive vs. Restrictive Patterns</h3>
+<div class="interp-cards" style="margin-top:12px">
+<div class="interp-card" style="border-color:#93C5FD;background:#EFF6FF">
+<h4 style="color:var(--oxygen-blue)">Obstructive Pattern</h4>
+<p><strong>FEV₁/FVC &lt; 0.70</strong> — the ratio is reduced because air cannot exit fast enough.</p>
+<p style="margin-top:8px">The lungs may hold normal or increased volume, but airflow OUT is impaired (airway narrowing, collapse, mucus). FEV₁ is disproportionately reduced relative to FVC.</p>
+<p style="margin-top:8px"><em>Examples:</em> COPD, asthma, bronchiectasis, cystic fibrosis</p>
+<p style="margin-top:8px"><em>Flow-volume loop:</em> Concave (scooped) expiratory limb; reduced PEF</p>
+</div>
+<div class="interp-card" style="border-color:#F4B860;background:#FFF4DF">
+<h4 style="color:#7A4B00">Restrictive Pattern</h4>
+<p><strong>FEV₁/FVC ≥ 0.70 with reduced FVC and TLC</strong> — the ratio is normal or elevated because the lungs are simply small.</p>
+<p style="margin-top:8px">The lungs cannot fully inflate. Airflow per unit volume is normal or fast — the problem is the container, not the pipes. FVC and TLC are both reduced proportionally.</p>
+<p style="margin-top:8px"><em>Examples:</em> Pulmonary fibrosis, neuromuscular disease, obesity, kyphoscoliosis, pleural effusion</p>
+<p style="margin-top:8px"><em>Flow-volume loop:</em> Small but normally shaped loop; proportionally reduced volumes</p>
+</div>
+</div>
+
+<h3 style="margin-top:20px">Flow-Volume Loop Comparison</h3>
+<div class="fvl-container">
+<svg viewBox="0 0 580 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flow-volume loop comparison diagram">
+<rect width="580" height="260" fill="#F8FBFD" rx="14"/>
+<!-- Y axis -->
+<line x1="65" y1="15" x2="65" y2="220" stroke="#415A77" stroke-width="1.5" stroke-linecap="round"/>
+<!-- X axis -->
+<line x1="65" y1="220" x2="550" y2="220" stroke="#415A77" stroke-width="1.5" stroke-linecap="round"/>
+<!-- Axis labels -->
+<text x="307" y="248" text-anchor="middle" font-size="11" fill="#415A77" font-family="Montserrat,sans-serif">Volume Expired (L) →</text>
+<text x="22" y="118" text-anchor="middle" font-size="11" fill="#415A77" font-family="Montserrat,sans-serif" transform="rotate(-90 22 118)">Flow (L/s) ↑</text>
+<!-- Y axis ticks -->
+<text x="56" y="60" text-anchor="end" font-size="10" fill="#415A77" font-family="monospace">10</text>
+<text x="56" y="140" text-anchor="end" font-size="10" fill="#415A77" font-family="monospace">5</text>
+<text x="56" y="222" text-anchor="end" font-size="10" fill="#415A77" font-family="monospace">0</text>
+<!-- X axis ticks -->
+<text x="65" y="235" text-anchor="middle" font-size="10" fill="#415A77" font-family="monospace">0</text>
+<text x="180" y="235" text-anchor="middle" font-size="10" fill="#415A77" font-family="monospace">1</text>
+<text x="295" y="235" text-anchor="middle" font-size="10" fill="#415A77" font-family="monospace">2</text>
+<text x="410" y="235" text-anchor="middle" font-size="10" fill="#415A77" font-family="monospace">3</text>
+<text x="525" y="235" text-anchor="middle" font-size="10" fill="#415A77" font-family="monospace">4</text>
+<!-- Grid lines -->
+<line x1="65" y1="60" x2="550" y2="60" stroke="#D7E6EF" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="65" y1="140" x2="550" y2="140" stroke="#D7E6EF" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="180" y1="15" x2="180" y2="220" stroke="#D7E6EF" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="295" y1="15" x2="295" y2="220" stroke="#D7E6EF" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="410" y1="15" x2="410" y2="220" stroke="#D7E6EF" stroke-width="1" stroke-dasharray="4 4"/>
+<!-- NORMAL curve (teal) — starts at TLC (65,220), rises to PEF ~10 L/s, curves down to RV (540,220) -->
+<path d="M 65,220 C 68,220 100,42 130,40 C 210,52 380,162 540,220" fill="none" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+<!-- OBSTRUCTIVE curve (coral) — lower PEF, scooped/concave mid-section -->
+<path d="M 65,220 C 68,220 98,88 128,86 C 190,112 330,190 490,220" fill="none" stroke="#E85D5D" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 4"/>
+<!-- RESTRICTIVE curve (amber) — small but normal shape -->
+<path d="M 65,220 C 68,220 95,62 118,60 C 175,76 270,164 360,220" fill="none" stroke="#F4B860" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 4"/>
+<!-- Annotation: scooping arrow for obstructive -->
+<text x="265" y="148" font-size="10" fill="#E85D5D" font-family="Montserrat,sans-serif" font-weight="bold">← scooped</text>
+<!-- Legend -->
+<rect x="78" y="20" width="22" height="4" fill="#1CA7A8" rx="2"/>
+<text x="106" y="27" font-size="11" fill="#0B1F33" font-family="Montserrat,sans-serif" font-weight="bold">Normal</text>
+<line x1="190" y1="22" x2="212" y2="22" stroke="#E85D5D" stroke-width="3" stroke-dasharray="8 4"/>
+<text x="218" y="27" font-size="11" fill="#0B1F33" font-family="Montserrat,sans-serif" font-weight="bold">Obstructive</text>
+<line x1="325" y1="22" x2="347" y2="22" stroke="#F4B860" stroke-width="3" stroke-dasharray="4 4"/>
+<text x="353" y="27" font-size="11" fill="#0B1F33" font-family="Montserrat,sans-serif" font-weight="bold">Restrictive</text>
+</svg>
+<p style="font-size:.85rem;color:var(--slate);margin-top:8px;text-align:center">Expiratory flow-volume curves. Obstructive: lower peak, concave (scooped) mid-curve. Restrictive: smaller loop, normal shape.</p>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Obstructive vs Restrictive Sort" style="margin-top:18px">
+<h3>Activity: Obstructive or Restrictive?</h3>
+<p>For each pattern description, select whether it fits an <em>Obstructive</em> or <em>Restrictive</em> spirometry pattern.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="obstructive"><span>FEV₁/FVC ratio is 58% — proportionally more of the vital capacity remains un-exhaled after 1 second</span><select><option value="">Select pattern…</option><option value="obstructive">Obstructive Pattern</option><option value="restrictive">Restrictive Pattern</option></select></div>
+<div class="sort-row" data-answer="restrictive"><span>FEV₁/FVC ratio is 84%, but FVC is only 55% of predicted and TLC is reduced</span><select><option value="">Select pattern…</option><option value="obstructive">Obstructive Pattern</option><option value="restrictive">Restrictive Pattern</option></select></div>
+<div class="sort-row" data-answer="obstructive"><span>Concave (scooped) expiratory limb on the flow-volume loop; associated with COPD and asthma</span><select><option value="">Select pattern…</option><option value="obstructive">Obstructive Pattern</option><option value="restrictive">Restrictive Pattern</option></select></div>
+<div class="sort-row" data-answer="restrictive"><span>Small, normally shaped flow-volume loop; associated with pulmonary fibrosis and neuromuscular weakness</span><select><option value="">Select pattern…</option><option value="obstructive">Obstructive Pattern</option><option value="restrictive">Restrictive Pattern</option></select></div>
+<div class="sort-row" data-answer="obstructive"><span>Difficulty getting air OUT; air trapping; hyperinflation; bronchospasm</span><select><option value="">Select pattern…</option><option value="obstructive">Obstructive Pattern</option><option value="restrictive">Restrictive Pattern</option></select></div>
+<div class="sort-row" data-answer="restrictive"><span>Difficulty filling lungs completely; normal or supranormal emptying rate; stiff lung or chest wall</span><select><option value="">Select pattern…</option><option value="obstructive">Obstructive Pattern</option><option value="restrictive">Restrictive Pattern</option></select></div>
+</div>
+<button class="small-btn primary" id="checkInterpSort" type="button" style="margin-top:14px">Check Answers</button>
+<div class="activity-status" id="interpSortStatus">Classify all six patterns to continue.</div>
+</article>
+</section>
+
+<!-- 11. LUNG VOLUMES -->
+<section class="info-card" id="lung-volumes">
+<h2>Lung Volumes &amp; Capacities</h2>
+<p>Understanding lung volumes is foundational for interpreting PFT results and knowing what each test can — and cannot — measure.</p>
+<h3 style="margin-top:14px">Volume Compartments</h3>
+<div class="lung-vol-stack" style="margin:14px auto;max-width:480px">
+<div class="lvol-bar" style="background:#DDF7F2;border:1.5px solid #86D9C8"><span>📏 IRV — Inspiratory Reserve Volume</span><span style="font-family:var(--font-data);font-size:.9rem">~3,000 mL</span></div>
+<div class="lvol-bar" style="background:#E6F3FF;border:1.5px solid #93C5FD"><span>💨 VT — Tidal Volume (normal breath)</span><span style="font-family:var(--font-data);font-size:.9rem">~500 mL</span></div>
+<div class="lvol-bar" style="background:#FFF4DF;border:1.5px solid #F4B860"><span>📉 ERV — Expiratory Reserve Volume</span><span style="font-family:var(--font-data);font-size:.9rem">~1,200 mL</span></div>
+<div class="lvol-bar" style="background:#FDE9E9;border:1.5px dashed #E85D5D"><span>🔒 RV — Residual Volume <em>(cannot be measured by spirometry)</em></span><span style="font-family:var(--font-data);font-size:.9rem">~1,200 mL</span></div>
+</div>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Capacity</th><th>Components</th><th>Can Spirometry Measure?</th></tr>
+<tr><td><strong>VC</strong> (Vital Capacity)</td><td>IRV + VT + ERV</td><td>✅ Yes</td></tr>
+<tr><td><strong>FVC</strong></td><td>Forced VC — same volumes, maximal effort</td><td>✅ Yes</td></tr>
+<tr><td><strong>IC</strong> (Inspiratory Capacity)</td><td>IRV + VT</td><td>✅ Yes</td></tr>
+<tr><td><strong>FRC</strong> (Functional Residual Capacity)</td><td>ERV + RV</td><td>❌ No — requires gas dilution or body box</td></tr>
+<tr><td><strong>TLC</strong> (Total Lung Capacity)</td><td>All volumes combined</td><td>❌ No — requires body box or dilution</td></tr>
+<tr><td><strong>RV</strong> (Residual Volume)</td><td>Air remaining after maximal exhalation</td><td>❌ No — cannot be expelled; requires gas dilution or plethysmography</td></tr>
+</table>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>Critical NBRC Point:</strong> Residual Volume (RV) cannot be measured by any spirometry technique because it is air that cannot be exhaled — no matter how hard the patient tries, this air stays in the lungs. Measuring RV requires either body plethysmography or gas dilution (helium dilution or nitrogen washout).</div>
+</section>
+
+<!-- 12. BODY PLETHYSMOGRAPHY -->
+<section class="info-card" id="body-box">
+<h2>Body Plethysmography ("Body Box")</h2>
+<span class="equip-badge">HIGH-YIELD ADVANCED PFT EQUIPMENT</span>
+<p>Body plethysmography measures lung volumes that spirometry cannot — especially RV and TLC — and quantifies airway resistance. It is considered the gold standard for comprehensive lung volume measurement.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>What It Measures</strong><br>Residual Volume (RV) · Total Lung Capacity (TLC) · Functional Residual Capacity (FRC) · Airway resistance (Raw) · Trapped gas volume. Invaluable in severe COPD, emphysema, and suspected restriction.</div>
+<div class="example-box soft-blue"><strong>Key Components</strong><br>Sealed, airtight chamber · Pressure sensors (box pressure and mouth pressure) · Mouthpiece with shutter valve · Computer system for data calculation. Patient breathes inside the sealed chamber — pressure changes in the box reflect lung volume changes.</div>
+<div class="example-box soft-amber"><strong>Procedure Overview</strong><br>Patient enters chamber; technician seals door. Nose clips applied. Patient breathes through mouthpiece. Shutter closes; patient makes panting maneuvers against the closed shutter. Boyle's law relates the pressure changes to lung volumes.</div>
+</div>
+
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Problem</th><th>Cause</th><th>RT Action</th></tr>
+<tr><td>Claustrophobia / panic during test</td><td>Patient anxiety in sealed chamber</td><td>Reassure; keep chamber door visible; window if available; allow adjustment time; may need to abort</td></tr>
+<tr><td>Invalid panting technique</td><td>Patient moving jaw, swallowing, or using tongue instead of chest</td><td>Recoach: "Keep your cheeks still and puff from your chest — like fogging a mirror"</td></tr>
+<tr><td>Air leak around mouthpiece</td><td>Poor seal; patient pulling away</td><td>Reposition; use different mouthpiece size; recoach</td></tr>
+<tr><td>Inconsistent pressure tracings</td><td>Variable effort; irregular breathing pattern</td><td>Rest patient; repeat instructions; try again after equilibration</td></tr>
+</table>
+</div>
+
+<article class="quiz-card require-complete" id="bodyboxQuiz" data-activity-name="Body Box Indication Check" style="margin-top:18px">
+<h3>Clinical Check: When Is the Body Box Needed?</h3>
+<p>A 68-year-old patient with severe emphysema has bedside spirometry showing FEV₁/FVC of 42%, FEV₁ at 35% predicted, and FVC at 62% predicted. The physician wants to assess the degree of air trapping and total lung hyperinflation. Which test provides the necessary measurements?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Bedside spirometry has already been performed and provides FVC, FEV₁, and the FEV₁/FVC ratio. It cannot measure RV or TLC — the values needed to quantify the degree of hyperinflation and air trapping in this COPD patient.">Repeat bedside spirometry with a different brand of spirometer for more accurate results.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Peak flow testing measures PEF — the speed of exhalation — but provides no information about RV, TLC, or the absolute degree of air trapping. It is not the right test for quantifying lung hyperinflation.">Peak flow measurement — to compare with predicted values for severity classification.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. Body plethysmography measures RV, TLC, FRC, and airway resistance — volumes that spirometry cannot measure. In severe COPD with suspected air trapping, TLC and RV elevations confirm hyperinflation. RV/TLC ratio greater than 0.40 indicates significant air trapping. This is why the body box is the gold standard for comprehensive lung volume assessment in obstructive lung disease.">Body plethysmography — it measures TLC, RV, and trapped gas that spirometry cannot assess.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. MIP/MEP measures respiratory muscle strength (inspiratory and expiratory pressure generation) — not lung volumes. These measurements are valuable for neuromuscular disease and ventilator weaning but do not quantify air trapping or hyperinflation.">MIP and MEP measurements to assess respiratory muscle contribution to the obstruction.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 13. GAS DILUTION -->
+<section class="info-card" id="gas-dilution">
+<h2>Gas Dilution Techniques</h2>
+<p>Gas dilution tests measure FRC (and from it, RV and TLC) by analyzing changes in known gas concentrations as the patient breathes. They are less accurate than body plethysmography in severe obstruction with trapped air — trapped air may not equilibrate with the dilution gas.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal">
+<strong>Helium Dilution</strong><br>
+The patient breathes a known concentration of helium from a closed circuit. Helium equilibrates with the lung gas. The final helium concentration reveals lung volume. Requires a helium analyzer, CO₂ absorber, and breathing circuit.<br><br>
+<em>Limitation:</em> Helium cannot enter trapped air (bullae, severely obstructed airways) — so plethysmography is more accurate in severe COPD.
+</div>
+<div class="example-box soft-blue">
+<strong>Nitrogen Washout</strong><br>
+The patient breathes 100% oxygen, washing nitrogen out of the lungs. The total volume of nitrogen exhaled (collected) is used to calculate FRC. Requires 7–10 minutes of breathing 100% O₂.<br><br>
+<em>Limitation:</em> Also cannot measure trapped air — the nitrogen in poorly ventilated regions may not wash out completely. Less practical than helium dilution in most labs.
+</div>
+</div>
+<div class="example-box soft-amber" style="margin-top:12px"><strong>Comparison Summary:</strong> Body plethysmography (&gt; gas dilution in obstruction) because it measures ALL gas in the thorax — including trapped air that doesn't communicate with the airway. Gas dilution only measures communicating gas. In restriction, all three methods typically agree well.</div>
+</section>
+
+<!-- 14. PRESSURE DEVICES -->
+<section class="info-card" id="pressure-devices">
+<h2>Respiratory Pressure Measurements</h2>
+<span class="equip-badge">EQUIPMENT: Aneroid Manometer · Pressure Gauge</span>
+<p>Maximum inspiratory and expiratory pressures measure the strength of respiratory muscles. These measurements are essential for evaluating neuromuscular disease, guiding ventilator weaning decisions, and assessing respiratory muscle fatigue.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>MIP / NIF — Maximum Inspiratory Pressure</strong><br>(Also: Negative Inspiratory Force — NIF)<br>The most negative airway pressure generated during a maximal inspiratory effort against a closed airway.<br><br>Normal: <strong>-60 to -100 cmH₂O</strong><br>Values less negative than -20 to -25 cmH₂O suggest inability to sustain spontaneous ventilation or protect the airway.</div>
+<div class="example-box soft-amber"><strong>MEP — Maximum Expiratory Pressure</strong><br>The highest positive airway pressure generated during a maximal expiratory effort against a closed airway. Reflects expiratory muscle strength — needed for coughing effectively.<br><br>Normal: <strong>80–100+ cmH₂O</strong><br>Low MEP = weak cough = retained secretions = atelectasis risk.</div>
+</div>
+
+<h3 style="margin-top:18px">MIP/NIF Procedure</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Apply mouthpiece and nose clips; connect to aneroid pressure manometer</li>
+<li>Have patient exhale to residual volume (or functional residual capacity) — measured at end of normal exhalation</li>
+<li>Occlude the airway with the shutter valve</li>
+<li>Instruct patient to inhale as hard as possible and sustain the effort for at least 1 second</li>
+<li>Record the most negative pressure achieved — this is the MIP/NIF value</li>
+<li>Repeat for reproducibility; record the best (most negative) value</li>
+</ol>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>Clinical Significance:</strong> MIP/NIF is a key component of ventilator weaning assessment. A patient with MIP of -20 cmH₂O or less negative is unlikely to sustain spontaneous breathing. A target of at least -20 to -25 cmH₂O (more negative = stronger) is often required before extubation trials in neuromuscular patients.</div>
+</section>
+
+<!-- 15. TROUBLESHOOTING -->
+<section class="info-card" id="troubleshooting">
+<h2>Troubleshooting PFT Results</h2>
+<p>Before interpreting any PFT result as reflecting true lung pathology, the RT must rule out equipment error, technique error, and poor patient effort. A common NBRC trap is to attribute poor results to disease when the actual cause is a correctable testing problem.</p>
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
+<table>
+<tr><th>Problem Found</th><th>Most Likely Cause</th><th>RT Action</th></tr>
+<tr><td>FVC lower than expected</td><td>Poor effort; early termination; air leak through nose</td><td>Recoach; check nose clips; confirm lip seal; repeat maneuver</td></tr>
+<tr><td>FEV₁ and FVC both low; ratio normal</td><td>Restrictive pattern OR poor effort</td><td>If effort was poor: repeat. If effort was good: consider restriction; escalate to full PFT lab</td></tr>
+<tr><td>Only first 1–2 seconds recorded</td><td>Patient terminated early; device disconnected</td><td>Encourage 6-second effort; confirm tubing and mouthpiece are secure</td></tr>
+<tr><td>Large variation between 3 trials (&gt;150 mL)</td><td>Inconsistent effort; patient fatigue; leak</td><td>Allow rest; reassess technique; verify nose clip and lip seal before retry</td></tr>
+<tr><td>Calibration volume reads outside ±3.5%</td><td>Sensor drift; leak in tubing/syringe; temperature change</td><td>Recheck connections; repeat calibration; remove from service if fails again</td></tr>
+<tr><td>Suspiciously high PEF with low FVC</td><td>Patient only blew briefly then stopped</td><td>Recoach: "Keep blowing even when it feels empty — at least 6 seconds"</td></tr>
+<tr><td>Peak flow reading lower than expected</td><td>Incomplete inhalation before blast; partial lip seal</td><td>Recoach: "Fill your lungs completely BEFORE blowing"; recheck mouthpiece seal</td></tr>
+</table>
+</div>
+</section>
+
+<!-- 16. ESCALATION & PEARLS -->
+<section class="info-card rt" id="escalation">
+<h2>Escalation &amp; RT Clinical Pearls</h2>
+<h3 style="margin-top:14px">When to Escalate Beyond Bedside Spirometry</h3>
+<ul class="pearl-list" style="--pulmo-teal:var(--alert-coral);margin-top:4px;list-style:none;padding:0;display:grid;gap:10px">
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Unexplained dyspnea with normal or near-normal bedside spirometry → full PFT lab with gas dilution or body box</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Spirometry pattern unclear (possible mixed obstruction and restriction) → body plethysmography</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Suspected air trapping in severe COPD/emphysema → body box for RV/TLC measurement</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Neuromuscular weakness suspected → MIP/MEP + bedside spirometry; may escalate to serial NIF monitoring</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Asthma severity not responding to expected treatment → bronchodilator study with pre- and post-spirometry</li>
+</ul>
+
+<h3 style="margin-top:20px">RT Clinical Pearls</h3>
+<ul class="pearl-list" style="margin-top:4px">
+<li><strong>Spirometry is entirely effort-dependent</strong> — even perfect equipment produces invalid data from a patient who doesn't understand or won't perform the maneuver.</li>
+<li><strong>Calibrate before testing, not after</strong> — a calibration performed after patient testing does not validate the results; it only tells you what happened after the fact.</li>
+<li><strong>Residual Volume cannot be measured by spirometry</strong> — regardless of how long or hard the patient blows, some air always remains. Period.</li>
+<li><strong>Nose clips are not optional</strong> — air leaking through the nose during an FVC maneuver produces falsely low FVC and FEV₁ that can be mistaken for obstruction or restriction.</li>
+<li><strong>FEV₁/FVC ratio classifies the pattern — FVC magnitude confirms severity</strong> — the ratio tells you obstructive vs. restrictive; how far FVC or FEV₁ drops from predicted tells you mild/moderate/severe.</li>
+<li><strong>Peak flow is a screening tool, not a spirometry replacement</strong> — it cannot distinguish obstruction from restriction, and cannot replace FVC/FEV₁ for diagnosis or NBRC clinical scenarios.</li>
+</ul>
+</section>
+
+<!-- 17. NBRC TRAPS -->
+<section class="info-card board" id="nbrc-traps">
+<h2>Common NBRC Traps — PFT</h2>
+<ul class="pearl-list trap-list" style="margin-top:14px">
+<li><strong>Treating a low FVC with a normal FEV₁/FVC ratio as obstruction.</strong> A normal or elevated ratio with low FVC indicates restriction — not obstruction. Obstruction requires a low ratio (&lt;0.70).</li>
+<li><strong>Stating that RV can be measured by bedside spirometry.</strong> It cannot. RV is air that cannot be expelled — spirometry only measures what can be blown out. This is one of the most frequently tested PFT facts on the NBRC.</li>
+<li><strong>Interpreting poor effort as pathology.</strong> A patient who terminates the FVC maneuver at 2–3 seconds will produce artificially low FVC and may appear to have restriction. Always rule out technique error before concluding disease.</li>
+<li><strong>Calibrating after patient testing.</strong> Calibration must be performed before testing. Calibrating afterward cannot validate results already collected — it only confirms whether the device was working at the end of the session.</li>
+<li><strong>Confusing FVC and VC.</strong> VC is a slow, relaxed vital capacity maneuver. FVC is performed with forced, maximal effort. In obstruction, FVC can be lower than VC due to dynamic airway collapse during forced effort.</li>
+<li><strong>Assuming body plethysmography and helium dilution always agree.</strong> In severe obstruction with trapped air, plethysmography reports higher TLC than helium dilution — because trapped air communicates with the box pressure but not with the helium circuit.</li>
+<li><strong>Using PEF alone to classify obstruction severity.</strong> Peak flow is effort-dependent and cannot differentiate obstruction from restriction. Only FEV₁/FVC provides the pattern classification needed for clinical decision-making.</li>
+</ul>
+</section>
+
+<!-- 18. CASE STUDY -->
+<section class="case-card require-complete" id="scenario" data-activity-name="PFT Asthma Case Study">
+<span class="eyebrow">Guided Unfolding Case</span>
+<h2>Asthma Exacerbation — Peak Flow to Spirometry</h2>
+<p>This case tests your ability to apply PFT devices, interpret results, and recognize a significant bronchodilator response.</p>
+
+<div class="case-stage" data-case-stage="0">
+<h3>Stage 1: Emergency Department Presentation</h3>
+<p><strong>Situation:</strong> A 24-year-old female with known asthma presents to the ED with wheezing, chest tightness, and dyspnea. She is alert and able to cooperate. Her documented personal best peak flow is <strong>480 L/min</strong>. A peak flow measurement is obtained: <strong>192 L/min</strong>.</p>
+<p><strong>Decision:</strong> What zone is this result, and what is the immediate clinical response?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Calculate: 192 ÷ 480 × 100 = 40%. The yellow zone is 50–79%. At 40%, this patient is in the red zone — severe airway obstruction requiring immediate bronchodilator therapy and emergency evaluation, not conservative monitoring.">Yellow zone (50–79%) — give a rescue inhaler and monitor for 30 minutes before reassessment.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. 192 ÷ 480 × 100 = 40% — red zone (&lt;50% of personal best). This indicates severe airway obstruction. Immediate actions: administer albuterol bronchodilator (likely via nebulizer), apply supplemental oxygen, reassess peak flow after treatment, prepare for escalation (systemic corticosteroids, possible HFNC or magnesium sulfate if no response), and notify the physician immediately.">Red zone (40% of personal best) — immediate bronchodilator administration, supplemental oxygen, and physician notification.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. The peak flow zone calculation is straightforward: 192 ÷ 480 × 100 = 40%. Spirometry would provide more diagnostic detail, but peak flow IS sufficient to classify severity and initiate immediate treatment in an acute asthma presentation — and waiting for spirometry before treating is inappropriate when the patient is in clear distress.">Spirometry must be performed first — peak flow alone cannot determine treatment in an acute presentation.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="1">
+<h3>Stage 2: Post-Bronchodilator Spirometry</h3>
+<p><strong>Update:</strong> After an initial albuterol nebulizer treatment, the patient's breathing improves somewhat. The physician orders spirometry to assess current lung function. Results:</p>
+<p><em>Pre-bronchodilator:</em> FVC 2.4 L (pred 3.8 L = 63%), FEV₁ 1.2 L (pred 3.2 L = 38%), FEV₁/FVC = <strong>50%</strong></p>
+<p><strong>Decision:</strong> What spirometry pattern do these results represent?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A restrictive pattern would show a reduced FVC with a normal or elevated FEV₁/FVC ratio (≥70%). This patient's ratio is 50% — well below 70%, indicating obstruction (airway narrowing due to bronchospasm), not restriction.">Restrictive pattern — both FVC and FEV₁ are reduced below predicted values.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. FEV₁/FVC = 50%, which is well below the 70% threshold. This confirms an obstructive pattern — consistent with acute asthma causing bronchospasm and airway narrowing. The FVC is also reduced (air trapping during the acute episode), but the ratio is the classifier. This is classic acute asthma spirometry.">Obstructive pattern — FEV₁/FVC of 50% is below the 70% threshold, indicating airway obstruction.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Body plethysmography is not needed to classify this spirometry pattern. The FEV₁/FVC ratio is 50% — clearly below 70%, confirming an obstructive pattern. Body plethysmography would add information about RV and air trapping but is not required for basic obstruction vs. restriction classification.">Cannot be determined — body plethysmography is needed to classify this pattern accurately.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="2">
+<h3>Stage 3: Bronchodilator Response</h3>
+<p><strong>Update:</strong> After a second albuterol treatment, post-bronchodilator spirometry is performed. Results: FVC 3.0 L, FEV₁ <strong>1.7 L</strong>. A significant bronchodilator response is defined as ≥12% improvement in FEV₁ AND ≥200 mL absolute increase from baseline.</p>
+<p><em>Pre-bronchodilator FEV₁: 1.2 L → Post-bronchodilator FEV₁: 1.7 L</em></p>
+<p><strong>Decision:</strong> Does this patient demonstrate a significant bronchodilator response?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Let's calculate: Absolute change = 1.7 − 1.2 = 0.5 L (500 mL) — this IS ≥200 mL. Percentage change = (1.7 − 1.2) ÷ 1.2 × 100 = 41.7% — this IS ≥12%. Both criteria are met. The response is significant.">No — the absolute change (500 mL) exceeds safe limits for a single treatment session.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. Absolute FEV₁ change = 1.7 − 1.2 = 0.5 L (500 mL) ✅ ≥200 mL. Percentage change = 500 ÷ 1,200 × 100 = 41.7% ✅ ≥12%. Both criteria for significant bronchodilator response are met. This confirms that this patient's airway obstruction is at least partially reversible — consistent with asthma rather than fixed obstruction (as in COPD). This information guides long-term treatment planning.">Yes — both the absolute change (500 mL) and percentage change (41.7%) meet the criteria for significant bronchodilator response.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. FVC response is a secondary outcome — the standard definition of significant bronchodilator response uses FEV₁ (both ≥12% and ≥200 mL absolute). This patient's FEV₁ response (41.7%, 500 mL) clearly meets both criteria.">No — only FVC improvement counts for bronchodilator response; FEV₁ change is not used.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="example-box soft-teal" style="margin-top:16px"><strong>Case Summary:</strong> This case demonstrates the complete asthma assessment pathway: peak flow for rapid severity classification → spirometry for pattern identification → post-bronchodilator spirometry for reversibility. A significant bronchodilator response (≥12% and ≥200 mL FEV₁ improvement) confirms reversible obstruction — the hallmark of asthma versus fixed COPD.</div>
+</div>
+</section>
+
+<!-- 19. KNOWLEDGE CHECK -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="PFT Knowledge Check">
+<span class="eyebrow">Knowledge Check</span>
+<h2>NBRC-Style Practice Questions</h2>
+<p>Answer each question correctly to complete this section.</p>
+
+<div class="knowledge-question" data-question-id="pft1" style="margin-bottom:20px">
+<h3>Question 1</h3>
+<p>Which of the following lung volumes CANNOT be measured by any bedside spirometry technique?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="pft1" data-correct="false" data-feedback="Incorrect. FVC (Forced Vital Capacity) is the primary measurement of bedside spirometry — it is the total volume exhaled during a maximal forced exhalation. Spirometry is specifically designed to measure FVC.">FVC — requires a sealed body plethysmograph to measure accurately.</button>
+<button class="quiz-option knowledge-option" data-question="pft1" data-correct="false" data-feedback="Incorrect. FEV₁ is measured during the first second of the FVC maneuver — it is a core output of every spirometry test. No additional equipment is needed beyond the spirometer.">FEV₁ — cannot be reliably calculated from bedside spirometry.</button>
+<button class="quiz-option knowledge-option" data-question="pft1" data-correct="true" data-feedback="Correct. Residual Volume (RV) is the air that remains in the lungs after a maximal exhalation — it cannot be exhaled, and therefore cannot be measured by spirometry. RV measurement requires either body plethysmography (preferred in obstruction) or gas dilution techniques (helium dilution or nitrogen washout). This is one of the most reliably tested facts in PFT-related NBRC questions.">Residual Volume (RV) — air that cannot be exhaled; requires body plethysmography or gas dilution.</button>
+<button class="quiz-option knowledge-option" data-question="pft1" data-correct="false" data-feedback="Incorrect. PEF (Peak Expiratory Flow) is measured during the FVC maneuver — it is the highest flow rate recorded during the forced exhalation. It is also independently measured by a peak flow meter.">PEF — peak flow requires a specialized pneumotachograph and cannot be measured by bedside spirometers.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="pft2" style="margin-bottom:20px">
+<h3>Question 2</h3>
+<p>An RT uses a 3-L calibration syringe and the spirometer displays 2.68 L. What is the correct interpretation and next action?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="pft2" data-correct="false" data-feedback="Incorrect. The ATS/ERS acceptable range is ±3.5% of 3.00 L, which means 2.895–3.105 L. A reading of 2.68 L represents a 10.7% error — far outside this range. This spirometer should not be used for patient testing.">Acceptable — a reading within 500 mL of 3.0 L meets calibration standards.</button>
+<button class="quiz-option knowledge-option" data-question="pft2" data-correct="true" data-feedback="Correct. The ATS/ERS standard requires spirometer volume accuracy within ±3.5% (±0.105 L) of the syringe volume. Acceptable range: 2.895–3.105 L. At 2.68 L, the error is 0.32 L (10.7%) — well outside the acceptable range. This spirometer must not be used for patient testing. Repeat calibration after checking all connections; if it fails again, remove from service and report to biomedical engineering.">Unacceptable — 2.68 L is outside the ±3.5% range (2.895–3.105 L); the spirometer must not be used until recalibrated or serviced.</button>
+<button class="quiz-option knowledge-option" data-question="pft2" data-correct="false" data-feedback="Incorrect. Calibration standards are defined by ATS/ERS guidelines (±3.5%), not by the individual manufacturer's discretion. Furthermore, this reading (10.7% error) is outside the range that any calibrated spirometer should accept.">Acceptable if the manufacturer's specifications allow ±15% variation.</button>
+<button class="quiz-option knowledge-option" data-question="pft2" data-correct="false" data-feedback="Incorrect. Calibration should be performed before patient testing — not after. Calibrating after the session tells you the device's status at that point, but does not validate results already collected on patients.">Acceptable — calibration is a post-session check and a 10% variation is within normal daily drift.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="pft3" style="margin-bottom:20px">
+<h3>Question 3</h3>
+<p>A patient completes an FVC maneuver with the following results: FVC 2.2 L (58% predicted), FEV₁ 1.9 L (72% predicted), FEV₁/FVC 86%. What pattern do these results most likely represent?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="pft3" data-correct="false" data-feedback="Incorrect. Obstruction requires an FEV₁/FVC ratio below 0.70 (70%). This patient's ratio is 86% — well above 70%. The problem is that the FVC is reduced, not that the ratio is low. A low FVC with a normal or elevated ratio is the hallmark of restriction.">Obstructive pattern — FEV₁ and FVC are both below predicted values.</button>
+<button class="quiz-option knowledge-option" data-question="pft3" data-correct="true" data-feedback="Correct. FEV₁/FVC = 86% — above 70% (no obstruction). FVC = 58% predicted — significantly reduced (restriction pattern). When the ratio is normal or elevated but FVC is reduced, this indicates a restrictive pattern: the lungs are small (cannot fully inflate), but air exits at a normal rate per unit volume. Causes include pulmonary fibrosis, neuromuscular disease, chest wall deformity, or significant obesity.">Restrictive pattern — normal/elevated FEV₁/FVC ratio with reduced FVC indicates the lungs cannot fully expand.</button>
+<button class="quiz-option knowledge-option" data-question="pft3" data-correct="false" data-feedback="Incorrect. Normal spirometry requires FVC and FEV₁ within approximately 80% of predicted, and a ratio above 70%. This patient's FVC is only 58% of predicted — a significant reduction. These are not normal results.">Normal spirometry — both parameters are within acceptable clinical variation.</button>
+<button class="quiz-option knowledge-option" data-question="pft3" data-correct="false" data-feedback="Incorrect. A mixed pattern typically shows both a reduced FEV₁/FVC ratio (obstruction) AND reduced volumes (restriction). This patient's ratio is 86% — indicating no obstruction component. The reduced FVC with normal ratio is classic restriction.">Mixed obstructive-restrictive pattern — both the ratio and FVC are abnormal.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="pft4" style="margin-bottom:20px">
+<h3>Question 4</h3>
+<p>During bedside spirometry, the RT notices that the patient's three FVC trials differ by 380 mL. What does this indicate, and what is the correct action?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="pft4" data-correct="false" data-feedback="Incorrect. Variation of 380 mL between trials is not clinically acceptable as a normal finding. ATS/ERS standards require that the two largest FVC values agree within 150 mL (0.150 L) for the test to be considered reproducible and valid.">This is acceptable — variation up to 500 mL between trials is within normal clinical range.</button>
+<button class="quiz-option knowledge-option" data-question="pft4" data-correct="false" data-feedback="Incorrect. A variation of 380 mL between trials indicates the test is not reproducible enough to be valid — but this does not mean the patient has obstruction. Obstruction is determined by the FEV₁/FVC ratio, not by trial variability. The immediate issue is test validity, not pattern classification.">This confirms the patient has severe obstruction — report results immediately.</button>
+<button class="quiz-option knowledge-option" data-question="pft4" data-correct="true" data-feedback="Correct. ATS/ERS reproducibility criterion: the two largest FVC values must agree within 150 mL. A 380 mL difference exceeds this threshold, making the test invalid (non-reproducible). The RT should allow the patient to rest, reassess technique (lip seal, nose clips, coaching), and repeat the maneuver series. Do not report a non-reproducible test as a valid result.">Poor reproducibility — the ATS/ERS criterion requires ≤150 mL variation between trials. Allow the patient to rest and repeat after assessing technique.</button>
+<button class="quiz-option knowledge-option" data-question="pft4" data-correct="false" data-feedback="Incorrect. Trial-to-trial variability does not indicate equipment failure — it indicates inconsistent patient effort or technique errors. Recalibrating the spirometer does not address the source of variability.">Equipment failure — recalibrate the spirometer immediately and repeat all trials.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="pft5" style="margin-bottom:20px">
+<h3>Question 5</h3>
+<p>An ICU patient with Guillain-Barré syndrome has a bedside MIP/NIF of -18 cmH₂O. Normal MIP is -60 to -100 cmH₂O. What does this finding indicate, and what is the clinical implication?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="pft5" data-correct="false" data-feedback="Incorrect. -18 cmH₂O is significantly less negative than the normal range of -60 to -100 cmH₂O. In neuromuscular disease monitoring, MIP values of -20 cmH₂O or less negative (weaker) are a trigger for intubation or at minimum intensive monitoring — not reassurance.">Normal inspiratory muscle strength — -18 cmH₂O is within the acceptable range for ICU patients.</button>
+<button class="quiz-option knowledge-option" data-question="pft5" data-correct="true" data-feedback="Correct. MIP of -18 cmH₂O is significantly weaker than normal (-60 to -100 cmH₂O). In Guillain-Barré syndrome (progressive neuromuscular paralysis), serial MIP measurement guides the decision to intubate. Most protocols consider MIP ≥-20 to -25 cmH₂O (less negative = weaker) as a threshold for elective intubation before respiratory failure. This patient is at this threshold — the physician should be notified immediately and intubation should be anticipated.">Severely reduced inspiratory muscle strength — MIP of -18 cmH₂O indicates the patient may be unable to sustain breathing; escalate to the physician for possible intubation.</button>
+<button class="quiz-option knowledge-option" data-question="pft5" data-correct="false" data-feedback="Incorrect. MIP/NIF measures inspiratory muscle strength, not airway obstruction. A reduced MIP in Guillain-Barré syndrome reflects progressive motor neuron paralysis weakening the diaphragm and accessory muscles — not bronchospasm or airway narrowing.">Moderate airway obstruction — administer bronchodilator therapy and reassess in 20 minutes.</button>
+<button class="quiz-option knowledge-option" data-question="pft5" data-correct="false" data-feedback="Incorrect. MIP is a direct measurement of respiratory muscle strength and is a standard, validated monitoring tool in neuromuscular respiratory failure. Guillain-Barré syndrome is one of its primary indications. The measurement of -18 cmH₂O is technically valid and clinically important — it drives escalation decisions.">The measurement is invalid — MIP cannot be accurately measured in patients with neuromuscular disease.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly.</div>
+</section>
+
+<!-- 20. FAQ -->
+<section id="faq">
+<span class="eyebrow">FAQ</span>
+<h2 style="font-family:var(--font-heading);font-size:clamp(1.9rem,3vw,3rem);letter-spacing:-.035em;margin:8px 0 16px">Common Questions</h2>
+<details class="accordion" open>
+<summary>Why are nose clips required for spirometry?</summary>
+<div class="accordion-body"><p>During a forced spirometry maneuver, the patient generates significant positive airway pressure. Without nose clips, air follows the path of least resistance — and the nose is an easy escape route. This produces an air leak that reduces the measured FVC and FEV₁. The patient may appear to have restriction or obstruction when the only problem is a missing nose clip. This is so commonly tested on the NBRC that the reflex response to "low spirometry values" should always include: "were nose clips in place?"</p></div>
+</details>
+<details class="accordion">
+<summary>Why must calibration happen before patient testing?</summary>
+<div class="accordion-body"><p>Calibration before testing verifies that the instrument is accurate for that session. Environmental factors — temperature, humidity, altitude, and barometric pressure changes — can alter spirometer performance day to day. A calibration performed after the session tells you whether the device was drifting at the end — but cannot retroactively validate results already recorded. ATS/ERS guidelines require daily calibration (at minimum) before any patient spirometry. Some labs with heavy volume calibrate at the beginning of each clinic session or after environmental changes.</p></div>
+</details>
+<details class="accordion">
+<summary>Why can't bedside spirometry measure Residual Volume?</summary>
+<div class="accordion-body"><p>Spirometry measures what moves — specifically, the air that can be inhaled and exhaled. Residual Volume (RV) is the air that permanently remains in the lungs after a maximal exhalation. No matter how hard or how long a patient blows, this air cannot exit. Since spirometry is a flow and volume measurement device (not a pressure measurement device), it has no way to sense or calculate gas that isn't moving through the sensor. RV measurement requires a physical principle that can account for static gas — either Boyle's Law (body plethysmography) or a tracer gas that diffuses throughout the lung (helium dilution or nitrogen washout).</p></div>
+</details>
+<details class="accordion">
+<summary>What is the body plethysmograph actually measuring?</summary>
+<div class="accordion-body"><p>The body box uses Boyle's Law (P₁V₁ = P₂V₂) — the inverse relationship between pressure and volume of a fixed amount of gas at constant temperature. When the patient makes breathing efforts against a closed shutter inside the sealed chamber, their lung volume changes slightly with each effort. This causes a reciprocal change in the pressure inside the sealed chamber (as the patient's thorax compresses the chamber air). By measuring both mouth pressure (lung) and box pressure, the system can calculate the volume of gas in the lungs at the moment of measurement — even gas that is trapped and doesn't communicate with the airway.</p></div>
+</details>
+<details class="accordion">
+<summary>What makes spirometry effort-dependent?</summary>
+<div class="accordion-body"><p>Spirometry measures voluntary maneuvers — the patient must choose to inhale as deeply as possible and exhale as hard and fast as possible. Unlike pulse oximetry or a chest X-ray, the device cannot force the result. A patient who inhales only 70% of their capacity before blowing will show a falsely low FVC. A patient who stops exhaling at 3 seconds will have an artificially shortened curve. A patient who hesitates at the start of the blast will lose PEF. The RT's coaching during each maneuver is the single most important factor determining whether results reflect true lung function.</p></div>
+</details>
+<details class="accordion">
+<summary>How is a significant bronchodilator response defined?</summary>
+<div class="accordion-body"><p>Per ATS/ERS guidelines, a significant bronchodilator response requires both: (1) an absolute increase in FEV₁ of ≥200 mL (0.2 L), AND (2) a percentage increase of ≥12% relative to the pre-bronchodilator baseline. Both criteria must be met simultaneously. A large absolute increase in a patient with severe obstruction may not meet the percentage threshold; a small absolute increase with a high percentage change may not meet the absolute threshold. A significant response supports reversible airway obstruction — the hallmark of asthma versus fixed COPD.</p></div>
+</details>
+</section>
+
+<!-- 21. SUMMARY -->
+<section class="info-card" id="summary">
+<h2>Summary &amp; Board-Prep Reminders</h2>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Spirometry Essentials</strong><br>FVC = total forced exhalation. FEV₁ = first second. FEV₁/FVC &lt;70% = obstruction. Normal/high ratio + low FVC = restriction. Calibrate before testing. Nose clips every time.</div>
+<div class="example-box soft-blue"><strong>What Spirometry Can't Do</strong><br>Cannot measure RV, TLC, or FRC. These require body plethysmography or gas dilution. If pattern is unclear or trapped air is suspected → escalate to full PFT lab.</div>
+<div class="example-box soft-amber"><strong>Peak Flow Zones</strong><br>Green = 80–100% (normal) · Yellow = 50–79% (caution) · Red = &lt;50% (emergency). Always compare to personal best. PEF is a screening tool — spirometry provides the diagnosis.</div>
+<div class="example-box soft-coral"><strong>Pressure Measurements</strong><br>MIP/NIF normal: -60 to -100 cmH₂O. MEP normal: 80–100+ cmH₂O. MIP ≥-20 cmH₂O in neuromuscular disease = probable need for ventilatory support. Serial monitoring guides weaning.</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:14px"><strong>NBRC Must-Know List:</strong> RV cannot be measured by spirometry · Calibrate BEFORE testing · FEV₁/FVC &lt;70% = obstruction · Normal ratio + low FVC = restriction · Poor effort ≠ disease · Nose clips prevent air leak · Peak flow zone &lt;50% = red zone emergency · Significant bronchodilator response: ≥12% AND ≥200 mL FEV₁ improvement</div>
+</section>
+
+<!-- 22. FLASHCARDS -->
+<section id="flashcards">
+<div class="glossary-card">
+<h3>Glossary &amp; Flashcard Mastery Deck</h3>
+<p>Click any card to flip it. Includes all normal values and interpretation rules for rapid NBRC review.</p>
+<div class="flashcard-shell">
+<div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<div class="tabs" role="tablist"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+<div aria-label="Flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0"><div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div></div>
+<div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+<div class="completed-list" id="completedList"></div>
+</div>
+</div>
+</section>
+
+</div>
+</div>
+</main>
+<footer class="footer">
+<div><strong>Pulmo<span>Core</span></strong><br>Core respiratory care learning for future RTs.</div>
+<div>Respiratory Equipment &amp; Procedures · Pulmonary Function Testing</div>
+</footer>
+</div>
+
+<script>
+/* ── COURSE MENU ── */
+document.addEventListener("DOMContentLoaded",function(){
+const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+if(button&&panel){
+panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+const list=document.getElementById("courseMenuList"),courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?"current":"")+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+button.onclick=function(event){event.preventDefault();event.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+document.addEventListener("click",event=>{if(!panel.contains(event.target)&&event.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}})
+}
+});
+
+/* ── GLOSSARY ── */
+const glossaryTerms=[
+{term:"Spirometry",definition:"The measurement of air volume and flow during breathing maneuvers. Measures FVC, FEV₁, PEF, and flow-volume loops. Effort-dependent — RT coaching directly determines result validity."},
+{term:"FVC",definition:"Forced Vital Capacity — the total volume of air expelled during a maximal forced exhalation from full inspiration. Normal: 3–5 L. Reduced in both obstruction (air trapping) and restriction (small lungs)."},
+{term:"FEV₁",definition:"Forced Expiratory Volume in 1 Second — the volume exhaled in the first second of the FVC maneuver. Normal: 2.5–4.5 L. Disproportionately reduced in obstruction; reduced proportionally in restriction."},
+{term:"FEV₁/FVC Ratio",definition:"The fraction of FVC exhaled in the first second. Normal: ≥0.70 (70%). Below 70% = obstructive pattern. Normal or elevated with low FVC = restrictive pattern. The primary interpretation tool in spirometry."},
+{term:"PEF",definition:"Peak Expiratory Flow — the highest flow rate achieved during the FVC maneuver, or measured independently by a peak flow meter. Used in asthma zone classification. Effort-dependent; not a substitute for spirometry diagnosis."},
+{term:"Obstructive Pattern",definition:"FEV₁/FVC < 70%. Air trapping and airway narrowing impair exhalation. Associated with COPD, asthma, bronchiectasis. Flow-volume loop shows concave (scooped) expiratory limb."},
+{term:"Restrictive Pattern",definition:"FEV₁/FVC ≥70% with reduced FVC and TLC. Lungs cannot fully inflate. Associated with fibrosis, neuromuscular disease, obesity, kyphoscoliosis. Flow-volume loop is smaller but normally shaped."},
+{term:"Residual Volume (RV)",definition:"The air remaining in the lungs after a maximal exhalation. CANNOT be measured by spirometry. Requires body plethysmography or gas dilution (helium dilution or nitrogen washout). Elevated in air trapping/emphysema."},
+{term:"Total Lung Capacity (TLC)",definition:"The volume of air in the lungs at maximal inspiration. TLC = FVC + RV. Cannot be measured by bedside spirometry. Body plethysmography is the gold standard. Elevated in obstruction with hyperinflation; reduced in restriction."},
+{term:"Peak Flow Meter",definition:"A simple mechanical device measuring Peak Expiratory Flow (L/min). Used for asthma home monitoring and zone classification. Green ≥80%, Yellow 50–79%, Red <50% of personal best. Reset marker before each use; record best of 3."},
+{term:"Asthma Zone System",definition:"A three-zone system comparing current PEF to personal best. Green (80–100%): well controlled. Yellow (50–79%): caution, increase monitoring/medication. Red (<50%): emergency, seek immediate care."},
+{term:"Body Plethysmography",definition:"An advanced PFT technique using a sealed chamber to measure RV, TLC, FRC, and airway resistance via Boyle's Law. Gold standard for lung volume measurement. More accurate than gas dilution in obstruction with trapped air."},
+{term:"3-L Calibration Syringe",definition:"A precision syringe injecting exactly 3 liters into the spirometer to verify volume accuracy. Must be performed before patient testing. Acceptable range: ±3.5% (2.895–3.105 L). Spirometer must be removed from service if calibration fails."},
+{term:"MIP / NIF",definition:"Maximum Inspiratory Pressure / Negative Inspiratory Force. The most negative airway pressure generated during maximal inspiration against a closed airway. Normal: -60 to -100 cmH₂O. Values ≥-20 cmH₂O (less negative) suggest impending ventilatory failure."},
+{term:"MEP",definition:"Maximum Expiratory Pressure. The highest positive pressure generated during forced expiration against a closed airway. Normal: 80–100+ cmH₂O. Reflects cough effectiveness and expiratory muscle strength."},
+{term:"Pneumotachograph",definition:"A flow sensor that measures airflow by detecting pressure drop across a resistance element (capillary tubes, screen, or variable orifice). Flow signal is integrated to calculate volume. Used in modern spirometers and mechanical ventilators."},
+{term:"Helium Dilution",definition:"A gas dilution technique for measuring FRC and RV. Patient breathes from a circuit with known helium concentration; dilution of helium reveals lung volume. Cannot measure trapped air in severe obstruction — body plethysmography preferred."},
+{term:"Nitrogen Washout",definition:"A gas dilution technique where the patient breathes 100% oxygen, washing nitrogen from the lungs. Total exhaled nitrogen volume reveals FRC. Like helium dilution, cannot measure air that doesn't communicate with the airway."},
+{term:"Bronchodilator Response",definition:"A significant increase in FEV₁ after bronchodilator administration, defined as ≥12% relative improvement AND ≥200 mL absolute improvement. Confirms reversible airway obstruction — distinguishes asthma from fixed COPD obstruction."},
+{term:"Nose Clips",definition:"A clip applied to close the nostrils during spirometry, preventing air leakage through the nose during forced maneuvers. Omitting nose clips artificially lowers FVC and FEV₁, potentially mimicking restriction or obstruction."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:'<div class="empty-state">No cards completed yet.</div>'}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete!";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+/* ── SHUFFLE ── */
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(c=>c.classList&&c.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(o=>container.appendChild(o))})}
+shuffleAnswerOptions();
+
+/* ── MARK COMPLETE ── */
+function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+/* ── PROGRESSIVE SECTIONS ── */
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));
+const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
+function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+function updateAll(){sections.forEach(setContinueState)}
+function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+sections.forEach((section,index)=>{if(index>=sections.length-1)return;const next=sections[index+1];const nextTitle=getSectionTitle(next);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});
+navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+document.addEventListener("activityComplete",updateAll);
+const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";sections[0].appendChild(note);
+updateNav(0);updateAll()
+}
+initializeProgressiveSections();
+
+/* ── SORT ACTIVITIES ── */
+function initSort(sectionSelector,buttonId,statusId){
+const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");
+const button=document.getElementById(buttonId);
+const status=document.getElementById(statusId);
+if(!activity||!button)return;
+button.addEventListener("click",()=>{
+const rows=Array.from(activity.querySelectorAll(".sort-row"));
+let correct=0;
+rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});
+status.textContent=`${correct} / ${rows.length} correct`;
+if(correct===rows.length){status.textContent="Activity complete!";status.classList.add("complete");markActivityComplete(activity)}
+})
+}
+initSort("#calibration","checkCalibrationSort","calibrationSortStatus");
+initSort("#maneuvers","checkManeuverSort","maneuverSortStatus");
+initSort("#interpretation","checkInterpSort","interpSortStatus");
+
+/* ── QUIZ ACTIVITIES ── */
+function initQuizOptions(selector){
+const activity=document.querySelector(selector);
+if(!activity)return;
+activity.querySelectorAll(".quiz-option").forEach(button=>{
+button.addEventListener("click",()=>{
+if(activity.dataset.correctAnswered==="true")return;
+const feedback=activity.querySelector(".quiz-feedback");
+const isCorrect=button.dataset.correct==="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+activity.dataset.correctAnswered="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+markActivityComplete(activity)
+}else{
+button.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."
+}
+})
+})
+}
+["#peakflowQuiz","#bodyboxQuiz"].forEach(initQuizOptions);
+
+/* ── CASE STUDY ── */
+function initCase(){
+const section=document.getElementById("scenario");
+if(!section)return;
+const stages=Array.from(section.querySelectorAll(".case-stage"));
+stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});
+section.querySelectorAll(".case-option").forEach(option=>option.addEventListener("click",()=>{
+const stage=option.closest(".case-stage");
+if(stage.dataset.correctAnswered==="true")return;
+const feedback=stage.querySelector(".case-feedback");
+const isCorrect=option.dataset.caseCorrect==="true";
+stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+stage.dataset.correctAnswered="true";
+stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=false
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=true
+}
+}));
+section.querySelectorAll(".case-next button").forEach(button=>{
+button.disabled=true;
+button.addEventListener("click",()=>{
+const current=button.closest(".case-stage");
+const idx=stages.indexOf(current);
+const next=stages[idx+1];
+if(!next)return;
+next.classList.remove("lesson-hidden");
+if(idx+1===stages.length-1)markActivityComplete(section);
+button.closest(".case-next").remove();
+next.scrollIntoView({behavior:"smooth",block:"start"})
+})
+})
+}
+initCase();
+
+/* ── KNOWLEDGE CHECK ── */
+function initKnowledge(){
+const section=document.getElementById("knowledge-check");
+if(!section)return;
+const status=document.getElementById("knowledgeStatus");
+const answered=new Set();
+const total=section.querySelectorAll(".knowledge-question").length;
+section.querySelectorAll(".knowledge-option").forEach(option=>option.addEventListener("click",()=>{
+const question=option.closest(".knowledge-question");
+if(question.dataset.correctAnswered==="true")return;
+const feedback=question.querySelector(".quiz-feedback");
+const isCorrect=option.dataset.correct==="true";
+question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+question.dataset.correctAnswered="true";
+answered.add(option.dataset.question);
+question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>"
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again:</strong> Select the correct answer."
+}
+status.textContent=`${answered.size} / ${total} questions answered correctly`;
+if(answered.size===total){status.textContent="Knowledge check complete!";status.classList.add("complete");markActivityComplete(section)}
+}))
+}
+initKnowledge();
+
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+window.LESSON_ID="re_pulmonary_function_testing";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>

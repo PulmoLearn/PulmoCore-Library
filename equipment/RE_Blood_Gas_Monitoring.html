@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PulmoCore | Blood Gas Monitoring, ABG Sampling &amp; Analyzers</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/courses.js"></script>
+<style>
+:root{--core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;--oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;--alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;--shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);--radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;--font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}img,svg,video,canvas{max-width:100%;height:auto}main,section,aside,div,article{min-width:0}html{scroll-behavior:smooth}body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}a{color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}.brand{display:flex;align-items:center;gap:14px;min-width:260px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}.brand-name{font-family:var(--font-heading);font-size:clamp(1.5rem,2vw,2.25rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.78rem;opacity:.9;margin-top:4px}.main-content{padding:32px clamp(20px,4vw,56px) 76px}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:8px}h1,h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15;margin:0}h2{font-size:clamp(1.9rem,3vw,3rem)}h3{font-size:1.45rem}
+.top-nav-actions{display:flex;align-items:center;gap:12px;margin-left:auto}.home-button{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);transition:all .2s ease;flex-shrink:0}.home-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.home-icon{width:24px;height:24px;display:block}.course-menu-container,.course-menu-wrapper{position:relative;flex-shrink:0}.course-menu-button{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);color:var(--white);min-height:46px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease;white-space:nowrap}.course-menu-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}.course-menu-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(360px,calc(100vw - 28px));max-height:min(72vh,620px);overflow-y:auto;background:var(--white);color:var(--core-navy);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:12px;display:none;z-index:40}.course-menu-panel.open{display:grid;gap:8px}.course-menu-heading{font-family:var(--font-heading);font-weight:800;padding:8px 10px 10px;border-bottom:1px solid var(--soft-border);margin-bottom:8px}#courseMenuList{display:grid;gap:8px}.course-menu-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;color:var(--core-navy);border:1px solid transparent;border-radius:12px;padding:10px}.course-menu-item:hover{background:var(--airway-mint)}.course-menu-title{font-weight:800}.course-menu-status{white-space:nowrap;font-size:.78rem;font-weight:800;border-radius:999px;padding:4px 8px;background:#E5F0F6;color:var(--slate)}.course-menu-status.complete{background:var(--airway-mint);color:var(--core-navy)}.course-menu-status.in-progress{background:#FFF4DF;color:#7A4B00}
+.content-layout{display:grid;grid-template-columns:fit-content(220px) minmax(0,1fr);gap:24px;align-items:start;margin-top:26px;width:100%;max-width:100%}.lesson-stack,.lesson-stack-top{display:grid;gap:18px;min-width:0;max-width:100%}.feature-card,.info-card,.quiz-card,.case-card,.glossary-card,.activity-card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}.info-card{padding:24px;border-left:8px solid var(--pulmo-teal)}.info-card.rt{border-left-color:var(--oxygen-blue)}.info-card.board{border-left-color:var(--clinical-amber)}.quiz-card,.case-card,.glossary-card,.activity-card{padding:24px}.case-card{border-top:10px solid var(--core-navy)}.side-nav{position:sticky;top:104px;display:grid;gap:6px;padding:14px;background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);width:max-content;max-width:220px;align-self:start;overflow:hidden}.side-nav h3{font-size:1.05rem;margin-bottom:6px}.side-nav a{text-decoration:none;color:#243b55;padding:6px 8px;border-radius:10px;font-size:.92rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere}.side-nav a:hover{background:var(--airway-mint)}.side-nav a.locked{pointer-events:none;opacity:.45;cursor:not-allowed}.side-nav a.current{background:var(--airway-mint);font-weight:800}
+.component-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.three-card-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:16px;width:100%;max-width:100%;align-items:stretch}.example-box{margin-top:auto;border-radius:12px;padding:12px 14px;font-size:.95rem}.soft-teal{background:var(--airway-mint)}.soft-blue{background:#E6F3FF}.soft-amber{background:#FFF4DF}.soft-coral{background:#FDE9E9}.data-card{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);border-radius:14px;padding:14px;color:#18344E;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:440px}th,td{text-align:left;padding:9px 10px;vertical-align:top;border-bottom:1px solid var(--soft-border)}th{background:#F4FAFC;font-family:var(--font-heading);font-size:.92rem}
+.lesson-hidden{display:none}.section-continue{margin-top:22px;padding-top:18px;border-top:1px solid var(--soft-border);display:flex;justify-content:flex-end}.section-continue .btn{min-height:44px;padding:10px 18px}.section-progress-note{display:inline-block;margin-top:12px;color:var(--slate);font-size:.92rem}.btn{border:2px solid transparent;border-radius:12px;min-height:48px;padding:12px 22px;font-weight:800;display:inline-flex;align-items:center;gap:10px;text-decoration:none;transition:transform .18s ease,background .18s ease}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--pulmo-teal);color:var(--white);box-shadow:0 8px 16px rgba(28,167,168,.24)}.btn-primary:hover{background:var(--pulmo-teal-dark)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.activity-status{margin-top:12px;padding:10px 12px;border-radius:12px;background:#F8FBFD;border:1px solid var(--soft-border);color:var(--slate);font-weight:700}.activity-status.complete{background:var(--airway-mint);color:var(--core-navy);border-color:#BCEFE5}
+.quiz-options{display:grid;gap:10px;margin:18px 0}.quiz-option{border:1px solid var(--soft-border);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--core-navy)}.quiz-option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}.quiz-option.correct-choice{border-color:#86D9C8;background:var(--airway-mint)}.quiz-option.incorrect-choice{border-color:#F2B5B5;background:#FDE9E9}.quiz-feedback{display:none;border-radius:12px;padding:14px}.quiz-feedback.show{display:block}
+.sort-grid{display:grid;gap:10px;margin-top:14px}.sort-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,260px);gap:10px;align-items:center;border:1px solid var(--soft-border);background:#FAFDFF;border-radius:12px;padding:10px;max-width:100%}.sort-row select{border:1px solid var(--soft-border);border-radius:10px;padding:9px 10px;background:var(--white);width:100%;min-width:0}.sort-row.correct{border-color:#86D9C8;background:var(--airway-mint)}.sort-row.incorrect{border-color:#F2B5B5;background:#FDE9E9}
+details.accordion{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);overflow:hidden}details.accordion+details.accordion{margin-top:12px}details.accordion summary{list-style:none;padding:18px 20px;font-weight:800;font-family:var(--font-heading);display:flex;justify-content:space-between;align-items:center;cursor:pointer}details.accordion summary::-webkit-details-marker{display:none}details.accordion summary::after{content:"+";color:var(--pulmo-teal);font-size:1.4rem}details.accordion[open] summary::after{content:"–"}.accordion-body{padding:0 20px 20px;color:#243b55}
+.flashcard-shell{display:grid;gap:16px}.progress-row{display:grid;gap:8px}.progress-bar{height:12px;border-radius:999px;background:#E5F0F6;overflow:hidden}.progress-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}.flashcard{min-height:220px;border:1px solid var(--soft-border);border-radius:var(--radius-lg);display:grid;place-items:center;padding:22px;text-align:center;background:linear-gradient(145deg,#fff,#F4FAFC);box-shadow:inset 0 0 30px rgba(75,163,242,.07)}.flashcard .term{font-family:var(--font-heading);font-size:clamp(1.7rem,3vw,2.8rem);color:var(--core-navy)}.flashcard .definition{font-size:1.1rem;color:#263f5e;max-width:720px}.deck-actions,.tabs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.small-btn,.tab-btn{border:1px solid var(--soft-border);border-radius:999px;background:var(--white);color:var(--core-navy);padding:9px 13px;font-weight:800}.small-btn.primary{background:var(--pulmo-teal);color:var(--white);border-color:var(--pulmo-teal)}.small-btn.warn{background:#FFF4DF;border-color:#F8D9A5;color:#7A4B00}.tab-btn.active{background:var(--core-navy);color:var(--white);border-color:var(--core-navy)}.completed-list{display:none;border-top:1px solid var(--soft-border);padding-top:12px;margin-top:8px}.completed-list.show{display:block}.empty-state{padding:22px;border-radius:14px;background:var(--airway-mint);color:var(--core-navy);text-align:center;font-weight:700}
+.equip-badge{display:inline-block;background:var(--core-navy);color:var(--white);font-family:var(--font-heading);font-size:.75rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.04em;margin-bottom:8px}
+.split-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.split-card{border-radius:14px;padding:18px;border:2px solid}.split-card h4{font-family:var(--font-heading);margin-bottom:10px;font-size:1.1rem}
+.abg-effect-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.abg-effect{border-radius:14px;padding:16px}.abg-effect h4{font-family:var(--font-heading);font-size:1rem;margin-bottom:8px}.abg-arrow{font-family:var(--font-data);font-size:1.05rem;display:grid;gap:4px}
+.syringe-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px;counter-reset:syringe-step}.syringe-part{border-radius:12px;padding:12px;background:#F8FBFD;border:1px solid var(--soft-border)}.syringe-part strong{display:block;font-family:var(--font-heading);font-size:.9rem;color:var(--core-navy);margin-bottom:4px}.syringe-part p{font-size:.85rem;color:var(--slate);margin:0}
+.normal-values-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}.nv-card{border-radius:14px;padding:14px;text-align:center;border:2px solid var(--soft-border)}.nv-param{font-family:var(--font-heading);font-size:.88rem;font-weight:800;margin-bottom:6px}.nv-range{font-family:var(--font-data);font-size:1.05rem;font-weight:700}
+.pearl-list{list-style:none;padding:0;margin:14px 0;display:grid;gap:10px}.pearl-list li{padding:10px 14px;border-radius:12px;background:var(--airway-mint);border-left:4px solid var(--pulmo-teal);font-size:.97rem}.trap-list li{background:#FFF4DF;border-left-color:var(--clinical-amber)}
+.footer{background:var(--core-navy);color:var(--white);padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1100px){.component-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three-card-grid{grid-template-columns:1fr}.content-layout{grid-template-columns:1fr}.side-nav{position:relative;top:auto;width:100%;max-width:100%}.split-compare,.abg-effect-grid{grid-template-columns:1fr}.syringe-grid{grid-template-columns:repeat(2,1fr)}.normal-values-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:780px){.top-nav{padding:14px 16px}.brand{min-width:auto}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-tagline{display:none}.main-content{padding:20px 14px 56px}.case-card,.quiz-card,.glossary-card,.activity-card,.info-card{padding:18px;border-radius:18px}.component-grid,.three-card-grid{grid-template-columns:1fr!important}.sort-row{grid-template-columns:1fr}.syringe-grid{grid-template-columns:1fr}.normal-values-grid{grid-template-columns:repeat(2,1fr)}table{min-width:420px}}@media(max-width:480px){.brand-name{font-size:1.35rem}h2{font-size:1.65rem}h3{font-size:1.25rem}.btn{width:100%;justify-content:center}.section-continue{justify-content:stretch}.section-continue .btn{width:100%}.normal-values-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+<header class="top-nav" aria-label="PulmoCore site navigation">
+<div class="brand">
+<div class="brand-mark" aria-hidden="true">
+<svg viewBox="0 0 64 64" fill="none" role="img"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="31" r="4" fill="#1CA7A8"/></svg>
+</div>
+<div><div class="brand-name">Pulmo<span>Core</span></div><div class="brand-tagline">Core respiratory care learning for future RTs.</div></div>
+</div>
+<div class="top-nav-actions">
+<a href="https://pulmolearn.github.io/PulmoCore-Library/glossary.html" class="home-button" style="width:auto;padding:0 14px;gap:8px;font-size:.88rem;font-weight:800;color:#fff;text-decoration:none;">📖 Glossary</a>
+<a href="https://pulmolearn.github.io/PulmoCore-Library/dashboard.html" class="home-button" aria-label="PulmoCore Home"><img src="/pulmocore-home-minimal.svg" alt="Home" class="home-icon"></a>
+<div class="course-menu-container course-menu-wrapper"><button class="course-menu-button" id="courseMenuButton" type="button" aria-haspopup="true" aria-expanded="false">☰ Courses</button><div class="course-menu-panel" id="courseMenuPanel" role="menu"><div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div></div></div>
+</div>
+</header>
+
+<main class="main-content">
+
+<section class="case-card" id="top" style="border-top-color:var(--pulmo-teal)">
+<span class="eyebrow">Respiratory Equipment &amp; Procedures</span>
+<h1 style="font-family:var(--font-heading);font-size:clamp(2rem,4.5vw,3.8rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px">Blood Gas Monitoring, ABG Sampling, Analyzers, Co-Oximetry, Pulse Oximetry &amp; Transcutaneous Monitoring</h1>
+<p style="font-size:1.15rem;max-width:980px;color:#243b55">The most important distinction in blood gas monitoring — oxygenation versus ventilation — is also the most commonly misunderstood. This lesson covers every device, every technique, every source of error, and every escalation decision from ABG syringe to analyzer to documentation.</p>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Course Track</strong><br>Respiratory Equipment &amp; Procedures</div>
+<div class="example-box soft-blue"><strong>Estimated Time</strong><br>60–80 minutes</div>
+<div class="example-box soft-amber"><strong>NBRC Focus</strong><br>Sample errors · Co-oximetry · Oxygenation vs ventilation · QC · Modified Allen test</div>
+</div>
+</section>
+
+<div class="content-layout">
+<aside aria-label="Lesson quick navigation" class="side-nav">
+<h3>Sections</h3>
+<a href="#objectives">Objectives</a>
+<a href="#overview-video">Video</a>
+<a href="#intro">Introduction</a>
+<a href="#indications">Indications &amp; Hazards</a>
+<a href="#sample-types">Sample Types</a>
+<a href="#supplies">ABG Supplies &amp; Syringe</a>
+<a href="#pre-sampling">Pre-Sampling Safety</a>
+<a href="#allen-test">Modified Allen Test</a>
+<a href="#puncture">Arterial Puncture</a>
+<a href="#sample-handling">Sample Handling</a>
+<a href="#normal-values">Normal ABG Values</a>
+<a href="#analyzers">Blood Gas Analyzers</a>
+<a href="#co-oximetry">Co-Oximetry</a>
+<a href="#calibration">Calibration &amp; QC</a>
+<a href="#pulse-ox">Pulse Oximetry</a>
+<a href="#transcutaneous">Transcutaneous Monitoring</a>
+<a href="#escalation">Escalation &amp; Pearls</a>
+<a href="#nbrc-traps">NBRC Traps</a>
+<a href="#scenario">Case Study</a>
+<a href="#knowledge-check">Knowledge Check</a>
+<a href="#faq">FAQ</a>
+<a href="#summary">Summary</a>
+<a href="#flashcards">Flashcards</a>
+</aside>
+
+<div class="lesson-stack-top">
+
+<!-- 1. OBJECTIVES -->
+<section class="info-card" id="objectives">
+<h2>Learning Objectives</h2>
+<ol style="padding-left:20px;margin:14px 0;display:grid;gap:8px">
+<li>Differentiate oxygenation and ventilation and identify which ABG parameters reflect each.</li>
+<li>State indications and contraindications for ABG analysis and identify sample rejection criteria.</li>
+<li>Identify ABG supplies and describe each component of the preheparinized syringe.</li>
+<li>Explain the purpose of the Modified Allen test and perform the procedure in the correct sequence.</li>
+<li>Describe safe arterial puncture preparation and post-procedure management.</li>
+<li>Explain how air bubbles, sample delay, clotting, and incorrect documentation affect ABG results.</li>
+<li>Compare stationary blood gas analyzers and point-of-care analyzers and identify appropriate use cases.</li>
+<li>Explain calibration types (1-point, 2-point, 3-point), quality control, and troubleshooting analyzer failures.</li>
+<li>Identify when co-oximetry is needed and why pulse oximetry is insufficient in those situations.</li>
+<li>State the limitations of pulse oximetry and proper documentation requirements.</li>
+<li>Explain transcutaneous monitoring, its working principle, and safety concerns.</li>
+<li>Apply blood gas monitoring concepts to NBRC-style troubleshooting and escalation scenarios.</li>
+</ol>
+<div class="example-box soft-amber" style="margin-top:4px"><strong>NBRC Emphasis:</strong> The most commonly missed blood gas monitoring questions involve: treating SpO₂ as equivalent to PaO₂, running clotted or air-contaminated samples, not ordering co-oximetry for CO poisoning, and not documenting oxygen settings at time of draw.</div>
+</section>
+
+
+<!-- OVERVIEW VIDEO -->
+<section class="info-card" id="overview-video">
+<span class="eyebrow">Video Overview</span>
+<h2>2-Minute Overview: Blood Gas Monitoring</h2>
+<p>Watch this quick overview before moving into the lesson.</p>
+<div id="videoContainer" style="margin-top:16px;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);border:1px solid var(--soft-border);">
+<video id="overviewVideo" controls controlslist="nodownload" disablepictureinpicture playsinline preload="metadata" style="width:100%;display:none;background:#000;">
+<source src="/equipment/RE_BloodGasMonitoring.mp4" type="video/mp4">
+<track default kind="captions" label="English captions" src="/equipment/RE_BloodGasMonitoring.vtt" srclang="en">
+</video>
+<div id="videoPlaceholder" style="padding:48px 24px;text-align:center;background:#0B1F33;border-radius:var(--radius-lg);">
+<div style="font-size:2.5rem;margin-bottom:16px;">🎬</div>
+<div style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px;">Video Coming Soon</div>
+<div style="color:rgba(255,255,255,0.6);font-size:.95rem;max-width:380px;margin:0 auto;line-height:1.6;">We're putting the finishing touches on this overview video. Check back soon!</div>
+</div>
+</div>
+</section>
+<!-- 2. INTRODUCTION -->
+<section class="info-card" id="intro">
+<h2>Oxygenation vs. Ventilation — The Foundation</h2>
+<span class="equip-badge">MOST IMPORTANT DISTINCTION IN THIS LESSON</span>
+<p>Blood gas monitoring is built on one foundational concept that must be mastered before everything else: <strong>oxygenation and ventilation are not the same thing</strong>, they are monitored by different parameters, and treating one as the other is one of the most dangerous clinical errors in respiratory care.</p>
+<div class="split-compare">
+<div class="split-card" style="border-color:#1CA7A8;background:#F0FDF8">
+<h4 style="color:var(--pulmo-teal)">🩸 Oxygenation</h4>
+<p><strong>What it is:</strong> The delivery of oxygen to the blood and tissues.</p>
+<p style="margin-top:8px"><strong>Measured by:</strong> PaO₂ (arterial O₂ tension) and SaO₂/SpO₂ (hemoglobin saturation)</p>
+<p style="margin-top:8px"><strong>Normal PaO₂:</strong> 80–100 mmHg</p>
+<p style="margin-top:8px"><strong>Clinical concern:</strong> Hypoxemia (low PaO₂)</p>
+<p style="margin-top:8px"><strong>Monitored by:</strong> ABG (PaO₂) or pulse oximetry (SpO₂)</p>
+<p style="margin-top:8px"><em>Treatment: Supplemental oxygen, HFNC, NIV, MV</em></p>
+</div>
+<div class="split-card" style="border-color:var(--clinical-amber);background:#FFF4DF">
+<h4 style="color:#7A4B00">💨 Ventilation</h4>
+<p><strong>What it is:</strong> The movement of air in and out of the lungs — the process that eliminates CO₂.</p>
+<p style="margin-top:8px"><strong>Measured by:</strong> PaCO₂ and pH (CO₂ + water = carbonic acid = pH)</p>
+<p style="margin-top:8px"><strong>Normal PaCO₂:</strong> 35–45 mmHg</p>
+<p style="margin-top:8px"><strong>Clinical concern:</strong> Hypercapnia (↑PaCO₂) = hypoventilation; Hypocapnia (↓PaCO₂) = hyperventilation</p>
+<p style="margin-top:8px"><strong>Monitored by:</strong> ABG only — pulse oximetry <em>cannot</em> measure PaCO₂ or ventilation status</p>
+<p style="margin-top:8px"><em>Treatment: Increase ventilation — NIV, MV, positioning</em></p>
+</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:14px"><strong>Critical Clinical Pearl:</strong> A patient can have a normal SpO₂ (96–98%) while simultaneously developing dangerous CO₂ retention (PaCO₂ 70+ mmHg) and acidosis (pH 7.20). Pulse oximetry completely misses this — and COPD patients on low-flow O₂ are particularly at risk. This is why the ABG is ordered: the SpO₂ cannot substitute for pH and PaCO₂.</div>
+</section>
+
+<!-- 3. INDICATIONS & HAZARDS -->
+<section class="info-card" id="indications">
+<h2>Indications, Contraindications &amp; Hazards</h2>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>Indications for ABG</strong><br>Evaluate ventilation status (PaCO₂/pH) · Evaluate oxygenation status (PaO₂/SaO₂) · Assess acid-base balance · Monitor response to oxygen or ventilatory therapy · Pre-operative surgical risk assessment · Unexplained dyspnea or altered mental status</div>
+<div class="example-box soft-amber"><strong>Sample Rejection Criteria</strong><br>Visible air bubbles not removed · Visible clot present · Sample not anticoagulated · Room-temperature storage &gt;30 minutes · Missing patient identification · Incorrect or missing documentation · Malfunctioning or uncalibrated analyzer</div>
+<div class="example-box soft-coral"><strong>Hazards of ABG Sampling</strong><br>Bloodborne pathogen exposure · Hematoma or hemorrhage at puncture site · Arterial spasm · Pain and vasovagal response · Incorrect treatment from inaccurate results · Patient misidentification errors · Infection at puncture site</div>
+</div>
+</section>
+
+<!-- 4. SAMPLE TYPES -->
+<section class="info-card" id="sample-types">
+<h2>Types of Blood Gas Samples</h2>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Arterial Blood Gas (ABG)</strong><br>Gold standard for oxygenation, ventilation, and acid-base status. Obtained from radial, brachial, or femoral artery. Provides PaO₂, PaCO₂, pH, HCO₃⁻, SaO₂, and base excess. Required when full cardiopulmonary picture is needed.</div>
+<div class="example-box soft-blue"><strong>Venous Blood Gas (VBG)</strong><br>Obtained from central venous line. pH and PaCO₂ differ from arterial values (VBG pH ~0.03–0.05 lower; PvCO₂ ~5 mmHg higher). PO₂ values are not clinically equivalent to PaO₂ — cannot assess oxygenation from VBG alone.</div>
+<div class="example-box soft-amber"><strong>Capillary Blood Gas (CBG)</strong><br>Used when arterial access is difficult — common in neonates and pediatric patients. Sample obtained from warmed heel, finger, or earlobe. Approximates arterial values if site is properly warmed and free-flowing.</div>
+<div class="example-box soft-coral"><strong>Arterial Line (A-Line) Sampling</strong><br>Indwelling arterial catheter for continuous blood pressure monitoring and frequent ABG sampling. <em>Open system:</em> requires discard volume before sample to clear dead space. <em>Closed system:</em> minimizes blood loss and open-air exposure. Preferred in ICU for critically ill patients.</div>
+</div>
+</section>
+
+<!-- 5. ABG SUPPLIES & SYRINGE -->
+<section class="info-card" id="supplies">
+<h2>ABG Supplies &amp; Syringe Anatomy</h2>
+<span class="equip-badge">EQUIPMENT: Preheparinized ABG Syringe</span>
+<h3 style="margin-top:14px">Required Supplies</h3>
+<div class="component-grid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal">20–22 gauge short-bevel needle</div>
+<div class="example-box soft-blue">Preheparinized 1–3 mL ABG syringe with cap</div>
+<div class="example-box soft-amber">Gauze pads, alcohol wipe (70% isopropyl), bandage</div>
+<div class="example-box soft-coral">Specimen label, biohazard bag, sharps container</div>
+</div>
+<h3 style="margin-top:20px">Syringe Component Profiles</h3>
+<div class="syringe-grid">
+<div class="syringe-part"><strong>Needle Hub</strong><p>Protective cover removed before insertion. Never recap by hand — place directly into sharps container after use.</p></div>
+<div class="syringe-part"><strong>Short-Bevel Needle (20–22G)</strong><p>Shorter bevel than standard needles reduces arterial wall trauma. <strong>Bevel must face UP</strong> during insertion for easier entry and reduced pain.</p></div>
+<div class="syringe-part"><strong>Preheparinized Syringe Barrel</strong><p>Lined with heparin to prevent clot formation. 1 mL (point-of-care) or 3 mL (standard). Self-fills when artery is accessed — do not pull plunger in a true arterial puncture.</p></div>
+<div class="syringe-part"><strong>Plunger</strong><p>In a properly performed radial puncture, arterial pressure pushes blood into the syringe without pulling. Pulling introduces room air — a major source of contamination.</p></div>
+<div class="syringe-part"><strong>Syringe Cap</strong><p>Applied after needle is safely removed and discarded. Seals the sample air-tight to prevent CO₂ loss or O₂ gain from ambient air before analysis.</p></div>
+<div class="syringe-part"><strong>Safety Guard / Needle Safety</strong><p>Activated using a hard surface (not the hand) after needle removal. Engineered device to prevent needlestick injury. Required by OSHA needlestick safety standards.</p></div>
+</div>
+<div class="example-box soft-amber" style="margin-top:14px"><strong>Why Heparin?</strong> Blood begins clotting immediately when it leaves the vessel. Heparin in the syringe prevents coagulation during transport and analysis. A clotted sample cannot be run through the analyzer — and should not be attempted — because clot particles can damage electrodes and produce falsely abnormal results.</div>
+</section>
+
+<!-- 6. PRE-SAMPLING SAFETY -->
+<section class="info-card" id="pre-sampling">
+<h2>Pre-Sampling Safety &amp; Order Verification</h2>
+<p>The most common ABG errors occur <em>before the sample reaches the analyzer</em> — during ordering, preparation, and documentation. A technically perfect puncture with incomplete documentation produces a clinically useless result.</p>
+<h3 style="margin-top:14px">Required Checks Before Drawing</h3>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal"><strong>Clinical Checks</strong><br>Valid physician order for ABG · Correct patient identity (two identifiers) · Oxygen delivery device and flow or FiO₂ at the time of draw · Recent changes to ventilator settings or oxygen support · Anticoagulant therapy (bleeding risk) · Presence of a palpable pulse at the intended site</div>
+<div class="example-box soft-blue"><strong>Required Documentation</strong><br>Date and time of collection · Sample source (radial, brachial, A-line) · FiO₂ or oxygen flow and delivery device · Ventilator settings if applicable · Patient temperature (if required by policy) · Collector name/initials · Whether the sample was on room air or supplemental oxygen</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>Critical Documentation Error:</strong> Drawing a "room air" ABG while the patient is still receiving supplemental oxygen — even 1–2 L/min nasal cannula — produces artificially elevated PaO₂ that misrepresents the patient's true baseline oxygenation. Always verify and document the exact oxygen source at the moment of the draw.</div>
+</section>
+
+<!-- 7. MODIFIED ALLEN TEST -->
+<section class="info-card" id="allen-test">
+<h2>Modified Allen Test</h2>
+<span class="equip-badge">REQUIRED BEFORE RADIAL ARTERY PUNCTURE</span>
+<p>The Modified Allen test assesses collateral circulation to the hand from the ulnar artery before radial artery puncture. If the radial artery is damaged or goes into spasm, the ulnar artery must be able to perfuse the hand — this test confirms it can.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>Positive Allen Test</strong><br>Color returns to the blanched palm within 5–7 seconds after releasing ulnar pressure. Indicates adequate collateral circulation. ✅ <em>Proceed with radial puncture.</em></div>
+<div class="example-box soft-coral"><strong>Negative Allen Test</strong><br>Color does NOT return (or takes &gt;15 seconds). Indicates the hand depends entirely on the radial artery for perfusion — ulnar collaterals are insufficient. ❌ <em>Do NOT use this radial site. Select an alternate site.</em></div>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Modified Allen Test Sequence" style="margin-top:18px">
+<h3>Activity: Modified Allen Test — Correct Order</h3>
+<p>Put the five steps of the Modified Allen test in the correct sequence.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="1"><span>Have the patient clench the fist tightly to expel blood from the palm</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="2"><span>Apply firm simultaneous pressure over both the radial and ulnar arteries</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="3"><span>Instruct the patient to open the hand — the palm should appear pale or blanched</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="4"><span>Release pressure over the ulnar artery only — maintain pressure on the radial artery</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+<div class="sort-row" data-answer="5"><span>Observe for return of pink color within 5–7 seconds — positive test confirms adequate collateral circulation</span><select><option value="">Select step…</option><option value="1">Step 1</option><option value="2">Step 2</option><option value="3">Step 3</option><option value="4">Step 4</option><option value="5">Step 5</option></select></div>
+</div>
+<button class="small-btn primary" id="checkAllenSort" type="button" style="margin-top:14px">Check Sequence</button>
+<div class="activity-status" id="allenSortStatus">Order all five steps to continue.</div>
+</article>
+</section>
+
+<!-- 8. ARTERIAL PUNCTURE -->
+<section class="info-card" id="puncture">
+<h2>Arterial Puncture — Procedure Overview</h2>
+<span class="equip-badge">EQUIPMENT: ABG Syringe · Needle · Safety Guard</span>
+<h3 style="margin-top:14px">Procedure Essentials</h3>
+<ol style="padding-left:20px;margin:10px 0;display:grid;gap:6px">
+<li>Confirm collateral circulation (Modified Allen test for radial site)</li>
+<li>Clean site with 70% isopropyl alcohol; allow to dry</li>
+<li>Palpate pulse with non-dominant hand; locate arterial landmark</li>
+<li>Insert 20–22 gauge needle bevel-up at 30–45° angle toward pulse</li>
+<li>Watch for spontaneous arterial flashback — do NOT pull back on plunger (pulling introduces room air)</li>
+<li>Allow 1–3 mL to fill; withdraw needle in one smooth motion</li>
+<li>Immediately apply firm direct pressure with gauze — maintain for 5 minutes (longer if anticoagulated)</li>
+<li>Activate safety guard using hard surface; place needle directly in sharps container (never recap by hand)</li>
+<li>Remove visible air bubbles immediately and cap the syringe</li>
+<li>Mix sample gently by rolling syringe between palms to coat with heparin (do not shake)</li>
+<li>Label sample at the bedside; place in biohazard bag; transport immediately</li>
+</ol>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-coral"><strong>Common Sampling Sites</strong><br><em>Radial artery</em> — most common; accessible, compressible, collateral circulation present. Requires Allen test.<br><em>Brachial artery</em> — larger vessel; used when radial is not accessible. Less collateral circulation — use with caution.<br><em>Femoral artery</em> — emergency only; large vessel, difficult to compress, high infection risk.</div>
+<div class="example-box soft-amber"><strong>Post-Puncture Care</strong><br>Hold firm pressure minimum 5 minutes (10+ min for anticoagulated patients). Check for hematoma formation. Verify distal pulse after pressure release. Document puncture site, difficulty, patient tolerance, and any complications. Apply bandage when bleeding is confirmed stopped.</div>
+</div>
+</section>
+
+<!-- 9. SAMPLE HANDLING -->
+<section class="info-card" id="sample-handling">
+<h2>Sample Handling &amp; Pre-Analytical Errors</h2>
+<span class="equip-badge">VERY HIGH-YIELD — MOST ERRORS OCCUR HERE</span>
+<p>The pre-analytical phase — everything that happens before the sample enters the analyzer — is where most ABG errors originate. Understanding the <em>specific effect</em> of each error on the results is a core NBRC testing area.</p>
+
+<div class="abg-effect-grid">
+<div class="abg-effect" style="background:#EFF6FF;border-radius:14px;border:2px solid #93C5FD">
+<h4>Air Bubble Contamination</h4>
+<div class="abg-arrow">
+<span>PaCO₂ → <strong style="color:#E85D5D">Decreases ↓</strong> (CO₂ diffuses into bubble)</span>
+<span>pH → <strong style="color:#1CA7A8">Increases ↑</strong> (less CO₂ = less acid)</span>
+<span>PaO₂ → <strong style="color:#F4B860">Variable</strong> (depends on original PaO₂ vs. room air PO₂)</span>
+</div>
+<p style="font-size:.88rem;margin-top:8px;color:#243b55"><strong>Action:</strong> Remove bubbles immediately after collection by holding syringe tip up and expelling; if significant bubble contamination persists, redraw.</p>
+</div>
+<div class="abg-effect" style="background:#FFF4DF;border-radius:14px;border:2px solid #F4B860">
+<h4>Sample Delay / Room-Temperature Storage</h4>
+<div class="abg-arrow">
+<span>PaCO₂ → <strong style="color:#E85D5D">Increases ↑</strong> (cells continue metabolizing)</span>
+<span>pH → <strong style="color:#E85D5D">Decreases ↓</strong> (more CO₂ = more acid)</span>
+<span>PaO₂ → <strong style="color:#E85D5D">Decreases ↓</strong> (cells consume oxygen)</span>
+</div>
+<p style="font-size:.88rem;margin-top:8px;color:#243b55"><strong>Action:</strong> Analyze within 5–10 minutes ideally; if delay &gt;10 min, place in ice slurry (not direct ice). Analyze within 30 minutes max. Never store at room temperature for &gt;30 minutes.</p>
+</div>
+</div>
+
+<article class="activity-card require-complete" data-activity-name="Sample Error Matching" style="margin-top:18px">
+<h3>Activity: Match the Error to Its Primary Effect</h3>
+<p>For each sample-handling problem, select its most clinically significant primary consequence.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="decrease-co2"><span>Air bubble enters the syringe and is not expelled before transport to analyzer</span><select><option value="">Select primary effect…</option><option value="decrease-co2">Decreases PaCO₂ / Increases pH</option><option value="increase-co2">Increases PaCO₂ / Decreases pH</option><option value="clot-reject">Must reject — risk of clot or analyzer damage</option><option value="bad-doc">Inaccurate clinical interpretation of oxygenation</option></select></div>
+<div class="sort-row" data-answer="increase-co2"><span>Sample stored at room temperature for 45 minutes before running on the analyzer</span><select><option value="">Select primary effect…</option><option value="decrease-co2">Decreases PaCO₂ / Increases pH</option><option value="increase-co2">Increases PaCO₂ / Decreases pH</option><option value="clot-reject">Must reject — risk of clot or analyzer damage</option><option value="bad-doc">Inaccurate clinical interpretation of oxygenation</option></select></div>
+<div class="sort-row" data-answer="clot-reject"><span>Sample collected in a syringe that was not preloaded with heparin — small clot is visible</span><select><option value="">Select primary effect…</option><option value="decrease-co2">Decreases PaCO₂ / Increases pH</option><option value="increase-co2">Increases PaCO₂ / Decreases pH</option><option value="clot-reject">Must reject — risk of clot or analyzer damage</option><option value="bad-doc">Inaccurate clinical interpretation of oxygenation</option></select></div>
+<div class="sort-row" data-answer="bad-doc"><span>ABG drawn while patient was on 4 L/min O₂ nasal cannula, but documented as "room air"</span><select><option value="">Select primary effect…</option><option value="decrease-co2">Decreases PaCO₂ / Increases pH</option><option value="increase-co2">Increases PaCO₂ / Decreases pH</option><option value="clot-reject">Must reject — risk of clot or analyzer damage</option><option value="bad-doc">Inaccurate clinical interpretation of oxygenation</option></select></div>
+</div>
+<button class="small-btn primary" id="checkSampleSort" type="button" style="margin-top:14px">Check Answers</button>
+<div class="activity-status" id="sampleSortStatus">Match all four errors to their primary effects to continue.</div>
+</article>
+</section>
+
+<!-- 10. NORMAL VALUES -->
+<section class="info-card" id="normal-values">
+<h2>Normal ABG Values</h2>
+<span class="equip-badge">MEMORIZE FOR NBRC</span>
+<p>These values represent normal arterial blood gas ranges for a healthy adult breathing room air at sea level. All interpretation begins by comparing patient values to these benchmarks.</p>
+<div class="normal-values-grid" style="margin-top:14px">
+<div class="nv-card" style="border-color:#1CA7A8;background:#F0FDF8"><div class="nv-param">pH</div><div class="nv-range" style="color:var(--pulmo-teal)">7.35–7.45</div><div style="font-size:.78rem;color:var(--slate);margin-top:6px">Acidity/alkalinity of blood</div></div>
+<div class="nv-card" style="border-color:#F4B860;background:#FFF4DF"><div class="nv-param">PaCO₂</div><div class="nv-range" style="color:#7A4B00">35–45 mmHg</div><div style="font-size:.78rem;color:var(--slate);margin-top:6px">Ventilation status</div></div>
+<div class="nv-card" style="border-color:#4BA3F2;background:#EFF6FF"><div class="nv-param">PaO₂</div><div class="nv-range" style="color:var(--oxygen-blue)">80–100 mmHg</div><div style="font-size:.78rem;color:var(--slate);margin-top:6px">Oxygenation status</div></div>
+<div class="nv-card" style="border-color:#E85D5D;background:#FFF1F2"><div class="nv-param">HCO₃⁻</div><div class="nv-range" style="color:#C0392B">22–26 mEq/L</div><div style="font-size:.78rem;color:var(--slate);margin-top:6px">Metabolic/renal compensation</div></div>
+<div class="nv-card" style="border-color:#86D9C8;background:#F0FDF8"><div class="nv-param">SaO₂</div><div class="nv-range" style="color:var(--pulmo-teal)">95–100%</div><div style="font-size:.78rem;color:var(--slate);margin-top:6px">Hemoglobin saturation</div></div>
+</div>
+<div class="example-box soft-amber" style="margin-top:14px"><strong>Quick Pattern Key:</strong> pH &lt;7.35 = acidosis · pH &gt;7.45 = alkalosis · PaCO₂ &gt;45 = hypoventilation/respiratory acidosis · PaCO₂ &lt;35 = hyperventilation/respiratory alkalosis · PaO₂ &lt;80 = hypoxemia · HCO₃⁻ &lt;22 = metabolic acidosis · HCO₃⁻ &gt;26 = metabolic alkalosis</div>
+</section>
+
+<!-- 11. BLOOD GAS ANALYZERS -->
+<section class="info-card" id="analyzers">
+<h2>Blood Gas Analyzers</h2>
+<p>Blood gas analyzers use electrochemical sensors to measure pH, PaCO₂, and PaO₂ directly, then calculate derived values like HCO₃⁻ and base excess. Understanding which type of analyzer is appropriate for which situation is tested on the NBRC.</p>
+<div class="split-compare" style="margin-top:14px">
+<div class="split-card" style="border-color:#1CA7A8;background:#F0FDF8">
+<h4 style="color:var(--pulmo-teal)">Stationary Blood Gas Analyzer</h4>
+<p><em>Examples: GEM system, Radiometer ABL</em></p>
+<ul style="padding-left:18px;margin-top:8px;display:grid;gap:6px;font-size:.93rem">
+<li>Located in central lab or respiratory department</li>
+<li>High-volume testing capacity — appropriate for multiple simultaneous samples</li>
+<li>Full blood gas panel including electrolytes and metabolites (depending on cartridge)</li>
+<li>Requires dedicated maintenance, daily calibration, and QC</li>
+<li>Higher accuracy with larger sample volumes</li>
+<li>Longer turnaround time — sample must travel to lab</li>
+</ul>
+</div>
+<div class="split-card" style="border-color:var(--oxygen-blue);background:#EFF6FF">
+<h4 style="color:var(--oxygen-blue)">Point-of-Care Analyzer</h4>
+<p><em>Examples: i-STAT, Abbott cartridge-based systems</em></p>
+<ul style="padding-left:18px;margin-top:8px;display:grid;gap:6px;font-size:.93rem">
+<li>Bedside, ED, ICU, and transport settings</li>
+<li>Small sample volume (typically 0.1–0.5 mL)</li>
+<li>Results in approximately 60–120 seconds</li>
+<li>Single-use precalibrated cartridges — minimal setup required</li>
+<li>No daily electrode maintenance — cartridge handles calibration</li>
+<li>More expensive per test than central lab; appropriate when speed is critical</li>
+</ul>
+</div>
+</div>
+<div class="example-box soft-amber" style="margin-top:12px"><strong>How Analyzers Measure:</strong> Each electrode in the analyzer is specific to one parameter. The <em>pH electrode</em> uses a glass membrane that generates a voltage proportional to H⁺ ion concentration. The <em>PaCO₂ electrode</em> (Severinghaus) uses a CO₂-permeable membrane; CO₂ diffuses through and changes the pH of a buffer solution, which the electrode detects. The <em>PaO₂ electrode</em> (Clark) reduces O₂ at a platinum cathode, producing a measurable current proportional to PO₂.</div>
+</section>
+
+<!-- 12. CO-OXIMETRY -->
+<section class="info-card" id="co-oximetry">
+<h2>Co-Oximetry</h2>
+<span class="equip-badge">CRITICAL — PULSE OX CANNOT REPLACE THIS</span>
+<p>A standard blood gas analyzer measures total hemoglobin saturation — it cannot distinguish between oxyhemoglobin, carboxyhemoglobin (COHb), or methemoglobin (MetHb). A co-oximeter uses multiple wavelengths of light to identify and quantify each hemoglobin species separately.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
+<div class="example-box soft-teal"><strong>What Co-Oximetry Measures</strong><br>Oxyhemoglobin (O₂Hb) — hemoglobin carrying O₂<br>Reduced hemoglobin (HHb) — deoxygenated<br>Carboxyhemoglobin (COHb) — bound to CO<br>Methemoglobin (MetHb) — oxidized, non-functional<br><br>Total hemoglobin and functional saturation are calculated from these fractions.</div>
+<div class="example-box soft-coral"><strong>When Co-Oximetry Is Required</strong><br>Carbon monoxide exposure or poisoning<br>Suspected methemoglobinemia<br>Pulse oximetry does not match clinical presentation<br>Patient appears cyanotic with normal SpO₂<br>SpO₂ &lt;80% requiring confirmation<br>Any unexplained hypoxemia<br>Suspected abnormal hemoglobin variant</div>
+</div>
+<div class="example-box soft-coral" style="margin-top:12px"><strong>The CO Poisoning Trap (VERY HIGH-YIELD):</strong> Standard pulse oximetry cannot distinguish carboxyhemoglobin from oxyhemoglobin — both absorb light at the same wavelengths detected by a 2-wavelength pulse oximeter. A CO-poisoned patient may show SpO₂ 98–100% while their functional oxygen saturation (oxyhemoglobin) is critically low. The cherry-red skin color, confusion, and history of smoke/CO exposure are the clinical cues — the SpO₂ cannot be trusted. <strong>ABG with co-oximetry is the only diagnostic tool.</strong></div>
+
+<article class="quiz-card require-complete" id="cooxQuiz" data-activity-name="Co-Oximetry Indication Check" style="margin-top:18px">
+<h3>Clinical Check: When Co-Oximetry Is Needed</h3>
+<p>A 52-year-old patient is brought to the ED from a residential fire. He is confused, has a severe headache, and his skin appears bright cherry-red. SpO₂ is 99% with a strong waveform. The nurse tells you the patient's "sats are perfect" and suggests no further respiratory workup. What is the correct RT response?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. The SpO₂ reading of 99% is meaningless in this situation. Pulse oximetry cannot detect carboxyhemoglobin (COHb) — it registers COHb as if it were oxyhemoglobin. The patient's true functional saturation could be critically low while the monitor reads 99%.">Accept the SpO₂ reading — 99% with good waveform confirms adequate oxygenation. No additional workup is needed.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. A VBG is not adequate for diagnosing CO poisoning — VBG provides pH, PaCO₂, and PO₂, but the critical measurement needed is COHb percentage, which requires co-oximetry on an ABG sample from a co-oximeter-equipped analyzer.">Order a VBG — it provides adequate information to assess this patient's oxygenation.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. This patient presents with the classic picture of carbon monoxide poisoning: smoke exposure, confusion, headache, cherry-red skin, and — critically — a falsely normal SpO₂. Pulse oximetry cannot distinguish COHb from O₂Hb. The only way to measure COHb is with ABG analyzed on a co-oximeter. Immediate actions: apply 100% O₂ via non-rebreather mask, draw ABG for co-oximetry, notify physician, and prepare for possible hyperbaric oxygen therapy.">Request ABG with co-oximetry immediately and apply 100% oxygen — pulse oximetry is unreliable in CO poisoning and cannot detect carboxyhemoglobin.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Standard ABG without co-oximetry will show PaO₂ and pH but cannot measure the percentage of hemoglobin bound to CO. Only co-oximetry, with its multiple light wavelengths, can distinguish and quantify COHb separately from oxyhemoglobin.">Order a standard ABG — without co-oximetry, the PaO₂ value will confirm adequate oxygenation.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 13. CALIBRATION & QC -->
+<section class="info-card" id="calibration">
+<h2>Calibration, Quality Control &amp; QA</h2>
+<p>A blood gas analyzer is only as trustworthy as its most recent successful quality control run. Calibration and QC are not bureaucratic formalities — they are the only way to know whether the analyzer's results reflect clinical reality.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>1-Point Calibration</strong><br>Electrodes calibrated to a single standard value. Typically performed automatically every 20–30 minutes on stationary analyzers. Detects small drift during operation. Not sufficient to verify full accuracy range.</div>
+<div class="example-box soft-blue"><strong>2-Point Calibration</strong><br>Electrodes calibrated at two standard concentrations (low and high). Typically performed every 8 hours. Verifies linearity across the clinical range. Most common full calibration interval in routine use.</div>
+<div class="example-box soft-amber"><strong>3-Point Calibration</strong><br>Most thorough calibration — three standard concentrations. Typically performed every 6 months or after electrode replacement. Required after major maintenance or when 2-point calibration repeatedly fails.</div>
+</div>
+
+<h3 style="margin-top:20px">Quality Control (QC) — Three Error Categories</h3>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
+<div class="example-box soft-teal"><strong>Pre-Analytical Errors</strong><br>Sample collection, handling, and transport. Air bubbles, clots, delay, wrong patient, incorrect FiO₂ documentation. No analyzer can correct a bad sample.</div>
+<div class="example-box soft-amber"><strong>Analytical Errors</strong><br>Errors during measurement. Electrode failure, calibration drift, contaminated controls, expired reagents, temperature errors. Detected and resolved by calibration and QC runs.</div>
+<div class="example-box soft-coral"><strong>Post-Analytical Errors</strong><br>Incorrect reporting, transcription, or interpretation. Results reported to wrong patient, misinterpretation of values, failure to act on critical results. Training and verification processes prevent these.</div>
+</div>
+
+<div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:16px">
+<table>
+<tr><th>Problem</th><th>Likely Cause</th><th>RT Action</th></tr>
+<tr><td>2-point calibration failure</td><td>Electrode deterioration or fouling</td><td>Replace electrode per manufacturer protocol; repeat calibration before patient use</td></tr>
+<tr><td>Inaccurate PaO₂ readings</td><td>Water condensate on O₂ electrode probe</td><td>Inspect probe; dry or replace as indicated; verify calibration afterward</td></tr>
+<tr><td>QC sample out of range</td><td>Expired controls; temperature issue; analyzer drift</td><td>Remove analyzer from patient service; troubleshoot; repeat QC before returning to service</td></tr>
+<tr><td>Cartridge error (i-STAT)</td><td>Expired or damaged single-use cartridge</td><td>Replace with new cartridge; verify expiration date</td></tr>
+<tr><td>Implausible or inconsistent ABG</td><td>Air bubble, delay, or sample contamination</td><td>Review sample handling; redraw if results do not correlate with clinical picture</td></tr>
+</table>
+</div>
+
+<article class="quiz-card require-complete" id="calibrationQuiz" data-activity-name="QC Failure Response Check" style="margin-top:18px">
+<h3>Clinical Check: QC Failure During a Busy Shift</h3>
+<p>During morning setup in a busy ICU, the blood gas analyzer runs a 2-point calibration and flags it as "FAILED." Two ABG samples are waiting. The charge nurse asks you to "just run the samples — we're behind." What is the correct action?</p>
+<div class="quiz-options">
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. Running patient samples on a failed calibration analyzer is a serious patient safety violation. Results from an uncalibrated analyzer are unreliable and could lead to incorrect treatment decisions — including inappropriate ventilator changes or oxygen adjustments.">Run both samples immediately — the calibration can be repeated afterward, and the charge nurse's authorization is sufficient.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. A failed 2-point calibration indicates the analyzer's accuracy is compromised. Running one sample as a 'test' still exposes a patient to potentially incorrect results. The analyzer must not be used for patient testing until QC passes.">Run one sample as a test — if the result looks clinically plausible, proceed with the second.</button>
+<button class="quiz-option" data-correct="true" data-feedback="Correct. A failed QC run means the analyzer cannot be trusted for patient results. The correct action is to: (1) remove the analyzer from patient service, (2) troubleshoot per manufacturer protocol (check calibration gas connections, control expiration dates, electrode condition), (3) repeat QC, (4) use an alternate analyzer or send samples to central lab while troubleshooting. Document the failure and corrective actions. No patient samples may be run until QC passes.">Remove the analyzer from patient service; troubleshoot and repeat QC; send samples to central lab or use an alternate analyzer in the meantime.</button>
+<button class="quiz-option" data-correct="false" data-feedback="Incorrect. QC failure on a 2-point calibration is not automatically resolved by running a 1-point calibration. The 2-point failure indicates a more significant accuracy problem requiring troubleshooting. Patient samples must not be run until the issue is identified and resolved.">Run a 1-point calibration instead — if it passes, the analyzer is acceptable for patient use.</button>
+</div>
+<div class="quiz-feedback" role="status"></div>
+</article>
+</section>
+
+<!-- 14. PULSE OXIMETRY -->
+<section class="info-card" id="pulse-ox">
+<h2>Pulse Oximetry</h2>
+<span class="equip-badge">HIGH-YIELD EQUIPMENT SECTION</span>
+<p>Pulse oximetry provides continuous, noninvasive SpO₂ and heart rate. It is the most widely used monitoring device in respiratory care — and also the most commonly misinterpreted. Understanding what it cannot measure is as important as understanding what it can.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>What Pulse Ox Measures</strong><br>SpO₂ — functional hemoglobin saturation. Heart rate. Plethysmographic waveform (perfusion quality indicator).<br><br><strong>What It Does NOT Measure:</strong> PaO₂, PaCO₂, pH, HCO₃⁻, COHb, MetHb. A normal SpO₂ provides no information about ventilation or acid-base status.</div>
+<div class="example-box soft-blue"><strong>Probe Placement Sites</strong><br>Fingertip (most common) · Earlobe · Forehead · Bridge of nose · Infant hand or foot<br><br>Site selection affects signal quality. In low-perfusion states, forehead or earlobe probes are more reliable than peripheral finger sites.</div>
+<div class="example-box soft-amber"><strong>Documentation Requirements</strong><br>Probe type and placement site · Date and time · Patient activity level and position · FiO₂ and oxygen delivery method · Correlation of pulse ox heart rate with palpated or ECG heart rate · Any ABG or co-oximetry available for correlation</div>
+</div>
+
+<h3 style="margin-top:20px">Pulse Oximetry Limitations — Match the Scenario</h3>
+<article class="activity-card require-complete" data-activity-name="Pulse Ox Limitations Sort" style="margin-top:12px">
+<p>For each clinical situation, select the pulse oximetry limitation responsible for the unreliable reading.</p>
+<div class="sort-grid">
+<div class="sort-row" data-answer="cohb"><span>A patient rescued from a burning building has SpO₂ 99%, but appears confused with cherry-red skin</span><select><option value="">Select limitation…</option><option value="cohb">Cannot detect carboxyhemoglobin (COHb)</option><option value="motion">Motion artifact</option><option value="nail">Nail covering interference</option><option value="perfusion">Insufficient peripheral perfusion</option></select></div>
+<div class="sort-row" data-answer="motion"><span>An agitated patient's SpO₂ fluctuates between 88% and 98% rapidly — no other signs of distress</span><select><option value="">Select limitation…</option><option value="cohb">Cannot detect carboxyhemoglobin (COHb)</option><option value="motion">Motion artifact</option><option value="nail">Nail covering interference</option><option value="perfusion">Insufficient peripheral perfusion</option></select></div>
+<div class="sort-row" data-answer="nail"><span>A patient has dark gel acrylic nails — the probe shows a weak, inconsistent signal on the index finger</span><select><option value="">Select limitation…</option><option value="cohb">Cannot detect carboxyhemoglobin (COHb)</option><option value="motion">Motion artifact</option><option value="nail">Nail covering interference</option><option value="perfusion">Insufficient peripheral perfusion</option></select></div>
+<div class="sort-row" data-answer="perfusion"><span>A patient in cardiogenic shock with cold, mottled fingertips — no plethysmographic waveform detected</span><select><option value="">Select limitation…</option><option value="cohb">Cannot detect carboxyhemoglobin (COHb)</option><option value="motion">Motion artifact</option><option value="nail">Nail covering interference</option><option value="perfusion">Insufficient peripheral perfusion</option></select></div>
+</div>
+<button class="small-btn primary" id="checkPulseoxSort" type="button" style="margin-top:14px">Check Answers</button>
+<div class="activity-status" id="pulseoxSortStatus">Match all four scenarios to their limitations to continue.</div>
+</article>
+</section>
+
+<!-- 15. TRANSCUTANEOUS -->
+<section class="info-card" id="transcutaneous">
+<h2>Transcutaneous Monitoring</h2>
+<span class="equip-badge">EQUIPMENT: Transcutaneous PO₂/PCO₂ Monitor</span>
+<p>Transcutaneous monitoring (TcPO₂/TcPCO₂) provides noninvasive continuous estimates of arterial oxygen and carbon dioxide tensions by measuring gas diffusion through the heated skin. It is most commonly used in neonatal and pediatric intensive care.</p>
+<div class="three-card-grid" style="margin-top:14px">
+<div class="example-box soft-teal"><strong>How It Works</strong><br>Modified blood gas electrodes are attached to the skin surface. A heating element warms the skin to 42–45°C, causing local capillary vasodilation and arterialization of blood flow. This allows transcutaneous gas diffusion to approximate arterial levels. The PO₂ and PCO₂ measured at the skin surface reflect — but are not equal to — PaO₂ and PaCO₂.</div>
+<div class="example-box soft-amber"><strong>Clinical Applications</strong><br>Continuous monitoring in premature neonates where frequent ABG sampling is impractical. Trending PaO₂ and PaCO₂ changes during procedures. Monitoring during transport when access is limited. Not as accurate as direct ABG — used for trending, not for absolute values.</div>
+<div class="example-box soft-coral"><strong>Safety Concern — Burns</strong><br>The heating element required for arterialization creates a serious burn risk, especially in premature neonates with fragile skin. <strong>Sensors must be repositioned every 4–6 hours in adults and more frequently (every 2–4 hours) in neonates.</strong> Failure to reposition results in thermal skin injury — one of the most preventable complications of transcutaneous monitoring.</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:12px"><strong>Accuracy Limitations:</strong> Transcutaneous values correlate well with ABG values when perfusion is adequate and technique is correct. Accuracy decreases with: poor peripheral perfusion · shock · peripheral vascular disease · edema · medication-induced vasodilation/constriction. Always correlate TcPO₂/TcPCO₂ with intermittent ABG for validation.</div>
+</section>
+
+<!-- 16. ESCALATION & PEARLS -->
+<section class="info-card rt" id="escalation">
+<h2>Escalation &amp; RT Clinical Pearls</h2>
+<h3 style="margin-top:14px">When to Escalate</h3>
+<ul class="pearl-list" style="--pulmo-teal:var(--alert-coral);margin-top:4px;list-style:none;padding:0;display:grid;gap:10px">
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">PaO₂ critically low — apply/increase supplemental oxygen; notify provider; consider escalation to HFNC or NIV</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">PaCO₂ rising with somnolence or distress — ventilatory failure is imminent; escalate to NIV or intubation preparation</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Severe acidosis (pH &lt;7.20) — emergent intervention; notify provider/rapid response; prepare for ventilatory support</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">SpO₂ does not correlate with clinical appearance — consider CO poisoning; obtain ABG with co-oximetry immediately</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Analyzer QC failure — remove from service; use alternate analyzer or central lab; do not run patient samples</li>
+<li style="padding:10px 14px;border-radius:12px;background:#FDE9E9;border-left:4px solid var(--alert-coral)">Questionable sample quality (bubble, clot, delay) — do not report results as clinically valid; redraw before acting on data</li>
+</ul>
+<h3 style="margin-top:20px">RT Clinical Pearls</h3>
+<ul class="pearl-list" style="margin-top:4px">
+<li><strong>A normal SpO₂ does not rule out hypercapnia.</strong> The most dangerous clinical confusion in blood gas monitoring — PaCO₂ and pH require an ABG.</li>
+<li><strong>Air bubbles usually lower PaCO₂ and raise pH.</strong> CO₂ diffuses out of the sample into the air bubble faster than O₂ moves in — the net effect is always a decrease in PaCO₂.</li>
+<li><strong>A clotted sample must never be analyzed.</strong> Reject and redraw — running a clotted sample risks analyzer damage and produces falsely abnormal values.</li>
+<li><strong>The most common ABG errors occur before the sample reaches the analyzer</strong> — in collection, handling, and documentation, not in the machine itself.</li>
+<li><strong>Always document FiO₂ or oxygen device at the time of the draw.</strong> Without this, the ABG result cannot be clinically interpreted — oxygenation assessment is meaningless without knowing the oxygen delivery conditions.</li>
+<li><strong>Co-oximetry is the only test that detects CO poisoning directly.</strong> Standard ABG analyzers and pulse oximeters both fail in CO poisoning — only a co-oximeter with multi-wavelength analysis can measure COHb.</li>
+</ul>
+</section>
+
+<!-- 17. NBRC TRAPS -->
+<section class="info-card board" id="nbrc-traps">
+<h2>Common NBRC Traps — Blood Gas Monitoring</h2>
+<ul class="pearl-list trap-list" style="margin-top:14px">
+<li><strong>Interpreting SpO₂ as equivalent to PaO₂.</strong> SpO₂ is the percentage of hemoglobin saturated with oxygen. PaO₂ is the partial pressure of dissolved oxygen in plasma. They are related but not interchangeable. A patient with SpO₂ 94% may have PaO₂ anywhere from ~70 to 100 mmHg depending on their hemoglobin-oxygen dissociation curve position.</li>
+<li><strong>Trusting a normal SpO₂ in a CO-poisoned patient.</strong> Pulse oximetry reads carboxyhemoglobin as oxyhemoglobin. Cherry-red skin + smoke exposure + normal SpO₂ = CO poisoning until proven otherwise by co-oximetry.</li>
+<li><strong>Running a clotted ABG sample.</strong> Once a clot is visible, the sample must be rejected. Analyzing a clotted sample risks damaging the analyzer's electrodes and produces meaningless results.</li>
+<li><strong>Ignoring visible air bubbles in the syringe.</strong> Bubbles must be expelled immediately after collection. An uncorrected bubble causes a falsely low PaCO₂ and elevated pH — exactly the opposite of what a hypoventilating patient actually has.</li>
+<li><strong>Drawing an ABG and documenting it as "room air" when the patient is on supplemental oxygen.</strong> This produces a falsely elevated PaO₂ that makes the patient appear more oxygenated than they actually are. Always verify and document the actual oxygen device and flow at the time of the draw.</li>
+<li><strong>Not performing the Modified Allen test before radial puncture.</strong> If radial artery patency is compromised after the puncture and no collateral circulation exists, the hand may be at risk for ischemia. The Allen test is a required safety check — not optional.</li>
+<li><strong>Using pulse oximetry alone when pH or PaCO₂ information is needed.</strong> Pulse oximetry provides no information about acid-base status or CO₂ levels. A patient with a "good SpO₂" can simultaneously have severe respiratory acidosis — which pulse oximetry will completely miss.</li>
+</ul>
+</section>
+
+<!-- 18. CASE STUDY -->
+<section class="case-card require-complete" id="scenario" data-activity-name="Blood Gas Monitoring Case Study">
+<span class="eyebrow">Guided Unfolding Case</span>
+<h2>The Somnolent COPD Patient on 2 L/min</h2>
+<p>This case tests your ability to distinguish oxygenation from ventilation, identify the correct monitoring tool, and respond to critical ABG results.</p>
+
+<div class="case-stage" data-case-stage="0">
+<h3>Stage 1: Identifying the Clinical Problem</h3>
+<p><strong>Situation:</strong> A 68-year-old male with severe COPD is on 2 L/min O₂ via nasal cannula in a step-down unit. The nurse calls you because he has become increasingly somnolent over the past two hours. His SpO₂ is <strong>94%</strong>. His respiratory rate is <strong>8 breaths/min</strong>.</p>
+<p><strong>Decision:</strong> What is the primary clinical concern — oxygenation or ventilation — and what is the most appropriate monitoring tool?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. While SpO₂ 94% is below the typical COPD target (88–92% on supplemental O₂ is often acceptable), a SpO₂ of 94% alone does not explain new somnolence. The critical finding here is the respiratory rate of 8/min — far below normal — and new altered mental status. This pattern suggests CO₂ retention (hypoventilation), not primarily a failure of oxygenation.">Oxygenation — SpO₂ 94% is below normal; increase oxygen flow and recheck.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The combination of a respiratory rate of 8/min and new somnolence strongly suggests CO₂ retention (hypoventilation leading to hypercapnic respiratory failure). The SpO₂ of 94% does not rule this out — pulse oximetry provides NO information about PaCO₂ or pH. An ABG is required to evaluate ventilation (PaCO₂ and pH). Increasing oxygen without assessing CO₂ could further blunt the hypoxic drive in a COPD patient and worsen CO₂ retention.">Ventilation — RR 8/min and somnolence suggest CO₂ retention; an ABG is needed to assess PaCO₂ and pH, which pulse oximetry cannot provide.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. A somnolent patient with RR 8/min on supplemental oxygen is not a 'normal COPD presentation.' While many COPD patients tolerate lower SpO₂ values, new somnolence combined with bradypnea is a significant change requiring clinical investigation — this is not a reassuring baseline.">Neither — SpO₂ 94% and RR 8 are acceptable baseline findings for a COPD patient on supplemental oxygen.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="1">
+<h3>Stage 2: ABG Results Arrive</h3>
+<p><strong>Update:</strong> An ABG is drawn from the radial artery. The Modified Allen test is positive. Results: pH <strong>7.26</strong>, PaCO₂ <strong>71 mmHg</strong>, PaO₂ <strong>74 mmHg</strong>, HCO₃⁻ <strong>31 mEq/L</strong>, SaO₂ <strong>93%</strong>. FiO₂ is documented as 2 L/min nasal cannula.</p>
+<p><strong>Decision:</strong> What does this ABG pattern represent?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Metabolic alkalosis would show elevated HCO₃⁻ (which IS elevated here at 31, consistent with compensation) AND a normal or high pH. This patient's pH is 7.26 — acidotic. The elevated HCO₃⁻ is chronic renal compensation from longstanding COPD, not the primary process.">Metabolic alkalosis — HCO₃⁻ is elevated above normal range.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. pH 7.26 (acidotic) + elevated PaCO₂ 71 mmHg = respiratory acidosis. The elevated HCO₃⁻ (31 mEq/L) reflects chronic metabolic compensation — consistent with a COPD patient who chronically retains CO₂. The acutely low pH despite elevated HCO₃⁻ indicates an acute-on-chronic exacerbation: his baseline elevated CO₂ is now rising further acutely. This patient needs ventilatory support — NIV (BiPAP) is typically the first-line intervention in COPD with hypercapnic respiratory failure.">Respiratory acidosis with chronic metabolic compensation — acute-on-chronic hypercapnic respiratory failure consistent with COPD exacerbation.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. These values are clearly outside normal limits. pH 7.26 is significantly below the lower limit of normal (7.35). PaCO₂ 71 mmHg is well above normal (35–45 mmHg). These results represent a medical emergency, not an acceptable baseline.">Normal ABG for a COPD patient — these values are within expected ranges for his condition.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="section-continue case-next"><button class="btn btn-primary" type="button">Continue Case →</button></div>
+</div>
+
+<div class="case-stage lesson-hidden" data-case-stage="2">
+<h3>Stage 3: Monitoring Decision</h3>
+<p><strong>Update:</strong> The physician orders BiPAP and requests continuous monitoring. A colleague suggests that since the patient is now on BiPAP, "continuous pulse oximetry is sufficient — we don't need to keep drawing ABGs." What is the RT's response?</p>
+<div class="quiz-options case-options">
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. While pulse oximetry does monitor SpO₂ in real time, it provides NO information about PaCO₂ or pH — the two values that are driving this patient's clinical problem. A patient on BiPAP for hypercapnic failure could have improving SpO₂ while PaCO₂ continues to rise and pH continues to fall.">Agree — continuous pulse oximetry is sufficient to monitor this patient on BiPAP.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. This patient's primary problem is CO₂ retention and respiratory acidosis — parameters that pulse oximetry cannot assess. Continuous SpO₂ monitoring is valuable but must be combined with serial ABGs to evaluate whether BiPAP is actually correcting PaCO₂ and pH. An improving SpO₂ with worsening PaCO₂ would be missed by pulse oximetry alone. ABGs should typically be drawn 30–60 minutes after initiating NIV to assess response.">Disagree — pulse oximetry cannot measure PaCO₂ or pH. Serial ABGs are needed to assess whether BiPAP is correcting CO₂ retention and acidosis.</button>
+<button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Transcutaneous monitoring is used in neonatal settings primarily and has significant accuracy limitations, especially in patients with poor perfusion. While it could trend PaCO₂ changes, it does not replace ABG validation in an adult ICU setting and would not be the standard of care for monitoring this patient's BiPAP response.">Switch to transcutaneous monitoring — it provides continuous CO₂ measurement without repeated blood draws.</button>
+</div>
+<div class="quiz-feedback case-feedback" role="status"></div>
+<div class="example-box soft-teal" style="margin-top:16px"><strong>Case Summary:</strong> This case illustrates the most critical concept in blood gas monitoring: oxygenation and ventilation are different, and only an ABG can assess both. The patient's "acceptable" SpO₂ masked life-threatening CO₂ retention and acidosis. Pulse oximetry is valuable — but it is a complement to ABG monitoring, never a substitute when ventilation status is the clinical question.</div>
+</div>
+</section>
+
+<!-- 19. KNOWLEDGE CHECK -->
+<section class="quiz-card require-complete" id="knowledge-check" data-activity-name="Blood Gas Monitoring Knowledge Check">
+<span class="eyebrow">Knowledge Check</span>
+<h2>NBRC-Style Practice Questions</h2>
+<p>Answer each question correctly to complete this section.</p>
+
+<div class="knowledge-question" data-question-id="bg1" style="margin-bottom:20px">
+<h3>Question 1</h3>
+<p>Which of the following sample-handling errors will cause the PaCO₂ to be <em>artificially decreased</em> in a blood gas sample?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="bg1" data-correct="false" data-feedback="Incorrect. Room-temperature storage increases PaCO₂ because blood cells continue metabolizing — they produce CO₂ and consume O₂. This effect worsens the longer the delay. Chilling the sample (ice slurry) slows cellular metabolism and extends acceptable storage time.">Storing the sample at room temperature for 45 minutes before analysis.</button>
+<button class="quiz-option knowledge-option" data-question="bg1" data-correct="true" data-feedback="Correct. Air bubbles decrease PaCO₂. Room air contains approximately 0.04% CO₂ — essentially zero compared to the ~5% CO₂ in arterial blood. CO₂ rapidly diffuses from the sample (high concentration) into the air bubble (near-zero concentration), lowering the sample's PaCO₂. At the same time, less CO₂ means less carbonic acid — so pH rises. The effect on PaO₂ depends on whether the patient's PaO₂ is above or below the PO₂ of room air (~160 mmHg).">Air bubble contamination that was not expelled before transport to the analyzer.</button>
+<button class="quiz-option knowledge-option" data-question="bg1" data-correct="false" data-feedback="Incorrect. A clotted sample should be rejected entirely — it cannot be analyzed. If it were run (which it should not be), the clot would interfere with electrode function. The presence of a clot does not specifically decrease PaCO₂.">Sample containing a visible blood clot from inadequate heparinization.</button>
+<button class="quiz-option knowledge-option" data-question="bg1" data-correct="false" data-feedback="Incorrect. Transporting an iced sample is the correct method for delaying samples that cannot be analyzed immediately — it slows cellular metabolism. This does not decrease PaCO₂; it prevents the metabolic rise in PaCO₂ that would otherwise occur during room-temperature storage.">Transporting the sample in an ice slurry to slow cellular metabolism.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="bg2" style="margin-bottom:20px">
+<h3>Question 2</h3>
+<p>A patient with methemoglobinemia has SpO₂ reading of approximately 85% on pulse oximetry, but appears clinically more compromised than expected. What is the most accurate explanation for this reading?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="bg2" data-correct="false" data-feedback="Incorrect. Motion artifact causes fluctuating, inconsistent readings — not a fixed ~85% reading. A stable 85% in an unexpected clinical context suggests a specific physiological limitation, not motion.">The reading is caused by motion artifact — reposition the probe and recheck.</button>
+<button class="quiz-option knowledge-option" data-question="bg2" data-correct="true" data-feedback="Correct. Methemoglobin absorbs light at wavelengths that cause standard 2-wavelength pulse oximeters to read SpO₂ at approximately 85% regardless of the actual functional saturation. This is because MetHb absorbs equally at both the 660 nm and 940 nm wavelengths used by pulse oximeters — causing it to be read as a fixed 85% as MetHb increases. The true functional saturation may be much lower. Only co-oximetry can directly measure MetHb percentage.">Methemoglobin causes pulse oximetry to read approximately 85% regardless of true functional saturation — co-oximetry is needed to measure MetHb directly.</button>
+<button class="quiz-option knowledge-option" data-question="bg2" data-correct="false" data-feedback="Incorrect. SpO₂ 85% in methemoglobinemia is a real limitation of pulse oximetry, not an artifact of probe placement. Moving the probe to another site will produce the same ~85% reading because the limitation is the light absorption property of methemoglobin, not probe position.">The probe is incorrectly placed — move to a different site for accurate reading.</button>
+<button class="quiz-option knowledge-option" data-question="bg2" data-correct="false" data-feedback="Incorrect. A standard ABG analyzer measures only total hemoglobin saturation using calculated values — it cannot distinguish methemoglobin from oxyhemoglobin. Only a co-oximeter (multi-wavelength spectrophotometer) can separate and quantify each hemoglobin fraction.">Order a standard ABG — the analyzer will calculate the true SaO₂ and identify the cause.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="bg3" style="margin-bottom:20px">
+<h3>Question 3</h3>
+<p>During a radial artery ABG attempt, the RT notices the plunger is pulled back to collect the sample. This technique indicates which of the following problems?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="bg3" data-correct="false" data-feedback="Incorrect. Using a venous or mixed venous site would produce a different (lower) PO₂ and different pH and PaCO₂ values — but this is not what pulling the plunger indicates. Pulling the plunger is specifically problematic because of air introduction, regardless of which site is used.">The RT may have accessed a venous rather than arterial site.</button>
+<button class="quiz-option knowledge-option" data-question="bg3" data-correct="true" data-feedback="Correct. In a true arterial puncture, the arterial pressure pushes blood into the preheparinized syringe without requiring the plunger to be pulled. If the RT must pull back on the plunger, it suggests: (1) the needle may not be fully seated in the artery, (2) the artery may be in spasm, or (3) a venous site was accessed. More importantly, pulling the plunger introduces room air into the sample — a direct source of PaCO₂ decrease and pH elevation. This technique should be avoided.">Pulling the plunger can introduce room air into the sample, artificially altering PaCO₂ and pH — spontaneous arterial flow should fill the syringe.</button>
+<button class="quiz-option knowledge-option" data-question="bg3" data-correct="false" data-feedback="Incorrect. Pulling the plunger does not speed up clotting — heparin in the syringe prevents clotting. The primary concern with pulling the plunger is room-air introduction, not clot formation.">Pulling the plunger back speeds clot formation in the heparinized sample.</button>
+<button class="quiz-option knowledge-option" data-correct="false" data-feedback="Incorrect. Pulling the plunger is not a recommended technique for arterial sampling. True arterial blood pressure is sufficient to fill the syringe without pulling. When pulling is required, it suggests a problem with needle position or site selection — it is not an acceptable alternative technique.">This is an acceptable alternative technique when the patient's blood pressure is low.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="bg4" style="margin-bottom:20px">
+<h3>Question 4</h3>
+<p>Before performing a radial arterial blood gas on a patient, the RT performs the Modified Allen test and finds that color does NOT return to the palm after releasing ulnar pressure. What is the correct next step?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="bg4" data-correct="false" data-feedback="Incorrect. A negative Modified Allen test means the ulnar artery cannot adequately perfuse the hand if the radial artery is damaged or goes into spasm. Proceeding with the radial puncture at this site puts the patient's hand at risk for ischemia.">Proceed with the radial puncture — one negative Allen test does not contraindicate the procedure.</button>
+<button class="quiz-option knowledge-option" data-question="bg4" data-correct="true" data-feedback="Correct. A negative Modified Allen test (no return of color after releasing ulnar pressure) indicates absent or insufficient collateral ulnar circulation. The radial artery MUST NOT be used at this site. Options include: trying the contralateral radial artery with a new Allen test, using the brachial artery (note: less collateral circulation), or using a femoral artery in emergencies. Document the negative Allen test and site change.">Do NOT use the radial artery at this site — document the negative Allen test and select an alternate sampling site.</button>
+<button class="quiz-option knowledge-option" data-question="bg4" data-correct="false" data-feedback="Incorrect. Waiting does not change the anatomy — the collateral circulation is what it is. A second Allen test on the same hand will very likely produce the same negative result. The correct response is to avoid the radial artery entirely on this side and select a different site.">Repeat the Allen test on the same hand after 5 minutes — a second positive result overrides the first negative.</button>
+<button class="quiz-option knowledge-option" data-question="bg4" data-correct="false" data-feedback="Incorrect. The Modified Allen test cannot be 'done incorrectly' in a way that would make a negative result appear false without obvious technique errors. The test is simple and well-standardized. A negative result should be taken at face value and documented.">The Allen test was likely performed incorrectly — repeat the test and proceed if the second attempt is positive.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="knowledge-question" data-question-id="bg5" style="margin-bottom:20px">
+<h3>Question 5</h3>
+<p>An RT draws an ABG on a patient who is receiving 4 L/min O₂ via nasal cannula but documents the sample as "room air." Why is this documentation error clinically significant?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="bg5" data-correct="false" data-feedback="Incorrect. The documentation error does not cause the blood gas analyzer to produce incorrect numbers — the machine measures what is in the sample. The problem is in how those numbers are interpreted clinically, not in what the machine produces.">The blood gas analyzer will produce incorrect values if FiO₂ is documented incorrectly.</button>
+<button class="quiz-option knowledge-option" data-question="bg5" data-correct="true" data-feedback="Correct. At 4 L/min nasal cannula, the patient's FiO₂ is approximately 36–40% (not 21% room air). The PaO₂ measured in the sample reflects oxygenation at 36–40% FiO₂. If interpreted as 'room air,' clinicians would calculate an artificially favorable P/F ratio and alveolar-arterial gradient, making the patient appear much better oxygenated than they actually are. This error can lead to delayed escalation of oxygen therapy or premature oxygen weaning.">The PaO₂ reflects oxygenation at ~36–40% FiO₂ — interpreting it as room air produces a falsely favorable A-a gradient and may prevent appropriate escalation of oxygen therapy.</button>
+<button class="quiz-option knowledge-option" data-question="bg5" data-correct="false" data-feedback="Incorrect. pH and PaCO₂ values are not altered by the supplemental oxygen — the documentation error primarily affects clinical interpretation of oxygenation-related values (PaO₂, P/F ratio, A-a gradient). The acid-base assessment would still be valid.">This error invalidates all values including pH and PaCO₂ — the ABG must be redrawn.</button>
+<button class="quiz-option knowledge-option" data-question="bg5" data-correct="false" data-feedback="Incorrect. Documentation errors are clinically significant — in this case, they directly affect interpretation of the patient's oxygenation status. A wrong FiO₂ documentation changes how clinicians calculate and interpret the P/F ratio and A-a gradient.">Documentation errors are administrative only — they do not affect clinical interpretation.</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="activity-status" id="knowledgeStatus">0 / 5 questions answered correctly.</div>
+</section>
+
+<!-- 20. FAQ -->
+<section id="faq">
+<span class="eyebrow">FAQ</span>
+<h2 style="font-family:var(--font-heading);font-size:clamp(1.9rem,3vw,3rem);letter-spacing:-.035em;margin:8px 0 16px">Common Questions</h2>
+<details class="accordion" open>
+<summary>What is the difference between PaO₂ and SpO₂?</summary>
+<div class="accordion-body"><p>PaO₂ is the partial pressure of oxygen dissolved in arterial plasma, measured in mmHg by a blood gas analyzer. SpO₂ is the percentage of hemoglobin molecules in the blood that are bound to oxygen, measured noninvasively by pulse oximetry. They are related through the oxygen-hemoglobin dissociation curve — but they are not interchangeable. A PaO₂ of 60 mmHg corresponds to approximately SpO₂ 90% on the standard dissociation curve. Pulse oximetry cannot measure PaO₂ directly, and the relationship between SpO₂ and PaO₂ changes with pH, temperature, and other factors.</p></div>
+</details>
+<details class="accordion">
+<summary>Why does an air bubble decrease PaCO₂?</summary>
+<div class="accordion-body"><p>Room air contains essentially no CO₂ (~0.04%). Arterial blood contains approximately 5–6% CO₂. When an air bubble is in the syringe, CO₂ rapidly diffuses from the high-concentration blood into the low-concentration bubble. This reduces the CO₂ content of the sample. Less CO₂ means less carbonic acid — so pH rises alongside the falling PaCO₂. This is why it's critical to expel air bubbles immediately after collection, before CO₂ has time to equilibrate with the bubble. The effect on PaO₂ depends on whether the patient's PaO₂ is above or below approximately 160 mmHg (the room air PO₂).</p></div>
+</details>
+<details class="accordion">
+<summary>Why is heparin used in ABG syringes?</summary>
+<div class="accordion-body"><p>Blood begins clotting within seconds of leaving the vessel — this is a normal physiological response. In a blood gas syringe, clotting would make the sample unusable (a clotted sample must be rejected), and if somehow analyzed, would produce inaccurate results and potentially damage analyzer electrodes. Heparin is an anticoagulant that inhibits the coagulation cascade, keeping the blood in a liquid state during transport and analysis. Most modern ABG syringes are preheparinized — the heparin is already present in the syringe body. The amount of heparin must be carefully calibrated: too little allows clotting; too much (excess liquid heparin) can dilute the sample and alter PaCO₂ and HCO₃⁻ values.</p></div>
+</details>
+<details class="accordion">
+<summary>When should co-oximetry be ordered instead of just an ABG?</summary>
+<div class="accordion-body"><p>Co-oximetry is needed whenever the question involves abnormal hemoglobin species — not just total saturation. Order co-oximetry when: (1) Carbon monoxide poisoning is suspected (smoke inhalation, enclosed space, vehicle exposure) — pulse oximetry reads COHb as oxyhemoglobin and will show falsely normal SpO₂. (2) Methemoglobinemia is suspected (dapsone, nitrates, certain local anesthetics). (3) SpO₂ does not match the clinical picture. (4) SpO₂ is below 80% and co-oximetric confirmation is needed. (5) Unexplained severe hypoxemia when other causes have been ruled out. A standard ABG analyzer cannot measure COHb or MetHb — only a co-oximeter with multiple wavelengths can separate these fractions.</p></div>
+</details>
+<details class="accordion">
+<summary>Why must FiO₂ be documented with every ABG result?</summary>
+<div class="accordion-body"><p>The PaO₂ value in isolation is meaningless without knowing how much oxygen the patient was receiving when the blood was drawn. A PaO₂ of 80 mmHg on room air (21% O₂) is perfectly normal. A PaO₂ of 80 mmHg on 100% FiO₂ via mechanical ventilation is catastrophically low. Clinicians use the P/F ratio (PaO₂ ÷ FiO₂) and the alveolar-arterial (A-a) gradient — both of which require knowing the FiO₂ — to assess the efficiency of oxygenation. Without documenting the oxygen device, flow, and FiO₂ at the time of the draw, the ABG cannot be properly interpreted and may actually be clinically misleading.</p></div>
+</details>
+<details class="accordion">
+<summary>What is the difference between a GEM analyzer and an i-STAT?</summary>
+<div class="accordion-body"><p>Both are blood gas analyzers, but they serve different settings. A GEM system is a stationary, laboratory-grade analyzer typically found in a central lab or blood gas lab. It is maintained by biomedical staff or respiratory therapy, performs regular automated calibrations, requires larger sample volumes, and processes high-volume testing with full panels. The i-STAT is a handheld point-of-care device. It uses single-use, precalibrated cartridges that handle their own calibration internally — no daily maintenance is required. It accepts very small samples and produces results in about 2 minutes. The i-STAT is ideal for bedside, emergency, and transport settings where rapid turnaround is critical and central lab distance is a barrier.</p></div>
+</details>
+</section>
+
+<!-- 21. SUMMARY -->
+<section class="info-card" id="summary">
+<h2>Summary &amp; Board-Prep Reminders</h2>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Oxygenation ≠ Ventilation</strong><br>PaO₂/SpO₂ = oxygenation. PaCO₂/pH = ventilation. A normal SpO₂ never rules out CO₂ retention. Always get an ABG when ventilation status is the question.</div>
+<div class="example-box soft-coral"><strong>Sample Errors — Know the Effects</strong><br>Air bubble: ↓PaCO₂, ↑pH. Room-temp delay: ↑PaCO₂, ↓pH, ↓PaO₂. Clot: reject and redraw. Wrong FiO₂ documented: invalidates oxygenation interpretation.</div>
+<div class="example-box soft-blue"><strong>Co-Oximetry Is Not Optional in CO Poisoning</strong><br>Pulse ox reads COHb as oxyhemoglobin — SpO₂ 99% with CO poisoning is possible. Co-oximetry is the only way to measure COHb directly. Never rely on SpO₂ alone after smoke or CO exposure.</div>
+<div class="example-box soft-amber"><strong>QC Failure = No Patient Samples</strong><br>An analyzer with a failed QC run must be removed from service. No exceptions — not even in emergencies. Send samples to central lab or alternate analyzer until resolved.</div>
+</div>
+<div class="example-box soft-teal" style="margin-top:14px"><strong>NBRC Must-Know List:</strong> SpO₂ ≠ PaO₂ · Normal SpO₂ does not rule out hypercapnia · Air bubble decreases PaCO₂ · Clotted samples → reject always · Always document FiO₂ at time of draw · Negative Allen test → change site · Co-oximetry = CO poisoning, MetHb · QC failure → remove analyzer from service · Transcutaneous sensors → reposition every 4–6 hours to prevent burns</div>
+</section>
+
+<!-- 22. FLASHCARDS -->
+<section id="flashcards">
+<div class="glossary-card">
+<h3>Glossary &amp; Flashcard Mastery Deck</h3>
+<p>Click any card to flip it. Includes all normal values, sample error effects, and clinical decision rules for NBRC preparation.</p>
+<div class="flashcard-shell">
+<div aria-live="polite" class="progress-row"><strong id="progressText">Progress: 0 / 0 mastered</strong><div aria-hidden="true" class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<div class="tabs" role="tablist"><button class="tab-btn active" data-view="active">Review Deck</button><button class="tab-btn" data-view="completed">Completed ✓</button><button class="tab-btn" data-view="all">All Cards</button></div>
+<div aria-label="Flashcard. Click to flip." class="flashcard" id="flashcard" role="button" tabindex="0"><div><div class="term" id="cardFront">Loading...</div><p class="definition" hidden id="cardBack"></p></div></div>
+<div class="deck-actions"><button class="small-btn" id="revealCard">Flip Card</button><button class="small-btn primary" id="knowCard">Know It ✓</button><button class="small-btn" id="reviewAgain">Review Again</button><button class="small-btn warn" id="resetAll">Reset All</button><button class="small-btn" id="shuffleDeck">Shuffle Active</button></div>
+<div class="completed-list" id="completedList"></div>
+</div>
+</div>
+</section>
+
+</div>
+</div>
+</main>
+<footer class="footer">
+<div><strong>Pulmo<span>Core</span></strong><br>Core respiratory care learning for future RTs.</div>
+<div>Respiratory Equipment &amp; Procedures · Blood Gas Monitoring</div>
+</footer>
+</div>
+
+<script>
+/* ── COURSE MENU ── */
+document.addEventListener("DOMContentLoaded",function(){
+const button=document.getElementById("courseMenuButton"),panel=document.getElementById("courseMenuPanel");
+if(button&&panel){
+panel.innerHTML='<div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>';
+const list=document.getElementById("courseMenuList"),courses=window.PULMOCORE_COURSES||window.pulmoCoreCourses||[];
+const currentFile=window.location.pathname.split("/").pop().toLowerCase();
+if(courses.length){list.innerHTML=courses.map(course=>{const file=course.file||course.href||"#";const title=course.title||course.name||file;let statusLabel="Not started",statusClass="not-started";if(typeof window.getCourseProgress==="function"){const progress=window.getCourseProgress(file);if(progress&&progress.completed){statusLabel="Complete";statusClass="complete"}else if(progress&&progress.percent>0){statusLabel="In progress ("+progress.percent+"%)";statusClass="in-progress"}}const isCurrent=file.toLowerCase()===currentFile;return'<a class="course-menu-item '+(isCurrent?"current":"")+'" href="'+file+'" role="menuitem"><span class="course-menu-title">'+title+'</span><span class="course-menu-status '+statusClass+'">'+statusLabel+'</span></a>'}).join("")}else{list.innerHTML='<div class="empty-state">Course list loads when courses.js is available.</div>'}
+button.onclick=function(event){event.preventDefault();event.stopPropagation();const isOpen=panel.classList.contains("open");panel.classList.toggle("open",!isOpen);button.setAttribute("aria-expanded",String(!isOpen))};
+document.addEventListener("click",event=>{if(!panel.contains(event.target)&&event.target!==button){panel.classList.remove("open");button.setAttribute("aria-expanded","false")}})
+}
+});
+
+/* ── GLOSSARY ── */
+const glossaryTerms=[
+{term:"ABG",definition:"Arterial Blood Gas — a sample drawn from an artery (typically radial) to measure pH, PaCO₂, PaO₂, HCO₃⁻, and SaO₂. The gold standard for evaluating oxygenation, ventilation, and acid-base status."},
+{term:"PaO₂",definition:"Partial pressure of oxygen dissolved in arterial plasma. Normal: 80–100 mmHg on room air. Reflects oxygenation status. Cannot be measured by pulse oximetry — requires direct blood gas analysis."},
+{term:"PaCO₂",definition:"Partial pressure of carbon dioxide in arterial blood. Normal: 35–45 mmHg. Directly reflects ventilation status. High PaCO₂ = hypoventilation/respiratory acidosis. Low PaCO₂ = hyperventilation/respiratory alkalosis."},
+{term:"pH",definition:"The negative log of hydrogen ion concentration — measures blood acidity/alkalinity. Normal: 7.35–7.45. Below 7.35 = acidosis. Above 7.45 = alkalosis. Tightly regulated by the lungs (PaCO₂) and kidneys (HCO₃⁻)."},
+{term:"HCO₃⁻",definition:"Bicarbonate — the primary metabolic/renal buffer in the acid-base system. Normal: 22–26 mEq/L. Elevated = metabolic alkalosis or renal compensation for chronic respiratory acidosis. Decreased = metabolic acidosis or renal compensation for chronic respiratory alkalosis."},
+{term:"SaO₂ vs SpO₂",definition:"SaO₂ = arterial hemoglobin saturation measured directly by co-oximetry on a blood sample. SpO₂ = peripheral saturation estimated noninvasively by pulse oximetry. SpO₂ approximates SaO₂ but cannot detect COHb or MetHb — and can be falsely normal in CO poisoning."},
+{term:"Oxygenation vs Ventilation",definition:"Oxygenation = delivery of O₂ to blood, measured by PaO₂/SpO₂. Ventilation = movement of air removing CO₂, measured by PaCO₂ and pH. A normal SpO₂ does NOT rule out ventilatory failure. Both must be assessed to fully evaluate a patient with respiratory compromise."},
+{term:"Co-Oximetry",definition:"Multi-wavelength spectrophotometric analysis that identifies and quantifies multiple hemoglobin species: oxyhemoglobin, reduced Hb, carboxyhemoglobin (COHb), and methemoglobin (MetHb). Required when CO poisoning or MetHb is suspected — standard ABG and pulse oximetry cannot detect these."},
+{term:"Carboxyhemoglobin (COHb)",definition:"Hemoglobin bound to carbon monoxide instead of oxygen. Renders Hb unable to carry O₂. Pulse oximetry reads COHb as oxyhemoglobin — SpO₂ appears falsely normal in CO poisoning. Only co-oximetry can measure COHb directly."},
+{term:"Methemoglobin (MetHb)",definition:"Oxidized form of hemoglobin that cannot carry oxygen. Caused by dapsone, nitrites, benzocaine, and other drugs. Pulse oximetry reads ~85% regardless of actual saturation when MetHb is present. Requires co-oximetry for accurate measurement."},
+{term:"Modified Allen Test",definition:"A 5-step bedside test performed before radial artery puncture to confirm collateral ulnar circulation to the hand. Steps: fist clench → compress both arteries → open hand (should blanch) → release ulnar pressure → observe for color return within 5–7 sec. Negative test (no return) = do not use that radial site."},
+{term:"Air Bubble Effect on ABG",definition:"Air bubble in an ABG syringe decreases PaCO₂ and increases pH. CO₂ diffuses from the high-concentration sample into the near-zero concentration bubble. PaO₂ change depends on the patient's baseline PaO₂ relative to room air PO₂. Remove bubbles immediately after collection."},
+{term:"Sample Delay Effect on ABG",definition:"Storing an ABG sample at room temperature for >10–30 minutes: PaCO₂ increases, pH decreases, PaO₂ decreases. Blood cells continue metabolizing — producing CO₂ and consuming O₂. Correct action: analyze within 10 minutes; if delay is unavoidable, place in ice slurry. Analyze within 30 minutes maximum."},
+{term:"Point-of-Care Analyzer (i-STAT)",definition:"A handheld blood gas analyzer using single-use, precalibrated cartridges. Provides results in ~60–120 seconds from a small sample volume. Ideal for bedside, ED, ICU, and transport settings. No daily maintenance or electrode calibration required — cartridge handles it."},
+{term:"Calibration — 1-Point",definition:"Blood gas electrode calibration to a single standard value. Typically automated every 20–30 minutes on stationary analyzers. Detects small drift between full calibrations. Not sufficient to verify full accuracy range alone."},
+{term:"Calibration — 2-Point",definition:"Blood gas electrode calibration at two standard concentrations (low and high). Verifies accuracy across the clinical range. Typically performed every 8 hours on stationary analyzers. If a 2-point calibration fails, the analyzer must be removed from patient service until resolved."},
+{term:"Quality Control (QC)",definition:"Running known-concentration control samples through the blood gas analyzer to verify measurement accuracy. If QC results fall outside acceptable ranges, the analyzer must be removed from patient service. Covers pre-analytical, analytical, and post-analytical error categories."},
+{term:"Transcutaneous Monitoring",definition:"Noninvasive monitoring of PO₂ and PCO₂ using heated skin surface electrodes (42–45°C). Heating causes local capillary arterialization. Primarily used in neonates. Must be repositioned every 4–6 hours (more frequently in neonates) to prevent thermal burns — the most common complication."},
+{term:"Preheparinized ABG Syringe",definition:"A plastic syringe (1 or 3 mL) with heparin already present in the barrel to prevent clotting of the arterial blood sample during transport and analysis. The 20–22 gauge short-bevel needle should be inserted bevel-up. Spontaneous arterial pressure should fill the syringe without pulling the plunger."},
+{term:"Pre-Analytical ABG Error",definition:"Any error occurring before the blood gas sample reaches the analyzer. The most common category of ABG errors. Includes: air bubble contamination, clot formation (insufficient heparin), room-temperature delay, incorrect patient labeling, and failure to document FiO₂ at time of draw."}
+];
+
+let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
+const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
+function getVisibleDeck(){if(currentView==="completed")return completedDeck;if(currentView==="all")return[...activeDeck,...completedDeck];return activeDeck}
+function updateProgress(){const total=glossaryTerms.length,mastered=completedDeck.length,percent=total?(mastered/total)*100:0;progressText.textContent=`Progress: ${mastered} / ${total} mastered · Active Review: ${activeDeck.length}`;progressFill.style.width=`${percent}%`}
+function renderCompletedList(){completedList.innerHTML=completedDeck.length?`<strong>Completed Cards:</strong><ul>${completedDeck.map(item=>`<li>${item.term}</li>`).join("")}</ul>`:'<div class="empty-state">No cards completed yet.</div>'}
+function renderFlashcard(){const deck=getVisibleDeck();answerShown=false;cardBack.hidden=true;completedList.classList.toggle("show",currentView==="completed");if(!deck.length){cardFront.textContent=currentView==="completed"?"No completed cards yet.":"Deck complete!";cardBack.textContent="Use Reset All to review again.";cardBack.hidden=false}else{if(currentIndex>=deck.length)currentIndex=0;const card=deck[currentIndex];cardFront.textContent=card.term;cardBack.textContent=card.definition;cardFront.className="term";cardBack.className="definition"}updateProgress();renderCompletedList()}
+function flipCurrentCard(){if(!getVisibleDeck().length)return;answerShown=!answerShown;cardBack.hidden=!answerShown}
+function advanceCard(){const deck=getVisibleDeck();if(!deck.length)return;currentIndex=(currentIndex+1)%deck.length;renderFlashcard()}
+document.getElementById("revealCard").addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("click",flipCurrentCard);
+flashcard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCurrentCard()}});
+document.getElementById("knowCard").addEventListener("click",()=>{if(currentView!=="active"||!activeDeck.length)return;const[known]=activeDeck.splice(currentIndex,1);completedDeck.push(known);if(currentIndex>=activeDeck.length)currentIndex=0;renderFlashcard()});
+document.getElementById("reviewAgain").addEventListener("click",advanceCard);
+document.getElementById("resetAll").addEventListener("click",()=>{activeDeck=[...glossaryTerms];completedDeck=[];currentIndex=0;currentView="active";document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.view==="active"));renderFlashcard()});
+document.getElementById("shuffleDeck").addEventListener("click",()=>{for(let i=activeDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[activeDeck[i],activeDeck[j]]=[activeDeck[j],activeDeck[i]]}currentIndex=0;renderFlashcard()});
+document.querySelectorAll(".tab-btn[data-view]").forEach(button=>button.addEventListener("click",()=>{currentView=button.dataset.view;currentIndex=0;document.querySelectorAll(".tab-btn[data-view]").forEach(btn=>btn.classList.remove("active"));button.classList.add("active");renderFlashcard()}));
+renderFlashcard();
+
+/* ── SHUFFLE ── */
+function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEach(container=>{const options=Array.from(container.children).filter(c=>c.classList&&c.classList.contains("quiz-option"));for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]]}options.forEach(o=>container.appendChild(o))})}
+shuffleAnswerOptions();
+
+/* ── MARK COMPLETE ── */
+function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
+
+/* ── PROGRESSIVE SECTIONS ── */
+function initializeProgressiveSections(){
+  if(initializeProgressiveSections._done)return;
+  initializeProgressiveSections._done=true;
+const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));
+const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
+function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
+function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
+function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+function updateAll(){sections.forEach(setContinueState)}
+function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
+function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+sections.forEach((section,index)=>{if(index>=sections.length-1)return;const next=sections[index+1];const nextTitle=getSectionTitle(next);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});
+navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+document.addEventListener("activityComplete",updateAll);
+const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";sections[0].appendChild(note);
+updateNav(0);updateAll()
+}
+initializeProgressiveSections();
+
+/* ── SORT ACTIVITIES ── */
+function initSort(sectionSelector,buttonId,statusId){
+const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");
+const button=document.getElementById(buttonId);
+const status=document.getElementById(statusId);
+if(!activity||!button)return;
+button.addEventListener("click",()=>{
+const rows=Array.from(activity.querySelectorAll(".sort-row"));
+let correct=0;
+rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});
+status.textContent=`${correct} / ${rows.length} correct`;
+if(correct===rows.length){status.textContent="Activity complete!";status.classList.add("complete");markActivityComplete(activity)}
+})
+}
+initSort("#allen-test","checkAllenSort","allenSortStatus");
+initSort("#sample-handling","checkSampleSort","sampleSortStatus");
+initSort("#pulse-ox","checkPulseoxSort","pulseoxSortStatus");
+
+/* ── QUIZ ACTIVITIES ── */
+function initQuizOptions(selector){
+const activity=document.querySelector(selector);
+if(!activity)return;
+activity.querySelectorAll(".quiz-option").forEach(button=>{
+button.addEventListener("click",()=>{
+if(activity.dataset.correctAnswered==="true")return;
+const feedback=activity.querySelector(".quiz-feedback");
+const isCorrect=button.dataset.correct==="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+activity.dataset.correctAnswered="true";
+activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";
+markActivityComplete(activity)
+}else{
+button.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."
+}
+})
+})
+}
+["#cooxQuiz","#calibrationQuiz"].forEach(initQuizOptions);
+
+/* ── CASE STUDY ── */
+function initCase(){
+const section=document.getElementById("scenario");
+if(!section)return;
+const stages=Array.from(section.querySelectorAll(".case-stage"));
+stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});
+section.querySelectorAll(".case-option").forEach(option=>option.addEventListener("click",()=>{
+const stage=option.closest(".case-stage");
+if(stage.dataset.correctAnswered==="true")return;
+const feedback=stage.querySelector(".case-feedback");
+const isCorrect=option.dataset.caseCorrect==="true";
+stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+stage.dataset.correctAnswered="true";
+stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=false
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";
+const next=stage.querySelector(".case-next button");if(next)next.disabled=true
+}
+}));
+section.querySelectorAll(".case-next button").forEach(button=>{
+button.disabled=true;
+button.addEventListener("click",()=>{
+const current=button.closest(".case-stage");
+const idx=stages.indexOf(current);
+const next=stages[idx+1];
+if(!next)return;
+next.classList.remove("lesson-hidden");
+if(idx+1===stages.length-1)markActivityComplete(section);
+button.closest(".case-next").remove();
+next.scrollIntoView({behavior:"smooth",block:"start"})
+})
+})
+}
+initCase();
+
+/* ── KNOWLEDGE CHECK ── */
+function initKnowledge(){
+const section=document.getElementById("knowledge-check");
+if(!section)return;
+const status=document.getElementById("knowledgeStatus");
+const answered=new Set();
+const total=section.querySelectorAll(".knowledge-question").length;
+section.querySelectorAll(".knowledge-option").forEach(option=>option.addEventListener("click",()=>{
+const question=option.closest(".knowledge-question");
+if(question.dataset.correctAnswered==="true")return;
+const feedback=question.querySelector(".quiz-feedback");
+const isCorrect=option.dataset.correct==="true";
+question.querySelectorAll(".knowledge-option").forEach(btn=>btn.classList.remove("incorrect-choice"));
+if(isCorrect){
+question.dataset.correctAnswered="true";
+answered.add(option.dataset.question);
+question.querySelectorAll(".knowledge-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});
+feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Correct answer locked in.</strong>"
+}else{
+option.classList.add("incorrect-choice");
+feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";
+feedback.innerHTML=option.dataset.feedback+"<br><br><strong>Try again:</strong> Select the correct answer."
+}
+status.textContent=`${answered.size} / ${total} questions answered correctly`;
+if(answered.size===total){status.textContent="Knowledge check complete!";status.classList.add("complete");markActivityComplete(section)}
+}))
+}
+initKnowledge();
+
+
+// ── Video placeholder ──
+(function(){var video=document.getElementById('overviewVideo');var placeholder=document.getElementById('videoPlaceholder');if(!video||!placeholder)return;video.addEventListener('canplay',function(){video.style.display='block';placeholder.style.display='none';});video.addEventListener('error',function(){video.style.display='none';placeholder.style.display='block';});})();
+window.LESSON_ID="re_blood_gas_monitoring";
+</script>
+<script type="module" src="/assets/progress-tracker.js"></script>
+</body>
+</html>
