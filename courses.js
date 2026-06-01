@@ -50,7 +50,7 @@ window.PULMOCORE_COURSES = [
   { title: "Assessment 2.2: Assessment of Oxygen — Hypoxemia vs. Hypoxia", file: "/assessment/PA_2_2_Assessment_of_Oxygen.html" },
   { title: "Assessment 2.3: ECG Assessment", file: "/assessment/PA_2_3_ECG_Assessment.html" },
   { title: "Assessment 2.4: Radiologic Examination", file: "/assessment/PA_2_4_Radiologic_Examination.html" },
-  { title: "Assessment 3.1: Diagnostic Tests & Nosocomial Prevention", file: "/assessment/PA_3_1_Diagnostic_Tests_Respiratory_Infections_Nosocomial_Prevention.html" },
+  { title: "Assessment 3.1: Diagnostic Tests & Nosocomial Prevention", file: "/assessment/PA_3_1_Diagnostic_Tests_Respiratory_Infections_&_Nosocomial_Prevention.html" },
   { title: "Assessment 3.2: Therapist-Driven Protocols", file: "/assessment/PA_3_2_Therapist-Driven_Protocols.html" },
   { title: "Assessment 3.3: Respiratory Failure", file: "/assessment/PA_3_3_Respiratory_Failure.html" },
   { title: "Assessment 3.4: Clinical Documentation & HIPAA", file: "/assessment/PA_3_4_Clinical_Documentation_HIPAA.html" },
