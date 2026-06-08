@@ -1,54 +1,9 @@
-import { jwtVerify, createRemoteJWKSet } from "jose";
-
-export const config = {
-  api: {
-    bodyParser: true
+export default function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).send("Method not allowed");
   }
-};
 
-export default async function handler(req, res) {
-  try {
-    if (req.method !== "POST") {
-      return res.status(405).send("Method not allowed");
-    }
-
-    const canvasJwksUrl = process.env.CANVAS_JWKS_URL;
-    const canvasIssuer = process.env.CANVAS_ISSUER;
-    const canvasClientId = process.env.CANVAS_CLIENT_ID;
-
-    if (!canvasJwksUrl || !canvasIssuer || !canvasClientId) {
-      return res.status(500).json({
-        error: "Missing Canvas environment variables",
-        required: [
-          "CANVAS_JWKS_URL",
-          "CANVAS_ISSUER",
-          "CANVAS_CLIENT_ID"
-        ]
-      });
-    }
-
-    const { id_token } = req.body;
-
-    if (!id_token) {
-      return res.status(400).send("Missing id_token");
-    }
-
-    const JWKS = createRemoteJWKSet(new URL(canvasJwksUrl));
-
-    const { payload } = await jwtVerify(id_token, JWKS, {
-      issuer: canvasIssuer,
-      audience: canvasClientId
-    });
-
-    const userName = payload.name || "Unknown User";
-
-    return res.redirect(
-      `/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html?lti=1&user=${encodeURIComponent(userName)}`
-    );
-  } catch (error) {
-    return res.status(500).json({
-      error: "LTI launch failed",
-      details: error.message
-    });
-  }
+  return res.status(200).json({
+    message: "LTI launch endpoint is alive"
+  });
 }
