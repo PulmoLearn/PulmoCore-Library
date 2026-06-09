@@ -58,8 +58,11 @@ export default function handler(req, res) {
       custom.lesson_url ||
       "https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html";
 
-    return res.redirect(lessonUrl + "?lti=1");
-  }
+    const finalLessonUrl = lessonUrl.includes("?")
+  ? lessonUrl + "&lti=1"
+  : lessonUrl + "?lti=1";
+
+return res.redirect(finalLessonUrl);
 
   return res.status(400).json({
     error: "Unknown or missing LTI message type",
