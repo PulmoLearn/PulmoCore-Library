@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoLearn | Canvas Lesson Picker</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4fafc;
+      color: #0b1f33;
+      padding: 24px;
+    }
+
+    .picker-shell {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #415a77;
+      margin-bottom: 24px;
+    }
+
+    .lesson-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .lesson-card {
+      background: white;
+      border: 1px solid #d7e6ef;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(11,31,51,.08);
+    }
+
+    .lesson-card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .lesson-card p {
+      color: #415a77;
+    }
+
+    .add-btn {
+      background: #1ca7a8;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .add-btn:hover {
+      background: #128486;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="picker-shell">
+    <h1>Select a PulmoLearn Lesson</h1>
+    <p class="subtitle">
+      Choose a lesson to add to your Canvas assignment.
+    </p>
+
+    <div class="lesson-grid" id="lessonGrid"></div>
+  </main>
+
+  <script>
+    const sampleLessons = [
+      {
+        title: "Foundations 1.1: Professional Communication & Conflict Resolution",
+        lessonId: "foundations_1_1",
+        url: "/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html",
+        description: "Students practice professional communication, patient-centered language, and conflict resolution."
+      },
+      {
+        title: "Foundations 1.2: Medical Math, Units & Dosage Calculations",
+        lessonId: "foundations_1_2",
+        url: "/foundations/Foundations_1_2_Medical_Math_Units_Dosage_Calculations.html",
+        description: "Students review metric conversions, dimensional analysis, and dosage calculation basics."
+      }
+    ];
+
+    const lessonGrid = document.getElementById("lessonGrid");
+
+    sampleLessons.forEach(lesson => {
+      const card = document.createElement("section");
+      card.className = "lesson-card";
+
+      card.innerHTML = `
+        <h2>${lesson.title}</h2>
+        <p>${lesson.description}</p>
+        <button class="add-btn" type="button">
+          Add to Canvas
+        </button>
+      `;
+
+      card.querySelector("button").addEventListener("click", () => {
+        submitLessonToCanvas(lesson);
+      });
+
+      lessonGrid.appendChild(card);
+    });
+
+    async function submitLessonToCanvas(lesson) {
+      const response = await fetch("/api/lti/deep-link-response", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(lesson)
+      });
+
+      if (!response.ok) {
+        alert("Unable to add this lesson to Canvas yet.");
+        return;
+      }
+
+      const html = await response.text();
+      document.open();
+      document.write(html);
+      document.close();
+    }
+  </script>
+</body>
+</html>
