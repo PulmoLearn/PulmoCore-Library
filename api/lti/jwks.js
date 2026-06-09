@@ -1,19 +1,33 @@
-export default function handler(req, res) {
-  const keyId = process.env.LTI_KEY_ID || "pulmolearn-lti-key-1";
+const crypto = require("crypto");
 
-  const jwk = {
-    kty: "RSA",
-    use: "sig",
-    kid: keyId,
-    alg: "RS256",
+module.exports = function handler(req, res) {
+  try {
+    const keyId = process.env.LTI_KEY_ID || "pulmolearn-lti-key-1";
+    const publicKeyPem = process.env.LTI_PUBLIC_KEY;
 
-    // These public-key values will be filled in during the next step.
-    n: "PLACEHOLDER_MODULUS",
-    e: "AQAB"
-  };
+    if (!publicKeyPem) {
+      return res.status(500).json({ error: "Missing LTI_PUBLIC_KEY" });
+    }
 
-  res.setHeader("Content-Type", "application/json");
-  res.status(200).json({
-    keys: [jwk]
-  });
-}
+    const publicKey = crypto.createPublicKey(publicKeyPem);
+    const jwk = publicKey.export({ format: "jwk" });
+
+    res.setHeader("Content-Type", "application/json");
+
+    return res.status(200).json({
+      keys: [
+        {
+          ...jwk,
+          kid: keyId,
+          use: "sig",
+          alg: "RS256"
+        }
+      ]
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Failed to generate JWKS",
+      details: error.message
+    });
+  }
+};
