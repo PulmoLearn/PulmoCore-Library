@@ -11,7 +11,6 @@ export default async function handler(req, res) {
       lessonUrl,
       lessonId,
       returnUrl,
-      canvasIssuer,
       deploymentId
     } = req.body;
 
@@ -58,8 +57,8 @@ export default async function handler(req, res) {
         kid: keyId,
         typ: "JWT"
       })
-      .setIssuer(clientId)
-      .setAudience(canvasIssuer || "https://canvas.instructure.com")
+      .setIssuer("https://www.pulmolearn.com")
+      .setAudience(clientId)
       .setIssuedAt()
       .setExpirationTime("5m")
       .sign(privateKey);
@@ -72,6 +71,7 @@ export default async function handler(req, res) {
   <body>
     <form id="deepLinkForm" method="POST" action="${returnUrl}">
       <input type="hidden" name="JWT" value="${jwt}" />
+      <input type="hidden" name="jwt" value="${jwt}" />
     </form>
     <script>
       document.getElementById("deepLinkForm").submit();
