@@ -7,12 +7,13 @@ export default async function handler(req, res) {
     const { SignJWT, importPKCS8 } = await import("jose");
 
     const {
-      title,
-      lessonUrl,
-      lessonId,
-      returnUrl,
-      deploymentId
-    } = req.body;
+  title,
+  lessonUrl,
+  lessonId,
+  returnUrl,
+  canvasIssuer,
+  deploymentId
+} = req.body;
 
     if (!title || !lessonUrl || !returnUrl) {
       return res.status(400).json({
