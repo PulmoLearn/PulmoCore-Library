@@ -1,6 +1,16 @@
 import crypto from "crypto";
 
 export default async function handler(req, res) {
+  const query = req.query || {};
+
+  return res.status(200).json({
+    message: "PulmoLearn LTI login endpoint reached",
+    method: req.method,
+    query
+  });
+}
+
+export default async function handler(req, res) {
   try {
     const {
       iss,
