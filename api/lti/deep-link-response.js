@@ -44,13 +44,14 @@ export default async function handler(req, res) {
       "https://purl.imsglobal.org/spec/lti/claim/deployment_id": deploymentId,
       "https://purl.imsglobal.org/spec/lti-dl/claim/content_items": [
         {
-          type: "ltiResourceLink",
-          title: title,
-          url: lessonUrl,
-          custom: {
-            lesson_id: lessonId || ""
-          }
-        }
+  type: "ltiResourceLink",
+  title: title,
+  url: "https://www.pulmolearn.com/api/lti/launch",
+  custom: {
+    lesson_id: lessonId || "",
+    lesson_url: lessonUrl
+  }
+}
       ]
     })
       .setProtectedHeader({
