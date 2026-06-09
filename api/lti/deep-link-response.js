@@ -7,24 +7,24 @@ export default async function handler(req, res) {
     const { SignJWT, importPKCS8 } = await import("jose");
 
     const {
-  title,
-  lessonUrl,
-  lessonId,
-  returnUrl,
-  canvasIssuer,
-  deploymentId
-} = req.body;
+      title,
+      lessonUrl,
+      lessonId,
+      returnUrl,
+      canvasIssuer,
+      deploymentId
+    } = req.body;
 
-    if (!title || !lessonUrl || !returnUrl) {
+    const clientId = process.env.CANVAS_CLIENT_ID;
+    const keyId = process.env.LTI_KEY_ID || "pulmolearn-lti-key-1";
+    const privateKeyPem = process.env.LTI_PRIVATE_KEY?.replace(/\\n/g, "\n");
+
+    if (!title || !lessonUrl || !returnUrl || !deploymentId) {
       return res.status(400).json({
         error: "Missing required deep link fields",
         received: req.body
       });
     }
-
-    const privateKeyPem = process.env.LTI_PRIVATE_KEY?.replace(/\\n/g, "\n");
-    const clientId = process.env.CANVAS_CLIENT_ID;
-    const keyId = process.env.LTI_KEY_ID || "pulmolearn-lti-key-1";
 
     if (!privateKeyPem || !clientId) {
       return res.status(500).json({
@@ -35,31 +35,28 @@ export default async function handler(req, res) {
     const privateKey = await importPKCS8(privateKeyPem, "RS256");
 
     const jwt = await new SignJWT({
+      iss: clientId,
+      aud: canvasIssuer || "https://canvas.instructure.com",
+      nonce: Math.random().toString(36).substring(2),
+
       "https://purl.imsglobal.org/spec/lti/claim/message_type": "LtiDeepLinkingResponse",
       "https://purl.imsglobal.org/spec/lti/claim/version": "1.3.0",
       "https://purl.imsglobal.org/spec/lti/claim/deployment_id": deploymentId,
       "https://purl.imsglobal.org/spec/lti-dl/claim/content_items": [
         {
           type: "ltiResourceLink",
-          title,
+          title: title,
           url: lessonUrl,
           custom: {
-            lesson_id: lessonId
-          },
-          lineItem: {
-            scoreMaximum: 100,
-            label: title
+            lesson_id: lessonId || ""
           }
         }
       ]
     })
       .setProtectedHeader({
         alg: "RS256",
-        kid: keyId,
-        typ: "JWT"
+        kid: keyId
       })
-      .setIssuer(clientId)
-.setAudience(canvasIssuer || "https://canvas.instructure.com")
       .setIssuedAt()
       .setExpirationTime("5m")
       .sign(privateKey);
@@ -71,8 +68,8 @@ export default async function handler(req, res) {
 <html>
   <body>
     <form id="deepLinkForm" method="POST" action="${returnUrl}">
-      <input type="hidden" name="JWT" value="${jwt}" />
-      <input type="hidden" name="jwt" value="${jwt}" />
+      <input type="hidden" name="JWT" value="${jwt}">
+      <input type="hidden" name="jwt" value="${jwt}">
     </form>
     <script>
       document.getElementById("deepLinkForm").submit();
