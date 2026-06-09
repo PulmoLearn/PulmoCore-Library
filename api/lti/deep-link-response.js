@@ -57,8 +57,8 @@ export default async function handler(req, res) {
         kid: keyId,
         typ: "JWT"
       })
-      .setIssuer("https://www.pulmolearn.com")
-      .setAudience(clientId)
+      .setIssuer(clientId)
+.setAudience(canvasIssuer || "https://canvas.instructure.com")
       .setIssuedAt()
       .setExpirationTime("5m")
       .sign(privateKey);
