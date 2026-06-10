@@ -9,22 +9,25 @@ import { supabase } from '/assets/auth.js'
 
 console.log('PulmoLearn: progress-tracker.js v7 loaded')
 
-const urlParams = new URLSearchParams(window.location.search);
-const isLtiLaunch = urlParams.get("lti") === "1";
+const urlParams = new URLSearchParams(window.location.search)
+const isLtiLaunch = urlParams.get('lti') === '1'
 
 if (isLtiLaunch) {
-  console.log("LTI launch detected — bypassing normal PulmoLearn login for test.");
-  window.PULMO_LTI_MODE = true;
+  console.log('LTI launch detected — bypassing normal PulmoLearn login for test.')
+  window.PULMO_LTI_MODE = true
 }
 
 // ── Auth check ──
 const { data: { session } } = await supabase.auth.getSession()
-if (!session) {
+
+if (!session && !isLtiLaunch) {
   window.location.href = '/login.html'
   throw new Error('Not authenticated')
 }
 
-const userId = session.user.id
+// Temporary LTI test user ID.
+// Later this will be replaced with the real Canvas LTI user ID.
+const userId = session?.user?.id || `lti-test-${Date.now()}`
 const lessonId = window.PULMO_LESSON_ID || window.LESSON_ID
 
 console.log(`PulmoLearn: lessonId="${lessonId}" userId="${userId}"`)
