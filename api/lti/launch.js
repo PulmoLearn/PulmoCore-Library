@@ -79,12 +79,7 @@ export default function handler(req, res) {
         ? lessonUrl + "&lti=1"
         : lessonUrl + "?lti=1";
 
-      return res.status(200).json({
-        message: "About to redirect",
-        custom,
-        rawLessonUrl: lessonUrl,
-        finalLessonUrl
-      });
+      return res.redirect(finalLessonUrl);
     }
 
     return res.status(400).json({
