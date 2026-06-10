@@ -66,16 +66,17 @@ export default function handler(req, res) {
       `);
     }
 
-    if (messageType === "LtiResourceLinkRequest") {
+   if (messageType === "LtiResourceLinkRequest") {
   const custom =
     payload["https://purl.imsglobal.org/spec/lti/claim/custom"] || {};
 
-  const lessonMap = {
-    foundations_1_1:
-      "https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html",
-    foundations_1_2:
-      "https://www.pulmolearn.com/foundations/Foundations_1_2_Medical_Math_Units_Dosage_Calculations.html"
-  };
+  return res.status(200).json({
+    message: "Resource launch received",
+    custom,
+    lesson_id: custom.lesson_id,
+    lesson_url: custom.lesson_url
+  });
+}
 
   const lessonUrl =
     lessonMap[custom.lesson_id] ||
