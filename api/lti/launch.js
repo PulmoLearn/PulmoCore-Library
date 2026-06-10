@@ -67,19 +67,22 @@ export default function handler(req, res) {
     }
 
     if (messageType === "LtiResourceLinkRequest") {
-      const custom =
-        payload["https://purl.imsglobal.org/spec/lti/claim/custom"] || {};
+  const custom =
+    payload["https://purl.imsglobal.org/spec/lti/claim/custom"] || {};
 
-      const lessonUrl =
-        custom.lesson_url ||
-        "https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html";
+  const lessonMap = {
+    foundations_1_1:
+      "https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html",
+    foundations_1_2:
+      "https://www.pulmolearn.com/foundations/Foundations_1_2_Medical_Math_Units_Dosage_Calculations.html"
+  };
 
-      const finalLessonUrl = lessonUrl.includes("?")
-        ? lessonUrl + "&lti=1"
-        : lessonUrl + "?lti=1";
+  const lessonUrl =
+    lessonMap[custom.lesson_id] ||
+    "https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html";
 
-      return res.redirect(finalLessonUrl);
-    }
+  return res.redirect(`${lessonUrl}?lti=1`);
+}
 
     return res.status(400).json({
       error: "Unknown or missing LTI message type",
