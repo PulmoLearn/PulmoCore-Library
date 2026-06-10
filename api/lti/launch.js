@@ -40,7 +40,7 @@ export default function handler(req, res) {
       <p>Professional communication, patient-centered language, and conflict resolution.</p>
       <form method="POST" action="/api/lti/deep-link-response">
         <input type="hidden" name="title" value="Foundations 1.1: Professional Communication & Conflict Resolution">
-        <input type="hidden" name="lessonUrl" value="https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html">
+        <input type="hidden" name="lessonUrl" value="https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution">
         <input type="hidden" name="lessonId" value="foundations_1_1">
         <input type="hidden" name="returnUrl" value="${returnUrl}">
         <input type="hidden" name="canvasIssuer" value="${canvasIssuer}">
@@ -54,7 +54,7 @@ export default function handler(req, res) {
       <p>Metric conversions, dimensional analysis, and dosage calculations.</p>
       <form method="POST" action="/api/lti/deep-link-response">
         <input type="hidden" name="title" value="Foundations 1.2: Medical Math, Units & Dosage Calculations">
-        <input type="hidden" name="lessonUrl" value="https://www.pulmolearn.com/foundations/Foundations_1_2_Medical_Math_Units_Dosage_Calculations.html">
+        <input type="hidden" name="lessonUrl" value="https://www.pulmolearn.com/foundations/Foundations_1_2_Medical_Math_Units_Dosage_Calculations">
         <input type="hidden" name="lessonId" value="foundations_1_2">
         <input type="hidden" name="returnUrl" value="${returnUrl}">
         <input type="hidden" name="canvasIssuer" value="${canvasIssuer}">
@@ -67,19 +67,20 @@ export default function handler(req, res) {
       `);
     }
 
-        if (messageType === "LtiResourceLinkRequest") {
+       if (messageType === "LtiResourceLinkRequest") {
       const custom =
         payload["https://purl.imsglobal.org/spec/lti/claim/custom"] || {};
 
       const lessonUrl =
         custom.lesson_url ||
-        "https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution.html";
+        "https://www.pulmolearn.com/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution";
 
       const finalLessonUrl = lessonUrl.includes("?")
         ? lessonUrl + "&lti=1"
         : lessonUrl + "?lti=1";
 
-      return res.redirect(finalLessonUrl);
+      res.setHeader("Location", finalLessonUrl);
+      return res.status(303).end();
     }
 
     return res.status(400).json({
