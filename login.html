@@ -60,6 +60,17 @@
     }
     .brand span { color: var(--pulmo-teal); }
     .subtitle { color: var(--slate); margin-bottom: 32px; font-size: .95rem; }
+    .lti-banner {
+      display: none;
+      background: #DDF7F2;
+      border: 1px solid #1CA7A8;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: .9rem;
+      color: var(--core-navy);
+      line-height: 1.5;
+    }
     label {
       display: block;
       font-weight: 700;
@@ -106,7 +117,6 @@
       font-size: .9rem;
       display: none;
     }
-    .divider { text-align: center; margin: 20px 0 4px; }
     .footer-link { text-align: center; margin-top: 22px; font-size: .9rem; color: var(--slate); }
     .footer-link a { color: var(--pulmo-teal); font-weight: 700; text-decoration: none; }
     .footer-link a:hover { text-decoration: underline; }
@@ -122,8 +132,6 @@
       transition: color .18s;
     }
     .back-link:hover { color: rgba(255,255,255,0.95); }
-  
-    /* ── 508 Accessibility: keyboard focus indicators ── */
     .hotspot-btn:focus-visible {
       outline: 3px solid var(--clinical-amber, #F4B860);
       outline-offset: 4px;
@@ -144,13 +152,19 @@
       border: 0;
     }
   </style>
-  
 </head>
 <body>
   <div class="card">
     <a href="/PulmoCore-Library/" class="back-link">← Back to PulmoLearn</a>
     <div class="brand">Pulmo<span>Learn</span></div>
-    <p class="subtitle">Sign in to continue your learning</p>
+    <p class="subtitle" id="subtitle">Sign in to continue your learning</p>
+
+    <!-- Shown only when arriving from a Canvas LTI launch -->
+    <div class="lti-banner" id="ltiBanner">
+      Log in to connect your PulmoLearn account to Canvas.
+      <strong>Use a personal email</strong> — your account stays with you
+      after graduation so you can keep studying for boards.
+    </div>
 
     <div class="error" id="errorMsg"></div>
 
@@ -164,21 +178,72 @@
 
     <button class="btn" id="loginBtn">Sign In</button>
 
-    <div class="footer-link">Don't have an account? <a href="/signup.html">Sign up</a></div>
+    <div class="footer-link">
+      Don't have an account?
+      <a href="/signup.html" id="signupLink">Sign up</a>
+    </div>
   </div>
 
   <script type="module">
     import { supabase } from '/assets/auth.js'
 
-    // If already logged in, go straight to dashboard
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) window.location.href = '/dashboard.html'
+    // ── LTI: detect Canvas handoff token ──────────────────────────────
+    const ltiParams = new URLSearchParams(window.location.search)
+    const ltiToken  = ltiParams.get('lti_token')
 
+    // Show Canvas-specific banner and carry lti_token through to signup
+    if (ltiToken) {
+      document.getElementById('ltiBanner').style.display = 'block'
+      document.getElementById('subtitle').textContent =
+        'Sign in to connect your account to Canvas'
+      const signupLink = document.getElementById('signupLink')
+      signupLink.href = `/signup.html?lti_token=${encodeURIComponent(ltiToken)}`
+    }
+
+    // After successful auth, call /api/lti/link if we came from Canvas.
+    // Returns true and handles redirect if LTI context is present,
+    // false if this is a normal (non-Canvas) login.
+    async function handleLtiLinkIfPresent() {
+      if (!ltiToken) return false
+
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return false
+
+      try {
+        const resp = await fetch('/api/lti/link', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lti_token: ltiToken,
+            access_token: session.access_token
+          })
+        })
+        const result = await resp.json()
+        if (result.ok && result.redirect) {
+          window.location.href = result.redirect
+          return true
+        }
+      } catch (err) {
+        console.error('LTI link failed:', err)
+      }
+      // Linking failed — fall through to normal flow so user isn't stuck
+      return false
+    }
+
+    // ── Already logged in ─────────────────────────────────────────────
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session) {
+      // If we came from Canvas, link first
+      const handled = await handleLtiLinkIfPresent()
+      if (!handled) window.location.href = '/dashboard.html'
+    }
+
+    // ── Login button ──────────────────────────────────────────────────
     const loginBtn = document.getElementById('loginBtn')
     const errorMsg = document.getElementById('errorMsg')
 
     loginBtn.addEventListener('click', async () => {
-      const email = document.getElementById('email').value.trim()
+      const email    = document.getElementById('email').value.trim()
       const password = document.getElementById('password').value
       errorMsg.style.display = 'none'
 
@@ -198,9 +263,12 @@
         errorMsg.style.display = 'block'
         loginBtn.disabled = false
         loginBtn.textContent = 'Sign In'
-      } else {
-        window.location.href = '/dashboard.html'
+        return
       }
+
+      // Successful login — try LTI link first, then fall back to dashboard
+      const handled = await handleLtiLinkIfPresent()
+      if (!handled) window.location.href = '/dashboard.html'
     })
 
     // Allow Enter key to submit
@@ -216,8 +284,6 @@
       document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
         var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
         var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
         var live = demo.querySelector('[data-a11y-live]');
         if (!live) {
           live = document.createElement('div');
@@ -227,9 +293,7 @@
           live.className = 'sr-only';
           demo.appendChild(live);
         }
-
         buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
           btn.addEventListener('keydown', function (e) {
             var target;
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
@@ -239,16 +303,12 @@
               e.preventDefault();
               target = buttons[(idx - 1 + buttons.length) % buttons.length];
             } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
+              e.preventDefault(); target = buttons[0];
             } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
+              e.preventDefault(); target = buttons[buttons.length - 1];
             }
             if (target) target.focus();
           });
-
-          /* On activation, push content to aria-live region */
           btn.addEventListener('click', function () {
             var title = btn.dataset.title || '';
             var text  = btn.dataset.text  || '';
@@ -256,8 +316,6 @@
             if (panel) panel.setAttribute('aria-label', title + ': ' + text);
           });
         });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
         var container = demo.querySelector('.hotspot-lung');
         if (container && buttons.length > 0) {
           container.addEventListener('focus', function () {
@@ -269,7 +327,6 @@
         }
       });
     }
-
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initA11yHotspots);
     } else {

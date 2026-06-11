@@ -60,7 +60,26 @@
       margin-bottom: 4px;
     }
     .brand span { color: var(--pulmo-teal); }
-    .subtitle { color: var(--slate); margin-bottom: 32px; font-size: .95rem; }
+    .subtitle { color: var(--slate); margin-bottom: 16px; font-size: .95rem; }
+    .lti-banner {
+      display: none;
+      background: #DDF7F2;
+      border: 1px solid #1CA7A8;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: .9rem;
+      color: var(--core-navy);
+      line-height: 1.5;
+    }
+    .email-hint {
+      display: none;
+      font-size: .8rem;
+      color: var(--slate);
+      margin-top: -14px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
     label {
       display: block;
       font-weight: 700;
@@ -132,8 +151,6 @@
     }
     .back-link:hover { color: rgba(255,255,255,0.95); }
     .optional { font-weight: 400; color: var(--slate); font-size: .8rem; margin-left: 4px; }
-  
-    /* ── 508 Accessibility: keyboard focus indicators ── */
     .hotspot-btn:focus-visible {
       outline: 3px solid var(--clinical-amber, #F4B860);
       outline-offset: 4px;
@@ -159,12 +176,24 @@
   <div class="card">
     <a href="/PulmoCore-Library/" class="back-link">← Back to PulmoLearn</a>
     <div class="brand">Pulmo<span>Learn</span></div>
-    <p class="subtitle">Create your account to get started</p>
+    <p class="subtitle" id="subtitle">Create your account to get started</p>
+
+    <!-- Shown only when arriving from a Canvas LTI launch -->
+    <div class="lti-banner" id="ltiBanner">
+      Create a <strong>personal email</strong> account — it stays with you
+      after graduation so you can keep studying for boards.
+      Already have an account? <a href="/login.html" id="loginLink">Sign in instead</a>.
+    </div>
 
     <div class="error" id="errorMsg"></div>
 
     <label for="email">Email address</label>
     <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+    <!-- Shown only in LTI context -->
+    <p class="email-hint" id="emailHint">
+      Use a personal email (Gmail, etc.) — not your school email,
+      which you may lose after graduation.
+    </p>
 
     <label for="password">Password</label>
     <input type="password" id="password" placeholder="Min. 8 characters" autocomplete="new-password" />
@@ -181,55 +210,93 @@
       <a href="/privacy.html" target="_blank">Privacy Policy</a>.
     </p>
 
-    <div class="footer-link">Already have an account? <a href="/login.html">Sign in</a></div>
+    <div class="footer-link">Already have an account? <a href="/login.html" id="signinLink">Sign in</a></div>
   </div>
 
   <script type="module">
     import { supabase } from '/assets/auth.js'
 
+    // ── LTI: detect Canvas handoff token ──────────────────────────────
+    const params   = new URLSearchParams(window.location.search)
+    const ltiToken = params.get('lti_token')
+
+    // Show Canvas-specific banner + hints; carry lti_token to login link
+    if (ltiToken) {
+      document.getElementById('ltiBanner').style.display  = 'block'
+      document.getElementById('emailHint').style.display  = 'block'
+      document.getElementById('subtitle').textContent     = 'Create your account to access Canvas lessons'
+      document.getElementById('loginLink').href  = `/login.html?lti_token=${encodeURIComponent(ltiToken)}`
+      document.getElementById('signinLink').href = `/login.html?lti_token=${encodeURIComponent(ltiToken)}`
+    }
+
+    // After successful auth, call /api/lti/link if we came from Canvas.
+    // Returns true and handles redirect; false if no LTI context.
+    async function handleLtiLinkIfPresent() {
+      if (!ltiToken) return false
+
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return false
+
+      try {
+        const resp = await fetch('/api/lti/link', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lti_token: ltiToken,
+            access_token: session.access_token
+          })
+        })
+        const result = await resp.json()
+        if (result.ok && result.redirect) {
+          window.location.href = result.redirect
+          return true
+        }
+      } catch (err) {
+        console.error('LTI link failed:', err)
+      }
+      return false
+    }
+
+    // ── Already logged in ─────────────────────────────────────────────
     const { data: { session } } = await supabase.auth.getSession()
-if (session) {
-  // Check if they already have access
-  const { data: access } = await supabase
-    .from('user_access')
-    .select('user_id')
-    .eq('user_id', session.user.id)
-    .maybeSingle()
+    if (session) {
+      // If we came from Canvas, link first
+      const handled = await handleLtiLinkIfPresent()
+      if (!handled) {
+        // Normal flow: check access and route accordingly
+        const { data: access } = await supabase
+          .from('user_access')
+          .select('user_id')
+          .eq('user_id', session.user.id)
+          .maybeSingle()
+        window.location.href = access ? '/dashboard.html' : '/payment.html'
+      }
+    }
 
-  if (access) {
-    // Has access — go to dashboard
-    window.location.href = '/dashboard.html'
-  } else {
-    // Logged in but no access — go to payment
-    window.location.href = '/payment.html'
-  }
-}
-
-    // Pre-fill voucher code if passed in URL e.g. /signup.html?voucher=CODE123
-    const params = new URLSearchParams(window.location.search)
+    // ── Pre-fill voucher from URL e.g. /signup.html?voucher=CODE123 ───
     const prefilledVoucher = params.get('voucher')
     if (prefilledVoucher) {
       document.getElementById('voucher').value = prefilledVoucher
       document.getElementById('voucher').dispatchEvent(new Event('input'))
     }
 
+    // ── Voucher validation as user types ─────────────────────────────
     let validVoucher = null
 
-    // Validate voucher as user types
     document.getElementById('voucher').addEventListener('input', async (e) => {
-      const code = e.target.value.trim().toUpperCase()
+      const code     = e.target.value.trim().toUpperCase()
       e.target.value = code
       const feedback = document.getElementById('voucherFeedback')
 
       if (!code) {
         feedback.textContent = ''
-        feedback.className = 'voucher-feedback'
+        feedback.className   = 'voucher-feedback'
         validVoucher = null
         return
       }
 
       feedback.textContent = 'Checking...'
-      feedback.className = 'voucher-feedback'
+      feedback.className   = 'voucher-feedback'
 
       const { data } = await supabase
         .from('vouchers')
@@ -241,85 +308,93 @@ if (session) {
 
       if (data) {
         feedback.textContent = '✓ Valid code — free access will be applied'
-        feedback.className = 'voucher-feedback valid'
+        feedback.className   = 'voucher-feedback valid'
         validVoucher = code
       } else {
         feedback.textContent = '✗ Invalid or already used code'
-        feedback.className = 'voucher-feedback invalid'
+        feedback.className   = 'voucher-feedback invalid'
         validVoucher = null
       }
     })
 
+    // ── Sign up button ────────────────────────────────────────────────
     document.getElementById('signupBtn').addEventListener('click', async () => {
-  const email = document.getElementById('email').value.trim()
-  const password = document.getElementById('password').value
-  const voucherInput = document.getElementById('voucher').value.trim().toUpperCase()
-  const errorMsg = document.getElementById('errorMsg')
-  const btn = document.getElementById('signupBtn')
+      const email        = document.getElementById('email').value.trim()
+      const password     = document.getElementById('password').value
+      const voucherInput = document.getElementById('voucher').value.trim().toUpperCase()
+      const errorMsg     = document.getElementById('errorMsg')
+      const btn          = document.getElementById('signupBtn')
 
-  errorMsg.style.display = 'none'
+      errorMsg.style.display = 'none'
 
-  if (!email || !password) {
-    errorMsg.textContent = 'Please fill in all fields.'
-    errorMsg.style.display = 'block'
-    return
-  }
-  if (password.length < 8) {
-    errorMsg.textContent = 'Password must be at least 8 characters.'
-    errorMsg.style.display = 'block'
-    return
-  }
+      if (!email || !password) {
+        errorMsg.textContent   = 'Please fill in all fields.'
+        errorMsg.style.display = 'block'
+        return
+      }
+      if (password.length < 8) {
+        errorMsg.textContent   = 'Password must be at least 8 characters.'
+        errorMsg.style.display = 'block'
+        return
+      }
 
-  btn.disabled = true
-  btn.textContent = 'Creating account...'
+      btn.disabled    = true
+      btn.textContent = 'Creating account...'
 
-  // 1. Create the user account
-  const { data: authData, error: authError } = await supabase.auth.signUp({ email, password })
+      // 1. Create the Supabase account
+      const { data: authData, error: authError } = await supabase.auth.signUp({ email, password })
 
-  if (authError) {
-    errorMsg.textContent = authError.message
-    errorMsg.style.display = 'block'
-    btn.disabled = false
-    btn.textContent = 'Create Account'
-    return
-  }
+      if (authError) {
+        errorMsg.textContent   = authError.message
+        errorMsg.style.display = 'block'
+        btn.disabled    = false
+        btn.textContent = 'Create Account'
+        return
+      }
 
-  const userId = authData.user.id
+      const userId = authData.user?.id
 
-  // 2a. Voucher path — use validVoucher OR re-check the input field directly
-  const codeToUse = validVoucher || voucherInput
+      // 2. Voucher path — re-verify at submission time
+      const codeToUse = validVoucher || voucherInput
 
-  if (codeToUse) {
-    // Re-verify the code is still valid at time of submission
-    const { data: voucherData } = await supabase
-      .from('vouchers')
-      .select('code')
-      .eq('code', codeToUse)
-      .eq('active', true)
-      .is('redeemed_by', null)
-      .single()
+      if (codeToUse && userId) {
+        const { data: voucherData } = await supabase
+          .from('vouchers')
+          .select('code')
+          .eq('code', codeToUse)
+          .eq('active', true)
+          .is('redeemed_by', null)
+          .single()
 
-    if (voucherData) {
-      await supabase.from('user_access').insert({
-        user_id: userId,
-        access_type: 'voucher',
-        voucher_code: codeToUse
-      })
-      await supabase.from('vouchers').update({
-        redeemed_by: userId,
-        redeemed_at: new Date().toISOString(),
-        active: false
-      }).eq('code', codeToUse)
+        if (voucherData) {
+          await supabase.from('user_access').insert({
+            user_id:      userId,
+            access_type:  'voucher',
+            voucher_code: codeToUse
+          })
+          await supabase.from('vouchers').update({
+            redeemed_by: userId,
+            redeemed_at: new Date().toISOString(),
+            active:      false
+          }).eq('code', codeToUse)
 
+          // Small pause to let Supabase session settle
+          await new Promise(resolve => setTimeout(resolve, 800))
+
+          // If we came from Canvas, link + route to lesson
+          const handled = await handleLtiLinkIfPresent()
+          if (!handled) window.location.href = '/dashboard.html'
+          return
+        }
+      }
+
+      // 3. No valid voucher — try LTI link anyway (they may have access
+      //    from a prior redemption on a different device/session),
+      //    otherwise send to payment.
       await new Promise(resolve => setTimeout(resolve, 800))
-      window.location.href = '/dashboard.html'
-      return
-    }
-  }
-
-  // 2b. No valid voucher — send to payment
-  window.location.href = '/payment.html'
-})
+      const handled = await handleLtiLinkIfPresent()
+      if (!handled) window.location.href = '/payment.html'
+    })
   </script>
 
   <script>
@@ -329,8 +404,6 @@ if (session) {
       document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
         var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
         var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
         var live = demo.querySelector('[data-a11y-live]');
         if (!live) {
           live = document.createElement('div');
@@ -340,9 +413,7 @@ if (session) {
           live.className = 'sr-only';
           demo.appendChild(live);
         }
-
         buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
           btn.addEventListener('keydown', function (e) {
             var target;
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
@@ -352,16 +423,12 @@ if (session) {
               e.preventDefault();
               target = buttons[(idx - 1 + buttons.length) % buttons.length];
             } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
+              e.preventDefault(); target = buttons[0];
             } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
+              e.preventDefault(); target = buttons[buttons.length - 1];
             }
             if (target) target.focus();
           });
-
-          /* On activation, push content to aria-live region */
           btn.addEventListener('click', function () {
             var title = btn.dataset.title || '';
             var text  = btn.dataset.text  || '';
@@ -369,8 +436,6 @@ if (session) {
             if (panel) panel.setAttribute('aria-label', title + ': ' + text);
           });
         });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
         var container = demo.querySelector('.hotspot-lung');
         if (container && buttons.length > 0) {
           container.addEventListener('focus', function () {
@@ -382,7 +447,6 @@ if (session) {
         }
       });
     }
-
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initA11yHotspots);
     } else {
