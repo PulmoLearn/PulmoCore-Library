@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Respiratory Therapy Calculators | PulmoLearn</title>
+  <meta name="description" content="Free respiratory therapy calculators for RT students, including P/F ratio, A-a gradient, CaO2, oxygen delivery, compliance, airway resistance, IBW tidal volume, minute ventilation, RSBI, dead space, MAP, OI, OSI, and surfactant dosing." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://pulmolearn.com/calculators/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow-soft: 0 8px 20px rgba(11,31,51,0.08);
+      --radius-lg: 22px;
+      --font-heading: "Montserrat", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--mist-blue);
+      color: var(--core-navy);
+      font-family: var(--font-body);
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+
+    .page-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%);
+      min-height: 100vh;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--core-navy);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px clamp(18px, 4vw, 52px);
+      box-shadow: 0 6px 18px rgba(11,31,51,0.18);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 52px;
+      height: 52px;
+      border: 2px solid rgba(255,255,255,.55);
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(28,167,168,0.12);
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 2vw, 2rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: 0.76rem; opacity: 0.85; margin-top: 3px; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      opacity: .9;
+    }
+
+    .nav-links a:hover { color: var(--airway-mint); }
+
+    .main-content {
+      padding: 32px clamp(20px,4vw,56px) 76px;
+    }
+
+    .hero {
+      background:
+        radial-gradient(ellipse 70% 70% at 50% 0%, rgba(75,163,242,.16), transparent 65%),
+        linear-gradient(135deg, var(--core-navy) 0%, var(--core-navy-2) 100%);
+      color: var(--white);
+      border-radius: 28px;
+      padding: clamp(36px, 7vw, 76px);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--airway-mint);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .82rem;
+      margin-bottom: 12px;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+      letter-spacing: -0.04em;
+      line-height: 1.12;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      max-width: 980px;
+      letter-spacing: -0.055em;
+    }
+
+    h1 span { color: var(--oxygen-blue); }
+
+    .hero p {
+      color: rgba(255,255,255,.75);
+      font-size: clamp(1rem, 2vw, 1.22rem);
+      max-width: 900px;
+      margin: 22px 0 0;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .btn {
+      border-radius: 14px;
+      min-height: 48px;
+      padding: 13px 22px;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .18s ease, background .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--pulmo-teal); color: var(--white); }
+    .btn-primary:hover { background: var(--pulmo-teal-dark); }
+    .btn-secondary { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.22); color: var(--white); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 30px;
+      max-width: 960px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .stat strong {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      letter-spacing: -0.04em;
+    }
+
+    .stat span {
+      display: block;
+      color: rgba(255,255,255,.62);
+      font-size: .85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    section.block {
+      margin-top: 28px;
+      background: var(--white);
+      border: 1px solid var(--soft-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: clamp(22px, 4vw, 36px);
+    }
+
+    .section-label {
+      color: var(--pulmo-teal);
+      font-family: var(--font-data);
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      color: #243b55;
+      max-width: 860px;
+      margin-top: 0;
+    }
+
+    .category-nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .category-nav a {
+      text-decoration: none;
+      font-weight: 800;
+      border: 1px solid var(--soft-border);
+      background: #FAFDFF;
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: #243b55;
+    }
+
+    .category-nav a:hover {
+      background: var(--airway-mint);
+      border-color: var(--pulmo-teal);
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .resource-card {
+      border: 1px solid var(--soft-border);
+      border-radius: 18px;
+      padding: 20px;
+      background: #FAFDFF;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      text-decoration: none;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      min-height: 100%;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--oxygen-blue);
+      background: #F5FBFF;
+    }
+
+    .resource-card h3 {
+      font-size: 1.16rem;
+    }
+
+    .resource-card p {
+      color: var(--slate);
+      margin: 0;
+      font-size: .95rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .78rem;
+      font-weight: 800;
+      background: #E6F3FF;
+      color: var(--core-navy);
+      border: 1px solid #CFE8FF;
+    }
+
+    .tag.teal { background: var(--airway-mint); border-color: #BCEFE5; }
+    .tag.amber { background: #FFF4DF; border-color: #F8D9A5; }
+    .tag.coral { background: #FDE9E9; border-color: #F2B5B5; }
+
+    .cta {
+      background: linear-gradient(135deg, var(--pulmo-teal-dark), var(--core-navy-2));
+      color: var(--white);
+      text-align: center;
+    }
+
+    .cta .section-label { color: var(--airway-mint); }
+    .cta p { color: rgba(255,255,255,.78); margin-left: auto; margin-right: auto; }
+
+    footer {
+      background: var(--core-navy);
+      color: var(--white);
+      padding: 34px clamp(20px,4vw,56px);
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    footer span { color: var(--pulmo-teal); }
+
+    @media (max-width: 1000px) {
+      .resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .top-nav { padding: 14px 16px; }
+      .nav-links { display: none; }
+      .brand-tagline { display: none; }
+      .resource-grid, .stats { grid-template-columns: 1fr; }
+      .hero { border-radius: 20px; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="top-nav">
+      <a href="/" class="brand" aria-label="PulmoLearn home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" width="38" height="38">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="31" r="4" fill="#1CA7A8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Learn</span></div>
+          <div class="brand-tagline">Interactive respiratory therapy education.</div>
+        </div>
+      </a>
+      <nav class="nav-links" aria-label="Calculator navigation">
+        <a href="/oxygenation/">Oxygenation</a>
+        <a href="/abg/">ABG Practice</a>
+        <a href="/signup.html">Get Access</a>
+      </nav>
+    </header>
+
+    <main class="main-content">
+      <section class="hero">
+        <span class="eyebrow">Free RT Tools</span>
+        <h1>Respiratory Therapy <span>Calculators</span></h1>
+        <p>Free PulmoLearn calculators for RT students, including oxygenation, ventilation, ventilator mechanics, weaning, neonatal surfactant dosing, and clinical reasoning tools.</p>
+
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#oxygenation">Browse Calculators</a>
+          <a class="btn btn-secondary" href="/oxygenation/">Review Oxygenation</a>
+          <a class="btn btn-secondary" href="/abg/">Practice ABGs</a>
+        </div>
+
+        <div class="stats" aria-label="Calculator library summary">
+          <div class="stat"><strong>15</strong><span>Calculators</span></div>
+          <div class="stat"><strong>Free</strong><span>Student tools</span></div>
+          <div class="stat"><strong>RT</strong><span>Board prep</span></div>
+          <div class="stat"><strong>NICU</strong><span>Included</span></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-label">Calculator Categories</div>
+        <h2 class="section-title">Find the Tool You Need</h2>
+        <p class="section-sub">These calculators are grouped by how RT students commonly use them: oxygenation, ventilation, ventilator mechanics, weaning, and NICU/PICU support.</p>
+
+        <div class="category-nav">
+          <a href="#oxygenation">Oxygenation</a>
+          <a href="#ventilation">Ventilation</a>
+          <a href="#mechanics">Ventilator Mechanics</a>
+          <a href="#weaning">Weaning</a>
+          <a href="#nicu">NICU / PICU</a>
+        </div>
+      </section>
+
+      <section class="block" id="oxygenation">
+        <div class="section-label">Oxygenation Calculators</div>
+        <h2 class="section-title">Assess Oxygenation and Oxygen Delivery</h2>
+        <p class="section-sub">Use these tools to connect PaO₂, FiO₂, A-a gradient, CaO₂, oxygen delivery, MAP, OI, OSI, and oxygenation severity.</p>
+
+        <div class="resource-grid">
+          <a class="resource-card" href="/calculators/pf-ratio-calculator.html">
+            <span class="tag">Oxygenation</span>
+            <h3>P/F Ratio Calculator</h3>
+            <p>Calculate PaO₂/FiO₂ and interpret oxygenation impairment severity.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/a-a-gradient-calculator.html">
+            <span class="tag">Gradient</span>
+            <h3>A-a Gradient Calculator</h3>
+            <p>Estimate PAO₂ on room air and calculate the alveolar-arterial oxygen gradient.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/oxygen-content-cao2-calculator.html">
+            <span class="tag teal">O₂ Content</span>
+            <h3>CaO₂ Calculator</h3>
+            <p>Calculate arterial oxygen content using hemoglobin, SaO₂, and PaO₂.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/oxygen-delivery-do2-calculator.html">
+            <span class="tag teal">O₂ Delivery</span>
+            <h3>DO₂ Calculator</h3>
+            <p>Calculate oxygen delivery from cardiac output and arterial oxygen content.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/oxygenation-index-osi-calculator.html">
+            <span class="tag amber">OI / OSI</span>
+            <h3>Oxygenation Index & OSI Calculator</h3>
+            <p>Calculate OI using PaO₂ or OSI using SpO₂ with FiO₂ and MAP.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/mean-airway-pressure-calculator.html">
+            <span class="tag">MAP</span>
+            <h3>Mean Airway Pressure Calculator</h3>
+            <p>Estimate MAP from pressure and timing inputs and connect it to oxygenation.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="block" id="ventilation">
+        <div class="section-label">Ventilation Calculators</div>
+        <h2 class="section-title">Evaluate Ventilation, CO₂ Clearance, and Dead Space</h2>
+        <p class="section-sub">These calculators help distinguish total ventilation from effective alveolar ventilation and wasted ventilation.</p>
+
+        <div class="resource-grid">
+          <a class="resource-card" href="/calculators/minute-ventilation-calculator.html">
+            <span class="tag">Ventilation</span>
+            <h3>Minute Ventilation Calculator</h3>
+            <p>Calculate VE from respiratory rate and tidal volume.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/alveolar-ventilation-calculator.html">
+            <span class="tag teal">CO₂ Clearance</span>
+            <h3>Alveolar Ventilation Calculator</h3>
+            <p>Calculate effective alveolar ventilation using RR, VT, and dead space.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/dead-space-vd-vt-calculator.html">
+            <span class="tag amber">Dead Space</span>
+            <h3>Dead Space VD/VT Calculator</h3>
+            <p>Calculate physiologic dead space fraction using PaCO₂ and mixed expired CO₂.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="block" id="mechanics">
+        <div class="section-label">Ventilator Mechanics Calculators</div>
+        <h2 class="section-title">Connect Pressure, Volume, Compliance, and Resistance</h2>
+        <p class="section-sub">Use these tools to interpret ventilator mechanics and troubleshoot high pressure alarms, stiff lungs, and resistance problems.</p>
+
+        <div class="resource-grid">
+          <a class="resource-card" href="/calculators/static-compliance-calculator.html">
+            <span class="tag teal">Compliance</span>
+            <h3>Static Compliance Calculator</h3>
+            <p>Calculate Cstat from VT, plateau pressure, and PEEP.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/dynamic-compliance-calculator.html">
+            <span class="tag teal">Compliance</span>
+            <h3>Dynamic Compliance Calculator</h3>
+            <p>Calculate Cdyn from VT, PIP, and PEEP.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/airway-resistance-calculator.html">
+            <span class="tag amber">Resistance</span>
+            <h3>Airway Resistance Calculator</h3>
+            <p>Calculate Raw from PIP, plateau pressure, and flow with L/min conversion.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/ibw-tidal-volume-calculator.html">
+            <span class="tag coral">Vent Setup</span>
+            <h3>IBW / Tidal Volume Calculator</h3>
+            <p>Estimate predicted body weight and 4, 6, and 8 mL/kg VT targets.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="block" id="weaning">
+        <div class="section-label">Weaning Calculator</div>
+        <h2 class="section-title">Support Ventilator Liberation Decisions</h2>
+        <p class="section-sub">Use weaning tools as part of a broader assessment that includes oxygenation, ventilation, mechanics, mental status, airway protection, and endurance.</p>
+
+        <div class="resource-grid">
+          <a class="resource-card" href="/calculators/rsbi-calculator.html">
+            <span class="tag amber">Weaning</span>
+            <h3>RSBI Calculator</h3>
+            <p>Calculate rapid shallow breathing index from respiratory rate and tidal volume.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="block" id="nicu">
+        <div class="section-label">NICU / PICU Calculators</div>
+        <h2 class="section-title">Neonatal and Pediatric Oxygenation Support</h2>
+        <p class="section-sub">These tools support learning around neonatal surfactant dosing, oxygenation severity, MAP, and support-adjusted oxygenation assessment.</p>
+
+        <div class="resource-grid">
+          <a class="resource-card" href="/calculators/surfactant-dose-calculator.html">
+            <span class="tag coral">NICU Dose</span>
+            <h3>Surfactant Dose Calculator</h3>
+            <p>Estimate surfactant dose volume from patient weight and product-specific mL/kg presets.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/oxygenation-index-osi-calculator.html">
+            <span class="tag amber">NICU / PICU</span>
+            <h3>OI / OSI Calculator</h3>
+            <p>Calculate oxygenation severity using PaO₂ or SpO₂ with FiO₂ and MAP.</p>
+          </a>
+
+          <a class="resource-card" href="/calculators/mean-airway-pressure-calculator.html">
+            <span class="tag">Pressure</span>
+            <h3>Mean Airway Pressure Calculator</h3>
+            <p>Estimate MAP and connect ventilator pressure-time support to oxygenation.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="block cta">
+        <div class="section-label">Go Beyond the Calculator</div>
+        <h2 class="section-title">Want to Understand the Clinical Reasoning Behind the Numbers?</h2>
+        <p class="section-sub">PulmoLearn connects calculations to ABGs, oxygenation, ventilator management, neonatal respiratory care, disease recognition, and NBRC-style clinical reasoning.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/signup.html">Get PulmoLearn Access</a>
+          <a class="btn btn-secondary" href="/curriculum.html">Browse Curriculum</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div><strong>Pulmo<span>Learn</span></strong><br>Interactive respiratory therapy education.</div>
+      <div>Calculators · Oxygenation · Ventilator Mechanics · NICU</div>
+    </footer>
+  </div>
+</body>
+</html>
