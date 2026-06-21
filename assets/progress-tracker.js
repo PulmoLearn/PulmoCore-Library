@@ -1,5 +1,5 @@
 /**
- * PulmoLearn Progress Tracker v7
+ * PulmoLearn Progress Tracker v8
  * Add to every lesson page just before </body>:
  *   <script>window.LESSON_ID = 'als'</script>
  *   <script type="module" src="/assets/progress-tracker.js"></script>
@@ -7,7 +7,7 @@
 
 import { supabase } from '/assets/auth.js'
 
-console.log('PulmoLearn: progress-tracker.js v7 loaded')
+console.log('PulmoLearn: progress-tracker.js v8 loaded')
 
 const urlParams = new URLSearchParams(window.location.search)
 const isLtiLaunch = urlParams.get('lti') === '1'
@@ -26,7 +26,6 @@ if (!session && !isLtiLaunch) {
 }
 
 // Temporary LTI test user ID.
-// Later this will be replaced with the real Canvas LTI user ID.
 const userId = session?.user?.id || `lti-test-${Date.now()}`
 const lessonId = window.PULMO_LESSON_ID || window.LESSON_ID
 
@@ -91,6 +90,34 @@ style.textContent = `
     margin-right: auto;
     line-height: 1.6;
     font-family: "Atkinson Hyperlegible", Arial, sans-serif;
+  }
+  .pl-educational-disclaimer {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-left: 4px solid #F4B860;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin: 0 auto 26px;
+    max-width: 760px;
+    text-align: left;
+    color: rgba(255,255,255,0.72);
+    font-family: "Atkinson Hyperlegible", Arial, sans-serif;
+    font-size: .86rem;
+    line-height: 1.5;
+  }
+  .pl-educational-disclaimer strong {
+    display: block;
+    color: #fff;
+    font-family: "Montserrat", Arial, sans-serif;
+    font-size: .9rem;
+    margin-bottom: 5px;
+    letter-spacing: -0.02em;
+  }
+  .pl-educational-disclaimer a {
+    color: #DDF7F2;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .pl-complete-actions {
     display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
@@ -187,6 +214,11 @@ function showCompletionBanner() {
       You've worked through all ${totalSections} sections of this module.
       Your progress has been saved — return to your dashboard to continue with the next lesson.
     </p>
+    <div class="pl-educational-disclaimer">
+      <strong>Educational disclaimer</strong>
+      PulmoLearn content is provided for educational purposes only and is intended to support respiratory therapy learning and professional development. It is not intended to replace clinical judgment, institutional policies, manufacturer instructions for use, physician orders, or professional medical advice. Always follow your organization's policies and consult appropriate clinical resources when making patient care decisions.
+      <br><a href="/disclaimer.html">Read full disclaimer</a>
+    </div>
     <div class="pl-complete-stats">
       <div class="pl-stat">
         <strong>${totalSections}</strong>
@@ -204,6 +236,7 @@ function showCompletionBanner() {
     <div class="pl-complete-actions">
       <a href="/dashboard.html" class="pl-btn-home">← Back to Dashboard</a>
       <a href="/glossary.html" class="pl-btn-glossary">📖 Full Glossary</a>
+      <a href="/disclaimer.html" class="pl-btn-glossary">⚕ Educational Disclaimer</a>
     </div>
   `
   lessonStack.appendChild(banner)
@@ -279,7 +312,6 @@ async function saveProgress() {
     console.error('PulmoLearn: Failed to save progress:', error.message)
   } else {
     console.log(`PulmoLearn: Save confirmed — ${lessonId} ${percent}%`)
-    // ── Sync to localStorage so courses.js dropdown stays current ──
     if (typeof window.saveCourseProgress === 'function') {
       const fileName = window.location.pathname.split('/').pop()
       window.saveCourseProgress(fileName, percent, completed)
@@ -331,7 +363,6 @@ async function restoreProgress() {
     document.dispatchEvent(new CustomEvent('progressRestored'))
   }, 200)
 
-  // ── Sync restored data to localStorage so courses.js dropdown reflects it ──
   if (typeof window.saveCourseProgress === 'function') {
     const fileName = window.location.pathname.split('/').pop()
     window.saveCourseProgress(fileName, data.percent, data.completed)
@@ -348,7 +379,6 @@ async function restoreProgress() {
 }
 
 // ── Safely call a lesson init function by name ──
-// Checks it exists and hasn't already been initialized
 function callInit(name) {
   if (typeof window[name] === 'function') {
     console.log(`PulmoLearn: Calling ${name}`)
@@ -387,10 +417,6 @@ document.addEventListener('activityComplete', scheduleSave)
 window.addEventListener('load', async () => {
   console.log('PulmoLearn: load event fired')
 
-  // Re-run all lesson init functions now that DOM is fully ready.
-  // These run too early during initial script parse so listeners
-  // don't attach correctly. Running them again on load fixes this.
-  // Each function is guarded so it only runs if it exists in the lesson.
   callInit('initializeProgressiveSections')
   callInit('initializePrecheck')
   callInit('initializeHotspotActivity')
@@ -402,7 +428,7 @@ window.addEventListener('load', async () => {
   callInit('initializePeakFlowActivity')
   callInit('shuffleAnswerOptions')
   callInit('enableDynamicReorder')
-  // Shuffle sequence multiple times for better randomization
+
   if (typeof shuffleSequence === 'function') {
     shuffleSequence()
     shuffleSequence()
@@ -410,34 +436,29 @@ window.addEventListener('load', async () => {
     shuffleSequence()
     shuffleSequence()
   }
-  
-  
-// ── Review mode — auto-show correct answers ──
+
+  // ── Review mode — auto-show correct answers ──
   if (new URLSearchParams(window.location.search).get('review') === 'true') {
     console.log('PulmoLearn: Review mode — auto-completing all activities')
     setTimeout(() => {
-      // Auto-select correct quiz options
       document.querySelectorAll('.quiz-option[data-correct="true"]').forEach(btn => {
         if (!btn.closest('[data-correct-answered="true"]')) {
           btn.click()
         }
       })
 
-      // Auto-select correct knowledge check options
       document.querySelectorAll('.knowledge-option[data-correct="true"]').forEach(btn => {
         if (!btn.closest('[data-correct-answered="true"]')) {
           btn.click()
         }
       })
 
-      // Auto-select correct case options
       document.querySelectorAll('.case-option[data-correct="true"]').forEach(btn => {
         if (!btn.closest('[data-correct-answered="true"]')) {
           btn.click()
         }
       })
 
-      // Auto-select correct sort answers
       document.querySelectorAll('.sort-row').forEach(row => {
         const select = row.querySelector('select')
         if (select && row.dataset.answer) {
@@ -445,21 +466,18 @@ window.addEventListener('load', async () => {
         }
       })
 
-      // Click check buttons to confirm sorts
       document.querySelectorAll('[id^="check"]').forEach(btn => {
         if (btn.tagName === 'BUTTON') btn.click()
       })
 
-      // Click all hotspots
       document.querySelectorAll('.hotspot-btn').forEach(btn => btn.click())
-
     }, 500)
   }
-  // Save immediately when user clicks any dashboard link
+
   document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault()
-      saveProgress() // fire and forget
+      saveProgress()
       window.location.href = link.href
     })
   })
@@ -494,7 +512,10 @@ window.addEventListener('pagehide', () => {
   navigator.sendBeacon(
     `${supabase.supabaseUrl}/rest/v1/progress`,
     new Blob([JSON.stringify({
-      user_id: userId, lesson_id: lessonId, percent, completed,
+      user_id: userId,
+      lesson_id: lessonId,
+      percent,
+      completed,
       updated_at: new Date().toISOString()
     })], { type: 'application/json' })
   )
