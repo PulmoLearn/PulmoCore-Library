@@ -38,6 +38,12 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 .calculator-panel{display:grid;gap:12px;background:#F8FBFD;border:1px solid var(--soft-border);border-radius:16px;padding:16px;margin-top:14px}
 .result-box{display:none;border-radius:14px;padding:14px;margin-top:12px;font-weight:800}
 .result-box.show{display:block}
+
+.math-input-grid select.answer-incorrect,.math-input-grid input.answer-incorrect{border-color:var(--alert-coral);background:#FDE9E9;box-shadow:0 0 0 3px rgba(232,93,93,.12)}
+.math-input-grid select.answer-correct,.math-input-grid input.answer-correct{border-color:#86D9C8;background:var(--airway-mint);box-shadow:0 0 0 3px rgba(134,217,200,.14)}
+.calculation-feedback{display:grid;gap:8px;text-align:left;font-weight:700}
+.calculation-feedback ol{margin:.25rem 0 .25rem 1.25rem;padding:0}
+.calculation-feedback li{margin:.15rem 0}
 @media(max-width:780px){.math-input-grid{grid-template-columns:1fr}}
 
     /* ── 508 Accessibility: keyboard focus indicators ── */
@@ -99,7 +105,7 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 <a href="#temperature">Temperature</a>
 <a href="#dosage">Dosage Calculations</a>
 <a href="#ibw">IBW + Tidal Volume</a>
-<a href="#practice">Assignment Practice</a>
+<a href="#practice">Mixed Practice</a>
 <a href="#scenario">Guided Scenario</a>
 <a href="#knowledge-check">Knowledge Check</a>
 <a href="#faq">FAQ</a>
@@ -148,9 +154,13 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 <div class="example-box soft-blue"><strong>Ventilator safety</strong><br>Wrong tidal volume can overdistend lungs.</div>
 <div class="example-box soft-amber"><strong>Clinical accuracy</strong><br>Units tell you what the number actually means.</div>
 </div>
+<article class="info-card rt" style="margin-top:16px;">
+<h3>Math Safety Mindset</h3>
+<p>Safe clinical math starts before the calculator. Write the units, identify what the order asks for, compare it to what is available, and pause if the answer does not make clinical sense. In respiratory care, a misplaced decimal or wrong unit can change a safe plan into an unsafe one.</p>
+</article>
 <article class="activity-card require-complete" data-activity-name="Math Safety Reflection" style="margin-top:16px">
 <h3>Would You Want Your RT Guessing?</h3>
-<p>Select the statements that reflect safe RT math habits.</p>
+<p>Select the statements that reflect safe RT math habits. Unsafe statements are included as distractors, but you only need to select the safe habits to continue.</p>
 <div class="quiz-options">
 <button class="quiz-option safety-option" data-good="true">I should write units with every number.</button>
 <button class="quiz-option safety-option" data-good="false">If the answer seems close, units do not matter.</button>
@@ -165,21 +175,26 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 <section class="info-card" id="metric-system">
 <h2>Metric System Foundations</h2>
 <p>The metric system uses prefixes to show size. Respiratory care commonly uses liters, milliliters, grams, milligrams, micrograms, centimeters, meters, and kilograms. You do not have to memorize hundreds of conversions. Start with the common ones.</p>
+<article class="info-card rt" style="margin-top:16px;">
+<h3>How to Read the Metric Ladder</h3>
+<p>The metric ladder is a map. Base units like liters, grams, and meters sit in the middle. Moving toward milli- or micro- means the unit is getting smaller, so the number usually gets larger. Moving toward kilo- means the unit is getting larger, so the number usually gets smaller.</p>
+</article>
 <img src="/foundations/foundations-metric-ladder.png" alt="Metric ladder showing kilo, base units, milli, and micro" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
 <div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
 <div class="example-box soft-teal"><strong>Volume</strong><br>1 L = 1000 mL</div>
 <div class="example-box soft-blue"><strong>Mass</strong><br>1 g = 1000 mg</div>
 <div class="example-box soft-amber"><strong>Small dose</strong><br>1000 mcg = 1 mg</div>
 </div>
+<p style="margin-top:16px;">In the practice below, focus on the direction of the conversion before calculating. Ask: am I converting to a smaller unit or a larger unit?</p>
 <article class="activity-card require-complete" data-activity-name="Metric Conversion Practice" style="margin-top:16px">
 <h3>Guided Metric Practice</h3>
-<p>Complete all three conversions. Use the hint if you are unsure.</p>
+<p>Choose the correct value for each conversion. Use the hint if you are unsure.</p>
 <div class="math-input-grid">
-<label>0.961 L = <input id="metric1" type="number" step="1" placeholder="mL"></label>
-<label>402 mL = <input id="metric2" type="number" step="0.001" placeholder="L"></label>
-<label>4483 mcg = <input id="metric3" type="number" step="0.001" placeholder="mg"></label>
+<label>0.961 L = <select id="metric1" aria-label="Convert 0.961 liters to milliliters"><option value="">Choose mL</option><option value="96.1">96.1 mL</option><option value="961">961 mL</option><option value="0.961">0.961 mL</option><option value="9610">9610 mL</option></select></label>
+<label>402 mL = <select id="metric2" aria-label="Convert 402 milliliters to liters"><option value="">Choose L</option><option value="4.02">4.02 L</option><option value="0.402">0.402 L</option><option value="402000">402000 L</option><option value="0.0402">0.0402 L</option></select></label>
+<label>4483 mcg = <select id="metric3" aria-label="Convert 4483 micrograms to milligrams"><option value="">Choose mg</option><option value="0.4483">0.4483 mg</option><option value="4.483">4.483 mg</option><option value="44.83">44.83 mg</option><option value="4483000">4483000 mg</option></select></label>
 </div>
-<div class="hint-box"><strong>Hint:</strong> L to mL means multiply by 1000. mL to L means divide by 1000. mcg to mg means divide by 1000.</div>
+<div class="hint-box"><strong>Hint:</strong> L to mL means multiply by 1000. When multiplying by a power of 10, move the decimal to the right for the number of zeros. mL to L means divide by 1000, and mcg to mg means divide by 1000. When dividing by a power of 10, move the decimal to the left for the number of zeros.</div>
 <button class="small-btn primary" id="checkMetric" type="button" style="margin-top:12px">Check Conversions</button>
 <div class="activity-status" id="metricStatus">Complete the conversions to continue.</div>
 </article>
@@ -187,19 +202,36 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 
 <section class="info-card" id="dimensional-analysis">
 <h2>Dimensional Analysis</h2>
-<p>Dimensional analysis is a label method. You set up the problem so the unit you do not want cancels out and the unit you want remains. This protects you from guessing and helps prevent medication and volume errors.</p>
+<p>Dimensional analysis is a unit-canceling method. Instead of guessing whether to multiply or divide, you set up the problem so the unit you do <strong>not</strong> want crosses out and the unit you <strong>do</strong> want is left in the answer.</p>
+<article class="info-card board" style="margin-top:16px;">
+<h3>Units Tell the Story</h3>
+<p>Every conversion factor is made from two equal values. For example, <strong>1 g = 1000 mg</strong>. Because those values are equal, both fractions below are true:</p>
+<div class="formula-card" style="margin-top:14px">
+<span>1000 mg</span> / 1 g &nbsp;&nbsp; or &nbsp;&nbsp; 1 g / <span>1000 mg</span>
+</div>
+<p style="margin-top:14px;">You choose the version that puts the unit you want to keep on top and the unit you want to remove across from the same unit in the starting amount. Matching units on opposite sides of the multiplication line cross-cancel.</p>
+</article>
 <img src="/foundations/foundations-dimensional-analysis.png" alt="Dimensional analysis example showing liters canceling to leave milliliters" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
 <div class="formula-card" style="margin-top:14px">
 Starting amount × <span>conversion factor</span> = answer in desired unit
 </div>
-<div class="math-step"><strong>Example:</strong> Convert 0.5 L to mL.<br>0.5 L × 1000 mL / 1 L = 500 mL. The L cancels, and mL remains.</div>
+<div class="math-step"><strong>Example:</strong> Convert 0.5 L to mL.<br>Because 1 L = 1000 mL, the conversion factor can be written as <strong>1000 mL / 1 L</strong> or <strong>1 L / 1000 mL</strong>. We want mL left in the answer, so mL goes on top and L goes on the bottom:<br><br><strong>0.5 L × 1000 mL / 1 L = 500 mL</strong><br><br>The L in the starting amount cancels with the L in the denominator. The only unit left on top is mL, which is the unit we need.</div>
+<article class="info-card rt" style="margin-top:16px;">
+<h3>How to Choose the Correct Direction</h3>
+<div class="component-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>1. Start with the given</strong><br>Write the number and unit you already have.</div>
+<div class="example-box soft-blue"><strong>2. Decide the final unit</strong><br>Ask: What unit should be left in the answer?</div>
+<div class="example-box soft-amber"><strong>3. Flip the factor if needed</strong><br>Place the unwanted unit on the bottom so it cancels.</div>
+</div>
+</article>
+<p style="margin-top:16px;">The next question is checking the setup, not the math. Ask yourself: which setup makes <strong>g</strong> cancel and leaves <strong>mg</strong> in the answer?</p>
 <article class="quiz-card require-complete" id="unit-setup-check" data-activity-name="Dimensional Analysis Setup" style="margin-top:16px">
 <h3>Choose the Correct Setup</h3>
-<p>Which setup correctly converts 4 g to mg?</p>
+<p>You need to convert <strong>4 g to mg</strong>. Since <strong>1 g = 1000 mg</strong>, which setup places grams on the bottom so grams cancel and milligrams remain?</p>
 <div class="quiz-options">
-<button class="quiz-option setup-option" data-correct="true" data-feedback="Correct. Grams cancel because g is on top and bottom, leaving mg.">4 g × 1000 mg / 1 g</button>
-<button class="quiz-option setup-option" data-correct="false" data-feedback="Not quite. This would leave g²/mg, not mg.">4 g × 1 g / 1000 mg</button>
-<button class="quiz-option setup-option" data-correct="false" data-feedback="Not quite. Dividing by 1000 would convert mg to g, not g to mg.">4 g ÷ 1000</button>
+<button class="quiz-option setup-option" data-correct="true" data-feedback="Correct. The starting unit is g, and the conversion factor has g on the bottom. The g units cancel, leaving mg on top: 4 × 1000 mg = 4000 mg.">4 g × 1000 mg / 1 g</button>
+<button class="quiz-option setup-option" data-correct="false" data-feedback="Not quite. This flips the conversion factor the wrong way. Grams would not cancel correctly, and mg would end up on the bottom instead of being left as the answer unit.">4 g × 1 g / 1000 mg</button>
+<button class="quiz-option setup-option" data-correct="false" data-feedback="Not quite. This may look like a shortcut, but it does not show the unit cancellation. Since you are converting from grams to the smaller unit milligrams, the answer should get larger, not smaller.">4 g ÷ 1000</button>
 </div>
 <div class="quiz-feedback" role="status"></div>
 </article>
@@ -208,6 +240,10 @@ Starting amount × <span>conversion factor</span> = answer in desired unit
 <section class="info-card" id="temperature">
 <h2>Temperature Conversions</h2>
 <p>Respiratory care uses Celsius and Fahrenheit. Body temperature is also important in physiology because gases expand, pressure changes, and humidification depends on temperature.</p>
+<article class="info-card rt" style="margin-top:16px;">
+<h3>Why Temperature Shows Up in RT Math</h3>
+<p>Most everyday patient temperatures are reported in Celsius or Fahrenheit, but gas law problems may use Kelvin. For this foundation lesson, focus on using the correct formula and rounding carefully rather than memorizing every possible temperature relationship.</p>
+</article>
 <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
 <table>
 <tr><th>Conversion</th><th>Formula</th><th>Clinical Use</th></tr>
@@ -218,11 +254,11 @@ Starting amount × <span>conversion factor</span> = answer in desired unit
 </div>
 <article class="activity-card require-complete" data-activity-name="Temperature Practice" style="margin-top:16px">
 <h3>Temperature Practice</h3>
-<p>Round as instructed.</p>
+<p>Choose the rounded value that best matches the conversion.</p>
 <div class="math-input-grid">
-<label>100°F = <input id="temp1" type="number" step="0.1" placeholder="°C"></label>
-<label>39°C = <input id="temp2" type="number" step="0.1" placeholder="°F"></label>
-<label>29°C = <input id="temp3" type="number" step="1" placeholder="K"></label>
+<label>100°F = <select id="temp1" aria-label="Convert 100 degrees Fahrenheit to Celsius"><option value="">Choose °C</option><option value="32.0">32.0°C</option><option value="37.8">37.8°C</option><option value="39.0">39.0°C</option><option value="212.0">212.0°C</option></select></label>
+<label>39°C = <select id="temp2" aria-label="Convert 39 degrees Celsius to Fahrenheit"><option value="">Choose °F</option><option value="71.0">71.0°F</option><option value="98.6">98.6°F</option><option value="102.2">102.2°F</option><option value="312.0">312.0°F</option></select></label>
+<label>29°C = <select id="temp3" aria-label="Convert 29 degrees Celsius to Kelvin"><option value="">Choose K</option><option value="244">244 K</option><option value="273">273 K</option><option value="302">302 K</option><option value="522">522 K</option></select></label>
 </div>
 <button class="small-btn primary" id="checkTemp" type="button" style="margin-top:12px">Check Temperature Answers</button>
 <div class="activity-status" id="tempStatus">Complete the temperature conversions to continue.</div>
@@ -232,18 +268,31 @@ Starting amount × <span>conversion factor</span> = answer in desired unit
 <section class="info-card" id="dosage">
 <h2>Medication & Dosage Calculations</h2>
 <p>Respiratory medications are often supplied in concentrations, such as mg per mL or percent solutions. You must connect what is ordered to what is available.</p>
+<article class="info-card rt" style="margin-top:16px;">
+<h3>Order, Supply, Amount to Give</h3>
+<p>Medication math usually starts with two pieces of information: the order tells you how much medication is needed, and the supply tells you how much medication is contained in a certain volume. Your job is to calculate the volume that delivers the ordered dose.</p>
+</article>
+<article class="info-card red" style="margin-top:16px;">
+<h3>Medication Decimal Safety</h3>
+<p>Healthcare notation must make decimals impossible to miss. Always place a leading zero before a decimal dose, and never add a trailing zero after a decimal point. Write <strong>0.5 mg</strong>, not <strong>.5 mg</strong>. Write <strong>5 mg</strong>, not <strong>5.0 mg</strong>.</p>
+<div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
+<div class="example-box soft-teal"><strong>Use a leading zero</strong><br>0.5 mL is safer than .5 mL because the decimal is easier to see.</div>
+<div class="example-box soft-coral"><strong>Avoid trailing zeros</strong><br>5.0 mg can be misread as 50 mg if the decimal is missed.</div>
+</div>
+</article>
 <img src="/foundations/foundations-dosage-calculation.png" alt="Medication order and available concentration visual" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
 <div class="formula-card" style="margin-top:14px">
 mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 </div>
 <div class="hint-box"><strong>Percent solution reminder:</strong> A 1% solution means 1 g / 100 mL = 1000 mg / 100 mL = 10 mg/mL. Therefore, 0.5% = 5 mg/mL and 10% = 100 mg/mL.</div>
+<p style="margin-top:16px;">Use the same logic from the image in the practice below. First identify the concentration, then decide whether you are solving for volume or dose.</p>
 <article class="activity-card require-complete" data-activity-name="Dosage Practice" style="margin-top:16px">
 <h3>Dosage Practice</h3>
-<p>Use the available albuterol concentration: 2.5 mg / 0.5 mL.</p>
+<p>Use the available albuterol concentration: 2.5 mg / 3 mL. Notice that answer choices use medication-safe decimal formatting when decimals are needed.</p>
 <div class="math-input-grid">
-<label>Order 5 mg. Give <input id="dose1" type="number" step="0.1" placeholder="mL"></label>
-<label>Give 4 mL. Dose = <input id="dose2" type="number" step="0.1" placeholder="mg"></label>
-<label>Give 4 ampules. Dose = <input id="dose3" type="number" step="0.1" placeholder="mg"></label>
+<label>Order 5 mg. Give <select id="dose1" aria-label="Calculate milliliters to give for 5 milligrams"><option value="">Choose mL</option><option value="3">3 mL</option><option value="5">5 mL</option><option value="6">6 mL</option><option value="0.6">0.6 mL</option></select></label>
+<label>Give 4 mL → Dose = <select id="dose2" aria-label="Calculate dose in milligrams from 4 milliliters"><option value="">Choose mg</option><option value="1.2">1.2 mg</option><option value="2.5">2.5 mg</option><option value="3.33">3.33 mg</option><option value="10">10 mg</option></select></label>
+<label>Give 4 ampules. Dose = <select id="dose3" aria-label="Calculate dose in milligrams from 4 ampules"><option value="">Choose mg</option><option value="4">4 mg</option><option value="6">6 mg</option><option value="10">10 mg</option><option value="12">12 mg</option></select></label>
 </div>
 <button class="small-btn primary" id="checkDose" type="button" style="margin-top:12px">Check Dosage Answers</button>
 <div class="activity-status" id="doseStatus">Complete the dosage practice to continue.</div>
@@ -253,6 +302,10 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 <section class="info-card" id="ibw">
 <h2>Ideal Body Weight & Tidal Volume</h2>
 <p>For ventilation, tidal volume is commonly based on predicted or ideal body weight, not actual weight. This matters because lung size relates more closely to height than total body weight.</p>
+<article class="info-card board" style="margin-top:16px;">
+<h3>Height First, Lung Protection Next</h3>
+<p>When calculating a protective tidal volume, do not start with the patient’s actual weight. Start with height, calculate ideal or predicted body weight, then multiply by the ordered mL/kg range. This helps reduce the risk of delivering volumes that are too large for the patient’s lungs.</p>
+</article>
 <img src="/foundations/foundations-ibw-tidal-volume.png" alt="Flowchart showing height to ideal body weight to safe tidal volume" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)">
 <div class="data-card" style="font-family:var(--font-body);white-space:normal;margin-top:14px">
 <table>
@@ -262,11 +315,12 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 <tr><td>6 mL/kg</td><td>A common lung-protective starting point based on ideal/predicted body weight.</td></tr>
 </table>
 </div>
+<p style="margin-top:16px;">The practice below isolates the final step: multiplying IBW by mL/kg and converting the result to liters. Later lessons can add the full height-to-IBW calculation.</p>
 <article class="activity-card require-complete" data-activity-name="IBW Tidal Volume Practice" style="margin-top:16px">
 <h3>Tidal Volume Practice</h3>
 <p>If a patient’s ideal body weight is 63 kg and average tidal volume is 6 mL/kg, what is the tidal volume in liters?</p>
 <div class="math-input-grid">
-<label>Answer = <input id="vtAnswer" type="number" step="0.001" placeholder="L"></label>
+<label>Answer = <select id="vtAnswer" aria-label="Calculate tidal volume in liters"><option value="">Choose L</option><option value="0.063">0.063 L</option><option value="0.378">0.378 L</option><option value="3.78">3.78 L</option><option value="378">378 L</option></select></label>
 </div>
 <div class="hint-box"><strong>Hint:</strong> 63 kg × 6 mL/kg = mL. Then convert mL to L by dividing by 1000.</div>
 <button class="small-btn primary" id="checkVT" type="button" style="margin-top:12px">Check Tidal Volume</button>
@@ -275,18 +329,19 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 </section>
 
 <section class="info-card" id="practice">
-<h2>Assignment Practice Zone</h2>
-<p>This section mirrors the style of the LMS assignment. Work through the mixed practice before submitting graded work.</p>
-<article class="activity-card require-complete" data-activity-name="Mixed Assignment Practice">
+<h2>Mixed Practice Zone</h2>
+<p>This section combines unit conversions and medication math so you can practice choosing the right method for the problem in front of you.</p>
+<div class="hint-box"><strong>Conversion factors for this practice:</strong> 12 in = 1 ft, 2.54 cm = 1 in, 2.2 lb = 1 kg, and 10% solution = 100 mg/mL. Use the factor that cancels the unit you do not want and leaves the unit you need.</div>
+<article class="activity-card require-complete" data-activity-name="Mixed Practice">
 <h3>Mixed Practice</h3>
-<p>Answer all items correctly. Use your notes and the lesson examples.</p>
+<p>Choose the correct solution for each item. Use your notes and the lesson examples.</p>
 <div class="math-input-grid">
-<label>6 ft 4 in = <input id="mix1" type="number" step="1" placeholder="cm"></label>
-<label>90 lb = <input id="mix2" type="number" step="1" placeholder="kg"></label>
-<label>10% Mucomyst, 2 mL = <input id="mix3" type="number" step="1" placeholder="mg"></label>
+<label>6 ft 4 in = <select id="mix1" aria-label="Convert 6 feet 4 inches to centimeters"><option value="">Choose cm</option><option value="76">76 cm</option><option value="183">183 cm</option><option value="193">193 cm</option><option value="254">254 cm</option></select></label>
+<label>90 lb = <select id="mix2" aria-label="Convert 90 pounds to kilograms"><option value="">Choose kg</option><option value="20">20 kg</option><option value="41">41 kg</option><option value="90">90 kg</option><option value="198">198 kg</option></select></label>
+<label>10% Mucomyst, 2 mL = <select id="mix3" aria-label="Calculate milligrams in 2 milliliters of 10 percent Mucomyst"><option value="">Choose mg</option><option value="20">20 mg</option><option value="100">100 mg</option><option value="200">200 mg</option><option value="1000">1000 mg</option></select></label>
 </div>
 <button class="small-btn primary" id="checkMixed" type="button" style="margin-top:12px">Check Mixed Practice</button>
-<div class="activity-status" id="mixedStatus">Complete the mixed assignment practice to continue.</div>
+<div class="activity-status" id="mixedStatus">Complete the mixed practice to continue.</div>
 </article>
 </section>
 
@@ -296,7 +351,7 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 <p>This beginner case shows why labels and units matter.</p>
 <div class="case-stage" data-case-stage="0">
 <h3>Stage 1: Medication Order</h3>
-<p>The order is albuterol 5 mg. The medication label says 2.5 mg / 0.5 mL.</p>
+<p>The order is albuterol 5 mg. The medication label says 2.5 mg / 3 mL.</p>
 <p><strong>Decision:</strong> What should the RT student calculate before administering?</p>
 <div class="quiz-options case-options">
 <button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. The student must calculate how many mL contain the ordered dose.">How many mL provide 5 mg.</button>
@@ -308,10 +363,10 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 </div>
 <div class="case-stage lesson-hidden" data-case-stage="1">
 <h3>Stage 2: Reasonableness Check</h3>
-<p>The concentration is 5 mg/mL because 2.5 mg is in 0.5 mL. To give 5 mg, the student calculates 1 mL.</p>
+<p>The concentration is 2.5 mg per 3 mL. To give 5 mg, the student calculates 6 mL.</p>
 <p><strong>Decision:</strong> Why is this reasonable?</p>
 <div class="quiz-options case-options">
-<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. If 0.5 mL contains 2.5 mg, then twice as much volume, 1 mL, contains twice as much drug, 5 mg.">The ordered dose is double 2.5 mg, so the volume is double 0.5 mL.</button>
+<button class="quiz-option case-option" data-case-correct="true" data-case-feedback="Correct. If 3 mL contains 2.5 mg, then twice as much volume, 6 mL, contains twice as much drug, 5 mg.">The ordered dose is double 2.5 mg, so the volume is double 3 mL.</button>
 <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Doubling the dose should double the volume when concentration stays the same.">A larger dose should require less volume.</button>
 <button class="quiz-option case-option" data-case-correct="false" data-case-feedback="Incorrect. Reasonableness checks are part of safe medication math.">No reasonableness check is needed.</button>
 </div>
@@ -321,7 +376,7 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 <div class="case-stage lesson-hidden" data-case-stage="2">
 <h3>Case Wrap-Up</h3>
 <div class="example-box soft-teal"><strong>Takeaway:</strong> Safe RT math includes units, setup, calculation, and reasonableness checking.</div>
-<div class="example-box soft-amber" style="margin-top:12px"><strong>Assignment connection:</strong> Your 1.2 assignment uses the same skills: unit conversion, dosage math, temperature conversion, and tidal volume calculation.</div>
+<div class="example-box soft-amber" style="margin-top:12px"><strong>Skill connection:</strong> These same habits apply any time you calculate unit conversions, dosage math, temperature conversions, or tidal volume targets.</div>
 </div>
 </section>
 
@@ -360,13 +415,23 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 </div><div class="quiz-feedback" role="status"></div>
 </div>
 
-<div class="activity-status" id="knowledgeStatus">0 / 3 questions answered correctly</div>
+<div class="knowledge-question" data-question-id="kq4">
+<h3>Question 4</h3>
+<p>Which medication notation follows safe decimal practice?</p>
+<div class="quiz-options">
+<button class="quiz-option knowledge-option" data-question="kq4" data-correct="true" data-feedback="Correct. Use a leading zero before a decimal and avoid trailing zeros after a decimal point.">0.5 mg and 5 mg</button>
+<button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. A missing leading zero can make the decimal easy to miss.">.5 mg and 5 mg</button>
+<button class="quiz-option knowledge-option" data-question="kq4" data-correct="false" data-feedback="Incorrect. A trailing zero after a decimal can create a tenfold medication error if the decimal is missed.">0.5 mg and 5.0 mg</button>
+</div><div class="quiz-feedback" role="status"></div>
+</div>
+
+<div class="activity-status" id="knowledgeStatus">0 / 4 questions answered correctly</div>
 </section>
 
 <section id="faq">
 <div class="section-heading"><span class="eyebrow">FAQ</span><h2>Common Math Questions</h2></div>
 <details class="accordion" open><summary>What if I am not good at math?</summary><div class="accordion-body"><p>This lesson is designed for beginners. Focus on writing units, using one step at a time, and checking whether the answer makes sense.</p></div></details>
-<details class="accordion"><summary>Why do units matter so much?</summary><div class="accordion-body"><p>Units tell you what the number represents. A medication answer in mg is not the same as an answer in mL.</p></div></details>
+<details class="accordion"><summary>Why do units and decimal formatting matter so much?</summary><div class="accordion-body"><p>Units tell you what the number represents. A medication answer in mg is not the same as an answer in mL. Decimal formatting also matters: write 0.5 instead of .5, and avoid 5.0 because trailing zeros can lead to dangerous misreading.</p></div></details>
 <details class="accordion"><summary>Do I need to memorize every formula?</summary><div class="accordion-body"><p>You should learn the common conversions and understand how to set up formulas. Many clinical settings also use references and protocols, but you still need to understand what the numbers mean.</p></div></details>
 <details class="accordion"><summary>Why is IBW based on height?</summary><div class="accordion-body"><p>Height better estimates lung size than actual body weight, which is why ventilator tidal volumes often use ideal or predicted body weight.</p></div></details>
 </section>
@@ -377,7 +442,7 @@ mL to give = <span>ordered dose</span> ÷ <span>available concentration</span>
 <div class="component-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px">
 <div class="example-box soft-teal"><strong>Must know:</strong><br>1 L = 1000 mL, 1 g = 1000 mg, and 1000 mcg = 1 mg.</div>
 <div class="example-box soft-blue"><strong>Math pearl:</strong><br>If the unit does not cancel correctly, the setup is wrong.</div>
-<div class="example-box soft-amber"><strong>Clinical pearl:</strong><br>Decimal errors can become medication errors.</div>
+<div class="example-box soft-amber"><strong>Clinical pearl:</strong><br>Use 0 before decimals and avoid trailing zeros: 0.5 mg, not .5 mg; 5 mg, not 5.0 mg.</div>
 <div class="example-box soft-coral"><strong>Common mistake:</strong><br>Using actual body weight instead of IBW for tidal volume.</div>
 </div>
 </section>
@@ -415,7 +480,9 @@ const glossaryTerms=[
 {term:"Ideal body weight",definition:"Estimated body weight based on height and sex, used to approximate lung size."},
 {term:"Tidal volume",definition:"The amount of air delivered or inhaled with one breath."},
 {term:"Celsius",definition:"Temperature scale commonly used in healthcare and science."},
-{term:"Kelvin",definition:"Temperature scale used in gas law calculations."}
+{term:"Kelvin",definition:"Temperature scale used in gas law calculations."},
+{term:"Leading zero",definition:"A zero placed before a decimal value less than one, such as 0.5, to make the decimal easier to see."},
+{term:"Trailing zero",definition:"A zero written after a decimal point, such as 5.0; avoided in medication notation because it can be misread."}
 ];
 let activeDeck=[...glossaryTerms],completedDeck=[],currentIndex=0,currentView="active",answerShown=false;
 const flashcard=document.getElementById("flashcard"),cardFront=document.getElementById("cardFront"),cardBack=document.getElementById("cardBack"),progressText=document.getElementById("progressText"),progressFill=document.getElementById("progressFill"),completedList=document.getElementById("completedList");
@@ -434,24 +501,26 @@ function shuffleAnswerOptions(){document.querySelectorAll(".quiz-options").forEa
 shuffleAnswerOptions();
 function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
 function approx(value,target,tol=0.01){return Math.abs(Number(value)-target)<=tol}
-function setStatus(id,text,ok){const s=document.getElementById(id);s.textContent=text;if(ok)s.classList.add("complete");}
+function setStatus(id,text,ok){const s=document.getElementById(id);s.innerHTML=text;s.classList.toggle("complete",!!ok);}
+function clearAnswerHighlights(activity){activity.querySelectorAll("input,select").forEach(el=>el.classList.remove("answer-correct","answer-incorrect"));}
+function markAnswerField(el,isCorrect){el.classList.remove("answer-correct","answer-incorrect");if(isCorrect){el.classList.add("answer-correct")}else if(el.value!==""){el.classList.add("answer-incorrect")}}
 function initializeProgressiveSections(){
   if(initializeProgressiveSections._done)return;
   initializeProgressiveSections._done=true;const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}function updateAll(){sections.forEach(setContinueState)}function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}sections.forEach((section,index)=>{if(index>=sections.length-1)return;const next=sections[index+1];const nextTitle=getSectionTitle(next);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});document.addEventListener("activityComplete",updateAll);const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";sections[0].appendChild(note);updateNav(0);updateAll()}
 initializeProgressiveSections();
-function initSafety(){const activity=document.querySelector("#why-math .activity-card.require-complete");const status=document.getElementById("safetyStatus");const options=activity.querySelectorAll(".safety-option");options.forEach(btn=>btn.addEventListener("click",()=>{const good=btn.dataset.good==="true";btn.classList.toggle(good?"correct-choice":"incorrect-choice");const selectedGood=Array.from(options).filter(o=>o.dataset.good==="true"&&o.classList.contains("correct-choice")).length;const selectedBad=Array.from(options).filter(o=>o.dataset.good==="false"&&o.classList.contains("incorrect-choice")).length;status.textContent=`${selectedGood} / 3 safe habits selected; ${selectedBad} unsafe habits identified`;if(selectedGood===3&&selectedBad===2){status.textContent="Math safety reflection complete.";status.classList.add("complete");markActivityComplete(activity)}}))}
+function initSafety(){const activity=document.querySelector("#why-math .activity-card.require-complete");const status=document.getElementById("safetyStatus");const options=activity.querySelectorAll(".safety-option");options.forEach(btn=>btn.addEventListener("click",()=>{const good=btn.dataset.good==="true";if(good){btn.classList.toggle("correct-choice")}else{btn.classList.toggle("incorrect-choice")}const selectedGood=Array.from(options).filter(o=>o.dataset.good==="true"&&o.classList.contains("correct-choice")).length;const selectedBad=Array.from(options).filter(o=>o.dataset.good==="false"&&o.classList.contains("incorrect-choice")).length;if(selectedBad>0){status.textContent=`${selectedGood} / 3 safe habits selected. Deselect unsafe statements before continuing.`;status.classList.remove("complete");return}status.textContent=`${selectedGood} / 3 safe habits selected`;if(selectedGood===3){status.textContent="Math safety reflection complete.";status.classList.add("complete");markActivityComplete(activity)}}))}
 initSafety();
-function initMetric(){const activity=document.querySelector("#metric-system .activity-card.require-complete");document.getElementById("checkMetric").addEventListener("click",()=>{const ok=approx(metric1.value,961,0)&&approx(metric2.value,0.402,0.001)&&approx(metric3.value,4.483,0.001);setStatus("metricStatus",ok?"Metric conversion practice complete.":"Check your answers: 0.961 L = 961 mL; 402 mL = 0.402 L; 4483 mcg = 4.483 mg.",ok);if(ok)markActivityComplete(activity)})}
+function initMetric(){const activity=document.querySelector("#metric-system .activity-card.require-complete");document.getElementById("checkMetric").addEventListener("click",()=>{clearAnswerHighlights(activity);const checks=[approx(metric1.value,961,0),approx(metric2.value,0.402,0.001),approx(metric3.value,4.483,0.001)];[metric1,metric2,metric3].forEach((el,i)=>markAnswerField(el,checks[i]));const ok=checks.every(Boolean);setStatus("metricStatus",ok?`<div class="calculation-feedback"><strong>Metric conversion practice complete.</strong><ol><li>0.961 L × 1000 = 961 mL.</li><li>402 mL ÷ 1000 = 0.402 L.</li><li>4483 mcg ÷ 1000 = 4.483 mg.</li></ol><strong>You may continue.</strong></div>`:`Use powers of 10 to move the decimal. Multiplying by 1000 moves the decimal 3 places right; dividing by 1000 moves it 3 places left. Check the red-highlighted response and try again.`,ok);if(ok)markActivityComplete(activity)})}
 initMetric();
 function initQuizOptions(selector){const activity=document.querySelector(selector);if(!activity)return;activity.querySelectorAll(".quiz-option").forEach(button=>{button.addEventListener("click",()=>{if(activity.dataset.correctAnswered==="true")return;const feedback=activity.querySelector(".quiz-feedback");const isCorrect=button.dataset.correct==="true";activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){activity.dataset.correctAnswered="true";activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";markActivityComplete(activity)}else{button.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."}})})}
 initQuizOptions("#unit-setup-check");
-function initTemp(){const activity=document.querySelector("#temperature .activity-card.require-complete");document.getElementById("checkTemp").addEventListener("click",()=>{const ok=approx(temp1.value,37.8,0.1)&&approx(temp2.value,102.2,0.1)&&approx(temp3.value,302,0);setStatus("tempStatus",ok?"Temperature practice complete.":"Check your formulas: 100°F = 37.8°C; 39°C = 102.2°F; 29°C = 302 K.",ok);if(ok)markActivityComplete(activity)})}
+function initTemp(){const activity=document.querySelector("#temperature .activity-card.require-complete");document.getElementById("checkTemp").addEventListener("click",()=>{clearAnswerHighlights(activity);const checks=[approx(temp1.value,37.8,0.1),approx(temp2.value,102.2,0.1),approx(temp3.value,302,0)];[temp1,temp2,temp3].forEach((el,i)=>markAnswerField(el,checks[i]));const ok=checks.every(Boolean);setStatus("tempStatus",ok?`<div class="calculation-feedback"><strong>Temperature practice complete.</strong><ol><li>100°F: (100 − 32) × 5 / 9 = 37.8°C.</li><li>39°C: (39 × 9 / 5) + 32 = 102.2°F.</li><li>29°C: 29 + 273 = 302 K.</li></ol><strong>You may continue.</strong></div>`:`Use the formulas from the table: °F to °C = (°F − 32) × 5 / 9; °C to °F = (°C × 9 / 5) + 32; °C to K = °C + 273. Check the red-highlighted response and try again.`,ok);if(ok)markActivityComplete(activity)})}
 initTemp();
-function initDose(){const activity=document.querySelector("#dosage .activity-card.require-complete");document.getElementById("checkDose").addEventListener("click",()=>{const ok=approx(dose1.value,1,0.01)&&approx(dose2.value,20,0.01)&&approx(dose3.value,10,0.01);setStatus("doseStatus",ok?"Dosage practice complete.":"Check your setup: concentration is 5 mg/mL. 5 mg = 1 mL; 4 mL = 20 mg; 4 ampules = 10 mg.",ok);if(ok)markActivityComplete(activity)})}
+function initDose(){const activity=document.querySelector("#dosage .activity-card.require-complete");document.getElementById("checkDose").addEventListener("click",()=>{clearAnswerHighlights(activity);const checks=[approx(dose1.value,6,0.05),approx(dose2.value,3.33,0.05),approx(dose3.value,10,0.01)];[dose1,dose2,dose3].forEach((el,i)=>markAnswerField(el,checks[i]));const ok=checks.every(Boolean);setStatus("doseStatus",ok?`<div class="calculation-feedback"><strong>Dosage practice complete.</strong><ol><li>Order 5 mg: 5 mg × 3 mL / 2.5 mg = 6 mL.</li><li>Give 4 mL: 4 mL × 2.5 mg / 3 mL = 3.33 mg.</li><li>Give 4 ampules: 4 × 2.5 mg = 10 mg.</li></ol><strong>You may continue.</strong></div>`:`Use the setup formulas instead of guessing: mL to give = ordered dose × available volume / available dose; dose in mg = volume given × available dose / available volume; total dose = number of ampules × mg per ampule. Check the red-highlighted response and try again.`,ok);if(ok)markActivityComplete(activity)})}
 initDose();
-function initVT(){const activity=document.querySelector("#ibw .activity-card.require-complete");document.getElementById("checkVT").addEventListener("click",()=>{const ok=approx(vtAnswer.value,0.378,0.001);setStatus("vtStatus",ok?"Tidal volume practice complete.":"63 × 6 = 378 mL. 378 mL ÷ 1000 = 0.378 L.",ok);if(ok)markActivityComplete(activity)})}
+function initVT(){const activity=document.querySelector("#ibw .activity-card.require-complete");document.getElementById("checkVT").addEventListener("click",()=>{clearAnswerHighlights(activity);const ok=approx(vtAnswer.value,0.378,0.001);markAnswerField(vtAnswer,ok);setStatus("vtStatus",ok?`<div class="calculation-feedback"><strong>Tidal volume practice complete.</strong><ol><li>63 kg × 6 mL/kg = 378 mL.</li><li>378 mL ÷ 1000 = 0.378 L.</li></ol><strong>You may continue.</strong></div>`:`Multiply IBW by the ordered mL/kg first. Then convert mL to L by dividing by 1000. Check the red-highlighted response and try again.`,ok);if(ok)markActivityComplete(activity)})}
 initVT();
-function initMixed(){const activity=document.querySelector("#practice .activity-card.require-complete");document.getElementById("checkMixed").addEventListener("click",()=>{const ok=approx(mix1.value,193,0)&&approx(mix2.value,41,0)&&approx(mix3.value,200,0);setStatus("mixedStatus",ok?"Mixed assignment practice complete.":"Check your answers: 6 ft 4 in = 76 in × 2.54 = 193 cm; 90 lb ÷ 2.2 = 41 kg; 10% = 100 mg/mL, so 2 mL = 200 mg.",ok);if(ok)markActivityComplete(activity)})}
+function initMixed(){const activity=document.querySelector("#practice .activity-card.require-complete");document.getElementById("checkMixed").addEventListener("click",()=>{clearAnswerHighlights(activity);const checks=[approx(mix1.value,193,0),approx(mix2.value,41,0),approx(mix3.value,200,0)];[mix1,mix2,mix3].forEach((el,i)=>markAnswerField(el,checks[i]));const ok=checks.every(Boolean);setStatus("mixedStatus",ok?`<div class="calculation-feedback"><strong>Mixed practice complete.</strong><ol><li>6 ft 4 in = 72 in + 4 in = 76 in; 76 in × 2.54 cm/in = 193 cm.</li><li>90 lb ÷ 2.2 lb/kg = 41 kg.</li><li>10% = 100 mg/mL; 2 mL × 100 mg/mL = 200 mg.</li></ol><strong>You may continue.</strong></div>`:`Use the listed conversion factors: 12 in = 1 ft, 2.54 cm = 1 in, 2.2 lb = 1 kg, and 10% = 100 mg/mL. Check the red-highlighted response and try again.`,ok);if(ok)markActivityComplete(activity)})}
 initMixed();
 function initCase(){const section=document.getElementById("scenario");const stages=Array.from(section.querySelectorAll(".case-stage"));stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});section.querySelectorAll(".case-option").forEach(option=>option.addEventListener("click",()=>{const stage=option.closest(".case-stage");if(stage.dataset.correctAnswered==="true")return;const feedback=stage.querySelector(".case-feedback");const isCorrect=option.dataset.caseCorrect==="true";stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){stage.dataset.correctAnswered="true";stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";const next=stage.querySelector(".case-next button");if(next)next.disabled=false}else{option.classList.add("incorrect-choice");feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";const next=stage.querySelector(".case-next button");if(next)next.disabled=true}}));section.querySelectorAll(".case-next button").forEach(button=>{button.disabled=true;button.addEventListener("click",()=>{const current=button.closest(".case-stage");const idx=stages.indexOf(current);const next=stages[idx+1];if(!next)return;next.classList.remove("lesson-hidden");if(idx+1===stages.length-1)markActivityComplete(section);button.closest(".case-next").remove();next.scrollIntoView({behavior:"smooth",block:"start"})})})}
 initCase();
