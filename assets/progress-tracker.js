@@ -561,6 +561,12 @@ window.addEventListener('load', async () => {
 
     console.log('PulmoLearn: Observer enabled')
     console.log('PulmoLearn: Ready — waiting for user interaction to save')
+
+    await saveProgress()
+
+    setInterval(() => {
+      saveProgress()
+   }, 30000)
   }, 3500)
 })
 
