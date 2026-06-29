@@ -17,18 +17,31 @@ export async function requireAccess() {
   const session = await requireAuth()
   if (!session) return null
 
-  const { data } = await supabase
+  // Admin users get full access
+  const { data: adminUser } = await supabase
+    .from('admin_users')
+    .select('user_id')
+    .eq('user_id', session.user.id)
+    .maybeSingle()
+
+  if (adminUser) {
+    return session
+  }
+
+  // Paid users get access
+  const { data: accessData } = await supabase
     .from('user_access')
     .select('access_type')
     .eq('user_id', session.user.id)
-    .single()
+    .maybeSingle()
 
-  if (!data) {
+  if (!accessData) {
     window.location.href = '/payment.html'
     return null
   }
 
   return session
+}
 }
 export async function signOut() {
   await supabase.auth.signOut()
