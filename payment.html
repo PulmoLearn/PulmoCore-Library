@@ -15,13 +15,9 @@
   <style>
     :root {
       --core-navy: #0B1F33;
-      --core-navy-2: #102A43;
       --pulmo-teal: #1CA7A8;
       --pulmo-teal-dark: #128486;
       --soft-border: #D7E6EF;
-      --mist-blue: #F4FAFC;
-      --airway-mint: #DDF7F2;
-      --clinical-amber: #F4B860;
       --white: #FFFFFF;
       --slate: #415A77;
       --font-heading: "Montserrat", Arial, sans-serif;
@@ -87,6 +83,18 @@
     .btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
     .trust-row { display: flex; justify-content: center; gap: 20px; margin-top: 14px; flex-wrap: wrap; }
     .trust-item { font-size: .78rem; color: var(--slate); font-weight: 700; display: flex; align-items: center; gap: 5px; }
+    .footer-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: .9rem;
+      color: var(--slate);
+    }
+    .footer-link a {
+      color: var(--pulmo-teal);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .footer-link a:hover { text-decoration: underline; }
     .error {
       background: #FDE9E9; color: #7F2E2E;
       border: 1px solid #F2B5B5; border-radius: 10px;
@@ -102,27 +110,6 @@
       transition: color .18s;
     }
     .back-link:hover { color: rgba(255,255,255,0.95); }
-  
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
   </style>
 </head>
 <body>
@@ -163,17 +150,20 @@
       <span class="trust-item">↩ 7-day refund guarantee</span>
       <span class="trust-item">💳 Powered by Stripe</span>
     </div>
+
+    <div class="footer-link">
+      Already a member? <a href="/login.html">Log in</a>
+    </div>
   </div>
 
   <script type="module">
     import { requireAuth } from '/assets/auth.js'
 
-    // Make sure user is logged in before they can pay
     const session = await requireAuth()
-if (!session) {
-  window.location.href = '/login.html'
-  throw new Error('Redirecting')
-}
+    if (!session) {
+      window.location.href = '/login.html'
+      throw new Error('Redirecting')
+    }
 
     const btn = document.getElementById('payBtn')
     const btnText = document.getElementById('btnText')
@@ -199,7 +189,7 @@ if (!session) {
         const data = await response.json()
 
         if (data.url) {
-          window.location.href = data.url // Redirect to Stripe Checkout
+          window.location.href = data.url
         } else {
           throw new Error(data.error || 'Unexpected error')
         }
@@ -212,75 +202,5 @@ if (!session) {
       }
     })
   </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
