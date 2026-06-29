@@ -282,37 +282,13 @@ async function resetProgress() {
 }
 
 // ── Save progress ──
-let saveTimer = null
-let observerPaused = true
-
-function scheduleSave() {
-  if (observerPaused) return
-  clearTimeout(saveTimer)
-  saveTimer = setTimeout(saveProgress, 600)
-}
-
 async function saveProgress() {
   if (!lessonId || !userId) return
 
   const percent = calculateProgress()
   const completed = isLessonComplete()
-
+  const now = new Date().toISOString()
   const lessonMeta = window.PULMO_LESSON || {}
-
-const progressPayload = {
-  user_id: userId,
-  lesson_id: lessonId,
-  course_id: lessonMeta.courseId || "unknown",
-  lesson_title: lessonMeta.lessonTitle || document.title,
-  percent_complete: percent,
-  completed,
-  last_visited_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-  ...(completed ? { completed_at: new Date().toISOString() } : {})
-}
-await supabase.from('lesson_progress').upsert(progressPayload, {
-  onConflict: 'user_id,lesson_id'
-});
 
   console.log(`PulmoLearn: Saving — ${lessonId} ${percent}% completed=${completed}`)
 
@@ -321,18 +297,44 @@ await supabase.from('lesson_progress').upsert(progressPayload, {
     lesson_id: lessonId,
     percent,
     completed,
-    updated_at: new Date().toISOString(),
-    ...(completed ? { completed_at: new Date().toISOString() } : {})
+    updated_at: now,
+    ...(completed ? { completed_at: now } : {})
   }, { onConflict: 'user_id,lesson_id' })
 
   if (error) {
     console.error('PulmoLearn: Failed to save progress:', error.message)
   } else {
     console.log(`PulmoLearn: Save confirmed — ${lessonId} ${percent}%`)
+
+    const progressPayload = {
+      user_id: userId,
+      lesson_id: lessonId,
+      course_id: lessonMeta.courseId || "unknown",
+      lesson_title: lessonMeta.lessonTitle || document.title,
+      percent_complete: percent,
+      completed,
+      last_visited_at: now,
+      updated_at: now,
+      ...(completed ? { completed_at: now } : {})
+    }
+
+    const { error: lessonProgressError } = await supabase
+      .from('lesson_progress')
+      .upsert(progressPayload, {
+        onConflict: 'user_id,lesson_id'
+      })
+
+    if (lessonProgressError) {
+      console.error('PulmoLearn: lesson_progress save failed:', lessonProgressError.message)
+    } else {
+      console.log(`PulmoLearn: lesson_progress save confirmed — ${lessonId} ${percent}%`)
+    }
+
     if (typeof window.saveCourseProgress === 'function') {
       const fileName = window.location.pathname.split('/').pop()
       window.saveCourseProgress(fileName, percent, completed)
     }
+
     if (completed) showCompletionBanner()
   }
 }
