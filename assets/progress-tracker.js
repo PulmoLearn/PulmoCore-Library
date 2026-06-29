@@ -274,9 +274,6 @@ async function resetProgress() {
     completed: false,
     updated_at: new Date().toISOString()
   }, { onConflict: 'user_id,lesson_id' })
-  await supabase.from('lesson_progress').upsert(progressPayload, {
-  onConflict: 'user_id,lesson_id'
-})
 
   const url = new URL(window.location.href)
   url.searchParams.delete('restart')
@@ -316,6 +313,7 @@ const progressPayload = {
 await supabase.from('lesson_progress').upsert(progressPayload, {
   onConflict: 'user_id,lesson_id'
 });
+
   console.log(`PulmoLearn: Saving — ${lessonId} ${percent}% completed=${completed}`)
 
   const { error } = await supabase.from('progress').upsert({
