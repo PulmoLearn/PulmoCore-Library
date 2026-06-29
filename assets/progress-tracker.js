@@ -1,20 +1,10 @@
 /**
- * PulmoLearn Progress Tracker v8.1
- * Add to every lesson page just before </body>:
- *   <script>
- *   window.LESSON_ID = 'foundations_1_4'
- *   window.PULMO_LESSON = {
- *     courseId: 'foundations',
- *     lessonId: 'foundations_1_4',
- *     lessonTitle: 'Introduction to Pulmonary Function Testing'
- *   }
- *   </script>
- *   <script type="module" src="/assets/progress-tracker.js"></script>
+ * PulmoLearn Progress Tracker v8.2
  */
 
 import { supabase } from '/assets/auth.js'
 
-console.log('PulmoLearn: progress-tracker.js v8.1 loaded')
+console.log('PulmoLearn: progress-tracker.js v8.2 loaded')
 
 const urlParams = new URLSearchParams(window.location.search)
 const isLtiLaunch = urlParams.get('lti') === '1'
@@ -38,6 +28,17 @@ console.log(`PulmoLearn: lessonId="${lessonId}" userId="${userId}"`)
 
 if (!lessonId) {
   console.error('PulmoLearn: window.LESSON_ID is not set on this lesson page.')
+}
+
+// ── Timing ──
+const sessionStartTime = Date.now()
+let lastSavedElapsedSeconds = 0
+
+function getSessionDeltaSeconds() {
+  const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000)
+  const delta = Math.max(0, elapsed - lastSavedElapsedSeconds)
+  lastSavedElapsedSeconds = elapsed
+  return delta
 }
 
 // ── Inject shared styles ──
@@ -254,7 +255,6 @@ function showCompletionBanner() {
   setTimeout(() => banner.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200)
 }
 
-// ── Resume banner ──
 function showResumeBanner(percent, sectionsRevealed, allSections) {
   const banner = document.createElement('div')
   banner.className = 'pl-resume-banner'
@@ -285,7 +285,7 @@ async function resetProgress() {
   const now = new Date().toISOString()
   const lessonMeta = window.PULMO_LESSON || {}
 
-  const { error } = await supabase.from('progress').upsert({
+  await supabase.from('progress').upsert({
     user_id: userId,
     lesson_id: lessonId,
     percent: 0,
@@ -293,27 +293,18 @@ async function resetProgress() {
     updated_at: now
   }, { onConflict: 'user_id,lesson_id' })
 
-  if (error) {
-    console.error('PulmoLearn: Failed to reset old progress table:', error.message)
-  }
-
-  const { error: lessonProgressError } = await supabase
-    .from('lesson_progress')
-    .upsert({
-      user_id: userId,
-      lesson_id: lessonId,
-      course_id: lessonMeta.courseId || 'unknown',
-      lesson_title: lessonMeta.lessonTitle || document.title,
-      percent_complete: 0,
-      completed: false,
-      last_visited_at: now,
-      completed_at: null,
-      updated_at: now
-    }, { onConflict: 'user_id,lesson_id' })
-
-  if (lessonProgressError) {
-    console.error('PulmoLearn: Failed to reset lesson_progress:', lessonProgressError.message)
-  }
+  await supabase.from('lesson_progress').upsert({
+    user_id: userId,
+    lesson_id: lessonId,
+    course_id: lessonMeta.courseId || 'unknown',
+    lesson_title: lessonMeta.lessonTitle || document.title,
+    percent_complete: 0,
+    completed: false,
+    total_seconds: 0,
+    last_visited_at: now,
+    completed_at: null,
+    updated_at: now
+  }, { onConflict: 'user_id,lesson_id' })
 
   const url = new URL(window.location.href)
   url.searchParams.delete('restart')
@@ -332,6 +323,18 @@ function scheduleSave() {
   saveTimer = setTimeout(saveProgress, 600)
 }
 
+async function getCurrentTotalSeconds() {
+  const { data, error } = await supabase
+    .from('lesson_progress')
+    .select('total_seconds')
+    .eq('user_id', userId)
+    .eq('lesson_id', lessonId)
+    .maybeSingle()
+
+  if (error || !data) return 0
+  return Number(data.total_seconds || 0)
+}
+
 async function saveProgress() {
   if (!lessonId || !userId) return
 
@@ -339,6 +342,7 @@ async function saveProgress() {
   const completed = isLessonComplete()
   const now = new Date().toISOString()
   const lessonMeta = window.PULMO_LESSON || {}
+  const deltaSeconds = getSessionDeltaSeconds()
 
   console.log(`PulmoLearn: Saving — ${lessonId} ${percent}% completed=${completed}`)
 
@@ -358,6 +362,9 @@ async function saveProgress() {
 
   console.log(`PulmoLearn: Save confirmed — ${lessonId} ${percent}%`)
 
+  const existingSeconds = await getCurrentTotalSeconds()
+  const updatedTotalSeconds = existingSeconds + deltaSeconds
+
   const progressPayload = {
     user_id: userId,
     lesson_id: lessonId,
@@ -365,6 +372,7 @@ async function saveProgress() {
     lesson_title: lessonMeta.lessonTitle || document.title,
     percent_complete: percent,
     completed,
+    total_seconds: updatedTotalSeconds,
     last_visited_at: now,
     updated_at: now,
     ...(completed ? { completed_at: now } : {})
@@ -379,7 +387,7 @@ async function saveProgress() {
   if (lessonProgressError) {
     console.error('PulmoLearn: lesson_progress save failed:', lessonProgressError.message)
   } else {
-    console.log(`PulmoLearn: lesson_progress save confirmed — ${lessonId} ${percent}%`)
+    console.log(`PulmoLearn: lesson_progress save confirmed — ${lessonId} ${percent}% · ${updatedTotalSeconds}s total`)
   }
 
   if (typeof window.saveCourseProgress === 'function') {
@@ -390,7 +398,7 @@ async function saveProgress() {
   if (completed) showCompletionBanner()
 }
 
-// ── Restore progress on load ──
+// ── Restore progress ──
 async function restoreProgress() {
   if (!lessonId || !userId) return
 
@@ -403,8 +411,6 @@ async function restoreProgress() {
     .eq('lesson_id', lessonId)
     .maybeSingle()
 
-  console.log(`PulmoLearn: restoreProgress result — data=${JSON.stringify(data)} error=${JSON.stringify(error)}`)
-
   if (error || !data || data.percent < 10) {
     console.log('PulmoLearn: No meaningful progress to restore — starting fresh')
     return
@@ -412,8 +418,6 @@ async function restoreProgress() {
 
   const allSections = getAllSections()
   const total = allSections.length
-
-  console.log(`PulmoLearn: Restoring to ${data.percent}% — ${total} total sections`)
 
   if (!total) return
 
@@ -450,10 +454,9 @@ async function restoreProgress() {
   console.log(`PulmoLearn: Restore complete — ${lessonId} at ${data.percent}%`)
 }
 
-// ── Safely call a lesson init function by name ──
+// ── Lesson init helpers ──
 function callInit(name) {
   if (typeof window[name] === 'function') {
-    console.log(`PulmoLearn: Calling ${name}`)
     try {
       window[name]()
     } catch (e) {
@@ -462,7 +465,7 @@ function callInit(name) {
   }
 }
 
-// ── MutationObserver ──
+// ── Observer ──
 const observer = new MutationObserver((mutations) => {
   if (observerPaused) return
 
@@ -511,8 +514,6 @@ window.addEventListener('load', async () => {
   }
 
   if (new URLSearchParams(window.location.search).get('review') === 'true') {
-    console.log('PulmoLearn: Review mode — auto-completing all activities')
-
     setTimeout(() => {
       document.querySelectorAll('.quiz-option[data-correct="true"]').forEach(btn => {
         if (!btn.closest('[data-correct-answered="true"]')) btn.click()
@@ -548,16 +549,7 @@ window.addEventListener('load', async () => {
   })
 
   setTimeout(async () => {
-    console.log('PulmoLearn: 3500ms delay complete — running init')
-
-    const sections2 = getAllSections()
-    const hidden2 = Array.from(sections2).filter(s => s.classList.contains('lesson-hidden')).length
-
-    console.log(`PulmoLearn: After 3500ms — ${sections2.length} total, ${hidden2} hidden, ${sections2.length - hidden2} visible`)
-
     const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
-
-    console.log(`PulmoLearn: isRestart=${isRestart}`)
 
     if (isRestart) {
       await resetProgress()
@@ -574,22 +566,7 @@ window.addEventListener('load', async () => {
 
 // ── Save on tab close ──
 window.addEventListener('pagehide', () => {
-  if (!lessonId || !userId) return
-
-  const percent = calculateProgress()
-  const completed = isLessonComplete()
-  const now = new Date().toISOString()
-
-  navigator.sendBeacon(
-    `${supabase.supabaseUrl}/rest/v1/progress`,
-    new Blob([JSON.stringify({
-      user_id: userId,
-      lesson_id: lessonId,
-      percent,
-      completed,
-      updated_at: now
-    })], { type: 'application/json' })
-  )
+  saveProgress()
 })
 
 console.log(`PulmoLearn: Setup complete for "${lessonId}"`)
