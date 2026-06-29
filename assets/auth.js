@@ -43,25 +43,8 @@ export async function requireAccess() {
 
   if (accessError) console.warn('Paid access check failed:', accessError.message)
 
-  if (!accessData) {
-  console.error('ACCESS DENIED DEBUG', {
-    userId: session.user.id,
-    email: session.user.email,
-    adminUser,
-    adminError,
-    accessData,
-    accessError
-  })
-
-  alert(
-    'Access denied debug:\n' +
-    'User ID: ' + session.user.id + '\n' +
-    'Email: ' + session.user.email + '\n' +
-    'Admin found: ' + !!adminUser + '\n' +
-    'Admin error: ' + (adminError?.message || 'none') + '\n' +
-    'Access error: ' + (accessError?.message || 'none')
-  )
-
+ if (!accessData) {
+  window.location.href = '/payment.html'
   return null
 }
 
