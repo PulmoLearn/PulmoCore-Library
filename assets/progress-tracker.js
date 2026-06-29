@@ -3,6 +3,7 @@
  */
 
 import { supabase } from '/assets/auth.js'
+import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
 
 console.log('PulmoLearn: progress-tracker.js v8.2 loaded')
 
@@ -23,6 +24,13 @@ if (!session && !isLtiLaunch) {
 
 const userId = session?.user?.id || `lti-test-${Date.now()}`
 const lessonId = window.PULMO_LESSON_ID || window.LESSON_ID
+const lessonMeta = window.PULMO_LESSON || {}
+
+initializeActivityAnalytics({
+  userId,
+  lessonId,
+  courseId: lessonMeta.courseId || 'unknown'
+})
 
 console.log(`PulmoLearn: lessonId="${lessonId}" userId="${userId}"`)
 
