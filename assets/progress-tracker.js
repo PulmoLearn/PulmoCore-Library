@@ -274,6 +274,9 @@ async function resetProgress() {
     completed: false,
     updated_at: new Date().toISOString()
   }, { onConflict: 'user_id,lesson_id' })
+  await supabase.from('lesson_progress').upsert(progressPayload, {
+  onConflict: 'user_id,lesson_id'
+})
 
   const url = new URL(window.location.href)
   url.searchParams.delete('restart')
@@ -296,6 +299,20 @@ async function saveProgress() {
 
   const percent = calculateProgress()
   const completed = isLessonComplete()
+
+  const lessonMeta = window.PULMO_LESSON || {}
+
+const progressPayload = {
+  user_id: userId,
+  lesson_id: lessonId,
+  course_id: lessonMeta.courseId || "unknown",
+  lesson_title: lessonMeta.lessonTitle || document.title,
+  percent_complete: percent,
+  completed,
+  last_visited_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+  ...(completed ? { completed_at: new Date().toISOString() } : {})
+}
 
   console.log(`PulmoLearn: Saving — ${lessonId} ${percent}% completed=${completed}`)
 
