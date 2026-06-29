@@ -32,36 +32,15 @@ th{background:#E5F0F6}
 .progress,.warn{background:#FFF4DF;color:#7A4B00}
 .low,.danger{background:#FDE9E9;color:#8A1F1F}
 .section-spacer{margin-top:18px}
-.student-row,.course-toggle-row{cursor:pointer}
-.student-row:hover,.course-toggle-row:hover{background:#F4FAFC}
-.course-toggle-row{background:#FAFDFF}
-.activity-detail-row.hidden{display:none}
+.student-row,.course-toggle-row,.lesson-toggle-row{cursor:pointer}
+.student-row:hover,.course-toggle-row:hover,.lesson-toggle-row:hover{background:#F4FAFC}
+.course-toggle-row,.lesson-toggle-row{background:#FAFDFF}
+.activity-detail-row.hidden,.lesson-detail-row.hidden{display:none}
 .expand-icon{font-weight:800;color:var(--teal);margin-right:8px}
 .detail-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.cards{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 
 <body>
@@ -169,6 +148,7 @@ th{background:#E5F0F6}
 
   <section class="card section-spacer" id="lessonSummaryCard" style="display:none">
     <h2>Lesson Analytics</h2>
+    <div class="sub" style="margin-bottom:12px;">Click a course row to expand or collapse lesson details.</div>
     <div class="table-wrap"><table><thead><tr>
       <th>Course</th><th>Lesson</th><th>Learners Started</th><th>Completed</th><th>Completion Rate</th><th>Avg Progress</th><th>Avg Minutes</th><th>Last Activity</th>
     </tr></thead><tbody id="lessonSummary"></tbody></table></div>
@@ -478,18 +458,73 @@ function renderActivitySummary(rows){
 }
 
 function renderLessonSummary(rows){
-  const groups=groupBy(rows,r=>`${r.course_id}|||${r.lesson_id}`);
-  const summaries=Object.values(groups).map(items=>{
-    const first=items[0], started=items.length, completed=items.filter(r=>r.completed).length;
-    const avgProgress=items.reduce((s,r)=>s+Number(r.percent_complete||0),0)/started;
-    const avgMinutes=items.reduce((s,r)=>s+Number(r.total_seconds||0),0)/started/60;
-    const lastActivity=items.map(r=>r.last_visited_at).filter(Boolean).sort().pop();
-    return {course_id:first.course_id,lesson_id:first.lesson_id,lesson_title:first.lesson_title||first.lesson_id,started,completed,completionRate:started?(completed/started)*100:0,avgProgress,avgMinutes,lastActivity};
+  const courseGroups=groupBy(rows,r=>r.course_id||"unknown");
+  const body=document.getElementById("lessonSummary");
+
+  const html=Object.entries(courseGroups).sort(([a],[b])=>a.localeCompare(b)).map(([course,courseItems])=>{
+    const courseKey=safeKey(course);
+    const learners=new Set(courseItems.map(r=>r.user_id)).size;
+    const started=courseItems.length;
+    const completed=courseItems.filter(r=>r.completed).length;
+    const completionRate=started ? (completed/started)*100 : 0;
+    const avgProgress=started ? courseItems.reduce((s,r)=>s+Number(r.percent_complete||0),0)/started : 0;
+    const avgMinutes=started ? courseItems.reduce((s,r)=>s+Number(r.total_seconds||0),0)/started/60 : 0;
+    const lastActivity=courseItems.map(r=>r.last_visited_at).filter(Boolean).sort().pop();
+
+    const lessonGroups=groupBy(courseItems,r=>`${r.lesson_id}`);
+    const lessonRows=Object.values(lessonGroups).map(items=>{
+      const first=items[0];
+      const lessonStarted=items.length;
+      const lessonCompleted=items.filter(r=>r.completed).length;
+      const lessonCompletionRate=lessonStarted ? (lessonCompleted/lessonStarted)*100 : 0;
+      const lessonAvgProgress=lessonStarted ? items.reduce((s,r)=>s+Number(r.percent_complete||0),0)/lessonStarted : 0;
+      const lessonAvgMinutes=lessonStarted ? items.reduce((s,r)=>s+Number(r.total_seconds||0),0)/lessonStarted/60 : 0;
+      const lessonLastActivity=items.map(r=>r.last_visited_at).filter(Boolean).sort().pop();
+
+      return `
+        <tr class="lesson-detail-row hidden" data-lesson-course-detail="${escapeHtml(courseKey)}">
+          <td>${escapeHtml(course)}</td>
+          <td><strong>${escapeHtml(first.lesson_title||first.lesson_id)}</strong><br><span class="sub">${escapeHtml(first.lesson_id)}</span></td>
+          <td>${lessonStarted}</td>
+          <td>${lessonCompleted}</td>
+          <td>${pct(lessonCompletionRate)}</td>
+          <td>${pct(lessonAvgProgress)}</td>
+          <td>${Math.round(lessonAvgMinutes*10)/10}</td>
+          <td>${dateText(lessonLastActivity)}</td>
+        </tr>
+      `;
+    }).join("");
+
+    return `
+      <tr class="lesson-toggle-row" data-lesson-course-toggle="${escapeHtml(courseKey)}">
+        <td colspan="2">
+          <span class="expand-icon">▶</span>
+          <strong>${escapeHtml(course)}</strong>
+          <br><span class="sub">${started} lesson progress records tracked</span>
+        </td>
+        <td>${learners}</td>
+        <td>${completed}</td>
+        <td>${pct(completionRate)}</td>
+        <td>${pct(avgProgress)}</td>
+        <td>${Math.round(avgMinutes*10)/10}</td>
+        <td>${dateText(lastActivity)}</td>
+      </tr>
+      ${lessonRows}
+    `;
+  }).join("");
+
+  body.innerHTML=html || `<tr><td colspan="8">No lesson progress data found.</td></tr>`;
+
+  body.querySelectorAll(".lesson-toggle-row").forEach(row=>{
+    row.addEventListener("click",()=>{
+      const courseKey=row.dataset.lessonCourseToggle;
+      const details=body.querySelectorAll(`[data-lesson-course-detail="${courseKey}"]`);
+      const icon=row.querySelector(".expand-icon");
+      const isOpening=[...details].some(detail=>detail.classList.contains("hidden"));
+      details.forEach(detail=>detail.classList.toggle("hidden",!isOpening));
+      if(icon) icon.textContent=isOpening ? "▼" : "▶";
+    });
   });
-  summaries.sort((a,b)=>a.course_id.localeCompare(b.course_id)||a.lesson_id.localeCompare(b.lesson_id));
-  document.getElementById("lessonSummary").innerHTML=summaries.map(s=>`
-    <tr><td>${escapeHtml(s.course_id)}</td><td><strong>${escapeHtml(s.lesson_title)}</strong><br><span class="sub">${escapeHtml(s.lesson_id)}</span></td><td>${s.started}</td><td>${s.completed}</td><td>${pct(s.completionRate)}</td><td>${pct(s.avgProgress)}</td><td>${Math.round(s.avgMinutes*10)/10}</td><td>${dateText(s.lastActivity)}</td></tr>
-  `).join("");
 }
 
 function renderUserProgress(rows){
@@ -523,75 +558,5 @@ document.getElementById("studentSummary").addEventListener("click",(event)=>{
 const isAdmin=await verifyAdmin();
 if(isAdmin){await loadData();}
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
