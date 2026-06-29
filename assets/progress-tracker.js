@@ -313,7 +313,9 @@ const progressPayload = {
   updated_at: new Date().toISOString(),
   ...(completed ? { completed_at: new Date().toISOString() } : {})
 }
-
+await supabase.from('lesson_progress').upsert(progressPayload, {
+  onConflict: 'user_id,lesson_id'
+});
   console.log(`PulmoLearn: Saving — ${lessonId} ${percent}% completed=${completed}`)
 
   const { error } = await supabase.from('progress').upsert({
