@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PulmoLearn Admin Dashboard</title>
+<style>
+:root {
+  --navy:#0B1F33;
+  --navy2:#102A43;
+  --teal:#1CA7A8;
+  --blue:#4BA3F2;
+  --mint:#DDF7F2;
+  --amber:#F4B860;
+  --coral:#E85D5D;
+  --bg:#F4FAFC;
+  --border:#D7E6EF;
+  --text:#243b55;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--navy)}
+header{background:var(--navy);color:white;padding:22px clamp(18px,4vw,52px);display:flex;justify-content:space-between;align-items:center;gap:16px}
+header h1{margin:0;font-size:clamp(1.5rem,3vw,2.4rem)}
+header a{color:white;text-decoration:none;font-weight:700;background:rgba(255,255,255,.1);padding:10px 14px;border-radius:12px}
+main{padding:28px clamp(16px,4vw,52px);max-width:1500px;margin:auto}
+.grid{display:grid;gap:18px}
+.cards{grid-template-columns:repeat(5,minmax(160px,1fr))}
+.card{background:white;border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 8px 20px rgba(11,31,51,.08)}
+.card h2,.card h3{margin:0 0 10px}
+.metric{font-size:2rem;font-weight:800;color:var(--teal)}
+.sub{color:var(--text);font-size:.9rem}
+.controls{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+select,input,button{padding:10px 12px;border-radius:10px;border:1px solid var(--border);font:inherit}
+button{background:var(--teal);color:white;font-weight:800;cursor:pointer;border:none}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:#E5F0F6}
+.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:.78rem;font-weight:800}
+.complete{background:var(--mint)}
+.progress{background:#FFF4DF;color:#7A4B00}
+.low{background:#FDE9E9;color:#8A1F1F}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.cards{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>PulmoLearn Admin Dashboard</h1>
+    <div style="opacity:.75">Learner progress analytics</div>
+  </div>
+  <a href="/dashboard.html">Back to Dashboard</a>
+</header>
+
+<main>
+  <div id="status" class="card">Loading admin analytics...</div>
+
+  <section class="grid cards" id="metrics" style="display:none">
+    <div class="card"><div class="metric" id="totalUsers">0</div><div class="sub">Active learners</div></div>
+    <div class="card"><div class="metric" id="lessonStarts">0</div><div class="sub">Lesson starts</div></div>
+    <div class="card"><div class="metric" id="lessonCompletions">0</div><div class="sub">Completed lessons</div></div>
+    <div class="card"><div class="metric" id="avgCompletion">0%</div><div class="sub">Average completion</div></div>
+    <div class="card"><div class="metric" id="totalHours">0</div><div class="sub">Total learning hours</div></div>
+  </section>
+
+  <div class="controls" id="controls" style="display:none">
+    <select id="courseFilter">
+      <option value="">All courses</option>
+    </select>
+    <input id="searchBox" type="search" placeholder="Search lesson title, lesson ID, or user ID..." />
+    <button id="refreshBtn">Refresh</button>
+  </div>
+
+  <section class="card" id="courseSummaryCard" style="display:none">
+    <h2>Course Summary</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Learners</th>
+            <th>Lessons Started</th>
+            <th>Completed</th>
+            <th>Average Completion</th>
+            <th>Total Hours</th>
+          </tr>
+        </thead>
+        <tbody id="courseSummary"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" id="lessonSummaryCard" style="display:none;margin-top:18px">
+    <h2>Lesson Analytics</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Lesson</th>
+            <th>Learners Started</th>
+            <th>Completed</th>
+            <th>Completion Rate</th>
+            <th>Avg Progress</th>
+            <th>Avg Minutes</th>
+            <th>Last Activity</th>
+          </tr>
+        </thead>
+        <tbody id="lessonSummary"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" id="userProgressCard" style="display:none;margin-top:18px">
+    <h2>Individual Learner Progress</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Course</th>
+            <th>Lesson</th>
+            <th>Progress</th>
+            <th>Status</th>
+            <th>Time</th>
+            <th>Last Visited</th>
+          </tr>
+        </thead>
+        <tbody id="userProgress"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import { supabase } from "/assets/auth.js";
+
+let allRows = [];
+
+const statusEl = document.getElementById("status");
+const metricsEl = document.getElementById("metrics");
+const controlsEl = document.getElementById("controls");
+
+function minutes(seconds) {
+  return Math.round((Number(seconds || 0) / 60) * 10) / 10;
+}
+
+function hours(seconds) {
+  return Math.round((Number(seconds || 0) / 3600) * 10) / 10;
+}
+
+function pct(value) {
+  return `${Math.round(Number(value || 0))}%`;
+}
+
+function dateText(value) {
+  if (!value) return "";
+  return new Date(value).toLocaleString();
+}
+
+function statusBadge(row) {
+  if (row.completed) return `<span class="badge complete">Complete</span>`;
+  if ((row.percent_complete || 0) > 0) return `<span class="badge progress">In progress</span>`;
+  return `<span class="badge low">Not started</span>`;
+}
+
+function groupBy(array, keyFn) {
+  return array.reduce((acc, item) => {
+    const key = keyFn(item) || "unknown";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(item);
+    return acc;
+  }, {});
+}
+
+async function verifyAdmin() {
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    window.location.href = "/login.html";
+    return false;
+  }
+
+  const { data, error } = await supabase
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error || !data) {
+    statusEl.innerHTML = "You are logged in, but this account is not authorized for the admin dashboard.";
+    return false;
+  }
+
+  return true;
+}
+
+async function loadData() {
+  statusEl.style.display = "block";
+  statusEl.textContent = "Loading admin analytics...";
+
+  const { data, error } = await supabase
+    .from("lesson_progress")
+    .select("*")
+    .order("last_visited_at", { ascending: false });
+
+  if (error) {
+    statusEl.innerHTML = `<strong>Error loading data:</strong> ${error.message}`;
+    return;
+  }
+
+  allRows = data || [];
+
+  statusEl.style.display = "none";
+  metricsEl.style.display = "grid";
+  controlsEl.style.display = "flex";
+  document.getElementById("courseSummaryCard").style.display = "block";
+  document.getElementById("lessonSummaryCard").style.display = "block";
+  document.getElementById("userProgressCard").style.display = "block";
+
+  populateCourseFilter();
+  render();
+}
+
+function populateCourseFilter() {
+  const filter = document.getElementById("courseFilter");
+  const current = filter.value;
+  const courses = [...new Set(allRows.map(r => r.course_id || "unknown"))].sort();
+
+  filter.innerHTML = `<option value="">All courses</option>` + courses.map(course =>
+    `<option value="${course}">${course}</option>`
+  ).join("");
+
+  filter.value = current;
+}
+
+function getFilteredRows() {
+  const course = document.getElementById("courseFilter").value;
+  const search = document.getElementById("searchBox").value.toLowerCase().trim();
+
+  return allRows.filter(row => {
+    const matchesCourse = !course || row.course_id === course;
+    const haystack = [
+      row.user_id,
+      row.course_id,
+      row.lesson_id,
+      row.lesson_title
+    ].join(" ").toLowerCase();
+
+    const matchesSearch = !search || haystack.includes(search);
+
+    return matchesCourse && matchesSearch;
+  });
+}
+
+function renderMetrics(rows) {
+  const users = new Set(rows.map(r => r.user_id));
+  const starts = rows.length;
+  const completed = rows.filter(r => r.completed).length;
+  const avg = starts ? rows.reduce((sum, r) => sum + Number(r.percent_complete || 0), 0) / starts : 0;
+  const seconds = rows.reduce((sum, r) => sum + Number(r.total_seconds || 0), 0);
+
+  document.getElementById("totalUsers").textContent = users.size;
+  document.getElementById("lessonStarts").textContent = starts;
+  document.getElementById("lessonCompletions").textContent = completed;
+  document.getElementById("avgCompletion").textContent = pct(avg);
+  document.getElementById("totalHours").textContent = hours(seconds);
+}
+
+function renderCourseSummary(rows) {
+  const groups = groupBy(rows, r => r.course_id);
+  const body = document.getElementById("courseSummary");
+
+  body.innerHTML = Object.entries(groups).map(([course, items]) => {
+    const users = new Set(items.map(r => r.user_id)).size;
+    const completed = items.filter(r => r.completed).length;
+    const avg = items.reduce((sum, r) => sum + Number(r.percent_complete || 0), 0) / items.length;
+    const seconds = items.reduce((sum, r) => sum + Number(r.total_seconds || 0), 0);
+
+    return `
+      <tr>
+        <td><strong>${course}</strong></td>
+        <td>${users}</td>
+        <td>${items.length}</td>
+        <td>${completed}</td>
+        <td>${pct(avg)}</td>
+        <td>${hours(seconds)}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderLessonSummary(rows) {
+  const groups = groupBy(rows, r => `${r.course_id}|||${r.lesson_id}`);
+  const body = document.getElementById("lessonSummary");
+
+  const summaries = Object.values(groups).map(items => {
+    const first = items[0];
+    const started = items.length;
+    const completed = items.filter(r => r.completed).length;
+    const avgProgress = items.reduce((sum, r) => sum + Number(r.percent_complete || 0), 0) / started;
+    const avgMinutes = items.reduce((sum, r) => sum + Number(r.total_seconds || 0), 0) / started / 60;
+    const lastActivity = items
+      .map(r => r.last_visited_at)
+      .filter(Boolean)
+      .sort()
+      .pop();
+
+    return {
+      course_id: first.course_id,
+      lesson_id: first.lesson_id,
+      lesson_title: first.lesson_title || first.lesson_id,
+      started,
+      completed,
+      completionRate: started ? (completed / started) * 100 : 0,
+      avgProgress,
+      avgMinutes,
+      lastActivity
+    };
+  });
+
+  summaries.sort((a, b) => a.course_id.localeCompare(b.course_id) || a.lesson_id.localeCompare(b.lesson_id));
+
+  body.innerHTML = summaries.map(s => `
+    <tr>
+      <td>${s.course_id}</td>
+      <td><strong>${s.lesson_title}</strong><br><span class="sub">${s.lesson_id}</span></td>
+      <td>${s.started}</td>
+      <td>${s.completed}</td>
+      <td>${pct(s.completionRate)}</td>
+      <td>${pct(s.avgProgress)}</td>
+      <td>${Math.round(s.avgMinutes * 10) / 10}</td>
+      <td>${dateText(s.lastActivity)}</td>
+    </tr>
+  `).join("");
+}
+
+function renderUserProgress(rows) {
+  const body = document.getElementById("userProgress");
+
+  body.innerHTML = rows.map(row => `
+    <tr>
+      <td><span class="sub">${row.user_id}</span></td>
+      <td>${row.course_id}</td>
+      <td><strong>${row.lesson_title || row.lesson_id}</strong><br><span class="sub">${row.lesson_id}</span></td>
+      <td>${row.percent_complete || 0}%</td>
+      <td>${statusBadge(row)}</td>
+      <td>${minutes(row.total_seconds)} min</td>
+      <td>${dateText(row.last_visited_at)}</td>
+    </tr>
+  `).join("");
+}
+
+function render() {
+  const rows = getFilteredRows();
+
+  renderMetrics(rows);
+  renderCourseSummary(rows);
+  renderLessonSummary(rows);
+  renderUserProgress(rows);
+}
+
+document.getElementById("courseFilter").addEventListener("change", render);
+document.getElementById("searchBox").addEventListener("input", render);
+document.getElementById("refreshBtn").addEventListener("click", loadData);
+
+const isAdmin = await verifyAdmin();
+if (isAdmin) {
+  await loadData();
+}
+</script>
+</body>
+</html>
