@@ -2,16 +2,17 @@
   PulmoLearn / PulmoCore Lesson Registry
   Expanded registry for NBRC 2027 dashboard alignment.
 
+  Includes:
+  - Starter disease/foundations entries
+  - Pulmonary Assessment course batch
+  - Foundations expansion batch through Foundations 3.4
+
   Requires:
   /assets/nbrc-outline-2027.js
 
-  Purpose:
-  - Central data source for NBRC 2027 alignment dashboards.
-  - Maps each lesson to canonical NBRC outline IDs from nbrc-outline-2027.js.
-  - Supports program director reporting, gap analysis, and student review filtering.
-
   mappingStatus: "first-pass" means usable for dashboard testing but should be reviewed before final accreditation reporting.
 */
+
 
 (function (global) {
   "use strict";
@@ -25,7 +26,7 @@
     "lessonId": "pa-1-1",
     "lessonTitle": "Introduction to Respiratory Patient Assessment & Interviewing",
     "displayTitle": "Introduction to Respiratory Patient Assessment & Interviewing",
-    "href": "/PA_1_1_Introduction_to_Respiratory_Patient_Assessment_&_Interviewing.html",
+    "href": "/assessment/PA_1_1_Introduction_to_Respiratory_Patient_Assessment_&_Interviewing",
     "estimatedMinutes": 40,
     "patientAge": [
       "adult",
@@ -234,7 +235,8 @@
         "notes": "Patient-centered and team-oriented communication during assessment."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_1_1_Introduction_to_Respiratory_Patient_Assessment_&_Interviewing"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -244,7 +246,7 @@
     "lessonId": "pa-1-2-physical-assessment-disease-differentiation",
     "lessonTitle": "Physical Assessment & Disease Differentiation",
     "displayTitle": "PA 1.2: Physical Assessment & Disease Differentiation",
-    "href": "/PA_1_2_Physical_Assessment_&_Disease_Differentiation.html",
+    "href": "/assessment/PA_1_2_Physical_Assessment_&_Disease_Differentiation",
     "estimatedMinutes": 45,
     "patientAge": [
       "Adult",
@@ -443,7 +445,8 @@
         "notes": "Escalation for acute unilateral breath sound loss, tracheal deviation, distress, or suspected pneumothorax."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_1_2_Physical_Assessment_&_Disease_Differentiation"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -453,7 +456,7 @@
     "lessonId": "pa_1_3_soap_notes_clinical_documentation",
     "lessonTitle": "SOAP Notes & Clinical Documentation",
     "displayTitle": "SOAP Notes & Clinical Documentation",
-    "href": "/PA_1_3_SOAP_Notes_&_Clinical_Documentation.html",
+    "href": "/assessment/PA_1_3_SOAP_Notes_&_Clinical_Documentation",
     "estimatedMinutes": 45,
     "patientAge": [
       "adult",
@@ -646,7 +649,8 @@
         "notes": "Clinical documentation as team communication and continuity of care."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_1_3_SOAP_Notes_&_Clinical_Documentation"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -656,7 +660,7 @@
     "lessonId": "pa-1-4-pulmonary-function-testing-basics",
     "lessonTitle": "Pulmonary Function Testing Basics",
     "displayTitle": "PA 1.4: Pulmonary Function Testing Basics",
-    "href": "/PA_1_4_Pulmonary_Function_Testing_Basics.html",
+    "href": "/assessment/PA_1_4_Pulmonary_Function_Testing_Basics",
     "estimatedMinutes": 45,
     "patientAge": [
       "Adult",
@@ -851,7 +855,8 @@
         "notes": "Spirometry quality control and patient safety checks."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_1_4_Pulmonary_Function_Testing_Basics"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -861,7 +866,7 @@
     "lessonId": "pa-2-1-advanced-blood-gas-mixed-disorders-monitoring-technology",
     "lessonTitle": "Advanced Blood Gas: Mixed Disorders, Monitoring Technology & Clinical Integration",
     "displayTitle": "PA 2.1: Advanced Blood Gas: Mixed Disorders, Monitoring Technology & Clinical Integration",
-    "href": "/PA_2_1_Advanced_Blood_Gas.html",
+    "href": "/assessment/PA_2_1_Advanced_Blood_Gas",
     "estimatedMinutes": 55,
     "patientAge": [
       "Adult",
@@ -1160,7 +1165,8 @@
         "notes": "Recommend repeat sampling, oxygen/ventilation modification, co-oximetry, or escalation."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_2_1_Advanced_Blood_Gas"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -1170,7 +1176,7 @@
     "lessonId": "pa-2-2-assessment-of-oxygen-hypoxemia-vs-hypoxia",
     "lessonTitle": "Assessment of Oxygen — Hypoxemia vs. Hypoxia",
     "displayTitle": "PA 2.2: Assessment of Oxygen — Hypoxemia vs. Hypoxia",
-    "href": "/PA_2_2_Assessment_of_Oxygen.html",
+    "href": "/assessment/PA_2_2_Assessment_of_Oxygen",
     "estimatedMinutes": 55,
     "patientAge": [
       "Adult",
@@ -1493,7 +1499,8 @@
         "notes": "Recommends escalation, co-oximetry, transfusion/provider notification, perfusion support, or antidote therapy based on hypoxia type."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_2_2_Assessment_of_Oxygen"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -1503,7 +1510,7 @@
     "lessonId": "pa-2-3-ecg-assessment-equipment-interpretation-chest-pain-artifact",
     "lessonTitle": "ECG Assessment — Equipment, Interpretation, Chest Pain & Artifact",
     "displayTitle": "PA 2.3: ECG Assessment — Equipment, Interpretation, Chest Pain & Artifact",
-    "href": "/PA_2_3_ECG_Assessment.html",
+    "href": "/assessment/PA_2_3_ECG_Assessment",
     "estimatedMinutes": 55,
     "patientAge": [
       "Adult",
@@ -1784,7 +1791,8 @@
         "notes": "Emergency response to chest pain, ST elevation, VF/VT alarms, SVT, and hemodynamic compromise."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_2_3_ECG_Assessment"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -1794,7 +1802,7 @@
     "lessonId": "pa_2_4_radiologic_examination",
     "lessonTitle": "Radiologic Examination — Imaging Modalities, CXR Interpretation & Radiation Safety",
     "displayTitle": "Radiologic Examination",
-    "href": "/PA_2_4_Radiologic_Examination.html",
+    "href": "/assessment/PA_2_4_Radiologic_Examination",
     "estimatedMinutes": 45,
     "patientAge": [
       "adult",
@@ -2044,7 +2052,8 @@
         "notes": "Communicates imaging findings, procedural precautions, and RT monitoring needs."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_2_4_Radiologic_Examination"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -2054,7 +2063,7 @@
     "lessonId": "pa_3_1_diagnostic_tests_respiratory_infections_nosocomial_prevention",
     "lessonTitle": "Diagnostic Tests, Respiratory Infections & Nosocomial Prevention",
     "displayTitle": "Diagnostic Tests, Respiratory Infections & Nosocomial Prevention",
-    "href": "/PA_3_1_Diagnostic_Tests_Respiratory_Infections_&_Nosocomial_Prevention.html",
+    "href": "/assessment/PA_3_1_Diagnostic_Tests_Respiratory_Infections_&_Nosocomial_Prevention",
     "estimatedMinutes": 45,
     "patientAge": [
       "Adult",
@@ -2407,7 +2416,8 @@
         "notes": "Recognizes sepsis risk, post-thoracentesis pneumothorax, VAP, and infection-control breaches."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_3_1_Diagnostic_Tests_Respiratory_Infections_&_Nosocomial_Prevention"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -2417,7 +2427,7 @@
     "lessonId": "pa_3_2_therapist_driven_protocols_soapier_severity_based_decision_making",
     "lessonTitle": "Therapist-Driven Protocols, SOAPIER Documentation & Severity-Based Clinical Decision-Making",
     "displayTitle": ": Therapist-Driven Protocols, SOAPIER Documentation & Severity-Based Clinical Decision-Making",
-    "href": "/PA_3_2_Therapist-Driven_Protocols.html",
+    "href": "/assessment/PA_3_2_Therapist-Driven_Protocols",
     "estimatedMinutes": 45,
     "patientAge": [
       "Adult",
@@ -2803,7 +2813,8 @@
         "notes": "Communicates RT recommendations and protocol rationale to physicians/team."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_3_2_Therapist-Driven_Protocols"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -2813,7 +2824,7 @@
     "lessonId": "pa_3_3_respiratory_failure",
     "lessonTitle": "Respiratory Failure — Types, Causes, ABG Interpretation & Intervention Hierarchy",
     "displayTitle": ": Respiratory Failure — Types, Causes, ABG Interpretation & Intervention Hierarchy",
-    "href": "/PA_3_3_Respiratory_Failure.html",
+    "href": "/assessment/PA_3_3_Respiratory_Failure",
     "estimatedMinutes": 45,
     "patientAge": [
       "Adult",
@@ -3208,7 +3219,8 @@
         "notes": "Recognizes impending ventilatory failure/arrest and need for urgent escalation."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_3_3_Respiratory_Failure"
   },
   {
     "courseId": "pulmonary-assessment",
@@ -3218,7 +3230,7 @@
     "lessonId": "pa-3-4-clinical-documentation-hipaa",
     "lessonTitle": "Clinical Documentation & HIPAA",
     "displayTitle": "PA 3.4: Clinical Documentation & HIPAA",
-    "href": "/PA_3_4_Clinical_Documentation_HIPAA.html",
+    "href": "/assessment/PA_3_4_Clinical_Documentation_HIPAA",
     "estimatedMinutes": 40,
     "patientAge": [
       "Adult",
@@ -3468,7 +3480,8 @@
         "notes": "Patient/family communication and privacy considerations in education/communication contexts."
       }
     ],
-    "mappingStatus": "first-pass"
+    "mappingStatus": "first-pass",
+    "url": "/assessment/PA_3_4_Clinical_Documentation_HIPAA"
   },
   {
     "courseId": "foundations",
@@ -3478,7 +3491,7 @@
     "lessonId": "foundations-1-3-oxygenation-gas-exchange-calculations",
     "lessonTitle": "Oxygenation & Gas Exchange Calculations",
     "displayTitle": "Foundations 1.3: Oxygenation & Gas Exchange Calculations",
-    "href": "/Foundations_1_3_Oxygenation_Gas_Exchange_Calculations.html",
+    "href": "/foundations/Foundations_1_3_Oxygenation_Gas_Exchange_Calculations",
     "estimatedMinutes": 70,
     "patientAge": [
       "Adult",
@@ -3714,7 +3727,8 @@
       }
     ],
     "mappingStatus": "first-pass",
-    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk."
+    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk.",
+    "url": "/foundations/Foundations_1_3_Oxygenation_Gas_Exchange_Calculations"
   },
   {
     "courseId": "foundations",
@@ -3724,7 +3738,7 @@
     "lessonId": "foundations_1_2",
     "lessonTitle": "Medical Math, Units & Dosage Calculations",
     "displayTitle": "Foundations 1.2: Medical Math, Units & Dosage Calculations",
-    "href": "/Foundations_1_2_Medical_Math_Units_Dosage_Calculations.html",
+    "href": "/foundations/Foundations_1_2_Medical_Math_Units_Dosage_Calculations",
     "estimatedMinutes": 60,
     "patientAge": [
       "Adult",
@@ -3934,7 +3948,8 @@
       }
     ],
     "mappingStatus": "first-pass",
-    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk."
+    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk.",
+    "url": "/foundations/Foundations_1_2_Medical_Math_Units_Dosage_Calculations"
   },
   {
     "courseId": "foundations",
@@ -3944,7 +3959,7 @@
     "lessonId": "foundations_1_1",
     "lessonTitle": "Professional Communication & Conflict Resolution",
     "displayTitle": "Foundations 1.1 · Professional Communication & Conflict Resolution",
-    "href": "/Foundations_1_1_Professional_Communication_Conflict_Resolution.html",
+    "href": "/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution",
     "estimatedMinutes": 45,
     "patientAge": [
       "Adult",
@@ -4128,7 +4143,8 @@
       }
     ],
     "mappingStatus": "first-pass",
-    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk."
+    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk.",
+    "url": "/foundations/Foundations_1_1_Professional_Communication_Conflict_Resolution"
   },
   {
     "courseId": "respiratory-diseases",
@@ -4138,7 +4154,7 @@
     "lessonId": "diseases_asthma",
     "lessonTitle": "Asthma",
     "displayTitle": "Asthma",
-    "href": "/Asthma.html",
+    "href": "/Asthma",
     "estimatedMinutes": 35,
     "patientAge": [
       "Adult",
@@ -4364,7 +4380,8 @@
       }
     ],
     "mappingStatus": "first-pass",
-    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk."
+    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk.",
+    "url": "/Asthma"
   },
   {
     "courseId": "respiratory-diseases",
@@ -4374,7 +4391,7 @@
     "lessonId": "ards",
     "lessonTitle": "Acute Respiratory Distress Syndrome",
     "displayTitle": "ARDS",
-    "href": "/ARDS.html",
+    "href": "/ARDS",
     "estimatedMinutes": 40,
     "patientAge": [
       "Adult"
@@ -4627,9 +4644,3170 @@
       }
     ],
     "mappingStatus": "first-pass",
-    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk."
+    "mappingNotes": "First-pass canonical NBRC 2027 line-item mapping. Review before using as final accreditation crosswalk.",
+    "url": "/ARDS"
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "foundations-orientation-core-skills",
+    "moduleTitle": "Foundations, Professional Skills, and Core Calculations",
+    "lessonId": "foundations-1-4-pulmonary-function-testing-basics",
+    "lessonTitle": "Pulmonary Function Testing Basics",
+    "displayTitle": "Foundations 1.4: Pulmonary Function Testing Basics",
+    "href": "/foundations/Foundations_1_4_Introduction_to_Pulmonary_Function_Testing",
+    "url": "/foundations/Foundations_1_4_Introduction_to_Pulmonary_Function_Testing",
+    "estimatedMinutes": 60,
+    "patientAge": [
+      "Adult",
+      "Older adult"
+    ],
+    "setting": [
+      "Outpatient",
+      "inpatient",
+      "or diagnostic testing",
+      "Diagnostic testing or clinical assessment"
+    ],
+    "topics": [
+      "pulmonary function testing",
+      "spirometry",
+      "FEV1",
+      "FVC",
+      "FEV1/FVC ratio",
+      "flow-volume loops",
+      "lung volumes",
+      "TLC",
+      "RV",
+      "DLCO",
+      "obstructive pattern",
+      "restrictive pattern",
+      "mixed pattern",
+      "bronchodilator response",
+      "test quality",
+      "patient effort",
+      "PFT interpretation algorithm"
+    ],
+    "activityTypes": [
+      "flashcards",
+      "guided-case",
+      "knowledge-check",
+      "quiz",
+      "selection",
+      "sorting",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "foundations_1_4_overview_video",
+        "type": "video",
+        "title": "Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_1_4_pft_component_matching",
+        "type": "sorting",
+        "title": "PFT Component Matching",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "foundations_1_4_lung_volume_check",
+        "type": "selection",
+        "title": "Lung Volume Check",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "foundations_1_4_flow_volume_loop_check",
+        "type": "quiz",
+        "title": "Flow-Volume Loop Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "foundations_1_4_dlco_factor_sorting",
+        "type": "sorting",
+        "title": "DLCO Factor Sorting",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_1_4_pft_pattern_practice",
+        "type": "selection",
+        "title": "PFT Pattern Practice",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_1_4_guided_pft_scenario",
+        "type": "guided-case",
+        "title": "Guided PFT Scenario",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "foundations_1_4_mixed_pft_practice",
+        "type": "selection",
+        "title": "Mixed PFT Practice",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_1_4_knowledge_check",
+        "type": "knowledge-check",
+        "title": "PFT Basics Mastery",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_1_4_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Deck",
+        "required": false,
+        "estimatedMinutes": 5
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.3",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "foundations_1_4_guided_pft_scenario"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Reviews pulmonary function testing data and diagnostic results."
+      },
+      {
+        "outlineId": "BOK-I.C.20",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "instruction",
+          "sorting",
+          "selection",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_1_4_pft_component_matching",
+          "foundations_1_4_pft_pattern_practice",
+          "foundations_1_4_guided_pft_scenario",
+          "foundations_1_4_knowledge_check"
+        ],
+        "estimatedMinutes": 14,
+        "notes": "Spirometry components, test quality, and basic interpretation practice."
+      },
+      {
+        "outlineId": "BOK-I.C.21",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "instruction",
+          "sorting",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_1_4_dlco_factor_sorting",
+          "foundations_1_4_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "DLCO factors and interpretation at a foundational level."
+      },
+      {
+        "outlineId": "BOK-I.C.22",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "instruction",
+          "selection",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_1_4_lung_volume_check",
+          "foundations_1_4_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Lung volume concepts including TLC and RV."
+      },
+      {
+        "outlineId": "BOK-I.D.21",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "selection",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_1_4_pft_pattern_practice",
+          "foundations_1_4_mixed_pft_practice",
+          "foundations_1_4_guided_pft_scenario",
+          "foundations_1_4_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Differentiates normal, obstructive, restrictive, and mixed spirometry patterns."
+      },
+      {
+        "outlineId": "BOK-I.D.22",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sorting",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_1_4_dlco_factor_sorting",
+          "foundations_1_4_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Connects DLCO patterns to clinical interpretation."
+      },
+      {
+        "outlineId": "BOK-I.D.23",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "selection",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_1_4_lung_volume_check",
+          "foundations_1_4_guided_pft_scenario",
+          "foundations_1_4_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Uses lung volume patterns to distinguish restrictive and mixed physiology."
+      },
+      {
+        "outlineId": "BOK-I.E.6",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "foundations_1_4_guided_pft_scenario"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Recognizes when pulmonary function testing supports further evaluation."
+      },
+      {
+        "outlineId": "BOK-III.E.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_1_4_guided_pft_scenario",
+          "foundations_1_4_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Uses PFT findings with symptoms and test quality to support care decisions."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Obstructive, restrictive, or mixed ventilatory pattern",
+        "conditionTags": [
+          "spirometry",
+          "PFT interpretation",
+          "flow-volume loop",
+          "DLCO"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Outpatient, inpatient, or diagnostic testing"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Dyspnea with abnormal pulmonary function data",
+        "conditionTags": [
+          "FEV1/FVC",
+          "TLC",
+          "DLCO",
+          "bronchodilator response"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Diagnostic testing or clinical assessment"
+      }
+    ],
+    "sourceFile": "Foundations_1_4_Introduction_to_Pulmonary_Function_Testing.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "monitoring-and-bedside-assessment",
+    "moduleTitle": "Monitoring and Bedside Assessment",
+    "lessonId": "foundations-2-1-oximetry-capnography",
+    "lessonTitle": "Oximetry & Capnography",
+    "displayTitle": "Foundations 2.1: Oximetry & Capnography",
+    "href": "/foundations/Foundations_2_1_Oximetry_Capnography",
+    "url": "/foundations/Foundations_2_1_Oximetry_Capnography",
+    "estimatedMinutes": 60,
+    "patientAge": [
+      "Adult",
+      "Pediatric",
+      "Neonatal"
+    ],
+    "setting": [
+      "Inpatient",
+      "emergency",
+      "outpatient",
+      "and sleep screening settings",
+      "Emergency department",
+      "ICU",
+      "procedural sedation",
+      "and resuscitation settings",
+      "Emergency and acute care settings"
+    ],
+    "topics": [
+      "pulse oximetry",
+      "SpO2 monitoring",
+      "oxygen saturation",
+      "co-oximetry",
+      "carboxyhemoglobin",
+      "carbon monoxide poisoning",
+      "capnography",
+      "ETCO2",
+      "capnogram waveform",
+      "colorimetric CO2 detector",
+      "airway placement confirmation",
+      "CPR quality",
+      "ROSC",
+      "rebreathing",
+      "airway obstruction waveform",
+      "monitor troubleshooting"
+    ],
+    "activityTypes": [
+      "flashcards",
+      "guided-case",
+      "knowledge-check",
+      "practice",
+      "quiz",
+      "select-all",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "found_2_1_overview_video",
+        "type": "video",
+        "title": "Lesson Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_1_monitoring_match",
+        "type": "sort",
+        "title": "Monitoring Match",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "found_2_1_pulse_ox_check",
+        "type": "quiz",
+        "title": "Pulse Ox Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_1_spo2_troubleshooting",
+        "type": "select-all",
+        "title": "Pulse Ox Troubleshooting",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_1_overnight_oximetry_check",
+        "type": "quiz",
+        "title": "Overnight Oximetry Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_1_co_oximetry_check",
+        "type": "quiz",
+        "title": "Co-Oximetry Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_1_etco2_trend_sorting",
+        "type": "sort",
+        "title": "ETCO2 Trend Sorting",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_1_waveform_match",
+        "type": "sort",
+        "title": "Waveform Pattern Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_1_cpr_capnography_check",
+        "type": "quiz",
+        "title": "CPR Capnography Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_1_guided_monitoring_scenario",
+        "type": "guided-case",
+        "title": "Guided Monitoring Scenario",
+        "required": true,
+        "estimatedMinutes": 7
+      },
+      {
+        "id": "found_2_1_monitoring_assignment_practice",
+        "type": "practice",
+        "title": "Monitoring Assignment Practice",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_1_knowledge_check",
+        "type": "knowledge-check",
+        "title": "Oximetry & Capnography Mastery",
+        "required": true,
+        "estimatedMinutes": 7
+      },
+      {
+        "id": "found_2_1_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Mastery Deck",
+        "required": false,
+        "estimatedMinutes": 5
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.7",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_1_guided_monitoring_scenario"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Reviews bedside monitoring data in clinical context."
+      },
+      {
+        "outlineId": "BOK-I.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "select-all",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_1_pulse_ox_check",
+          "found_2_1_spo2_troubleshooting",
+          "found_2_1_guided_monitoring_scenario"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Compares monitor values with patient appearance, pulse, perfusion, and oxygen delivery."
+      },
+      {
+        "outlineId": "BOK-I.C.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_1_monitoring_match",
+          "found_2_1_pulse_ox_check",
+          "found_2_1_guided_monitoring_scenario",
+          "found_2_1_knowledge_check"
+        ],
+        "estimatedMinutes": 10,
+        "notes": "Pulse oximetry and capnography data gathering and troubleshooting."
+      },
+      {
+        "outlineId": "BOK-I.C.5",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_1_co_oximetry_check",
+          "found_2_1_guided_monitoring_scenario",
+          "found_2_1_knowledge_check"
+        ],
+        "estimatedMinutes": 7,
+        "notes": "Co-oximetry and dyshemoglobin recognition including CO poisoning."
+      },
+      {
+        "outlineId": "BOK-I.C.14",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "quiz"
+        ],
+        "interactionIds": [
+          "found_2_1_overnight_oximetry_check"
+        ],
+        "estimatedMinutes": 3,
+        "notes": "Introduces overnight oximetry as a monitoring procedure."
+      },
+      {
+        "outlineId": "BOK-I.D.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_1_etco2_trend_sorting",
+          "found_2_1_waveform_match",
+          "found_2_1_cpr_capnography_check",
+          "found_2_1_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Interprets SpO2 trends, ETCO2 trends, and capnogram waveform patterns."
+      },
+      {
+        "outlineId": "BOK-I.D.5",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_1_co_oximetry_check",
+          "found_2_1_guided_monitoring_scenario",
+          "found_2_1_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Interprets co-oximetry results and limitations of standard pulse oximetry."
+      },
+      {
+        "outlineId": "BOK-I.D.15",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "quiz"
+        ],
+        "interactionIds": [
+          "found_2_1_overnight_oximetry_check"
+        ],
+        "estimatedMinutes": 3,
+        "notes": "Interprets basic overnight oximetry concepts."
+      },
+      {
+        "outlineId": "BOK-II.A.21",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_1_monitoring_match",
+          "found_2_1_guided_monitoring_scenario"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Uses noninvasive monitoring devices and recognizes troubleshooting needs."
+      },
+      {
+        "outlineId": "BOK-II.B.4",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "select-all",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_1_spo2_troubleshooting",
+          "found_2_1_guided_monitoring_scenario"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Applies patient-first troubleshooting and quality checks when data appear inconsistent."
+      },
+      {
+        "outlineId": "BOK-III.C.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_1_co_oximetry_check",
+          "found_2_1_guided_monitoring_scenario",
+          "found_2_1_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Supports oxygenation decisions when SpO2 or co-oximetry suggests risk."
+      },
+      {
+        "outlineId": "BOK-III.C.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_1_guided_monitoring_scenario",
+          "found_2_1_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Uses monitoring data to guide oxygen therapy escalation."
+      },
+      {
+        "outlineId": "BOK-III.G.1",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "quiz"
+        ],
+        "interactionIds": [
+          "found_2_1_cpr_capnography_check"
+        ],
+        "estimatedMinutes": 3,
+        "notes": "Uses ETCO2 concepts for CPR quality and ROSC recognition."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Unexpected low SpO2 or misleading pulse oximetry",
+        "conditionTags": [
+          "artifact",
+          "poor perfusion",
+          "carbon monoxide poisoning",
+          "oxygenation monitoring"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Inpatient, emergency, outpatient, and sleep screening settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Capnography change during ventilation, airway management, or CPR",
+        "conditionTags": [
+          "ETCO2",
+          "airway obstruction",
+          "airway displacement",
+          "CPR quality",
+          "ROSC"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Emergency department, ICU, procedural sedation, and resuscitation settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Dyshemoglobinemia or suspected carbon monoxide exposure",
+        "conditionTags": [
+          "COHb",
+          "co-oximetry",
+          "100 percent oxygen"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Emergency and acute care settings"
+      }
+    ],
+    "sourceFile": "Foundations_2_1_Oximetry_Capnography.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "monitoring-and-bedside-assessment",
+    "moduleTitle": "Monitoring and Bedside Assessment",
+    "lessonId": "foundations-2-2-clinical-laboratory-data-interpretation",
+    "lessonTitle": "Clinical & Laboratory Data Interpretation",
+    "displayTitle": "Foundations 2.2: Clinical & Laboratory Data Interpretation",
+    "href": "/foundations/Foundations_2_2_Interpreting_Clinical_Laboratory_Data",
+    "url": "/foundations/Foundations_2_2_Interpreting_Clinical_Laboratory_Data",
+    "estimatedMinutes": 75,
+    "patientAge": [
+      "Adult",
+      "Pediatric",
+      "Neonatal"
+    ],
+    "setting": [
+      "Inpatient",
+      "emergency",
+      "outpatient",
+      "and acute care settings",
+      "Emergency department",
+      "ICU",
+      "floor care",
+      "and outpatient assessment settings",
+      "Acute care",
+      "and infection-control settings"
+    ],
+    "topics": [
+      "clinical laboratory data",
+      "CBC interpretation",
+      "hemoglobin and oxygen carrying capacity",
+      "anemia",
+      "polycythemia",
+      "white blood cells",
+      "neutrophils",
+      "eosinophils",
+      "platelets",
+      "electrolytes",
+      "bicarbonate",
+      "anion gap",
+      "acid-base balance",
+      "potassium abnormalities",
+      "sodium abnormalities",
+      "respiratory muscle weakness",
+      "sputum assessment",
+      "sputum sample quality",
+      "Gram stain",
+      "culture and sensitivity",
+      "community-acquired pneumonia",
+      "hospital-acquired pneumonia",
+      "ventilator-associated pneumonia",
+      "tuberculosis testing",
+      "AFB smear",
+      "BNP",
+      "NT-proBNP",
+      "troponin",
+      "BUN",
+      "creatinine",
+      "procalcitonin",
+      "CRP",
+      "lactate",
+      "sepsis",
+      "hypoperfusion"
+    ],
+    "activityTypes": [
+      "flashcards",
+      "guided-case",
+      "knowledge-check",
+      "practice",
+      "quiz",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "found_2_2_overview_video",
+        "type": "video",
+        "title": "Lesson Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_2_lab_data_match",
+        "type": "sort",
+        "title": "Lab Data Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_2_cbc_concept_check",
+        "type": "quiz",
+        "title": "CBC Concept Check",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "found_2_2_electrolyte_interpretation",
+        "type": "sort",
+        "title": "Electrolyte Interpretation",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_2_sputum_clue_match",
+        "type": "sort",
+        "title": "Sputum Clue Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_2_microbiology_match",
+        "type": "sort",
+        "title": "Microbiology Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_2_special_test_match",
+        "type": "sort",
+        "title": "Special Test Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_2_guided_lab_scenario",
+        "type": "guided-case",
+        "title": "Guided Lab Scenario",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "found_2_2_lab_mixed_practice",
+        "type": "practice",
+        "title": "Lab Mixed Practice",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "found_2_2_knowledge_check",
+        "type": "knowledge-check",
+        "title": "Clinical & Laboratory Data Mastery",
+        "required": true,
+        "estimatedMinutes": 7
+      },
+      {
+        "id": "found_2_2_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Mastery Deck",
+        "required": false,
+        "estimatedMinutes": 5
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_2_lab_data_match",
+          "found_2_2_cbc_concept_check",
+          "found_2_2_guided_lab_scenario",
+          "found_2_2_knowledge_check"
+        ],
+        "estimatedMinutes": 14,
+        "notes": "Reviews and interprets CBC, electrolytes, renal, cardiac, inflammatory, sputum, and microbiology data."
+      },
+      {
+        "outlineId": "BOK-I.A.8",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "practice",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_2_guided_lab_scenario",
+          "found_2_2_lab_mixed_practice",
+          "found_2_2_knowledge_check"
+        ],
+        "estimatedMinutes": 9,
+        "notes": "Uses lab patterns to determine patient condition and escalation needs."
+      },
+      {
+        "outlineId": "BOK-I.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_2_cbc_concept_check",
+          "found_2_2_guided_lab_scenario"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Compares laboratory values with symptoms, vital signs, ABGs, imaging, and bedside assessment."
+      },
+      {
+        "outlineId": "BOK-I.C.17",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_2_sputum_clue_match",
+          "found_2_2_guided_lab_scenario"
+        ],
+        "estimatedMinutes": 7,
+        "notes": "Assesses sputum quality and microbiology clues."
+      },
+      {
+        "outlineId": "BOK-I.D.18",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_2_sputum_clue_match",
+          "found_2_2_microbiology_match",
+          "found_2_2_knowledge_check"
+        ],
+        "estimatedMinutes": 9,
+        "notes": "Interprets sputum, Gram stain, culture, AFB, and infection-control clues."
+      },
+      {
+        "outlineId": "BOK-I.E.1",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "sort",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_2_microbiology_match",
+          "found_2_2_knowledge_check"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Introduces TB-related testing and positive AFB escalation."
+      },
+      {
+        "outlineId": "BOK-I.E.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_2_lab_data_match",
+          "found_2_2_special_test_match",
+          "found_2_2_guided_lab_scenario",
+          "found_2_2_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Recommends or interprets laboratory tests in respiratory scenarios."
+      },
+      {
+        "outlineId": "BOK-II.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_2_microbiology_match",
+          "found_2_2_guided_lab_scenario"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Applies infection-control reasoning when microbiology or TB testing suggests risk."
+      },
+      {
+        "outlineId": "BOK-II.B.3",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "sort"
+        ],
+        "interactionIds": [
+          "found_2_2_sputum_clue_match"
+        ],
+        "estimatedMinutes": 3,
+        "notes": "Connects specimen handling and biohazard considerations to sputum and microbiology testing."
+      },
+      {
+        "outlineId": "BOK-III.E.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "practice",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_2_guided_lab_scenario",
+          "found_2_2_lab_mixed_practice",
+          "found_2_2_knowledge_check"
+        ],
+        "estimatedMinutes": 9,
+        "notes": "Uses clinical and laboratory data to support escalation, precautions, or care plan modification."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Dyspnea with abnormal oxygen-carrying capacity, infection markers, or laboratory trends",
+        "conditionTags": [
+          "anemia",
+          "hemoglobin",
+          "leukocytosis",
+          "neutrophilia",
+          "oxygen delivery"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Inpatient, emergency, outpatient, and acute care settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Electrolyte or metabolic abnormality affecting ventilation, acid-base balance, cardiac rhythm, or weakness",
+        "conditionTags": [
+          "bicarbonate",
+          "potassium",
+          "sodium",
+          "anion gap",
+          "respiratory muscle weakness"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Emergency department, ICU, floor care, and outpatient assessment settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Suspected respiratory infection, sepsis, TB, or fluid overload requiring interpretation of sputum, microbiology, and special markers",
+        "conditionTags": [
+          "sputum",
+          "Gram stain",
+          "culture",
+          "AFB",
+          "lactate",
+          "BNP",
+          "procalcitonin"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Acute care, emergency, ICU, and infection-control settings"
+      }
+    ],
+    "sourceFile": "Foundations_2_2_Interpreting_Clinical_Laboratory_Data.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "foundational-clinical-data-and-interpretation",
+    "moduleTitle": "Foundational Clinical Data and Interpretation",
+    "lessonId": "foundations-2-3-abg-interpretation",
+    "lessonTitle": "ABG Interpretation",
+    "displayTitle": "Foundations 2.3: ABG Interpretation",
+    "href": "/foundations/Foundations_2_3_ABG_Interpretation",
+    "url": "/foundations/Foundations_2_3_ABG_Interpretation",
+    "estimatedMinutes": 90,
+    "patientAge": [
+      "Adult",
+      "Pediatric",
+      "Neonatal"
+    ],
+    "setting": [
+      "Emergency department",
+      "ICU",
+      "acute care",
+      "and outpatient diagnostic settings",
+      "pulmonary clinic",
+      "and long-term care settings",
+      "Emergency",
+      "and home oxygen evaluation settings",
+      "Hospital and emergency settings"
+    ],
+    "topics": [
+      "arterial blood gas",
+      "ABG interpretation",
+      "acid-base balance",
+      "pH",
+      "PaCO2",
+      "HCO3",
+      "PaO2",
+      "respiratory acidosis",
+      "respiratory alkalosis",
+      "metabolic acidosis",
+      "metabolic alkalosis",
+      "ROME method",
+      "compensation",
+      "acute respiratory acidosis",
+      "chronic respiratory acidosis",
+      "hypoxemia",
+      "hypoventilation correction",
+      "mixed disorders"
+    ],
+    "activityTypes": [
+      "calculation",
+      "flashcards",
+      "guided-case",
+      "knowledge-check",
+      "practice",
+      "quiz",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "found_2_3_overview_video",
+        "type": "video",
+        "title": "Lesson Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_3_abg_framework_sequence",
+        "type": "sort",
+        "title": "ABG Framework Sequence",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "found_2_3_range_recognition",
+        "type": "sort",
+        "title": "Range Recognition",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_3_primary_cause_check",
+        "type": "quiz",
+        "title": "Primary Cause Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_3_technical_classification",
+        "type": "sort",
+        "title": "Technical Classification Practice",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_3_compensation_check",
+        "type": "quiz",
+        "title": "Compensation Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_3_acute_chronic_check",
+        "type": "quiz",
+        "title": "Acute Chronic Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_3_oxygenation_check",
+        "type": "quiz",
+        "title": "Oxygenation Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_3_hypoventilation_correction",
+        "type": "calculation",
+        "title": "Hypoventilation Correction Practice",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_3_mixed_disorder_check",
+        "type": "quiz",
+        "title": "Mixed Disorder Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_2_3_guided_abg_scenario",
+        "type": "guided-case",
+        "title": "Guided ABG Scenario",
+        "required": true,
+        "estimatedMinutes": 10
+      },
+      {
+        "id": "found_2_3_abg_assignment_practice",
+        "type": "practice",
+        "title": "ABG Assignment Practice",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_3_knowledge_check",
+        "type": "knowledge-check",
+        "title": "ABG Interpretation Mastery",
+        "required": true,
+        "estimatedMinutes": 10
+      },
+      {
+        "id": "found_2_3_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Mastery Deck",
+        "required": false,
+        "estimatedMinutes": 5
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.2",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_3_guided_abg_scenario"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Reviews ABG values and related laboratory trends in context."
+      },
+      {
+        "outlineId": "BOK-I.A.8",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 7,
+        "notes": "Determines patient condition from ventilation, oxygenation, and acid-base data."
+      },
+      {
+        "outlineId": "BOK-I.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_3_primary_cause_check",
+          "found_2_3_guided_abg_scenario"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Connects ABG abnormalities to patient assessment and clinical severity."
+      },
+      {
+        "outlineId": "BOK-I.C.5",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "calculation",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_range_recognition",
+          "found_2_3_technical_classification",
+          "found_2_3_hypoventilation_correction",
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 18,
+        "notes": "Gathers and classifies ABG data including pH, PaCO2, HCO3, and PaO2."
+      },
+      {
+        "outlineId": "BOK-I.C.7",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "calculation",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_hypoventilation_correction",
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Uses calculations to evaluate hypoventilation correction and oxygenation interpretation."
+      },
+      {
+        "outlineId": "BOK-I.D.5",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_technical_classification",
+          "found_2_3_compensation_check",
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 18,
+        "notes": "Interprets ABGs to classify acid-base disorders, compensation, oxygenation severity, and mixed disorders."
+      },
+      {
+        "outlineId": "BOK-I.D.7",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "calculation",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_hypoventilation_correction",
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Applies cardiopulmonary calculations to oxygenation and ventilation interpretation."
+      },
+      {
+        "outlineId": "BOK-I.E.8",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Recognizes when blood gas or hemoximetry interpretation supports further evaluation."
+      },
+      {
+        "outlineId": "BOK-III.C.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_oxygenation_check",
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Uses ABG data to identify hypoxemia and urgency."
+      },
+      {
+        "outlineId": "BOK-III.C.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Uses ABG findings to support oxygen and ventilation decisions."
+      },
+      {
+        "outlineId": "BOK-III.E.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "practice",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_3_guided_abg_scenario",
+          "found_2_3_abg_assignment_practice",
+          "found_2_3_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Recommends reassessment or care plan modification when values worsen."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Acid-base disturbance or abnormal arterial blood gas",
+        "conditionTags": [
+          "ABG",
+          "acidosis",
+          "alkalosis",
+          "compensation",
+          "mixed disorder"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Emergency department, ICU, acute care, and outpatient diagnostic settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Hypercapnia, hypoventilation, and chronic CO2 retention",
+        "conditionTags": [
+          "PaCO2",
+          "chronic respiratory acidosis",
+          "renal compensation",
+          "hypoventilation"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "ICU, acute care, pulmonary clinic, and long-term care settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Hypoxemia and oxygenation impairment",
+        "conditionTags": [
+          "PaO2",
+          "hypoxemia",
+          "oxygenation severity",
+          "hypoventilation correction"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Emergency, ICU, acute care, and home oxygen evaluation settings"
+      },
+      {
+        "patientConditionCategory": "Neonatal/Pediatric/Adult",
+        "patientConditionType": "ABG interpretation across age groups",
+        "conditionTags": [
+          "ventilation",
+          "oxygenation",
+          "acid-base interpretation"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Hospital and emergency settings"
+      }
+    ],
+    "sourceFile": "Foundations_2_3_ABG_Interpretation.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "clinical-data-abg-and-decision-making",
+    "moduleTitle": "Clinical Data, ABG Interpretation, and Decision Making",
+    "lessonId": "foundations-2-4-integrated-clinical-decision-making",
+    "lessonTitle": "Integrated Clinical Decision Making",
+    "displayTitle": "Foundations 2.4: Integrated Clinical Decision Making",
+    "href": "/foundations/Foundations_2_4_Integrated_Respiratory_Decision_Making",
+    "url": "/foundations/Foundations_2_4_Integrated_Respiratory_Decision_Making",
+    "estimatedMinutes": 75,
+    "patientAge": [
+      "Adult",
+      "Pediatric",
+      "Neonatal"
+    ],
+    "setting": [
+      "Emergency department",
+      "inpatient",
+      "and ICU settings",
+      "Emergency",
+      "and outpatient settings",
+      "ICU",
+      "procedural",
+      "and inpatient settings",
+      "Acute care and emergency settings"
+    ],
+    "topics": [
+      "integrated clinical decision making",
+      "respiratory failure",
+      "oxygenation failure",
+      "ventilatory failure",
+      "combined respiratory failure",
+      "dyspnea differentiation",
+      "pulmonary dyspnea",
+      "cardiac dyspnea",
+      "priority ladder",
+      "airway priority",
+      "breathing priority",
+      "ABG trends",
+      "monitoring trends",
+      "laboratory data interpretation",
+      "reassessment",
+      "escalation",
+      "COPD exacerbation",
+      "board-style clinical reasoning"
+    ],
+    "activityTypes": [
+      "flashcards",
+      "guided-case",
+      "knowledge-check",
+      "practice",
+      "quiz",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "found_2_4_overview_video",
+        "type": "video",
+        "title": "Lesson Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_4_data_source_match",
+        "type": "sort",
+        "title": "Data Source Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_4_failure_pattern_sort",
+        "type": "sort",
+        "title": "Failure Pattern Sort",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_4_dyspnea_pattern_match",
+        "type": "sort",
+        "title": "Dyspnea Pattern Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_4_priority_ladder_sequence",
+        "type": "sort",
+        "title": "Priority Ladder Sequence",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_2_4_patient_board_check",
+        "type": "quiz",
+        "title": "Patient Board Check",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "found_2_4_guided_integrated_case",
+        "type": "guided-case",
+        "title": "Guided Integrated Case",
+        "required": true,
+        "estimatedMinutes": 12
+      },
+      {
+        "id": "found_2_4_integrated_decision_practice",
+        "type": "practice",
+        "title": "Integrated Decision Practice",
+        "required": true,
+        "estimatedMinutes": 7
+      },
+      {
+        "id": "found_2_4_knowledge_check",
+        "type": "knowledge-check",
+        "title": "Integrated Clinical Decision Making Mastery",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "found_2_4_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Mastery Deck",
+        "required": false,
+        "estimatedMinutes": 5
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.1",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_4_data_source_match",
+          "found_2_4_guided_integrated_case"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Reviews history, medications, prior response, and clinical context."
+      },
+      {
+        "outlineId": "BOK-I.A.2",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_4_data_source_match",
+          "found_2_4_guided_integrated_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Reviews laboratory data, ABGs, and monitoring trends."
+      },
+      {
+        "outlineId": "BOK-I.A.7",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_data_source_match",
+          "found_2_4_guided_integrated_case",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Connects SpO2, ETCO2, PaO2, PaCO2, BNP, and trends to patient condition."
+      },
+      {
+        "outlineId": "BOK-I.A.8",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "practice",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_failure_pattern_sort",
+          "found_2_4_dyspnea_pattern_match",
+          "found_2_4_guided_integrated_case",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Differentiates oxygenation failure, ventilatory failure, combined failure, and dyspnea patterns."
+      },
+      {
+        "outlineId": "BOK-I.B.1",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "practice",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_dyspnea_pattern_match",
+          "found_2_4_patient_board_check",
+          "found_2_4_guided_integrated_case",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Assesses work of breathing, airway protection, breath sounds, mental status, perfusion, fatigue, and response."
+      },
+      {
+        "outlineId": "BOK-I.D.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_guided_integrated_case",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Evaluates monitoring trends after intervention."
+      },
+      {
+        "outlineId": "BOK-I.D.5",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_guided_integrated_case",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Evaluates ABG trends after respiratory support."
+      },
+      {
+        "outlineId": "BOK-II.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_2_4_priority_ladder_sequence",
+          "found_2_4_guided_integrated_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Prioritizes safe escalation and reassessment when a patient is deteriorating."
+      },
+      {
+        "outlineId": "BOK-III.C.1",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_failure_pattern_sort",
+          "found_2_4_guided_integrated_case",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Selects first interventions to minimize hypoxemia based on primary threat."
+      },
+      {
+        "outlineId": "BOK-III.C.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "guided-case",
+          "practice",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_guided_integrated_case",
+          "found_2_4_integrated_decision_practice",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 10,
+        "notes": "Titrates oxygen and supports ventilation in integrated scenarios."
+      },
+      {
+        "outlineId": "BOK-III.E.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "guided-case",
+          "practice",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_2_4_guided_integrated_case",
+          "found_2_4_integrated_decision_practice",
+          "found_2_4_knowledge_check"
+        ],
+        "estimatedMinutes": 10,
+        "notes": "Modifies or escalates care based on reassessment, ABG trends, patient status, and response."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "COPD exacerbation with hypoxemia and hypercapnia",
+        "conditionTags": [
+          "COPD",
+          "combined respiratory failure",
+          "bronchospasm",
+          "ABG interpretation",
+          "oxygen titration"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Emergency department, inpatient, and ICU settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Acute dyspnea requiring pulmonary versus cardiac pattern differentiation",
+        "conditionTags": [
+          "dyspnea",
+          "heart failure",
+          "BNP",
+          "orthopnea",
+          "wheezing",
+          "crackles"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Emergency, inpatient, and outpatient settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Airway, breathing, and escalation priority scenario",
+        "conditionTags": [
+          "airway protection",
+          "respiratory distress",
+          "reassessment",
+          "escalation"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Emergency department, ICU, procedural, and inpatient settings"
+      },
+      {
+        "patientConditionCategory": "Pediatric and Neonatal",
+        "patientConditionType": "Integrated respiratory assessment and response-to-therapy reasoning",
+        "conditionTags": [
+          "oxygenation",
+          "ventilation",
+          "assessment",
+          "reassessment"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Acute care and emergency settings"
+      }
+    ],
+    "sourceFile": "Foundations_2_4_Integrated_Respiratory_Decision_Making.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "procedural-airway-management-and-bronchoscopy",
+    "moduleTitle": "Procedural Airway Management and Bronchoscopy",
+    "lessonId": "foundations-3-1-flexible-bronchoscopy-procedure-sedation-airway-assessment",
+    "lessonTitle": "Flexible Bronchoscopy: Procedure, Sedation & Airway Assessment",
+    "displayTitle": "Foundations 3.1: Flexible Bronchoscopy",
+    "href": "/foundations/Foundations_3_1_Flexible_Bronchoscopy",
+    "url": "/foundations/Foundations_3_1_Flexible_Bronchoscopy",
+    "estimatedMinutes": 65,
+    "patientAge": [
+      "Adult",
+      "Pediatric"
+    ],
+    "setting": [
+      "Bronchoscopy suite",
+      "ICU",
+      "emergency department",
+      "procedural area",
+      "Pre-procedure assessment and acute care settings",
+      "Acute care",
+      "bronchoscopy suite"
+    ],
+    "topics": [
+      "flexible bronchoscopy",
+      "diagnostic bronchoscopy",
+      "therapeutic bronchoscopy",
+      "Mallampati airway assessment",
+      "conscious sedation",
+      "procedural monitoring",
+      "ETCO2 monitoring",
+      "hypoventilation",
+      "topical lidocaine",
+      "bronchoalveolar lavage",
+      "bronchial washing",
+      "bronchial brushing",
+      "endobronchial biopsy",
+      "transbronchial needle aspiration",
+      "thermal ablation",
+      "cryotherapy",
+      "airway stent placement",
+      "balloon dilation",
+      "foreign body removal",
+      "secretion clearance",
+      "post-procedure recovery"
+    ],
+    "activityTypes": [
+      "flashcards",
+      "guided-case",
+      "hotspot-select",
+      "knowledge-check",
+      "practice",
+      "quiz",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "found_3_1_overview_video",
+        "type": "video",
+        "title": "Lesson Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_3_1_bronchoscopy_type_match",
+        "type": "sort",
+        "title": "Bronchoscopy Type Match",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "found_3_1_mallampati_identification",
+        "type": "hotspot-select",
+        "title": "Mallampati Identification",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "found_3_1_patient_prep_match",
+        "type": "sort",
+        "title": "Patient Preparation Match",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "found_3_1_sedation_monitoring_sort",
+        "type": "sort",
+        "title": "Sedation Monitoring Parameters Sort",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_3_1_hypoventilation_intervention_check",
+        "type": "quiz",
+        "title": "Hypoventilation Intervention Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "found_3_1_diagnostic_technique_match",
+        "type": "sort",
+        "title": "Diagnostic Technique Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_3_1_therapeutic_procedure_match",
+        "type": "sort",
+        "title": "Therapeutic Procedure Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_3_1_unfolding_case",
+        "type": "guided-case",
+        "title": "Bronchoscopy Unfolding Case",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "found_3_1_mixed_practice",
+        "type": "practice",
+        "title": "Mixed Practice 3.1",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "found_3_1_knowledge_check",
+        "type": "knowledge-check",
+        "title": "Flexible Bronchoscopy Mastery",
+        "required": true,
+        "estimatedMinutes": 7
+      },
+      {
+        "id": "found_3_1_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Mastery Deck",
+        "required": false,
+        "estimatedMinutes": 5
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.1",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Reviews procedure indications, allergies, bleeding risk, oxygen requirement, and airway history."
+      },
+      {
+        "outlineId": "BOK-I.A.4",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Reviews imaging findings relevant to bronchoscopy."
+      },
+      {
+        "outlineId": "BOK-I.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "hotspot-select",
+          "quiz",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_mallampati_identification",
+          "found_3_1_hypoventilation_intervention_check",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Assesses difficult airway risk and procedural tolerance during sedation."
+      },
+      {
+        "outlineId": "BOK-I.C.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_sedation_monitoring_sort",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Uses SpO2, respiratory rate, heart rate, blood pressure, and ETCO2 during procedural sedation."
+      },
+      {
+        "outlineId": "BOK-I.C.24",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_3_1_diagnostic_technique_match",
+          "found_3_1_unfolding_case",
+          "found_3_1_knowledge_check"
+        ],
+        "estimatedMinutes": 7,
+        "notes": "Supports diagnostic sampling including BAL, washing, brushing, biopsy, and TBNA."
+      },
+      {
+        "outlineId": "BOK-I.D.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_sedation_monitoring_sort",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Evaluates procedural monitoring trends and post-procedure status."
+      },
+      {
+        "outlineId": "BOK-I.D.25",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_3_1_diagnostic_technique_match",
+          "found_3_1_unfolding_case",
+          "found_3_1_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Differentiates diagnostic sampling approaches and purposes."
+      },
+      {
+        "outlineId": "BOK-I.E.4",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_3_1_bronchoscopy_type_match",
+          "found_3_1_diagnostic_technique_match",
+          "found_3_1_therapeutic_procedure_match",
+          "found_3_1_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Covers diagnostic and therapeutic bronchoscopy indications and techniques."
+      },
+      {
+        "outlineId": "BOK-I.E.5",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_diagnostic_technique_match",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Identifies BAL and related specimen collection purposes."
+      },
+      {
+        "outlineId": "BOK-II.A.22",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_3_1_bronchoscopy_type_match",
+          "found_3_1_therapeutic_procedure_match",
+          "found_3_1_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Identifies bronchoscopes and procedural support needs."
+      },
+      {
+        "outlineId": "BOK-II.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_patient_prep_match",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Applies procedural safety and infection-prevention principles."
+      },
+      {
+        "outlineId": "BOK-III.A.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "hotspot-select",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_3_1_mallampati_identification",
+          "found_3_1_unfolding_case",
+          "found_3_1_knowledge_check"
+        ],
+        "estimatedMinutes": 7,
+        "notes": "Recognizes difficult airway risk using Mallampati and related clues."
+      },
+      {
+        "outlineId": "BOK-III.A.3",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_hypoventilation_intervention_check",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Supports airway patency and responds to sedation-related obstruction or hypoventilation."
+      },
+      {
+        "outlineId": "BOK-III.C.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_sedation_monitoring_sort",
+          "found_3_1_hypoventilation_intervention_check",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Minimizes hypoxemia during procedural monitoring."
+      },
+      {
+        "outlineId": "BOK-III.C.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_3_1_unfolding_case",
+          "found_3_1_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Adjusts oxygen and ventilation support during bronchoscopy."
+      },
+      {
+        "outlineId": "BOK-III.H.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "guided-case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "found_3_1_bronchoscopy_type_match",
+          "found_3_1_unfolding_case",
+          "found_3_1_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Bronchoscopy procedural support and monitoring."
+      },
+      {
+        "outlineId": "BOK-III.H.3",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_therapeutic_procedure_match",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Specialized bronchoscopy techniques including thermal ablation, cryotherapy, stent, and balloon dilation."
+      },
+      {
+        "outlineId": "BOK-III.H.8",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "guided-case"
+        ],
+        "interactionIds": [
+          "found_3_1_sedation_monitoring_sort",
+          "found_3_1_hypoventilation_intervention_check",
+          "found_3_1_unfolding_case"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Moderate/conscious sedation monitoring and response to hypoventilation."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Patient undergoing bronchoscopy with procedural sedation",
+        "conditionTags": [
+          "conscious sedation",
+          "hypoventilation",
+          "ETCO2 trend",
+          "airway obstruction",
+          "SpO2 decline"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Bronchoscopy suite, ICU, emergency department, procedural area"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Difficult airway risk before bronchoscopy",
+        "conditionTags": [
+          "Mallampati class 3",
+          "Mallampati class 4",
+          "emergency airway plan",
+          "sedation risk"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Pre-procedure assessment and acute care settings"
+      },
+      {
+        "patientConditionCategory": "Adults",
+        "patientConditionType": "Diagnostic or therapeutic bronchoscopy decision support",
+        "conditionTags": [
+          "BAL",
+          "bronchial washing",
+          "biopsy",
+          "TBNA",
+          "thermal ablation",
+          "cryotherapy",
+          "stent",
+          "foreign body removal"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "Acute care, ICU, bronchoscopy suite"
+      }
+    ],
+    "sourceFile": "Foundations_3_1_Flexible_Bronchoscopy.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "procedures-monitoring-and-cardiac-rhythm-analysis",
+    "moduleTitle": "Procedures, Monitoring, and Cardiac Rhythm Analysis",
+    "lessonId": "foundations-3-2-ecg-interpretation-cardiac-rhythm-analysis",
+    "lessonTitle": "ECG Interpretation & Cardiac Rhythm Analysis",
+    "displayTitle": "Foundations 3.2: ECG Interpretation & Cardiac Rhythm Analysis",
+    "href": "/foundations/Foundations_3_2_ECG_Interpretation_Cardiac_Rhythm_Analysis",
+    "url": "/foundations/Foundations_3_2_ECG_Interpretation_Cardiac_Rhythm_Analysis",
+    "estimatedMinutes": 75,
+    "patientAge": [
+      "Adult",
+      "Older adult"
+    ],
+    "setting": [
+      "Emergency department",
+      "ICU",
+      "General acute care",
+      "Procedural areas",
+      "Inpatient",
+      "Emergency",
+      "Critical care"
+    ],
+    "topics": [
+      "ECG interpretation",
+      "cardiac rhythm analysis",
+      "ECG paper",
+      "PQRST waveforms",
+      "PR interval",
+      "QRS duration",
+      "QT interval",
+      "ST segment",
+      "heart rate calculation",
+      "sinus rhythm",
+      "atrial flutter",
+      "atrial fibrillation",
+      "SVT",
+      "ventricular tachycardia",
+      "ventricular fibrillation",
+      "asystole",
+      "defibrillation",
+      "synchronized cardioversion",
+      "5 Hs and 5 Ts",
+      "shockable rhythms"
+    ],
+    "activityTypes": [
+      "calculation",
+      "case",
+      "flashcards",
+      "knowledge-check",
+      "quiz",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "foundations_3_2_overview_video",
+        "type": "video",
+        "title": "Lesson overview video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_2_ecg_time_match",
+        "type": "sort",
+        "title": "ECG box-to-time match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_2_four_step_order",
+        "type": "sort",
+        "title": "Four-step ECG analysis order",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_2_rate_calculation_practice",
+        "type": "calculation",
+        "title": "Rate calculation practice",
+        "required": true,
+        "estimatedMinutes": 7
+      },
+      {
+        "id": "foundations_3_2_sinus_rhythm_match",
+        "type": "sort",
+        "title": "Sinus rhythm match",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_3_2_atrial_rhythm_features",
+        "type": "sort",
+        "title": "Atrial rhythm key features",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_3_2_vt_vs_svt_check",
+        "type": "quiz",
+        "title": "VT vs SVT check",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "foundations_3_2_deadly_rhythm_intervention",
+        "type": "sort",
+        "title": "Deadly rhythm intervention match",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_3_2_clinical_scenarios",
+        "type": "case",
+        "title": "ECG clinical scenarios",
+        "required": true,
+        "estimatedMinutes": 12
+      },
+      {
+        "id": "foundations_3_2_rhythm_intervention_match",
+        "type": "sort",
+        "title": "Rhythm-to-intervention match",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_3_2_knowledge_check",
+        "type": "knowledge-check",
+        "title": "Foundations 3.2 knowledge check",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "foundations_3_2_flashcards",
+        "type": "flashcards",
+        "title": "Glossary flashcard mastery deck",
+        "required": false,
+        "estimatedMinutes": 8
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.7",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_2_clinical_scenarios"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Reviews cardiac monitoring and clinical trends."
+      },
+      {
+        "outlineId": "BOK-I.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_3_2_vt_vs_svt_check",
+          "foundations_3_2_clinical_scenarios",
+          "foundations_3_2_knowledge_check"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Assesses stability, pulse, perfusion, mental status, and symptoms during rhythm changes."
+      },
+      {
+        "outlineId": "BOK-I.C.1",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "calculation",
+          "quiz",
+          "case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_3_2_ecg_time_match",
+          "foundations_3_2_four_step_order",
+          "foundations_3_2_rate_calculation_practice",
+          "foundations_3_2_clinical_scenarios",
+          "foundations_3_2_knowledge_check"
+        ],
+        "estimatedMinutes": 18,
+        "notes": "Performs ECG/rhythm analysis including intervals, rate, and rhythm features."
+      },
+      {
+        "outlineId": "BOK-I.D.1",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "calculation",
+          "quiz",
+          "case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_3_2_rate_calculation_practice",
+          "foundations_3_2_sinus_rhythm_match",
+          "foundations_3_2_atrial_rhythm_features",
+          "foundations_3_2_deadly_rhythm_intervention",
+          "foundations_3_2_knowledge_check"
+        ],
+        "estimatedMinutes": 20,
+        "notes": "Interprets sinus, atrial, SVT, VT, VFib, and asystole patterns."
+      },
+      {
+        "outlineId": "BOK-I.E.9",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_3_2_clinical_scenarios",
+          "foundations_3_2_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Recognizes when ECG is needed for rhythm disturbance or cardiac arrest scenarios."
+      },
+      {
+        "outlineId": "BOK-II.A.21",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "instruction",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_2_clinical_scenarios"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Uses cardiac monitoring as part of noninvasive monitoring and patient safety."
+      },
+      {
+        "outlineId": "BOK-III.E.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_3_2_deadly_rhythm_intervention",
+          "foundations_3_2_rhythm_intervention_match",
+          "foundations_3_2_knowledge_check"
+        ],
+        "estimatedMinutes": 9,
+        "notes": "Selects appropriate escalation for bradycardia, tachycardia, shockable, and non-shockable rhythms."
+      },
+      {
+        "outlineId": "BOK-III.G.1",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_3_2_deadly_rhythm_intervention",
+          "foundations_3_2_clinical_scenarios",
+          "foundations_3_2_knowledge_check"
+        ],
+        "estimatedMinutes": 10,
+        "notes": "Recognizes life-threatening rhythms requiring emergency response."
+      },
+      {
+        "outlineId": "BOK-III.H.9",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "case",
+          "knowledge-check"
+        ],
+        "interactionIds": [
+          "foundations_3_2_deadly_rhythm_intervention",
+          "foundations_3_2_rhythm_intervention_match",
+          "foundations_3_2_knowledge_check"
+        ],
+        "estimatedMinutes": 7,
+        "notes": "Differentiates defibrillation from synchronized cardioversion in scenarios."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Cardiopulmonary emergencies",
+        "patientConditionType": "Rhythm disturbance or cardiac arrest",
+        "conditionTags": [
+          "bradycardia",
+          "tachycardia",
+          "SVT",
+          "VT",
+          "VFib",
+          "asystole",
+          "pulseless rhythms"
+        ],
+        "clinicalJudgmentType": [
+          "Recognize cues",
+          "Analyze cues",
+          "Prioritize hypotheses",
+          "Take action",
+          "Evaluate outcomes"
+        ],
+        "setting": [
+          "Emergency department",
+          "ICU",
+          "General acute care",
+          "Procedural areas"
+        ]
+      },
+      {
+        "patientConditionCategory": "Monitoring and diagnostics",
+        "patientConditionType": "ECG rhythm interpretation",
+        "conditionTags": [
+          "PQRST",
+          "rate calculation",
+          "interval measurement",
+          "atrial rhythms",
+          "ventricular rhythms"
+        ],
+        "clinicalJudgmentType": [
+          "Recognize cues",
+          "Analyze cues"
+        ],
+        "setting": [
+          "Inpatient",
+          "Emergency",
+          "Critical care"
+        ]
+      }
+    ],
+    "sourceFile": "Foundations_3_2_ECG_Interpretation_Cardiac_Rhythm_Analysis.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "foundations-procedures-diagnostics",
+    "moduleTitle": "Procedures, Diagnostics, and Advanced Interpretation",
+    "lessonId": "foundations_3_3",
+    "lessonTitle": "Anion Gap, Bicarbonate Gap & Mixed Acid-Base Disorders",
+    "displayTitle": "Foundations 3.3: Anion Gap, Bicarbonate Gap & Mixed Acid-Base Disorders",
+    "href": "/foundations/Foundations_3_3_Anion_Gap_Mixed_Acid_Base_Disorders",
+    "url": "/foundations/Foundations_3_3_Anion_Gap_Mixed_Acid_Base_Disorders",
+    "estimatedMinutes": 65,
+    "patientAge": [
+      "Adult",
+      "Pediatric concepts when clinically applicable"
+    ],
+    "setting": [
+      "Emergency department",
+      "intensive care",
+      "acute care",
+      "and board-style case scenarios"
+    ],
+    "topics": [
+      "base excess",
+      "lactate",
+      "anion gap",
+      "bicarbonate gap",
+      "delta gap",
+      "anion gap metabolic acidosis",
+      "non-anion gap metabolic acidosis",
+      "DKA",
+      "alcohol ketoacidosis",
+      "starvation ketoacidosis",
+      "lactic acidosis",
+      "mixed acid-base disorders",
+      "ABG interpretation"
+    ],
+    "activityTypes": [
+      "calculation",
+      "flashcards",
+      "guided_case",
+      "knowledge_check",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "foundations_3_3_overview_video",
+        "type": "video",
+        "title": "Lesson Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_3_lactate_type_match",
+        "type": "sort",
+        "title": "Lactate Type Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_3_agma_nagma_sort",
+        "type": "sort",
+        "title": "AGMA vs NAGMA Sort",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_3_anion_gap_calculation",
+        "type": "calculation",
+        "title": "Anion Gap Calculation Practice",
+        "required": true,
+        "estimatedMinutes": 7
+      },
+      {
+        "id": "foundations_3_3_agma_cause_match",
+        "type": "sort",
+        "title": "AGMA Cause Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_3_bicarbonate_gap_calculation",
+        "type": "calculation",
+        "title": "Bicarbonate Gap Step-by-Step",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "foundations_3_3_mixed_disorder_match",
+        "type": "sort",
+        "title": "Mixed Disorder Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_3_unfolding_case",
+        "type": "guided_case",
+        "title": "Anion Gap Unfolding Case",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "foundations_3_3_assignment_practice",
+        "type": "sort",
+        "title": "Assignment Practice",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_3_3_knowledge_check",
+        "type": "knowledge_check",
+        "title": "Knowledge Check",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "foundations_3_3_glossary_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Mastery Deck",
+        "required": false,
+        "estimatedMinutes": 5
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.2",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "calculation",
+          "guided_case",
+          "knowledge_check"
+        ],
+        "interactionIds": [
+          "foundations_3_3_lactate_type_match",
+          "foundations_3_3_anion_gap_calculation",
+          "foundations_3_3_unfolding_case",
+          "foundations_3_3_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Reviews lab values related to metabolic status, lactate, and acid-base interpretation."
+      },
+      {
+        "outlineId": "BOK-I.A.8",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided_case",
+          "knowledge_check"
+        ],
+        "interactionIds": [
+          "foundations_3_3_unfolding_case",
+          "foundations_3_3_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Integrates history, clinical findings, and diagnostic data to recognize acid-base disorders."
+      },
+      {
+        "outlineId": "BOK-I.C.7",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "calculation",
+          "guided_case",
+          "knowledge_check"
+        ],
+        "interactionIds": [
+          "foundations_3_3_anion_gap_calculation",
+          "foundations_3_3_bicarbonate_gap_calculation",
+          "foundations_3_3_unfolding_case",
+          "foundations_3_3_knowledge_check"
+        ],
+        "estimatedMinutes": 18,
+        "notes": "Calculates anion gap, delta gap, and bicarbonate gap."
+      },
+      {
+        "outlineId": "BOK-I.D.5",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "calculation",
+          "guided_case",
+          "knowledge_check"
+        ],
+        "interactionIds": [
+          "foundations_3_3_agma_nagma_sort",
+          "foundations_3_3_mixed_disorder_match",
+          "foundations_3_3_unfolding_case",
+          "foundations_3_3_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Interprets acid-base disorders and mixed metabolic/respiratory patterns."
+      },
+      {
+        "outlineId": "BOK-I.D.7",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "calculation",
+          "guided_case",
+          "knowledge_check"
+        ],
+        "interactionIds": [
+          "foundations_3_3_anion_gap_calculation",
+          "foundations_3_3_bicarbonate_gap_calculation",
+          "foundations_3_3_knowledge_check"
+        ],
+        "estimatedMinutes": 14,
+        "notes": "Applies cardiopulmonary and acid-base calculations to identify mixed disorders."
+      },
+      {
+        "outlineId": "BOK-I.E.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "calculation"
+        ],
+        "interactionIds": [
+          "foundations_3_3_lactate_type_match",
+          "foundations_3_3_anion_gap_calculation"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Uses laboratory tests to explain metabolic acidosis and lactate elevation."
+      },
+      {
+        "outlineId": "BOK-III.E.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "guided_case",
+          "knowledge_check"
+        ],
+        "interactionIds": [
+          "foundations_3_3_unfolding_case",
+          "foundations_3_3_knowledge_check"
+        ],
+        "estimatedMinutes": 6,
+        "notes": "Prioritizes treatment considerations based on acid-base severity and likely cause."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Acid-base and metabolic disorders",
+        "patientConditionType": "Metabolic acidosis, mixed acid-base disorders, and elevated lactate",
+        "conditionTags": [
+          "AGMA",
+          "NAGMA",
+          "DKA",
+          "AKA",
+          "SKA",
+          "lactic acidosis",
+          "mixed acid-base disorder"
+        ],
+        "clinicalJudgmentType": "Information Gathering and Decision Making",
+        "setting": "Emergency department, intensive care, acute care, and board-style case scenarios"
+      }
+    ],
+    "sourceFile": "Foundations_3_3_Anion_Gap_Mixed_Acid_Base_Disorders.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
+  },
+  {
+    "courseId": "foundations",
+    "courseTitle": "PulmoCore Foundations of Respiratory Care",
+    "moduleId": "foundations-clinical-systems-professional-practice",
+    "moduleTitle": "Clinical Systems, Ethics, and Professional Practice",
+    "lessonId": "foundations_3_4",
+    "lessonTitle": "Nutrition, Ethics & Electronic Medical Records",
+    "displayTitle": "Foundations 3.4: Nutrition, Ethics & Electronic Medical Records",
+    "href": "/foundations/Foundations_3_4_Nutrition_Ethics_Electronic_Medical_Records",
+    "url": "/foundations/Foundations_3_4_Nutrition_Ethics_Electronic_Medical_Records",
+    "estimatedMinutes": 65,
+    "patientAge": [
+      "Adult",
+      "Older adult"
+    ],
+    "setting": [
+      "Hospital",
+      "outpatient",
+      "and post-acute care",
+      "All respiratory care settings"
+    ],
+    "topics": [
+      "cardiac nutrition",
+      "COPD nutrition",
+      "malnutrition",
+      "dyspnea and eating",
+      "macronutrients and CO2 production",
+      "key nutrients",
+      "AARC Code of Ethics",
+      "scope of practice",
+      "HIPAA",
+      "EMR vs EHR",
+      "patient verification",
+      "documentation ethics"
+    ],
+    "activityTypes": [
+      "case",
+      "flashcards",
+      "quiz",
+      "sequence",
+      "sort",
+      "video"
+    ],
+    "activities": [
+      {
+        "id": "foundations_3_4_overview_video",
+        "type": "video",
+        "title": "Lesson Overview Video",
+        "required": false,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_4_cardiac_diet_match",
+        "type": "sort",
+        "title": "Cardiac Diet Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_4_copd_eating_strategy_sort",
+        "type": "sort",
+        "title": "COPD Eating Strategy Sort",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_3_4_nutrient_function_match",
+        "type": "sort",
+        "title": "Nutrient-Function Match",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_4_nutrition_signs_check",
+        "type": "quiz",
+        "title": "Nutrition Signs Check",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "foundations_3_4_ethics_principle_match",
+        "type": "sort",
+        "title": "Ethics Principle Match",
+        "required": true,
+        "estimatedMinutes": 6
+      },
+      {
+        "id": "foundations_3_4_ethics_scenario_check",
+        "type": "quiz",
+        "title": "Ethics Scenario Check",
+        "required": true,
+        "estimatedMinutes": 4
+      },
+      {
+        "id": "foundations_3_4_emr_ehr_check",
+        "type": "quiz",
+        "title": "EMR vs EHR Check",
+        "required": true,
+        "estimatedMinutes": 3
+      },
+      {
+        "id": "foundations_3_4_hipaa_violations_sort",
+        "type": "sort",
+        "title": "HIPAA Violations Sort",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_4_verification_step_order",
+        "type": "sequence",
+        "title": "Verification Step Order",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_4_unfolding_case",
+        "type": "case",
+        "title": "3.4 Unfolding Case",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "foundations_3_4_assignment_practice",
+        "type": "sort",
+        "title": "3.4 Assignment Practice",
+        "required": true,
+        "estimatedMinutes": 5
+      },
+      {
+        "id": "foundations_3_4_knowledge_check",
+        "type": "quiz",
+        "title": "Foundations 3.4 Knowledge Check",
+        "required": true,
+        "estimatedMinutes": 8
+      },
+      {
+        "id": "foundations_3_4_glossary_flashcards",
+        "type": "flashcards",
+        "title": "Glossary Flashcard Mastery Deck",
+        "required": false,
+        "estimatedMinutes": 6
+      }
+    ],
+    "nbrcAlignment": [
+      {
+        "outlineId": "BOK-I.A.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "quiz",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_4_nutrition_signs_check",
+          "foundations_3_4_unfolding_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Reviews medical record information, active orders, and nutrition-related patient data."
+      },
+      {
+        "outlineId": "BOK-I.A.2",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "quiz",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_4_nutrition_signs_check",
+          "foundations_3_4_unfolding_case"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Identifies clinical signs related to fluid balance, malnutrition, and respiratory status."
+      },
+      {
+        "outlineId": "BOK-I.B.1",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_4_copd_eating_strategy_sort",
+          "foundations_3_4_nutrition_signs_check",
+          "foundations_3_4_unfolding_case"
+        ],
+        "estimatedMinutes": 8,
+        "notes": "Evaluates nutrition-related findings and dyspnea/eating strategies."
+      },
+      {
+        "outlineId": "BOK-II.B.1",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "sequence",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_4_hipaa_violations_sort",
+          "foundations_3_4_verification_step_order",
+          "foundations_3_4_unfolding_case",
+          "foundations_3_4_knowledge_check"
+        ],
+        "estimatedMinutes": 12,
+        "notes": "Applies HIPAA privacy, confidentiality, patient verification, and safe documentation principles."
+      },
+      {
+        "outlineId": "BOK-II.B.4",
+        "coverageLevel": "reinforced",
+        "evidenceType": [
+          "quiz",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_4_emr_ehr_check",
+          "foundations_3_4_unfolding_case"
+        ],
+        "estimatedMinutes": 4,
+        "notes": "Connects EHR/EMR documentation accuracy and audit trail concepts to quality and safety."
+      },
+      {
+        "outlineId": "BOK-III.E.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "case",
+          "quiz"
+        ],
+        "interactionIds": [
+          "foundations_3_4_unfolding_case",
+          "foundations_3_4_knowledge_check"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Escalates concerns related to nutrition, aspiration risk, fluid overload, and deterioration."
+      },
+      {
+        "outlineId": "BOK-III.I.1",
+        "coverageLevel": "assessed",
+        "evidenceType": [
+          "sort",
+          "quiz",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_4_ethics_principle_match",
+          "foundations_3_4_ethics_scenario_check",
+          "foundations_3_4_unfolding_case"
+        ],
+        "estimatedMinutes": 10,
+        "notes": "Covers ethics, scope of practice, interdisciplinary responsibilities, and documentation ethics."
+      },
+      {
+        "outlineId": "BOK-III.I.2",
+        "coverageLevel": "applied",
+        "evidenceType": [
+          "sort",
+          "case"
+        ],
+        "interactionIds": [
+          "foundations_3_4_copd_eating_strategy_sort",
+          "foundations_3_4_unfolding_case"
+        ],
+        "estimatedMinutes": 5,
+        "notes": "Supports patient-facing nutrition strategies and safety communication within the care plan."
+      }
+    ],
+    "dcjAlignment": [
+      {
+        "patientConditionCategory": "Adult",
+        "patientConditionType": "Cardiopulmonary disease with nutrition and safety needs",
+        "conditionTags": [
+          "CHF",
+          "CAD",
+          "COPD",
+          "malnutrition",
+          "fluid overload",
+          "hypercapnia",
+          "aspiration risk"
+        ],
+        "clinicalJudgmentType": "Information Gathering",
+        "setting": "Hospital, outpatient, and post-acute care"
+      },
+      {
+        "patientConditionCategory": "Adult",
+        "patientConditionType": "Patient safety, ethics, privacy, and documentation",
+        "conditionTags": [
+          "HIPAA",
+          "patient verification",
+          "scope of practice",
+          "documentation accuracy",
+          "EHR"
+        ],
+        "clinicalJudgmentType": "Decision Making",
+        "setting": "All respiratory care settings"
+      }
+    ],
+    "sourceFile": "Foundations_3_4_Nutrition_Ethics_Electronic_Medical_Records.html",
+    "mappingStatus": "first-pass",
+    "mappingNotes": "First-pass exact NBRC BOK mapping generated from embedded lesson metadata. Review before accreditation reporting."
   }
 ];
+
+  const COURSE_ID_ALIASES = {
+    "pulmocore-assessment": "pulmonary-assessment",
+    "pulmocore-pulmonary-assessment": "pulmonary-assessment",
+    "foundations-of-respiratory-care": "foundations",
+    "pulmocore-foundations": "foundations",
+    "pulmocore-physiology": "respiratory-physiology"
+  };
+
+  const COURSE_PATH_PREFIXES = {
+    "pulmonary-assessment": "/assessment",
+    "foundations": "/foundations",
+    "respiratory-physiology": "/physiology",
+    "respiratory-diseases": ""
+  };
+
+  function cleanFilename(value) {
+    return String(value || "")
+      .trim()
+      .replace(/^https?:\/\/[^/]+/i, "")
+      .replace(/\.html$/i, "")
+      .replace(/^\/+/, "")
+      .split("/")
+      .pop();
+  }
+
+  function normalizeHref(courseId, href) {
+    const normalizedCourseId = COURSE_ID_ALIASES[courseId] || courseId;
+    const prefix = COURSE_PATH_PREFIXES[normalizedCourseId] ?? "";
+    const filename = cleanFilename(href);
+    return (prefix + "/" + filename).replace(/\/+/g, "/");
+  }
+
+  REGISTRY.forEach(lesson => {
+    lesson.courseId = COURSE_ID_ALIASES[lesson.courseId] || lesson.courseId;
+    lesson.href = normalizeHref(lesson.courseId, lesson.href || lesson.url || lesson.path || lesson.sourceFile || lesson.lessonId);
+    lesson.url = lesson.href;
+  });
 
   function getAllLessons() {
     return REGISTRY.slice();
@@ -4640,20 +7818,19 @@
   }
 
   function getLessonsByCourse(courseId) {
-    return REGISTRY.filter(lesson => lesson.courseId === courseId);
+    const normalizedCourseId = COURSE_ID_ALIASES[courseId] || courseId;
+    return REGISTRY.filter(lesson => lesson.courseId === normalizedCourseId);
   }
 
   function getLessonsByOutlineId(outlineId) {
     return REGISTRY.filter(lesson =>
-      Array.isArray(lesson.nbrcAlignment) &&
-      lesson.nbrcAlignment.some(entry => entry.outlineId === outlineId)
+      (lesson.nbrcAlignment || []).some(entry => entry.outlineId === outlineId)
     );
   }
 
   function getAlignmentRows() {
     return REGISTRY.flatMap(lesson =>
       (lesson.nbrcAlignment || []).map(entry => ({
-        ...entry,
         courseId: lesson.courseId,
         courseTitle: lesson.courseTitle,
         moduleId: lesson.moduleId,
@@ -4662,12 +7839,13 @@
         lessonTitle: lesson.lessonTitle,
         displayTitle: lesson.displayTitle,
         href: lesson.href,
-        lessonEstimatedMinutes: lesson.estimatedMinutes,
-        patientAge: lesson.patientAge || [],
-        setting: lesson.setting || [],
-        topics: lesson.topics || [],
-        activityTypes: lesson.activityTypes || [],
-        mappingStatus: lesson.mappingStatus || "unknown"
+        outlineId: entry.outlineId,
+        coverageLevel: entry.coverageLevel,
+        evidenceType: entry.evidenceType || [],
+        interactionIds: entry.interactionIds || [],
+        estimatedMinutes: entry.estimatedMinutes || 0,
+        notes: entry.notes || "",
+        mappingStatus: lesson.mappingStatus || "first-pass"
       }))
     );
   }
@@ -4697,8 +7875,11 @@
           entry.coverageLevel === "assessed" ||
           (Array.isArray(entry.evidenceType) && (
             entry.evidenceType.includes("knowledge-check") ||
+            entry.evidenceType.includes("knowledge_check") ||
             entry.evidenceType.includes("case-study") ||
+            entry.evidenceType.includes("case") ||
             entry.evidenceType.includes("guided-case") ||
+            entry.evidenceType.includes("guided_case") ||
             entry.evidenceType.includes("calculation")
           ))
         ) {
@@ -4766,8 +7947,11 @@
     const assessed = entries.some(entry =>
       entry.coverageLevel === "assessed" ||
       entry.evidenceType.includes("knowledge-check") ||
+      entry.evidenceType.includes("knowledge_check") ||
       entry.evidenceType.includes("case-study") ||
+      entry.evidenceType.includes("case") ||
       entry.evidenceType.includes("guided-case") ||
+      entry.evidenceType.includes("guided_case") ||
       entry.evidenceType.includes("calculation")
     );
 
