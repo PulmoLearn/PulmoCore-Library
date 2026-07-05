@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NBRC Registry Test</title>
+
+  <script src="/assets/nbrc-outline-2027.js"></script>
+  <script src="/assets/lesson-registry.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+      line-height: 1.5;
+      background: #f4fafc;
+      color: #0B1F33;
+    }
+
+    pre {
+      background: #fff;
+      border: 1px solid #d7e6ef;
+      border-radius: 12px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #d7e6ef;
+      background: #1CA7A8;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>NBRC Registry Test</h1>
+  <p>This page confirms that <code>nbrc-outline-2027.js</code> and <code>lesson-registry.js</code> are loading correctly.</p>
+
+  <button onclick="runStatsTest()">Registry Stats</button>
+  <button onclick="runOutlineTest()">Outline Lookup: BOK-I.D.7</button>
+  <button onclick="runCoverageTest()">Coverage: BOK-I.D.7</button>
+  <button onclick="runInvalidMappingTest()">Invalid Mapping Check</button>
+  <button onclick="runSearchTest()">Search: P/F ratio</button>
+
+  <h2>Output</h2>
+  <pre id="output">Click a button to run a test.</pre>
+
+  <script>
+    function showResult(result) {
+      document.getElementById("output").textContent = JSON.stringify(result, null, 2);
+      console.log(result);
+    }
+
+    function runStatsTest() {
+      showResult(PULMO_LESSON_REGISTRY_HELPERS.getRegistryStats());
+    }
+
+    function runOutlineTest() {
+      showResult(NBRC_RT_DCO_2027_HELPERS.getBreadthItem("BOK-I.D.7"));
+    }
+
+    function runCoverageTest() {
+      showResult(PULMO_LESSON_REGISTRY_HELPERS.getCoverageByOutlineId("BOK-I.D.7"));
+    }
+
+    function runInvalidMappingTest() {
+      const invalidRows = PULMO_LESSON_REGISTRY_HELPERS
+        .getAlignmentRows()
+        .filter(row => !NBRC_RT_DCO_2027_HELPERS.getBreadthItem(row.outlineId));
+
+      showResult({
+        invalidCount: invalidRows.length,
+        invalidRows
+      });
+    }
+
+    function runSearchTest() {
+      showResult(PULMO_LESSON_REGISTRY_HELPERS.searchLessons("P/F ratio"));
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const checks = {
+        outlineLoaded: typeof NBRC_RT_DCO_2027 !== "undefined",
+        outlineHelpersLoaded: typeof NBRC_RT_DCO_2027_HELPERS !== "undefined",
+        registryLoaded: typeof PULMO_LESSON_REGISTRY !== "undefined",
+        registryHelpersLoaded: typeof PULMO_LESSON_REGISTRY_HELPERS !== "undefined"
+      };
+
+      showResult(checks);
+    });
+  </script>
+</body>
+</html>
