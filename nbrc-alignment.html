@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulmoCore | NBRC 2027 Alignment Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="/assets/nbrc-outline-2027.js"></script>
+  <script src="/assets/lesson-registry.js"></script>
+  <style>
+    :root {
+      --core-navy: #0B1F33;
+      --core-navy-2: #102A43;
+      --pulmo-teal: #1CA7A8;
+      --pulmo-teal-dark: #128486;
+      --oxygen-blue: #4BA3F2;
+      --mist-blue: #F4FAFC;
+      --airway-mint: #DDF7F2;
+      --clinical-amber: #F4B860;
+      --alert-coral: #E85D5D;
+      --white: #FFFFFF;
+      --slate: #415A77;
+      --soft-border: #D7E6EF;
+      --shadow: 0 14px 35px rgba(11, 31, 51, 0.10);
+      --shadow-soft: 0 8px 20px rgba(11, 31, 51, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --font-heading: "Montserrat", "Inter", Arial, sans-serif;
+      --font-body: "Atkinson Hyperlegible", "Inter", Arial, sans-serif;
+      --font-data: "IBM Plex Mono", "Roboto Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; max-width: 100%; overflow-x: hidden; }
+    body { background: var(--mist-blue); color: var(--core-navy); font-family: var(--font-body); line-height: 1.5; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--clinical-amber);
+      outline-offset: 3px;
+    }
+    a { color: inherit; }
+
+    .page-shell { max-width: 1440px; margin: 0 auto; min-height: 100vh; background: linear-gradient(180deg, #fff 0%, #f7fbfd 100%); }
+    .top-nav { background: var(--core-navy); color: var(--white); padding: 18px clamp(18px, 4vw, 52px); display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 6px 18px rgba(11,31,51,.18); }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .brand-mark { width: 56px; height: 56px; border: 2px solid rgba(255,255,255,.55); border-radius: 18px; display: grid; place-items: center; background: rgba(28,167,168,.12); flex: 0 0 auto; }
+    .brand-mark svg { width: 40px; height: 40px; }
+    .brand-name { font-family: var(--font-heading); font-size: clamp(1.45rem, 2vw, 2.25rem); font-weight: 800; line-height: 1; letter-spacing: -.04em; }
+    .brand-name span { color: var(--pulmo-teal); }
+    .brand-tagline { font-size: .82rem; opacity: .9; margin-top: 4px; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav-link { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 9px 13px; border-radius: 14px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); color: #fff; text-decoration: none; font-weight: 800; }
+    .nav-link:hover { background: rgba(255,255,255,.16); }
+
+    main { padding: 32px clamp(20px, 4vw, 56px) 70px; }
+    .hero { border-radius: var(--radius-lg); background: var(--white); border: 1px solid var(--soft-border); border-top: 10px solid var(--pulmo-teal); box-shadow: var(--shadow-soft); padding: clamp(22px, 4vw, 34px); }
+    .eyebrow { display: inline-block; color: var(--pulmo-teal); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; margin-bottom: 8px; }
+    h1, h2, h3 { font-family: var(--font-heading); letter-spacing: -.035em; line-height: 1.15; margin: 0; }
+    h1 { font-size: clamp(2.2rem, 5vw, 4rem); }
+    h2 { font-size: clamp(1.65rem, 3vw, 2.5rem); }
+    h3 { font-size: 1.2rem; }
+    .hero p { max-width: 980px; color: #243b55; font-size: 1.08rem; }
+
+    .status-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .status-pill { border-radius: 999px; padding: 8px 12px; background: var(--airway-mint); font-weight: 800; color: var(--core-navy); }
+    .status-pill.warn { background: #FFF4DF; color: #7A4B00; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
+    .summary-card { background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); padding: 16px; min-width: 0; }
+    .summary-label { color: var(--slate); font-weight: 800; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+    .summary-value { font-family: var(--font-heading); font-size: clamp(1.7rem, 3vw, 2.35rem); font-weight: 800; margin-top: 4px; }
+
+    .panel { margin-top: 18px; background: var(--white); border: 1px solid var(--soft-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); padding: 20px; }
+    .filter-grid { display: grid; grid-template-columns: 1.3fr repeat(4, minmax(150px, .75fr)); gap: 12px; align-items: end; }
+    .field label { display: block; font-weight: 800; color: var(--core-navy); margin-bottom: 6px; font-size: .92rem; }
+    .field input, .field select { width: 100%; border: 1px solid var(--soft-border); border-radius: 12px; padding: 11px 12px; background: #fff; color: var(--core-navy); min-height: 44px; }
+    .filter-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+    .btn { border: 1px solid var(--soft-border); border-radius: 999px; background: #fff; color: var(--core-navy); padding: 9px 13px; font-weight: 800; }
+    .btn.primary { background: var(--pulmo-teal); color: #fff; border-color: var(--pulmo-teal); }
+    .btn:hover { transform: translateY(-1px); }
+
+    .tab-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .tab-button { border: 1px solid var(--soft-border); border-radius: 999px; background: #fff; color: var(--core-navy); padding: 10px 14px; font-weight: 800; }
+    .tab-button.active { background: var(--core-navy); color: #fff; border-color: var(--core-navy); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .section-header { display: flex; gap: 12px; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; margin-bottom: 14px; }
+    .section-header p { margin: 6px 0 0; color: var(--slate); }
+    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 9px; font-size: .78rem; font-weight: 800; white-space: nowrap; }
+    .badge.gap { background: #FDE9E9; color: #8A1C1C; }
+    .badge.covered { background: #E6F3FF; color: #18344E; }
+    .badge.assessed { background: var(--airway-mint); color: var(--core-navy); }
+    .badge.first-pass { background: #FFF4DF; color: #7A4B00; }
+    .badge.introduced { background: #EEF4F8; color: var(--slate); }
+    .badge.reinforced { background: #E6F3FF; color: #18344E; }
+    .badge.applied { background: #DDF7F2; color: #0B1F33; }
+
+    .table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--soft-border); border-radius: var(--radius-md); }
+    table { width: 100%; min-width: 980px; border-collapse: collapse; background: #fff; }
+    th, td { text-align: left; vertical-align: top; padding: 11px 12px; border-bottom: 1px solid var(--soft-border); }
+    th { background: #E5F0F6; color: var(--core-navy); font-weight: 800; position: sticky; top: 0; z-index: 1; }
+    td { color: #243b55; }
+    tr:last-child td { border-bottom: 0; }
+    .mono { font-family: var(--font-data); font-size: .86rem; }
+    .lesson-link { color: var(--core-navy); font-weight: 800; text-decoration: none; }
+    .lesson-link:hover { color: var(--pulmo-teal-dark); text-decoration: underline; }
+    .chip-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { border-radius: 999px; background: #EEF4F8; color: var(--slate); font-weight: 800; padding: 3px 8px; font-size: .76rem; }
+
+    details.domain { border: 1px solid var(--soft-border); border-radius: var(--radius-lg); overflow: hidden; background: #fff; box-shadow: var(--shadow-soft); margin-bottom: 14px; }
+    details.domain > summary { list-style: none; cursor: pointer; padding: 18px 20px; display: flex; justify-content: space-between; gap: 12px; align-items: center; font-family: var(--font-heading); font-weight: 800; }
+    details.domain > summary::-webkit-details-marker { display: none; }
+    details.domain > summary::after { content: "+"; color: var(--pulmo-teal); font-size: 1.45rem; }
+    details.domain[open] > summary::after { content: "–"; }
+    .domain-body { padding: 0 18px 18px; display: grid; gap: 12px; }
+    .outline-item { border: 1px solid var(--soft-border); border-radius: var(--radius-md); padding: 14px; background: #FAFDFF; }
+    .outline-title { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+    .outline-title strong { color: var(--core-navy); }
+    .lesson-mini-list { display: grid; gap: 8px; margin-top: 10px; }
+    .lesson-mini { background: #fff; border: 1px solid var(--soft-border); border-radius: 12px; padding: 10px; }
+    .lesson-mini-title { display: flex; gap: 8px; justify-content: space-between; flex-wrap: wrap; font-weight: 800; }
+    .muted { color: var(--slate); }
+    .small { font-size: .88rem; }
+
+    .gap-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .gap-card { border: 1px solid #F2B5B5; background: #FFF8F8; border-radius: var(--radius-md); padding: 12px; }
+    .empty-state { border-radius: var(--radius-md); padding: 18px; background: var(--airway-mint); font-weight: 800; }
+    .error-state { border-radius: var(--radius-md); padding: 18px; background: #FDE9E9; color: #8A1C1C; font-weight: 800; }
+
+    @media (max-width: 1180px) {
+      .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .field.search { grid-column: 1 / -1; }
+    }
+    @media (max-width: 760px) {
+      .top-nav { align-items: flex-start; flex-direction: column; }
+      .nav-actions { justify-content: flex-start; }
+      main { padding: 20px 14px 56px; }
+      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .filter-grid { grid-template-columns: 1fr; }
+      .gap-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .summary-grid { grid-template-columns: 1fr; }
+      .brand-mark { width: 48px; height: 48px; border-radius: 14px; }
+      .brand-tagline { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-nav">
+      <div class="brand" aria-label="PulmoCore brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg fill="none" role="img" viewBox="0 0 64 64">
+            <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+            <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+            <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-linecap="round" stroke-width="3"></path>
+            <circle cx="32" cy="31" fill="#1CA7A8" r="4"></circle>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">Pulmo<span>Core</span></div>
+          <div class="brand-tagline">NBRC 2027 curriculum alignment dashboard</div>
+        </div>
+      </div>
+      <nav class="nav-actions" aria-label="Dashboard navigation">
+        <a class="nav-link" href="/dashboard.html">Dashboard</a>
+        <a class="nav-link" href="/glossary.html">Glossary</a>
+        <a class="nav-link" href="/nbrc-test.html">Registry Test</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="eyebrow">Program Director View · Static Proof of Concept</span>
+        <h1>NBRC 2027 Alignment Dashboard</h1>
+        <p>This dashboard reads the canonical NBRC 2027 outline and the PulmoCore lesson registry to show which outline items are covered, assessed, and still unmapped. The current registry is a starter proof of concept and should be treated as first-pass alignment until each lesson is reviewed line by line.</p>
+        <div class="status-strip" id="loadStatus">
+          <span class="status-pill warn">Loading registry...</span>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Registry summary" id="summaryGrid"></section>
+
+      <section class="panel" aria-label="Filters">
+        <div class="section-header">
+          <div>
+            <h2>Filter Alignment Data</h2>
+            <p>Search by lesson, topic, outline ID, course, activity type, or coverage level.</p>
+          </div>
+          <span class="badge first-pass">First-pass registry</span>
+        </div>
+        <div class="filter-grid">
+          <div class="field search">
+            <label for="searchInput">Search</label>
+            <input id="searchInput" type="search" placeholder="Try P/F ratio, spirometry, asthma, BOK-I.D.7..." />
+          </div>
+          <div class="field">
+            <label for="courseFilter">Course</label>
+            <select id="courseFilter"><option value="">All courses</option></select>
+          </div>
+          <div class="field">
+            <label for="domainFilter">NBRC Domain</label>
+            <select id="domainFilter"><option value="">All domains</option></select>
+          </div>
+          <div class="field">
+            <label for="coverageFilter">Coverage</label>
+            <select id="coverageFilter">
+              <option value="">All coverage</option>
+              <option value="introduced">Introduced</option>
+              <option value="reinforced">Reinforced</option>
+              <option value="applied">Applied</option>
+              <option value="assessed">Assessed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="activityFilter">Activity Type</label>
+            <select id="activityFilter"><option value="">All activity types</option></select>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="btn primary" id="resetFilters" type="button">Reset Filters</button>
+          <button class="btn" id="showGapsOnly" type="button">Show Gaps</button>
+          <button class="btn" id="showAssessedOnly" type="button">Show Assessed</button>
+        </div>
+      </section>
+
+      <div class="tab-row" role="tablist" aria-label="Dashboard views">
+        <button class="tab-button active" data-tab="outline" role="tab" type="button">Outline Coverage</button>
+        <button class="tab-button" data-tab="matrix" role="tab" type="button">Lesson Matrix</button>
+        <button class="tab-button" data-tab="gaps" role="tab" type="button">Gap List</button>
+        <button class="tab-button" data-tab="lessons" role="tab" type="button">Lesson Cards</button>
+      </div>
+
+      <section class="panel tab-panel active" id="tab-outline">
+        <div class="section-header">
+          <div>
+            <h2>Expandable NBRC Outline Coverage</h2>
+            <p>Each line item shows whether it is currently covered by mapped lessons and whether the evidence reaches assessed level.</p>
+          </div>
+          <span class="badge" id="outlineCountBadge">0 items</span>
+        </div>
+        <div id="outlineView"></div>
+      </section>
+
+      <section class="panel tab-panel" id="tab-matrix">
+        <div class="section-header">
+          <div>
+            <h2>Lesson-to-Outline Matrix</h2>
+            <p>Filtered rows from every registry alignment entry.</p>
+          </div>
+          <span class="badge" id="matrixCountBadge">0 rows</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Outline ID</th>
+                <th>NBRC Line Item</th>
+                <th>Lesson</th>
+                <th>Course</th>
+                <th>Coverage</th>
+                <th>Evidence</th>
+                <th>Minutes</th>
+              </tr>
+            </thead>
+            <tbody id="matrixBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel tab-panel" id="tab-gaps">
+        <div class="section-header">
+          <div>
+            <h2>Unmapped NBRC Line Items</h2>
+            <p>These line items are not currently mapped in the starter registry. Some may be covered in lessons that have not been added yet.</p>
+          </div>
+          <span class="badge gap" id="gapCountBadge">0 gaps</span>
+        </div>
+        <div class="gap-grid" id="gapList"></div>
+      </section>
+
+      <section class="panel tab-panel" id="tab-lessons">
+        <div class="section-header">
+          <div>
+            <h2>Mapped Lesson Cards</h2>
+            <p>Quick view of lessons in the registry and their mapped outline item count.</p>
+          </div>
+          <span class="badge" id="lessonCountBadge">0 lessons</span>
+        </div>
+        <div class="gap-grid" id="lessonCards"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const state = {
+        search: "",
+        course: "",
+        domain: "",
+        coverage: "",
+        activity: "",
+        gapsOnly: false,
+        assessedOnly: false
+      };
+
+      const rank = { introduced: 1, reinforced: 2, applied: 3, assessed: 4 };
+
+      const els = {
+        loadStatus: document.getElementById("loadStatus"),
+        summaryGrid: document.getElementById("summaryGrid"),
+        searchInput: document.getElementById("searchInput"),
+        courseFilter: document.getElementById("courseFilter"),
+        domainFilter: document.getElementById("domainFilter"),
+        coverageFilter: document.getElementById("coverageFilter"),
+        activityFilter: document.getElementById("activityFilter"),
+        resetFilters: document.getElementById("resetFilters"),
+        showGapsOnly: document.getElementById("showGapsOnly"),
+        showAssessedOnly: document.getElementById("showAssessedOnly"),
+        outlineView: document.getElementById("outlineView"),
+        matrixBody: document.getElementById("matrixBody"),
+        gapList: document.getElementById("gapList"),
+        lessonCards: document.getElementById("lessonCards"),
+        outlineCountBadge: document.getElementById("outlineCountBadge"),
+        matrixCountBadge: document.getElementById("matrixCountBadge"),
+        gapCountBadge: document.getElementById("gapCountBadge"),
+        lessonCountBadge: document.getElementById("lessonCountBadge")
+      };
+
+      function requireData() {
+        return Boolean(
+          window.NBRC_RT_DCO_2027 &&
+          window.NBRC_RT_DCO_2027_HELPERS &&
+          window.PULMO_LESSON_REGISTRY &&
+          window.PULMO_LESSON_REGISTRY_HELPERS
+        );
+      }
+
+      function escapeHtml(value) {
+        return String(value == null ? "" : value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function badge(text, cls) {
+        return `<span class="badge ${escapeHtml(cls || "")}">${escapeHtml(text)}</span>`;
+      }
+
+      function chips(values, limit) {
+        const arr = Array.isArray(values) ? values.filter(Boolean) : [];
+        const shown = arr.slice(0, limit || 8);
+        const extra = arr.length - shown.length;
+        return `<div class="chip-list">${shown.map(v => `<span class="chip">${escapeHtml(v)}</span>`).join("")}${extra > 0 ? `<span class="chip">+${extra} more</span>` : ""}</div>`;
+      }
+
+      function getAllItems() {
+        return window.NBRC_RT_DCO_2027_HELPERS.flattenBreadthItems(window.NBRC_RT_DCO_2027);
+      }
+
+      function getLessons() {
+        return window.PULMO_LESSON_REGISTRY_HELPERS.getAllLessons();
+      }
+
+      function getRows() {
+        return window.PULMO_LESSON_REGISTRY_HELPERS.getAlignmentRows();
+      }
+
+      function getCoverage(outlineId) {
+        return window.PULMO_LESSON_REGISTRY_HELPERS.getCoverageByOutlineId(outlineId);
+      }
+
+      function getBestCoverage(entries) {
+        if (!entries || !entries.length) return "gap";
+        const best = entries.reduce((current, entry) => {
+          const level = entry.coverageLevel || "introduced";
+          return (rank[level] || 0) > (rank[current] || 0) ? level : current;
+        }, "introduced");
+        return best;
+      }
+
+      function isAssessed(entries) {
+        return (entries || []).some(entry =>
+          entry.coverageLevel === "assessed" ||
+          (entry.evidenceType || []).includes("knowledge-check") ||
+          (entry.evidenceType || []).includes("case-study") ||
+          (entry.evidenceType || []).includes("guided-case") ||
+          (entry.evidenceType || []).includes("calculation")
+        );
+      }
+
+      function itemSearchText(item, coverage) {
+        return [
+          item.id,
+          item.label,
+          item.domainId,
+          item.domainTitle,
+          item.sectionId,
+          item.sectionTitle,
+          ...(item.examples || []),
+          ...((coverage.entries || []).map(entry => [entry.lessonTitle, entry.courseTitle, entry.notes, ...(entry.evidenceType || [])].join(" ")))
+        ].join(" ").toLowerCase();
+      }
+
+      function passesItemFilters(item) {
+        const coverage = getCoverage(item.id);
+        const entries = coverage.entries || [];
+        const bestCoverage = getBestCoverage(entries);
+        const assessed = isAssessed(entries);
+        const search = state.search.trim().toLowerCase();
+
+        if (state.gapsOnly && entries.length > 0) return false;
+        if (state.assessedOnly && !assessed) return false;
+        if (state.domain && item.parentDomainId !== state.domain && item.domainId !== state.domain) return false;
+        if (state.coverage) {
+          if (state.coverage === "assessed" && !assessed) return false;
+          if (state.coverage !== "assessed" && bestCoverage !== state.coverage) return false;
+        }
+        if (state.course && !entries.some(entry => entry.courseId === state.course)) return false;
+        if (state.activity && !entries.some(entry => (entry.evidenceType || []).includes(state.activity))) return false;
+        if (search && !itemSearchText(item, coverage).includes(search)) return false;
+
+        return true;
+      }
+
+      function passesRowFilters(row) {
+        const item = window.NBRC_RT_DCO_2027_HELPERS.getBreadthItem(row.outlineId);
+        const search = state.search.trim().toLowerCase();
+        const searchable = [
+          row.outlineId,
+          item && item.label,
+          item && item.domainTitle,
+          item && item.sectionTitle,
+          row.lessonTitle,
+          row.courseTitle,
+          row.moduleTitle,
+          row.coverageLevel,
+          row.notes,
+          ...(row.evidenceType || []),
+          ...(row.topics || []),
+          ...(row.setting || [])
+        ].join(" ").toLowerCase();
+
+        if (state.gapsOnly) return false;
+        if (state.assessedOnly && row.coverageLevel !== "assessed" && !(row.evidenceType || []).some(t => ["knowledge-check", "case-study", "guided-case", "calculation"].includes(t))) return false;
+        if (state.course && row.courseId !== state.course) return false;
+        if (state.domain && item && item.parentDomainId !== state.domain && item.domainId !== state.domain) return false;
+        if (state.coverage && row.coverageLevel !== state.coverage) return false;
+        if (state.activity && !(row.evidenceType || []).includes(state.activity) && !(row.activityTypes || []).includes(state.activity)) return false;
+        if (search && !searchable.includes(search)) return false;
+        return true;
+      }
+
+      function populateFilters() {
+        const lessons = getLessons();
+        const rows = getRows();
+        const domains = window.NBRC_RT_DCO_2027.breadthOfKnowledge || [];
+        const courses = Array.from(new Map(lessons.map(l => [l.courseId, l.courseTitle || l.courseId])).entries()).sort((a, b) => a[1].localeCompare(b[1]));
+        const activityTypes = Array.from(new Set(rows.flatMap(row => [ ...(row.evidenceType || []), ...(row.activityTypes || []) ]))).filter(Boolean).sort();
+
+        els.courseFilter.innerHTML = '<option value="">All courses</option>' + courses.map(([id, title]) => `<option value="${escapeHtml(id)}">${escapeHtml(title)}</option>`).join("");
+        els.domainFilter.innerHTML = '<option value="">All domains</option>' + domains.map(domain => `<option value="${escapeHtml(domain.id)}">${escapeHtml(domain.domainId)}. ${escapeHtml(domain.title)}</option>`).join("");
+        els.activityFilter.innerHTML = '<option value="">All activity types</option>' + activityTypes.map(type => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("");
+      }
+
+      function renderStatus() {
+        const valid = getRows().filter(row => window.NBRC_RT_DCO_2027_HELPERS.getBreadthItem(row.outlineId));
+        const invalid = getRows().length - valid.length;
+        els.loadStatus.innerHTML = `
+          <span class="status-pill">Outline loaded</span>
+          <span class="status-pill">Registry loaded</span>
+          <span class="status-pill ${invalid ? 'warn' : ''}">Invalid mappings: ${invalid}</span>
+          <span class="status-pill warn">Starter registry · first-pass alignment</span>
+        `;
+      }
+
+      function renderSummary() {
+        const stats = window.PULMO_LESSON_REGISTRY_HELPERS.getRegistryStats();
+        const totalOutlineItems = getAllItems().length;
+        const gaps = totalOutlineItems - stats.outlineItemsCovered;
+        const cards = [
+          ["Lessons", stats.lessonCount],
+          ["Courses", stats.courseCount],
+          ["NBRC Items Covered", `${stats.outlineItemsCovered}/${totalOutlineItems}`],
+          ["Items Assessed", stats.outlineItemsAssessed],
+          ["Activities", stats.activityCount],
+          ["Mapped Hours", stats.estimatedHours]
+        ];
+        els.summaryGrid.innerHTML = cards.map(([label, value]) => `
+          <article class="summary-card">
+            <div class="summary-label">${escapeHtml(label)}</div>
+            <div class="summary-value">${escapeHtml(value)}</div>
+          </article>
+        `).join("");
+      }
+
+      function renderOutline() {
+        const domains = window.NBRC_RT_DCO_2027.breadthOfKnowledge || [];
+        let visibleCount = 0;
+
+        const html = domains.map(domain => {
+          const items = (domain.sections || []).flatMap(section =>
+            (section.items || []).map(item => ({
+              ...item,
+              parentDomainId: domain.id,
+              domainId: domain.domainId,
+              domainTitle: domain.title,
+              parentSectionId: section.id,
+              sectionId: section.sectionId,
+              sectionTitle: section.title
+            }))
+          ).filter(passesItemFilters);
+
+          visibleCount += items.length;
+          if (!items.length) return "";
+
+          const domainCovered = items.filter(item => getCoverage(item.id).lessonCount > 0).length;
+          const domainAssessed = items.filter(item => getCoverage(item.id).assessed).length;
+
+          return `
+            <details class="domain" open>
+              <summary>
+                <span>${escapeHtml(domain.domainId)}. ${escapeHtml(domain.title)}</span>
+                <span>${badge(`${domainCovered}/${items.length} covered`, domainCovered ? 'covered' : 'gap')} ${badge(`${domainAssessed} assessed`, domainAssessed ? 'assessed' : 'gap')}</span>
+              </summary>
+              <div class="domain-body">
+                ${items.map(item => renderOutlineItem(item)).join("")}
+              </div>
+            </details>
+          `;
+        }).join("");
+
+        els.outlineCountBadge.textContent = `${visibleCount} items`;
+        els.outlineView.innerHTML = html || '<div class="empty-state">No outline items match the current filters.</div>';
+      }
+
+      function renderOutlineItem(item) {
+        const coverage = getCoverage(item.id);
+        const entries = coverage.entries || [];
+        const assessed = isAssessed(entries);
+        const status = entries.length === 0 ? badge("Gap", "gap") : assessed ? badge("Assessed", "assessed") : badge("Covered", "covered");
+        const best = entries.length ? badge(getBestCoverage(entries), getBestCoverage(entries)) : "";
+
+        return `
+          <article class="outline-item">
+            <div class="outline-title">
+              <div>
+                <div class="mono muted">${escapeHtml(item.id)} · ${escapeHtml(item.sectionId)} ${escapeHtml(item.sectionTitle)}</div>
+                <strong>${escapeHtml(item.label)}</strong>
+                ${item.examples && item.examples.length ? `<div class="small muted">Examples: ${escapeHtml(item.examples.slice(0, 5).join('; '))}</div>` : ""}
+              </div>
+              <div>${status} ${best}</div>
+            </div>
+            ${entries.length ? `
+              <div class="lesson-mini-list">
+                ${entries.map(entry => `
+                  <div class="lesson-mini">
+                    <div class="lesson-mini-title">
+                      <a class="lesson-link" href="${escapeHtml(entry.href || '#')}">${escapeHtml(entry.lessonTitle)}</a>
+                      <span>${badge(entry.coverageLevel || 'introduced', entry.coverageLevel || 'introduced')}</span>
+                    </div>
+                    <div class="small muted">${escapeHtml(entry.courseTitle || '')} · ${escapeHtml(entry.estimatedMinutes || 0)} mapped min</div>
+                    ${entry.notes ? `<div class="small">${escapeHtml(entry.notes)}</div>` : ""}
+                    ${chips(entry.evidenceType, 6)}
+                  </div>
+                `).join("")}
+              </div>
+            ` : `<div class="small muted" style="margin-top:8px;">No mapped lesson yet.</div>`}
+          </article>
+        `;
+      }
+
+      function renderMatrix() {
+        const rows = getRows().filter(passesRowFilters);
+        els.matrixCountBadge.textContent = `${rows.length} rows`;
+        els.matrixBody.innerHTML = rows.length ? rows.map(row => {
+          const item = window.NBRC_RT_DCO_2027_HELPERS.getBreadthItem(row.outlineId);
+          return `
+            <tr>
+              <td class="mono">${escapeHtml(row.outlineId)}</td>
+              <td><strong>${escapeHtml(item ? item.label : 'Unknown outline item')}</strong><br><span class="small muted">${escapeHtml(item ? `${item.sectionId} ${item.sectionTitle}` : '')}</span></td>
+              <td><a class="lesson-link" href="${escapeHtml(row.href || '#')}">${escapeHtml(row.lessonTitle)}</a><br><span class="small muted">${escapeHtml(row.moduleTitle || '')}</span></td>
+              <td>${escapeHtml(row.courseTitle || row.courseId)}</td>
+              <td>${badge(row.coverageLevel || 'introduced', row.coverageLevel || 'introduced')}</td>
+              <td>${chips(row.evidenceType, 8)}</td>
+              <td>${escapeHtml(row.estimatedMinutes || 0)}</td>
+            </tr>
+          `;
+        }).join("") : '<tr><td colspan="7"><div class="empty-state">No matrix rows match the current filters.</div></td></tr>';
+      }
+
+      function renderGaps() {
+        const gaps = getAllItems().filter(item => {
+          const coverage = getCoverage(item.id);
+          if (coverage.lessonCount > 0) return false;
+          if (state.domain && item.parentDomainId !== state.domain && item.domainId !== state.domain) return false;
+          const search = state.search.trim().toLowerCase();
+          if (search && !itemSearchText(item, coverage).includes(search)) return false;
+          return true;
+        });
+
+        els.gapCountBadge.textContent = `${gaps.length} gaps`;
+        els.gapList.innerHTML = gaps.length ? gaps.map(item => `
+          <article class="gap-card">
+            <div class="mono muted">${escapeHtml(item.id)} · ${escapeHtml(item.sectionId)}</div>
+            <strong>${escapeHtml(item.label)}</strong>
+            <div class="small muted">${escapeHtml(item.domainTitle)} · ${escapeHtml(item.sectionTitle)}</div>
+            ${item.examples && item.examples.length ? `<div class="small">Examples: ${escapeHtml(item.examples.slice(0, 4).join('; '))}</div>` : ""}
+          </article>
+        `).join("") : '<div class="empty-state">No gaps match the current filters.</div>';
+      }
+
+      function renderLessonCards() {
+        const lessons = getLessons().filter(lesson => {
+          const search = state.search.trim().toLowerCase();
+          const searchable = [lesson.lessonTitle, lesson.courseTitle, lesson.moduleTitle, ...(lesson.topics || []), ...(lesson.activityTypes || [])].join(" ").toLowerCase();
+          if (state.course && lesson.courseId !== state.course) return false;
+          if (state.activity && !(lesson.activityTypes || []).includes(state.activity) && !(lesson.nbrcAlignment || []).some(entry => (entry.evidenceType || []).includes(state.activity))) return false;
+          if (state.coverage && !(lesson.nbrcAlignment || []).some(entry => entry.coverageLevel === state.coverage)) return false;
+          if (state.domain) {
+            const hasDomain = (lesson.nbrcAlignment || []).some(entry => {
+              const item = window.NBRC_RT_DCO_2027_HELPERS.getBreadthItem(entry.outlineId);
+              return item && (item.parentDomainId === state.domain || item.domainId === state.domain);
+            });
+            if (!hasDomain) return false;
+          }
+          if (search && !searchable.includes(search)) return false;
+          return true;
+        });
+
+        els.lessonCountBadge.textContent = `${lessons.length} lessons`;
+        els.lessonCards.innerHTML = lessons.length ? lessons.map(lesson => {
+          const alignments = lesson.nbrcAlignment || [];
+          const assessed = alignments.filter(entry => entry.coverageLevel === "assessed").length;
+          return `
+            <article class="outline-item">
+              <div class="outline-title">
+                <div>
+                  <div class="mono muted">${escapeHtml(lesson.lessonId)}</div>
+                  <a class="lesson-link" href="${escapeHtml(lesson.href || '#')}">${escapeHtml(lesson.displayTitle || lesson.lessonTitle)}</a>
+                  <div class="small muted">${escapeHtml(lesson.courseTitle)} · ${escapeHtml(lesson.moduleTitle || '')}</div>
+                </div>
+                <span>${badge(`${alignments.length} mapped`, 'covered')} ${badge(`${assessed} assessed`, assessed ? 'assessed' : 'introduced')}</span>
+              </div>
+              <div class="small" style="margin-top:8px;">Estimated lesson time: <strong>${escapeHtml(lesson.estimatedMinutes || 0)} minutes</strong></div>
+              ${chips(lesson.topics, 8)}
+            </article>
+          `;
+        }).join("") : '<div class="empty-state">No lessons match the current filters.</div>';
+      }
+
+      function renderAll() {
+        renderSummary();
+        renderOutline();
+        renderMatrix();
+        renderGaps();
+        renderLessonCards();
+      }
+
+      function updateStateFromInputs() {
+        state.search = els.searchInput.value || "";
+        state.course = els.courseFilter.value || "";
+        state.domain = els.domainFilter.value || "";
+        state.coverage = els.coverageFilter.value || "";
+        state.activity = els.activityFilter.value || "";
+      }
+
+      function resetFilters() {
+        state.search = "";
+        state.course = "";
+        state.domain = "";
+        state.coverage = "";
+        state.activity = "";
+        state.gapsOnly = false;
+        state.assessedOnly = false;
+        els.searchInput.value = "";
+        els.courseFilter.value = "";
+        els.domainFilter.value = "";
+        els.coverageFilter.value = "";
+        els.activityFilter.value = "";
+        els.showGapsOnly.classList.remove("primary");
+        els.showAssessedOnly.classList.remove("primary");
+        renderAll();
+      }
+
+      function setupEvents() {
+        [els.searchInput, els.courseFilter, els.domainFilter, els.coverageFilter, els.activityFilter].forEach(el => {
+          el.addEventListener("input", () => {
+            updateStateFromInputs();
+            state.gapsOnly = false;
+            state.assessedOnly = false;
+            els.showGapsOnly.classList.remove("primary");
+            els.showAssessedOnly.classList.remove("primary");
+            renderAll();
+          });
+        });
+
+        els.resetFilters.addEventListener("click", resetFilters);
+
+        els.showGapsOnly.addEventListener("click", () => {
+          updateStateFromInputs();
+          state.gapsOnly = !state.gapsOnly;
+          state.assessedOnly = false;
+          els.showGapsOnly.classList.toggle("primary", state.gapsOnly);
+          els.showAssessedOnly.classList.remove("primary");
+          renderAll();
+          showTab("outline");
+        });
+
+        els.showAssessedOnly.addEventListener("click", () => {
+          updateStateFromInputs();
+          state.assessedOnly = !state.assessedOnly;
+          state.gapsOnly = false;
+          els.showAssessedOnly.classList.toggle("primary", state.assessedOnly);
+          els.showGapsOnly.classList.remove("primary");
+          renderAll();
+          showTab("outline");
+        });
+
+        document.querySelectorAll(".tab-button").forEach(button => {
+          button.addEventListener("click", () => showTab(button.dataset.tab));
+        });
+      }
+
+      function showTab(tabName) {
+        document.querySelectorAll(".tab-button").forEach(button => button.classList.toggle("active", button.dataset.tab === tabName));
+        document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.toggle("active", panel.id === `tab-${tabName}`));
+      }
+
+      function init() {
+        if (!requireData()) {
+          els.loadStatus.innerHTML = '<span class="status-pill warn">Missing required JS files</span>';
+          els.summaryGrid.innerHTML = '<div class="error-state">The dashboard could not find /assets/nbrc-outline-2027.js or /assets/lesson-registry.js. Confirm both scripts are uploaded and paths are correct.</div>';
+          return;
+        }
+
+        renderStatus();
+        populateFilters();
+        setupEvents();
+        renderAll();
+      }
+
+      document.addEventListener("DOMContentLoaded", init);
+    })();
+  </script>
+</body>
+</html>
