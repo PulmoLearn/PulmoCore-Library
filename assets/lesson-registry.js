@@ -44731,7 +44731,3507 @@
                   }
             ],
             "mappingStatus": "first-pass-conservative"
-      }
+      },
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "functional-testing-and-oxygen-titration",
+      "moduleTitle": "Functional Testing and Ambulatory Oxygen Equipment",
+      "lessonId": "equipment-exercise-oxygen-titration-functional-testing",
+      "lessonTitle": "Exercise Oxygen Titration & Functional Testing Equipment — 6MWT, Ambulatory Oxygen, Monitoring & Stop Criteria",
+      "displayTitle": "Equipment — Exercise Oxygen Titration & Functional Testing",
+      "href": "/equipment/equipment-exercise-oxygen-titration-functional-testing",
+      "estimatedMinutes": 65,
+      "patientAge": [
+            "Adult",
+            "Pediatric when applicable by facility protocol"
+      ],
+      "setting": [
+            "Pulmonary clinic, pulmonary rehabilitation, acute care, discharge planning"
+      ],
+      "topics": [
+            "exercise oxygen titration",
+            "6-minute walk test",
+            "ambulatory oxygen",
+            "portable oxygen equipment",
+            "oxygen flow titration",
+            "pulse oximetry during exertion",
+            "functional capacity testing",
+            "oxygen conserving devices",
+            "oxygen cylinders",
+            "liquid oxygen",
+            "portable oxygen concentrator",
+            "desaturation during exercise",
+            "stop criteria",
+            "post-test recovery"
+      ],
+      "searchTags": [
+            "oxygen titration with exercise",
+            "6MWT equipment setup",
+            "ambulatory oxygen titration",
+            "portable oxygen troubleshooting",
+            "pulse dose oxygen limitations",
+            "exercise desaturation stop criteria"
+      ],
+      "activityTypes": [
+            "case-study",
+            "checklist",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_exercise_o2_overview_video",
+                  "type": "video",
+                  "title": "2-Minute Overview: Exercise Oxygen Titration",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_exercise_o2_equipment_sort",
+                  "type": "sorting",
+                  "title": "Choose the Right Portable Oxygen Equipment",
+                  "required": true,
+                  "estimatedMinutes": 7
+            },
+            {
+                  "id": "equipment_exercise_o2_setup_check",
+                  "type": "checklist",
+                  "title": "6MWT and Oxygen Titration Setup Checklist",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_exercise_o2_titration_case",
+                  "type": "case-study",
+                  "title": "Exercise Desaturation Titration Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_exercise_o2_knowledge_check",
+                  "type": "quiz",
+                  "title": "Exercise Oxygen Titration Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_exercise_o2_flashcards",
+                  "type": "flashcards",
+                  "title": "Exercise Oxygen Titration Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-I.C.6",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_exercise_o2_equipment_sort",
+                        "equipment_exercise_o2_setup_check",
+                        "equipment_exercise_o2_titration_case",
+                        "equipment_exercise_o2_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Prepare equipment, perform exercise oxygen titration, collect SpO2/HR/dyspnea/distance data, apply stop criteria"
+            },
+            {
+                  "outlineId": "BOK-I.D.6",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_exercise_o2_equipment_sort",
+                        "equipment_exercise_o2_setup_check",
+                        "equipment_exercise_o2_titration_case",
+                        "equipment_exercise_o2_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Evaluate oxygen response to exertion, identify effective flow/device, recognize unsafe or failed titration, document recommendation"
+            },
+            {
+                  "outlineId": "II.A",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_exercise_o2_equipment_sort",
+                        "equipment_exercise_o2_setup_check",
+                        "equipment_exercise_o2_titration_case",
+                        "equipment_exercise_o2_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Select safe portable oxygen equipment, verify cylinder pressure/duration, prevent trip hazards and oxygen hazards"
+            },
+            {
+                  "outlineId": "III.A",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_exercise_o2_equipment_sort",
+                        "equipment_exercise_o2_setup_check",
+                        "equipment_exercise_o2_titration_case",
+                        "equipment_exercise_o2_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Titrate oxygen device/flow during activity according to patient response and protocol"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Chronic cardiopulmonary disease",
+                  "patientConditionType": "Exercise desaturation requiring ambulatory oxygen titration",
+                  "conditionTags": [
+                        "COPD",
+                        "interstitial lung disease",
+                        "pulmonary hypertension",
+                        "heart failure",
+                        "post-hospital discharge"
+                  ],
+                  "clinicalJudgmentType": "Equipment selection, titration, monitoring, stop criteria, and documentation",
+                  "setting": "Pulmonary clinic, pulmonary rehabilitation, acute care, discharge planning"
+            }
+      ],
+      "sourceFile": "equipment-exercise-oxygen-titration-functional-testing.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-exercise-oxygen-titration-functional-testing"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "oxygen-delivery-and-positive-pressure-equipment",
+      "moduleTitle": "Oxygen Delivery, High-Flow, and Noninvasive Support Equipment",
+      "lessonId": "equipment-heated-high-flow-nasal-cannula",
+      "lessonTitle": "Heated High-Flow Nasal Cannula — Setup, Titration & Troubleshooting",
+      "displayTitle": "Equipment — Heated High-Flow Nasal Cannula",
+      "href": "/equipment/equipment-heated-high-flow-nasal-cannula",
+      "estimatedMinutes": 55,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "Hospital, emergency department, ICU, transport within hospital",
+            "Pediatric acute care, NICU, emergency department"
+      ],
+      "topics": [
+            "heated high-flow nasal cannula",
+            "HFNC setup",
+            "high-flow oxygen therapy",
+            "heated humidification",
+            "flow titration",
+            "FiO2 titration",
+            "cannula sizing",
+            "condensation management",
+            "HFNC troubleshooting",
+            "pediatric HFNC",
+            "neonatal HFNC"
+      ],
+      "searchTags": [
+            "HFNC setup",
+            "heated high-flow device",
+            "high-flow nasal cannula troubleshooting",
+            "HFNC titration",
+            "HFNC contraindications",
+            "HFNC pediatric",
+            "HFNC neonatal",
+            "HFNC equipment",
+            "heated humidified high flow oxygen"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_hfnc_overview_video",
+                  "type": "video",
+                  "title": "Overview: Heated High-Flow Nasal Cannula",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_hfnc_component_sort",
+                  "type": "sorting",
+                  "title": "HFNC Component Function Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_hfnc_setup_order_check",
+                  "type": "quiz",
+                  "title": "Setup Sequence Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_hfnc_titration_decisions",
+                  "type": "case-study",
+                  "title": "Flow vs FiO2 Titration Decisions",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_hfnc_troubleshooting_case",
+                  "type": "case-study",
+                  "title": "HFNC Troubleshooting Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_hfnc_knowledge_check",
+                  "type": "quiz",
+                  "title": "HFNC Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_hfnc_flashcards",
+                  "type": "flashcards",
+                  "title": "HFNC Equipment Flashcard Mastery Deck",
+                  "required": false,
+                  "estimatedMinutes": 6
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-II.A.3",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_hfnc_component_sort",
+                        "equipment_hfnc_setup_order_check",
+                        "equipment_hfnc_titration_decisions",
+                        "equipment_hfnc_troubleshooting_case",
+                        "equipment_hfnc_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Select, assemble, verify, troubleshoot, and maintain heated high-flow oxygen delivery equipment"
+            },
+            {
+                  "outlineId": "BOK-III.C.2.b",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_hfnc_component_sort",
+                        "equipment_hfnc_setup_order_check",
+                        "equipment_hfnc_titration_decisions",
+                        "equipment_hfnc_troubleshooting_case",
+                        "equipment_hfnc_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Set initial flow and FiO2, monitor response, titrate support, and recognize HFNC failure"
+            },
+            {
+                  "outlineId": "BOK-II.A.1",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_hfnc_component_sort",
+                        "equipment_hfnc_setup_order_check",
+                        "equipment_hfnc_titration_decisions",
+                        "equipment_hfnc_troubleshooting_case",
+                        "equipment_hfnc_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Choose correct high-flow nasal cannula size and interface fit"
+            },
+            {
+                  "outlineId": "BOK-II.A.5",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_hfnc_component_sort",
+                        "equipment_hfnc_setup_order_check",
+                        "equipment_hfnc_titration_decisions",
+                        "equipment_hfnc_troubleshooting_case",
+                        "equipment_hfnc_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Set up heated passover humidification and manage water chamber/circuit hazards"
+            },
+            {
+                  "outlineId": "BOK-II.A.21",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_hfnc_component_sort",
+                        "equipment_hfnc_setup_order_check",
+                        "equipment_hfnc_titration_decisions",
+                        "equipment_hfnc_troubleshooting_case",
+                        "equipment_hfnc_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Monitor SpO2, respiratory pattern, and escalation signals during HFNC"
+            },
+            {
+                  "outlineId": "BOK-III.E.2.k",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_hfnc_component_sort",
+                        "equipment_hfnc_setup_order_check",
+                        "equipment_hfnc_titration_decisions",
+                        "equipment_hfnc_troubleshooting_case",
+                        "equipment_hfnc_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Recommend escalation, titration, or discontinuation based on patient response"
+            },
+            {
+                  "outlineId": "BOK-III.E.2.l",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_hfnc_component_sort",
+                        "equipment_hfnc_setup_order_check",
+                        "equipment_hfnc_titration_decisions",
+                        "equipment_hfnc_troubleshooting_case",
+                        "equipment_hfnc_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Recommend humidification adjustments when dryness, rainout, or interface intolerance occurs"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Adults",
+                  "patientConditionType": "Acute hypoxemic respiratory failure, post-extubation support, pneumonia, ARDS, heart failure",
+                  "conditionTags": [
+                        "HFNC",
+                        "hypoxemia",
+                        "post-extubation",
+                        "high-flow oxygen",
+                        "work of breathing"
+                  ],
+                  "clinicalJudgmentType": "Device setup, titration, troubleshooting, escalation",
+                  "setting": "Hospital, emergency department, ICU, transport within hospital"
+            },
+            {
+                  "patientConditionCategory": "Children / Neonatal",
+                  "patientConditionType": "Bronchiolitis, neonatal respiratory distress, post-extubation support",
+                  "conditionTags": [
+                        "pediatric HFNC",
+                        "neonatal HFNC",
+                        "cannula sizing",
+                        "skin protection"
+                  ],
+                  "clinicalJudgmentType": "Safe interface selection and monitoring",
+                  "setting": "Pediatric acute care, NICU, emergency department"
+            }
+      ],
+      "sourceFile": "equipment-heated-high-flow-nasal-cannula.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-heated-high-flow-nasal-cannula"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "mechanical-ventilation-equipment-procedures",
+      "moduleTitle": "Mechanical Ventilation Equipment Procedures",
+      "lessonId": "equipment-ventilator-setup-circuit-humidification",
+      "lessonTitle": "Ventilator Setup, Circuit Assembly, Humidification & Safety Checks",
+      "displayTitle": "Equipment — Ventilator Setup & Humidification",
+      "href": "/equipment/equipment-ventilator-setup-circuit-humidification",
+      "estimatedMinutes": 75,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency department, transport, procedural area"
+      ],
+      "topics": [
+            "ventilator setup",
+            "ventilator circuit assembly",
+            "short self-test",
+            "SST",
+            "heated humidifier",
+            "HME",
+            "inspiratory limb",
+            "expiratory limb",
+            "bacteria filter",
+            "expiratory filter",
+            "test lung",
+            "oxygen supply",
+            "air supply",
+            "patient connection",
+            "ventilator safety checks",
+            "humidification for artificial airways",
+            "condensation management",
+            "capnography adapter",
+            "inline nebulizer adapter"
+      ],
+      "searchTags": [
+            "ventilator setup skill",
+            "ventilator circuit assembly",
+            "SST troubleshooting",
+            "heated humidifier setup",
+            "ventilator humidification",
+            "pre-use ventilator safety check",
+            "circuit leak test",
+            "test lung setup"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_vent_setup_overview_video",
+                  "type": "video",
+                  "title": "Overview: Ventilator Setup & Safety Checks",
+                  "required": false,
+                  "estimatedMinutes": 3
+            },
+            {
+                  "id": "equipment_vent_setup_component_sort",
+                  "type": "sorting",
+                  "title": "Circuit Component Function Sort",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_vent_setup_sst_troubleshooting",
+                  "type": "quiz",
+                  "title": "SST Failure Troubleshooting",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_vent_setup_humidification_choice",
+                  "type": "quiz",
+                  "title": "Humidification Choice Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_vent_setup_patient_ready_case",
+                  "type": "case-study",
+                  "title": "Patient-Ready Ventilator Setup Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_vent_setup_knowledge_check",
+                  "type": "quiz",
+                  "title": "Ventilator Setup Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_vent_setup_flashcards",
+                  "type": "flashcards",
+                  "title": "Ventilator Setup Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-II.A",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_setup_component_sort",
+                        "equipment_vent_setup_sst_troubleshooting",
+                        "equipment_vent_setup_humidification_choice",
+                        "equipment_vent_setup_patient_ready_case",
+                        "equipment_vent_setup_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Assemble ventilator circuit safely, protect sterility, verify filters, humidification, alarms, and patient-ready configuration"
+            },
+            {
+                  "outlineId": "BOK-II.B",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_setup_component_sort",
+                        "equipment_vent_setup_sst_troubleshooting",
+                        "equipment_vent_setup_humidification_choice",
+                        "equipment_vent_setup_patient_ready_case",
+                        "equipment_vent_setup_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Troubleshoot circuit leaks, SST failure, humidifier problems, missing filters, gas supply problems, condensate, and incorrect adapter placement"
+            },
+            {
+                  "outlineId": "BOK-III.C.1",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_setup_component_sort",
+                        "equipment_vent_setup_sst_troubleshooting",
+                        "equipment_vent_setup_humidification_choice",
+                        "equipment_vent_setup_patient_ready_case",
+                        "equipment_vent_setup_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Prepare ventilator and circuit before entering ordered patient settings and connecting the patient"
+            },
+            {
+                  "outlineId": "BOK-I.A",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_setup_component_sort",
+                        "equipment_vent_setup_sst_troubleshooting",
+                        "equipment_vent_setup_humidification_choice",
+                        "equipment_vent_setup_patient_ready_case",
+                        "equipment_vent_setup_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Verify ventilator readiness, baseline patient status, and initial patient response after connection"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Critical care mechanical ventilation",
+                  "patientConditionType": "Intubated or tracheostomized patient requiring ventilator setup",
+                  "conditionTags": [
+                        "endotracheal tube",
+                        "tracheostomy",
+                        "mechanical ventilation",
+                        "ICU",
+                        "transport return"
+                  ],
+                  "clinicalJudgmentType": "Equipment selection, setup verification, safety check, and troubleshooting",
+                  "setting": "ICU, emergency department, transport, procedural area"
+            }
+      ],
+      "sourceFile": "equipment-ventilator-setup-circuit-humidification.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-ventilator-setup-circuit-humidification"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "positive-pressure-and-ventilator-equipment",
+      "moduleTitle": "Positive Pressure & Ventilator Equipment",
+      "lessonId": "equipment-niv-cpap-bipap",
+      "lessonTitle": "Noninvasive Ventilation Equipment — CPAP, BiPAP, Interfaces, Initial Settings & Titration",
+      "displayTitle": "Equipment — NIV: CPAP & BiPAP",
+      "href": "/equipment/equipment-niv-cpap-bipap",
+      "estimatedMinutes": 70,
+      "patientAge": [
+            "Adult",
+            "Pediatric"
+      ],
+      "setting": [
+            "Emergency, ICU, acute care",
+            "Emergency, ICU, sleep, acute care"
+      ],
+      "topics": [
+            "noninvasive ventilation",
+            "CPAP",
+            "BiPAP",
+            "NIV interfaces",
+            "IPAP",
+            "EPAP",
+            "pressure support",
+            "oxygen bleed-in",
+            "mask leak",
+            "skin protection",
+            "NIV humidification",
+            "NIV contraindications",
+            "NIV failure",
+            "positive pressure troubleshooting"
+      ],
+      "searchTags": [
+            "NIV setup",
+            "CPAP setup",
+            "BiPAP setup",
+            "IPAP EPAP",
+            "NIV interface selection",
+            "NIV leak troubleshooting",
+            "NIV contraindications",
+            "NIV titration",
+            "NIV failure signs"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_niv_overview_video",
+                  "type": "video",
+                  "title": "2-Minute Overview: NIV Equipment",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_niv_cpap_bipap_sort",
+                  "type": "sorting",
+                  "title": "CPAP vs BiPAP Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_niv_interface_selection",
+                  "type": "sorting",
+                  "title": "Interface Selection Sort",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_niv_safety_check",
+                  "type": "quiz",
+                  "title": "NIV Circuit Safety Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_niv_troubleshooting_case",
+                  "type": "case-study",
+                  "title": "NIV Leak and Failure Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_niv_knowledge_check",
+                  "type": "quiz",
+                  "title": "NIV Equipment Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_niv_flashcards",
+                  "type": "flashcards",
+                  "title": "NIV Equipment Flashcards",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-II.B.NIV-EQUIPMENT",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_niv_cpap_bipap_sort",
+                        "equipment_niv_interface_selection",
+                        "equipment_niv_safety_check",
+                        "equipment_niv_troubleshooting_case",
+                        "equipment_niv_knowledge_check"
+                  ],
+                  "estimatedMinutes": 18,
+                  "notes": "Choose NIV interfaces and circuits, verify exhalation port safety, manage leaks, troubleshoot equipment alarms and intolerance"
+            },
+            {
+                  "outlineId": "BOK-III.C.NIV-INITIATE-MODIFY",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_niv_cpap_bipap_sort",
+                        "equipment_niv_interface_selection",
+                        "equipment_niv_safety_check",
+                        "equipment_niv_troubleshooting_case",
+                        "equipment_niv_knowledge_check"
+                  ],
+                  "estimatedMinutes": 18,
+                  "notes": "Set CPAP, IPAP, EPAP, pressure support, FiO2 or oxygen bleed-in; monitor response and titrate according to order/protocol"
+            },
+            {
+                  "outlineId": "BOK-I.A.NIV-RESPONSE",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_niv_cpap_bipap_sort",
+                        "equipment_niv_interface_selection",
+                        "equipment_niv_safety_check",
+                        "equipment_niv_troubleshooting_case",
+                        "equipment_niv_knowledge_check"
+                  ],
+                  "estimatedMinutes": 18,
+                  "notes": "Assess improvement or failure using respiratory rate, work of breathing, SpO2, VT, leak, mental status, ABG/CO2 trends, and comfort"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Acute ventilatory failure",
+                  "patientConditionType": "COPD exacerbation or hypoventilation requiring bilevel support",
+                  "conditionTags": [
+                        "hypercapnia",
+                        "increased work of breathing",
+                        "BiPAP",
+                        "IPAP",
+                        "EPAP"
+                  ],
+                  "clinicalJudgmentType": "Equipment selection, initial settings, monitoring and escalation",
+                  "setting": "Emergency, ICU, acute care"
+            },
+            {
+                  "patientConditionCategory": "Acute oxygenation failure",
+                  "patientConditionType": "Pulmonary edema or OSA requiring CPAP support",
+                  "conditionTags": [
+                        "CPAP",
+                        "pulmonary edema",
+                        "oxygenation",
+                        "mask leak"
+                  ],
+                  "clinicalJudgmentType": "Interface selection, pressure titration, oxygen bleed-in, tolerance monitoring",
+                  "setting": "Emergency, ICU, sleep, acute care"
+            }
+      ],
+      "sourceFile": "equipment-niv-cpap-bipap.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-niv-cpap-bipap"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "mechanical-ventilation-equipment-operation",
+      "moduleTitle": "Mechanical Ventilation Equipment Operation",
+      "lessonId": "equipment-ventilator-modes-settings-parameter-changes",
+      "lessonTitle": "Ventilator Modes, Ordered Settings & Parameter Changes",
+      "displayTitle": "Equipment — Ventilator Modes & Parameter Changes",
+      "href": "/equipment/equipment-ventilator-modes-settings-parameter-changes",
+      "estimatedMinutes": 65,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency department",
+            "ICU, emergency department, transport"
+      ],
+      "topics": [
+            "mechanical ventilator operation",
+            "ordered ventilator settings",
+            "assist control ventilation",
+            "SIMV",
+            "CPAP",
+            "pressure support ventilation",
+            "volume control",
+            "pressure control",
+            "FiO2",
+            "PEEP",
+            "tidal volume",
+            "respiratory rate",
+            "flow",
+            "inspiratory time",
+            "parameter changes",
+            "ventilator alarms",
+            "patient response monitoring"
+      ],
+      "searchTags": [
+            "ventilator settings equipment",
+            "ordered ventilator parameter change",
+            "basic ventilator modes procedure",
+            "A/C SIMV CPAP PSV setup",
+            "FiO2 PEEP tidal volume respiratory rate",
+            "ventilator screen verification"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_vent_modes_overview_video",
+                  "type": "video",
+                  "title": "Overview: Ventilator Modes, Settings & Parameter Changes",
+                  "required": false,
+                  "estimatedMinutes": 3
+            },
+            {
+                  "id": "equipment_vent_modes_mode_control_sort",
+                  "type": "sorting",
+                  "title": "Mode-to-Active Controls Sort",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_vent_modes_order_entry_check",
+                  "type": "quiz",
+                  "title": "Order Entry Safety Check",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_vent_modes_parameter_change_case",
+                  "type": "case-study",
+                  "title": "Ordered Parameter Change Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_vent_modes_knowledge_check",
+                  "type": "quiz",
+                  "title": "Ventilator Operation Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_vent_modes_flashcards",
+                  "type": "flashcards",
+                  "title": "Ventilator Mode & Settings Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-III.C.7",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_modes_mode_control_sort",
+                        "equipment_vent_modes_order_entry_check",
+                        "equipment_vent_modes_parameter_change_case",
+                        "equipment_vent_modes_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Differentiate full support from spontaneous modes and recognize CPAP/PSV setup used during liberation procedures"
+            },
+            {
+                  "outlineId": "BOK-III.C.4",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_modes_mode_control_sort",
+                        "equipment_vent_modes_order_entry_check",
+                        "equipment_vent_modes_parameter_change_case",
+                        "equipment_vent_modes_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Introduce equipment-side contributors such as inappropriate trigger, flow, rise time, pressure support, or I-time settings"
+            },
+            {
+                  "outlineId": "BOK-III.C.5",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_modes_mode_control_sort",
+                        "equipment_vent_modes_order_entry_check",
+                        "equipment_vent_modes_parameter_change_case",
+                        "equipment_vent_modes_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Use measured waveforms and loops as a post-change verification tool; detailed waveform analysis is covered in the troubleshooting lesson"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Mechanical ventilation",
+                  "patientConditionType": "Newly ventilated patient requiring ordered settings",
+                  "conditionTags": [
+                        "intubated",
+                        "volume control",
+                        "pressure control",
+                        "initial settings"
+                  ],
+                  "clinicalJudgmentType": "Order-to-screen equipment setup and safety verification",
+                  "setting": "ICU, emergency department, transport"
+            },
+            {
+                  "patientConditionCategory": "Mechanical ventilation",
+                  "patientConditionType": "Ventilated patient requiring ordered parameter change",
+                  "conditionTags": [
+                        "hypoxemia",
+                        "hypercapnia",
+                        "low minute ventilation",
+                        "high pressure alarm"
+                  ],
+                  "clinicalJudgmentType": "Parameter modification and response monitoring",
+                  "setting": "ICU, emergency department"
+            }
+      ],
+      "sourceFile": "equipment-ventilator-modes-settings-parameter-changes.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-ventilator-modes-settings-parameter-changes"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "mechanical-ventilation-equipment-troubleshooting",
+      "moduleTitle": "Mechanical Ventilation Equipment Troubleshooting",
+      "lessonId": "equipment-ventilator-troubleshooting-graphics",
+      "lessonTitle": "Ventilator Troubleshooting, Alarm Response & Graphics Recognition",
+      "displayTitle": "Equipment — Ventilator Troubleshooting & Graphics",
+      "href": "/equipment/equipment-ventilator-troubleshooting-graphics",
+      "estimatedMinutes": 80,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency",
+            "ICU, emergency, transport"
+      ],
+      "topics": [
+            "ventilator troubleshooting",
+            "ventilator alarms",
+            "high pressure alarm",
+            "low pressure alarm",
+            "low exhaled tidal volume alarm",
+            "apnea alarm",
+            "ventilator graphics",
+            "patient-ventilator dyssynchrony",
+            "flow starvation",
+            "auto-PEEP",
+            "air trapping",
+            "ineffective triggering",
+            "double triggering",
+            "circuit leak",
+            "ET tube obstruction",
+            "condensate management",
+            "patient assessment during alarms"
+      ],
+      "searchTags": [
+            "ventilator troubleshooting equipment",
+            "high pressure alarm RT",
+            "low pressure alarm RT",
+            "ventilator graphics basics",
+            "patient ventilator dyssynchrony",
+            "auto PEEP waveform",
+            "flow starvation waveform"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_vent_trouble_alarm_priority_sort",
+                  "type": "sorting",
+                  "title": "Alarm Priority Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_vent_trouble_high_low_alarm_check",
+                  "type": "quiz",
+                  "title": "High vs Low Pressure Alarm Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_vent_trouble_graphics_match",
+                  "type": "sorting",
+                  "title": "Graphics Pattern Match",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_vent_trouble_dyssynchrony_case",
+                  "type": "case-study",
+                  "title": "Dyssynchrony Troubleshooting Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_vent_trouble_knowledge_check",
+                  "type": "quiz",
+                  "title": "Troubleshooting Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_vent_trouble_flashcards",
+                  "type": "flashcards",
+                  "title": "Ventilator Troubleshooting Flashcards",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-III.C.4",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_trouble_alarm_priority_sort",
+                        "equipment_vent_trouble_high_low_alarm_check",
+                        "equipment_vent_trouble_graphics_match",
+                        "equipment_vent_trouble_dyssynchrony_case",
+                        "equipment_vent_trouble_knowledge_check"
+                  ],
+                  "estimatedMinutes": 20,
+                  "notes": "Recognize alarm, waveform, and patient-assessment signs of dyssynchrony and choose immediate corrective actions"
+            },
+            {
+                  "outlineId": "BOK-III.C.5",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vent_trouble_alarm_priority_sort",
+                        "equipment_vent_trouble_high_low_alarm_check",
+                        "equipment_vent_trouble_graphics_match",
+                        "equipment_vent_trouble_dyssynchrony_case",
+                        "equipment_vent_trouble_knowledge_check"
+                  ],
+                  "estimatedMinutes": 20,
+                  "notes": "Use pressure, flow, and volume waveforms/loops to identify equipment problems, obstruction, leaks, air trapping, and dyssynchrony"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Mechanical ventilation troubleshooting",
+                  "patientConditionType": "Ventilated patient with acute alarm or waveform change",
+                  "conditionTags": [
+                        "mechanical ventilation",
+                        "alarms",
+                        "waveforms",
+                        "critical care"
+                  ],
+                  "clinicalJudgmentType": "Rapid patient assessment, equipment troubleshooting, and intervention selection",
+                  "setting": "ICU, emergency, transport"
+            },
+            {
+                  "patientConditionCategory": "Patient-ventilator interaction",
+                  "patientConditionType": "Patient demonstrating dyssynchrony or increased work of breathing on the ventilator",
+                  "conditionTags": [
+                        "dyssynchrony",
+                        "auto-PEEP",
+                        "flow starvation",
+                        "ineffective trigger"
+                  ],
+                  "clinicalJudgmentType": "Recognize graphics pattern and choose corrective action",
+                  "setting": "ICU, emergency"
+            }
+      ],
+      "sourceFile": "equipment-ventilator-troubleshooting-graphics.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-ventilator-troubleshooting-graphics"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "advanced-icu-procedure-assist",
+      "moduleTitle": "Advanced ICU Procedure Assist, Monitoring, Transport & Safety",
+      "lessonId": "equipment-advanced-icu-procedure-assist",
+      "lessonTitle": "Advanced ICU Procedure Assist — ETCO₂, Bronchoscopy, Apnea Test, Lines, Transport & Debriefing",
+      "displayTitle": "Equipment — Advanced ICU Procedure Assist",
+      "href": "/equipment/equipment-advanced-icu-procedure-assist",
+      "estimatedMinutes": 75,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency department, procedural area, transport",
+            "ICU, procedure suite, CT/MRI transport, emergency department"
+      ],
+      "topics": [
+            "end-tidal carbon dioxide monitoring",
+            "capnography",
+            "exhaled gas analysis",
+            "bronchoscopy assist",
+            "apnea test",
+            "arterial line assist",
+            "venous catheter assist",
+            "critical care transport",
+            "transport ventilator",
+            "oxygen cylinder safety",
+            "procedure timeout",
+            "adverse event debriefing"
+      ],
+      "searchTags": [
+            "ETCO2 setup",
+            "capnography troubleshooting",
+            "exhaled gas analysis",
+            "bronchoscopy cart",
+            "bronchoscopy through ETT",
+            "apnea test equipment",
+            "arterial line insertion assist",
+            "ICU transport checklist",
+            "adverse event debrief"
+      ],
+      "activityTypes": [
+            "case-study",
+            "checklist",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_advanced_icu_overview_video",
+                  "type": "video",
+                  "title": "2-Minute Overview: Advanced ICU Procedure Assist",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_advanced_icu_capnography_sort",
+                  "type": "sorting",
+                  "title": "Capnography Setup & Troubleshooting Sort",
+                  "required": true,
+                  "estimatedMinutes": 7
+            },
+            {
+                  "id": "equipment_advanced_icu_bronchoscopy_checklist",
+                  "type": "checklist",
+                  "title": "Bronchoscopy Assist Readiness Checklist",
+                  "required": true,
+                  "estimatedMinutes": 7
+            },
+            {
+                  "id": "equipment_advanced_icu_apnea_test_case",
+                  "type": "case-study",
+                  "title": "Apnea Test Stop Criteria Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_advanced_icu_transport_case",
+                  "type": "case-study",
+                  "title": "Critical Care Transport Equipment Failure Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_advanced_icu_knowledge_check",
+                  "type": "quiz",
+                  "title": "Advanced ICU Procedure Assist Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_advanced_icu_flashcards",
+                  "type": "flashcards",
+                  "title": "Advanced ICU Procedure Assist Flashcard Mastery Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-I.C.13",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_advanced_icu_capnography_sort",
+                        "equipment_advanced_icu_bronchoscopy_checklist",
+                        "equipment_advanced_icu_apnea_test_case",
+                        "equipment_advanced_icu_transport_case",
+                        "equipment_advanced_icu_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Prepare oxygenation equipment, verify baseline data, support provider during apnea test, monitor stop criteria"
+            },
+            {
+                  "outlineId": "BOK-I.D.14",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_advanced_icu_capnography_sort",
+                        "equipment_advanced_icu_bronchoscopy_checklist",
+                        "equipment_advanced_icu_apnea_test_case",
+                        "equipment_advanced_icu_transport_case",
+                        "equipment_advanced_icu_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Recognize test termination criteria, report PaCO2/ETCO2 trends, document tolerance and provider communication"
+            },
+            {
+                  "outlineId": "BOK-I.E.10",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_advanced_icu_capnography_sort",
+                        "equipment_advanced_icu_bronchoscopy_checklist",
+                        "equipment_advanced_icu_apnea_test_case",
+                        "equipment_advanced_icu_transport_case",
+                        "equipment_advanced_icu_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Select and troubleshoot ETCO2 or CO monitoring equipment and recognize clinically significant readings"
+            },
+            {
+                  "outlineId": "BOK-III.H.7",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_advanced_icu_capnography_sort",
+                        "equipment_advanced_icu_bronchoscopy_checklist",
+                        "equipment_advanced_icu_apnea_test_case",
+                        "equipment_advanced_icu_transport_case",
+                        "equipment_advanced_icu_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Prepare oxygenation, suction, monitoring, sterile-field support, and patient stabilization equipment during line procedures"
+            },
+            {
+                  "outlineId": "BOK-III.G.4",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_advanced_icu_capnography_sort",
+                        "equipment_advanced_icu_bronchoscopy_checklist",
+                        "equipment_advanced_icu_apnea_test_case",
+                        "equipment_advanced_icu_transport_case",
+                        "equipment_advanced_icu_knowledge_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Use post-event debriefing to identify equipment, communication, and procedure process improvements"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Critical care monitoring",
+                  "patientConditionType": "Patient requiring CO2, CO, airway, or transport monitoring",
+                  "conditionTags": [
+                        "mechanical ventilation",
+                        "cardiac arrest",
+                        "sedation",
+                        "smoke inhalation",
+                        "transport"
+                  ],
+                  "clinicalJudgmentType": "Monitoring device selection and troubleshooting",
+                  "setting": "ICU, emergency department, procedural area, transport"
+            },
+            {
+                  "patientConditionCategory": "Advanced ICU procedures",
+                  "patientConditionType": "Patient undergoing bronchoscopy, apnea test, vascular access procedure, or critical care transport",
+                  "conditionTags": [
+                        "bronchoscopy",
+                        "apnea test",
+                        "arterial line",
+                        "central line",
+                        "transport ventilator"
+                  ],
+                  "clinicalJudgmentType": "Procedure preparation, patient monitoring, stop criteria, escalation, documentation",
+                  "setting": "ICU, procedure suite, CT/MRI transport, emergency department"
+            }
+      ],
+      "sourceFile": "equipment-advanced-icu-procedure-assist.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-advanced-icu-procedure-assist"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "advanced-icu-procedure-assist",
+      "moduleTitle": "Advanced ICU Procedure Assist Equipment",
+      "lessonId": "equipment-bronchoscopy-assisting-specimen-safety",
+      "lessonTitle": "Bronchoscopy Assisting — Equipment, Airway Safety, Specimens & Post-Procedure Monitoring",
+      "displayTitle": "Equipment — Bronchoscopy Assisting",
+      "href": "/equipment/equipment-bronchoscopy-assisting-specimen-safety",
+      "estimatedMinutes": 55,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency department, bronchoscopy suite, operating room"
+      ],
+      "topics": [
+            "bronchoscopy assisting",
+            "flexible bronchoscopy",
+            "rigid bronchoscopy",
+            "bronchoscopy through ETT",
+            "bronchoscopy through tracheostomy",
+            "bronchoalveolar lavage",
+            "specimen trap",
+            "airway suction setup",
+            "oxygenation during bronchoscopy",
+            "ventilator preparation",
+            "post-bronchoscopy monitoring"
+      ],
+      "searchTags": [
+            "bronchoscopy assisting",
+            "bronchoscopy equipment",
+            "BAL setup",
+            "specimen collection",
+            "bronchoscopy through ETT",
+            "bronchoscopy safety",
+            "RT role bronchoscopy"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_bronchoscopy_overview_video",
+                  "type": "video",
+                  "title": "Overview: RT Role in Bronchoscopy Assisting",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_bronchoscopy_equipment_selection_sort",
+                  "type": "sorting",
+                  "title": "Bronchoscopy Equipment Selection Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_bronchoscopy_safety_timeout_check",
+                  "type": "quiz",
+                  "title": "Procedure Safety Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_bronchoscopy_unfolding_case",
+                  "type": "case-study",
+                  "title": "Hypoxemia During Bronchoscopy Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_bronchoscopy_knowledge_check",
+                  "type": "quiz",
+                  "title": "Bronchoscopy Assisting Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_bronchoscopy_flashcards",
+                  "type": "flashcards",
+                  "title": "Bronchoscopy Assisting Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 6
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-III.H",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_bronchoscopy_equipment_selection_sort",
+                        "equipment_bronchoscopy_safety_timeout_check",
+                        "equipment_bronchoscopy_unfolding_case",
+                        "equipment_bronchoscopy_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Prepare bronchoscopy equipment, airway supplies, suction, specimen traps, monitoring, and post-procedure support"
+            },
+            {
+                  "outlineId": "BOK-II.A",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_bronchoscopy_equipment_selection_sort",
+                        "equipment_bronchoscopy_safety_timeout_check",
+                        "equipment_bronchoscopy_unfolding_case",
+                        "equipment_bronchoscopy_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Use PPE, maintain clean/sterile workflow, manage specimen handling, and prevent equipment-related patient harm"
+            },
+            {
+                  "outlineId": "BOK-II.B",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_bronchoscopy_equipment_selection_sort",
+                        "equipment_bronchoscopy_safety_timeout_check",
+                        "equipment_bronchoscopy_unfolding_case",
+                        "equipment_bronchoscopy_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Troubleshoot suction failure, oxygenation deterioration, airway obstruction, and ventilator/circuit problems during bronchoscopy"
+            },
+            {
+                  "outlineId": "BOK-I.A",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_bronchoscopy_equipment_selection_sort",
+                        "equipment_bronchoscopy_safety_timeout_check",
+                        "equipment_bronchoscopy_unfolding_case",
+                        "equipment_bronchoscopy_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Monitor SpO2, breath sounds, ventilation, bleeding, secretions, and post-procedure changes"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Airway management",
+                  "patientConditionType": "Bronchoscopy requiring RT procedure assist",
+                  "conditionTags": [
+                        "intubated patient",
+                        "tracheostomy",
+                        "retained secretions",
+                        "foreign body",
+                        "BAL",
+                        "biopsy"
+                  ],
+                  "clinicalJudgmentType": "Equipment selection, monitoring, troubleshooting, escalation",
+                  "setting": "ICU, emergency department, bronchoscopy suite, operating room"
+            }
+      ],
+      "sourceFile": "equipment-bronchoscopy-assisting-specimen-safety.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-bronchoscopy-assisting-specimen-safety"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "mechanical-ventilation-equipment-procedures",
+      "moduleTitle": "Mechanical Ventilation Equipment & Bedside Procedures",
+      "lessonId": "equipment-inline-medication-ventilator-aerosol",
+      "lessonTitle": "Inline Medication Delivery During Mechanical Ventilation — SVN, MDI, Adapters & Circuit Safety",
+      "displayTitle": "Equipment — Inline Medication Delivery During Mechanical Ventilation",
+      "href": "/equipment/equipment-inline-medication-ventilator-aerosol",
+      "estimatedMinutes": 55,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency department, transport"
+      ],
+      "topics": [
+            "inline medication administration",
+            "mechanical ventilation aerosol delivery",
+            "small volume nebulizer",
+            "metered dose inhaler",
+            "ventilator circuit adapters",
+            "HME removal during aerosol therapy",
+            "mesh nebulizer",
+            "jet nebulizer",
+            "MDI spacer adapter",
+            "ventilator medication delivery troubleshooting"
+      ],
+      "searchTags": [
+            "inline medication ventilator",
+            "ventilator SVN setup",
+            "ventilator MDI adapter",
+            "HME aerosol contraindication",
+            "nebulizer placement mechanical ventilation",
+            "aerosol troubleshooting ventilator"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_inline_med_overview_video",
+                  "type": "video",
+                  "title": "Overview: Inline Medication Delivery",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_inline_med_device_selection_sort",
+                  "type": "sorting",
+                  "title": "Device Selection Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_inline_med_hme_safety_check",
+                  "type": "quiz",
+                  "title": "HME and Filter Safety Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_inline_med_troubleshooting_case",
+                  "type": "case-study",
+                  "title": "Poor Aerosol Delivery Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_inline_med_knowledge_check",
+                  "type": "quiz",
+                  "title": "Inline Medication Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_inline_med_flashcards",
+                  "type": "flashcards",
+                  "title": "Inline Medication Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-II.B",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_inline_med_device_selection_sort",
+                        "equipment_inline_med_hme_safety_check",
+                        "equipment_inline_med_troubleshooting_case",
+                        "equipment_inline_med_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Select aerosol delivery device, place adapters correctly, prevent HME/filter obstruction, troubleshoot poor aerosol delivery"
+            },
+            {
+                  "outlineId": "BOK-II.A",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_inline_med_device_selection_sort",
+                        "equipment_inline_med_hme_safety_check",
+                        "equipment_inline_med_troubleshooting_case",
+                        "equipment_inline_med_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Maintain circuit integrity, avoid contamination, manage filters and adapters safely"
+            },
+            {
+                  "outlineId": "BOK-III.C",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_inline_med_device_selection_sort",
+                        "equipment_inline_med_hme_safety_check",
+                        "equipment_inline_med_troubleshooting_case",
+                        "equipment_inline_med_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Administer aerosol therapy without interrupting ventilatory support or worsening airway resistance"
+            },
+            {
+                  "outlineId": "BOK-I.A",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_inline_med_device_selection_sort",
+                        "equipment_inline_med_hme_safety_check",
+                        "equipment_inline_med_troubleshooting_case",
+                        "equipment_inline_med_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Monitor breath sounds, peak pressure, expiratory flow, SpO2, HR, and patient response after medication delivery"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Airway management",
+                  "patientConditionType": "Intubated or tracheostomized patient requiring aerosol medication",
+                  "conditionTags": [
+                        "mechanical ventilation",
+                        "bronchospasm",
+                        "obstructive airway disease",
+                        "artificial airway"
+                  ],
+                  "clinicalJudgmentType": "Device selection, setup, troubleshooting, and response monitoring",
+                  "setting": "ICU, emergency department, transport"
+            }
+      ],
+      "sourceFile": "equipment-inline-medication-ventilator-aerosol.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-inline-medication-ventilator-aerosol"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "artificial-airway-equipment-procedures",
+      "moduleTitle": "Artificial Airway Equipment & Procedures",
+      "lessonId": "equipment-artificial-airway-suction-cuff-trach",
+      "lessonTitle": "Artificial Airway Equipment — Suctioning, Cuff Care, Inline Meds & Trach Devices",
+      "displayTitle": "Equipment — Artificial Airway Equipment & Procedures",
+      "href": "/equipment/equipment-artificial-airway-suction-cuff-trach",
+      "estimatedMinutes": 85,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency, transport, long-term acute care"
+      ],
+      "topics": [
+            "artificial airway equipment",
+            "endotracheal tube equipment",
+            "tracheostomy equipment",
+            "artificial airway suctioning",
+            "closed suction catheter",
+            "open suction catheter",
+            "cuff manometer",
+            "cuff pressure",
+            "inline medication administration",
+            "ET tube exchange",
+            "tracheotomy assist",
+            "trach emergency equipment",
+            "tube securement",
+            "airway rescue equipment"
+      ],
+      "searchTags": [
+            "artificial airway suction setup",
+            "closed suction procedure",
+            "cuff pressure troubleshooting",
+            "inline medication ventilator adapter",
+            "trach tube equipment",
+            "ET tube exchange assist",
+            "tracheotomy assist equipment",
+            "bedside trach emergency supplies"
+      ],
+      "activityTypes": [
+            "case-study",
+            "checklist",
+            "flashcards",
+            "quiz",
+            "sorting"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_airway_equipment_identification_sort",
+                  "type": "sorting",
+                  "title": "Artificial Airway Equipment Identification",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_airway_suction_decision_check",
+                  "type": "quiz",
+                  "title": "Suction Equipment & Stop Criteria Check",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_airway_cuff_pressure_case",
+                  "type": "case-study",
+                  "title": "Cuff Pressure Troubleshooting Case",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_airway_exchange_trach_checklist",
+                  "type": "checklist",
+                  "title": "Airway Exchange & Tracheotomy Equipment Checklist",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_airway_emergency_case",
+                  "type": "case-study",
+                  "title": "Trach Emergency Readiness Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_airway_knowledge_check",
+                  "type": "quiz",
+                  "title": "Artificial Airway Equipment Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_airway_flashcards",
+                  "type": "flashcards",
+                  "title": "Artificial Airway Equipment Flashcards",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-III.A.5",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_airway_equipment_identification_sort",
+                        "equipment_airway_suction_decision_check",
+                        "equipment_airway_cuff_pressure_case",
+                        "equipment_airway_exchange_trach_checklist",
+                        "equipment_airway_emergency_case",
+                        "equipment_airway_knowledge_check"
+                  ],
+                  "estimatedMinutes": 20,
+                  "notes": "Prepare equipment, assist with airway exchange, maintain oxygenation, verify new airway placement, and monitor for complications"
+            },
+            {
+                  "outlineId": "BOK-III.H.5",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_airway_equipment_identification_sort",
+                        "equipment_airway_suction_decision_check",
+                        "equipment_airway_cuff_pressure_case",
+                        "equipment_airway_exchange_trach_checklist",
+                        "equipment_airway_emergency_case",
+                        "equipment_airway_knowledge_check"
+                  ],
+                  "estimatedMinutes": 20,
+                  "notes": "Prepare tracheotomy equipment, airway rescue supplies, suction, oxygen delivery, cuff inflation equipment, and post-procedure monitoring"
+            },
+            {
+                  "outlineId": "BOK-III.A.4",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_airway_equipment_identification_sort",
+                        "equipment_airway_suction_decision_check",
+                        "equipment_airway_cuff_pressure_case",
+                        "equipment_airway_exchange_trach_checklist",
+                        "equipment_airway_emergency_case",
+                        "equipment_airway_knowledge_check"
+                  ],
+                  "estimatedMinutes": 20,
+                  "notes": "Secure tube, assess tube depth, monitor cuff pressure, suction artificial airway, and recognize emergency red flags"
+            },
+            {
+                  "outlineId": "BOK-II.B",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_airway_equipment_identification_sort",
+                        "equipment_airway_suction_decision_check",
+                        "equipment_airway_cuff_pressure_case",
+                        "equipment_airway_exchange_trach_checklist",
+                        "equipment_airway_emergency_case",
+                        "equipment_airway_knowledge_check"
+                  ],
+                  "estimatedMinutes": 20,
+                  "notes": "Select suction equipment, cuff pressure devices, adapters, oxygen sources, BVM, and trach emergency supplies"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Airway management",
+                  "patientConditionType": "Artificial airway requiring bedside equipment procedures",
+                  "conditionTags": [
+                        "endotracheal tube",
+                        "tracheostomy",
+                        "mechanical ventilation",
+                        "copious secretions",
+                        "cuff leak",
+                        "tube exchange"
+                  ],
+                  "clinicalJudgmentType": "Equipment selection, setup, troubleshooting, and escalation",
+                  "setting": "ICU, emergency, transport, long-term acute care"
+            }
+      ],
+      "sourceFile": "equipment-artificial-airway-suction-cuff-trach.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-artificial-airway-suction-cuff-trach"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "critical-care-airway-procedures",
+      "moduleTitle": "Critical Care Airway Equipment & Procedure Support",
+      "lessonId": "equipment-et-tube-exchange-airway-rescue",
+      "lessonTitle": "ET Tube Exchange & Airway Rescue Equipment — Exchanger Setup, Oxygenation, Confirmation & Safety",
+      "displayTitle": "Equipment — ET Tube Exchange & Airway Rescue",
+      "href": "/equipment/equipment-et-tube-exchange-airway-rescue",
+      "estimatedMinutes": 55,
+      "patientAge": [
+            "Adult",
+            "Pediatric"
+      ],
+      "setting": [
+            "ICU, emergency department, transport, operating room"
+      ],
+      "topics": [
+            "endotracheal tube exchange",
+            "airway exchange catheter",
+            "ET tube obstruction",
+            "cuff leak",
+            "tube damage",
+            "tube exchange setup",
+            "airway rescue",
+            "oxygenation during airway exchange",
+            "ETCO2 confirmation",
+            "reintubation readiness",
+            "difficult airway equipment",
+            "extubation failure rescue"
+      ],
+      "searchTags": [
+            "ET tube exchange equipment",
+            "airway exchange catheter setup",
+            "ETT cuff leak exchange",
+            "damaged ET tube",
+            "airway rescue checklist",
+            "ETCO2 confirmation after tube exchange",
+            "RT role tube exchange"
+      ],
+      "activityTypes": [
+            "case-study",
+            "checklist",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_ett_exchange_overview_video",
+                  "type": "video",
+                  "title": "Overview: ET Tube Exchange & Airway Rescue",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_ett_exchange_indication_sort",
+                  "type": "sorting",
+                  "title": "Exchange Indication vs Emergency Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_ett_exchange_equipment_check",
+                  "type": "checklist",
+                  "title": "Tube Exchange Equipment Readiness",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_ett_exchange_confirmation_quiz",
+                  "type": "quiz",
+                  "title": "Placement Confirmation Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_ett_exchange_rescue_case",
+                  "type": "case-study",
+                  "title": "Damaged ETT Exchange Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_ett_exchange_knowledge_check",
+                  "type": "quiz",
+                  "title": "ETT Exchange Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_ett_exchange_flashcards",
+                  "type": "flashcards",
+                  "title": "ET Tube Exchange Flashcards",
+                  "required": false,
+                  "estimatedMinutes": 6
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-III.A.5",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_ett_exchange_indication_sort",
+                        "equipment_ett_exchange_equipment_check",
+                        "equipment_ett_exchange_confirmation_quiz",
+                        "equipment_ett_exchange_rescue_case",
+                        "equipment_ett_exchange_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Prepare airway exchange equipment, support oxygenation, assist tube exchange, confirm placement, monitor complications"
+            },
+            {
+                  "outlineId": "BOK-III.A.7",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_ett_exchange_indication_sort",
+                        "equipment_ett_exchange_equipment_check",
+                        "equipment_ett_exchange_confirmation_quiz",
+                        "equipment_ett_exchange_rescue_case",
+                        "equipment_ett_exchange_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Prepare airway rescue equipment for failed extubation or planned exchange over an airway exchange catheter"
+            },
+            {
+                  "outlineId": "BOK-I.E.10",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_ett_exchange_indication_sort",
+                        "equipment_ett_exchange_equipment_check",
+                        "equipment_ett_exchange_confirmation_quiz",
+                        "equipment_ett_exchange_rescue_case",
+                        "equipment_ett_exchange_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Use colorimetric CO2 and waveform capnography to confirm airway placement after exchange"
+            },
+            {
+                  "outlineId": "BOK-III.C.4",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_ett_exchange_indication_sort",
+                        "equipment_ett_exchange_equipment_check",
+                        "equipment_ett_exchange_confirmation_quiz",
+                        "equipment_ett_exchange_rescue_case",
+                        "equipment_ett_exchange_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Recognize airway-related causes of ventilation failure such as obstruction, cuff leak, or malposition"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Airway management",
+                  "patientConditionType": "Existing artificial airway requiring exchange or rescue",
+                  "conditionTags": [
+                        "damaged ETT",
+                        "cuff leak",
+                        "obstructed tube",
+                        "malposition",
+                        "failed extubation"
+                  ],
+                  "clinicalJudgmentType": "Equipment readiness, safety monitoring, escalation, and confirmation",
+                  "setting": "ICU, emergency department, transport, operating room"
+            }
+      ],
+      "sourceFile": "equipment-et-tube-exchange-airway-rescue.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-et-tube-exchange-airway-rescue"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "icu-airway-maintenance-vap-prevention",
+      "moduleTitle": "ICU Airway Maintenance, VAP Prevention & Skin Protection",
+      "lessonId": "equipment-vap-oral-skin-care",
+      "lessonTitle": "VAP Prevention, Oral Care, Cuff Pressure, Skin Care & Artificial Airway Maintenance",
+      "displayTitle": "Equipment — VAP Prevention, Oral Care & Skin Care",
+      "href": "/equipment/equipment-vap-oral-skin-care",
+      "estimatedMinutes": 70,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency, long-term acute care, transport preparation"
+      ],
+      "topics": [
+            "ventilator associated pneumonia prevention",
+            "VAP prevention bundle",
+            "oral care equipment",
+            "endotracheal tube care",
+            "cuff pressure monitoring",
+            "subglottic suctioning",
+            "ET tube repositioning",
+            "skin care under tube securement devices",
+            "condensate management",
+            "ventilator circuit handling",
+            "artificial airway maintenance"
+      ],
+      "searchTags": [
+            "VAP bundle equipment",
+            "oral care kit",
+            "cuff pressure check",
+            "subglottic suction",
+            "ET tube repositioning",
+            "securement device skin care",
+            "ventilator circuit condensate",
+            "artificial airway maintenance"
+      ],
+      "activityTypes": [
+            "case-study",
+            "checklist",
+            "flashcards",
+            "quiz",
+            "sorting"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_vap_oral_care_bundle_sort",
+                  "type": "sorting",
+                  "title": "VAP Bundle Equipment Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_vap_cuff_pressure_check",
+                  "type": "quiz",
+                  "title": "Cuff Pressure Safety Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_vap_condensate_safety_check",
+                  "type": "quiz",
+                  "title": "Circuit Condensate Safety Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_vap_securement_skin_checklist",
+                  "type": "checklist",
+                  "title": "Tube Securement & Skin Care Checklist",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_vap_prevention_unfolding_case",
+                  "type": "case-study",
+                  "title": "Rising VAP Risk Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_vap_knowledge_check",
+                  "type": "quiz",
+                  "title": "VAP Prevention Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_vap_flashcards",
+                  "type": "flashcards",
+                  "title": "VAP Prevention Flashcard Mastery Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-II.A",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vap_oral_care_bundle_sort",
+                        "equipment_vap_cuff_pressure_check",
+                        "equipment_vap_condensate_safety_check",
+                        "equipment_vap_securement_skin_checklist",
+                        "equipment_vap_prevention_unfolding_case",
+                        "equipment_vap_knowledge_check"
+                  ],
+                  "estimatedMinutes": 18,
+                  "notes": "VAP bundle workflow, oral care equipment, circuit handling, condensate safety, and contamination prevention"
+            },
+            {
+                  "outlineId": "BOK-II.B",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vap_oral_care_bundle_sort",
+                        "equipment_vap_cuff_pressure_check",
+                        "equipment_vap_condensate_safety_check",
+                        "equipment_vap_securement_skin_checklist",
+                        "equipment_vap_prevention_unfolding_case",
+                        "equipment_vap_knowledge_check"
+                  ],
+                  "estimatedMinutes": 18,
+                  "notes": "Cuff manometer use, subglottic suction setup, oral suction setup, securement device maintenance, and circuit hazard recognition"
+            },
+            {
+                  "outlineId": "BOK-III.A",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vap_oral_care_bundle_sort",
+                        "equipment_vap_cuff_pressure_check",
+                        "equipment_vap_condensate_safety_check",
+                        "equipment_vap_securement_skin_checklist",
+                        "equipment_vap_prevention_unfolding_case",
+                        "equipment_vap_knowledge_check"
+                  ],
+                  "estimatedMinutes": 18,
+                  "notes": "Perform airway maintenance procedures that reduce aspiration, VAP, tube obstruction, mucosal injury, and pressure injury"
+            },
+            {
+                  "outlineId": "BOK-I.A",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_vap_oral_care_bundle_sort",
+                        "equipment_vap_cuff_pressure_check",
+                        "equipment_vap_condensate_safety_check",
+                        "equipment_vap_securement_skin_checklist",
+                        "equipment_vap_prevention_unfolding_case",
+                        "equipment_vap_knowledge_check"
+                  ],
+                  "estimatedMinutes": 18,
+                  "notes": "Monitor airway maintenance response using secretion quality, cuff pressure, skin condition, SpO2, breath sounds, and tube position"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Airway management",
+                  "patientConditionType": "Intubated or tracheostomy patient requiring artificial airway maintenance",
+                  "conditionTags": [
+                        "endotracheal tube",
+                        "tracheostomy",
+                        "mechanical ventilation",
+                        "VAP prevention",
+                        "cuff pressure",
+                        "oral care"
+                  ],
+                  "clinicalJudgmentType": "Procedure sequencing, equipment selection, safety monitoring, and troubleshooting",
+                  "setting": "ICU, emergency, long-term acute care, transport preparation"
+            }
+      ],
+      "sourceFile": "equipment-vap-oral-skin-care.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-vap-oral-skin-care"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "mechanical-ventilation-liberation-procedures",
+      "moduleTitle": "Mechanical Ventilation Liberation Procedures",
+      "lessonId": "equipment-weaning-sbt-extubation-liberation",
+      "lessonTitle": "Weaning, Spontaneous Breathing Trial Setup, Extubation & Ventilator Liberation Procedures",
+      "displayTitle": "Equipment — Weaning, SBT & Extubation Procedures",
+      "href": "/equipment/equipment-weaning-sbt-extubation-liberation",
+      "estimatedMinutes": 75,
+      "patientAge": [
+            "Adult",
+            "Pediatric"
+      ],
+      "setting": [
+            "ICU, emergency, PACU",
+            "ICU, emergency, hospice-aligned acute care",
+            "ICU, emergency, long-term acute care"
+      ],
+      "topics": [
+            "mechanical ventilation weaning",
+            "spontaneous breathing trial",
+            "SBT setup",
+            "T-piece trial",
+            "tracheostomy collar trial",
+            "CPAP trial",
+            "pressure support trial",
+            "weaning parameters",
+            "RSBI",
+            "NIF",
+            "MIP",
+            "MEP",
+            "extubation",
+            "cuff leak test",
+            "post-extubation stridor",
+            "ventilator liberation",
+            "withdrawal of life support",
+            "terminal extubation"
+      ],
+      "searchTags": [
+            "SBT setup",
+            "weaning trial equipment",
+            "extubation checklist",
+            "cuff leak check",
+            "post-extubation stridor",
+            "ventilator liberation",
+            "terminal extubation procedure",
+            "withdrawal of life support RT"
+      ],
+      "activityTypes": [
+            "case-study",
+            "checklist",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_weaning_overview_video",
+                  "type": "video",
+                  "title": "Overview: Weaning, SBT & Extubation Procedures",
+                  "required": false,
+                  "estimatedMinutes": 3
+            },
+            {
+                  "id": "equipment_weaning_sbt_method_selection",
+                  "type": "sorting",
+                  "title": "SBT Method Selection",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_weaning_sbt_stop_criteria_check",
+                  "type": "quiz",
+                  "title": "SBT Stop Criteria Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_weaning_extubation_equipment_checklist",
+                  "type": "checklist",
+                  "title": "Extubation Equipment Readiness",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_weaning_liberation_case",
+                  "type": "case-study",
+                  "title": "SBT Failure vs Extubation Readiness Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_weaning_terminal_extubation_check",
+                  "type": "quiz",
+                  "title": "Withdrawal of Life Support Procedure Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_weaning_flashcards",
+                  "type": "flashcards",
+                  "title": "Weaning, SBT & Extubation Flashcard Mastery Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-I.C.11",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_weaning_sbt_method_selection",
+                        "equipment_weaning_sbt_stop_criteria_check",
+                        "equipment_weaning_extubation_equipment_checklist",
+                        "equipment_weaning_liberation_case",
+                        "equipment_weaning_terminal_extubation_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Set up SBT, gather baseline data, monitor patient response, and identify stop criteria"
+            },
+            {
+                  "outlineId": "BOK-I.D.12",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_weaning_sbt_method_selection",
+                        "equipment_weaning_sbt_stop_criteria_check",
+                        "equipment_weaning_extubation_equipment_checklist",
+                        "equipment_weaning_liberation_case",
+                        "equipment_weaning_terminal_extubation_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Evaluate SBT tolerance, recognize failure, and recommend return to support or extubation readiness"
+            },
+            {
+                  "outlineId": "BOK-III.A.7",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_weaning_sbt_method_selection",
+                        "equipment_weaning_sbt_stop_criteria_check",
+                        "equipment_weaning_extubation_equipment_checklist",
+                        "equipment_weaning_liberation_case",
+                        "equipment_weaning_terminal_extubation_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Prepare extubation equipment, perform cuff leak check, assist with tube removal, and monitor post-extubation airway"
+            },
+            {
+                  "outlineId": "BOK-III.C.7",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_weaning_sbt_method_selection",
+                        "equipment_weaning_sbt_stop_criteria_check",
+                        "equipment_weaning_extubation_equipment_checklist",
+                        "equipment_weaning_liberation_case",
+                        "equipment_weaning_terminal_extubation_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Select SBT method, support spontaneous breathing, identify failure, transition to extubation or continued support"
+            },
+            {
+                  "outlineId": "BOK-III.H.10",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_weaning_sbt_method_selection",
+                        "equipment_weaning_sbt_stop_criteria_check",
+                        "equipment_weaning_extubation_equipment_checklist",
+                        "equipment_weaning_liberation_case",
+                        "equipment_weaning_terminal_extubation_check"
+                  ],
+                  "estimatedMinutes": 19,
+                  "notes": "Prepare equipment and monitoring for terminal extubation or withdrawal of ventilatory support"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Mechanical ventilation liberation",
+                  "patientConditionType": "Patient being evaluated for ventilator discontinuation",
+                  "conditionTags": [
+                        "invasive mechanical ventilation",
+                        "SBT",
+                        "extubation readiness",
+                        "weaning"
+                  ],
+                  "clinicalJudgmentType": "Procedure setup, monitoring, interpretation, and escalation",
+                  "setting": "ICU, emergency, long-term acute care"
+            },
+            {
+                  "patientConditionCategory": "Artificial airway management",
+                  "patientConditionType": "Endotracheal tube removal and post-extubation airway monitoring",
+                  "conditionTags": [
+                        "endotracheal tube",
+                        "cuff leak",
+                        "stridor",
+                        "reintubation risk"
+                  ],
+                  "clinicalJudgmentType": "Equipment readiness and post-procedure troubleshooting",
+                  "setting": "ICU, emergency, PACU"
+            },
+            {
+                  "patientConditionCategory": "End-of-life ventilator support",
+                  "patientConditionType": "Withdrawal of ventilatory support",
+                  "conditionTags": [
+                        "terminal extubation",
+                        "withdrawal of life support",
+                        "comfort-focused care"
+                  ],
+                  "clinicalJudgmentType": "Procedure assist and communication/documentation",
+                  "setting": "ICU, emergency, hospice-aligned acute care"
+            }
+      ],
+      "sourceFile": "equipment-weaning-sbt-extubation-liberation.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-weaning-sbt-extubation-liberation"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "critical-care-transport-equipment",
+      "moduleTitle": "Critical Care Transport Equipment & Oxygen Planning",
+      "lessonId": "equipment-critical-care-transport-oxygen-planning",
+      "lessonTitle": "Critical Care Transport & Oxygen Planning — Portable Ventilators, Cylinders, Monitors & Transport Safety",
+      "displayTitle": "Equipment — Critical Care Transport & Oxygen Planning",
+      "href": "/equipment/equipment-critical-care-transport-oxygen-planning",
+      "estimatedMinutes": 65,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, radiology, procedure suite, emergency department, transport route",
+            "Intrahospital transport, diagnostic imaging, emergency response"
+      ],
+      "topics": [
+            "critical care transport",
+            "intrahospital transport",
+            "portable ventilator",
+            "transport ventilator setup",
+            "oxygen cylinder duration",
+            "E cylinder",
+            "H cylinder",
+            "transport oxygen planning",
+            "transport monitoring",
+            "ETCO2 transport monitoring",
+            "airway emergency equipment",
+            "portable suction",
+            "battery management",
+            "transport safety checklist"
+      ],
+      "searchTags": [
+            "transport ventilator setup",
+            "critical care transport checklist",
+            "oxygen cylinder duration",
+            "transport oxygen calculation",
+            "portable suction setup",
+            "ventilator transport monitoring",
+            "RT transport safety"
+      ],
+      "activityTypes": [
+            "calculator-case",
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_transport_overview_video",
+                  "type": "video",
+                  "title": "Overview: Critical Care Transport Equipment",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_transport_go_no_go_check",
+                  "type": "quiz",
+                  "title": "Transport Go/No-Go Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_transport_bag_sort",
+                  "type": "sorting",
+                  "title": "Transport Equipment Bag Sort",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_transport_oxygen_calculation",
+                  "type": "calculator-case",
+                  "title": "Oxygen Duration Calculation",
+                  "required": true,
+                  "estimatedMinutes": 8
+            },
+            {
+                  "id": "equipment_transport_alarm_case",
+                  "type": "case-study",
+                  "title": "Transport Ventilator Alarm Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_transport_knowledge_check",
+                  "type": "quiz",
+                  "title": "Critical Care Transport Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_transport_flashcards",
+                  "type": "flashcards",
+                  "title": "Critical Care Transport Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "L-41",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_transport_go_no_go_check",
+                        "equipment_transport_bag_sort",
+                        "equipment_transport_oxygen_calculation",
+                        "equipment_transport_alarm_case",
+                        "equipment_transport_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Prepare equipment, calculate oxygen supply, verify transport ventilator settings, monitor patient response, and troubleshoot transport emergencies"
+            },
+            {
+                  "outlineId": "BOK-I.E.10",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_transport_go_no_go_check",
+                        "equipment_transport_bag_sort",
+                        "equipment_transport_oxygen_calculation",
+                        "equipment_transport_alarm_case",
+                        "equipment_transport_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Use ETCO2 monitoring during airway and ventilator transport to confirm ventilation and detect deterioration"
+            },
+            {
+                  "outlineId": "BOK-III.C.4",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_transport_go_no_go_check",
+                        "equipment_transport_bag_sort",
+                        "equipment_transport_oxygen_calculation",
+                        "equipment_transport_alarm_case",
+                        "equipment_transport_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Identify transport-related distress, high-pressure alarms, low-volume alarms, and asynchrony during portable ventilator use"
+            },
+            {
+                  "outlineId": "BOK-III.G.4",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_transport_go_no_go_check",
+                        "equipment_transport_bag_sort",
+                        "equipment_transport_oxygen_calculation",
+                        "equipment_transport_alarm_case",
+                        "equipment_transport_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Document and communicate transport adverse events and participate in debriefing after equipment or patient instability"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Critical care",
+                  "patientConditionType": "Mechanically ventilated patient requiring intrahospital transport",
+                  "conditionTags": [
+                        "portable ventilator",
+                        "oxygen cylinder",
+                        "ETCO2",
+                        "transport monitor",
+                        "airway emergency"
+                  ],
+                  "clinicalJudgmentType": "Equipment preparation, safety verification, monitoring, troubleshooting",
+                  "setting": "ICU, radiology, procedure suite, emergency department, transport route"
+            },
+            {
+                  "patientConditionCategory": "Airway management",
+                  "patientConditionType": "Artificial airway during transport",
+                  "conditionTags": [
+                        "ETT",
+                        "tracheostomy",
+                        "circuit disconnect",
+                        "portable suction",
+                        "BVM"
+                  ],
+                  "clinicalJudgmentType": "Airway rescue readiness and deterioration response",
+                  "setting": "Intrahospital transport, diagnostic imaging, emergency response"
+            }
+      ],
+      "sourceFile": "equipment-critical-care-transport-oxygen-planning.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-critical-care-transport-oxygen-planning"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "icu-monitoring-and-procedure-equipment",
+      "moduleTitle": "ICU Monitoring & Procedure Equipment",
+      "lessonId": "equipment-chest-tube-pleural-drainage-systems",
+      "lessonTitle": "Chest Tube & Pleural Drainage Systems — Setup, Monitoring, Troubleshooting & Safety",
+      "displayTitle": "Equipment — Chest Tube & Pleural Drainage Systems",
+      "href": "/equipment/equipment-chest-tube-pleural-drainage-systems",
+      "estimatedMinutes": 65,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency, step-down, post-op, transport"
+      ],
+      "topics": [
+            "chest tubes",
+            "pleural drainage",
+            "water seal",
+            "suction control",
+            "air leak",
+            "tidaling",
+            "pneumothorax",
+            "hemothorax",
+            "thoracotomy",
+            "mediastinal chest tube",
+            "drainage chamber",
+            "chest drainage system",
+            "patient monitoring",
+            "equipment troubleshooting",
+            "tube dislodgement"
+      ],
+      "searchTags": [
+            "chest tube equipment",
+            "pleural drainage troubleshooting",
+            "water seal vs suction",
+            "air leak chest tube",
+            "tidaling chest drainage",
+            "chest tube dislodgement",
+            "mediastinal chest tube care"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_chest_tube_overview_video",
+                  "type": "video",
+                  "title": "Overview: Chest Tube & Pleural Drainage Systems",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_chest_tube_component_sort",
+                  "type": "sorting",
+                  "title": "Drainage System Component Match",
+                  "required": true,
+                  "estimatedMinutes": 7
+            },
+            {
+                  "id": "equipment_chest_tube_troubleshooting_check",
+                  "type": "quiz",
+                  "title": "Chest Tube Troubleshooting Check",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_chest_tube_safety_case",
+                  "type": "case-study",
+                  "title": "Air Leak and Dislodgement Safety Case",
+                  "required": true,
+                  "estimatedMinutes": 12
+            },
+            {
+                  "id": "equipment_chest_tube_knowledge_check",
+                  "type": "quiz",
+                  "title": "Chest Tube Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_chest_tube_flashcards",
+                  "type": "flashcards",
+                  "title": "Chest Tube Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "EQUIP-ICU-CHEST-TUBE-01",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_chest_tube_component_sort",
+                        "equipment_chest_tube_troubleshooting_check",
+                        "equipment_chest_tube_safety_case",
+                        "equipment_chest_tube_knowledge_check"
+                  ],
+                  "estimatedMinutes": 16,
+                  "notes": "Equipment selection, drainage system positioning, monitoring findings, troubleshooting, escalation, and documentation"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Pleural space disorder / post-procedure ICU care",
+                  "patientConditionType": "Patient with chest tube requiring respiratory monitoring and drainage system safety checks",
+                  "conditionTags": [
+                        "pneumothorax",
+                        "hemothorax",
+                        "thoracotomy",
+                        "pleural effusion",
+                        "empyema",
+                        "air leak"
+                  ],
+                  "clinicalJudgmentType": "Equipment safety, monitoring, troubleshooting, and escalation",
+                  "setting": "ICU, emergency, step-down, post-op, transport"
+            }
+      ],
+      "sourceFile": "equipment-chest-tube-pleural-drainage-systems.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-chest-tube-pleural-drainage-systems"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "specialty-gases-equipment",
+      "moduleTitle": "Specialty Gas Equipment & Monitoring",
+      "lessonId": "equipment-specialty-gases-heliox-nitric-oxide",
+      "lessonTitle": "Specialty Gases — Heliox & Inhaled Nitric Oxide Equipment",
+      "displayTitle": "Equipment — Specialty Gases: Heliox & Nitric Oxide",
+      "href": "/equipment/equipment-specialty-gases-heliox-nitric-oxide",
+      "estimatedMinutes": 55,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "Emergency, ICU, pediatric, transport",
+            "NICU, PICU, ICU, transport"
+      ],
+      "topics": [
+            "specialty gases",
+            "heliox",
+            "inhaled nitric oxide",
+            "nitric oxide delivery system",
+            "heliox flow correction",
+            "gas cylinder safety",
+            "airway obstruction",
+            "pulmonary hypertension",
+            "PPHN",
+            "ARDS oxygenation support",
+            "nebulizer delivery with heliox",
+            "NO2 monitoring",
+            "methemoglobin monitoring",
+            "specialty gas troubleshooting"
+      ],
+      "searchTags": [
+            "heliox equipment",
+            "heliox flow calculation",
+            "heliox troubleshooting",
+            "nitric oxide setup",
+            "iNO monitoring",
+            "NO2 alarm",
+            "methemoglobin monitoring",
+            "specialty gases RT",
+            "pulmonary vasodilator equipment"
+      ],
+      "activityTypes": [
+            "case-study",
+            "flashcards",
+            "quiz",
+            "sorting",
+            "video"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_specialty_gases_overview_video",
+                  "type": "video",
+                  "title": "Overview: Specialty Gas Equipment",
+                  "required": false,
+                  "estimatedMinutes": 2
+            },
+            {
+                  "id": "equipment_specialty_gases_device_selection",
+                  "type": "sorting",
+                  "title": "Heliox vs Nitric Oxide Selection",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_specialty_gases_heliox_flow_check",
+                  "type": "quiz",
+                  "title": "Heliox Flow Correction Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_specialty_gases_ino_monitoring_check",
+                  "type": "quiz",
+                  "title": "iNO Monitoring Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_specialty_gases_case",
+                  "type": "case-study",
+                  "title": "Specialty Gas Troubleshooting Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_specialty_gases_knowledge_check",
+                  "type": "quiz",
+                  "title": "Specialty Gas Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_specialty_gases_flashcards",
+                  "type": "flashcards",
+                  "title": "Specialty Gas Flashcard Deck",
+                  "required": false,
+                  "estimatedMinutes": 8
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-II.B-specialty-gases",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_specialty_gases_device_selection",
+                        "equipment_specialty_gases_heliox_flow_check",
+                        "equipment_specialty_gases_ino_monitoring_check",
+                        "equipment_specialty_gases_case",
+                        "equipment_specialty_gases_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Heliox and nitric oxide equipment setup, calibration/verification, alarms, contraindications, and troubleshooting"
+            },
+            {
+                  "outlineId": "BOK-III.C-specialty-gases",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_specialty_gases_device_selection",
+                        "equipment_specialty_gases_heliox_flow_check",
+                        "equipment_specialty_gases_ino_monitoring_check",
+                        "equipment_specialty_gases_case",
+                        "equipment_specialty_gases_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Select heliox or iNO based on clinical goal, set up delivery, monitor response, and escalate when ineffective"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Obstructive airway disease and upper airway obstruction",
+                  "patientConditionType": "Asthma, COPD exacerbation, croup, or upper airway obstruction receiving heliox support",
+                  "conditionTags": [
+                        "asthma",
+                        "COPD",
+                        "croup",
+                        "upper airway obstruction",
+                        "high work of breathing"
+                  ],
+                  "clinicalJudgmentType": "Specialty gas selection, flow correction, and troubleshooting",
+                  "setting": "Emergency, ICU, pediatric, transport"
+            },
+            {
+                  "patientConditionCategory": "Pulmonary vascular disease and hypoxic respiratory failure",
+                  "patientConditionType": "PPHN, pulmonary hypertension, or hypoxic respiratory failure receiving inhaled nitric oxide",
+                  "conditionTags": [
+                        "PPHN",
+                        "pulmonary hypertension",
+                        "ARDS",
+                        "hypoxic respiratory failure",
+                        "right heart strain"
+                  ],
+                  "clinicalJudgmentType": "iNO delivery setup, monitoring, alarm response, and weaning safety",
+                  "setting": "NICU, PICU, ICU, transport"
+            }
+      ],
+      "sourceFile": "equipment-specialty-gases-heliox-nitric-oxide.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-specialty-gases-heliox-nitric-oxide"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "icu-procedure-assist-and-monitoring-equipment",
+      "moduleTitle": "ICU Procedure Assist and Monitoring Equipment",
+      "lessonId": "equipment-invasive-lines-a-line-sampling-pressure-monitoring",
+      "lessonTitle": "Invasive Lines, A-Line Blood Sampling & Pressure Monitoring Equipment",
+      "displayTitle": "Equipment — Invasive Lines, A-Line Sampling & Pressure Monitoring",
+      "href": "/equipment/equipment-invasive-lines-a-line-sampling-pressure-monitoring",
+      "estimatedMinutes": 55,
+      "patientAge": [
+            "Adult",
+            "Pediatric",
+            "Neonatal"
+      ],
+      "setting": [
+            "ICU, emergency department, transport stabilization"
+      ],
+      "topics": [
+            "arterial line",
+            "arterial blood sampling",
+            "invasive pressure monitoring",
+            "transducer setup",
+            "zeroing and leveling",
+            "dynamic response test",
+            "arterial waveform",
+            "central venous catheter assist",
+            "arterial catheter insertion assist",
+            "line safety",
+            "specimen handling"
+      ],
+      "searchTags": [
+            "arterial line setup",
+            "a-line blood sampling",
+            "pressure transducer zeroing",
+            "invasive pressure monitoring",
+            "square wave test",
+            "arterial catheter assist",
+            "central line assist",
+            "ABG from arterial line"
+      ],
+      "activityTypes": [
+            "case-study",
+            "quiz",
+            "sequencing",
+            "sorting"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_invasive_lines_equipment_sort",
+                  "type": "sorting",
+                  "title": "A-Line Equipment Identification",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_invasive_lines_sampling_order",
+                  "type": "sequencing",
+                  "title": "Arterial Line Sampling Sequence",
+                  "required": true,
+                  "estimatedMinutes": 7
+            },
+            {
+                  "id": "equipment_invasive_lines_waveform_check",
+                  "type": "quiz",
+                  "title": "Waveform Troubleshooting Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_invasive_lines_case",
+                  "type": "case-study",
+                  "title": "Damped A-Line Waveform and ABG Accuracy Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_invasive_lines_knowledge_check",
+                  "type": "quiz",
+                  "title": "Invasive Line Equipment Knowledge Check",
+                  "required": true,
+                  "estimatedMinutes": 10
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-III.H.7",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_invasive_lines_equipment_sort",
+                        "equipment_invasive_lines_sampling_order",
+                        "equipment_invasive_lines_waveform_check",
+                        "equipment_invasive_lines_case",
+                        "equipment_invasive_lines_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Prepare assist equipment, maintain sterile support role, connect pressure monitoring system, recognize hazards, and communicate complications."
+            },
+            {
+                  "outlineId": "BOK-I.C",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_invasive_lines_equipment_sort",
+                        "equipment_invasive_lines_sampling_order",
+                        "equipment_invasive_lines_waveform_check",
+                        "equipment_invasive_lines_case",
+                        "equipment_invasive_lines_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Obtain arterial blood samples from an arterial line using closed or open sampling workflow and safe specimen handling."
+            },
+            {
+                  "outlineId": "BOK-I.D",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_invasive_lines_equipment_sort",
+                        "equipment_invasive_lines_sampling_order",
+                        "equipment_invasive_lines_waveform_check",
+                        "equipment_invasive_lines_case",
+                        "equipment_invasive_lines_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Evaluate waveform reliability, sample quality, and whether a blood gas result matches the patient condition and oxygen setting."
+            },
+            {
+                  "outlineId": "BOK-II.B",
+                  "coverageLevel": "reinforced",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_invasive_lines_equipment_sort",
+                        "equipment_invasive_lines_sampling_order",
+                        "equipment_invasive_lines_waveform_check",
+                        "equipment_invasive_lines_case",
+                        "equipment_invasive_lines_knowledge_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Troubleshoot pressure bags, transducers, stopcocks, flush systems, alarms, and damped or exaggerated arterial waveforms."
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Critical care monitoring",
+                  "patientConditionType": "Patient requiring invasive arterial pressure monitoring and blood gas sampling",
+                  "conditionTags": [
+                        "shock",
+                        "mechanical ventilation",
+                        "vasopressors",
+                        "frequent ABGs",
+                        "unstable oxygenation"
+                  ],
+                  "clinicalJudgmentType": "Equipment setup, sampling safety, waveform troubleshooting, and escalation",
+                  "setting": "ICU, emergency department, transport stabilization"
+            }
+      ],
+      "sourceFile": "equipment-invasive-lines-a-line-sampling-pressure-monitoring.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-invasive-lines-a-line-sampling-pressure-monitoring"
+},
+{
+      "courseId": "equipment",
+      "courseTitle": "PulmoCore Respiratory Equipment & Procedures",
+      "moduleId": "advanced-icu-procedure-support",
+      "moduleTitle": "Advanced ICU Procedure Support",
+      "lessonId": "equipment-apnea-test-brain-death-support",
+      "lessonTitle": "Apnea Test & Brain Death Determination Support — Equipment, Setup, Monitoring & Stop Criteria",
+      "displayTitle": "Equipment — Apnea Test & Brain Death Support",
+      "href": "/equipment/equipment-apnea-test-brain-death-support",
+      "estimatedMinutes": 55,
+      "patientAge": [
+            "Adult",
+            "Pediatric"
+      ],
+      "setting": [
+            "ICU, emergency department, neurocritical care"
+      ],
+      "topics": [
+            "apnea test",
+            "brain death determination",
+            "preoxygenation",
+            "apneic oxygenation",
+            "oxygen insufflation catheter",
+            "CPAP apnea test",
+            "ABG sampling",
+            "PaCO2 target",
+            "hemodynamic monitoring",
+            "apnea test abort criteria",
+            "ventilator disconnection",
+            "brain death procedure support"
+      ],
+      "searchTags": [
+            "apnea test setup",
+            "brain death apnea test equipment",
+            "apnea test stop criteria",
+            "apneic oxygenation catheter",
+            "CPAP apnea test",
+            "RT brain death support",
+            "apnea test ABG documentation"
+      ],
+      "activityTypes": [
+            "case-study",
+            "quiz",
+            "sorting"
+      ],
+      "activities": [
+            {
+                  "id": "equipment_apnea_test_equipment_sort",
+                  "type": "sorting",
+                  "title": "Apnea Test Equipment Selection",
+                  "required": true,
+                  "estimatedMinutes": 6
+            },
+            {
+                  "id": "equipment_apnea_test_readiness_check",
+                  "type": "quiz",
+                  "title": "Readiness and Safety Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            },
+            {
+                  "id": "equipment_apnea_test_abort_criteria_case",
+                  "type": "case-study",
+                  "title": "Apnea Test Abort Criteria Case",
+                  "required": true,
+                  "estimatedMinutes": 10
+            },
+            {
+                  "id": "equipment_apnea_test_documentation_check",
+                  "type": "quiz",
+                  "title": "Documentation and Communication Check",
+                  "required": true,
+                  "estimatedMinutes": 5
+            }
+      ],
+      "nbrcAlignment": [
+            {
+                  "outlineId": "BOK-I.C.13",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_apnea_test_equipment_sort",
+                        "equipment_apnea_test_readiness_check",
+                        "equipment_apnea_test_abort_criteria_case",
+                        "equipment_apnea_test_documentation_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Prepare equipment, preoxygenate, support apneic oxygenation, gather baseline and endpoint ABG data, monitor safety criteria"
+            },
+            {
+                  "outlineId": "BOK-I.D.14",
+                  "coverageLevel": "assessed",
+                  "evidenceType": [
+                        "instruction",
+                        "case-study",
+                        "knowledge-check",
+                        "troubleshooting"
+                  ],
+                  "interactionIds": [
+                        "equipment_apnea_test_equipment_sort",
+                        "equipment_apnea_test_readiness_check",
+                        "equipment_apnea_test_abort_criteria_case",
+                        "equipment_apnea_test_documentation_check"
+                  ],
+                  "estimatedMinutes": 14,
+                  "notes": "Evaluate patient response, identify apnea test intolerance, recognize abort criteria, communicate results and complications"
+            }
+      ],
+      "dcjAlignment": [
+            {
+                  "patientConditionCategory": "Neurologic critical care",
+                  "patientConditionType": "Suspected brain death requiring apnea test support",
+                  "conditionTags": [
+                        "brain death",
+                        "coma",
+                        "mechanical ventilation",
+                        "apnea test",
+                        "critical care"
+                  ],
+                  "clinicalJudgmentType": "Procedure readiness, equipment setup, monitoring, abort criteria",
+                  "setting": "ICU, emergency department, neurocritical care"
+            }
+      ],
+      "sourceFile": "equipment-apnea-test-brain-death-support.html",
+      "mappingStatus": "first-pass",
+      "mappingNotes": "First-pass exact/broad NBRC 2027 equipment and procedure mapping generated from embedded lesson metadata. Review before final accreditation reporting.",
+      "url": "/equipment/equipment-apnea-test-brain-death-support"
+}
 ];
 
   const COURSE_ID_ALIASES = {
