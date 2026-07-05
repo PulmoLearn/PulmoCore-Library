@@ -44863,7 +44863,7 @@
                   "notes": "Evaluate oxygen response to exertion, identify effective flow/device, recognize unsafe or failed titration, document recommendation"
             },
             {
-                  "outlineId": "II.A",
+                  "outlineId": "BOK-II.A.2",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -44881,7 +44881,7 @@
                   "notes": "Select safe portable oxygen equipment, verify cylinder pressure/duration, prevent trip hazards and oxygen hazards"
             },
             {
-                  "outlineId": "III.A",
+                  "outlineId": "BOK-III.C.2",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -45041,7 +45041,7 @@
                   "notes": "Select, assemble, verify, troubleshoot, and maintain heated high-flow oxygen delivery equipment"
             },
             {
-                  "outlineId": "BOK-III.C.2.b",
+                  "outlineId": "BOK-III.C.2",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -45117,7 +45117,7 @@
                   "notes": "Monitor SpO2, respiratory pattern, and escalation signals during HFNC"
             },
             {
-                  "outlineId": "BOK-III.E.2.k",
+                  "outlineId": "BOK-III.E.2",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -45136,7 +45136,7 @@
                   "notes": "Recommend escalation, titration, or discontinuation based on patient response"
             },
             {
-                  "outlineId": "BOK-III.E.2.l",
+                  "outlineId": "BOK-III.E.2",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -45296,7 +45296,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "BOK-II.A",
+                  "outlineId": "BOK-II.A.9",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -45315,7 +45315,7 @@
                   "notes": "Assemble ventilator circuit safely, protect sterility, verify filters, humidification, alarms, and patient-ready configuration"
             },
             {
-                  "outlineId": "BOK-II.B",
+                  "outlineId": "BOK-II.B.4",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -45353,7 +45353,7 @@
                   "notes": "Prepare ventilator and circuit before entering ordered patient settings and connecting the patient"
             },
             {
-                  "outlineId": "BOK-I.A",
+                  "outlineId": "BOK-I.A.7",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -45497,7 +45497,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "BOK-II.B.NIV-EQUIPMENT",
+                  "outlineId": "BOK-II.A.4",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -45516,7 +45516,7 @@
                   "notes": "Choose NIV interfaces and circuits, verify exhalation port safety, manage leaks, troubleshoot equipment alarms and intolerance"
             },
             {
-                  "outlineId": "BOK-III.C.NIV-INITIATE-MODIFY",
+                  "outlineId": "BOK-III.C.3",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -45535,7 +45535,7 @@
                   "notes": "Set CPAP, IPAP, EPAP, pressure support, FiO2 or oxygen bleed-in; monitor response and titrate according to order/protocol"
             },
             {
-                  "outlineId": "BOK-I.A.NIV-RESPONSE",
+                  "outlineId": "BOK-I.A.7",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -46264,7 +46264,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "BOK-III.H",
+                  "outlineId": "BOK-III.H.2",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -46282,7 +46282,7 @@
                   "notes": "Prepare bronchoscopy equipment, airway supplies, suction, specimen traps, monitoring, and post-procedure support"
             },
             {
-                  "outlineId": "BOK-II.A",
+                  "outlineId": "BOK-II.A.9",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -46300,7 +46300,7 @@
                   "notes": "Use PPE, maintain clean/sterile workflow, manage specimen handling, and prevent equipment-related patient harm"
             },
             {
-                  "outlineId": "BOK-II.B",
+                  "outlineId": "BOK-II.B.4",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -46318,7 +46318,7 @@
                   "notes": "Troubleshoot suction failure, oxygenation deterioration, airway obstruction, and ventilator/circuit problems during bronchoscopy"
             },
             {
-                  "outlineId": "BOK-I.A",
+                  "outlineId": "BOK-I.A.7",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -46448,7 +46448,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "BOK-II.B",
+                  "outlineId": "BOK-II.B.4",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -46466,7 +46466,7 @@
                   "notes": "Select aerosol delivery device, place adapters correctly, prevent HME/filter obstruction, troubleshoot poor aerosol delivery"
             },
             {
-                  "outlineId": "BOK-II.A",
+                  "outlineId": "BOK-II.A.9",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -46484,7 +46484,7 @@
                   "notes": "Maintain circuit integrity, avoid contamination, manage filters and adapters safely"
             },
             {
-                  "outlineId": "BOK-III.C",
+                  "outlineId": "BOK-III.C.3",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -46502,7 +46502,7 @@
                   "notes": "Administer aerosol therapy without interrupting ventilatory support or worsening airway resistance"
             },
             {
-                  "outlineId": "BOK-I.A",
+                  "outlineId": "BOK-I.A.7",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -46703,7 +46703,7 @@
                   "notes": "Secure tube, assess tube depth, monitor cuff pressure, suction artificial airway, and recognize emergency red flags"
             },
             {
-                  "outlineId": "BOK-II.B",
+                  "outlineId": "BOK-II.B.4",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -47042,7 +47042,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "BOK-II.A",
+                  "outlineId": "BOK-II.A.9",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -47062,7 +47062,7 @@
                   "notes": "VAP bundle workflow, oral care equipment, circuit handling, condensate safety, and contamination prevention"
             },
             {
-                  "outlineId": "BOK-II.B",
+                  "outlineId": "BOK-II.B.4",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -47082,7 +47082,7 @@
                   "notes": "Cuff manometer use, subglottic suction setup, oral suction setup, securement device maintenance, and circuit hazard recognition"
             },
             {
-                  "outlineId": "BOK-III.A",
+                  "outlineId": "BOK-III.A.4",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -47102,7 +47102,7 @@
                   "notes": "Perform airway maintenance procedures that reduce aspiration, VAP, tube obstruction, mucosal injury, and pressure injury"
             },
             {
-                  "outlineId": "BOK-I.A",
+                  "outlineId": "BOK-I.A.7",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -47495,7 +47495,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "L-41",
+                  "outlineId": "BOK-III.G.3",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -47701,7 +47701,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "EQUIP-ICU-CHEST-TUBE-01",
+                  "outlineId": "BOK-II.A.20",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -47846,7 +47846,7 @@
       ],
       "nbrcAlignment": [
             {
-                  "outlineId": "BOK-II.B-specialty-gases",
+                  "outlineId": "BOK-II.A.17",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -47865,7 +47865,7 @@
                   "notes": "Heliox and nitric oxide equipment setup, calibration/verification, alarms, contraindications, and troubleshooting"
             },
             {
-                  "outlineId": "BOK-III.C-specialty-gases",
+                  "outlineId": "BOK-III.D.3",
                   "coverageLevel": "assessed",
                   "evidenceType": [
                         "instruction",
@@ -48022,7 +48022,7 @@
                   "notes": "Prepare assist equipment, maintain sterile support role, connect pressure monitoring system, recognize hazards, and communicate complications."
             },
             {
-                  "outlineId": "BOK-I.C",
+                  "outlineId": "BOK-I.C.4",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -48041,7 +48041,7 @@
                   "notes": "Obtain arterial blood samples from an arterial line using closed or open sampling workflow and safe specimen handling."
             },
             {
-                  "outlineId": "BOK-I.D",
+                  "outlineId": "BOK-I.D.8",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
@@ -48060,7 +48060,7 @@
                   "notes": "Evaluate waveform reliability, sample quality, and whether a blood gas result matches the patient condition and oxygen setting."
             },
             {
-                  "outlineId": "BOK-II.B",
+                  "outlineId": "BOK-II.B.4",
                   "coverageLevel": "reinforced",
                   "evidenceType": [
                         "instruction",
