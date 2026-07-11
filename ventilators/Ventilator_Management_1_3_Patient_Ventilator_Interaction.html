@@ -125,4 +125,74 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
  initMulti(document.getElementById('final-case'),'.final-option','finalStatus');initMulti(document.getElementById('knowledge-check'),'.knowledge-option','knowledgeStatus');
  function progressive(){const sections=[...document.querySelectorAll('.lesson-stack > section')],links=[...document.querySelectorAll('.side-nav a')];sections.forEach((s,i)=>{s.dataset.sectionIndex=i;if(i>0)s.classList.add('lesson-hidden')});function complete(s){const req=[...s.querySelectorAll('.require-complete')];if(s.classList.contains('require-complete'))req.push(s);return req.every(x=>x.dataset.complete==='true')}function update(){sections.forEach(s=>{const b=s.querySelector(':scope > .section-continue button');if(b)b.disabled=!complete(s)});links.forEach(l=>{const t=document.querySelector(l.getAttribute('href'));l.classList.toggle('locked',t&&t.classList.contains('lesson-hidden'))})}sections.forEach((s,i)=>{if(i===sections.length-1)return;const n=sections[i+1],h=n.querySelector('h2,h3');const w=document.createElement('div');w.className='section-continue';w.innerHTML='<button class="btn btn-primary" type="button">Continue to '+(h?h.textContent:'Next Section')+' →</button>';w.querySelector('button').addEventListener('click',()=>{if(!complete(s))return;n.classList.remove('lesson-hidden');w.remove();n.scrollIntoView({behavior:'smooth',block:'start'});update()});s.appendChild(w)});links.forEach(l=>l.addEventListener('click',e=>{const t=document.querySelector(l.getAttribute('href'));if(t&&t.classList.contains('lesson-hidden'))e.preventDefault()}));document.addEventListener('activityComplete',update);update()}progressive();
  const cards=[['Trigger','The event that initiates inspiration: time, pressure, or flow.'],['Control / limit','The variable targeted or constrained during inspiration.'],['Cycle','The event that ends inspiration and begins exhalation.'],['Baseline','The pressure maintained during exhalation, usually PEEP.'],['Ineffective triggering','Patient effort that fails to trigger a ventilator breath.'],['Auto-triggering','A ventilator breath delivered without true patient effort.'],['Flow starvation','Inspiratory demand exceeds the flow supplied by the ventilator.'],['Double triggering','Two breaths delivered for one prolonged patient effort.'],['Premature cycling','Inspiration ends before the patient is ready.'],['Delayed cycling','Inspiration continues after the patient wants to exhale.']];let active=[...cards],done=[],idx=0,shown=false;const f=document.getElementById('cardFront'),b=document.getElementById('cardBack'),bar=document.getElementById('progressFill'),txt=document.getElementById('progressText');function render(){if(!active.length){f.textContent='Deck complete';b.textContent='Reset to review again.';b.hidden=false}else{idx%=active.length;f.textContent=active[idx][0];b.textContent=active[idx][1];b.hidden=true;shown=false}txt.textContent='Progress: '+done.length+' / '+cards.length+' mastered';bar.style.width=(done.length/cards.length*100)+'%'}function flip(){if(!active.length)return;shown=!shown;b.hidden=!shown}document.getElementById('flashcard').addEventListener('click',flip);document.getElementById('revealCard').addEventListener('click',flip);document.getElementById('reviewAgain').addEventListener('click',()=>{if(active.length){idx=(idx+1)%active.length;render()}});document.getElementById('knowCard').addEventListener('click',()=>{if(active.length){done.push(active.splice(idx,1)[0]);if(idx>=active.length)idx=0;render()}});document.getElementById('resetAll').addEventListener('click',()=>{active=[...cards];done=[];idx=0;render()});render();
-});</script><script src="/assets/progress-tracker.js" type="module"></script></body></html>
+});</script><script src="/assets/progress-tracker.js" type="module"></script>
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
+</body></html>

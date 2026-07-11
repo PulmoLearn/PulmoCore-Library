@@ -163,4 +163,74 @@ document.addEventListener('DOMContentLoaded',function(){
  progressive();
  const cards=[['PBW','Predicted body weight estimates lung size from height and sex and is used to select tidal volume.'],['Minute ventilation','Tidal volume multiplied by respiratory rate. It is the main ventilator determinant of PaCO₂.'],['Assist-control','A full-support strategy in which each mandatory or patient-triggered breath receives the set control target.'],['PEEP','Positive pressure remaining at end expiration to prevent alveolar collapse and improve oxygenation.'],['Auto-PEEP','Pressure caused by incomplete exhalation and dynamic hyperinflation.'],['Plateau pressure','Pressure measured during an inspiratory hold that reflects alveolar distending pressure when flow is zero.'],['NIV failure','Worsening gas exchange, effort, mental status, or instability despite optimized noninvasive support.']];let active=[...cards],done=[],idx=0,shown=false;const f=document.getElementById('cardFront'),b=document.getElementById('cardBack'),bar=document.getElementById('progressFill'),txt=document.getElementById('progressText');function render(){if(!active.length){f.textContent='Deck complete';b.textContent='Reset to review again.';b.hidden=false}else{idx%=active.length;f.textContent=active[idx][0];b.textContent=active[idx][1];b.hidden=true;shown=false}txt.textContent='Progress: '+done.length+' / '+cards.length+' mastered';bar.style.width=(done.length/cards.length*100)+'%'}function flip(){if(!active.length)return;shown=!shown;b.hidden=!shown}document.getElementById('flashcard').addEventListener('click',flip);document.getElementById('revealCard').addEventListener('click',flip);document.getElementById('reviewAgain').addEventListener('click',()=>{if(active.length){idx=(idx+1)%active.length;render()}});document.getElementById('knowCard').addEventListener('click',()=>{if(active.length){done.push(active.splice(idx,1)[0]);if(idx>=active.length)idx=0;render()}});document.getElementById('resetAll').addEventListener('click',()=>{active=[...cards];done=[];idx=0;render()});render();
 });
-</script><script src="/assets/progress-tracker.js" type="module"></script></body>
+</script><script src="/assets/progress-tracker.js" type="module"></script>
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
+</body>
