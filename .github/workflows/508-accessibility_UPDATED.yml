@@ -1,0 +1,48 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# PulmoCore — 508 Accessibility Auto-Patch
+#
+# Runs whenever HTML lesson files are pushed to the repository.
+# 1. Applies the existing 508 accessibility patch.
+# 2. Makes the course-menu builder safe for lessons both with and without
+#    #courseMenuList.
+# 3. Commits the changes back automatically.
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: 508 Accessibility Patch
+
+on:
+  push:
+    paths:
+      - '**.html'
+      - 'add_508_accessibility.py'
+      - 'fix_course_menu_safety.py'
+      - '.github/workflows/508-accessibility.yml'
+  workflow_dispatch:
+
+jobs:
+  patch-accessibility:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Run 508 accessibility patch
+        run: python3 add_508_accessibility.py .
+
+      - name: Make course menus null-safe
+        run: python3 fix_course_menu_safety.py .
+
+      - name: Commit patched files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit — all files already patched."
+          else
+            git commit -m "ci: apply 508 and course-menu safety patches"
+            git push
+          fi
