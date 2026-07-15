@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
-\"\"\"
-PulmoCore course-menu safety patch.
-
-Supports both lesson layouts:
-1. Lessons that include #courseMenuList:
-   - The menu is built normally.
-2. Lessons that do not include #courseMenuList:
-   - Menu construction is skipped safely instead of throwing a TypeError.
-
-The patch is idempotent and can be run repeatedly.
-\"\"\"
-
 from __future__ import annotations
 
 import argparse
@@ -18,75 +6,46 @@ import re
 from pathlib import Path
 
 
-NULL_GUARD = '''const list=document.getElementById("courseMenuList");
-    if(!list){
-      console.warn('PulmoLearn: #courseMenuList not found; course menu build skipped.');
-      return;
-    }'''
-
-
 def patch_course_menu_builder(html: str) -> tuple[str, bool]:
-    \"\"\"Insert a null check before courseMenuList.innerHTML assignments.\"\"\"
-    if "#courseMenuList not found; course menu build skipped." in html:
+    marker = "#courseMenuList not found; course menu build skipped."
+    if marker in html:
         return html, False
+
+    pattern = re.compile(
+        r'''const\s+(?P<var>[A-Za-z_$][\w$]*)\s*=\s*
+            document\.getElementById\(\s*["']courseMenuList["']\s*\)\s*;\s*
+            (?=(?P=var)\.innerHTML\s*=)''',
+        re.VERBOSE,
+    )
 
     changed = False
 
-    compact = re.compile(
-        r\"\"\"const\\s+list\\s*=\\s*document\\.getElementById\\(\\s*[\"']courseMenuList[\"']\\s*\\)\\s*;\\s*
-            (?=list\\.innerHTML\\s*=)\"\"\",
-        re.VERBOSE,
-    )
-
-    def compact_replacement(match: re.Match[str]) -> str:
-        nonlocal changed
-        changed = True
-        return NULL_GUARD + "\\n    "
-
-    html = compact.sub(compact_replacement, html)
-
-    generic = re.compile(
-        r\"\"\"const\\s+(?P<var>[A-Za-z_$][\\w$]*)\\s*=\\s*
-            document\\.getElementById\\(\\s*[\"']courseMenuList[\"']\\s*\\)\\s*;\\s*
-            (?=(?P=var)\\.innerHTML\\s*=)\"\"\",
-        re.VERBOSE,
-    )
-
-    def generic_replacement(match: re.Match[str]) -> str:
+    def replace(match: re.Match[str]) -> str:
         nonlocal changed
         changed = True
         var_name = match.group("var")
         return (
-            f'const {var_name}=document.getElementById("courseMenuList");\\n'
-            f'    if(!{var_name}){{\\n'
-            "      console.warn('PulmoLearn: #courseMenuList not found; course menu build skipped.');\\n"
-            "      return;\\n"
-            "    }\\n    "
+            f'const {var_name}=document.getElementById("courseMenuList");\n'
+            f'    if(!{var_name}){{\n'
+            "      console.warn('PulmoLearn: #courseMenuList not found; course menu build skipped.');\n"
+            "      return;\n"
+            "    }\n    "
         )
 
-    html = generic.sub(generic_replacement, html)
-    return html, changed
+    return pattern.sub(replace, html), changed
 
 
 def add_menu_aria_controls(html: str) -> tuple[str, bool]:
-    \"\"\"Add aria-controls when the standard course-menu button exists.\"\"\"
-    if 'id="courseMenuButton"' not in html or 'aria-controls="courseMenuPanel"' in html:
+    if 'id="courseMenuButton"' not in html:
+        return html, False
+    if 'aria-controls="courseMenuPanel"' in html:
         return html, False
 
-    patterns = [
-        (
-            'id="courseMenuButton" aria-expanded="false" aria-haspopup="true"',
-            'id="courseMenuButton" aria-expanded="false" aria-haspopup="true" aria-controls="courseMenuPanel"',
-        ),
-        (
-            "id='courseMenuButton' aria-expanded='false' aria-haspopup='true'",
-            "id='courseMenuButton' aria-expanded='false' aria-haspopup='true' aria-controls='courseMenuPanel'",
-        ),
-    ]
+    old = 'id="courseMenuButton" aria-expanded="false" aria-haspopup="true"'
+    new = 'id="courseMenuButton" aria-expanded="false" aria-haspopup="true" aria-controls="courseMenuPanel"'
 
-    for old, new in patterns:
-        if old in html:
-            return html.replace(old, new, 1), True
+    if old in html:
+        return html.replace(old, new, 1), True
 
     return html, False
 
@@ -118,12 +77,7 @@ def iter_html_files(root: Path):
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "target",
-        nargs="?",
-        default=".",
-        help="HTML file or directory to patch (default: current directory)",
-    )
+    parser.add_argument("target", nargs="?", default=".")
     args = parser.parse_args()
 
     root = Path(args.target).resolve()
