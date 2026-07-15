@@ -180,7 +180,7 @@ table{width:100%;border-collapse:collapse;min-width:620px}th,td{text-align:left;
       <span aria-hidden="true">⌂</span><span>Home</span>
     </a>
     <div class="course-menu-container">
-      <button class="course-menu-button" id="courseMenuButton" aria-expanded="false" aria-haspopup="true">☰ Courses</button>
+      <button class="course-menu-button" id="courseMenuButton" aria-expanded="false" aria-haspopup="true" aria-controls="courseMenuPanel">☰ Courses</button>
       <div class="course-menu-panel" id="courseMenuPanel" role="menu">
         <div class="course-menu-heading">PulmoCore Courses</div><div id="courseMenuList"></div>
       </div>
@@ -812,6 +812,10 @@ renderMasteryCard();
     if(!courses.length)return;
     built=true;
     const list=document.getElementById("courseMenuList");
+    if(!list){
+      console.warn('PulmoLearn: #courseMenuList not found; course menu build skipped.');
+      return;
+    }
     list.innerHTML=courses.map(c=>`<a class="course-menu-item" href="${c.file||c.href||'#'}" role="menuitem"><span class="course-menu-title">${c.title||c.name||'Course'}</span><span class="course-menu-status">Open</span></a>`).join("");
   }
   document.addEventListener("DOMContentLoaded",()=>{setup();build()});window.addEventListener("load",build);setTimeout(build,300);
