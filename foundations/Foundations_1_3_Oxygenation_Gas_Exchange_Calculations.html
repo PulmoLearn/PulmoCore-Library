@@ -233,6 +233,13 @@ window.PULMO_LESSON = {
       "estimatedMinutes": 3
     },
     {
+      "id": "foundations_1_3_gas_law_clinical_match",
+      "type": "sort",
+      "title": "Gas Law Clinical Examples",
+      "required": true,
+      "estimatedMinutes": 5
+    },
+    {
       "id": "foundations_1_3_oxygen_journey_sort",
       "type": "sorting",
       "title": "Oxygen Journey Sort",
@@ -463,6 +470,61 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 <tr><td><strong>Henry's law</strong></td><td>Dissolved gas is proportional to its partial pressure and solubility.</td><td>Increasing gas partial pressure increases the amount that dissolves in blood or liquid.</td></tr>
 </table>
 </div>
+
+<article class="activity-card require-complete" data-activity-id="foundations_1_3_gas_law_clinical_match" data-activity-name="Gas Law Clinical Examples" data-activity-type="sort" data-course-id="foundations" data-estimated-minutes="5" data-lesson-id="foundations_1_3" data-module-id="foundations-procedures-diagnostics" data-required="true" style="margin-top:16px">
+<h3>Which Gas Law Explains the Clinical Example?</h3>
+<p>Apply the relationships from the table above. Select the gas law that best explains each respiratory-care example. Each law is used once.</p>
+<div class="sort-grid" id="gasLawClinicalSort">
+
+<div class="sort-row" data-answer="boyle">
+<strong>During inspiration, the diaphragm descends, thoracic volume increases, alveolar pressure falls below atmospheric pressure, and air moves into the lungs.</strong>
+<select aria-label="Choose the gas law for the inspiration example">
+<option value="">Choose a gas law</option>
+<option value="henry">Henry's law</option>
+<option value="dalton">Dalton's law</option>
+<option value="boyle">Boyle's law</option>
+<option value="charles">Charles's law</option>
+</select>
+</div>
+
+<div class="sort-row" data-answer="charles">
+<strong>A sealed resuscitation bag or gas-filled device becomes warmer, causing the gas inside to expand when pressure is allowed to remain approximately constant.</strong>
+<select aria-label="Choose the gas law for the warming gas example">
+<option value="">Choose a gas law</option>
+<option value="boyle">Boyle's law</option>
+<option value="charles">Charles's law</option>
+<option value="henry">Henry's law</option>
+<option value="dalton">Dalton's law</option>
+</select>
+</div>
+
+<div class="sort-row" data-answer="dalton">
+<strong>At sea level, the total atmospheric pressure is produced by the combined partial pressures of oxygen, nitrogen, water vapor, and other gases.</strong>
+<select aria-label="Choose the gas law for the gas mixture example">
+<option value="">Choose a gas law</option>
+<option value="charles">Charles's law</option>
+<option value="henry">Henry's law</option>
+<option value="dalton">Dalton's law</option>
+<option value="boyle">Boyle's law</option>
+</select>
+</div>
+
+<div class="sort-row" data-answer="henry">
+<strong>Increasing the partial pressure of oxygen increases the amount of oxygen that dissolves in plasma, as occurs during hyperbaric oxygen therapy.</strong>
+<select aria-label="Choose the gas law for the dissolved oxygen example">
+<option value="">Choose a gas law</option>
+<option value="dalton">Dalton's law</option>
+<option value="boyle">Boyle's law</option>
+<option value="charles">Charles's law</option>
+<option value="henry">Henry's law</option>
+</select>
+</div>
+
+</div>
+<button class="small-btn primary" id="checkGasLawClinical" style="margin-top:12px" type="button">Check Gas Laws</button>
+<div class="activity-status" id="gasLawClinicalStatus">Select one gas law for each clinical example.</div>
+</article>
+
 <article class="info-card rt" style="margin-top:16px;">
 <h3>How Inspiration Begins</h3>
 <p>The diaphragm contracts and descends while the external intercostals assist chest expansion. Thoracic volume rises, pleural pressure becomes more negative, alveolar pressure falls slightly below atmospheric pressure, and gas flows inward down the pressure gradient. Quiet expiration is usually passive because inspiratory muscles relax and elastic recoil reduces lung volume, raising alveolar pressure above atmospheric pressure.</p>
@@ -500,7 +562,7 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 </div>
 <article class="activity-card require-complete" data-activity-id="foundations_1_3_oxygen_journey_sort" data-activity-name="Oxygen Journey Sort" data-activity-type="sorting" data-estimated-minutes="4" data-required="true" style="margin-top:16px">
 <h3>Put the Oxygen Pathway in Order</h3>
-<p>The numbered positions stay fixed. Choose the correct oxygen-pathway event for each step. The answer choices are presented in a different order in each dropdown.</p>
+<p>The numbered positions stay fixed. Use each pathway event once to build the complete sequence. All four selections must be entered before checking; feedback will not reveal which individual step is incorrect.</p>
 <div class="sort-grid" id="journeySort">
 <div class="sort-row" data-answer="inspired">
 <strong>1</strong>
@@ -793,15 +855,94 @@ function initializeProgressiveSections(){
   if(initializeProgressiveSections._done)return;
   initializeProgressiveSections._done=true;const sections=Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));const navLinks=Array.from(document.querySelectorAll(".side-nav a[href^='#']"));sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}function updateAll(){sections.forEach(setContinueState)}function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}sections.forEach((section,index)=>{if(index>=sections.length-1)return;const next=sections[index+1];const nextTitle=getSectionTitle(next);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});document.addEventListener("activityComplete",updateAll);const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";sections[0].appendChild(note);updateNav(0);updateAll()}
 initializeProgressiveSections();
+(function initGasLawClinicalMatch(){
+  const activity=document.querySelector('[data-activity-id="foundations_1_3_gas_law_clinical_match"]');
+  const button=document.getElementById("checkGasLawClinical");
+  const status=document.getElementById("gasLawClinicalStatus");
+  if(!activity||!button||!status)return;
+
+  button.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    const values=rows.map(row=>row.querySelector("select").value);
+
+    if(values.some(value=>!value)){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Select a gas law for all four clinical examples before checking.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    if(new Set(values).size!==values.length){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Use each gas law once, then check the complete set.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    const allCorrect=rows.every(row=>row.querySelector("select").value===row.dataset.answer);
+
+    if(allCorrect){
+      rows.forEach(row=>{
+        row.classList.add("correct");
+        row.classList.remove("incorrect");
+      });
+      status.textContent="Activity complete. Boyle explains pressure-volume changes, Charles explains temperature-volume changes, Dalton explains partial pressures in a mixture, and Henry explains gas dissolved in liquid.";
+      status.classList.add("complete");
+      markActivityComplete(activity);
+    }else{
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="The complete set is not correct yet. Recheck what changes in each example—pressure and volume, temperature and volume, partial pressures, or gas dissolved in liquid.";
+      status.classList.remove("complete");
+    }
+  });
+})();
+
 function initSort(sectionSelector,buttonId,statusId){const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");const button=document.getElementById(buttonId);const status=document.getElementById(statusId);if(!activity||!button)return;button.addEventListener("click",()=>{const rows=Array.from(activity.querySelectorAll(".sort-row"));let correct=0;rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});status.textContent=`${correct} / ${rows.length} correct`;if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}})}
-initSort("#journey","checkJourneySort","journeyStatus");
-document.getElementById("checkJourneySort")?.addEventListener("click",()=>{
+(function initJourneySequence(){
   const activity=document.querySelector('[data-activity-id="foundations_1_3_oxygen_journey_sort"]');
+  const button=document.getElementById("checkJourneySort");
   const status=document.getElementById("journeyStatus");
-  if(activity?.dataset.complete==="true" && status){
-    status.textContent="Activity complete. Oxygen enters as inspired gas, reaches the alveoli, enters arterial blood, and is then delivered to the tissues.";
-  }
-});
+  if(!activity||!button||!status)return;
+
+  button.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    const selects=rows.map(row=>row.querySelector("select"));
+    const values=selects.map(select=>select.value);
+
+    // Do not grade a partial sequence because that reveals answers one row at a time.
+    if(values.some(value=>!value)){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Choose an event for all four numbered steps before checking the pathway.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    // Require each event to be used once.
+    if(new Set(values).size!==values.length){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Use each oxygen-pathway event only once, then check the complete sequence.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    const allCorrect=rows.every(row=>row.querySelector("select").value===row.dataset.answer);
+
+    if(allCorrect){
+      rows.forEach(row=>{
+        row.classList.add("correct");
+        row.classList.remove("incorrect");
+      });
+      status.textContent="Activity complete. Oxygen enters as inspired gas, reaches the alveoli, enters arterial blood, and is then delivered to the tissues.";
+      status.classList.add("complete");
+      markActivityComplete(activity);
+    }else{
+      // Do not identify which individual rows are correct or incorrect.
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="The complete pathway is not in the correct order yet. Reconsider the full sequence from inspired gas to tissue delivery and try again.";
+      status.classList.remove("complete");
+    }
+  });
+})();
 function initCalc(btnId,inputId,statusId,activitySelector,target,tol,message){const activity=document.querySelector(activitySelector+" .activity-card.require-complete");document.getElementById(btnId).addEventListener("click",()=>{const ok=approx(document.getElementById(inputId).value,target,tol);setStatus(statusId,ok?"Calculation complete.":message,ok);if(ok)markActivityComplete(activity)})}
 initCalc("checkPiO2","pio2Answer","pio2Status","#pio2",656,1,"Check: 0.92 × (760 − 47) = 656 mmHg.");
 initCalc("checkPAO2","pao2Answer","pao2Status","#pao2",189,1,"Check: 0.33 × 713 − 37/0.8 = 189 mmHg.");
