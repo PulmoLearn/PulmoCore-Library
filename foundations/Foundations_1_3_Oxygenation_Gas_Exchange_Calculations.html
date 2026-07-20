@@ -500,15 +500,51 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 </div>
 <article class="activity-card require-complete" data-activity-id="foundations_1_3_oxygen_journey_sort" data-activity-name="Oxygen Journey Sort" data-activity-type="sorting" data-estimated-minutes="4" data-required="true" style="margin-top:16px">
 <h3>Put the Oxygen Pathway in Order</h3>
-<p>Choose the best order for each step.</p>
+<p>The numbered positions stay fixed. Choose the correct oxygen-pathway event for each step. The answer choices are presented in a different order in each dropdown.</p>
 <div class="sort-grid" id="journeySort">
-<div class="sort-row" data-answer="1"><strong>Oxygen enters as inspired gas</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
-<div class="sort-row" data-answer="2"><strong>Oxygen reaches alveoli</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
-<div class="sort-row" data-answer="3"><strong>Oxygen enters arterial blood</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
-<div class="sort-row" data-answer="4"><strong>Oxygen is delivered to tissues</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
+<div class="sort-row" data-answer="inspired">
+<strong>1</strong>
+<select aria-label="Choose the first oxygen pathway event">
+<option value="">Choose the 1st event</option>
+<option value="arterial">Oxygen enters arterial blood</option>
+<option value="tissues">Oxygen is delivered to tissues</option>
+<option value="inspired">Oxygen enters as inspired gas</option>
+<option value="alveoli">Oxygen reaches alveoli</option>
+</select>
+</div>
+<div class="sort-row" data-answer="alveoli">
+<strong>2</strong>
+<select aria-label="Choose the second oxygen pathway event">
+<option value="">Choose the 2nd event</option>
+<option value="tissues">Oxygen is delivered to tissues</option>
+<option value="inspired">Oxygen enters as inspired gas</option>
+<option value="arterial">Oxygen enters arterial blood</option>
+<option value="alveoli">Oxygen reaches alveoli</option>
+</select>
+</div>
+<div class="sort-row" data-answer="arterial">
+<strong>3</strong>
+<select aria-label="Choose the third oxygen pathway event">
+<option value="">Choose the 3rd event</option>
+<option value="alveoli">Oxygen reaches alveoli</option>
+<option value="arterial">Oxygen enters arterial blood</option>
+<option value="tissues">Oxygen is delivered to tissues</option>
+<option value="inspired">Oxygen enters as inspired gas</option>
+</select>
+</div>
+<div class="sort-row" data-answer="tissues">
+<strong>4</strong>
+<select aria-label="Choose the fourth oxygen pathway event">
+<option value="">Choose the 4th event</option>
+<option value="inspired">Oxygen enters as inspired gas</option>
+<option value="alveoli">Oxygen reaches alveoli</option>
+<option value="tissues">Oxygen is delivered to tissues</option>
+<option value="arterial">Oxygen enters arterial blood</option>
+</select>
+</div>
 </div>
 <button class="small-btn primary" id="checkJourneySort" style="margin-top:12px" type="button">Check Pathway</button>
-<div class="activity-status" id="journeyStatus">Complete the pathway activity to continue.</div>
+<div class="activity-status" id="journeyStatus">Choose the correct event for all four numbered steps.</div>
 </article>
 </section>
 <section class="info-card" id="pio2">
@@ -759,6 +795,13 @@ function initializeProgressiveSections(){
 initializeProgressiveSections();
 function initSort(sectionSelector,buttonId,statusId){const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");const button=document.getElementById(buttonId);const status=document.getElementById(statusId);if(!activity||!button)return;button.addEventListener("click",()=>{const rows=Array.from(activity.querySelectorAll(".sort-row"));let correct=0;rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});status.textContent=`${correct} / ${rows.length} correct`;if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}})}
 initSort("#journey","checkJourneySort","journeyStatus");
+document.getElementById("checkJourneySort")?.addEventListener("click",()=>{
+  const activity=document.querySelector('[data-activity-id="foundations_1_3_oxygen_journey_sort"]');
+  const status=document.getElementById("journeyStatus");
+  if(activity?.dataset.complete==="true" && status){
+    status.textContent="Activity complete. Oxygen enters as inspired gas, reaches the alveoli, enters arterial blood, and is then delivered to the tissues.";
+  }
+});
 function initCalc(btnId,inputId,statusId,activitySelector,target,tol,message){const activity=document.querySelector(activitySelector+" .activity-card.require-complete");document.getElementById(btnId).addEventListener("click",()=>{const ok=approx(document.getElementById(inputId).value,target,tol);setStatus(statusId,ok?"Calculation complete.":message,ok);if(ok)markActivityComplete(activity)})}
 initCalc("checkPiO2","pio2Answer","pio2Status","#pio2",656,1,"Check: 0.92 × (760 − 47) = 656 mmHg.");
 initCalc("checkPAO2","pao2Answer","pao2Status","#pao2",189,1,"Check: 0.33 × 713 − 37/0.8 = 189 mmHg.");
