@@ -17,7 +17,7 @@ window.PULMO_LESSON = {
   "moduleId": "foundations-core-skills",
   "moduleTitle": "Core Foundations and Clinical Readiness",
   "moduleName": "Core Foundations and Clinical Readiness",
-  "lessonId": "foundations-1-3-oxygenation-gas-exchange-calculations",
+  "lessonId": "foundations_1_3",
   "lessonNumber": "Foundations 1.3",
   "lessonTitle": "Gas Behavior, Respiratory Physiology & Oxygenation Calculations",
   "title": "Gas Behavior, Respiratory Physiology & Oxygenation Calculations",
@@ -327,6 +327,7 @@ window.PULMO_LESSON = {
 };
 window.PULMO_LESSON_ID = window.PULMO_LESSON.lessonId;
 window.LESSON_ID = window.PULMO_LESSON.lessonId;
+window.PULMO_LESSON.legacyLessonIds = ["foundations-1-3-oxygenation-gas-exchange-calculations"];
 </script>
 <style>
 
@@ -450,7 +451,7 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
   <span class="eyebrow">Video Overview</span>
   <h2>Lesson Overview Video: Oxygenation &amp; Gas Exchange Calculations</h2>
 
-  <div class="lesson-video" data-activity-id="foundations_1_3_overview_video" data-activity-type="video" data-course-id="foundations" data-lesson-id="foundations-1-3-oxygenation-gas-exchange-calculations" data-module-id="foundations-of-respiratory-care" data-video-id="foundations_1_3_overview_video" data-video-title="Lesson Overview Video: Oxygenation &amp; Gas Exchange Calculations" id="videoContainer" style="width:100%; margin-top:16px; aspect-ratio:16/9; background:#000; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border);">
+  <div class="lesson-video" data-activity-id="foundations_1_3_overview_video" data-activity-type="video" data-course-id="foundations" data-lesson-id="foundations_1_3" data-module-id="foundations-of-respiratory-care" data-video-id="foundations_1_3_overview_video" data-video-title="Lesson Overview Video: Oxygenation &amp; Gas Exchange Calculations" id="videoContainer" style="width:100%; margin-top:16px; aspect-ratio:16/9; background:#000; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid var(--soft-border);">
     <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" data-activity-id="foundations_1_3_overview_video" data-activity-type="video" data-video-id="foundations_1_3_overview_video" data-video-title="Lesson Overview Video: Oxygenation &amp; Gas Exchange Calculations" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/H90i2f2tzro?rel=0" style="width:100%; height:100%; display:block; border:0;" title="PulmoLearn Lesson Video: Oxygenation &amp; Gas Exchange Calculations">
     </iframe>
   </div>
@@ -943,16 +944,124 @@ function initSort(sectionSelector,buttonId,statusId){const activity=document.que
     }
   });
 })();
-function initCalc(btnId,inputId,statusId,activitySelector,target,tol,message){const activity=document.querySelector(activitySelector+" .activity-card.require-complete");document.getElementById(btnId).addEventListener("click",()=>{const ok=approx(document.getElementById(inputId).value,target,tol);setStatus(statusId,ok?"Calculation complete.":message,ok);if(ok)markActivityComplete(activity)})}
-initCalc("checkPiO2","pio2Answer","pio2Status","#pio2",656,1,"Check: 0.92 × (760 − 47) = 656 mmHg.");
-initCalc("checkPAO2","pao2Answer","pao2Status","#pao2",189,1,"Check: 0.33 × 713 − 37/0.8 = 189 mmHg.");
-initCalc("checkPF","pfAnswer","pfStatus","#pf-ratio",345,1,"Check: 107 / 0.31 = 345.");
-initCalc("checkCaO2","cao2Answer","cao2Status","#cao2",19,1,"Check: (1.34 × 14.9 × 0.95) + (0.003 × 88) ≈ 19 mL/dL.");
-initCalc("checkDO2","do2Answer","do2Status","#do2",900,1,"Check: CO 5 L/min × (18 × 10) = 900 mL/min.");
-initCalc("checkO2ER","o2erAnswer","o2erStatus","#o2er",27,1,"Check: 283 / 1054 × 100 = 27%.");
+function initCalc(btnId,inputId,statusId,activitySelector,target,tol,hints){
+  const activity=document.querySelector(activitySelector+" .activity-card.require-complete");
+  const button=document.getElementById(btnId);
+  const input=document.getElementById(inputId);
+  if(!activity||!button||!input)return;
+
+  let attempts=0;
+
+  button.addEventListener("click",()=>{
+    const value=input.value.trim();
+
+    if(value===""){
+      setStatus(statusId,"Enter your calculated value before checking.",false);
+      return;
+    }
+
+    attempts++;
+    const ok=approx(value,target,tol);
+
+    if(ok){
+      setStatus(statusId,"Calculation complete. Your answer is within the accepted range.",true);
+      markActivityComplete(activity);
+      return;
+    }
+
+    const hintIndex=Math.min(attempts-1,hints.length-1);
+    setStatus(statusId,"Not quite. "+hints[hintIndex],false);
+  });
+}
+
+initCalc(
+  "checkPiO2","pio2Answer","pio2Status","#pio2",656,1,
+  [
+    "Use the inspired-oxygen-pressure formula and subtract water-vapor pressure from barometric pressure before multiplying by FiO₂.",
+    "Confirm that FiO₂ is written as a decimal and that you used 47 mmHg for water-vapor pressure.",
+    "Recheck the subtraction first, then multiply the remaining pressure by 0.92."
+  ]
+);
+
+initCalc(
+  "checkPAO2","pao2Answer","pao2Status","#pao2",189,1,
+  [
+    "Use the alveolar gas equation and complete the inspired-oxygen portion before subtracting the PaCO₂/R term.",
+    "Confirm that you used PB − 47 for humidified inspired pressure and divided PaCO₂ by the respiratory quotient.",
+    "Recheck the order of operations: calculate FiO₂ × (PB − 47), calculate PaCO₂/R, then subtract."
+  ]
+);
+
+initCalc(
+  "checkPF","pfAnswer","pfStatus","#pf-ratio",345,1,
+  [
+    "Divide PaO₂ by FiO₂ expressed as a decimal.",
+    "Do not use the oxygen percentage as a whole number.",
+    "Convert 31% to 0.31 before dividing."
+  ]
+);
+
+initCalc(
+  "checkCaO2","cao2Answer","cao2Status","#cao2",19,1,
+  [
+    "Calculate hemoglobin-bound oxygen and dissolved oxygen separately, then add them.",
+    "Use saturation as a decimal in the hemoglobin-bound portion.",
+    "Recheck both terms: 1.34 × Hb × SaO₂ and 0.003 × PaO₂."
+  ]
+);
+
+initCalc(
+  "checkDO2","do2Answer","do2Status","#do2",900,1,
+  [
+    "Multiply cardiac output by arterial oxygen content after converting oxygen content from per deciliter to per liter.",
+    "Remember that multiplying CaO₂ by 10 converts mL/dL to mL/L.",
+    "Use DO₂ = CO × CaO₂ × 10."
+  ]
+);
+
+initCalc(
+  "checkO2ER","o2erAnswer","o2erStatus","#o2er",27,1,
+  [
+    "Divide oxygen consumption by oxygen delivery, then multiply by 100.",
+    "Keep VO₂ in the numerator and DO₂ in the denominator.",
+    "Recheck the percentage conversion after completing the division."
+  ]
+);
 function initQuizOptions(selector){const activity=document.querySelector(selector);if(!activity)return;activity.querySelectorAll(".quiz-option").forEach(button=>{button.addEventListener("click",()=>{if(activity.dataset.correctAnswered==="true")return;const feedback=activity.querySelector(".quiz-feedback");const isCorrect=button.dataset.correct==="true";activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){activity.dataset.correctAnswered="true";activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";markActivityComplete(activity)}else{button.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."}})})}
 initQuizOptions("#aa-check");
-function initMixed(){const activity=document.querySelector("#practice .activity-card.require-complete");document.getElementById("checkMixed").addEventListener("click",()=>{const ok=approx(mix1.value,88,1)&&approx(mix2.value,11,1)&&approx(mix3.value,200,1);setStatus("mixedStatus",ok?"Mixed oxygenation practice complete.":"Check: A-a = 157 − 69 = 88; C(a-v)O2 = 19 − 8 = 11; VO2 = 5 × (4 × 10) = 200.",ok);if(ok)markActivityComplete(activity)})}
+function initMixed(){
+  const activity=document.querySelector("#practice .activity-card.require-complete");
+  const button=document.getElementById("checkMixed");
+  const status=document.getElementById("mixedStatus");
+  if(!activity||!button||!status)return;
+
+  let attempts=0;
+
+  button.addEventListener("click",()=>{
+    const values=[mix1.value.trim(),mix2.value.trim(),mix3.value.trim()];
+
+    if(values.some(value=>value==="")){
+      setStatus("mixedStatus","Complete all three calculations before checking the set.",false);
+      return;
+    }
+
+    attempts++;
+    const ok=approx(values[0],88,1)&&approx(values[1],11,1)&&approx(values[2],200,1);
+
+    if(ok){
+      setStatus("mixedStatus","Mixed oxygenation practice complete. All three values are within the accepted ranges.",true);
+      markActivityComplete(activity);
+      return;
+    }
+
+    const messages=[
+      "One or more values are outside the accepted range. Recheck each formula without changing the order of the given values.",
+      "Review the three relationships: A–a gradient is alveolar minus arterial oxygen; C(a-v)O₂ is arterial minus venous oxygen content; VO₂ uses cardiac output and the content difference.",
+      "Check unit conversions carefully, especially the ×10 conversion used with cardiac output and oxygen-content difference."
+    ];
+    setStatus("mixedStatus","Not quite. "+messages[Math.min(attempts-1,messages.length-1)],false);
+  });
+}
 initMixed();
 function initCase(){const section=document.getElementById("scenario");const stages=Array.from(section.querySelectorAll(".case-stage"));stages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});section.querySelectorAll(".case-option").forEach(option=>option.addEventListener("click",()=>{const stage=option.closest(".case-stage");if(stage.dataset.correctAnswered==="true")return;const feedback=stage.querySelector(".case-feedback");const isCorrect=option.dataset.caseCorrect==="true";stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){stage.dataset.correctAnswered="true";stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";const next=stage.querySelector(".case-next button");if(next)next.disabled=false}else{option.classList.add("incorrect-choice");feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";const next=stage.querySelector(".case-next button");if(next)next.disabled=true}}));section.querySelectorAll(".case-next button").forEach(button=>{button.disabled=true;button.addEventListener("click",()=>{const current=button.closest(".case-stage");const idx=stages.indexOf(current);const next=stages[idx+1];if(!next)return;next.classList.remove("lesson-hidden");if(idx+1===stages.length-1)markActivityComplete(section);button.closest(".case-next").remove();next.scrollIntoView({behavior:"smooth",block:"start"})})})}
 initCase();
