@@ -366,11 +366,11 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
 <h3>Sequence the Mucociliary Escalator</h3>
 <p>Select the correct order for each step.</p>
 <div class="sort-grid" id="sequenceSort">
-<div class="sort-row" data-answer="1"><strong>Particle enters the airway</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="2"><strong>Mucus traps the particle</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="3"><strong>Cilia move mucus upward</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="4"><strong>Secretions reach the pharynx</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="5"><strong>Secretions are swallowed or coughed out</strong><select class="order-select"><option value="">Select order</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
+<div class="sort-row" data-answer="particle"><strong>1st</strong><select class="order-select" aria-label="Select the first step"><option value="">Choose step</option><option value="particle">Particle enters the airway</option><option value="trap">Mucus traps the particle</option><option value="move">Cilia move mucus upward</option><option value="pharynx">Secretions reach the pharynx</option><option value="clear">Secretions are swallowed or coughed out</option></select></div>
+<div class="sort-row" data-answer="trap"><strong>2nd</strong><select class="order-select" aria-label="Select the second step"><option value="">Choose step</option><option value="particle">Particle enters the airway</option><option value="trap">Mucus traps the particle</option><option value="move">Cilia move mucus upward</option><option value="pharynx">Secretions reach the pharynx</option><option value="clear">Secretions are swallowed or coughed out</option></select></div>
+<div class="sort-row" data-answer="move"><strong>3rd</strong><select class="order-select" aria-label="Select the third step"><option value="">Choose step</option><option value="particle">Particle enters the airway</option><option value="trap">Mucus traps the particle</option><option value="move">Cilia move mucus upward</option><option value="pharynx">Secretions reach the pharynx</option><option value="clear">Secretions are swallowed or coughed out</option></select></div>
+<div class="sort-row" data-answer="pharynx"><strong>4th</strong><select class="order-select" aria-label="Select the fourth step"><option value="">Choose step</option><option value="particle">Particle enters the airway</option><option value="trap">Mucus traps the particle</option><option value="move">Cilia move mucus upward</option><option value="pharynx">Secretions reach the pharynx</option><option value="clear">Secretions are swallowed or coughed out</option></select></div>
+<div class="sort-row" data-answer="clear"><strong>5th</strong><select class="order-select" aria-label="Select the fifth step"><option value="">Choose step</option><option value="particle">Particle enters the airway</option><option value="trap">Mucus traps the particle</option><option value="move">Cilia move mucus upward</option><option value="pharynx">Secretions reach the pharynx</option><option value="clear">Secretions are swallowed or coughed out</option></select></div>
 </div>
 <button class="small-btn primary" data-check-sort="mucus-sequence" style="margin-top:12px;" type="button">Check Sequence</button>
 <div class="activity-status">Complete the sequence activity to continue.</div>
@@ -569,6 +569,22 @@ document.querySelectorAll(".tab-btn[data-view]").forEach(button => button.addEve
 document.querySelectorAll(".tab-btn[data-mode]").forEach(button => button.addEventListener("click", () => { cardMode = button.dataset.mode; currentIndex = 0; document.querySelectorAll(".tab-btn[data-mode]").forEach(btn => btn.classList.remove("active")); button.classList.add("active"); renderFlashcard(); })); renderFlashcard();
 
 function shuffleAnswerOptions() { document.querySelectorAll(".quiz-options").forEach(container => { const options = Array.from(container.children).filter(child => child.classList && child.classList.contains("quiz-option")); for (let i = options.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [options[i], options[j]] = [options[j], options[i]]; } options.forEach(option => container.appendChild(option)); }); } shuffleAnswerOptions();
+
+function shuffleDropdownOptions(selector) {
+  document.querySelectorAll(selector).forEach(select => {
+    const placeholder = select.querySelector('option[value=""]');
+    const options = Array.from(select.querySelectorAll('option:not([value=""])'));
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    select.innerHTML = "";
+    if (placeholder) select.appendChild(placeholder);
+    options.forEach(option => select.appendChild(option));
+    select.value = "";
+  });
+}
+shuffleDropdownOptions("#defense-match select, #mucus-sequence select");
 function markActivityComplete(element) { element.dataset.complete = "true"; element.dispatchEvent(new CustomEvent("activityComplete", { bubbles: true })); }
 
 function initializeQuizOptions(selector, completeOnCorrect=true) { document.querySelectorAll(selector).forEach(option => { option.addEventListener('click', () => { const container = option.closest('.require-complete') || option.closest('.knowledge-question'); if (!container || container.dataset.correctAnswered === 'true') return; const feedback = container.querySelector('.quiz-feedback'); const correct = option.dataset.correct === 'true' || option.dataset.caseCorrect === 'true'; const buttons = container.querySelectorAll('.quiz-option'); buttons.forEach(b=>b.classList.remove('incorrect-choice')); if (correct) { container.dataset.correctAnswered = 'true'; buttons.forEach(b=>{ b.disabled=true; if((b.dataset.correct==='true') || (b.dataset.caseCorrect==='true')) b.classList.add('correct-choice'); }); feedback.className='quiz-feedback show'; feedback.style.background='var(--airway-mint)'; feedback.innerHTML=(option.dataset.feedback||option.dataset.caseFeedback||'Correct.') + '<br><br><strong>You may continue.</strong>'; if(completeOnCorrect && container.classList.contains('require-complete')) markActivityComplete(container); } else { option.classList.add('incorrect-choice'); feedback.className='quiz-feedback show'; feedback.style.background='var(--soft-coral)'; feedback.innerHTML=(option.dataset.feedback||option.dataset.caseFeedback||'Not quite.') + '<br><br><strong>Try again:</strong> Select the correct answer to continue.'; } }); }); }
