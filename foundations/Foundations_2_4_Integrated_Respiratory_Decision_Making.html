@@ -509,16 +509,16 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 <img alt="RT priority ladder with airway, breathing, circulation, data, and reassessment priorities" src="/foundations/foundations-2-4-priority-ladder.png" style="margin-top:16px;border-radius:var(--radius-lg);border:1px solid var(--soft-border);box-shadow:var(--shadow-soft)"/>
 <article class="activity-card require-complete" data-activity-id="found_2_4_priority_ladder_sequence" data-activity-name="Priority Ladder Sequence" data-activity-type="sort" data-course-id="foundations" data-estimated-minutes="5" data-lesson-id="foundations-2-4-integrated-clinical-decision-making" data-module-id="clinical-data-abg-and-decision-making" data-required="true" style="margin-top:16px">
 <h3>Order the Priority Ladder</h3>
-<p>Put the broad priority categories in order. This is the safety sequence you should use when a patient is deteriorating.</p>
+<p>The numbered positions stay fixed. Choose the correct priority category for each position. Use each category once and complete all five selections before checking.</p>
 <div class="sort-grid" id="prioritySort">
-<div class="sort-row" data-answer="1"><strong>Airway</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="2"><strong>Breathing</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="3"><strong>Circulation</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="4"><strong>Data</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
-<div class="sort-row" data-answer="5"><strong>Reassess</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option></select></div>
+<div class="sort-row" data-answer="airway"><strong>1</strong><select aria-label="Choose the first priority category"><option value="">Choose the 1st priority</option><option value="data">Data</option><option value="circulation">Circulation</option><option value="airway">Airway</option><option value="reassess">Reassess</option><option value="breathing">Breathing</option></select></div>
+<div class="sort-row" data-answer="breathing"><strong>2</strong><select aria-label="Choose the second priority category"><option value="">Choose the 2nd priority</option><option value="reassess">Reassess</option><option value="airway">Airway</option><option value="data">Data</option><option value="breathing">Breathing</option><option value="circulation">Circulation</option></select></div>
+<div class="sort-row" data-answer="circulation"><strong>3</strong><select aria-label="Choose the third priority category"><option value="">Choose the 3rd priority</option><option value="breathing">Breathing</option><option value="data">Data</option><option value="circulation">Circulation</option><option value="airway">Airway</option><option value="reassess">Reassess</option></select></div>
+<div class="sort-row" data-answer="data"><strong>4</strong><select aria-label="Choose the fourth priority category"><option value="">Choose the 4th priority</option><option value="circulation">Circulation</option><option value="reassess">Reassess</option><option value="breathing">Breathing</option><option value="data">Data</option><option value="airway">Airway</option></select></div>
+<div class="sort-row" data-answer="reassess"><strong>5</strong><select aria-label="Choose the fifth priority category"><option value="">Choose the 5th priority</option><option value="airway">Airway</option><option value="breathing">Breathing</option><option value="reassess">Reassess</option><option value="circulation">Circulation</option><option value="data">Data</option></select></div>
 </div>
 <button class="small-btn primary" id="checkPrioritySort" style="margin-top:12px" type="button">Check Sequence</button>
-<div class="activity-status" id="prioritySortStatus">Complete the priority sequence to continue.</div>
+<div class="activity-status" id="prioritySortStatus">Choose the correct priority category for all five numbered positions.</div>
 </article>
 </section>
 <section class="info-card" id="reassessment-plan">
@@ -780,11 +780,52 @@ function initializeProgressiveSections(){
 initializeProgressiveSections();
 function initSort(sectionSelector,buttonId,statusId){const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");const button=document.getElementById(buttonId);const status=document.getElementById(statusId);if(!activity||!button)return;button.addEventListener("click",()=>{const rows=Array.from(activity.querySelectorAll(".sort-row"));let correct=0;rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});status.textContent=`${correct} / ${rows.length} correct`;if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}})}
 function shuffleSortRows(containerId){const container=document.getElementById(containerId);if(!container)return;const rows=Array.from(container.querySelectorAll(":scope > .sort-row"));for(let i=rows.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rows[i],rows[j]]=[rows[j],rows[i]]}rows.forEach(row=>container.appendChild(row))}
-["integrationSort","failureSort","dyspneaSort","prioritySort"].forEach(shuffleSortRows);
+["integrationSort","failureSort","dyspneaSort"].forEach(shuffleSortRows);
 initSort("#integration","checkIntegrationSort","integrationSortStatus");
 initSort("#failure-patterns","checkFailureSort","failureSortStatus");
 initSort("#dyspnea","checkDyspneaSort","dyspneaSortStatus");
-initSort("#priority","checkPrioritySort","prioritySortStatus");
+
+(function initPrioritySequence(){
+  const activity=document.querySelector('[data-activity-id="found_2_4_priority_ladder_sequence"]');
+  const button=document.getElementById("checkPrioritySort");
+  const status=document.getElementById("prioritySortStatus");
+  if(!activity||!button||!status)return;
+
+  button.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    const values=rows.map(row=>row.querySelector("select").value);
+
+    if(values.some(value=>!value)){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Choose a priority category for all five numbered positions before checking.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    if(new Set(values).size!==values.length){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Use each priority category only once, then check the complete sequence.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    const allCorrect=rows.every(row=>row.querySelector("select").value===row.dataset.answer);
+
+    if(allCorrect){
+      rows.forEach(row=>{
+        row.classList.add("correct");
+        row.classList.remove("incorrect");
+      });
+      status.textContent="Activity complete. Prioritize airway, breathing, circulation, supporting data, and reassessment.";
+      status.classList.add("complete");
+      markActivityComplete(activity);
+    }else{
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="The complete priority ladder is not correct yet. Reconsider the full safety sequence and try again.";
+      status.classList.remove("complete");
+    }
+  });
+})();
 function initQuizOptions(selector){const activity=document.querySelector(selector);if(!activity)return;activity.querySelectorAll(".quiz-option").forEach(button=>{button.addEventListener("click",()=>{if(activity.dataset.correctAnswered==="true")return;const feedback=activity.querySelector(".quiz-feedback");const isCorrect=button.dataset.correct==="true";activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){activity.dataset.correctAnswered="true";activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";markActivityComplete(activity)}else{button.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="var(--soft-coral)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again:</strong> Select the best answer to continue."}})})}
 initQuizOptions("#board-check");
 function setSelectState(select,ok){select.classList.remove("incorrect-input","correct-input");select.classList.add(ok?"correct-input":"incorrect-input")}
