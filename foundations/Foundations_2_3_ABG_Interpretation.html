@@ -467,15 +467,15 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 <div class="abg-strip">pH 7.34, PaCO₂ 60, HCO₃⁻ 32, PaO₂ 58</div>
 <article class="activity-card require-complete" data-activity-id="found_2_3_abg_framework_sequence" data-activity-name="ABG Framework Sequence" data-activity-type="sort" data-course-id="foundations" data-estimated-minutes="4" data-lesson-id="foundations-2-3-abg-interpretation" data-module-id="foundational-clinical-data-and-interpretation" data-required="true" style="margin-top:16px">
 <h3>Put the ABG Steps in Order</h3>
-<p>This is a practice check of the framework. Even when an image or instructor gives you the steps, the goal is to build the habit of using the same sequence every time.</p>
+<p>The numbered positions stay fixed. Choose the correct ABG step for each position. Use each step once and complete all four selections before checking.</p>
 <div class="sort-grid" id="frameworkSort">
-<div class="sort-row" data-answer="1"><strong>Check pH</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
-<div class="sort-row" data-answer="2"><strong>Identify respiratory or metabolic cause</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
-<div class="sort-row" data-answer="3"><strong>Evaluate compensation</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
-<div class="sort-row" data-answer="4"><strong>Interpret oxygenation</strong><select><option value="">Choose</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
+<div class="sort-row" data-answer="ph"><strong>1</strong><select aria-label="Choose the first ABG interpretation step"><option value="">Choose the 1st step</option><option value="cause">Identify respiratory or metabolic cause</option><option value="oxygenation">Interpret oxygenation</option><option value="ph">Check pH</option><option value="compensation">Evaluate compensation</option></select></div>
+<div class="sort-row" data-answer="cause"><strong>2</strong><select aria-label="Choose the second ABG interpretation step"><option value="">Choose the 2nd step</option><option value="compensation">Evaluate compensation</option><option value="ph">Check pH</option><option value="oxygenation">Interpret oxygenation</option><option value="cause">Identify respiratory or metabolic cause</option></select></div>
+<div class="sort-row" data-answer="compensation"><strong>3</strong><select aria-label="Choose the third ABG interpretation step"><option value="">Choose the 3rd step</option><option value="oxygenation">Interpret oxygenation</option><option value="cause">Identify respiratory or metabolic cause</option><option value="compensation">Evaluate compensation</option><option value="ph">Check pH</option></select></div>
+<div class="sort-row" data-answer="oxygenation"><strong>4</strong><select aria-label="Choose the fourth ABG interpretation step"><option value="">Choose the 4th step</option><option value="ph">Check pH</option><option value="compensation">Evaluate compensation</option><option value="cause">Identify respiratory or metabolic cause</option><option value="oxygenation">Interpret oxygenation</option></select></div>
 </div>
 <button class="small-btn primary" id="checkFrameworkSort" style="margin-top:12px" type="button">Check Sequence</button>
-<div class="activity-status" id="frameworkSortStatus">Complete the sequence activity to continue.</div>
+<div class="activity-status" id="frameworkSortStatus">Choose the correct ABG step for all four numbered positions.</div>
 </article>
 </section>
 <section class="info-card" id="ranges">
@@ -894,8 +894,50 @@ initializeProgressiveSections();
 function setSelectState(select, ok){select.classList.remove("incorrect-input","correct-input");select.classList.add(ok?"correct-input":"incorrect-input")}
 function initSort(sectionSelector,buttonId,statusId){const activity=document.querySelector(sectionSelector+" .activity-card.require-complete");const button=document.getElementById(buttonId);const status=document.getElementById(statusId);if(!activity||!button)return;button.addEventListener("click",()=>{const rows=Array.from(activity.querySelectorAll(".sort-row"));let correct=0;rows.forEach(row=>{const select=row.querySelector("select");const isCorrect=select.value===row.dataset.answer;row.classList.toggle("correct",isCorrect);row.classList.toggle("incorrect",select.value!==""&&!isCorrect);if(isCorrect)correct++});status.textContent=`${correct} / ${rows.length} correct`;if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}})}
 function shuffleSortRows(containerId){const container=document.getElementById(containerId);if(!container)return;const rows=Array.from(container.querySelectorAll(":scope > .sort-row"));for(let i=rows.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rows[i],rows[j]]=[rows[j],rows[i]]}rows.forEach(row=>container.appendChild(row))}
-["frameworkSort","rangeSort","technicalSort"].forEach(shuffleSortRows);
-initSort("#framework","checkFrameworkSort","frameworkSortStatus");
+["rangeSort","technicalSort"].forEach(shuffleSortRows);
+
+(function initFrameworkSequence(){
+  const activity=document.querySelector('[data-activity-id="found_2_3_abg_framework_sequence"]');
+  const button=document.getElementById("checkFrameworkSort");
+  const status=document.getElementById("frameworkSortStatus");
+  if(!activity||!button||!status)return;
+
+  button.addEventListener("click",()=>{
+    const rows=Array.from(activity.querySelectorAll(".sort-row"));
+    const values=rows.map(row=>row.querySelector("select").value);
+
+    if(values.some(value=>!value)){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Choose an ABG step for all four numbered positions before checking.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    if(new Set(values).size!==values.length){
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="Use each ABG step only once, then check the complete sequence.";
+      status.classList.remove("complete");
+      return;
+    }
+
+    const allCorrect=rows.every(row=>row.querySelector("select").value===row.dataset.answer);
+
+    if(allCorrect){
+      rows.forEach(row=>{
+        row.classList.add("correct");
+        row.classList.remove("incorrect");
+      });
+      status.textContent="Activity complete. Check pH, identify the respiratory or metabolic cause, evaluate compensation, and then interpret oxygenation.";
+      status.classList.add("complete");
+      markActivityComplete(activity);
+    }else{
+      rows.forEach(row=>row.classList.remove("correct","incorrect"));
+      status.textContent="The complete sequence is not correct yet. Reconsider the full ABG framework and try again.";
+      status.classList.remove("complete");
+    }
+  });
+})();
+
 initSort("#ranges","checkRangeSort","rangeSortStatus");
 initSort("#technical","checkTechnicalSort","technicalSortStatus");
 
