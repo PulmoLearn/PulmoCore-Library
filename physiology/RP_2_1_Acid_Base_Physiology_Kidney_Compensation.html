@@ -1242,6 +1242,25 @@ initSimpleQuiz("equil-options");
 initSimpleQuiz("bh-options");
 initSimpleQuiz("alk-options");
 
+
+function shuffleSelectOptions(containerId){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  container.querySelectorAll("select").forEach(select=>{
+    const placeholder=Array.from(select.options).find(option=>option.value==="");
+    const choices=Array.from(select.options).filter(option=>option.value!=="");
+    for(let i=choices.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [choices[i],choices[j]]=[choices[j],choices[i]];
+    }
+    select.innerHTML="";
+    if(placeholder)select.appendChild(placeholder);
+    choices.forEach(option=>select.appendChild(option));
+    select.value="";
+  });
+}
+shuffleSelectOptions("centerSort");
+
 function initSort(activitySelector,buttonId,statusId){
   const activity=document.querySelector(activitySelector),button=document.getElementById(buttonId),status=document.getElementById(statusId);
   if(!activity||!button)return;
@@ -1294,7 +1313,7 @@ function initializeGuidedCase(){
       nextStage.classList.remove("lesson-hidden");
       if(currentIndex+1===caseStages.length-1)markActivityComplete(caseSection);
       const caseContinue=button.closest(".case-next");if(caseContinue)caseContinue.remove();
-      nextStage.scrollIntoView({behavior:"smooth",block:"start"})
+      requestAnimationFrame(()=>{const sticky=document.querySelector(".top-nav");const offset=(sticky?sticky.offsetHeight:0)+18;const top=nextStage.getBoundingClientRect().top+window.scrollY-offset;window.scrollTo({top:Math.max(0,top),behavior:"smooth"});const heading=nextStage.querySelector("h3");if(heading){heading.setAttribute("tabindex","-1");heading.focus({preventScroll:true})}})
     })
   })
 }
