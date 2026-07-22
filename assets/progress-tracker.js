@@ -7,6 +7,10 @@ import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
 
 console.log('PulmoLearn: progress-tracker.js v8.2 loaded')
 
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual'
+}
+
 const urlParams = new URLSearchParams(window.location.search)
 const isLtiLaunch = urlParams.get('lti') === '1'
 
@@ -555,12 +559,22 @@ window.addEventListener('load', async () => {
     const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
 
     if (isRestart) {
-      await resetProgress()
-    } else {
-      await restoreProgress()
-    }
+  await resetProgress()
+} else {
+  await restoreProgress()
+}
 
-    observerPaused = false
+window.scrollTo(0, 0)
+
+requestAnimationFrame(() => {
+  window.scrollTo(0, 0)
+})
+
+setTimeout(() => {
+  window.scrollTo(0, 0)
+}, 150)
+
+observerPaused = false
 
     console.log('PulmoLearn: Observer enabled')
     console.log('PulmoLearn: Ready — waiting for user interaction to save')
