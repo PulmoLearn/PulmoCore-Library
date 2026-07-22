@@ -276,11 +276,6 @@ function showResumeBanner(percent, sectionsRevealed, allSections) {
   `
   document.body.appendChild(banner)
 
-  const lastVisible = allSections[sectionsRevealed - 1]
-  if (lastVisible) {
-    setTimeout(() => lastVisible.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400)
-  }
-
   setTimeout(() => {
     if (banner.parentNode) banner.remove()
   }, 6000)
