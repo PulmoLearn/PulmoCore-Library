@@ -165,7 +165,7 @@ function restoreAnswerState() {
       }
     })
 
-    // Restore calculation and checkbox values.
+    // Restore input and checkbox values.
     Object.entries(activityState.inputs || {}).forEach(([key, value]) => {
       let input = document.getElementById(key)
 
@@ -183,6 +183,19 @@ function restoreAnswerState() {
       }
     })
 
+    // ADD THE MULTISELECT RESTORATION HERE.
+    activity.querySelectorAll('.check-row').forEach(row => {
+      const checkbox = row.querySelector('input[type="checkbox"]')
+      if (!checkbox) return
+
+      const shouldBeChecked = row.dataset.answer === 'true'
+      const isCorrect = checkbox.checked === shouldBeChecked
+
+      row.classList.toggle('correct', isCorrect)
+      row.classList.remove('incorrect')
+    })
+
+    // Keep this after the multiselect restoration.
     if (activityState.complete) {
       activity.dataset.complete = 'true'
 
@@ -431,7 +444,6 @@ function showCompletionBanner() {
   `
 
   lessonStack.appendChild(banner)
-  setTimeout(() => banner.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200)
 }
 
 function showResumeBanner(percent, sectionsRevealed, allSections) {
@@ -705,33 +717,6 @@ window.addEventListener('load', async () => {
     shuffleSequence()
     shuffleSequence()
     shuffleSequence()
-  }
-
-  if (new URLSearchParams(window.location.search).get('review') === 'true') {
-    setTimeout(() => {
-      document.querySelectorAll('.quiz-option[data-correct="true"]').forEach(btn => {
-        if (!btn.closest('[data-correct-answered="true"]')) btn.click()
-      })
-
-      document.querySelectorAll('.knowledge-option[data-correct="true"]').forEach(btn => {
-        if (!btn.closest('[data-correct-answered="true"]')) btn.click()
-      })
-
-      document.querySelectorAll('.case-option[data-correct="true"]').forEach(btn => {
-        if (!btn.closest('[data-correct-answered="true"]')) btn.click()
-      })
-
-      document.querySelectorAll('.sort-row').forEach(row => {
-        const select = row.querySelector('select')
-        if (select && row.dataset.answer) select.value = row.dataset.answer
-      })
-
-      document.querySelectorAll('[id^="check"]').forEach(btn => {
-        if (btn.tagName === 'BUTTON') btn.click()
-      })
-
-      document.querySelectorAll('.hotspot-btn').forEach(btn => btn.click())
-    }, 500)
   }
 
   document.querySelectorAll('a[href*="dashboard"]').forEach(link => {
