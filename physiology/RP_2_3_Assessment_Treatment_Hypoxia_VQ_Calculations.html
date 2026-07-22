@@ -614,9 +614,9 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;</script><script src="/assets/pr
 <h3>Calculate CaO₂ and DO₂</h3>
 <p>Patient data: <strong>Hb 10 g/dL | SaO₂ 0.95 | PaO₂ 80 mm Hg | Cardiac output 5.0 L/min</strong></p>
 <div class="calc-grid">
-<div class="calc-item"><label>Hemoglobin-bound O₂ (mL/dL)</label><div class="calc-hint">1.34 × 10 × 0.95</div><input id="calcVE" placeholder="12.7" step="0.1" type="number"/></div>
-<div class="calc-item"><label>CaO₂ (mL/dL)</label><div class="calc-hint">Bound term + (0.003 × 80)</div><input id="calcCO" placeholder="13.0" step="0.1" type="number"/></div>
-<div class="calc-item"><label>DO₂ (mL/min)</label><div class="calc-hint">5.0 × CaO₂ × 10</div><input id="calcVQ" placeholder="650" step="1" type="number"/></div>
+<div class="calc-item"><label>Hemoglobin-bound O₂ (mL/dL)</label><div class="calc-hint">1.34 × 10 × 0.95</div><input id="calcVE" placeholder="Enter result" step="0.1" type="number"/></div>
+<div class="calc-item"><label>CaO₂ (mL/dL)</label><div class="calc-hint">Bound term + (0.003 × 80)</div><input id="calcCO" placeholder="Enter result" step="0.1" type="number"/></div>
+<div class="calc-item"><label>DO₂ (mL/min)</label><div class="calc-hint">5.0 × CaO₂ × 10</div><input id="calcVQ" placeholder="Enter result" step="1" type="number"/></div>
 </div>
 <button class="small-btn primary" id="checkVqCalc" style="margin-top:12px;" type="button">Check Calculations</button>
 <div class="activity-status" id="vqCalcStatus">Complete the oxygen-content and delivery calculation to continue.</div>
@@ -943,6 +943,26 @@ function initSimpleQuiz(optClass){
 }
 initSimpleQuiz("hvh-opts");
 
+
+function shuffleSelectOptions(containerId){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  container.querySelectorAll("select").forEach(select=>{
+    const placeholder=Array.from(select.options).find(option=>option.value==="");
+    const choices=Array.from(select.options).filter(option=>option.value!=="");
+    for(let i=choices.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [choices[i],choices[j]]=[choices[j],choices[i]];
+    }
+    select.innerHTML="";
+    if(placeholder)select.appendChild(placeholder);
+    choices.forEach(option=>select.appendChild(option));
+    select.value="";
+  });
+}
+shuffleSelectOptions("vqInterpSort");
+shuffleSelectOptions("sdSort");
+
 function initSort(activitySelector,buttonId,statusId){
   const activity=document.querySelector(activitySelector),button=document.getElementById(buttonId),status=document.getElementById(statusId);
   if(!activity||!button)return;
@@ -1020,7 +1040,7 @@ function initializeGuidedCase(){
       next.classList.remove("lesson-hidden");
       if(currentIndex+1===caseStages.length-1)markActivityComplete(caseSection);
       const cc=button.closest(".case-next");if(cc)cc.remove();
-      next.scrollIntoView({behavior:"smooth",block:"start"})
+      requestAnimationFrame(()=>{const sticky=document.querySelector(".top-nav");const offset=(sticky?sticky.offsetHeight:0)+18;const top=next.getBoundingClientRect().top+window.scrollY-offset;window.scrollTo({top:Math.max(0,top),behavior:"smooth"});const heading=next.querySelector("h3");if(heading){heading.setAttribute("tabindex","-1");heading.focus({preventScroll:true})}})
     })
   })
 }
