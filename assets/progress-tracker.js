@@ -268,7 +268,7 @@ function showResumeBanner(percent, sectionsRevealed, allSections) {
   banner.className = 'pl-resume-banner'
   banner.innerHTML = `
     <span style="color:#1CA7A8;">↩</span>
-    <span>Resumed at ${percent}% — scroll up to review earlier sections</span>
+    <span>Progress restored to ${percent}% — scroll down to continue where you left off</span>
     <button onclick="this.closest('.pl-resume-banner').remove()" style="
       background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
       border-radius:8px; color:#fff; padding:4px 10px; cursor:pointer; font-size:.85rem;
@@ -276,10 +276,12 @@ function showResumeBanner(percent, sectionsRevealed, allSections) {
   `
   document.body.appendChild(banner)
 
-  const lastVisible = allSections[sectionsRevealed - 1]
-  if (lastVisible) {
-    setTimeout(() => lastVisible.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400)
-  }
+  requestAnimationFrame(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto'
+    })
+  })
 
   setTimeout(() => {
     if (banner.parentNode) banner.remove()
