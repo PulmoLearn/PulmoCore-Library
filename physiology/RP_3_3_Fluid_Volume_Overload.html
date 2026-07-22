@@ -499,12 +499,12 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;</script><script src="/assets/pr
 <div class="calc-item" id="ioBox1">
 <label>24-hour fluid balance (in mL)</label>
 <div class="calc-hint">Fluid balance = Total Intake − Total Output<br/>Intake: 1500 + 480 + 720 = ? mL<br/>Fluid balance = ? − 840 = ?</div>
-<input id="ioBalance" placeholder="e.g. +1860" step="1" type="number"/>
+<input id="ioBalance" placeholder="Enter net fluid balance" step="1" type="number"/>
 </div>
 <div class="calc-item" id="ioBox2">
 <label>Urine output rate (mL/hr)</label>
 <div class="calc-hint">Rate = Volume ÷ Hours<br/>320 mL ÷ 8 hours = ?<br/>Interpret the rate in the context of body weight and trend</div>
-<input id="ioRate" placeholder="e.g. 40" step="1" type="number"/>
+<input id="ioRate" placeholder="Enter urine output rate" step="1" type="number"/>
 </div>
 </div>
 <button class="small-btn primary" id="checkIoCalc" style="margin-top:12px;" type="button">Check I&amp;O Calculations</button>
@@ -756,6 +756,26 @@ shuffleAnswerOptions();
 function markActivityComplete(element){element.dataset.complete="true";element.dispatchEvent(new CustomEvent("activityComplete",{bubbles:true}))}
 function initSimpleQuiz(optClass){document.querySelectorAll("."+optClass).forEach(optionContainer=>{const activity=optionContainer.closest(".quiz-card");if(!activity||!activity.classList.contains("require-complete"))return;optionContainer.querySelectorAll(".quiz-option").forEach(button=>{button.addEventListener("click",()=>{if(activity.dataset.correctAnswered==="true")return;const feedback=activity.querySelector(".quiz-feedback");const isCorrect=button.dataset.correct==="true";activity.querySelectorAll(".quiz-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){activity.dataset.correctAnswered="true";activity.querySelectorAll(".quiz-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.correct==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>You may continue.</strong>";markActivityComplete(activity)}else{button.classList.add("incorrect-choice");feedback.className="quiz-feedback show";feedback.style.background="#FDE9E9";feedback.innerHTML=button.dataset.feedback+"<br><br><strong>Try again.</strong>"}})})})};
 initSimpleQuiz("rt-opts");
+
+function shuffleSelectOptions(containerId){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  container.querySelectorAll("select").forEach(select=>{
+    const placeholder=Array.from(select.options).find(option=>option.value==="");
+    const choices=Array.from(select.options).filter(option=>option.value!=="");
+    for(let i=choices.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [choices[i],choices[j]]=[choices[j],choices[i]];
+    }
+    select.innerHTML="";
+    if(placeholder)select.appendChild(placeholder);
+    choices.forEach(option=>select.appendChild(option));
+    select.value="";
+  });
+}
+shuffleSelectOptions("signSort");
+shuffleSelectOptions("bunSort");
+
 function initSort(activitySelector,buttonId,statusId){const activity=document.querySelector(activitySelector),button=document.getElementById(buttonId),status=document.getElementById(statusId);if(!activity||!button)return;button.addEventListener("click",()=>{const rows=Array.from(activity.querySelectorAll(".sort-row"));let correct=0;rows.forEach(row=>{const sel=row.querySelector("select");const ok=sel.value===row.dataset.answer;row.classList.toggle("correct",ok);row.classList.toggle("incorrect",sel.value!==""&&!ok);if(ok)correct++});status.textContent=`${correct} / ${rows.length} correct`;if(correct===rows.length){status.textContent="Activity complete.";status.classList.add("complete");markActivityComplete(activity)}})}
 initSort("#assessment .activity-card.require-complete","checkSignSort","signSortStatus");
 initSort("#bun-creatinine .activity-card.require-complete","checkBunSort","bunSortStatus");
@@ -783,7 +803,7 @@ function initializeGuidedCase(){
   const caseStages=Array.from(caseSection.querySelectorAll(".case-stage"));
   caseStages.forEach((stage,index)=>{if(index>0)stage.classList.add("lesson-hidden")});
   caseSection.querySelectorAll(".case-option").forEach(option=>{option.addEventListener("click",()=>{const stage=option.closest(".case-stage");if(stage.dataset.correctAnswered==="true")return;const feedback=stage.querySelector(".case-feedback");const isCorrect=option.dataset.caseCorrect==="true";stage.querySelectorAll(".case-option").forEach(btn=>btn.classList.remove("incorrect-choice"));if(isCorrect){stage.dataset.correctAnswered="true";stage.querySelectorAll(".case-option").forEach(btn=>{btn.disabled=true;if(btn.dataset.caseCorrect==="true")btn.classList.add("correct-choice")});feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";const nb=stage.querySelector(".case-next button");if(nb)nb.disabled=false}else{option.classList.add("incorrect-choice");feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>Try again.</strong>";const nb=stage.querySelector(".case-next button");if(nb)nb.disabled=true}})});
-  caseSection.querySelectorAll(".case-next button").forEach(button=>{button.disabled=true;button.addEventListener("click",()=>{const current=button.closest(".case-stage");const currentIndex=caseStages.indexOf(current);const next=caseStages[currentIndex+1];if(!next)return;next.classList.remove("lesson-hidden");if(currentIndex+1===caseStages.length-1)markActivityComplete(caseSection);const cc=button.closest(".case-next");if(cc)cc.remove();next.scrollIntoView({behavior:"smooth",block:"start"})})})
+  caseSection.querySelectorAll(".case-next button").forEach(button=>{button.disabled=true;button.addEventListener("click",()=>{const current=button.closest(".case-stage");const currentIndex=caseStages.indexOf(current);const next=caseStages[currentIndex+1];if(!next)return;next.classList.remove("lesson-hidden");if(currentIndex+1===caseStages.length-1)markActivityComplete(caseSection);const cc=button.closest(".case-next");if(cc)cc.remove();requestAnimationFrame(()=>{const sticky=document.querySelector(".top-nav");const offset=(sticky?sticky.offsetHeight:0)+18;const top=next.getBoundingClientRect().top+window.scrollY-offset;window.scrollTo({top:Math.max(0,top),behavior:"smooth"});const heading=next.querySelector("h3");if(heading){heading.setAttribute("tabindex","-1");heading.focus({preventScroll:true})}})})})
 }
 initializeGuidedCase();
 
@@ -819,9 +839,10 @@ function initializeProgressiveSections(){
   function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requiresCompletion=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requiresCompletion){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
   function updateAllContinueStates(){sections.forEach(setContinueState)}
   function updateNavState(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const isVisible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!isVisible);link.classList.toggle("current",targetIndex===currentIndex)})}
-  function revealThrough(targetIndex,shouldScroll=true){const currentVisible=sections.reduce((highest,section,index)=>!section.classList.contains("lesson-hidden")?index:highest,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNavState(targetIndex);updateAllContinueStates();if(shouldScroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
+  function scrollBelowHeader(target){requestAnimationFrame(()=>{const sticky=document.querySelector(".top-nav");const offset=(sticky?sticky.offsetHeight:0)+18;const top=target.getBoundingClientRect().top+window.scrollY-offset;window.scrollTo({top:Math.max(0,top),behavior:"smooth"})})}
+  function revealThrough(targetIndex,shouldScroll=true){const currentVisible=sections.reduce((highest,section,index)=>!section.classList.contains("lesson-hidden")?index:highest,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);scrollBelowHeader(currentSection);return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNavState(targetIndex);updateAllContinueStates();if(shouldScroll&&sections[targetIndex])scrollBelowHeader(sections[targetIndex])}
   sections.forEach((section,index)=>{if(index>=sections.length-1)return;const nextTitle=getSectionTitle(sections[index+1]);const wrapper=document.createElement("div");wrapper.className="section-continue";wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});section.appendChild(wrapper)});
-  navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((highest,section,index)=>!section.classList.contains("lesson-hidden")?index:highest,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
+  navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((highest,section,index)=>!section.classList.contains("lesson-hidden")?index:highest,0);scrollBelowHeader(sections[currentVisible]);return}revealThrough(Number(target.dataset.sectionIndex))})});
   document.addEventListener("activityComplete",()=>updateAllContinueStates());
   const firstSection=sections[0];if(firstSection){const note=document.createElement("span");note.className="section-progress-note";note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";firstSection.appendChild(note)}
   updateNavState(0);updateAllContinueStates()
