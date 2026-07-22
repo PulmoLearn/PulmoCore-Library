@@ -30,6 +30,173 @@ const userId = session?.user?.id || `lti-test-${Date.now()}`
 const lessonId = window.PULMO_LESSON_ID || window.LESSON_ID
 const lessonMeta = window.PULMO_LESSON || {}
 
+// ── Saved answer state ──
+const answerStateKey = `pulmolearn-answer-state:${userId}:${lessonId}`
+
+function getSavedAnswerState() {
+  try {
+    return JSON.parse(localStorage.getItem(answerStateKey)) || {}
+  } catch (error) {
+    console.warn('PulmoLearn: Could not read saved answer state.', error)
+    return {}
+  }
+}
+
+function saveAnswerState() {
+  if (!lessonId || !userId) return
+
+  const state = {
+    activities: {}
+  }
+
+  document.querySelectorAll('[data-activity-id]').forEach(activity => {
+    const activityId = activity.dataset.activityId
+    if (!activityId) return
+
+    const activityState = {
+      complete: activity.dataset.complete === 'true',
+      correctButtons: [],
+      selects: {},
+      inputs: {}
+    }
+
+    activity.querySelectorAll('.quiz-option.correct-choice').forEach(button => {
+      activityState.correctButtons.push(button.textContent.trim())
+    })
+
+    activity.querySelectorAll('select').forEach((select, index) => {
+      if (select.value) {
+        const key = select.id || select.name || `select-${index}`
+        activityState.selects[key] = select.value
+      }
+    })
+
+    activity.querySelectorAll('input').forEach((input, index) => {
+      if (input.value !== '') {
+        const key = input.id || input.name || `input-${index}`
+        activityState.inputs[key] = input.value
+      }
+
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        const key = input.id || input.name || `input-${index}`
+        activityState.inputs[key] = input.checked
+      }
+    })
+
+    const hasSavedWork =
+      activityState.complete ||
+      activityState.correctButtons.length > 0 ||
+      Object.keys(activityState.selects).length > 0 ||
+      Object.keys(activityState.inputs).length > 0
+
+    if (hasSavedWork) {
+      state.activities[activityId] = activityState
+    }
+  })
+
+  localStorage.setItem(answerStateKey, JSON.stringify(state))
+}
+
+function restoreAnswerState() {
+  const saved = getSavedAnswerState()
+
+  if (!saved.activities) return
+
+  Object.entries(saved.activities).forEach(([activityId, activityState]) => {
+    const activity = document.querySelector(
+      `[data-activity-id="${CSS.escape(activityId)}"]`
+    )
+
+    if (!activity) return
+
+    // Restore correct selected buttons.
+    if (Array.isArray(activityState.correctButtons)) {
+      activityState.correctButtons.forEach(savedText => {
+        const matchingButton = Array.from(
+          activity.querySelectorAll('.quiz-option')
+        ).find(button => button.textContent.trim() === savedText)
+
+        if (!matchingButton) return
+
+        matchingButton.classList.add('correct-choice')
+
+        const question =
+          matchingButton.closest('.knowledge-question') ||
+          matchingButton.closest('.case-stage') ||
+          matchingButton.closest('.quiz-card')
+
+        if (question) {
+          question.dataset.correctAnswered = 'true'
+
+          question.querySelectorAll('.quiz-option').forEach(button => {
+            button.disabled = true
+          })
+
+          const feedback = question.querySelector('.quiz-feedback')
+
+          if (feedback && matchingButton.dataset.feedback) {
+            feedback.classList.add('show')
+            feedback.style.background = 'var(--airway-mint)'
+            feedback.innerHTML =
+              matchingButton.dataset.feedback +
+              '<br><br><strong>Previously completed.</strong>'
+          }
+        }
+      })
+    }
+
+    // Restore dropdown values.
+    Object.entries(activityState.selects || {}).forEach(([key, value]) => {
+      let select = document.getElementById(key)
+
+      if (!select && key.startsWith('select-')) {
+        const index = Number(key.replace('select-', ''))
+        select = activity.querySelectorAll('select')[index]
+      }
+
+      if (select) {
+        select.value = value
+
+        const row = select.closest('.sort-row')
+        if (row && select.value === row.dataset.answer) {
+          row.classList.add('correct')
+          row.classList.remove('incorrect')
+        }
+      }
+    })
+
+    // Restore calculation and checkbox values.
+    Object.entries(activityState.inputs || {}).forEach(([key, value]) => {
+      let input = document.getElementById(key)
+
+      if (!input && key.startsWith('input-')) {
+        const index = Number(key.replace('input-', ''))
+        input = activity.querySelectorAll('input')[index]
+      }
+
+      if (!input) return
+
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        input.checked = Boolean(value)
+      } else {
+        input.value = value
+      }
+    })
+
+    if (activityState.complete) {
+      activity.dataset.complete = 'true'
+
+      const status = activity.querySelector('.activity-status')
+      if (status) {
+        status.textContent = 'Previously completed.'
+        status.classList.add('complete')
+      }
+    }
+  })
+
+  document.dispatchEvent(new CustomEvent('progressRestored'))
+}
+
 initializeActivityAnalytics({
   userId,
   lessonId,
@@ -496,6 +663,26 @@ observer.observe(document.body, {
 
 document.addEventListener('activityComplete', scheduleSave)
 
+document.addEventListener('activityComplete', () => {
+  setTimeout(saveAnswerState, 50)
+})
+
+document.addEventListener('click', event => {
+  if (
+    event.target.closest('.quiz-option') ||
+    event.target.closest('[id^="check"]') ||
+    event.target.closest('[id^="calc"]')
+  ) {
+    setTimeout(saveAnswerState, 100)
+  }
+})
+
+document.addEventListener('change', event => {
+  if (event.target.matches('select, input')) {
+    setTimeout(saveAnswerState, 100)
+  }
+})
+
 // ── Init ──
 window.addEventListener('load', async () => {
   console.log('PulmoLearn: load event fired')
@@ -558,10 +745,12 @@ window.addEventListener('load', async () => {
   setTimeout(async () => {
     const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
 
-    if (isRestart) {
+   if (isRestart) {
   await resetProgress()
+  localStorage.removeItem(answerStateKey)
 } else {
   await restoreProgress()
+  restoreAnswerState()
 }
 
 window.scrollTo(0, 0)
