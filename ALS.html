@@ -202,6 +202,46 @@
     .sort-row.correct { border-color: #86D9C8; background: var(--airway-mint); }
     .sort-row.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
 
+    .sequence-list { display: grid; gap: 10px; margin-top: 14px; }
+    .sequence-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--soft-border);
+      background: #FAFDFF;
+      border-radius: 12px;
+      padding: 12px 14px;
+      cursor: grab;
+      user-select: none;
+    }
+    .sequence-item:active { cursor: grabbing; }
+    .sequence-item.dragging { opacity: .55; border-color: var(--oxygen-blue); }
+    .sequence-item.drag-over { border-color: var(--pulmo-teal); box-shadow: inset 0 0 0 2px rgba(28,167,168,.18); }
+    .sequence-item.correct { border-color: #86D9C8; background: var(--airway-mint); }
+    .sequence-item.incorrect { border-color: #F2B5B5; background: #FDE9E9; }
+    .sequence-handle { font-size: 1.35rem; color: var(--slate); line-height: 1; }
+    .sequence-position {
+      min-width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #EAF3F8;
+      font-family: var(--font-data);
+      font-weight: 800;
+    }
+    .sequence-controls { display: flex; gap: 6px; }
+    .sequence-move {
+      width: 38px; height: 38px; padding: 0; border-radius: 10px;
+      border: 1px solid var(--soft-border); background: var(--white); color: var(--core-navy); font-weight: 800;
+    }
+    .sequence-move:hover { background: var(--airway-mint); }
+    @media (max-width: 560px) {
+      .sequence-item { grid-template-columns: auto minmax(0,1fr); }
+      .sequence-controls { grid-column: 1 / -1; justify-content: flex-end; }
+    }
+
     .footer { background: var(--core-navy); color: var(--white); padding: 34px clamp(20px, 4vw, 56px); display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
     .footer strong span { color: var(--pulmo-teal); }
 
@@ -453,84 +493,42 @@
     with worsening dyspnea, weak cough, and suspected hypoventilation.
   </p>
 
-  <div class="sort-grid" id="sequenceSort">
+  <div class="sequence-list" id="sequenceSort" role="list" aria-label="ALS respiratory support steps. Drag the steps into order or use the move buttons.">
 
-    <div class="sort-row" data-answer="1">
+    <div class="sequence-item" draggable="true" data-answer="1" role="listitem" tabindex="0">
+      <span class="sequence-handle" aria-hidden="true">☰</span>
       <strong>Assess respiratory status</strong>
-      <select class="order-select">
-        <option value="">Select order</option>
-        <option value="1">1st</option>
-        <option value="2">2nd</option>
-        <option value="3">3rd</option>
-        <option value="4">4th</option>
-        <option value="5">5th</option>
-        <option value="6">6th</option>
-      </select>
+      <div class="sequence-controls"><span class="sequence-position" aria-label="Current position">1</span><button class="sequence-move move-up" type="button" aria-label="Move Assess respiratory status up">↑</button><button class="sequence-move move-down" type="button" aria-label="Move Assess respiratory status down">↓</button></div>
     </div>
 
-    <div class="sort-row" data-answer="2">
+    <div class="sequence-item" draggable="true" data-answer="2" role="listitem" tabindex="0">
+      <span class="sequence-handle" aria-hidden="true">☰</span>
       <strong>Identify immediate respiratory threats</strong>
-      <select class="order-select">
-        <option value="">Select order</option>
-        <option value="1">1st</option>
-        <option value="2">2nd</option>
-        <option value="3">3rd</option>
-        <option value="4">4th</option>
-        <option value="5">5th</option>
-        <option value="6">6th</option>
-      </select>
+      <div class="sequence-controls"><span class="sequence-position" aria-label="Current position">2</span><button class="sequence-move move-up" type="button" aria-label="Move Identify immediate respiratory threats up">↑</button><button class="sequence-move move-down" type="button" aria-label="Move Identify immediate respiratory threats down">↓</button></div>
     </div>
 
-    <div class="sort-row" data-answer="3">
+    <div class="sequence-item" draggable="true" data-answer="3" role="listitem" tabindex="0">
+      <span class="sequence-handle" aria-hidden="true">☰</span>
       <strong>Initiate supportive ventilatory therapy</strong>
-      <select class="order-select">
-        <option value="">Select order</option>
-        <option value="1">1st</option>
-        <option value="2">2nd</option>
-        <option value="3">3rd</option>
-        <option value="4">4th</option>
-        <option value="5">5th</option>
-        <option value="6">6th</option>
-      </select>
+      <div class="sequence-controls"><span class="sequence-position" aria-label="Current position">3</span><button class="sequence-move move-up" type="button" aria-label="Move Initiate supportive ventilatory therapy up">↑</button><button class="sequence-move move-down" type="button" aria-label="Move Initiate supportive ventilatory therapy down">↓</button></div>
     </div>
 
-    <div class="sort-row" data-answer="4">
+    <div class="sequence-item" draggable="true" data-answer="4" role="listitem" tabindex="0">
+      <span class="sequence-handle" aria-hidden="true">☰</span>
       <strong>Provide airway clearance support</strong>
-      <select class="order-select">
-        <option value="">Select order</option>
-        <option value="1">1st</option>
-        <option value="2">2nd</option>
-        <option value="3">3rd</option>
-        <option value="4">4th</option>
-        <option value="5">5th</option>
-        <option value="6">6th</option>
-      </select>
+      <div class="sequence-controls"><span class="sequence-position" aria-label="Current position">4</span><button class="sequence-move move-up" type="button" aria-label="Move Provide airway clearance support up">↑</button><button class="sequence-move move-down" type="button" aria-label="Move Provide airway clearance support down">↓</button></div>
     </div>
 
-    <div class="sort-row" data-answer="5">
+    <div class="sequence-item" draggable="true" data-answer="5" role="listitem" tabindex="0">
+      <span class="sequence-handle" aria-hidden="true">☰</span>
       <strong>Reassess respiratory progression and mechanics</strong>
-      <select class="order-select">
-        <option value="">Select order</option>
-        <option value="1">1st</option>
-        <option value="2">2nd</option>
-        <option value="3">3rd</option>
-        <option value="4">4th</option>
-        <option value="5">5th</option>
-        <option value="6">6th</option>
-      </select>
+      <div class="sequence-controls"><span class="sequence-position" aria-label="Current position">5</span><button class="sequence-move move-up" type="button" aria-label="Move Reassess respiratory progression and mechanics up">↑</button><button class="sequence-move move-down" type="button" aria-label="Move Reassess respiratory progression and mechanics down">↓</button></div>
     </div>
 
-    <div class="sort-row" data-answer="6">
+    <div class="sequence-item" draggable="true" data-answer="6" role="listitem" tabindex="0">
+      <span class="sequence-handle" aria-hidden="true">☰</span>
       <strong>Escalate long-term respiratory planning</strong>
-      <select class="order-select">
-        <option value="">Select order</option>
-        <option value="1">1st</option>
-        <option value="2">2nd</option>
-        <option value="3">3rd</option>
-        <option value="4">4th</option>
-        <option value="5">5th</option>
-        <option value="6">6th</option>
-      </select>
+      <div class="sequence-controls"><span class="sequence-position" aria-label="Current position">6</span><button class="sequence-move move-up" type="button" aria-label="Move Escalate long-term respiratory planning up">↑</button><button class="sequence-move move-down" type="button" aria-label="Move Escalate long-term respiratory planning down">↓</button></div>
     </div>
 
   </div>
@@ -640,7 +638,7 @@
       });
       document.querySelectorAll(".case-next button").forEach(button => {
         button.disabled = true;
-        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); nextStage.scrollIntoView({ behavior: "smooth", block: "start" }); });
+        button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); });
       });
     }
 
@@ -665,56 +663,114 @@
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
     function initializeManifestationsSort() { const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
 
-    function initializeSequenceSort() { const activity = document.querySelector("#management .activity-card.require-complete"); const button = document.getElementById("checkSequenceSort"); const status = document.getElementById("sequenceSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sequence activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
-    function shuffleSequence() {
+    function updateSequencePositions() {
       const container = document.getElementById("sequenceSort");
       if (!container) return;
-      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
-      for (let i = rows.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [rows[i], rows[j]] = [rows[j], rows[i]];
-      }
-      rows.forEach(row => container.appendChild(row));
+      const items = Array.from(container.querySelectorAll(":scope > .sequence-item"));
+      items.forEach((item, index) => {
+        const position = item.querySelector(".sequence-position");
+        if (position) {
+          position.textContent = String(index + 1);
+          position.setAttribute("aria-label", `Current position ${index + 1}`);
+        }
+        const up = item.querySelector(".move-up");
+        const down = item.querySelector(".move-down");
+        if (up) up.disabled = index === 0;
+        if (down) down.disabled = index === items.length - 1;
+      });
     }
 
-    function normalizeSequenceRanks(changedSelect) {
+    function clearSequenceFeedback() {
       const container = document.getElementById("sequenceSort");
-      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
-      const changedRow = changedSelect.closest(".sort-row");
-      const chosenRank = changedSelect.value;
-      if (!chosenRank) return;
-      // Only clear duplicate selections — don't cascade or reorder
-      rows.forEach(row => {
-        if (row === changedRow) return;
-        const select = row.querySelector("select");
-        if (select && select.value === chosenRank) {
-          select.value = "";
+      if (!container) return;
+      container.querySelectorAll(".sequence-item").forEach(item => item.classList.remove("correct", "incorrect"));
+      const status = document.getElementById("sequenceSortStatus");
+      if (status && !status.classList.contains("complete")) status.textContent = "Arrange all six steps, then check the sequence.";
+    }
+
+    function moveSequenceItem(item, direction) {
+      const container = item.parentElement;
+      if (direction < 0 && item.previousElementSibling) container.insertBefore(item, item.previousElementSibling);
+      if (direction > 0 && item.nextElementSibling) container.insertBefore(item.nextElementSibling, item);
+      clearSequenceFeedback();
+      updateSequencePositions();
+      item.focus({ preventScroll: true });
+    }
+
+    function initializeSequenceDragDrop() {
+      const container = document.getElementById("sequenceSort");
+      if (!container) return;
+      let dragged = null;
+
+      container.querySelectorAll(".sequence-item").forEach(item => {
+        item.addEventListener("dragstart", event => {
+          dragged = item;
+          item.classList.add("dragging");
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", item.dataset.answer);
+        });
+        item.addEventListener("dragend", () => {
+          item.classList.remove("dragging");
+          container.querySelectorAll(".sequence-item").forEach(row => row.classList.remove("drag-over"));
+          dragged = null;
+          clearSequenceFeedback();
+          updateSequencePositions();
+        });
+        item.addEventListener("dragover", event => {
+          event.preventDefault();
+          if (!dragged || dragged === item) return;
+          item.classList.add("drag-over");
+          const rect = item.getBoundingClientRect();
+          const before = event.clientY < rect.top + rect.height / 2;
+          container.insertBefore(dragged, before ? item : item.nextElementSibling);
+        });
+        item.addEventListener("dragleave", () => item.classList.remove("drag-over"));
+        item.querySelector(".move-up")?.addEventListener("click", () => moveSequenceItem(item, -1));
+        item.querySelector(".move-down")?.addEventListener("click", () => moveSequenceItem(item, 1));
+        item.addEventListener("keydown", event => {
+          if (event.altKey && event.key === "ArrowUp") { event.preventDefault(); moveSequenceItem(item, -1); }
+          if (event.altKey && event.key === "ArrowDown") { event.preventDefault(); moveSequenceItem(item, 1); }
+        });
+      });
+      updateSequencePositions();
+    }
+
+    function initializeSequenceSort() {
+      const activity = document.querySelector("#management .activity-card.require-complete");
+      const button = document.getElementById("checkSequenceSort");
+      const status = document.getElementById("sequenceSortStatus");
+      if (!activity || !button || !status) return;
+      button.addEventListener("click", () => {
+        const items = Array.from(activity.querySelectorAll(".sequence-item"));
+        let correctCount = 0;
+        items.forEach((item, index) => {
+          const correct = Number(item.dataset.answer) === index + 1;
+          item.classList.toggle("correct", correct);
+          item.classList.toggle("incorrect", !correct);
+          if (correct) correctCount++;
+        });
+        status.textContent = `${correctCount} / ${items.length} steps in the correct position`;
+        if (correctCount === items.length) {
+          status.textContent = "Sequence activity complete.";
+          status.classList.add("complete");
+          markActivityComplete(activity);
+        } else {
+          status.classList.remove("complete");
+          status.textContent += ". Reorder the highlighted steps and try again.";
         }
       });
     }
 
-    function reorderSequenceRows() {
-      const container = document.getElementById("sequenceSort");
-      const rows = Array.from(container.querySelectorAll(":scope > .sort-row"));
-      rows.sort((a, b) => {
-        const aVal = Number(a.querySelector("select").value) || 99;
-        const bVal = Number(b.querySelector("select").value) || 99;
-        if (aVal !== bVal) return aVal - bVal;
-        return a.dataset.answer - b.dataset.answer;
-      });
-      rows.forEach(row => container.appendChild(row));
-    }
-
-    function enableDynamicReorder() {
+    function shuffleSequence() {
       const container = document.getElementById("sequenceSort");
       if (!container) return;
-      container.querySelectorAll(".order-select").forEach(select => {
-        select.addEventListener("change", () => {
-          container.querySelectorAll(".sort-row").forEach(row => row.classList.remove("correct", "incorrect"));
-          normalizeSequenceRanks(select);
-          reorderSequenceRows();
-        });
-      });
+      const items = Array.from(container.querySelectorAll(":scope > .sequence-item"));
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      items.forEach(item => container.appendChild(item));
+      updateSequencePositions();
     }
 
     function initializeKnowledgeCheck() {
@@ -807,7 +863,7 @@
 
     shuffleAnswerOptions();
     shuffleSequence();
-    enableDynamicReorder();
+    initializeSequenceDragDrop();
     initializePrecheck();
     initializeHotspotActivity();
     initializeRiskSort();
@@ -816,6 +872,34 @@
     initializePeakFlowActivity();
     initializeKnowledgeCheck();
     initializeGuidedCase();
+
+    function reconcileRestoredActivityState() {
+      document.querySelectorAll(".require-complete[data-activity-id]").forEach(activity => {
+        let complete = activity.dataset.complete === "true";
+        if (!complete && activity.querySelector(".correct-choice")) {
+          if (activity.matches("#knowledge-check")) {
+            const questions = Array.from(activity.querySelectorAll(".knowledge-question"));
+            complete = questions.length > 0 && questions.every(question => question.dataset.correctAnswered === "true" || question.querySelector(".correct-choice"));
+          } else if (activity.matches("#case-study")) {
+            const stages = Array.from(activity.querySelectorAll(".case-stage:not(:last-child)"));
+            complete = stages.length > 0 && stages.every(stage => stage.dataset.correctAnswered === "true" || stage.querySelector(".correct-choice"));
+          } else {
+            complete = true;
+          }
+        }
+        if (!complete && activity.querySelector(".activity-status.complete")) complete = true;
+        if (!complete && activity.querySelectorAll(".hotspot-btn").length) {
+          const hotspots = Array.from(activity.querySelectorAll(".hotspot-btn"));
+          complete = hotspots.every(button => button.classList.contains("visited"));
+        }
+        if (complete && activity.dataset.complete !== "true") markActivityComplete(activity);
+      });
+    }
+
+    window.addEventListener("load", () => {
+      setTimeout(reconcileRestoredActivityState, 700);
+      setTimeout(reconcileRestoredActivityState, 1600);
+    });
    
   </script>
   <script>
