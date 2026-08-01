@@ -774,15 +774,8 @@ Recognize volume-loss patterns, determine whether collapse is low-volume, obstru
 <h3>Click the Atelectasis Hotspots</h3>
 <p>Click each hotspot to reveal how that structure contributes to atelectasis.</p>
 <div class="hotspot-demo">
-<div aria-label="Simplified atelectasis lung graphic with clickable hotspots" class="hotspot-lung">
-<svg aria-hidden="true" fill="none" viewbox="0 0 240 240">
-<path d="M114 28v63c-15-24-42-36-62-24-22 13-31 82-4 111 25 27 56-7 61-61l5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"></path>
-<path d="M126 28v63c15-24 42-36 62-24 22 13 31 82 4 111-25 27-56-7-61-61l-5-89Z" fill="rgba(75,163,242,.18)" stroke="#4BA3F2" stroke-width="3"></path>
-<path d="M120 26v80m0 0c-24 8-38 27-48 52m48-52c24 8 38 27 48 52" stroke="#1CA7A8" stroke-linecap="round" stroke-width="5"></path>
-<ellipse cx="75" cy="158" fill="#E85D5D" opacity=".55" rx="30" ry="18"></ellipse>
-<ellipse cx="162" cy="162" fill="#E85D5D" opacity=".35" rx="25" ry="14"></ellipse>
-<circle cx="120" cy="116" fill="#1CA7A8" r="14"></circle>
-</svg>
+<div aria-label="Stylized atelectasis lung graphic with clickable hotspots" class="hotspot-lung">
+<img alt="Stylized atelectasis lung diagram showing both lungs, trachea, and central bronchi in a clean respiratory-education illustration style. The image highlights a mucus plug obstructing a central bronchus, a region of collapsed alveoli in the lower left lung, a second underinflated or low-volume region in the lower right lung representing reduced compliance, and a subtle lower right ventilation-perfusion mismatch area showing continued perfusion to poorly ventilated lung. The diagram is designed for four interactive hotspots that teach collapsed alveoli, mucus plugging, reduced compliance, and V/Q mismatch." src="atelectasis-hotspot-airway-map.png" style="width:82%; height:auto; display:block;"/>
 <button aria-label="Hotspot 1: Collapsed Alveoli" class="hotspot-btn" data-text="Collapsed alveoli receive little ventilation, reducing gas exchange and lowering lung volume." data-title="Collapsed Alveoli" style="left:28%; top:62%;">1</button>
 <button aria-label="Hotspot 2: Mucus Plug" class="hotspot-btn" data-text="Secretions can obstruct an airway so distal alveoli absorb gas and collapse." data-title="Mucus Plug" style="left:43%; top:48%;">2</button>
 <button aria-label="Hotspot 3: Reduced Compliance" class="hotspot-btn" data-text="Collapsed areas become harder to inflate, increasing work of breathing." data-title="Reduced Compliance" style="right:27%; top:65%;">3</button>
@@ -940,7 +933,7 @@ Recognize volume-loss patterns, determine whether collapse is low-volume, obstru
   and escalating if oxygenation or collapse fails to improve.
 </p>
 <div class="example-box soft-blue" style="margin-top:16px;">
-<img alt="Stepwise respiratory therapy clinical management framework showing assessment, stabilization, supportive therapy, reassessment, and escalation planning" src="atelectasis-clinical-management-framework.png" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"/>
+<img alt="Stepwise respiratory therapy clinical management framework showing assessment, stabilization, supportive therapy, reassessment, and escalation planning" src="Clinical_Management_Framework.png" style="width:100%; border-radius:16px; box-shadow: var(--shadow-soft);"/>
 </div>
 <div class="info-card board" style="margin-top:16px;">
 <h3>Board Prep Connection</h3>
@@ -1337,6 +1330,116 @@ Recognize volume-loss patterns, determine whether collapse is low-volume, obstru
         button.disabled = true;
         button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); });
       });
+    }
+
+    function initializeProgressiveSections() {
+      if (document.documentElement.dataset.progressiveSectionsReady === "true") return;
+      document.documentElement.dataset.progressiveSectionsReady = "true";
+
+      const sections = Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));
+      const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+      if (!sections.length) return;
+
+      sections.forEach((section, index) => {
+        section.dataset.sectionIndex = String(index);
+        if (index > 0) section.classList.add("lesson-hidden");
+      });
+
+      function getSectionTitle(section) {
+        const heading = section.querySelector("h2, h3");
+        return heading ? heading.textContent.trim() : "Next Section";
+      }
+
+      function isSectionComplete(section) {
+        const required = Array.from(section.querySelectorAll(".require-complete"));
+        if (section.classList.contains("require-complete")) required.push(section);
+        return required.every(item => item.dataset.complete === "true");
+      }
+
+      function setContinueState(section) {
+        const button = section.querySelector(":scope > .section-continue:not(.case-next) button");
+        if (!button) return;
+        const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete");
+        if (!requiresCompletion) {
+          button.disabled = false;
+          return;
+        }
+        const complete = isSectionComplete(section);
+        button.disabled = !complete;
+        button.textContent = complete ? button.dataset.readyText : "Complete activity to continue";
+      }
+
+      function updateAllContinueStates() {
+        sections.forEach(setContinueState);
+      }
+
+      function updateNavState(currentIndex) {
+        navLinks.forEach(link => {
+          const target = document.querySelector(link.getAttribute("href"));
+          const targetIndex = target ? Number(target.dataset.sectionIndex) : -1;
+          const isVisible = target && !target.classList.contains("lesson-hidden");
+          link.classList.toggle("locked", !isVisible);
+          link.classList.toggle("current", targetIndex === currentIndex);
+        });
+      }
+
+      function revealThrough(targetIndex, shouldScroll = false) {
+        const currentVisible = sections.reduce(
+          (highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest,
+          0
+        );
+        const currentSection = sections[currentVisible];
+
+        if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) {
+          setContinueState(currentSection);
+          return;
+        }
+
+        sections.forEach((section, index) => {
+          if (index <= targetIndex) section.classList.remove("lesson-hidden");
+        });
+
+        updateNavState(targetIndex);
+        updateAllContinueStates();
+
+        if (shouldScroll && sections[targetIndex]) {
+          sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      sections.forEach((section, index) => {
+        if (index >= sections.length - 1) return;
+        if (section.querySelector(":scope > .section-continue:not(.case-next)")) return;
+
+        const nextSection = sections[index + 1];
+        const nextTitle = getSectionTitle(nextSection);
+        const wrapper = document.createElement("div");
+        wrapper.className = "section-continue";
+        wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+
+        wrapper.querySelector("button").addEventListener("click", () => {
+          const button = wrapper.querySelector("button");
+          if (button.disabled) return;
+          revealThrough(index + 1, false);
+          wrapper.remove();
+        });
+
+        section.appendChild(wrapper);
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener("click", event => {
+          const target = document.querySelector(link.getAttribute("href"));
+          if (!target || target.dataset.sectionIndex === undefined) return;
+          event.preventDefault();
+          if (target.classList.contains("lesson-hidden") || link.classList.contains("locked")) return;
+          revealThrough(Number(target.dataset.sectionIndex), true);
+        });
+      });
+
+      document.addEventListener("activityComplete", updateAllContinueStates);
+      updateNavState(0);
+      updateAllContinueStates();
     }
 
     function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
