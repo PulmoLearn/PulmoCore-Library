@@ -651,6 +651,56 @@ function callInit(name) {
   }
 }
 
+// ── Shared image protection ──
+function initializeImageProtection() {
+  if (document.documentElement.dataset.imageProtectionReady === 'true') return
+
+  document.documentElement.dataset.imageProtectionReady = 'true'
+
+  function protectImage(image) {
+    if (!(image instanceof HTMLImageElement)) return
+
+    image.draggable = false
+    image.style.webkitUserDrag = 'none'
+    image.style.userSelect = 'none'
+  }
+
+  document.querySelectorAll('img').forEach(protectImage)
+
+  document.addEventListener('contextmenu', event => {
+    const image = event.target.closest?.('img')
+
+    if (image) {
+      event.preventDefault()
+    }
+  })
+
+  document.addEventListener('dragstart', event => {
+    const image = event.target.closest?.('img')
+
+    if (image) {
+      event.preventDefault()
+    }
+  })
+
+  const imageObserver = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node instanceof HTMLImageElement) {
+          protectImage(node)
+        } else if (node instanceof HTMLElement) {
+          node.querySelectorAll('img').forEach(protectImage)
+        }
+      })
+    })
+  })
+
+  imageObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
+}
+
 // ── Observer ──
 const observer = new MutationObserver((mutations) => {
   if (observerPaused) return
@@ -699,6 +749,8 @@ document.addEventListener('change', event => {
 window.addEventListener('load', async () => {
   console.log('PulmoLearn: load event fired')
 
+  initializeImageProtection()
+
   callInit('initializeProgressiveSections')
   callInit('initializePrecheck')
   callInit('initializeHotspotActivity')
@@ -730,25 +782,25 @@ window.addEventListener('load', async () => {
   setTimeout(async () => {
     const isRestart = new URLSearchParams(window.location.search).get('restart') === 'true'
 
-   if (isRestart) {
-  await resetProgress()
-  localStorage.removeItem(answerStateKey)
-} else {
-  await restoreProgress()
-  restoreAnswerState()
-}
+    if (isRestart) {
+      await resetProgress()
+      localStorage.removeItem(answerStateKey)
+    } else {
+      await restoreProgress()
+      restoreAnswerState()
+    }
 
-window.scrollTo(0, 0)
+    window.scrollTo(0, 0)
 
-requestAnimationFrame(() => {
-  window.scrollTo(0, 0)
-})
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0)
+    })
 
-setTimeout(() => {
-  window.scrollTo(0, 0)
-}, 150)
+    setTimeout(() => {
+      window.scrollTo(0, 0)
+    }, 150)
 
-observerPaused = false
+    observerPaused = false
 
     console.log('PulmoLearn: Observer enabled')
     console.log('PulmoLearn: Ready — waiting for user interaction to save')
@@ -757,7 +809,7 @@ observerPaused = false
 
     setInterval(() => {
       saveProgress()
-   }, 30000)
+    }, 30000)
   }, 3500)
 })
 
