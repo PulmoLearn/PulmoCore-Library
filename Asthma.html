@@ -1163,6 +1163,119 @@
     }
 
 
+
+    // Defined here for progress-tracker.js v8.2 to call once during setup.
+    // Do not invoke this function directly in the lesson; the tracker owns initialization.
+    function initializeProgressiveSections() {
+      if (document.documentElement.dataset.progressiveSectionsReady === "true") return;
+      document.documentElement.dataset.progressiveSectionsReady = "true";
+
+      const sections = Array.from(document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section"));
+      const navLinks = Array.from(document.querySelectorAll(".side-nav a[href^='#']"));
+      if (!sections.length) return;
+
+      sections.forEach((section, index) => {
+        section.dataset.sectionIndex = String(index);
+        if (index > 0) section.classList.add("lesson-hidden");
+      });
+
+      function getSectionTitle(section) {
+        const heading = section.querySelector("h2, h3");
+        return heading ? heading.textContent.trim() : "Next Section";
+      }
+
+      function isSectionComplete(section) {
+        const required = Array.from(section.querySelectorAll(".require-complete"));
+        if (section.classList.contains("require-complete")) required.push(section);
+        return required.every(item => item.dataset.complete === "true");
+      }
+
+      function setContinueState(section) {
+        const button = section.querySelector(":scope > .section-continue:not(.case-next) button");
+        if (!button) return;
+        const requiresCompletion = section.classList.contains("require-complete") || section.querySelector(".require-complete");
+        if (!requiresCompletion) {
+          button.disabled = false;
+          return;
+        }
+        const complete = isSectionComplete(section);
+        button.disabled = !complete;
+        button.textContent = complete ? button.dataset.readyText : "Complete activity to continue";
+      }
+
+      function updateAllContinueStates() {
+        sections.forEach(setContinueState);
+      }
+
+      function updateNavState(currentIndex) {
+        navLinks.forEach(link => {
+          const target = document.querySelector(link.getAttribute("href"));
+          const targetIndex = target ? Number(target.dataset.sectionIndex) : -1;
+          const isVisible = target && !target.classList.contains("lesson-hidden");
+          link.classList.toggle("locked", !isVisible);
+          link.classList.toggle("current", targetIndex === currentIndex);
+        });
+      }
+
+      function revealThrough(targetIndex, shouldScroll = false) {
+        const currentVisible = sections.reduce(
+          (highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest,
+          0
+        );
+        const currentSection = sections[currentVisible];
+
+        if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) {
+          setContinueState(currentSection);
+          return;
+        }
+
+        sections.forEach((section, index) => {
+          if (index <= targetIndex) section.classList.remove("lesson-hidden");
+        });
+
+        updateNavState(targetIndex);
+        updateAllContinueStates();
+
+        if (shouldScroll && sections[targetIndex]) {
+          sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      sections.forEach((section, index) => {
+        if (index >= sections.length - 1) return;
+        if (section.querySelector(":scope > .section-continue:not(.case-next)")) return;
+
+        const nextSection = sections[index + 1];
+        const nextTitle = getSectionTitle(nextSection);
+        const wrapper = document.createElement("div");
+        wrapper.className = "section-continue";
+        wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
+
+        wrapper.querySelector("button").addEventListener("click", () => {
+          const button = wrapper.querySelector("button");
+          if (button.disabled) return;
+          revealThrough(index + 1, false);
+          wrapper.remove();
+        });
+
+        section.appendChild(wrapper);
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener("click", event => {
+          const target = document.querySelector(link.getAttribute("href"));
+          if (!target || target.dataset.sectionIndex === undefined) return;
+          event.preventDefault();
+          if (target.classList.contains("lesson-hidden") || link.classList.contains("locked")) return;
+          revealThrough(Number(target.dataset.sectionIndex), true);
+        });
+      });
+
+      document.addEventListener("activityComplete", updateAllContinueStates);
+      updateNavState(0);
+      updateAllContinueStates();
+    }
+
     function initializeHotspotActivity() { const activity = document.querySelector("#pathophysiology .activity-card.require-complete"); if (!activity) return; const buttons = Array.from(activity.querySelectorAll(".hotspot-btn")); const panel = document.getElementById("hotspotPanel"); const status = document.getElementById("hotspotStatus"); buttons.forEach(button => { button.addEventListener("click", () => { button.classList.add("visited"); panel.innerHTML = `<strong>${button.dataset.title}</strong><br>${button.dataset.text}`; const visited = buttons.filter(btn => btn.classList.contains("visited")).length; status.textContent = `${visited} / ${buttons.length} hotspots reviewed`; if (visited === buttons.length) { status.textContent = "Hotspot activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }); }
 
     function initializeRiskSort() { const activity = document.querySelector("#triggers .activity-card.require-complete"); const button = document.getElementById("checkRiskSort"); const status = document.getElementById("riskSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
