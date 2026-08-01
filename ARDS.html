@@ -320,6 +320,7 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
     .empty-state { padding: 22px; border-radius: 14px; background: var(--airway-mint); color: var(--core-navy); text-align: center; font-weight: 700; }
 
     .lesson-hidden { display: none; }
+    .lesson-stack-top > section, .lesson-stack > section { scroll-margin-top: 120px; }
     .section-continue { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--soft-border); display: flex; justify-content: flex-end; }
     .section-continue .btn { min-height: 44px; padding: 10px 18px; }
     .section-progress-note { display: inline-block; margin-top: 12px; color: var(--slate); font-size: 0.92rem; }
@@ -663,6 +664,31 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
 </div>
 <h3 style="margin-top:18px;">Lung-Protective Ventilation Concept</h3>
 <p>The ventilator should oxygenate and ventilate while protecting the lung. Board-style ARDS questions often prioritize low tidal volume by predicted body weight, plateau pressure limitation, adequate PEEP, permissive hypercapnia when appropriate, and proning for severe hypoxemia.</p>
+<article class="info-card rt" style="margin-top:18px;">
+<h3>PEEP as a Recruitment Trial—not a One-Way Escalator</h3>
+<p>PEEP can recruit unstable alveoli, reduce cyclic opening and collapse, and improve oxygenation. However, a higher PEEP is only beneficial when the recruitment gain outweighs the effects of increased intrathoracic pressure and possible overdistention. Every PEEP change should be treated as a monitored trial.</p>
+<div class="data-card" style="font-family:var(--font-body); white-space:normal; margin-top:14px;">
+<table>
+<tr><th>After Increasing PEEP</th><th>Reassess</th><th>Interpretation</th></tr>
+<tr><td>SpO₂ or PaO₂ improves, compliance improves, pressures remain acceptable, and blood pressure is stable</td><td>Confirm the improvement persists and continue trending oxygenation, mechanics, and perfusion.</td><td>The change may have recruited alveoli without causing important hemodynamic harm.</td></tr>
+<tr><td>SpO₂ improves, but blood pressure falls or perfusion worsens</td><td>Check mean arterial pressure, heart rate, urine output, lactate trend, right-ventricular tolerance, and overall volume/hemodynamic status.</td><td>The higher intrathoracic pressure may be reducing venous return or cardiac output. Better saturation does not automatically mean better oxygen delivery.</td></tr>
+<tr><td>Plateau pressure or driving pressure rises, compliance worsens, or hypotension appears</td><td>Reevaluate whether overdistention or hemodynamic compromise outweighs recruitment.</td><td>Return to the previously tolerated PEEP when appropriate and reassess the whole patient.</td></tr>
+<tr><td>Oxygenation remains inadequate at the tolerated PEEP</td><td>Adjust FiO₂ as needed while continuing lung-protective ventilation and considering proning or other indicated escalation.</td><td>FiO₂ may be the safer immediate oxygenation adjustment when further PEEP causes harm.</td></tr>
+</table>
+</div>
+<div class="example-box soft-amber" style="margin-top:14px;"><strong>Key principle:</strong><br>The goal is not the highest PEEP or the best SpO₂ in isolation. The goal is adequate oxygenation with acceptable lung stress, blood pressure, cardiac output, and tissue perfusion.</div>
+</article>
+<article class="quiz-card" style="margin-top:18px;">
+<h3>Clinical Application: When Recruitment Costs Too Much</h3>
+<p>PEEP is increased from 10 to 14 cm H₂O. SpO₂ rises from 88% to 92%, but blood pressure falls from 108/64 to 82/48 mm Hg and plateau pressure increases. Which response best reflects ARDS management?</p>
+<div class="quiz-options">
+<button class="quiz-option peep-response-option" data-correct="false" data-feedback="Not quite. A higher SpO₂ does not justify continued PEEP escalation when hemodynamics and lung stress worsen.">Keep PEEP at 14 because oxygen saturation improved.</button>
+<button class="quiz-option peep-response-option" data-correct="true" data-feedback="Correct. The PEEP trial produced possible recruitment but also important hemodynamic and pressure consequences. Return toward the previously tolerated PEEP, reassess perfusion and mechanics, and adjust FiO₂ if needed while considering other oxygenation strategies.">Return toward the previously tolerated PEEP, reassess hemodynamics and pressures, and use FiO₂ or other strategies as needed.</button>
+<button class="quiz-option peep-response-option" data-correct="false" data-feedback="Not quite. Removing all PEEP can worsen derecruitment; the appropriate response is usually to return to the last tolerated level and reassess.">Immediately reduce PEEP to zero.</button>
+<button class="quiz-option peep-response-option" data-correct="false" data-feedback="Not quite. Blood pressure and perfusion are central to oxygen delivery and cannot be ignored while treating oxygenation.">Ignore the blood pressure because ARDS is primarily a lung problem.</button>
+</div>
+<div class="quiz-feedback peep-response-feedback" role="status"></div>
+</article>
 <article class="activity-card require-complete" data-activity-id="ards_escalation_sequence" data-activity-name="ARDS Management Strategy Identification" data-activity-type="sorting" data-course-id="respiratory-diseases" data-estimated-minutes="6" data-lesson-id="ards" data-module-id="acute-hypoxemic-respiratory-failure" data-required="true" style="margin-top:16px;">
 <h3>Identify the ARDS Management Strategy</h3>
 <p>
@@ -1136,7 +1162,7 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
       function updateAllContinueStates() { sections.forEach(setContinueState); }
       function updateNavState(currentIndex) { navLinks.forEach(link => { const target = document.querySelector(link.getAttribute("href")); const targetIndex = target ? Number(target.dataset.sectionIndex) : -1; const isVisible = target && !target.classList.contains("lesson-hidden"); link.classList.toggle("locked", !isVisible); link.classList.toggle("current", targetIndex === currentIndex); }); }
       function revealThrough(targetIndex, shouldScroll = true) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); const currentSection = sections[currentVisible]; if (targetIndex > currentVisible + 1 && !isSectionComplete(currentSection)) { setContinueState(currentSection); currentSection.scrollIntoView({ behavior: "smooth", block: "start" }); return; } sections.forEach((section, index) => { if (index <= targetIndex) section.classList.remove("lesson-hidden"); }); updateNavState(targetIndex); updateAllContinueStates(); if (shouldScroll && sections[targetIndex]) sections[targetIndex].scrollIntoView({ behavior: "smooth", block: "start" }); }
-      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
+      sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1, false); wrapper.remove(); }); section.appendChild(wrapper); });
       navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
@@ -1289,6 +1315,25 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
     }
   
 
+    function initializePeepResponseActivity() {
+      const options = Array.from(document.querySelectorAll(".peep-response-option"));
+      if (!options.length) return;
+      const feedback = document.querySelector(".peep-response-feedback");
+      options.forEach(option => {
+        option.addEventListener("click", () => {
+          const isCorrect = option.dataset.correct === "true";
+          options.forEach(btn => btn.classList.remove("correct-choice", "incorrect-choice"));
+          option.classList.add(isCorrect ? "correct-choice" : "incorrect-choice");
+          if (feedback) {
+            feedback.className = "quiz-feedback peep-response-feedback show";
+            feedback.style.background = isCorrect ? "var(--airway-mint)" : "var(--soft-coral)";
+            feedback.innerHTML = option.dataset.feedback;
+          }
+          if (isCorrect) options.forEach(btn => btn.disabled = true);
+        });
+      });
+    }
+
     // ── Initialize lesson interactions ──
     document.addEventListener("DOMContentLoaded", function(){
       shuffleAnswerOptions();
@@ -1303,6 +1348,7 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
       enableDynamicReorder();
       initializeSequenceSort();
       initializeGlossarySearch();
+      initializeProgressiveSections();
       const sequenceSort = document.getElementById("sequenceSort");
       if (sequenceSort) sequenceSort.style.visibility = "visible";
     });
