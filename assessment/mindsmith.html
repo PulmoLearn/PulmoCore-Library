@@ -347,9 +347,118 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;</script><script src="/assets/pr
 .mindsmith-embed-shell{width:100%;min-height:700px;border-radius:var(--radius-lg);overflow:hidden;background:#fff;border:1px solid var(--soft-border);box-shadow:var(--shadow-soft);}
 .mindsmith-embed-shell iframe{display:block;width:100%;height:700px;max-width:100%;border:0;}
 @media (max-width:780px){.mindsmith-card{padding:8px}.mindsmith-embed-shell,.mindsmith-embed-shell iframe{min-height:78vh;height:78vh;border-radius:14px;}}
+
+
+/* Compact embedded-lesson layout: preserves PulmoCore branding while maximizing player space */
+.embed-only-page .top-nav{
+  min-height:56px;
+  padding:7px clamp(16px,3vw,40px);
+  gap:14px;
+}
+.embed-only-page .brand{gap:10px;min-width:220px;}
+.embed-only-page .brand-mark{width:42px;height:42px;border-radius:13px;}
+.embed-only-page .brand-mark svg{width:30px;height:30px;}
+.embed-only-page .brand-name{font-size:clamp(1.3rem,1.8vw,1.75rem);}
+.embed-only-page .brand-tagline{font-size:.68rem;margin-top:1px;line-height:1.15;}
+.embed-only-page .top-nav-actions{gap:8px;}
+.embed-only-page .home-button{height:38px;min-height:38px;width:38px;border-radius:11px;}
+.embed-only-page .top-nav-actions > a:first-child{height:38px!important;padding:0 11px!important;font-size:.79rem!important;}
+.embed-only-page .home-icon{width:20px;height:20px;}
+.embed-only-page .course-menu-button{min-height:38px;padding:7px 12px;border-radius:11px;font-size:.88rem;}
+
+.embed-only-page .main-content{
+  padding:12px clamp(14px,3vw,44px) 14px;
+}
+.embed-only-page #top{
+  padding:13px 18px 12px;
+  border-top-width:6px;
+  border-radius:17px;
+  box-shadow:0 7px 18px rgba(11,31,51,.07);
+}
+.embed-only-page #top .eyebrow{
+  font-size:.72rem;
+  margin-bottom:3px;
+}
+.embed-only-page #top h1{
+  font-size:clamp(1.7rem,3.15vw,2.65rem)!important;
+  line-height:1.03!important;
+  letter-spacing:-.047em!important;
+  margin:0 0 6px!important;
+}
+.embed-only-page #top > p{
+  display:none;
+}
+.embed-only-page #top .case-meta{
+  margin:7px 0 0;
+  gap:8px;
+}
+.embed-only-page #top .case-meta div{
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:.86rem;
+  line-height:1.2;
+}
+.embed-only-page .mindsmith-card{
+  padding:0;
+  margin-top:12px;
+  border:0;
+  box-shadow:none;
+  background:transparent;
+}
+.embed-only-page .mindsmith-embed-shell{
+  min-height:0;
+  height:clamp(640px,calc(100vh - 292px),900px);
+  border-radius:17px;
+}
+.embed-only-page .mindsmith-embed-shell iframe{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+}
+.embed-only-page .footer{
+  min-height:48px;
+  padding:10px clamp(16px,3vw,40px);
+  gap:12px;
+  align-items:center;
+  font-size:.82rem;
+  line-height:1.25;
+}
+
+@media (max-width:900px){
+  .embed-only-page .brand-tagline{display:none;}
+  .embed-only-page .brand{min-width:auto;}
+  .embed-only-page .mindsmith-embed-shell{height:calc(100vh - 275px);min-height:620px;}
+}
+@media (max-width:780px){
+  .embed-only-page .top-nav{padding:7px 10px;}
+  .embed-only-page .brand-mark{width:38px;height:38px;}
+  .embed-only-page .brand-mark svg{width:27px;height:27px;}
+  .embed-only-page .brand-name{font-size:1.25rem;}
+  .embed-only-page .main-content{padding:9px 9px 10px;}
+  .embed-only-page #top{padding:11px 13px 10px;}
+  .embed-only-page #top h1{font-size:clamp(1.45rem,6vw,2rem)!important;}
+  .embed-only-page #top .case-meta{grid-template-columns:1fr;gap:5px;}
+  .embed-only-page #top .case-meta div{padding:6px 9px;}
+  .embed-only-page .mindsmith-card{padding:0;margin-top:9px;}
+  .embed-only-page .mindsmith-embed-shell,
+  .embed-only-page .mindsmith-embed-shell iframe{
+    height:78vh!important;
+    min-height:620px!important;
+    border-radius:13px;
+  }
+  .embed-only-page .footer{padding:9px 12px;font-size:.76rem;}
+}
+@media (max-width:560px){
+  .embed-only-page .top-nav-actions > a:first-child{font-size:0!important;width:38px!important;padding:0!important;}
+  .embed-only-page .top-nav-actions > a:first-child::before{content:'📖';font-size:1rem;}
+  .embed-only-page .course-menu-button{font-size:0;padding:7px 10px;}
+  .embed-only-page .course-menu-button::before{content:'☰';font-size:1rem;}
+  .embed-only-page .footer{display:none;}
+}
+
 </style>
 </head>
-<body>
+<body class="embed-only-page">
 <div class="page-shell">
 <header aria-label="PulmoCore site navigation" class="top-nav">
 <div aria-label="PulmoCore brand" class="brand">
@@ -438,75 +547,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-</script>
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
-</body>
+</script></body>
 </html>
