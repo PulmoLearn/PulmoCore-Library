@@ -3,679 +3,930 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Hand Hygiene & Isolation Precautions | Competency Practice</title>
 
-  <link
-    rel="stylesheet"
-    href="/competencies/hand-hygiene-isolation/practice-engine.css"
-  />
+  <style>
+    :root{
+      --navy:#0b2748;
+      --teal:#0f7f7b;
+      --blue:#3578a8;
+      --bg:#f4f8fb;
+      --card:#ffffff;
+      --line:#d9e4ec;
+      --text:#173247;
+      --muted:#62798a;
+      --good:#147d64;
+      --good-bg:#e8f6f1;
+      --warn:#9a6415;
+      --warn-bg:#fff5df;
+      --shadow:0 8px 28px rgba(18,55,83,.08);
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    button{
+      font:inherit;
+    }
+
+    .lesson-shell{
+      width:min(1180px,calc(100% - 28px));
+      margin:28px auto 60px;
+    }
+
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items:flex-end;
+      background:linear-gradient(135deg,#fff,#f7fbfd);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .eyebrow,
+    .section-kicker{
+      margin:0 0 6px;
+      color:var(--teal);
+      font-size:.78rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    h1{
+      margin:0;
+      color:var(--navy);
+      font-size:clamp(1.8rem,4vw,3rem);
+    }
+
+    h2{
+      margin:0;
+      color:var(--navy);
+    }
+
+    h3{
+      color:var(--navy);
+    }
+
+    .lede{
+      max-width:760px;
+      margin:10px 0 0;
+      line-height:1.6;
+    }
+
+    .progress-card{
+      min-width:180px;
+    }
+
+    .progress-card span{
+      display:block;
+      text-align:right;
+      font-size:.85rem;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .progress-track{
+      height:10px;
+      border-radius:999px;
+      background:#e3ecf2;
+      overflow:hidden;
+    }
+
+    .progress-bar{
+      height:100%;
+      width:14.285%;
+      background:var(--teal);
+      transition:width .25s ease;
+    }
+
+    .lesson-nav{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      padding:16px 2px;
+    }
+
+    .nav-step{
+      white-space:nowrap;
+      border:1px solid var(--line);
+      background:white;
+      color:var(--text);
+      border-radius:999px;
+      padding:9px 13px;
+      cursor:pointer;
+    }
+
+    .nav-step.active{
+      background:var(--navy);
+      color:white;
+      border-color:var(--navy);
+    }
+
+    .lesson-section{
+      display:none;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .lesson-section.active{
+      display:block;
+    }
+
+    .section-heading{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .card-grid,
+    .challenge-grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .card-grid.three{
+      grid-template-columns:repeat(3,1fr);
+    }
+
+    .challenge-grid{
+      grid-template-columns:1fr 1fr;
+    }
+
+    .info-card,
+    .scenario-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      background:#fff;
+    }
+
+    .info-card h3{
+      margin-top:0;
+    }
+
+    .info-card p,
+    .info-card li{
+      line-height:1.55;
+    }
+
+    .scenario-card{
+      background:#f5fafc;
+    }
+
+    .scenario-label{
+      display:inline-block;
+      font-size:.74rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      color:var(--teal);
+    }
+
+    .callout{
+      margin-top:20px;
+      border-left:5px solid var(--teal);
+      background:#eef8f7;
+      border-radius:12px;
+      padding:16px;
+    }
+
+    .callout.success{
+      background:var(--good-bg);
+      border-left-color:var(--good);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .actions.end{
+      justify-content:flex-end;
+    }
+
+    .primary,
+    .secondary{
+      border-radius:12px;
+      padding:10px 16px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .primary{
+      border:1px solid var(--navy);
+      background:var(--navy);
+      color:#fff;
+    }
+
+    .secondary{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--navy);
+    }
+
+    .choice-grid,
+    .asset-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .choice-btn,
+    .asset-card,
+    .ppe-card,
+    .sequence-btn{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:16px;
+      cursor:pointer;
+      color:var(--text);
+    }
+
+    .choice-btn.selected,
+    .asset-card.selected{
+      outline:3px solid rgba(15,127,123,.22);
+      border-color:var(--teal);
+      background:#f0fbf9;
+    }
+
+    .asset-card{
+      text-align:center;
+      min-height:160px;
+    }
+
+    .asset-card img,
+    .ppe-card img{
+      max-width:120px;
+      max-height:105px;
+      object-fit:contain;
+    }
+
+    .asset-fallback{
+      height:92px;
+      display:grid;
+      place-items:center;
+      border:1px dashed #b9cad6;
+      border-radius:12px;
+      background:#f8fbfd;
+      color:var(--muted);
+      font-size:.78rem;
+      padding:8px;
+    }
+
+    .asset-label{
+      display:block;
+      margin-top:8px;
+      font-weight:700;
+    }
+
+    .feedback{
+      display:none;
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:12px;
+      border-left:5px solid var(--teal);
+      background:#eef8f7;
+    }
+
+    .feedback.show{
+      display:block;
+    }
+
+    .feedback.correct{
+      background:var(--good-bg);
+      border-left-color:var(--good);
+    }
+
+    .feedback.incorrect{
+      background:var(--warn-bg);
+      border-left-color:var(--warn);
+    }
+
+    .instructions{
+      line-height:1.6;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    .drag-layout{
+      display:grid;
+      grid-template-columns:.85fr 1.15fr;
+      gap:22px;
+    }
+
+    .subhead{
+      margin:0 0 10px;
+    }
+
+    .ppe-tray{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+
+    .ppe-card{
+      text-align:center;
+      min-height:160px;
+    }
+
+    .worker-target{
+      position:relative;
+      min-height:500px;
+      border:2px dashed #b8cbd7;
+      border-radius:20px;
+      background:#f8fbfd;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      padding:16px;
+    }
+
+    .worker-image{
+      display:none;
+      max-height:390px;
+      max-width:90%;
+      object-fit:contain;
+    }
+
+    .worker-image.loaded{
+      display:block;
+    }
+
+    .worker-placeholder{
+      width:min(270px,80%);
+      text-align:center;
+    }
+
+    .placeholder-head{
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      background:#dce8ef;
+      margin:0 auto;
+      border:2px solid #bdced8;
+    }
+
+    .placeholder-body{
+      height:210px;
+      margin-top:8px;
+      background:#dce8ef;
+      clip-path:polygon(25% 0,75% 0,100% 100%,0 100%);
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding-bottom:24px;
+      color:#6f8290;
+      font-weight:700;
+    }
+
+    .equipped-list{
+      position:absolute;
+      left:16px;
+      right:16px;
+      bottom:16px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .equipped-chip{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 10px;
+      cursor:pointer;
+    }
+
+    .segmented{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .route-button{
+      border:1px solid var(--line);
+      background:white;
+      border-radius:999px;
+      padding:9px 13px;
+      cursor:pointer;
+    }
+
+    .route-button.active{
+      background:var(--teal);
+      color:white;
+      border-color:var(--teal);
+    }
+
+    .sequence-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .sequence-btn{
+      text-align:left;
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+
+    .sequence-btn.selected{
+      border-color:var(--teal);
+      background:#f0fbf9;
+    }
+
+    .sequence-number{
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#e8f1f5;
+      color:var(--navy);
+      font-weight:800;
+      flex:0 0 auto;
+    }
+
+    .check-list{
+      padding-left:20px;
+    }
+
+    pre{
+      overflow:auto;
+      background:#f6f9fb;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      line-height:1.5;
+    }
+
+    code{
+      background:#eef3f6;
+      padding:2px 6px;
+      border-radius:6px;
+    }
+
+    @media(max-width:820px){
+      .hero{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .progress-card{
+        width:100%;
+      }
+
+      .card-grid.three,
+      .challenge-grid,
+      .drag-layout{
+        grid-template-columns:1fr;
+      }
+
+      .choice-grid,
+      .asset-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:520px){
+      .lesson-shell{
+        width:min(100% - 16px,1180px);
+        margin-top:10px;
+      }
+
+      .hero,
+      .lesson-section{
+        padding:20px;
+        border-radius:18px;
+      }
+
+      .choice-grid,
+      .asset-grid,
+      .ppe-tray{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <main class="lesson-shell">
 
-    <!-- =========================================================
-         HERO / LESSON HEADER
-    ========================================================== -->
-    <header class="hero">
+<main class="lesson-shell">
+
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Competency Practice Prototype · M-1 L-1</p>
+      <h1>Hand Hygiene &amp; Isolation Precautions</h1>
+      <p class="lede">
+        Practice the preparation, hand-hygiene, isolation-precaution,
+        PPE-removal, disposal, and final hand-hygiene steps from the competency.
+      </p>
+    </div>
+
+    <div class="progress-card" aria-label="Lesson progress">
+      <span id="progressText">1 of 7</span>
+      <div class="progress-track">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+    </div>
+  </header>
+
+
+  <nav class="lesson-nav" aria-label="Lesson sections">
+    <button type="button" data-section="0" class="nav-step active">1. Overview</button>
+    <button type="button" data-section="1" class="nav-step">2. Recognize</button>
+    <button type="button" data-section="2" class="nav-step">3. Gather</button>
+    <button type="button" data-section="3" class="nav-step">4. PPE</button>
+    <button type="button" data-section="4" class="nav-step">5. Hand Hygiene</button>
+    <button type="button" data-section="5" class="nav-step">6. Remove PPE</button>
+    <button type="button" data-section="6" class="nav-step">7. Challenge</button>
+  </nav>
+
+
+  <!-- OVERVIEW -->
+  <section class="lesson-section active" data-section-panel="0">
+
+    <div class="section-heading">
       <div>
-        <p class="eyebrow">
-          Competency Practice Prototype · M-1 L-1
+        <p class="section-kicker">Orientation block</p>
+        <h2>Competency Overview</h2>
+      </div>
+    </div>
+
+    <div class="card-grid three">
+
+      <article class="info-card">
+        <h3>Preparation</h3>
+        <p>
+          Review the chart for the isolation precaution and gather
+          hand-hygiene supplies and appropriate PPE.
         </p>
+      </article>
 
-        <h1>
-          Hand Hygiene &amp; Isolation Precautions
-        </h1>
-
-        <p class="lede">
-          Practice the preparation, hand-hygiene, isolation-precaution,
-          PPE-removal, disposal, and final hand-hygiene steps from the competency.
+      <article class="info-card">
+        <h3>Implementation</h3>
+        <p>
+          Prepare the hands and wrists, then complete alcohol-based
+          or soap-and-water hand hygiene.
         </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Isolation &amp; Completion</h3>
+        <p>
+          Select protective wear, remove PPE to prevent cross-contamination,
+          dispose of PPE, and perform hand hygiene.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="callout">
+      <strong>Prototype goal:</strong>
+      show how one hands-on competency can become a sequence of reusable
+      digital practice activities before lab.
+    </div>
+
+    <div class="actions end">
+      <button type="button" class="primary next-section">
+        Start Practice
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- RECOGNIZE -->
+  <section class="lesson-section" data-section-panel="1">
+
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Template: clinical-choice</p>
+        <h2>Recognize the Isolation Precaution</h2>
       </div>
+    </div>
 
-      <div class="progress-card" aria-label="Lesson progress">
-        <span id="progressText">1 of 7</span>
+    <div class="scenario-card">
+      <span class="scenario-label">Patient scenario</span>
+      <p id="scenarioPrompt"></p>
+    </div>
 
-        <div class="progress-track">
-          <div
-            id="progressBar"
-            class="progress-bar"
-          ></div>
-        </div>
-      </div>
-    </header>
+    <div id="scenarioChoices" class="choice-grid"></div>
 
-
-    <!-- =========================================================
-         LESSON NAVIGATION
-    ========================================================== -->
-    <nav
-      class="lesson-nav"
-      aria-label="Lesson sections"
-    >
-      <button
-        type="button"
-        data-section="0"
-        class="nav-step active"
-      >
-        1. Overview
+    <div class="actions">
+      <button id="checkScenario" type="button" class="primary">
+        Check Answer
       </button>
 
-      <button
-        type="button"
-        data-section="1"
-        class="nav-step"
-      >
-        2. Recognize
+      <button id="newScenario" type="button" class="secondary">
+        New Scenario
+      </button>
+    </div>
+
+    <div
+      id="scenarioFeedback"
+      class="feedback"
+      aria-live="polite"
+    ></div>
+
+    <div class="actions end">
+      <button type="button" class="secondary next-section">
+        Continue
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- GATHER -->
+  <section class="lesson-section" data-section-panel="2">
+
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Template: equipment-select</p>
+        <h2>Gather the Needed Supplies</h2>
+      </div>
+    </div>
+
+    <p class="instructions">
+      Select the hand-hygiene supplies and precaution-specific PPE
+      needed for the current scenario.
+    </p>
+
+    <div id="supplyGrid" class="asset-grid"></div>
+
+    <div class="actions">
+      <button id="checkSupplies" type="button" class="primary">
+        Check Supplies
       </button>
 
-      <button
-        type="button"
-        data-section="2"
-        class="nav-step"
-      >
-        3. Gather
+      <button id="resetSupplies" type="button" class="secondary">
+        Reset
       </button>
+    </div>
 
-      <button
-        type="button"
-        data-section="3"
-        class="nav-step"
-      >
-        4. PPE
+    <div
+      id="supplyFeedback"
+      class="feedback"
+      aria-live="polite"
+    ></div>
+
+    <div class="actions end">
+      <button type="button" class="secondary next-section">
+        Continue
       </button>
+    </div>
 
-      <button
-        type="button"
-        data-section="4"
-        class="nav-step"
-      >
-        5. Hand Hygiene
-      </button>
-
-      <button
-        type="button"
-        data-section="5"
-        class="nav-step"
-      >
-        6. Remove PPE
-      </button>
-
-      <button
-        type="button"
-        data-section="6"
-        class="nav-step"
-      >
-        7. Challenge
-      </button>
-    </nav>
+  </section>
 
 
-    <!-- =========================================================
-         SECTION 1 — OVERVIEW
-    ========================================================== -->
-    <section
-      class="lesson-section active"
-      data-section-panel="0"
-    >
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">
-            Orientation block
-          </p>
+  <!-- PPE -->
+  <section class="lesson-section" data-section-panel="3">
 
-          <h2>
-            Competency Overview
-          </h2>
-        </div>
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Template: drag-to-target</p>
+        <h2>Prepare the Healthcare Worker</h2>
+      </div>
+    </div>
+
+    <p class="instructions">
+      Drag PPE to the healthcare worker.
+      Click an item as an accessible alternative to dragging.
+    </p>
+
+    <div class="drag-layout">
+
+      <div>
+        <h3 class="subhead">PPE Tray</h3>
+        <div id="ppeTray" class="ppe-tray"></div>
       </div>
 
-      <div class="card-grid three">
+      <div>
+        <h3 class="subhead">Healthcare Worker</h3>
 
-        <article class="info-card">
-          <h3>Preparation</h3>
+        <div id="workerTarget" class="worker-target">
 
-          <p>
-            Review the chart for the isolation precaution and gather
-            hand-hygiene supplies and appropriate PPE.
-          </p>
-        </article>
-
-
-        <article class="info-card">
-          <h3>Implementation</h3>
-
-          <p>
-            Prepare the hands and wrists, then complete alcohol-based
-            or soap-and-water hand hygiene.
-          </p>
-        </article>
-
-
-        <article class="info-card">
-          <h3>Isolation &amp; Completion</h3>
-
-          <p>
-            Select protective wear, remove PPE to prevent
-            cross-contamination, dispose of PPE, and perform hand hygiene.
-          </p>
-        </article>
-
-      </div>
-
-
-      <div class="callout">
-        <strong>Prototype goal:</strong>
-        show how one hands-on competency can become a sequence of
-        reusable digital practice activities before lab.
-      </div>
-
-
-      <div class="actions end">
-        <button
-          type="button"
-          class="primary next-section"
-        >
-          Start Practice
-        </button>
-      </div>
-    </section>
-
-
-    <!-- =========================================================
-         SECTION 2 — RECOGNIZE ISOLATION
-    ========================================================== -->
-    <section
-      class="lesson-section"
-      data-section-panel="1"
-    >
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">
-            Template: clinical-choice
-          </p>
-
-          <h2>
-            Recognize the Isolation Precaution
-          </h2>
-        </div>
-      </div>
-
-
-      <div class="scenario-card">
-        <span class="scenario-label">
-          Patient scenario
-        </span>
-
-        <p id="scenarioPrompt"></p>
-      </div>
-
-
-      <div
-        id="scenarioChoices"
-        class="choice-grid"
-      ></div>
-
-
-      <div class="actions">
-
-        <button
-          id="checkScenario"
-          type="button"
-          class="primary"
-        >
-          Check Answer
-        </button>
-
-        <button
-          id="newScenario"
-          type="button"
-          class="secondary"
-        >
-          New Scenario
-        </button>
-
-      </div>
-
-
-      <div
-        id="scenarioFeedback"
-        class="feedback"
-        aria-live="polite"
-      ></div>
-
-
-      <div class="actions end">
-        <button
-          type="button"
-          class="secondary next-section"
-        >
-          Continue
-        </button>
-      </div>
-    </section>
-
-
-    <!-- =========================================================
-         SECTION 3 — GATHER SUPPLIES
-    ========================================================== -->
-    <section
-      class="lesson-section"
-      data-section-panel="2"
-    >
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">
-            Template: equipment-select
-          </p>
-
-          <h2>
-            Gather the Needed Supplies
-          </h2>
-        </div>
-      </div>
-
-
-      <p class="instructions">
-        Select the hand-hygiene supplies and precaution-specific PPE
-        needed for the current scenario.
-      </p>
-
-
-      <div
-        id="supplyGrid"
-        class="asset-grid"
-      ></div>
-
-
-      <div class="actions">
-
-        <button
-          id="checkSupplies"
-          type="button"
-          class="primary"
-        >
-          Check Supplies
-        </button>
-
-        <button
-          id="resetSupplies"
-          type="button"
-          class="secondary"
-        >
-          Reset
-        </button>
-
-      </div>
-
-
-      <div
-        id="supplyFeedback"
-        class="feedback"
-        aria-live="polite"
-      ></div>
-
-
-      <div class="actions end">
-        <button
-          type="button"
-          class="secondary next-section"
-        >
-          Continue
-        </button>
-      </div>
-    </section>
-
-
-    <!-- =========================================================
-         SECTION 4 — PPE DRAG AND DROP
-    ========================================================== -->
-    <section
-      class="lesson-section"
-      data-section-panel="3"
-    >
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">
-            Template: drag-to-target
-          </p>
-
-          <h2>
-            Prepare the Healthcare Worker
-          </h2>
-        </div>
-      </div>
-
-
-      <p class="instructions">
-        Drag PPE to the healthcare worker.
-        Click an item as an accessible alternative to dragging.
-        Real images placed in the
-        <code>assets</code>
-        folder automatically replace the placeholders.
-      </p>
-
-
-      <div class="drag-layout">
-
-        <!-- PPE TRAY -->
-        <div>
-          <h3 class="subhead">
-            PPE Tray
-          </h3>
+          <img
+            id="workerImage"
+            src="/competencies/hand-hygiene-isolation/assets/worker.png"
+            alt="Healthcare worker without PPE"
+            class="worker-image"
+          />
 
           <div
-            id="ppeTray"
-            class="ppe-tray"
-          ></div>
-        </div>
-
-
-        <!-- HEALTHCARE WORKER -->
-        <div>
-          <h3 class="subhead">
-            Healthcare Worker
-          </h3>
-
-          <div
-            id="workerTarget"
-            class="worker-target"
+            id="workerFallback"
+            class="worker-placeholder"
+            aria-hidden="true"
           >
-
-            <img
-              id="workerImage"
-              src="/competencies/hand-hygiene-isolation/assets/worker.png"
-              data-fallback-label="worker.png"
-              alt="Healthcare worker without PPE"
-              class="asset-image worker-image"
-            />
-
-
-            <div
-              id="workerFallback"
-              class="worker-placeholder"
-              aria-hidden="true"
-            >
-              <div class="placeholder-head"></div>
-
-              <div class="placeholder-body">
-                worker.png
-              </div>
+            <div class="placeholder-head"></div>
+            <div class="placeholder-body">
+              worker.png
             </div>
-
-
-            <div
-              id="equippedPPE"
-              class="equipped-list"
-              aria-live="polite"
-            ></div>
-
           </div>
-        </div>
 
-      </div>
+          <div
+            id="equippedPPE"
+            class="equipped-list"
+            aria-live="polite"
+          ></div>
 
-
-      <div class="actions">
-
-        <button
-          id="checkPPE"
-          type="button"
-          class="primary"
-        >
-          Check PPE Setup
-        </button>
-
-        <button
-          id="resetPPE"
-          type="button"
-          class="secondary"
-        >
-          Reset
-        </button>
-
-      </div>
-
-
-      <div
-        id="ppeFeedback"
-        class="feedback"
-        aria-live="polite"
-      ></div>
-
-
-      <div class="actions end">
-        <button
-          type="button"
-          class="secondary next-section"
-        >
-          Continue
-        </button>
-      </div>
-    </section>
-
-
-    <!-- =========================================================
-         SECTION 5 — HAND HYGIENE SEQUENCE
-    ========================================================== -->
-    <section
-      class="lesson-section"
-      data-section-panel="4"
-    >
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">
-            Template: procedural-sequence
-          </p>
-
-          <h2>
-            Perform Hand Hygiene
-          </h2>
         </div>
       </div>
 
+    </div>
 
-      <div class="segmented">
+    <div class="actions">
+      <button id="checkPPE" type="button" class="primary">
+        Check PPE Setup
+      </button>
 
-        <button
-          type="button"
-          class="route-button active"
-          data-route="alcohol"
-        >
-          Alcohol-Based Rub
-        </button>
+      <button id="resetPPE" type="button" class="secondary">
+        Reset
+      </button>
+    </div>
+
+    <div
+      id="ppeFeedback"
+      class="feedback"
+      aria-live="polite"
+    ></div>
+
+    <div class="actions end">
+      <button type="button" class="secondary next-section">
+        Continue
+      </button>
+    </div>
+
+  </section>
 
 
-        <button
-          type="button"
-          class="route-button"
-          data-route="soap"
-        >
-          Soap &amp; Warm Water
-        </button>
+  <!-- HAND HYGIENE -->
+  <section class="lesson-section" data-section-panel="4">
 
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Template: procedural-sequence</p>
+        <h2>Perform Hand Hygiene</h2>
       </div>
+    </div>
+
+    <div class="segmented">
+
+      <button
+        type="button"
+        class="route-button active"
+        data-route="alcohol"
+      >
+        Alcohol-Based Rub
+      </button>
+
+      <button
+        type="button"
+        class="route-button"
+        data-route="soap"
+      >
+        Soap &amp; Warm Water
+      </button>
+
+    </div>
+
+    <p id="routePrompt" class="instructions"></p>
+
+    <p class="hint">
+      Click each step in the order it should be performed.
+    </p>
+
+    <div
+      id="sequenceItems"
+      class="sequence-list"
+    ></div>
+
+    <div class="actions">
+      <button id="checkSequence" type="button" class="primary">
+        Check Sequence
+      </button>
+
+      <button id="resetSequence" type="button" class="secondary">
+        Reset
+      </button>
+    </div>
+
+    <div
+      id="sequenceFeedback"
+      class="feedback"
+      aria-live="polite"
+    ></div>
+
+    <div class="actions end">
+      <button type="button" class="secondary next-section">
+        Continue
+      </button>
+    </div>
+
+  </section>
 
 
-      <p
-        id="routePrompt"
-        class="instructions"
-      ></p>
+  <!-- REMOVE PPE -->
+  <section class="lesson-section" data-section-panel="5">
 
-
-      <p class="hint">
-        Click each step in the order it should be performed.
-      </p>
-
-
-      <div
-        id="sequenceItems"
-        class="sequence-list"
-      ></div>
-
-
-      <div class="actions">
-
-        <button
-          id="checkSequence"
-          type="button"
-          class="primary"
-        >
-          Check Sequence
-        </button>
-
-        <button
-          id="resetSequence"
-          type="button"
-          class="secondary"
-        >
-          Reset
-        </button>
-
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Template: procedural-sequence</p>
+        <h2>Remove PPE Safely</h2>
       </div>
+    </div>
+
+    <p class="instructions">
+      Click the steps in the order listed in the competency for
+      PPE removal, disposal, and final hand hygiene.
+    </p>
+
+    <div
+      id="doffList"
+      class="sequence-list"
+    ></div>
+
+    <div class="actions">
+      <button id="checkDoff" type="button" class="primary">
+        Check Order
+      </button>
+
+      <button id="resetDoff" type="button" class="secondary">
+        Reset
+      </button>
+    </div>
+
+    <div
+      id="doffFeedback"
+      class="feedback"
+      aria-live="polite"
+    ></div>
+
+    <div class="actions end">
+      <button type="button" class="secondary next-section">
+        Continue
+      </button>
+    </div>
+
+  </section>
 
 
-      <div
-        id="sequenceFeedback"
-        class="feedback"
-        aria-live="polite"
-      ></div>
+  <!-- CHALLENGE -->
+  <section class="lesson-section" data-section-panel="6">
 
-
-      <div class="actions end">
-        <button
-          type="button"
-          class="secondary next-section"
-        >
-          Continue
-        </button>
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Template: competency-challenge</p>
+        <h2>Competency Challenge</h2>
       </div>
-    </section>
+    </div>
+
+    <div class="challenge-grid">
+
+      <article class="info-card">
+        <h3>Practice Pathway</h3>
+
+        <ul class="check-list">
+          <li>Identify the isolation precaution</li>
+          <li>Gather needed supplies</li>
+          <li>Select appropriate PPE</li>
+          <li>Sequence hand-hygiene actions</li>
+          <li>Sequence PPE removal</li>
+          <li>Finish with hand hygiene</li>
+        </ul>
+      </article>
 
 
-    <!-- =========================================================
-         SECTION 6 — PPE REMOVAL
-    ========================================================== -->
-    <section
-      class="lesson-section"
-      data-section-panel="5"
-    >
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">
-            Template: procedural-sequence
-          </p>
+      <article class="info-card">
+        <h3>Competency Assets</h3>
 
-          <h2>
-            Remove PPE Safely
-          </h2>
-        </div>
-      </div>
-
-
-      <p class="instructions">
-        Click the steps in the order listed in the competency for
-        PPE removal, disposal, and final hand hygiene.
-      </p>
-
-
-      <div
-        id="doffList"
-        class="sequence-list"
-      ></div>
-
-
-      <div class="actions">
-
-        <button
-          id="checkDoff"
-          type="button"
-          class="primary"
-        >
-          Check Order
-        </button>
-
-        <button
-          id="resetDoff"
-          type="button"
-          class="secondary"
-        >
-          Reset
-        </button>
-
-      </div>
-
-
-      <div
-        id="doffFeedback"
-        class="feedback"
-        aria-live="polite"
-      ></div>
-
-
-      <div class="actions end">
-        <button
-          type="button"
-          class="secondary next-section"
-        >
-          Continue
-        </button>
-      </div>
-    </section>
-
-
-    <!-- =========================================================
-         SECTION 7 — COMPETENCY CHALLENGE
-    ========================================================== -->
-    <section
-      class="lesson-section"
-      data-section-panel="6"
-    >
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">
-            Template: competency-challenge
-          </p>
-
-          <h2>
-            Competency Challenge
-          </h2>
-        </div>
-      </div>
-
-
-      <div class="challenge-grid">
-
-        <article class="info-card">
-
-          <h3>
-            Practice Pathway
-          </h3>
-
-          <ul class="check-list">
-            <li>Identify the isolation precaution</li>
-            <li>Gather needed supplies</li>
-            <li>Select appropriate PPE</li>
-            <li>Sequence hand-hygiene actions</li>
-            <li>Sequence PPE removal</li>
-            <li>Finish with hand hygiene</li>
-          </ul>
-
-        </article>
-
-
-        <article class="info-card">
-
-          <h3>
-            Competency Folder
-          </h3>
-
-          <pre>/competencies/
+        <pre>/competencies/
   hand-hygiene-isolation/
     index.html
-    practice-engine.js
-    practice-engine.css
 
     assets/
       worker.png
@@ -687,115 +938,1518 @@
       alcohol-rub.png
       soap-paper-towels.png
       distractor.png</pre>
+      </article>
 
-        </article>
+    </div>
 
-      </div>
+    <div class="callout success">
+      <strong>Streamlined workflow:</strong>
+      competency content defines what students practice, reusable templates
+      define how activities behave, and the images in the assets folder
+      determine what the activity looks like.
+    </div>
 
+    <div class="actions">
+      <button id="restartLesson" type="button" class="secondary">
+        Restart Demo
+      </button>
+    </div>
 
-      <div class="callout success">
+  </section>
 
-        <strong>Streamlined workflow:</strong>
-
-        the reusable template controls how the activities behave.
-        The competency determines the content and correct responses.
-        Correctly named PNG/SVG files in the
-        <code>assets</code>
-        folder determine what students see.
-
-      </div>
-
-
-      <div class="actions">
-
-        <button
-          id="restartLesson"
-          type="button"
-          class="secondary"
-        >
-          Restart Demo
-        </button>
-
-      </div>
-    </section>
-
-  </main>
+</main>
 
 
-  <!-- =========================================================
-       PRACTICE ENGINE
-  ========================================================== -->
-  <script src="/competencies/hand-hygiene-isolation/practice-engine.js"></script>
+<script>
+(() => {
+  "use strict";
+
+  /* ============================================================
+     ASSET PATHS
+
+     These are explicit site-root paths so Vercel/PulmoLearn
+     always knows exactly where to find the images.
+  ============================================================ */
+
+  const ASSET_ROOT =
+    "/competencies/hand-hygiene-isolation/assets/";
+
+  const assetMap = {
+
+    "alcohol-rub": {
+      label: "Alcohol-based rub",
+      file: ASSET_ROOT + "alcohol-rub.png"
+    },
+
+    "soap-paper-towels": {
+      label: "Soap + paper towels",
+      file: ASSET_ROOT + "soap-paper-towels.png"
+    },
+
+    "gloves": {
+      label: "Gloves",
+      file: ASSET_ROOT + "gloves.png"
+    },
+
+    "gown": {
+      label: "Gown",
+      file: ASSET_ROOT + "gown.png"
+    },
+
+    "surgical-mask": {
+      label: "Surgical mask",
+      file: ASSET_ROOT + "surgical-mask.png"
+    },
+
+    "n95-mask": {
+      label: "N95 mask",
+      file: ASSET_ROOT + "n95-mask.png"
+    },
+
+    "face-shield": {
+      label: "Face shield",
+      file: ASSET_ROOT + "face-shield.png"
+    },
+
+    "distractor": {
+      label: "Stethoscope",
+      file: ASSET_ROOT + "distractor.png"
+    }
+
+  };
 
 
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
+  /* ============================================================
+     SCENARIOS
+  ============================================================ */
 
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
+  const scenarios = [
+
+    {
+      id: "contact",
+
+      prompt:
+        "The patient chart indicates CONTACT precautions.",
+
+      correct: "contact",
+
+      correctPPE: [
+        "gown",
+        "gloves"
+      ],
+
+      supplies: [
+        "alcohol-rub",
+        "soap-paper-towels",
+        "gown",
+        "gloves"
+      ],
+
+      feedback:
+        "Contact precautions: put on a gown that covers the torso and wrists, fasten it in the back, then put on gloves over the gown sleeves."
+    },
+
+
+    {
+      id: "droplet",
+
+      prompt:
+        "The patient chart indicates DROPLET precautions.",
+
+      correct: "droplet",
+
+      correctPPE: [
+        "face-shield",
+        "surgical-mask"
+      ],
+
+      supplies: [
+        "alcohol-rub",
+        "soap-paper-towels",
+        "face-shield",
+        "surgical-mask"
+      ],
+
+      feedback:
+        "Droplet precautions: use goggles or a face shield for eye protection and a surgical mask."
+    },
+
+
+    {
+      id: "airborne",
+
+      prompt:
+        "The patient chart indicates AIRBORNE precautions.",
+
+      correct: "airborne",
+
+      correctPPE: [
+        "n95-mask"
+      ],
+
+      supplies: [
+        "alcohol-rub",
+        "soap-paper-towels",
+        "n95-mask"
+      ],
+
+      feedback:
+        "Airborne precautions: use a fitted N95 mask or respirator and ensure a tight seal."
+    }
+
+  ];
+
+
+  /* ============================================================
+     HAND HYGIENE SEQUENCES
+  ============================================================ */
+
+  const handHygiene = {
+
+    alcohol: {
+
+      prompt:
+        "Place the alcohol-based hand-rub actions in the order listed in the competency.",
+
+      steps: [
+
+        "Dispense an appropriate amount of antiseptic product into the palm.",
+
+        "Rub hands together, covering palms, fingers, between fingers, under nails, and around cuticles.",
+
+        "Continue rubbing until the product is dry."
+
+      ]
+    },
+
+
+    soap: {
+
+      prompt:
+        "Place the antimicrobial soap and warm-water actions in the order listed in the competency.",
+
+      steps: [
+
+        "Stand at the sink without hands, body, or clothing touching the sink.",
+
+        "Turn on the water and adjust flow and temperature.",
+
+        "Wet forearms and hands thoroughly.",
+
+        "Apply soap liberally to hands and forearms.",
+
+        "Rub firmly to create lather and cover all skin surfaces for a minimum of 15 seconds.",
+
+        "Rinse thoroughly from fingernails to forearms.",
+
+        "Dry thoroughly from fingernails to forearms.",
+
+        "Turn off the faucet with a paper towel and discard it properly.",
+
+        "Allow hands to completely dry before applying gloves."
+
+      ]
+    }
+
+  };
+
+
+  /* ============================================================
+     PPE REMOVAL SEQUENCE
+  ============================================================ */
+
+  const doffSteps = [
+
+    "Remove gloves and turn them inside out.",
+
+    "Remove mask and protective eyewear.",
+
+    "Remove the gown.",
+
+    "Dispose of PPE appropriately.",
+
+    "Perform proper hand hygiene."
+
+  ];
+
+
+  /* ============================================================
+     STATE
+  ============================================================ */
+
+  const state = {
+
+    section: 0,
+
+    scenarioIndex: 0,
+
+    scenarioChoice: null,
+
+    selectedSupplies: new Set(),
+
+    selectedPPE: [],
+
+    route: "alcohol",
+
+    selectedSequence: [],
+
+    doffSelection: []
+
+  };
+
+
+  const $ =
+    (selector, root = document) =>
+      root.querySelector(selector);
+
+  const $$ =
+    (selector, root = document) =>
+      [...root.querySelectorAll(selector)];
+
+
+  /* ============================================================
+     UTILITIES
+  ============================================================ */
+
+  function shuffle(array){
+
+    const copy = [...array];
+
+    for(let i = copy.length - 1; i > 0; i--){
+
+      const j =
+        Math.floor(Math.random() * (i + 1));
+
+      [copy[i], copy[j]] =
+        [copy[j], copy[i]];
+
+    }
+
+    return copy;
+  }
+
+
+  function sameMembers(a,b){
+
+    const aa =
+      [...a].sort();
+
+    const bb =
+      [...b].sort();
+
+    return (
+      aa.length === bb.length &&
+      aa.every(
+        (value,index) =>
+          value === bb[index]
+      )
+    );
+  }
+
+
+  function setFeedback(
+    element,
+    type,
+    html
+  ){
+
+    element.className =
+      `feedback show ${type}`;
+
+    element.innerHTML =
+      html;
+  }
+
+
+  function clearFeedback(element){
+
+    element.className =
+      "feedback";
+
+    element.innerHTML =
+      "";
+  }
+
+
+  /* ============================================================
+     SECTION NAVIGATION
+  ============================================================ */
+
+  function showSection(index){
+
+    state.section =
+      Math.max(
+        0,
+        Math.min(
+          6,
+          Number(index)
+        )
+      );
+
+    $$(".lesson-section").forEach(
+      (section,i) => {
+
+        section.classList.toggle(
+          "active",
+          i === state.section
+        );
+
+      }
+    );
+
+
+    $$(".nav-step").forEach(
+      (button,i) => {
+
+        button.classList.toggle(
+          "active",
+          i === state.section
+        );
+
+      }
+    );
+
+
+    $("#progressText").textContent =
+      `${state.section + 1} of 7`;
+
+
+    $("#progressBar").style.width =
+      `${((state.section + 1) / 7) * 100}%`;
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+
+
+  /* ============================================================
+     IMAGE / PLACEHOLDER SYSTEM
+  ============================================================ */
+
+  function makeAssetVisual(key){
+
+    const asset =
+      assetMap[key];
+
+    const wrap =
+      document.createElement("div");
+
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      asset.file;
+
+    img.alt =
+      asset.label;
+
+    img.style.display =
+      "none";
+
+
+    const fallback =
+      document.createElement("div");
+
+    fallback.className =
+      "asset-fallback";
+
+    fallback.textContent =
+      `${asset.file.split("/").pop()} placeholder`;
+
+
+    img.addEventListener(
+      "load",
+      () => {
+
+        fallback.style.display =
+          "none";
+
+        img.style.display =
+          "inline-block";
+
+      }
+    );
+
+
+    img.addEventListener(
+      "error",
+      () => {
+
+        img.style.display =
+          "none";
+
+        fallback.style.display =
+          "grid";
+
+      }
+    );
+
+
+    wrap.append(
+      img,
+      fallback
+    );
+
+
+    return wrap;
+  }
+
+
+  /* ============================================================
+     WORKER IMAGE
+  ============================================================ */
+
+  const workerImage =
+    $("#workerImage");
+
+  const workerFallback =
+    $("#workerFallback");
+
+
+  workerImage.addEventListener(
+    "load",
+    () => {
+
+      workerImage.classList.add(
+        "loaded"
+      );
+
+      workerFallback.style.display =
+        "none";
+
+    }
+  );
+
+
+  workerImage.addEventListener(
+    "error",
+    () => {
+
+      workerImage.classList.remove(
+        "loaded"
+      );
+
+      workerFallback.style.display =
+        "";
+
+    }
+  );
+
+
+  /* ============================================================
+     SCENARIOS
+  ============================================================ */
+
+  function currentScenario(){
+
+    return scenarios[
+      state.scenarioIndex
+    ];
+
+  }
+
+
+  function renderScenario(){
+
+    state.scenarioChoice =
+      null;
+
+
+    $("#scenarioPrompt").textContent =
+      currentScenario().prompt;
+
+
+    clearFeedback(
+      $("#scenarioFeedback")
+    );
+
+
+    const wrap =
+      $("#scenarioChoices");
+
+
+    wrap.innerHTML =
+      "";
+
+
+    [
+      "standard",
+      "contact",
+      "droplet",
+      "airborne"
+    ].forEach(type => {
+
+      const button =
+        document.createElement("button");
+
+
+      button.className =
+        "choice-btn";
+
+
+      button.type =
+        "button";
+
+
+      button.textContent =
+        type.charAt(0).toUpperCase()
+        + type.slice(1);
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          state.scenarioChoice =
+            type;
+
+
+          $$(".choice-btn",wrap)
+            .forEach(
+              b =>
+                b.classList.remove(
+                  "selected"
+                )
+            );
+
+
+          button.classList.add(
+            "selected"
+          );
+
+        }
+      );
+
+
+      wrap.appendChild(
+        button
+      );
+
+    });
+
+
+    renderSupplies();
+
+    renderPPE();
+
+  }
+
+
+  $("#checkScenario")
+    .addEventListener(
+      "click",
+      () => {
+
+        const fb =
+          $("#scenarioFeedback");
+
+
+        if(!state.scenarioChoice){
+
+          setFeedback(
+            fb,
+            "incorrect",
+            "<strong>Select an isolation precaution first.</strong>"
+          );
+
+          return;
         }
 
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
 
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
+        if(
+          state.scenarioChoice ===
+          currentScenario().correct
+        ){
 
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
+          setFeedback(
+            fb,
+            "correct",
+            `<strong>Correct.</strong> ${currentScenario().feedback}`
+          );
+
+        } else {
+
+          setFeedback(
+            fb,
+            "incorrect",
+            "<strong>Not quite.</strong> Review the isolation type shown in the patient chart."
+          );
+
         }
+
+      }
+    );
+
+
+  $("#newScenario")
+    .addEventListener(
+      "click",
+      () => {
+
+        state.scenarioIndex =
+          (
+            state.scenarioIndex + 1
+          ) % scenarios.length;
+
+
+        renderScenario();
+
+      }
+    );
+
+
+  /* ============================================================
+     GATHER SUPPLIES
+  ============================================================ */
+
+  function renderSupplies(){
+
+    state.selectedSupplies =
+      new Set();
+
+
+    clearFeedback(
+      $("#supplyFeedback")
+    );
+
+
+    const wrap =
+      $("#supplyGrid");
+
+
+    wrap.innerHTML =
+      "";
+
+
+    Object.keys(
+      assetMap
+    ).forEach(key => {
+
+      const button =
+        document.createElement("button");
+
+
+      button.className =
+        "asset-card";
+
+
+      button.type =
+        "button";
+
+
+      button.appendChild(
+        makeAssetVisual(key)
+      );
+
+
+      const label =
+        document.createElement("span");
+
+
+      label.className =
+        "asset-label";
+
+
+      label.textContent =
+        assetMap[key].label;
+
+
+      button.appendChild(
+        label
+      );
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          if(
+            state.selectedSupplies.has(
+              key
+            )
+          ){
+
+            state.selectedSupplies.delete(
+              key
+            );
+
+            button.classList.remove(
+              "selected"
+            );
+
+          } else {
+
+            state.selectedSupplies.add(
+              key
+            );
+
+            button.classList.add(
+              "selected"
+            );
+
+          }
+
+        }
+      );
+
+
+      wrap.appendChild(
+        button
+      );
+
+    });
+
+  }
+
+
+  $("#checkSupplies")
+    .addEventListener(
+      "click",
+      () => {
+
+        const expected =
+          currentScenario().supplies;
+
+
+        const actual =
+          [...state.selectedSupplies];
+
+
+        const fb =
+          $("#supplyFeedback");
+
+
+        if(
+          sameMembers(
+            expected,
+            actual
+          )
+        ){
+
+          setFeedback(
+            fb,
+            "correct",
+            "<strong>Correct.</strong> You gathered the hand-hygiene supplies and the precaution-specific PPE listed for this scenario."
+          );
+
+        } else {
+
+          setFeedback(
+            fb,
+            "incorrect",
+            "<strong>Not quite.</strong> Recheck both the hand-hygiene supplies and the PPE needed for the current precaution."
+          );
+
+        }
+
+      }
+    );
+
+
+  $("#resetSupplies")
+    .addEventListener(
+      "click",
+      renderSupplies
+    );
+
+
+  /* ============================================================
+     PPE DRAG AND DROP
+  ============================================================ */
+
+  function renderPPE(){
+
+    state.selectedPPE =
+      [];
+
+
+    clearFeedback(
+      $("#ppeFeedback")
+    );
+
+
+    const tray =
+      $("#ppeTray");
+
+
+    tray.innerHTML =
+      "";
+
+
+    renderEquipped();
+
+
+    [
+      "n95-mask",
+      "surgical-mask",
+      "gown",
+      "gloves",
+      "face-shield"
+    ].forEach(key => {
+
+      const button =
+        document.createElement("button");
+
+
+      button.className =
+        "ppe-card";
+
+
+      button.type =
+        "button";
+
+
+      button.draggable =
+        true;
+
+
+      button.dataset.asset =
+        key;
+
+
+      button.appendChild(
+        makeAssetVisual(key)
+      );
+
+
+      const label =
+        document.createElement("span");
+
+
+      label.className =
+        "asset-label";
+
+
+      label.textContent =
+        assetMap[key].label;
+
+
+      button.appendChild(
+        label
+      );
+
+
+      button.addEventListener(
+        "dragstart",
+        event => {
+
+          event.dataTransfer.setData(
+            "text/plain",
+            key
+          );
+
+        }
+      );
+
+
+      button.addEventListener(
+        "click",
+        () =>
+          addPPE(key)
+      );
+
+
+      tray.appendChild(
+        button
+      );
+
+    });
+
+  }
+
+
+  function addPPE(key){
+
+    if(
+      !key ||
+      state.selectedPPE.includes(key)
+    ){
+
+      return;
+    }
+
+
+    state.selectedPPE.push(
+      key
+    );
+
+
+    renderEquipped();
+
+  }
+
+
+  function renderEquipped(){
+
+    const wrap =
+      $("#equippedPPE");
+
+
+    wrap.innerHTML =
+      "";
+
+
+    state.selectedPPE
+      .forEach(key => {
+
+        const chip =
+          document.createElement(
+            "button"
+          );
+
+
+        chip.type =
+          "button";
+
+
+        chip.className =
+          "equipped-chip";
+
+
+        chip.textContent =
+          `${assetMap[key].label} ×`;
+
+
+        chip.title =
+          `Remove ${assetMap[key].label}`;
+
+
+        chip.addEventListener(
+          "click",
+          () => {
+
+            state.selectedPPE =
+              state.selectedPPE.filter(
+                item =>
+                  item !== key
+              );
+
+
+            renderEquipped();
+
+          }
+        );
+
+
+        wrap.appendChild(
+          chip
+        );
+
       });
-    }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
+  }
+
+
+  $("#workerTarget")
+    .addEventListener(
+      "dragover",
+      event =>
+        event.preventDefault()
+    );
+
+
+  $("#workerTarget")
+    .addEventListener(
+      "drop",
+      event => {
+
+        event.preventDefault();
+
+
+        addPPE(
+          event.dataTransfer.getData(
+            "text/plain"
+          )
+        );
+
+      }
+    );
+
+
+  $("#checkPPE")
+    .addEventListener(
+      "click",
+      () => {
+
+        const fb =
+          $("#ppeFeedback");
+
+
+        const correct =
+          sameMembers(
+            state.selectedPPE,
+            currentScenario().correctPPE
+          );
+
+
+        if(correct){
+
+          setFeedback(
+            fb,
+            "correct",
+            `<strong>Correct.</strong> ${currentScenario().feedback}`
+          );
+
+        } else {
+
+          setFeedback(
+            fb,
+            "incorrect",
+            "<strong>Not quite.</strong> Adjust the PPE so it matches the current isolation precaution."
+          );
+
+        }
+
+      }
+    );
+
+
+  $("#resetPPE")
+    .addEventListener(
+      "click",
+      renderPPE
+    );
+
+
+  /* ============================================================
+     HAND HYGIENE SEQUENCE
+  ============================================================ */
+
+  function renderSequence(){
+
+    state.selectedSequence =
+      [];
+
+
+    clearFeedback(
+      $("#sequenceFeedback")
+    );
+
+
+    $("#routePrompt").textContent =
+      handHygiene[
+        state.route
+      ].prompt;
+
+
+    $$(".route-button")
+      .forEach(button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.route ===
+            state.route
+        );
+
+      });
+
+
+    const wrap =
+      $("#sequenceItems");
+
+
+    wrap.innerHTML =
+      "";
+
+
+    shuffle(
+      handHygiene[
+        state.route
+      ].steps
+    ).forEach(step => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.type =
+        "button";
+
+
+      button.className =
+        "sequence-btn";
+
+
+      const num =
+        document.createElement(
+          "span"
+        );
+
+
+      num.className =
+        "sequence-number";
+
+
+      num.textContent =
+        "—";
+
+
+      const text =
+        document.createElement(
+          "span"
+        );
+
+
+      text.textContent =
+        step;
+
+
+      button.append(
+        num,
+        text
+      );
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          if(
+            state.selectedSequence
+              .includes(step)
+          ){
+
+            return;
+          }
+
+
+          state.selectedSequence
+            .push(step);
+
+
+          num.textContent =
+            state.selectedSequence
+              .length;
+
+
+          button.classList.add(
+            "selected"
+          );
+
+        }
+      );
+
+
+      wrap.appendChild(
+        button
+      );
+
+    });
+
+  }
+
+
+  $$(".route-button")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          state.route =
+            button.dataset.route;
+
+
+          renderSequence();
+
+        }
+      );
+
+    });
+
+
+  $("#checkSequence")
+    .addEventListener(
+      "click",
+      () => {
+
+        const expected =
+          handHygiene[
+            state.route
+          ].steps;
+
+
+        const fb =
+          $("#sequenceFeedback");
+
+
+        const correct =
+          expected.length ===
+            state.selectedSequence.length
+          &&
+          expected.every(
+            (step,index) =>
+              step ===
+              state.selectedSequence[index]
+          );
+
+
+        if(correct){
+
+          setFeedback(
+            fb,
+            "correct",
+            "<strong>Correct.</strong> The hand-hygiene actions are in the order listed in the competency."
+          );
+
+        } else {
+
+          setFeedback(
+            fb,
+            "incorrect",
+            "<strong>Not quite.</strong> Reset and try the sequence again."
+          );
+
+        }
+
+      }
+    );
+
+
+  $("#resetSequence")
+    .addEventListener(
+      "click",
+      renderSequence
+    );
+
+
+  /* ============================================================
+     PPE REMOVAL
+  ============================================================ */
+
+  function renderDoff(){
+
+    state.doffSelection =
+      [];
+
+
+    clearFeedback(
+      $("#doffFeedback")
+    );
+
+
+    const wrap =
+      $("#doffList");
+
+
+    wrap.innerHTML =
+      "";
+
+
+    shuffle(
+      doffSteps
+    ).forEach(step => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.type =
+        "button";
+
+
+      button.className =
+        "sequence-btn";
+
+
+      const num =
+        document.createElement(
+          "span"
+        );
+
+
+      num.className =
+        "sequence-number";
+
+
+      num.textContent =
+        "—";
+
+
+      const text =
+        document.createElement(
+          "span"
+        );
+
+
+      text.textContent =
+        step;
+
+
+      button.append(
+        num,
+        text
+      );
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          if(
+            state.doffSelection
+              .includes(step)
+          ){
+
+            return;
+          }
+
+
+          state.doffSelection
+            .push(step);
+
+
+          num.textContent =
+            state.doffSelection
+              .length;
+
+
+          button.classList.add(
+            "selected"
+          );
+
+        }
+      );
+
+
+      wrap.appendChild(
+        button
+      );
+
+    });
+
+  }
+
+
+  $("#checkDoff")
+    .addEventListener(
+      "click",
+      () => {
+
+        const fb =
+          $("#doffFeedback");
+
+
+        const correct =
+          doffSteps.length ===
+            state.doffSelection.length
+          &&
+          doffSteps.every(
+            (step,index) =>
+              step ===
+              state.doffSelection[index]
+          );
+
+
+        if(correct){
+
+          setFeedback(
+            fb,
+            "correct",
+            "<strong>Correct.</strong> The PPE removal, disposal, and final hand-hygiene steps match the competency."
+          );
+
+        } else {
+
+          setFeedback(
+            fb,
+            "incorrect",
+            "<strong>Not quite.</strong> Reset and try the sequence again."
+          );
+
+        }
+
+      }
+    );
+
+
+  $("#resetDoff")
+    .addEventListener(
+      "click",
+      renderDoff
+    );
+
+
+  /* ============================================================
+     NAVIGATION
+  ============================================================ */
+
+  $$(".nav-step")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () =>
+          showSection(
+            button.dataset.section
+          )
+      );
+
+    });
+
+
+  $$(".next-section")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () =>
+          showSection(
+            state.section + 1
+          )
+      );
+
+    });
+
+
+  $("#restartLesson")
+    .addEventListener(
+      "click",
+      () => {
+
+        state.scenarioIndex =
+          0;
+
+
+        state.route =
+          "alcohol";
+
+
+        renderScenario();
+
+        renderSequence();
+
+        renderDoff();
+
+        showSection(0);
+
+      }
+    );
+
+
+  /* ============================================================
+     INITIALIZE
+  ============================================================ */
+
+  renderScenario();
+
+  renderSequence();
+
+  renderDoff();
+
+  showSection(0);
+
+})();
+</script>
 
 </body>
 </html>
