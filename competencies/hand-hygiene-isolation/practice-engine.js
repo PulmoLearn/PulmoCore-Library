@@ -9,7 +9,8 @@
     "gown": { label: "Gown", file: ASSET_ROOT + "gown.png" },
     "surgical-mask": { label: "Surgical mask", file: ASSET_ROOT + "surgical-mask.png" },
     "n95-mask": { label: "N95 mask", file: ASSET_ROOT + "n95-mask.png" },
-    "face-shield": { label: "Face shield", file: ASSET_ROOT + "face-shield.png" }
+    "face-shield": { label: "Face shield", file: ASSET_ROOT + "face-shield.png" },
+    "single-patient-stethoscope": { label: "Single-patient-use stethoscope", file: ASSET_ROOT + "distractor.png" }
   };
 
   const signChoices = [
@@ -74,7 +75,7 @@
       caseText: "Frequent watery diarrhea after recent antibiotic use. Stool testing is positive for C. difficile. The facility is currently managing a C. difficile outbreak.",
       correctSign: "contact",
       correctHand: "soap",
-      correctPPE: ["gown", "gloves"],
+      correctPPE: ["gown", "gloves", "single-patient-stethoscope"],
       signHints: [
         "Focus on how contamination can spread from the patient and environment by touch.",
         "Use the memory cue: Contact → touch → gown + gloves."
@@ -84,12 +85,12 @@
         "The facility is managing a C. difficile outbreak; choose soap and water for this practice case."
       ],
       ppeHints: [
-        "Think about the Contact Precautions rule from the teaching section.",
-        "Contact → gown + gloves."
+        "Contact Precautions involve both what you wear and how you prevent equipment from carrying organisms to another patient.",
+        "Think: gown + gloves, plus the item in the tray labeled for single-patient use."
       ],
       signExplanation: "C. difficile requires Contact Precautions.",
       handExplanation: "For this practice case, the stated C. difficile outbreak is the specific indication to choose soap and water.",
-      ppeExplanation: "Wear a gown and gloves before entering."
+      ppeExplanation: "Wear a gown and gloves and use the single-patient-use stethoscope to reduce cross-transmission through shared equipment."
     },
 
     {
@@ -143,11 +144,11 @@
   };
 
   const doffSteps = [
-    "Remove gloves and turn them inside out.",
-    "Remove mask and protective eyewear.",
-    "Remove the gown.",
-    "Dispose of PPE appropriately.",
-    "Perform proper hand hygiene."
+    "Remove gloves, avoiding contact between contaminated glove surfaces and bare skin.",
+    "Remove goggles or face shield by handling the headband, ear pieces, or strap rather than the front.",
+    "Remove the gown, touching the inside as much as possible and turning the contaminated surface inward.",
+    "Remove the mask or respirator without touching the front. If an airborne respirator is worn, remove it after leaving the room and closing the door.",
+    "Perform hand hygiene immediately after all PPE is removed."
   ];
 
   const state = {
@@ -540,7 +541,7 @@
     tray.innerHTML = "";
     renderEquipped();
 
-    ["n95-mask", "surgical-mask", "gown", "gloves", "face-shield"].forEach(key => {
+    ["n95-mask", "surgical-mask", "gown", "gloves", "face-shield", "single-patient-stethoscope"].forEach(key => {
       const button = document.createElement("button");
       button.className = "ppe-card";
       button.type = "button";
@@ -859,7 +860,7 @@
       setFeedback(
         $("#doffFeedback"),
         "correct",
-        "<strong>Correct.</strong> Every PPE-removal step is in the correct position."
+        "<strong>Correct.</strong> The sequence limits contact with contaminated PPE surfaces and ends with hand hygiene."
       );
     } else {
       state.doffCorrect = false;
@@ -867,7 +868,7 @@
       setFeedback(
         $("#doffFeedback"),
         "incorrect",
-        `<strong>${correctCount} of ${doffSteps.length} positions are correct.</strong> Keep the green steps in place and adjust the others.`
+        `<strong>${correctCount} of ${doffSteps.length} positions are correct.</strong> Keep the green steps in place. For the others, ask which contaminated surface should be removed next while keeping your hands away from your face and clothing.`
       );
     }
   });
