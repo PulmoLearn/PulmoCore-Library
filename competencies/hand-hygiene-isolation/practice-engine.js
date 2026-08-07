@@ -2,16 +2,14 @@
   "use strict";
 
   const ASSET_ROOT = "/competencies/hand-hygiene-isolation/assets/";
+  const STICKY_HEADER_OFFSET = 130;
 
   const assetMap = {
-    "alcohol-rub": { label: "Alcohol-based rub", file: ASSET_ROOT + "alcohol-rub.png" },
-    "soap-paper-towels": { label: "Soap + paper towels", file: ASSET_ROOT + "soap-paper-towels.png" },
     "gloves": { label: "Gloves", file: ASSET_ROOT + "gloves.png" },
     "gown": { label: "Gown", file: ASSET_ROOT + "gown.png" },
     "surgical-mask": { label: "Surgical mask", file: ASSET_ROOT + "surgical-mask.png" },
     "n95-mask": { label: "N95 mask", file: ASSET_ROOT + "n95-mask.png" },
-    "face-shield": { label: "Face shield", file: ASSET_ROOT + "face-shield.png" },
-    "distractor": { label: "Stethoscope", file: ASSET_ROOT + "distractor.png" }
+    "face-shield": { label: "Face shield", file: ASSET_ROOT + "face-shield.png" }
   };
 
   const signChoices = [
@@ -25,50 +23,97 @@
     {
       id: "airborne",
       patient: "Maria R., 42 years",
-      caseText: "Persistent cough, fever, night sweats, and weight loss. Pulmonary tuberculosis is being evaluated.",
+      caseText: "Persistent cough, fever, night sweats, and weight loss. Pulmonary tuberculosis is being evaluated. Your hands are not visibly soiled.",
       correctSign: "airborne",
+      correctHand: "alcohol",
       correctPPE: ["n95-mask"],
-      supplies: ["alcohol-rub", "soap-paper-towels", "n95-mask"],
-      signFeedback: "Suspected pulmonary tuberculosis requires airborne precautions. The patient’s door should display an Airborne Precautions sign.",
-      wrongSignFeedback: "Because pulmonary tuberculosis is suspected, this patient requires airborne precautions.",
-      ppeFeedback: "Before entering, the healthcare worker should wear a fitted N95 respirator.",
-      supplyFeedback: "For this patient, gather hand-hygiene supplies and an N95 respirator."
+      signHints: [
+        "Think back to the comparison table: which precaution is associated with a fit-tested respirator?",
+        "Use the memory cue: Air → respirator. Tuberculosis is the key clue."
+      ],
+      handHints: [
+        "Nothing in the case says your hands are visibly soiled. Which method did the lesson identify as preferred for routine care?",
+        "Routine care + hands not visibly soiled → alcohol-based hand rub."
+      ],
+      ppeHints: [
+        "Use the sign you just selected. Which respiratory protection matches Airborne Precautions?",
+        "Airborne Precautions require a fit-tested N95 or respirator."
+      ],
+      signExplanation: "Suspected pulmonary tuberculosis requires Airborne Precautions.",
+      handExplanation: "Because your hands are not visibly soiled, alcohol-based hand rub is appropriate for routine hand hygiene.",
+      ppeExplanation: "Before entering, wear a fitted N95 respirator."
     },
+
     {
       id: "droplet",
       patient: "James T., 68 years",
-      caseText: "Fever, cough, body aches, and positive influenza testing. The patient is sneezing frequently.",
+      caseText: "Fever, cough, body aches, and positive influenza testing. The patient is sneezing frequently. Your hands are not visibly soiled.",
       correctSign: "droplet",
+      correctHand: "alcohol",
       correctPPE: ["surgical-mask", "face-shield"],
-      supplies: ["alcohol-rub", "soap-paper-towels", "surgical-mask", "face-shield"],
-      signFeedback: "Influenza is managed with droplet precautions. The patient’s door should display a Droplet Precautions sign.",
-      wrongSignFeedback: "This patient’s influenza symptoms require droplet precautions.",
-      ppeFeedback: "Before entering, the healthcare worker should wear a surgical mask and eye protection or a face shield.",
-      supplyFeedback: "For this patient, gather hand-hygiene supplies, a surgical mask, and eye protection."
+      signHints: [
+        "Think about the route of spread: coughing and sneezing produce respiratory droplets.",
+        "Recall the memory cue: Droplet → mask + eyes."
+      ],
+      handHints: [
+        "Choose the method based on your hands, not the isolation sign. Are they visibly soiled?",
+        "Hands not visibly soiled → alcohol-based hand rub."
+      ],
+      ppeHints: [
+        "Think back to the Droplet memory cue from the teaching section.",
+        "Droplet → surgical mask + eye protection."
+      ],
+      signExplanation: "Influenza is managed with Droplet Precautions.",
+      handExplanation: "With no visible soil, alcohol-based hand rub is appropriate.",
+      ppeExplanation: "Use a surgical mask plus eye protection or a face shield."
     },
+
     {
       id: "contact",
       patient: "Linda P., 74 years",
-      caseText: "Frequent watery diarrhea after recent antibiotic use. Stool testing is positive for C. difficile.",
+      caseText: "Frequent watery diarrhea after recent antibiotic use. Stool testing is positive for C. difficile. The facility is currently managing a C. difficile outbreak.",
       correctSign: "contact",
+      correctHand: "soap",
       correctPPE: ["gown", "gloves"],
-      supplies: ["alcohol-rub", "soap-paper-towels", "gown", "gloves"],
-      signFeedback: "C. difficile requires contact precautions. The patient’s door should display a Contact Precautions sign.",
-      wrongSignFeedback: "This patient requires contact precautions.",
-      ppeFeedback: "Before entering, the healthcare worker should wear a gown and gloves.",
-      supplyFeedback: "For this patient, gather hand-hygiene supplies, a gown, and gloves."
+      signHints: [
+        "Focus on how contamination can spread from the patient and environment by touch.",
+        "Use the memory cue: Contact → touch → gown + gloves."
+      ],
+      handHints: [
+        "This case includes a specific circumstance that changes the usual routine hand-hygiene choice.",
+        "The facility is managing a C. difficile outbreak; choose soap and water for this practice case."
+      ],
+      ppeHints: [
+        "Think about the Contact Precautions rule from the teaching section.",
+        "Contact → gown + gloves."
+      ],
+      signExplanation: "C. difficile requires Contact Precautions.",
+      handExplanation: "For this practice case, the stated C. difficile outbreak is the specific indication to choose soap and water.",
+      ppeExplanation: "Wear a gown and gloves before entering."
     },
+
     {
       id: "standard",
       patient: "Noah B., 27 years",
-      caseText: "Stable postoperative appendectomy patient with no known transmissible infection and no isolation order.",
+      caseText: "Stable postoperative appendectomy patient with no known transmissible infection and no isolation order. You are entering to ask questions and check a pulse on intact skin. Your hands are not visibly soiled.",
       correctSign: "none",
+      correctHand: "alcohol",
       correctPPE: [],
-      supplies: ["alcohol-rub", "soap-paper-towels"],
-      signFeedback: "No additional isolation precautions are ordered, so no isolation sign is needed. Standard precautions still apply.",
-      wrongSignFeedback: "This patient does not need an isolation sign. Standard precautions still apply.",
-      ppeFeedback: "No isolation-specific PPE is required before entering. Standard precautions still apply, and task-based PPE would be added only if needed.",
-      supplyFeedback: "For this patient, standard hand-hygiene supplies are needed, but no isolation-specific PPE is required."
+      signHints: [
+        "No additional isolation order is present. Standard Precautions still apply to every patient.",
+        "Standard Precautions do not require a special isolation sign."
+      ],
+      handHints: [
+        "Your hands are not visibly soiled. Choose the routine hand-hygiene method.",
+        "Routine care + hands not visibly soiled → alcohol-based hand rub."
+      ],
+      ppeHints: [
+        "Standard Precautions make gloves task-based. Is this task expected to involve body fluids, mucous membranes, non-intact skin, or contaminated equipment?",
+        "For the described task—questions and a pulse on intact skin—no isolation-specific PPE is required."
+      ],
+      signExplanation: "No isolation sign is needed. Standard Precautions still apply.",
+      handExplanation: "Alcohol-based hand rub is appropriate because your hands are not visibly soiled.",
+      ppeExplanation: "No isolation-specific PPE is required for the described task. Gloves would be added if the task created an exposure risk."
     }
   ];
 
@@ -109,15 +154,16 @@
     section: 0,
     scenarioIndex: 0,
     scenarioChoice: null,
-    signCorrect: false,
-    suppliesCorrect: false,
-    ppeCorrect: false,
-    selectedSupplies: new Set(),
+    handChoice: null,
     selectedPPE: [],
+    signCorrect: false,
+    handCorrect: false,
+    ppeCorrect: false,
+    signAttempts: 0,
+    handAttempts: 0,
+    ppeAttempts: 0,
     route: "alcohol",
-    sequenceOrder: [],
     sequenceCorrect: false,
-    doffOrder: [],
     doffCorrect: false
   };
 
@@ -139,47 +185,98 @@
     return aa.length === bb.length && aa.every((value, index) => value === bb[index]);
   }
 
-  function setFeedback(element, type, html) {
-    element.className = `feedback show ${type}`;
-    element.innerHTML = html;
+  function setFeedback(el, type, html) {
+    el.className = `feedback show ${type}`;
+    el.innerHTML = html;
   }
 
-  function clearFeedback(element) {
-    element.className = "feedback";
-    element.innerHTML = "";
+  function clearFeedback(el) {
+    el.className = "feedback";
+    el.innerHTML = "";
   }
 
   function currentScenario() {
     return scenarios[state.scenarioIndex];
   }
 
-  function updatePatientBadges() {
-    const text = `Patient ${state.scenarioIndex + 1} of ${scenarios.length}`;
-    $("#patientProgressBadge").textContent = text;
-    $$(".patient-count-copy").forEach(el => el.textContent = text);
+  function supportLabel() {
+    return ["Guided", "Supported", "Reduced hints", "Independent"][state.scenarioIndex];
+  }
+
+  function hintFor(type, attempt) {
+    const sc = currentScenario();
+    const hints = sc[`${type}Hints`];
+
+    // Fade scaffolding across patients.
+    if (state.scenarioIndex === 3) {
+      return "Reassess the patient information and the rules from the teaching section, then try again.";
+    }
+
+    if (state.scenarioIndex === 2) {
+      return hints[0];
+    }
+
+    if (state.scenarioIndex === 1) {
+      return attempt <= 1 ? hints[0] : hints[1];
+    }
+
+    return attempt <= 1 ? hints[0] : hints[1];
+  }
+
+  function scrollToCurrentSection() {
+    const section = document.querySelector(
+      `.lesson-section[data-section-panel="${state.section}"]`
+    );
+    if (!section) return;
+
+    const y =
+      section.getBoundingClientRect().top +
+      window.scrollY -
+      STICKY_HEADER_OFFSET;
+
+    window.scrollTo({
+      top: Math.max(0, y),
+      behavior: "smooth"
+    });
   }
 
   function updateProgress() {
     if (state.section === 0) {
-      $("#progressText").textContent = "Overview";
-      $("#progressBar").style.width = "0%";
+      $("#progressText").textContent = "Teach";
+      $("#progressBar").style.width = "7%";
       return;
     }
 
     if (state.section >= 1 && state.section <= 3) {
-      const patientBase = state.scenarioIndex * 3;
-      const patientStep = state.section;
-      const completed = patientBase + patientStep;
+      const completed = state.scenarioIndex * 3 + state.section;
       const total = scenarios.length * 3 + 2;
       $("#progressText").textContent = `Patient ${state.scenarioIndex + 1} of 4`;
       $("#progressBar").style.width = `${(completed / total) * 100}%`;
       return;
     }
 
-    const total = scenarios.length * 3 + 2;
-    const completed = scenarios.length * 3 + (state.section === 4 ? 1 : 2);
-    $("#progressText").textContent = state.section === 4 ? "Hand Hygiene" : state.section === 5 ? "PPE Removal" : "Complete";
-    $("#progressBar").style.width = state.section === 6 ? "100%" : `${(completed / total) * 100}%`;
+    if (state.section === 4) {
+      $("#progressText").textContent = "Procedure Practice";
+      $("#progressBar").style.width = "90%";
+    } else if (state.section === 5) {
+      $("#progressText").textContent = "Procedure Practice";
+      $("#progressBar").style.width = "96%";
+    } else {
+      $("#progressText").textContent = "Complete";
+      $("#progressBar").style.width = "100%";
+    }
+  }
+
+  function updatePatientBadges() {
+    const count = `Patient ${state.scenarioIndex + 1} of ${scenarios.length}`;
+    $("#patientProgressBadge").textContent = count;
+    $$(".patient-count-copy").forEach(el => el.textContent = count);
+
+    const support = supportLabel();
+    ["supportBadge1", "supportBadge2", "supportBadge3"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = support;
+    });
   }
 
   function showSection(index) {
@@ -196,20 +293,202 @@
     updatePatientBadges();
     updateProgress();
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    requestAnimationFrame(() => {
+      scrollToCurrentSection();
+    });
   }
 
   function renderScenarioSummary(targetId) {
     const target = document.getElementById(targetId);
     if (!target) return;
-
     const sc = currentScenario();
+
     target.innerHTML = `
       <p class="patient-name">${sc.patient}</p>
       <p class="patient-case">${sc.caseText}</p>
     `;
   }
 
+  function resetPatient() {
+    state.scenarioChoice = null;
+    state.handChoice = null;
+    state.selectedPPE = [];
+
+    state.signCorrect = false;
+    state.handCorrect = false;
+    state.ppeCorrect = false;
+
+    state.signAttempts = 0;
+    state.handAttempts = 0;
+    state.ppeAttempts = 0;
+
+    $("#continueToHandHygiene").disabled = true;
+    $("#continueToPPE").disabled = true;
+    $("#completePatient").disabled = true;
+  }
+
+  /* Sign activity */
+  function renderSignActivity() {
+    renderScenarioSummary("scenarioCase");
+    clearFeedback($("#scenarioFeedback"));
+    $("#continueToHandHygiene").disabled = true;
+
+    const wrap = $("#scenarioChoices");
+    wrap.innerHTML = "";
+
+    signChoices.forEach(sign => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "sign-card";
+
+      const img = document.createElement("img");
+      img.src = sign.image;
+      img.alt = sign.title;
+
+      const fallback = document.createElement("div");
+      fallback.className = `sign-fallback ${sign.fallbackClass}`;
+      fallback.innerHTML = `
+        <div>
+          <strong>${sign.title}</strong>
+          <div class="sign-subtitle">${sign.subtitle}</div>
+        </div>
+      `;
+
+      img.addEventListener("load", () => {
+        img.style.display = "block";
+        fallback.style.display = "none";
+      });
+
+      img.addEventListener("error", () => {
+        img.style.display = "none";
+        fallback.style.display = "grid";
+      });
+
+      const title = document.createElement("span");
+      title.className = "sign-title";
+      title.textContent = sign.title;
+
+      button.append(img, fallback, title);
+
+      button.addEventListener("click", () => {
+        state.scenarioChoice = sign.id;
+        state.signCorrect = false;
+        $("#continueToHandHygiene").disabled = true;
+        clearFeedback($("#scenarioFeedback"));
+        $$(".sign-card", wrap).forEach(card => card.classList.remove("selected"));
+        button.classList.add("selected");
+      });
+
+      wrap.appendChild(button);
+    });
+  }
+
+  $("#checkScenario").addEventListener("click", () => {
+    const fb = $("#scenarioFeedback");
+    const sc = currentScenario();
+
+    if (!state.scenarioChoice) {
+      setFeedback(fb, "incorrect", "<strong>Select a sign first.</strong>");
+      return;
+    }
+
+    state.signAttempts += 1;
+
+    if (state.scenarioChoice === sc.correctSign) {
+      state.signCorrect = true;
+      $("#continueToHandHygiene").disabled = false;
+      setFeedback(fb, "correct", `<strong>Correct.</strong> ${sc.signExplanation}`);
+    } else {
+      state.signCorrect = false;
+      $("#continueToHandHygiene").disabled = true;
+      setFeedback(
+        fb,
+        "incorrect",
+        `<strong>Not quite.</strong> ${hintFor("sign", state.signAttempts)}`
+      );
+    }
+  });
+
+  $("#continueToHandHygiene").addEventListener("click", () => {
+    if (!state.signCorrect) return;
+    renderHandDecision();
+    showSection(2);
+  });
+
+  /* Hand hygiene decision */
+  function initHandChoiceImages() {
+    $$(".hand-choice").forEach(button => {
+      const img = $("img", button);
+      const fallback = $(".hand-choice-fallback", button);
+
+      img.addEventListener("load", () => {
+        img.style.display = "block";
+        fallback.style.display = "none";
+      });
+
+      img.addEventListener("error", () => {
+        img.style.display = "none";
+        fallback.style.display = "grid";
+      });
+
+      button.addEventListener("click", () => {
+        state.handChoice = button.dataset.handChoice;
+        state.handCorrect = false;
+        $("#continueToPPE").disabled = true;
+        clearFeedback($("#handHygieneFeedback"));
+        $$(".hand-choice").forEach(b => b.classList.remove("selected"));
+        button.classList.add("selected");
+      });
+    });
+  }
+
+  function renderHandDecision() {
+    renderScenarioSummary("handScenarioSummary");
+    state.handChoice = null;
+    state.handCorrect = false;
+    state.handAttempts = 0;
+    $("#continueToPPE").disabled = true;
+    clearFeedback($("#handHygieneFeedback"));
+    $$(".hand-choice").forEach(b => b.classList.remove("selected"));
+
+    const sc = currentScenario();
+    $("#handHygienePrompt").innerHTML =
+      `<strong>Decision:</strong> Based on this patient and the condition of your hands, which hand-hygiene method is most appropriate before entering?`;
+  }
+
+  $("#checkHandHygiene").addEventListener("click", () => {
+    const fb = $("#handHygieneFeedback");
+    const sc = currentScenario();
+
+    if (!state.handChoice) {
+      setFeedback(fb, "incorrect", "<strong>Select a hand-hygiene method first.</strong>");
+      return;
+    }
+
+    state.handAttempts += 1;
+
+    if (state.handChoice === sc.correctHand) {
+      state.handCorrect = true;
+      $("#continueToPPE").disabled = false;
+      setFeedback(fb, "correct", `<strong>Correct.</strong> ${sc.handExplanation}`);
+    } else {
+      state.handCorrect = false;
+      $("#continueToPPE").disabled = true;
+      setFeedback(
+        fb,
+        "incorrect",
+        `<strong>Not quite.</strong> ${hintFor("hand", state.handAttempts)}`
+      );
+    }
+  });
+
+  $("#continueToPPE").addEventListener("click", () => {
+    if (!state.handCorrect) return;
+    renderPPE();
+    showSection(3);
+  });
+
+  /* PPE */
   function makeAssetVisual(key) {
     const asset = assetMap[key];
     const wrap = document.createElement("div");
@@ -249,180 +528,13 @@
     workerFallback.style.display = "";
   });
 
-  function resetPatientStageState() {
-    state.scenarioChoice = null;
-    state.signCorrect = false;
-    state.suppliesCorrect = false;
-    state.ppeCorrect = false;
-    state.selectedSupplies = new Set();
-    state.selectedPPE = [];
-
-    $("#continueToGather").disabled = true;
-    $("#continueToPPE").disabled = true;
-    $("#completePatient").disabled = true;
-  }
-
-  function renderScenario() {
-    renderScenarioSummary("scenarioCase");
-    renderScenarioSummary("supplyScenarioSummary");
-    renderScenarioSummary("ppeScenarioSummary");
-    updatePatientBadges();
-
-    clearFeedback($("#scenarioFeedback"));
-    state.scenarioChoice = null;
-    state.signCorrect = false;
-    $("#continueToGather").disabled = true;
-
-    const wrap = $("#scenarioChoices");
-    wrap.innerHTML = "";
-
-    signChoices.forEach(sign => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "sign-card";
-      button.dataset.choice = sign.id;
-
-      const img = document.createElement("img");
-      img.src = sign.image;
-      img.alt = sign.title;
-
-      const fallback = document.createElement("div");
-      fallback.className = `sign-fallback ${sign.fallbackClass}`;
-      fallback.innerHTML = `
-        <div>
-          <strong>${sign.title}</strong>
-          <div class="sign-subtitle">${sign.subtitle}</div>
-        </div>
-      `;
-
-      img.addEventListener("load", () => {
-        img.style.display = "block";
-        fallback.style.display = "none";
-      });
-
-      img.addEventListener("error", () => {
-        img.style.display = "none";
-        fallback.style.display = "grid";
-      });
-
-      const title = document.createElement("span");
-      title.className = "sign-title";
-      title.textContent = sign.title;
-
-      button.append(img, fallback, title);
-
-      button.addEventListener("click", () => {
-        state.scenarioChoice = sign.id;
-        state.signCorrect = false;
-        $("#continueToGather").disabled = true;
-        clearFeedback($("#scenarioFeedback"));
-
-        $$(".sign-card", wrap).forEach(card => card.classList.remove("selected"));
-        button.classList.add("selected");
-      });
-
-      wrap.appendChild(button);
-    });
-
-    renderSupplies();
-    renderPPE();
-  }
-
-  $("#checkScenario").addEventListener("click", () => {
-    const fb = $("#scenarioFeedback");
-    const sc = currentScenario();
-
-    if (!state.scenarioChoice) {
-      setFeedback(fb, "incorrect", "<strong>Select a sign first.</strong>");
-      return;
-    }
-
-    if (state.scenarioChoice === sc.correctSign) {
-      state.signCorrect = true;
-      $("#continueToGather").disabled = false;
-      setFeedback(fb, "correct", `<strong>Correct.</strong> ${sc.signFeedback}`);
-    } else {
-      state.signCorrect = false;
-      $("#continueToGather").disabled = true;
-      setFeedback(fb, "incorrect", `<strong>Not quite.</strong> ${sc.wrongSignFeedback}`);
-    }
-  });
-
-  $("#continueToGather").addEventListener("click", () => {
-    if (!state.signCorrect) return;
-    renderSupplies();
-    showSection(2);
-  });
-
-  function renderSupplies() {
-    state.selectedSupplies = new Set();
-    state.suppliesCorrect = false;
-    $("#continueToPPE").disabled = true;
-    clearFeedback($("#supplyFeedback"));
-    renderScenarioSummary("supplyScenarioSummary");
-
-    const wrap = $("#supplyGrid");
-    wrap.innerHTML = "";
-
-    Object.keys(assetMap).forEach(key => {
-      const button = document.createElement("button");
-      button.className = "asset-card";
-      button.type = "button";
-      button.appendChild(makeAssetVisual(key));
-
-      const label = document.createElement("span");
-      label.className = "asset-label";
-      label.textContent = assetMap[key].label;
-      button.appendChild(label);
-
-      button.addEventListener("click", () => {
-        state.suppliesCorrect = false;
-        $("#continueToPPE").disabled = true;
-        clearFeedback($("#supplyFeedback"));
-
-        if (state.selectedSupplies.has(key)) {
-          state.selectedSupplies.delete(key);
-          button.classList.remove("selected");
-        } else {
-          state.selectedSupplies.add(key);
-          button.classList.add("selected");
-        }
-      });
-
-      wrap.appendChild(button);
-    });
-  }
-
-  $("#checkSupplies").addEventListener("click", () => {
-    const expected = currentScenario().supplies;
-    const actual = [...state.selectedSupplies];
-    const fb = $("#supplyFeedback");
-
-    if (sameMembers(expected, actual)) {
-      state.suppliesCorrect = true;
-      $("#continueToPPE").disabled = false;
-      setFeedback(fb, "correct", `<strong>Correct.</strong> ${currentScenario().supplyFeedback}`);
-    } else {
-      state.suppliesCorrect = false;
-      $("#continueToPPE").disabled = true;
-      setFeedback(fb, "incorrect", "<strong>Not quite.</strong> Recheck the hand-hygiene supplies and isolation-specific PPE needed for this patient.");
-    }
-  });
-
-  $("#resetSupplies").addEventListener("click", renderSupplies);
-
-  $("#continueToPPE").addEventListener("click", () => {
-    if (!state.suppliesCorrect) return;
-    renderPPE();
-    showSection(3);
-  });
-
   function renderPPE() {
+    renderScenarioSummary("ppeScenarioSummary");
     state.selectedPPE = [];
     state.ppeCorrect = false;
+    state.ppeAttempts = 0;
     $("#completePatient").disabled = true;
     clearFeedback($("#ppeFeedback"));
-    renderScenarioSummary("ppeScenarioSummary");
 
     const tray = $("#ppeTray");
     tray.innerHTML = "";
@@ -433,7 +545,6 @@
       button.className = "ppe-card";
       button.type = "button";
       button.draggable = true;
-      button.dataset.asset = key;
       button.appendChild(makeAssetVisual(key));
 
       const label = document.createElement("span");
@@ -452,7 +563,6 @@
 
   function addPPE(key) {
     if (!key || state.selectedPPE.includes(key)) return;
-
     state.selectedPPE.push(key);
     state.ppeCorrect = false;
     $("#completePatient").disabled = true;
@@ -469,7 +579,6 @@
       chip.type = "button";
       chip.className = "equipped-chip";
       chip.textContent = `${assetMap[key].label} ×`;
-      chip.title = `Remove ${assetMap[key].label}`;
 
       chip.addEventListener("click", () => {
         state.selectedPPE = state.selectedPPE.filter(item => item !== key);
@@ -492,16 +601,21 @@
 
   $("#checkPPE").addEventListener("click", () => {
     const fb = $("#ppeFeedback");
-    const correct = sameMembers(state.selectedPPE, currentScenario().correctPPE);
+    const sc = currentScenario();
+    state.ppeAttempts += 1;
 
-    if (correct) {
+    if (sameMembers(state.selectedPPE, sc.correctPPE)) {
       state.ppeCorrect = true;
       $("#completePatient").disabled = false;
-      setFeedback(fb, "correct", `<strong>Correct.</strong> ${currentScenario().ppeFeedback}`);
+      setFeedback(fb, "correct", `<strong>Correct.</strong> ${sc.ppeExplanation}`);
     } else {
       state.ppeCorrect = false;
       $("#completePatient").disabled = true;
-      setFeedback(fb, "incorrect", "<strong>Not quite.</strong> Adjust the PPE to match the current patient case before entering the room.");
+      setFeedback(
+        fb,
+        "incorrect",
+        `<strong>Not quite.</strong> ${hintFor("ppe", state.ppeAttempts)}`
+      );
     }
   });
 
@@ -512,8 +626,8 @@
 
     if (state.scenarioIndex < scenarios.length - 1) {
       state.scenarioIndex += 1;
-      resetPatientStageState();
-      renderScenario();
+      resetPatient();
+      renderSignActivity();
       showSection(1);
     } else {
       renderSequence();
@@ -521,6 +635,7 @@
     }
   });
 
+  /* Sortable procedure practice */
   function createSortableItem(step, listType) {
     const item = document.createElement("div");
     item.className = "sortable-item";
@@ -563,7 +678,6 @@
     down.title = "Move step down";
 
     controls.append(up, down);
-
     content.append(row, controls);
 
     const status = document.createElement("span");
@@ -571,14 +685,12 @@
 
     item.append(handle, content, status);
 
-    item.addEventListener("dragstart", () => {
-      item.classList.add("dragging");
-    });
+    item.addEventListener("dragstart", () => item.classList.add("dragging"));
 
     item.addEventListener("dragend", () => {
       item.classList.remove("dragging");
       clearSortMarks(listType);
-      syncOrderFromDOM(listType);
+      syncOrder(listType);
     });
 
     item.addEventListener("dragover", event => {
@@ -586,9 +698,7 @@
       item.classList.add("drag-over");
     });
 
-    item.addEventListener("dragleave", () => {
-      item.classList.remove("drag-over");
-    });
+    item.addEventListener("dragleave", () => item.classList.remove("drag-over"));
 
     item.addEventListener("drop", event => {
       event.preventDefault();
@@ -599,17 +709,14 @@
       if (!dragging || dragging === item) return;
 
       const items = [...container.children];
-      const draggingIndex = items.indexOf(dragging);
-      const targetIndex = items.indexOf(item);
+      const from = items.indexOf(dragging);
+      const to = items.indexOf(item);
 
-      if (draggingIndex < targetIndex) {
-        item.after(dragging);
-      } else {
-        item.before(dragging);
-      }
+      if (from < to) item.after(dragging);
+      else item.before(dragging);
 
       clearSortMarks(listType);
-      syncOrderFromDOM(listType);
+      syncOrder(listType);
     });
 
     up.addEventListener("click", () => {
@@ -617,7 +724,7 @@
       if (prev) {
         item.parentElement.insertBefore(item, prev);
         clearSortMarks(listType);
-        syncOrderFromDOM(listType);
+        syncOrder(listType);
       }
     });
 
@@ -626,58 +733,43 @@
       if (next) {
         next.after(item);
         clearSortMarks(listType);
-        syncOrderFromDOM(listType);
+        syncOrder(listType);
       }
     });
 
     return item;
   }
 
-  function syncOrderFromDOM(listType) {
+  function syncOrder(listType) {
     const container = listType === "sequence" ? $("#sequenceItems") : $("#doffList");
-    const order = [...container.children].map(el => el.dataset.step);
-
-    if (listType === "sequence") {
-      state.sequenceOrder = order;
-      state.sequenceCorrect = false;
-      $("#continueToDoff").disabled = true;
-    } else {
-      state.doffOrder = order;
-      state.doffCorrect = false;
-      $("#finishLesson").disabled = true;
-    }
-
-    updateOrderNumbers(container);
-  }
-
-  function updateOrderNumbers(container) {
     [...container.children].forEach((item, index) => {
       $(".order-number", item).textContent = index + 1;
     });
+
+    if (listType === "sequence") {
+      state.sequenceCorrect = false;
+      $("#continueToDoff").disabled = true;
+    } else {
+      state.doffCorrect = false;
+      $("#finishLesson").disabled = true;
+    }
   }
 
   function clearSortMarks(listType) {
     const container = listType === "sequence" ? $("#sequenceItems") : $("#doffList");
+
     [...container.children].forEach(item => {
       item.classList.remove("correct-position", "wrong-position");
       $(".sort-status", item).textContent = "";
     });
 
-    if (listType === "sequence") {
-      clearFeedback($("#sequenceFeedback"));
-    } else {
-      clearFeedback($("#doffFeedback"));
-    }
+    clearFeedback(listType === "sequence" ? $("#sequenceFeedback") : $("#doffFeedback"));
   }
 
   function renderSortable(container, steps, listType) {
     container.innerHTML = "";
-
-    shuffle(steps).forEach(step => {
-      container.appendChild(createSortableItem(step, listType));
-    });
-
-    syncOrderFromDOM(listType);
+    shuffle(steps).forEach(step => container.appendChild(createSortableItem(step, listType)));
+    syncOrder(listType);
   }
 
   function gradeSortable(container, expected) {
@@ -685,11 +777,11 @@
 
     [...container.children].forEach((item, index) => {
       const correct = item.dataset.step === expected[index];
+
       item.classList.toggle("correct-position", correct);
       item.classList.toggle("wrong-position", !correct);
 
-      const status = $(".sort-status", item);
-      status.textContent = correct ? "✓ Correct" : "Adjust";
+      $(".sort-status", item).textContent = correct ? "✓ Correct" : "Adjust";
 
       if (correct) correctCount += 1;
     });
@@ -723,19 +815,22 @@
   $("#checkSequence").addEventListener("click", () => {
     const expected = handHygiene[state.route].steps;
     const correctCount = gradeSortable($("#sequenceItems"), expected);
-    const fb = $("#sequenceFeedback");
 
     if (correctCount === expected.length) {
       state.sequenceCorrect = true;
       $("#continueToDoff").disabled = false;
-      setFeedback(fb, "correct", "<strong>Correct.</strong> Every hand-hygiene step is in the correct position.");
+      setFeedback(
+        $("#sequenceFeedback"),
+        "correct",
+        "<strong>Correct.</strong> Every hand-hygiene step is in the correct position."
+      );
     } else {
       state.sequenceCorrect = false;
       $("#continueToDoff").disabled = true;
       setFeedback(
-        fb,
+        $("#sequenceFeedback"),
         "incorrect",
-        `<strong>${correctCount} of ${expected.length} positions are correct.</strong> Green steps are already in the right position. Reorder the steps marked “Adjust,” then check again.`
+        `<strong>${correctCount} of ${expected.length} positions are correct.</strong> Keep the green steps in place and adjust the others.`
       );
     }
   });
@@ -757,19 +852,22 @@
 
   $("#checkDoff").addEventListener("click", () => {
     const correctCount = gradeSortable($("#doffList"), doffSteps);
-    const fb = $("#doffFeedback");
 
     if (correctCount === doffSteps.length) {
       state.doffCorrect = true;
       $("#finishLesson").disabled = false;
-      setFeedback(fb, "correct", "<strong>Correct.</strong> Every PPE-removal step is in the correct position.");
+      setFeedback(
+        $("#doffFeedback"),
+        "correct",
+        "<strong>Correct.</strong> Every PPE-removal step is in the correct position."
+      );
     } else {
       state.doffCorrect = false;
       $("#finishLesson").disabled = true;
       setFeedback(
-        fb,
+        $("#doffFeedback"),
         "incorrect",
-        `<strong>${correctCount} of ${doffSteps.length} positions are correct.</strong> Green steps are already in the right position. Reorder the steps marked “Adjust,” then check again.`
+        `<strong>${correctCount} of ${doffSteps.length} positions are correct.</strong> Keep the green steps in place and adjust the others.`
       );
     }
   });
@@ -779,27 +877,28 @@
     showSection(6);
   });
 
+  /* Navigation and lifecycle */
   $("#startPractice").addEventListener("click", () => {
     state.scenarioIndex = 0;
-    resetPatientStageState();
-    renderScenario();
+    resetPatient();
+    renderSignActivity();
     showSection(1);
   });
 
-  /* Navigation is display-only for the patient loop:
-     prevent skipping ahead into unfinished patient steps. */
   $$(".nav-step").forEach(button => {
     button.addEventListener("click", () => {
       const target = Number(button.dataset.section);
 
+      // Always allow Teach.
       if (target === 0) {
         showSection(0);
         return;
       }
 
+      // Do not allow the top nav to bypass gated patient flow.
       if (target === state.section) return;
 
-      /* Allow completed procedural pages once reached; otherwise keep flow gated. */
+      // Once procedure practice is reached, allow revisiting completed procedure sections.
       if (state.section >= 4 && target >= 4 && target <= state.section) {
         showSection(target);
       }
@@ -811,14 +910,15 @@
     state.route = "alcohol";
     state.sequenceCorrect = false;
     state.doffCorrect = false;
-    resetPatientStageState();
-    renderScenario();
+    resetPatient();
+    renderSignActivity();
     renderSequence();
     renderDoff();
     showSection(0);
   });
 
-  renderScenario();
+  initHandChoiceImages();
+  renderSignActivity();
   renderSequence();
   renderDoff();
   showSection(0);
