@@ -1,5 +1,10 @@
 const crypto = require("crypto");
 
+const CANVAS_ISSUER = process.env.CANVAS_ISSUER;
+const CANVAS_CLIENT_ID = process.env.CANVAS_CLIENT_ID;
+const SITE = "https://www.pulmolearn.com";
+const LTI_LAUNCH_URL = `${SITE}/api/lti/launch`;
+
 module.exports = async function handler(req, res) {
   try {
     const params = req.method === "POST" ? req.body : req.query;
@@ -10,12 +15,23 @@ module.exports = async function handler(req, res) {
       target_link_uri,
       lti_message_hint,
       client_id
-    } = params;
+    } = params || {};
 
     if (!iss || !login_hint || !target_link_uri || !client_id) {
       return res.status(400).json({
-        error: "Missing required LTI parameters",
-        received: params
+        error: "Missing required LTI parameters"
+      });
+    }
+
+    if (CANVAS_ISSUER && iss !== CANVAS_ISSUER) {
+      return res.status(400).json({
+        error: "Unexpected Canvas issuer"
+      });
+    }
+
+    if (CANVAS_CLIENT_ID && client_id !== CANVAS_CLIENT_ID) {
+      return res.status(400).json({
+        error: "Unexpected Canvas client_id"
       });
     }
 
@@ -37,20 +53,19 @@ module.exports = async function handler(req, res) {
     redirectUrl.searchParams.set("prompt", "none");
 
     redirectUrl.searchParams.set("client_id", client_id);
-    redirectUrl.searchParams.set("redirect_uri", target_link_uri);
+
+    // Use the registered LTI redirect URI rather than an arbitrary target URI.
+    redirectUrl.searchParams.set("redirect_uri", LTI_LAUNCH_URL);
+
     redirectUrl.searchParams.set("login_hint", login_hint);
     redirectUrl.searchParams.set("nonce", nonce);
     redirectUrl.searchParams.set("state", state);
 
     if (lti_message_hint) {
-      redirectUrl.searchParams.set(
-        "lti_message_hint",
-        lti_message_hint
-      );
+      redirectUrl.searchParams.set("lti_message_hint", lti_message_hint);
     }
 
     return res.redirect(redirectUrl.toString());
-
   } catch (error) {
     return res.status(500).json({
       error: "LTI login failed",
