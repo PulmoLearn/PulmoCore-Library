@@ -262,7 +262,7 @@ function buildPickerHtml({
     function fillLessons() {
       const course = getCurrentCourse();
       lessonSelect.innerHTML = course.lessons.map(lesson =>
-        '<option value="' + lesson.id + '">' + lesson.title + '</option>'
+        '<option value="' + lesson.id + '">' + (lesson.displayTitle || lesson.title) + '</option>'
       ).join('');
       renderLesson();
     }
@@ -276,7 +276,7 @@ function buildPickerHtml({
         return;
       }
 
-      const title = escapeHtml(lesson.title);
+      const title = escapeHtml(lesson.displayTitle || lesson.title);
       const description = escapeHtml(lesson.description);
       const category = escapeHtml(lesson.category || course.label);
       const time = escapeHtml(lesson.time || '');
