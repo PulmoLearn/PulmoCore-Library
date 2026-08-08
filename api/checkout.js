@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
 
         line_items: [
           {
-            price: process.env.STRIPE_PRICE_ID,
+            price: 'price_1U20FSCN4cYiptezLQuuSPev',
             quantity: 1
           }
         ],
