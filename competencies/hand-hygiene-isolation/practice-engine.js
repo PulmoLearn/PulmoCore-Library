@@ -200,12 +200,17 @@
     el.innerHTML = "";
   }
 
-  function bindImageFallback(img, fallback, loadedClass = "loaded") {
+  function bindImageFallback(
+    img,
+    fallback,
+    loadedClass = "loaded",
+    visibleDisplay = "block"
+  ) {
     if (!img) return;
 
     const showImage = () => {
       if (loadedClass) img.classList.add(loadedClass);
-      img.style.display = "";
+      img.style.display = visibleDisplay;
       if (fallback) fallback.style.display = "none";
     };
 
@@ -218,6 +223,7 @@
     img.addEventListener("load", showImage);
     img.addEventListener("error", showFallback);
 
+    // Cached images may have completed before listeners were attached.
     if (img.complete) {
       if (img.naturalWidth > 0) showImage();
       else showFallback();
@@ -228,7 +234,7 @@
     $$(".teach-asset").forEach(img => {
       if (img.dataset.bound === "true") return;
       img.dataset.bound = "true";
-      bindImageFallback(img, img.nextElementSibling);
+      bindImageFallback(img, img.nextElementSibling, "loaded", "block");
     });
   }
 
@@ -384,7 +390,7 @@
         </div>
       `;
 
-      bindImageFallback(img, fallback, "");
+      bindImageFallback(img, fallback, "", "block");
       img.src = sign.image;
 
       const title = document.createElement("span");
@@ -440,7 +446,7 @@
       const img = $("img", button);
       const fallback = $(".hand-choice-fallback", button);
 
-      bindImageFallback(img, fallback);
+      bindImageFallback(img, fallback, "loaded", "block");
 
       button.addEventListener("click", () => {
         state.handChoice = button.dataset.handChoice;
@@ -506,7 +512,7 @@
     fallback.className = "asset-fallback";
     fallback.textContent = `${asset.file.split("/").pop()} placeholder`;
 
-    bindImageFallback(img, fallback);
+    bindImageFallback(img, fallback, "loaded", "inline-block");
     img.src = asset.file;
 
     wrap.append(img, fallback);
@@ -516,7 +522,7 @@
   const workerImage = $("#workerImage");
   const workerFallback = $("#workerFallback");
 
-  bindImageFallback(workerImage, workerFallback);
+  bindImageFallback(workerImage, workerFallback, "loaded", "block");
 
   function renderSetup() {
     renderScenarioSummary("ppeScenarioSummary");
@@ -535,6 +541,8 @@
       button.className = "ppe-card";
       button.type = "button";
       button.draggable = true;
+      button.dataset.asset = key;
+      button.setAttribute("aria-pressed", "false");
       button.appendChild(makeAssetVisual(key));
 
       const label = document.createElement("span");
@@ -546,8 +554,18 @@
         event.dataTransfer.setData("text/plain", key);
       });
 
-      button.addEventListener("click", () => addSetupItem(key));
+      button.addEventListener("click", () => toggleSetupItem(key));
       tray.appendChild(button);
+    });
+
+    updateSetupSelectionStyles();
+  }
+
+  function updateSetupSelectionStyles() {
+    $$("#ppeTray .ppe-card").forEach(card => {
+      const selected = state.selectedSetup.includes(card.dataset.asset);
+      card.classList.toggle("selected", selected);
+      card.setAttribute("aria-pressed", selected ? "true" : "false");
     });
   }
 
@@ -558,7 +576,25 @@
     state.setupCorrect = false;
     $("#completePatient").disabled = true;
     clearFeedback($("#ppeFeedback"));
+    updateSetupSelectionStyles();
     renderEquipped();
+  }
+
+  function removeSetupItem(key) {
+    state.selectedSetup = state.selectedSetup.filter(item => item !== key);
+    state.setupCorrect = false;
+    $("#completePatient").disabled = true;
+    clearFeedback($("#ppeFeedback"));
+    updateSetupSelectionStyles();
+    renderEquipped();
+  }
+
+  function toggleSetupItem(key) {
+    if (state.selectedSetup.includes(key)) {
+      removeSetupItem(key);
+    } else {
+      addSetupItem(key);
+    }
   }
 
   function renderEquipped() {
@@ -572,11 +608,7 @@
       chip.textContent = `${assetMap[key].label} ×`;
 
       chip.addEventListener("click", () => {
-        state.selectedSetup = state.selectedSetup.filter(item => item !== key);
-        state.setupCorrect = false;
-        $("#completePatient").disabled = true;
-        clearFeedback($("#ppeFeedback"));
-        renderEquipped();
+        removeSetupItem(key);
       });
 
       wrap.appendChild(chip);
@@ -903,7 +935,7 @@
     showSection(0);
   });
 
-  console.info("PulmoLearn practice engine v6.2 — image cache-safe");
+  console.info("PulmoLearn practice engine v6.3 — image + mobile selection fixes");
   initializeMediaFrames();
   initHandChoiceImages();
   initScenarioOrder();
