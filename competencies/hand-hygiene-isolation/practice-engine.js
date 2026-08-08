@@ -200,21 +200,35 @@
     el.innerHTML = "";
   }
 
+  function bindImageFallback(img, fallback, loadedClass = "loaded") {
+    if (!img) return;
+
+    const showImage = () => {
+      if (loadedClass) img.classList.add(loadedClass);
+      img.style.display = "";
+      if (fallback) fallback.style.display = "none";
+    };
+
+    const showFallback = () => {
+      if (loadedClass) img.classList.remove(loadedClass);
+      img.style.display = "none";
+      if (fallback) fallback.style.display = "grid";
+    };
+
+    img.addEventListener("load", showImage);
+    img.addEventListener("error", showFallback);
+
+    if (img.complete) {
+      if (img.naturalWidth > 0) showImage();
+      else showFallback();
+    }
+  }
+
   function initializeMediaFrames() {
     $$(".teach-asset").forEach(img => {
-      const fallback = img.nextElementSibling;
       if (img.dataset.bound === "true") return;
       img.dataset.bound = "true";
-
-      img.addEventListener("load", () => {
-        img.classList.add("loaded");
-        if (fallback) fallback.style.display = "none";
-      });
-
-      img.addEventListener("error", () => {
-        img.classList.remove("loaded");
-        if (fallback) fallback.style.display = "grid";
-      });
+      bindImageFallback(img, img.nextElementSibling);
     });
   }
 
@@ -359,7 +373,6 @@
       button.className = "sign-card";
 
       const img = document.createElement("img");
-      img.src = sign.image;
       img.alt = sign.title;
 
       const fallback = document.createElement("div");
@@ -371,15 +384,8 @@
         </div>
       `;
 
-      img.addEventListener("load", () => {
-        img.style.display = "block";
-        fallback.style.display = "none";
-      });
-
-      img.addEventListener("error", () => {
-        img.style.display = "none";
-        fallback.style.display = "grid";
-      });
+      bindImageFallback(img, fallback, "");
+      img.src = sign.image;
 
       const title = document.createElement("span");
       title.className = "sign-title";
@@ -434,15 +440,7 @@
       const img = $("img", button);
       const fallback = $(".hand-choice-fallback", button);
 
-      img.addEventListener("load", () => {
-        img.classList.add("loaded");
-        fallback.style.display = "none";
-      });
-
-      img.addEventListener("error", () => {
-        img.classList.remove("loaded");
-        fallback.style.display = "grid";
-      });
+      bindImageFallback(img, fallback);
 
       button.addEventListener("click", () => {
         state.handChoice = button.dataset.handChoice;
@@ -502,22 +500,14 @@
     const wrap = document.createElement("div");
 
     const img = document.createElement("img");
-    img.src = asset.file;
     img.alt = asset.label;
 
     const fallback = document.createElement("div");
     fallback.className = "asset-fallback";
     fallback.textContent = `${asset.file.split("/").pop()} placeholder`;
 
-    img.addEventListener("load", () => {
-      fallback.style.display = "none";
-      img.classList.add("loaded");
-    });
-
-    img.addEventListener("error", () => {
-      img.classList.remove("loaded");
-      fallback.style.display = "grid";
-    });
+    bindImageFallback(img, fallback);
+    img.src = asset.file;
 
     wrap.append(img, fallback);
     return wrap;
@@ -526,15 +516,7 @@
   const workerImage = $("#workerImage");
   const workerFallback = $("#workerFallback");
 
-  workerImage.addEventListener("load", () => {
-    workerImage.classList.add("loaded");
-    workerFallback.style.display = "none";
-  });
-
-  workerImage.addEventListener("error", () => {
-    workerImage.classList.remove("loaded");
-    workerFallback.style.display = "";
-  });
+  bindImageFallback(workerImage, workerFallback);
 
   function renderSetup() {
     renderScenarioSummary("ppeScenarioSummary");
@@ -921,6 +903,7 @@
     showSection(0);
   });
 
+  console.info("PulmoLearn practice engine v6.2 — image cache-safe");
   initializeMediaFrames();
   initHandChoiceImages();
   initScenarioOrder();
