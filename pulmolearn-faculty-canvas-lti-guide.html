@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulmoLearn | Faculty Canvas LTI Setup Guide</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --core-navy:#0B1F33;
+      --core-navy-2:#102A43;
+      --pulmo-teal:#1CA7A8;
+      --pulmo-teal-dark:#128486;
+      --oxygen-blue:#4BA3F2;
+      --mist-blue:#F4FAFC;
+      --airway-mint:#DDF7F2;
+      --clinical-amber:#F4B860;
+      --white:#FFFFFF;
+      --slate:#415A77;
+      --soft-border:#D7E6EF;
+      --shadow:0 12px 32px rgba(11,31,51,.09);
+      --radius:20px;
+      --heading:"Montserrat",Arial,sans-serif;
+      --body:"Atkinson Hyperlegible",Arial,sans-serif;
+    }
+
+    * { box-sizing:border-box; }
+
+    html {
+      scroll-behavior:smooth;
+      background:var(--mist-blue);
+    }
+
+    body {
+      margin:0;
+      background:
+        radial-gradient(circle at top right, rgba(28,167,168,.09), transparent 30%),
+        var(--mist-blue);
+      color:var(--core-navy);
+      font-family:var(--body);
+      line-height:1.6;
+    }
+
+    a { color:inherit; }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline:3px solid var(--clinical-amber);
+      outline-offset:4px;
+    }
+
+    .topbar {
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(11,31,51,.97);
+      color:#fff;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(12px);
+    }
+
+    .topbar-inner {
+      max-width:1200px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand {
+      text-decoration:none;
+      font-family:var(--heading);
+      font-weight:800;
+      font-size:1.35rem;
+      letter-spacing:-.04em;
+    }
+
+    .brand span { color:var(--pulmo-teal); }
+
+    .top-actions {
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .top-link {
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.07);
+      color:#fff;
+      border-radius:10px;
+      padding:8px 12px;
+      font-size:.85rem;
+      font-weight:700;
+    }
+
+    .shell {
+      max-width:1200px;
+      margin:0 auto;
+      padding:36px 22px 70px;
+    }
+
+    .hero {
+      background:linear-gradient(135deg,var(--core-navy),var(--core-navy-2));
+      color:#fff;
+      border-radius:28px;
+      padding:clamp(28px,5vw,52px);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero::after {
+      content:"";
+      position:absolute;
+      width:360px;
+      height:360px;
+      border-radius:50%;
+      right:-160px;
+      top:-170px;
+      background:rgba(28,167,168,.13);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .eyebrow {
+      color:#8FE0D5;
+      font-weight:800;
+      letter-spacing:.09em;
+      text-transform:uppercase;
+      font-size:.8rem;
+      margin-bottom:8px;
+    }
+
+    h1,h2,h3 {
+      font-family:var(--heading);
+      letter-spacing:-.035em;
+      line-height:1.18;
+    }
+
+    h1 {
+      max-width:840px;
+      font-size:clamp(2.25rem,5vw,4rem);
+      margin:0 0 14px;
+    }
+
+    .hero p {
+      max-width:820px;
+      color:#E8F3F6;
+      font-size:1.08rem;
+      margin:0;
+    }
+
+    .hero-callout {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-top:28px;
+      position:relative;
+      z-index:1;
+    }
+
+    .mini-card {
+      border:1px solid rgba(255,255,255,.13);
+      background:rgba(255,255,255,.06);
+      border-radius:14px;
+      padding:14px 16px;
+    }
+
+    .mini-card strong {
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .mini-card span {
+      color:rgba(255,255,255,.7);
+      font-size:.88rem;
+    }
+
+    .section {
+      margin-top:26px;
+    }
+
+    .section-heading {
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:14px;
+    }
+
+    .section-heading h2 {
+      margin:0;
+      font-size:clamp(1.7rem,3vw,2.45rem);
+    }
+
+    .section-heading p {
+      margin:0;
+      color:var(--slate);
+      max-width:600px;
+    }
+
+    .notice {
+      background:#FFF8EA;
+      border:1px solid #F8D9A5;
+      border-left:6px solid var(--clinical-amber);
+      border-radius:16px;
+      padding:16px 18px;
+      margin-bottom:18px;
+    }
+
+    .notice strong {
+      font-family:var(--heading);
+    }
+
+    .step-grid {
+      display:grid;
+      gap:16px;
+    }
+
+    .step-card {
+      background:var(--white);
+      border:1px solid var(--soft-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .step-head {
+      display:grid;
+      grid-template-columns:58px 1fr;
+      gap:16px;
+      align-items:center;
+      padding:19px 22px;
+      border-bottom:1px solid var(--soft-border);
+      background:linear-gradient(90deg,#fff,#FAFDFF);
+    }
+
+    .step-num {
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      background:var(--core-navy);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-family:var(--heading);
+      font-weight:800;
+      font-size:1.15rem;
+    }
+
+    .step-head h3 {
+      margin:0 0 3px;
+      font-size:1.25rem;
+    }
+
+    .step-head p {
+      margin:0;
+      color:var(--slate);
+      font-size:.92rem;
+    }
+
+    .step-body {
+      padding:20px 22px 22px;
+    }
+
+    .instruction-list {
+      margin:0;
+      padding-left:22px;
+    }
+
+    .instruction-list li {
+      margin:8px 0;
+      padding-left:4px;
+    }
+
+    .path {
+      margin:14px 0 0;
+      padding:12px 14px;
+      border-radius:12px;
+      background:var(--mist-blue);
+      border:1px solid var(--soft-border);
+      color:#243B55;
+      font-weight:700;
+    }
+
+    .client-card {
+      margin-top:14px;
+      background:var(--airway-mint);
+      border:1px solid #BCEFE5;
+      border-radius:14px;
+      padding:14px 16px;
+    }
+
+    .client-card span {
+      display:block;
+      color:var(--slate);
+      font-size:.78rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      margin-bottom:3px;
+    }
+
+    .client-id {
+      font-family:Consolas,Monaco,monospace;
+      font-size:1rem;
+      font-weight:700;
+      overflow-wrap:anywhere;
+    }
+
+    .button-row {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:44px;
+      border-radius:11px;
+      padding:10px 15px;
+      text-decoration:none;
+      font-weight:800;
+      border:1px solid transparent;
+      cursor:pointer;
+      font-family:var(--body);
+      font-size:.92rem;
+    }
+
+    .btn-primary {
+      background:var(--pulmo-teal);
+      color:#fff;
+    }
+
+    .btn-primary:hover { background:var(--pulmo-teal-dark); }
+
+    .btn-secondary {
+      background:#fff;
+      color:var(--core-navy);
+      border-color:var(--soft-border);
+    }
+
+    .btn-secondary:hover { border-color:var(--pulmo-teal); }
+
+    .copy-status {
+      margin-top:8px;
+      min-height:20px;
+      color:var(--pulmo-teal-dark);
+      font-size:.86rem;
+      font-weight:700;
+    }
+
+    .quick-grid {
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .quick-card {
+      background:#fff;
+      border:1px solid var(--soft-border);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .quick-card h2 {
+      margin:0 0 12px;
+      font-size:1.5rem;
+    }
+
+    .checklist {
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:10px;
+    }
+
+    .checklist li {
+      display:grid;
+      grid-template-columns:28px 1fr;
+      gap:10px;
+      align-items:start;
+    }
+
+    .checkmark {
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      background:var(--airway-mint);
+      color:var(--pulmo-teal-dark);
+      display:grid;
+      place-items:center;
+      font-weight:800;
+      margin-top:1px;
+    }
+
+    .student-flow {
+      background:var(--core-navy);
+      color:#fff;
+    }
+
+    .student-flow p { color:#E8F3F6; }
+
+    .flow {
+      display:grid;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .flow-item {
+      padding:11px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      border-radius:10px;
+      font-size:.92rem;
+    }
+
+    .footer {
+      color:var(--slate);
+      text-align:center;
+      margin-top:30px;
+      font-size:.86rem;
+    }
+
+    @media (max-width:850px) {
+      .hero-callout,
+      .quick-grid {
+        grid-template-columns:1fr;
+      }
+      .section-heading {
+        display:block;
+      }
+      .section-heading p {
+        margin-top:6px;
+      }
+    }
+
+    @media (max-width:560px) {
+      .topbar-inner {
+        align-items:flex-start;
+        flex-direction:column;
+      }
+      .shell {
+        padding:22px 14px 50px;
+      }
+      .hero {
+        border-radius:20px;
+        padding:26px 20px;
+      }
+      .step-head {
+        grid-template-columns:46px 1fr;
+        padding:16px;
+      }
+      .step-num {
+        width:40px;
+        height:40px;
+        border-radius:11px;
+      }
+      .step-body {
+        padding:17px 16px 19px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">Pulmo<span>Learn</span></a>
+
+      <nav class="top-actions" aria-label="Faculty guide shortcuts">
+        <a class="top-link" href="#install">Install LTI</a>
+        <a class="top-link" href="#assignment">Build Assignment</a>
+        <a class="top-link" href="#checklist">Checklist</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">Faculty Setup Guide</div>
+
+      <h1>Add PulmoLearn Lessons to Your Canvas Course</h1>
+
+      <p>
+        This guide walks instructors through the one-time PulmoLearn LTI installation
+        and the repeatable workflow for creating PulmoLearn assignments in Canvas.
+      </p>
+
+      <div class="hero-callout">
+        <div class="mini-card">
+          <strong>One-time setup</strong>
+          <span>Add the PulmoLearn LTI app to each Canvas course.</span>
+        </div>
+
+        <div class="mini-card">
+          <strong>Repeat for each lesson</strong>
+          <span>Create the assignment, paste the PulmoLearn HTML, and select the lesson.</span>
+        </div>
+
+        <div class="mini-card">
+          <strong>Automatic completion</strong>
+          <span>PulmoLearn sends completed lesson status back to Canvas.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" style="color:var(--pulmo-teal);">Part 1</div>
+          <h2>Add the PulmoLearn LTI App</h2>
+        </div>
+
+        <p>Complete this once for each Canvas course before adding PulmoLearn assignments.</p>
+      </div>
+
+      <div class="notice">
+        <strong>One-time course setup:</strong>
+        Once PulmoLearn appears as an External Tool in the course, you do not need to repeat this step for every assignment.
+      </div>
+
+      <article class="step-card">
+        <div class="step-head">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Open the Canvas app configuration</h3>
+            <p>Install PulmoLearn at the course level using the provided Client ID.</p>
+          </div>
+        </div>
+
+        <div class="step-body">
+          <ol class="instruction-list">
+            <li>Open the Canvas course.</li>
+            <li>Select <strong>Settings</strong> from the course navigation.</li>
+            <li>Open the <strong>Apps</strong> tab.</li>
+            <li>Select <strong>View App Configurations</strong>.</li>
+            <li>Select <strong>+ App</strong>.</li>
+            <li>Choose the configuration option that uses a <strong>Client ID</strong>.</li>
+            <li>Enter the PulmoLearn Client ID below.</li>
+            <li>Follow the Canvas prompts to install or enable PulmoLearn for the course.</li>
+          </ol>
+
+          <div class="path">
+            Settings → Apps → View App Configurations → + App → By Client ID
+          </div>
+
+          <div class="client-card">
+            <span>PulmoLearn Client ID</span>
+            <div class="client-id" id="clientId">249000000000000136</div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="copyClientId" type="button">Copy Client ID</button>
+          </div>
+
+          <div class="copy-status" id="clientCopyStatus" aria-live="polite"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="assignment">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" style="color:var(--pulmo-teal);">Part 2</div>
+          <h2>Create a PulmoLearn Assignment</h2>
+        </div>
+
+        <p>Repeat these steps for each PulmoLearn lesson you want to place in a Canvas module.</p>
+      </div>
+
+      <div class="step-grid">
+
+        <article class="step-card">
+          <div class="step-head">
+            <div class="step-num">1</div>
+            <div>
+              <h3>Create the assignment from Modules</h3>
+              <p>Build the assignment where students will encounter it in the course.</p>
+            </div>
+          </div>
+
+          <div class="step-body">
+            <ol class="instruction-list">
+              <li>Open the appropriate <strong>Module</strong>.</li>
+              <li>Select the module <strong>+</strong> button.</li>
+              <li>Choose <strong>Assignment</strong>.</li>
+              <li>Select <strong>Create Assignment</strong>.</li>
+              <li>Enter the PulmoLearn lesson name as the assignment name.</li>
+              <li>Select <strong>Add Item</strong>.</li>
+            </ol>
+
+            <div class="path">
+              Modules → + → Assignment → Create Assignment → Add Item
+            </div>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div class="step-head">
+            <div class="step-num">2</div>
+            <div>
+              <h3>Edit the assignment and enter points</h3>
+              <p>Open the assignment settings before connecting the External Tool.</p>
+            </div>
+          </div>
+
+          <div class="step-body">
+            <ol class="instruction-list">
+              <li>Open the new assignment.</li>
+              <li>Select <strong>Edit</strong>.</li>
+              <li>Enter the desired number of <strong>Points</strong>.</li>
+            </ol>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div class="step-head">
+            <div class="step-num">3</div>
+            <div>
+              <h3>Paste the PulmoLearn assignment HTML</h3>
+              <p>Use the PulmoLearn Assignment Builder to create the branded Canvas instructions.</p>
+            </div>
+          </div>
+
+          <div class="step-body">
+            <ol class="instruction-list">
+              <li>In the Canvas assignment description, select the <strong>&lt;/&gt; HTML Editor</strong>.</li>
+              <li>Open the <strong>PulmoLearn Assignment HTML Builder</strong>.</li>
+              <li>Select the correct <strong>Course</strong>.</li>
+              <li>Select the correct <strong>Lesson</strong>.</li>
+              <li>Use <strong>Copy Canvas HTML</strong>.</li>
+              <li>Return to Canvas and paste the HTML into the assignment HTML editor.</li>
+            </ol>
+
+            <div class="button-row">
+              <a class="btn btn-primary" href="/lti-assignment-builder.html" target="_blank" rel="noopener">
+                Open Assignment HTML Builder
+              </a>
+            </div>
+
+            <div class="path">
+              Edit Assignment → &lt;/&gt; HTML Editor → Paste PulmoLearn HTML
+            </div>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div class="step-head">
+            <div class="step-num">4</div>
+            <div>
+              <h3>Choose PulmoLearn as the Submission Type</h3>
+              <p>Connect the Canvas assignment to the LTI External Tool.</p>
+            </div>
+          </div>
+
+          <div class="step-body">
+            <ol class="instruction-list">
+              <li>Scroll to <strong>Submission Type</strong>.</li>
+              <li>Select <strong>External Tool</strong>.</li>
+              <li>Select <strong>Find</strong>.</li>
+              <li>Choose <strong>PulmoLearn</strong> from the External Tools list.</li>
+            </ol>
+
+            <div class="path">
+              Submission Type → External Tool → Find → PulmoLearn
+            </div>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div class="step-head">
+            <div class="step-num">5</div>
+            <div>
+              <h3>Select the PulmoLearn course and lesson</h3>
+              <p>The PulmoLearn picker filters the lesson list by course.</p>
+            </div>
+          </div>
+
+          <div class="step-body">
+            <ol class="instruction-list">
+              <li>In the PulmoLearn External Tool window, select the appropriate <strong>Course</strong>.</li>
+              <li>Select the matching <strong>Lesson</strong>.</li>
+              <li>Verify the displayed lesson title and description.</li>
+              <li>Select <strong>Add to Canvas</strong>.</li>
+            </ol>
+
+            <div class="path">
+              PulmoLearn → Course → Lesson → Add to Canvas
+            </div>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div class="step-head">
+            <div class="step-num">6</div>
+            <div>
+              <h3>Save and publish</h3>
+              <p>Finish the assignment and make it available to students.</p>
+            </div>
+          </div>
+
+          <div class="step-body">
+            <ol class="instruction-list">
+              <li>Confirm the PulmoLearn External Tool appears in the assignment settings.</li>
+              <li>Review the points and assignment description.</li>
+              <li>Select <strong>Save &amp; Publish</strong>.</li>
+            </ol>
+
+            <div class="path">
+              Review → Save &amp; Publish
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="section" id="checklist">
+      <div class="quick-grid">
+        <article class="quick-card">
+          <h2>Faculty Quick Checklist</h2>
+
+          <ul class="checklist">
+            <li><span class="checkmark">✓</span><span>Correct PulmoLearn assignment name</span></li>
+            <li><span class="checkmark">✓</span><span>Points entered</span></li>
+            <li><span class="checkmark">✓</span><span>PulmoLearn HTML pasted into the assignment description</span></li>
+            <li><span class="checkmark">✓</span><span>Submission Type = External Tool</span></li>
+            <li><span class="checkmark">✓</span><span>External Tool = PulmoLearn</span></li>
+            <li><span class="checkmark">✓</span><span>Correct PulmoLearn course selected</span></li>
+            <li><span class="checkmark">✓</span><span>Correct PulmoLearn lesson selected</span></li>
+            <li><span class="checkmark">✓</span><span>Assignment saved and published</span></li>
+          </ul>
+        </article>
+
+        <article class="quick-card student-flow">
+          <h2>What Students Experience</h2>
+
+          <p>
+            Students launch the lesson from the Canvas assignment. PulmoLearn verifies their account access,
+            opens the assigned lesson, saves progress, and returns completion to Canvas when the lesson reaches 100%.
+          </p>
+
+          <div class="flow">
+            <div class="flow-item">1. Open Canvas assignment</div>
+            <div class="flow-item">2. Launch PulmoLearn in a new window</div>
+            <div class="flow-item">3. Sign in if prompted</div>
+            <div class="flow-item">4. Complete the assigned lesson</div>
+            <div class="flow-item">5. Return to Canvas and use “Check My Completion” if the status has not refreshed yet</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="footer">
+      PulmoLearn Faculty Guide · Canvas LTI Assignment Setup
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('copyClientId').addEventListener('click', async () => {
+      const value = document.getElementById('clientId').textContent.trim();
+      const status = document.getElementById('clientCopyStatus');
+
+      try {
+        await navigator.clipboard.writeText(value);
+        status.textContent = 'Client ID copied.';
+      } catch (error) {
+        status.textContent = 'Clipboard access was blocked. Select and copy the Client ID manually.';
+      }
+    });
+  </script>
+</body>
+</html>
