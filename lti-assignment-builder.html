@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulmoLearn | Canvas Assignment Builder</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root {
+      --navy:#0B1F33;
+      --teal:#1CA7A8;
+      --teal-dark:#128486;
+      --mist:#F4FAFC;
+      --white:#FFFFFF;
+      --slate:#415A77;
+      --border:#D7E6EF;
+      --amber:#F4B860;
+      --mint:#DDF7F2;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      background:var(--mist);
+      color:var(--navy);
+      font-family:Arial,Helvetica,sans-serif;
+      line-height:1.5;
+    }
+    .shell { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
+    .hero {
+      background:var(--navy);
+      color:#fff;
+      border-radius:22px;
+      padding:28px 30px;
+      margin-bottom:20px;
+    }
+    .eyebrow {
+      color:#8FE0D5;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    h1 { margin:0 0 10px; font-size:32px; }
+    .hero p { margin:0; max-width:800px; color:#E8F3F6; }
+    .panel {
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:22px;
+      margin-bottom:18px;
+    }
+    .selectors {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    label {
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+    select {
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px 13px;
+      background:#fff;
+      color:var(--navy);
+      font-size:15px;
+    }
+    select:focus-visible,
+    button:focus-visible {
+      outline:3px solid var(--amber);
+      outline-offset:3px;
+    }
+    .selected {
+      border-left:6px solid var(--teal);
+    }
+    .selected h2 {
+      margin:0 0 8px;
+      font-size:24px;
+    }
+    .meta {
+      color:var(--slate);
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .selected p { color:#243B55; }
+    .actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:16px 0;
+    }
+    button {
+      border:0;
+      border-radius:10px;
+      padding:11px 16px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .primary { background:var(--teal); color:#fff; }
+    .primary:hover { background:var(--teal-dark); }
+    .secondary {
+      background:#fff;
+      color:var(--navy);
+      border:1px solid var(--border);
+    }
+    .copy-status {
+      min-height:22px;
+      color:var(--teal-dark);
+      font-weight:700;
+      font-size:13px;
+    }
+    textarea {
+      width:100%;
+      min-height:360px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:14px;
+      font-family:Consolas,Monaco,monospace;
+      font-size:12px;
+      line-height:1.45;
+      resize:vertical;
+      background:#FBFDFE;
+      color:#183247;
+    }
+    .preview-title {
+      margin:0 0 12px;
+      font-size:18px;
+    }
+    .note {
+      background:#FFF7E8;
+      border:1px solid var(--amber);
+      border-radius:12px;
+      padding:13px 15px;
+      color:#5D471B;
+      font-size:14px;
+    }
+    @media (max-width:720px) {
+      .selectors { grid-template-columns:1fr; }
+      .shell { padding:16px 12px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">Canvas Course Builder</div>
+      <h1>PulmoLearn Assignment HTML Builder</h1>
+      <p>Select a course and lesson. The matching assignment title and final PulmoLearn Canvas description HTML are generated automatically for copying into Canvas.</p>
+    </section>
+
+    <section class="panel selectors">
+      <div>
+        <label for="courseSelect">Course</label>
+        <select id="courseSelect"></select>
+      </div>
+      <div>
+        <label for="lessonSelect">Lesson</label>
+        <select id="lessonSelect"></select>
+      </div>
+    </section>
+
+    <section class="panel selected">
+      <h2 id="selectedTitle"></h2>
+      <div class="meta" id="selectedMeta"></div>
+      <p id="selectedDescription"></p>
+
+      <div class="actions">
+        <button class="primary" id="copyTitleBtn" type="button">Copy Assignment Title</button>
+        <button class="primary" id="copyHtmlBtn" type="button">Copy Canvas HTML</button>
+        <button class="secondary" id="selectHtmlBtn" type="button">Select HTML Text</button>
+      </div>
+
+      <div class="copy-status" id="copyStatus" aria-live="polite"></div>
+    </section>
+
+    <section class="panel">
+      <h2 class="preview-title">Canvas HTML</h2>
+      <textarea id="htmlOutput" spellcheck="false" aria-label="Generated Canvas assignment HTML"></textarea>
+    </section>
+
+    <section class="note">
+      In Canvas, create the assignment, paste this HTML into the assignment description, choose <strong>External Tool → PulmoLearn</strong>, and select the same course and lesson. The native Canvas launch button will appear below the description.
+    </section>
+  </main>
+
+  <script>
+    const courseSelect = document.getElementById("courseSelect");
+    const lessonSelect = document.getElementById("lessonSelect");
+    const selectedTitle = document.getElementById("selectedTitle");
+    const selectedMeta = document.getElementById("selectedMeta");
+    const selectedDescription = document.getElementById("selectedDescription");
+    const htmlOutput = document.getElementById("htmlOutput");
+    const copyStatus = document.getElementById("copyStatus");
+
+    let courses = [];
+
+    function escapeText(value) {
+      return String(value ?? "");
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function currentCourse() {
+      return courses.find(course => course.key === courseSelect.value) || courses[0];
+    }
+
+    function currentLesson() {
+      const course = currentCourse();
+      return course?.lessons.find(lesson => lesson.id === lessonSelect.value) || course?.lessons[0];
+    }
+
+    function buildCanvasHtml(lesson) {
+      const title = escapeHtml(lesson.title);
+      const description = escapeHtml(lesson.description);
+
+      return `<div style="max-width: 900px; margin: 0 auto 24px auto; font-family: Arial, Helvetica, sans-serif; color: #0b1f33;">
+    <div style="background: #0B1F33; border-radius: 18px; padding: 28px 30px; color: #ffffff; margin-bottom: 18px;"><br />
+        <div style="font-size: 13px; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; color: #8fe0d5; margin-bottom: 8px;">PulmoLearn Assignment</div>
+        <h2 style="margin: 0 0 10px 0; font-size: 26px; line-height: 1.25; color: #ffffff;">${title}</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #e8f3f6;">${description}</p>
+    </div>
+    <div style="background: #F4FAFC; border: 1px solid #D7E6EF; border-left: 5px solid #1CA7A8; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;"><br />
+        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">Before you begin</h3>
+        <p style="margin: 0 0 10px 0; line-height: 1.6; color: #415a77;">PulmoLearn opens in a separate browser window so the interactive lesson has enough space to function properly.</p>
+        <p style="margin: 0; line-height: 1.6; color: #415a77;"><strong>Use the launch button below to begin.</strong> If prompted, sign in with the PulmoLearn account you activated using your bookstore voucher.</p>
+    </div>
+    <div style="background: #FFF7E8; border: 1px solid #F4B860; border-radius: 12px; padding: 18px 20px; text-align: center;"><br />
+        <p style="margin: 0 0 14px 0; color: #0b1f33; line-height: 1.55; font-size: 15px;"><strong>Finished your PulmoLearn lesson?</strong><br />Your completion is sent automatically to Canvas.</p>
+        <a href="" style="display: inline-block; background: #1CA7A8; color: #ffffff; text-decoration: none; border-radius: 10px; padding: 12px 22px; font-weight: bold; font-size: 15px;" target="_self"> ✓ Check My Completion </a>
+        <p style="margin: 10px 0 0 0; color: #415a77; font-size: 13px; line-height: 1.45;">Use this button after finishing the lesson to refresh the assignment and display your updated submission status.</p>
+    </div>
+</div>`;
+    }
+
+    function fillCourses() {
+      courseSelect.innerHTML = courses.map(course =>
+        `<option value="${escapeHtml(course.key)}">${escapeHtml(course.label)}</option>`
+      ).join("");
+      fillLessons();
+    }
+
+    function fillLessons() {
+      const course = currentCourse();
+      lessonSelect.innerHTML = course.lessons.map(lesson =>
+        `<option value="${escapeHtml(lesson.id)}">${escapeHtml(lesson.title)}</option>`
+      ).join("");
+      render();
+    }
+
+    function render() {
+      const course = currentCourse();
+      const lesson = currentLesson();
+      if (!lesson) return;
+
+      selectedTitle.textContent = lesson.title;
+      selectedMeta.textContent =
+        [course.label, lesson.time, lesson.level].filter(Boolean).join(" · ");
+      selectedDescription.textContent = lesson.description;
+      htmlOutput.value = buildCanvasHtml(lesson);
+      copyStatus.textContent = "";
+    }
+
+    async function copyText(text, message) {
+      try {
+        await navigator.clipboard.writeText(text);
+        copyStatus.textContent = message;
+      } catch {
+        htmlOutput.focus();
+        htmlOutput.select();
+        copyStatus.textContent = "Clipboard access was blocked. The HTML has been selected so you can copy it manually.";
+      }
+    }
+
+    document.getElementById("copyTitleBtn").addEventListener("click", () => {
+      const lesson = currentLesson();
+      copyText(lesson.title, "Assignment title copied.");
+    });
+
+    document.getElementById("copyHtmlBtn").addEventListener("click", () => {
+      copyText(htmlOutput.value, "Canvas HTML copied.");
+    });
+
+    document.getElementById("selectHtmlBtn").addEventListener("click", () => {
+      htmlOutput.focus();
+      htmlOutput.select();
+      copyStatus.textContent = "HTML selected.";
+    });
+
+    courseSelect.addEventListener("change", fillLessons);
+    lessonSelect.addEventListener("change", render);
+
+    fetch("/api/lti/catalog")
+      .then(response => {
+        if (!response.ok) throw new Error("Could not load PulmoLearn course catalog.");
+        return response.json();
+      })
+      .then(data => {
+        courses = data.courses || [];
+        fillCourses();
+      })
+      .catch(error => {
+        document.body.innerHTML =
+          '<main style="max-width:800px;margin:40px auto;font-family:Arial,sans-serif;padding:20px;">' +
+          '<h1>Unable to load course catalog</h1><p>' +
+          escapeHtml(error.message) +
+          '</p></main>';
+      });
+  </script>
+</body>
+</html>
