@@ -290,7 +290,7 @@ function buildPickerHtml({
         '</div>' +
         '<p class="description">' + description + '</p>' +
         '<form method="POST" action="/api/lti/deep-link-response">' +
-          '<input type="hidden" name="title" value="' + attr(lesson.title) + '">' +
+          '<input type="hidden" name="title" value="' + attr(lesson.displayTitle || lesson.title) + '">' +
           '<input type="hidden" name="lessonUrl" value="' + attr(lesson.url) + '">' +
           '<input type="hidden" name="lessonId" value="' + attr(lesson.id) + '">' +
           '<input type="hidden" name="returnUrl" value="${safeReturnUrl}">' +
