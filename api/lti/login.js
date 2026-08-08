@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+const crypto = require("crypto");
+
+module.exports = async function handler(req, res) {
   try {
     const params = req.method === "POST" ? req.body : req.query;
 
@@ -17,12 +19,12 @@ export default async function handler(req, res) {
       });
     }
 
-    const state = Math.random().toString(36).substring(2);
-    const nonce = Math.random().toString(36).substring(2);
+    const state = crypto.randomBytes(32).toString("hex");
+    const nonce = crypto.randomBytes(32).toString("hex");
 
     res.setHeader("Set-Cookie", [
-      `lti_state=${state}; Path=/; HttpOnly; Secure; SameSite=None`,
-      `lti_nonce=${nonce}; Path=/; HttpOnly; Secure; SameSite=None`
+      `lti_state=${state}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=600`,
+      `lti_nonce=${nonce}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=600`
     ]);
 
     const redirectUrl = new URL(
@@ -41,14 +43,18 @@ export default async function handler(req, res) {
     redirectUrl.searchParams.set("state", state);
 
     if (lti_message_hint) {
-      redirectUrl.searchParams.set("lti_message_hint", lti_message_hint);
+      redirectUrl.searchParams.set(
+        "lti_message_hint",
+        lti_message_hint
+      );
     }
 
     return res.redirect(redirectUrl.toString());
+
   } catch (error) {
     return res.status(500).json({
       error: "LTI login failed",
       details: error.message
     });
   }
-}
+};
