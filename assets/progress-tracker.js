@@ -1,11 +1,11 @@
 /**
- * PulmoLearn Progress Tracker v8.2
+ * PulmoLearn Progress Tracker v8.3
  */
 
 import { supabase } from '/assets/auth.js'
 import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
 
-console.log('PulmoLearn: progress-tracker.js v8.2 loaded')
+console.log('PulmoLearn: progress-tracker.js v8.3 loaded')
 
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual'
@@ -29,6 +29,53 @@ if (!session && !isLtiLaunch) {
 const userId = session?.user?.id || `lti-test-${Date.now()}`
 const lessonId = window.PULMO_LESSON_ID || window.LESSON_ID
 const lessonMeta = window.PULMO_LESSON || {}
+
+// ── Canvas LTI completion passback ──
+const ltiPassbackKey = `pulmolearn-lti-passback:${userId}:${lessonId}`
+let ltiPassbackInFlight = false
+
+async function sendLtiCompletionPassback() {
+  if (!isLtiLaunch || !session?.access_token || !lessonId) return
+
+  if (sessionStorage.getItem(ltiPassbackKey) === 'sent') {
+    return
+  }
+
+  if (ltiPassbackInFlight) return
+  ltiPassbackInFlight = true
+
+  try {
+    const response = await fetch('/api/lti/score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        lesson_id: lessonId,
+        completed: true
+      })
+    })
+
+    const result = await response.json().catch(() => ({}))
+
+    if (!response.ok || !result?.ok || !result?.passed_back) {
+      console.error(
+        'PulmoLearn: Canvas completion passback failed:',
+        result?.error || `HTTP ${response.status}`,
+        result
+      )
+      return
+    }
+
+    sessionStorage.setItem(ltiPassbackKey, 'sent')
+    console.log(`PulmoLearn: Canvas completion passback confirmed — ${lessonId}`)
+  } catch (error) {
+    console.error('PulmoLearn: Canvas completion passback error:', error)
+  } finally {
+    ltiPassbackInFlight = false
+  }
+}
 
 // ── Saved answer state ──
 const answerStateKey = `pulmolearn-answer-state:${userId}:${lessonId}`
@@ -468,6 +515,9 @@ function showResumeBanner(percent, sectionsRevealed, allSections) {
 async function resetProgress() {
   console.log(`PulmoLearn: Resetting progress for "${lessonId}"`)
 
+  sessionStorage.removeItem(ltiPassbackKey)
+  ltiPassbackInFlight = false
+
   const now = new Date().toISOString()
   const lessonMeta = window.PULMO_LESSON || {}
 
@@ -581,7 +631,10 @@ async function saveProgress() {
     window.saveCourseProgress(fileName, percent, completed)
   }
 
-  if (completed) showCompletionBanner()
+  if (completed) {
+    showCompletionBanner()
+    await sendLtiCompletionPassback()
+  }
 }
 
 // ── Restore progress ──
