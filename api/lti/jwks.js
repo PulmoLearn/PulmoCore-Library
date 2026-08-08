@@ -21,9 +21,7 @@ export default function handler(req, res) {
     }
 
     const publicKey =
-      createPublicKey(
-        publicKeyPem
-      );
+      createPublicKey(publicKeyPem);
 
     const jwk =
       publicKey.export({
@@ -59,7 +57,6 @@ export default function handler(req, res) {
       .json({
         error:
           "Failed to generate JWKS",
-
         details:
           error.message
       });

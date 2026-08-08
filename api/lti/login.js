@@ -66,50 +66,15 @@ export default async function handler(req, res) {
         "https://sso.canvaslms.com/api/lti/authorize_redirect"
       );
 
-    redirectUrl.searchParams.set(
-      "response_type",
-      "id_token"
-    );
-
-    redirectUrl.searchParams.set(
-      "response_mode",
-      "form_post"
-    );
-
-    redirectUrl.searchParams.set(
-      "scope",
-      "openid"
-    );
-
-    redirectUrl.searchParams.set(
-      "prompt",
-      "none"
-    );
-
-    redirectUrl.searchParams.set(
-      "client_id",
-      client_id
-    );
-
-    redirectUrl.searchParams.set(
-      "redirect_uri",
-      LTI_LAUNCH_URL
-    );
-
-    redirectUrl.searchParams.set(
-      "login_hint",
-      login_hint
-    );
-
-    redirectUrl.searchParams.set(
-      "nonce",
-      nonce
-    );
-
-    redirectUrl.searchParams.set(
-      "state",
-      state
-    );
+    redirectUrl.searchParams.set("response_type", "id_token");
+    redirectUrl.searchParams.set("response_mode", "form_post");
+    redirectUrl.searchParams.set("scope", "openid");
+    redirectUrl.searchParams.set("prompt", "none");
+    redirectUrl.searchParams.set("client_id", client_id);
+    redirectUrl.searchParams.set("redirect_uri", LTI_LAUNCH_URL);
+    redirectUrl.searchParams.set("login_hint", login_hint);
+    redirectUrl.searchParams.set("nonce", nonce);
+    redirectUrl.searchParams.set("state", state);
 
     if (lti_message_hint) {
       redirectUrl.searchParams.set(

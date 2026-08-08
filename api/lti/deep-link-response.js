@@ -67,9 +67,7 @@ export default async function handler(req, res) {
       );
 
     const claims = {
-      iss:
-        clientId,
-
+      iss: clientId,
       aud:
         canvasIssuer ||
         "https://canvas.instructure.com",
@@ -86,20 +84,14 @@ export default async function handler(req, res) {
       "https://purl.imsglobal.org/spec/lti-dl/claim/content_items":
         [
           {
-            type:
-              "ltiResourceLink",
-
+            type: "ltiResourceLink",
             title,
-
-            // Canvas must launch the LTI endpoint, not the lesson directly.
             url:
               "https://www.pulmolearn.com/api/lti/launch",
-
             custom:
               {
                 lesson_id:
                   lessonId || "",
-
                 lesson_url:
                   lessonUrl
               }
@@ -114,15 +106,10 @@ export default async function handler(req, res) {
     }
 
     const jwt =
-      await new SignJWT(
-        claims
-      )
+      await new SignJWT(claims)
         .setProtectedHeader({
-          alg:
-            "RS256",
-
-          kid:
-            keyId
+          alg: "RS256",
+          kid: keyId
         })
         .setIssuedAt()
         .setExpirationTime("5m")
@@ -148,17 +135,8 @@ export default async function handler(req, res) {
     method="POST"
     action="${returnUrl}"
   >
-    <input
-      type="hidden"
-      name="JWT"
-      value="${jwt}"
-    >
-
-    <input
-      type="hidden"
-      name="jwt"
-      value="${jwt}"
-    >
+    <input type="hidden" name="JWT" value="${jwt}">
+    <input type="hidden" name="jwt" value="${jwt}">
   </form>
 
   <script>
@@ -176,7 +154,6 @@ export default async function handler(req, res) {
       .json({
         error:
           "Deep link response failed",
-
         details:
           error.message
       });
