@@ -481,27 +481,6 @@
         padding:17px 16px 19px;
       }
     }
-  
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
   </style>
 </head>
 
@@ -628,9 +607,13 @@
               <li>Select the module <strong>+</strong> button.</li>
               <li>Choose <strong>Assignment</strong>.</li>
               <li>Select <strong>Create Assignment</strong>.</li>
-              <li>Enter the PulmoLearn lesson name as the assignment name.</li>
-              <li>Select <strong>Add Item</strong>.</li>
+              <li>Select <strong>Add Item</strong>. You do not need to enter the final lesson title at this point.</li>
             </ol>
+
+            <div class="notice" style="margin-top:16px;margin-bottom:0;">
+              <strong>Assignment title:</strong>
+              When you select a PulmoLearn lesson as the External Tool, Canvas will use the lesson title supplied by PulmoLearn and may replace the assignment title you entered earlier. You can skip entering the final title during initial assignment creation and adjust the title afterward if needed.
+            </div>
 
             <div class="path">
               Modules → + → Assignment → Create Assignment → Add Item
@@ -745,6 +728,7 @@
           <div class="step-body">
             <ol class="instruction-list">
               <li>Confirm the PulmoLearn External Tool appears in the assignment settings.</li>
+              <li>Review the assignment title supplied by PulmoLearn and change it only if needed.</li>
               <li>Review the points and assignment description.</li>
               <li>Select <strong>Save &amp; Publish</strong>.</li>
             </ol>
@@ -764,7 +748,7 @@
           <h2>Faculty Quick Checklist</h2>
 
           <ul class="checklist">
-            <li><span class="checkmark">✓</span><span>Correct PulmoLearn assignment name</span></li>
+            <li><span class="checkmark">✓</span><span>PulmoLearn lesson title populated correctly; adjust only if needed</span></li>
             <li><span class="checkmark">✓</span><span>Points entered</span></li>
             <li><span class="checkmark">✓</span><span>PulmoLearn HTML pasted into the assignment description</span></li>
             <li><span class="checkmark">✓</span><span>Submission Type = External Tool</span></li>
@@ -812,75 +796,5 @@
       }
     });
   </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
