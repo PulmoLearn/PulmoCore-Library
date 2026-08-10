@@ -233,7 +233,7 @@
 
       <div class="guide-panel" id="guidePanel" hidden>
         <h3>Canvas Competency Guide</h3>
-        <p>Copy the complete Canvas-ready competency guide HTML, then paste it into the Canvas HTML Editor. Instructors may edit their Canvas copy as needed.</p>
+        <p>Copy the complete Canvas-ready competency guide HTML, then paste it into the Canvas HTML Editor. The guide is loaded from PulmoLearn and instructors may edit their Canvas copy as needed.</p>
         <button class="guide-copy" id="copyGuideBtn" type="button">Copy Canvas Page HTML</button>
         <div class="guide-status" id="guideStatus" aria-live="polite"></div>
       </div>
@@ -263,7 +263,13 @@
 
     let courses = [];
 
-    const equipmentCompetencyGuides = [
+    /*
+      Respiratory Equipment exception
+      --------------------------------
+      Equipment competency guides keep their original descriptive filenames
+      directly inside /equipment/ (no competency-guides subfolder).
+    */
+    const equipmentLegacyGuideMap = [
       {
         keywords: ["professional", "communication", "documentation"],
         url: "/equipment/Respiratory_Equipment_Professionalism_Communication_Documentation_Competency_Guide_Canvas.html"
@@ -314,37 +320,185 @@
       }
     ];
 
+    /*
+      Competency guide naming convention
+      -----------------------------------
+      Store guides inside each course folder:
+
+        /<course-folder>/competency-guides/<Course_Prefix>_<lesson>_CG.html
+
+      Examples:
+        /Neonatal_Pediatric/competency-guides/Neonatal_Pediatric_1_1_CG.html
+        /assessment/competency-guides/Pulmonary_Assessment_1_1_CG.html
+
+      Respiratory Equipment is handled separately above and continues using
+      its existing descriptive filenames directly inside /equipment/.
+
+      The builder derives the folder from the lesson URL whenever possible.
+      Add/edit a course entry below only when its filename prefix differs from
+      the folder name converted to underscores.
+    */
+    const competencyGuideCoursePrefixes = {
+      "equipment": "Respiratory_Equipment",
+      "respiratory-equipment": "Respiratory_Equipment",
+      "respiratory_equipment": "Respiratory_Equipment",
+
+      "neonatal-pediatric": "Neonatal_Pediatric",
+      "neonatal_pediatric": "Neonatal_Pediatric",
+      "neonatalpediatric": "Neonatal_Pediatric",
+
+      "foundations": "Foundations",
+      "respiratory-foundations": "Foundations",
+      "respiratory_foundations": "Foundations",
+
+      "physiology": "Physiology",
+      "respiratory-physiology": "Physiology",
+      "respiratory_physiology": "Physiology",
+
+      "pulmonary-assessment": "Pulmonary_Assessment",
+      "pulmonary_assessment": "Pulmonary_Assessment",
+      "assessment": "Pulmonary_Assessment",
+
+      "mechanical-ventilation": "Mechanical_Ventilation",
+      "mechanical_ventilation": "Mechanical_Ventilation",
+      "ventilation": "Mechanical_Ventilation",
+      "ventilators": "Mechanical_Ventilation",
+
+      "oxygenation": "Oxygenation",
+      "pharmacology": "Pharmacology"
+    };
+
     function normalizeMatchText(value) {
       return String(value || "")
         .toLowerCase()
         .replace(/&/g, " and ")
-        .replace(/[^a-z0-9]+/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
+        .replace(/[^a-z0-9_-]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^[-_]+|[-_]+$/g, "");
+    }
+
+    function lessonNumberForGuide(lesson) {
+      const candidates = [
+        lesson?.id,
+        lesson?.lessonId,
+        lesson?.moduleId,
+        lesson?.displayTitle,
+        lesson?.title,
+        lesson?.url,
+        lesson?.lessonUrl
+      ].filter(Boolean);
+
+      for (const value of candidates) {
+        const text = String(value);
+        const match = text.match(/(?:^|[^0-9])(\d+)[._-](\d+)(?:[^0-9]|$)/);
+        if (match) return `${match[1]}_${match[2]}`;
+      }
+      return "";
+    }
+
+    function lessonUrlValue(lesson) {
+      return String(
+        lesson?.url ||
+        lesson?.lessonUrl ||
+        lesson?.lesson_url ||
+        lesson?.href ||
+        ""
+      ).trim();
+    }
+
+    function courseFolderForGuide(course, lesson) {
+      const lessonUrl = lessonUrlValue(lesson);
+
+      if (lessonUrl) {
+        try {
+          const parsed = new URL(lessonUrl, window.location.origin);
+          const segments = parsed.pathname.split("/").filter(Boolean);
+          if (segments.length) return segments[0];
+        } catch (error) {
+          console.warn("Could not parse lesson URL for competency guide path:", lessonUrl);
+        }
+      }
+
+      return String(
+        course?.folder ||
+        course?.path ||
+        course?.key ||
+        course?.slug ||
+        ""
+      ).replace(/^\/+|\/+$/g, "");
+    }
+
+    function titleCasePrefix(folder) {
+      return String(folder || "")
+        .replace(/[-\s]+/g, "_")
+        .split("_")
+        .filter(Boolean)
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join("_");
+    }
+
+    function coursePrefixForGuide(course, folder) {
+      const candidates = [
+        folder,
+        course?.key,
+        course?.slug,
+        course?.label,
+        course?.title
+      ].filter(Boolean);
+
+      for (const candidate of candidates) {
+        const normalized = normalizeMatchText(candidate);
+        if (competencyGuideCoursePrefixes[normalized]) {
+          return competencyGuideCoursePrefixes[normalized];
+        }
+
+        const underscored = normalized.replace(/-/g, "_");
+        if (competencyGuideCoursePrefixes[underscored]) {
+          return competencyGuideCoursePrefixes[underscored];
+        }
+      }
+
+      return titleCasePrefix(folder || course?.key || course?.label);
     }
 
     function competencyGuideUrl(course, lesson) {
+      const folder = courseFolderForGuide(course, lesson);
       const courseText = normalizeMatchText([
+        folder,
         course?.key,
+        course?.slug,
         course?.label,
         course?.title
       ].filter(Boolean).join(" "));
 
       const lessonText = normalizeMatchText([
         lesson?.id,
-        lesson?.title,
+        lesson?.lessonId,
+        lesson?.moduleId,
         lesson?.displayTitle,
-        lesson?.description
+        lesson?.title,
+        lesson?.description,
+        lesson?.url,
+        lesson?.lessonUrl
       ].filter(Boolean).join(" "));
 
-      // Keep competency-guide controls limited to the Respiratory Equipment course.
-      if (!courseText.includes("equipment")) return "";
+      // Respiratory Equipment keeps its existing descriptive filenames
+      // directly in /equipment/.
+      if (folder === "equipment" || courseText.includes("equipment")) {
+        const equipmentMatch = equipmentLegacyGuideMap.find(guide =>
+          guide.keywords.some(keyword =>
+            lessonText.includes(normalizeMatchText(keyword))
+          )
+        );
+        return equipmentMatch?.url || "";
+      }
 
-      const match = equipmentCompetencyGuides.find(guide =>
-        guide.keywords.some(keyword => lessonText.includes(normalizeMatchText(keyword)))
-      );
+      const lessonNumber = lessonNumberForGuide(lesson);
+      const prefix = coursePrefixForGuide(course, folder);
 
-      return match?.url || "";
+      if (!folder || !lessonNumber || !prefix) return "";
+
+      return `/${folder}/competency-guides/${prefix}_${lessonNumber}_CG.html`;
     }
 
     function escapeText(value) {
@@ -422,6 +576,7 @@
       guidePanel.hidden = !guideUrl;
       copyGuideBtn.dataset.guideUrl = guideUrl;
       copyGuideBtn.textContent = "Copy Canvas Page HTML";
+      copyGuideBtn.title = guideUrl ? `Copies: ${guideUrl}` : "";
       guideStatus.textContent = "";
     }
 
@@ -477,7 +632,7 @@
         console.error(error);
         copyGuideBtn.textContent = originalText;
         guideStatus.textContent =
-          "Unable to copy the competency guide. Confirm the guide file is deployed at the expected /equipment/ URL.";
+          `Guide not found yet. Upload it to: ${guideUrl}`;
       } finally {
         copyGuideBtn.disabled = false;
       }
