@@ -115,6 +115,38 @@
       font-weight:700;
       font-size:13px;
     }
+    .guide-panel {
+      margin-top:18px;
+      padding:16px 18px;
+      background:var(--mint);
+      border:1px solid #b9e5dc;
+      border-radius:14px;
+    }
+    .guide-panel[hidden] { display:none; }
+    .guide-panel h3 {
+      margin:0 0 6px;
+      font-size:18px;
+      color:var(--navy);
+    }
+    .guide-panel p {
+      margin:0 0 12px;
+      color:#334e68;
+      font-size:14px;
+    }
+    .guide-copy {
+      background:var(--navy);
+      color:#fff;
+    }
+    .guide-copy:hover {
+      background:#153552;
+    }
+    .guide-status {
+      margin-top:10px;
+      min-height:20px;
+      color:var(--teal-dark);
+      font-weight:700;
+      font-size:13px;
+    }
     textarea {
       width:100%;
       min-height:360px;
@@ -198,6 +230,13 @@
       </div>
 
       <div class="copy-status" id="copyStatus" aria-live="polite"></div>
+
+      <div class="guide-panel" id="guidePanel" hidden>
+        <h3>Canvas Competency Guide</h3>
+        <p>Copy the complete Canvas-ready competency guide HTML, then paste it into the Canvas HTML Editor. Instructors may edit their Canvas copy as needed.</p>
+        <button class="guide-copy" id="copyGuideBtn" type="button">Copy Canvas Page HTML</button>
+        <div class="guide-status" id="guideStatus" aria-live="polite"></div>
+      </div>
     </section>
 
     <section class="panel">
@@ -218,8 +257,95 @@
     const selectedDescription = document.getElementById("selectedDescription");
     const htmlOutput = document.getElementById("htmlOutput");
     const copyStatus = document.getElementById("copyStatus");
+    const guidePanel = document.getElementById("guidePanel");
+    const copyGuideBtn = document.getElementById("copyGuideBtn");
+    const guideStatus = document.getElementById("guideStatus");
 
     let courses = [];
+
+    const equipmentCompetencyGuides = [
+      {
+        keywords: ["professional", "communication", "documentation"],
+        url: "/equipment/Respiratory_Equipment_Professionalism_Communication_Documentation_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["patient", "assessment"],
+        url: "/equipment/Respiratory_Equipment_RT_Patient_Assessment_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["infection", "ppe", "isolation"],
+        url: "/equipment/Respiratory_Equipment_Infection_Control_PPE_Isolation_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["pft", "spirometry", "peak flow"],
+        url: "/equipment/Respiratory_Equipment_PFT_Spirometry_Peak_Flow_Respiratory_Pressure_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["cardiovascular", "monitor"],
+        url: "/equipment/Respiratory_Equipment_Cardiovascular_Monitoring_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["blood gas", "abg"],
+        url: "/equipment/Respiratory_Equipment_Blood_Gas_Monitoring_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["airway management"],
+        url: "/equipment/Respiratory_Equipment_Airway_Management_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["airway pharmacology", "pharmacology"],
+        url: "/equipment/Respiratory_Equipment_Airway_Pharmacology_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["aerosol", "drug therapy"],
+        url: "/equipment/Respiratory_Equipment_Aerosol_Drug_Therapy_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["humidity", "bland aerosol"],
+        url: "/equipment/Respiratory_Equipment_Humidity_Bland_Aerosol_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["oxygen delivery"],
+        url: "/equipment/Respiratory_Equipment_Oxygen_Delivery_Competency_Guide_Canvas.html"
+      },
+      {
+        keywords: ["medical gas", "gas system", "cylinder", "flowmeter"],
+        url: "/equipment/Respiratory_Equipment_Medical_Gas_Systems_Competency_Guide_Canvas.html"
+      }
+    ];
+
+    function normalizeMatchText(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/&/g, " and ")
+        .replace(/[^a-z0-9]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function competencyGuideUrl(course, lesson) {
+      const courseText = normalizeMatchText([
+        course?.key,
+        course?.label,
+        course?.title
+      ].filter(Boolean).join(" "));
+
+      const lessonText = normalizeMatchText([
+        lesson?.id,
+        lesson?.title,
+        lesson?.displayTitle,
+        lesson?.description
+      ].filter(Boolean).join(" "));
+
+      // Keep competency-guide controls limited to the Respiratory Equipment course.
+      if (!courseText.includes("equipment")) return "";
+
+      const match = equipmentCompetencyGuides.find(guide =>
+        guide.keywords.some(keyword => lessonText.includes(normalizeMatchText(keyword)))
+      );
+
+      return match?.url || "";
+    }
 
     function escapeText(value) {
       return String(value ?? "");
@@ -291,6 +417,12 @@
       selectedDescription.textContent = lesson.description;
       htmlOutput.value = buildCanvasHtml(lesson);
       copyStatus.textContent = "";
+
+      const guideUrl = competencyGuideUrl(course, lesson);
+      guidePanel.hidden = !guideUrl;
+      copyGuideBtn.dataset.guideUrl = guideUrl;
+      copyGuideBtn.textContent = "Copy Canvas Page HTML";
+      guideStatus.textContent = "";
     }
 
     async function copyText(text, message) {
@@ -311,6 +443,44 @@
 
     document.getElementById("copyHtmlBtn").addEventListener("click", () => {
       copyText(htmlOutput.value, "Canvas HTML copied.");
+    });
+
+    copyGuideBtn.addEventListener("click", async () => {
+      const guideUrl = copyGuideBtn.dataset.guideUrl;
+      if (!guideUrl) return;
+
+      const originalText = "Copy Canvas Page HTML";
+      copyGuideBtn.disabled = true;
+      copyGuideBtn.textContent = "Copying…";
+      guideStatus.textContent = "";
+
+      try {
+        const response = await fetch(guideUrl, {
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error(`Could not load competency guide (${response.status}).`);
+        }
+
+        const guideHtml = await response.text();
+        await navigator.clipboard.writeText(guideHtml);
+
+        copyGuideBtn.textContent = "✓ Copied — Paste into Canvas HTML Editor";
+        guideStatus.textContent = "Competency guide HTML copied to your clipboard.";
+
+        window.setTimeout(() => {
+          copyGuideBtn.textContent = originalText;
+        }, 3500);
+      } catch (error) {
+        console.error(error);
+        copyGuideBtn.textContent = originalText;
+        guideStatus.textContent =
+          "Unable to copy the competency guide. Confirm the guide file is deployed at the expected /equipment/ URL.";
+      } finally {
+        copyGuideBtn.disabled = false;
+      }
     });
 
     document.getElementById("selectHtmlBtn").addEventListener("click", () => {
