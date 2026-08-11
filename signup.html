@@ -1379,7 +1379,7 @@
 
 
             // ─────────────────────────────────────────────────────────
-            // REDEEM VOUCHER
+            // REDEEM VOUCHER VIA SECURE SUPABASE FUNCTION
             // ─────────────────────────────────────────────────────────
 
             const codeToUse =
@@ -1397,190 +1397,48 @@
             ) {
 
               const {
-                data: voucherData,
-                error: voucherError
+                data: redemptionResult,
+                error: redemptionError
               } =
-                await supabase
-                  .from('vouchers')
-                  .select(
-                    'code, access_type, school_id, school_name, organization_id'
-                  )
-                  .eq(
-                    'code',
-                    codeToUse
-                  )
-                  .eq(
-                    'active',
-                    true
-                  )
-                  .is(
-                    'redeemed_by',
-                    null
-                  )
-                  .maybeSingle()
-
-
-              if (voucherError) {
-
-                console.error(
-                  'Voucher redemption lookup failed:',
-                  voucherError.message
+                await supabase.rpc(
+                  'redeem_voucher',
+                  {
+                    p_code:
+                      codeToUse
+                  }
                 )
 
-              }
 
+              if (redemptionError) {
 
-              if (voucherData) {
+                console.error(
+                  'Voucher redemption service failed:',
+                  redemptionError.message
+                )
 
-                // ── Create entitlement ──
+              } else if (redemptionResult?.ok) {
 
-                const {
-                  error: accessError
-                } =
-                  await supabase
-                    .from('user_access')
-                    .insert(
-                      {
+                accessWasCreated =
+                  true
 
-                        user_id:
-                          userId,
+                console.log(
+                  'PulmoLearn: voucher redeemed successfully:',
+                  redemptionResult
+                )
 
-                        access_type:
-                          voucherData.access_type ||
-                          'voucher',
+              } else {
 
-                        voucher_code:
-                          codeToUse
+                console.error(
+                  'Voucher redemption was not completed:',
+                  redemptionResult
+                )
 
-                      }
-                    )
+                errorMsg.textContent =
+                  redemptionResult?.message ||
+                  'Your account was created, but the voucher could not be redeemed. Please contact support before purchasing access.'
 
-
-                if (accessError) {
-
-                  console.error(
-                    'Failed to create user access:',
-                    accessError.message
-                  )
-
-                } else {
-
-                  accessWasCreated =
-                    true
-
-                }
-
-
-                // ── Mark voucher redeemed ──
-
-                const {
-                  error: voucherUpdateError
-                } =
-                  await supabase
-                    .from('vouchers')
-                    .update(
-                      {
-
-                        redeemed_by:
-                          userId,
-
-                        redeemed_at:
-                          new Date().toISOString(),
-
-                        active:
-                          false
-
-                      }
-                    )
-                    .eq(
-                      'code',
-                      codeToUse
-                    )
-
-
-                if (voucherUpdateError) {
-
-                  console.error(
-                    'Failed to mark voucher redeemed:',
-                    voucherUpdateError.message
-                  )
-
-                }
-
-
-                // ── Update profile access display ──
-
-                await supabase
-                  .from('profiles')
-                  .update(
-                    {
-
-                      access_level:
-                        voucherData.access_type ||
-                        'voucher',
-
-                      school_program:
-                        schoolProgram ||
-                        voucherData.school_name ||
-                        null,
-
-                      expected_graduation_date:
-                        graduationDate ||
-                        null
-
-                    }
-                  )
-                  .eq(
-                    'id',
-                    userId
-                  )
-
-
-                // ── Organization membership ──
-
-                if (
-                  voucherData.organization_id
-                ) {
-
-                  const {
-                    error: membershipError
-                  } =
-                    await supabase
-                      .from('organization_members')
-                      .upsert(
-                        {
-
-                          organization_id:
-                            voucherData.organization_id,
-
-                          user_id:
-                            userId,
-
-                          role:
-                            'student',
-
-                          cohort:
-                            voucherData.school_id ||
-                            null
-
-                        },
-                        {
-                          onConflict:
-                            'organization_id,user_id'
-                        }
-                      )
-
-
-                  if (membershipError) {
-
-                    console.error(
-                      'Failed to create organization membership:',
-                      membershipError.message
-                    )
-
-                  }
-
-                }
+                errorMsg.style.display =
+                  'block'
 
               }
 
