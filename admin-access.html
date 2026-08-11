@@ -51,28 +51,7 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
 .member-list{margin-top:12px}
 @media(max-width:900px){.two,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
 :focus-visible{outline:3px solid var(--amber);outline-offset:3px}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <header>
@@ -151,12 +130,11 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
       <h2>Assign User</h2>
       <div class="sub">Find an existing PulmoLearn account and assign it to an organization/cohort. “Program Director / Instructor” is stored as <code>program_director</code> so it remains compatible with the existing PD dashboard.</div>
 
-      <label for="assignEmail">User email</label>
-      <div class="controls">
-        <input id="assignEmail" type="email" placeholder="person@example.com" style="flex:1;min-width:240px" />
-        <button id="findUserBtn" class="secondary">Find User</button>
-      </div>
-      <div id="foundUser" class="sub"></div>
+      <label for="assignUserSelect">Choose user</label>
+      <select id="assignUserSelect">
+        <option value="">Select a PulmoLearn user...</option>
+      </select>
+      <div id="foundUser" class="sub" style="margin-top:8px"></div>
 
       <div class="form-grid section">
         <div>
@@ -205,8 +183,10 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
     <div class="card">
       <h2>Administrator Management</h2>
       <div class="sub">Grant or remove PulmoLearn system administrator access for an existing account.</div>
-      <label for="adminEmail">User email</label>
-      <input id="adminEmail" type="email" placeholder="admin@example.com" />
+      <label for="adminUserSelect">Choose user</label>
+      <select id="adminUserSelect">
+        <option value="">Select a PulmoLearn user...</option>
+      </select>
       <div class="controls"><button id="grantAdminBtn">Grant Admin</button><button id="removeAdminBtn" class="danger">Remove Admin</button></div>
 
       <h3 class="section">Voucher Lookup</h3>
@@ -225,6 +205,7 @@ import { supabase } from "/assets/auth.js";
 
 let roster = [];
 let organizations = [];
+let users = [];
 let selectedUserId = null;
 const statusEl = document.getElementById("status");
 
@@ -283,10 +264,20 @@ function renderRoster(){
   }).join("") || `<tr><td colspan="9">No enrolled users found.</td></tr>`;
 }
 
-async function findUserByEmail(email){
-  const {data,error}=await supabase.rpc("admin_find_user",{p_email:email});
-  if(error) throw error;
-  return data?.[0]||null;
+async function loadUsers(){
+  const {data,error}=await supabase.rpc("admin_list_users");
+  if(error){showStatus("Could not load users: "+error.message);return}
+  users=data||[];
+
+  const options =
+    `<option value="">Select a PulmoLearn user...</option>` +
+    users.map(u=>{
+      const label = `${u.full_name || "Unnamed User"} — ${u.email || ""}`;
+      return `<option value="${esc(u.user_id)}">${esc(label)}</option>`;
+    }).join("");
+
+  document.getElementById("assignUserSelect").innerHTML=options;
+  document.getElementById("adminUserSelect").innerHTML=options;
 }
 
 document.getElementById("refreshRoster").onclick=loadRoster;
@@ -318,14 +309,13 @@ document.getElementById("loadOrgMembersBtn").onclick=async()=>{
     : "No members are assigned to this organization yet.";
 };
 
-document.getElementById("findUserBtn").onclick=async()=>{
-  clearStatus();
-  try{
-    const u=await findUserByEmail(document.getElementById("assignEmail").value.trim());
-    if(!u){selectedUserId=null;document.getElementById("foundUser").textContent="No user found.";return}
-    selectedUserId=u.user_id;
-    document.getElementById("foundUser").innerHTML=`<strong>${esc(u.full_name||"Unnamed")}</strong><br>${esc(u.email)}<br><code>${esc(u.user_id)}</code>`;
-  }catch(e){showStatus("User lookup failed: "+e.message)}
+document.getElementById("assignUserSelect").onchange=()=>{
+  const id=document.getElementById("assignUserSelect").value;
+  selectedUserId=id||null;
+  const u=users.find(x=>x.user_id===id);
+  document.getElementById("foundUser").innerHTML=u
+    ? `<strong>${esc(u.full_name||"Unnamed User")}</strong><br>${esc(u.email||"")}<br><span class="small">Current role: ${esc(u.current_role||"student")} · Access: ${esc(u.access_type||"none")}</span>`
+    : "";
 };
 
 document.getElementById("assignUserBtn").onclick=async()=>{
@@ -339,6 +329,7 @@ document.getElementById("assignUserBtn").onclick=async()=>{
   if(error){showStatus("Assignment failed: "+error.message);return}
   if(data?.ok===false){showStatus(data.message||"Assignment failed.");return}
   showStatus("User assignment updated.",true);
+  await loadUsers();
   await loadRoster();
 };
 
@@ -346,15 +337,16 @@ document.getElementById("grantAdminBtn").onclick=()=>setAdmin(true);
 document.getElementById("removeAdminBtn").onclick=()=>setAdmin(false);
 async function setAdmin(enabled){
   clearStatus();
-  try{
-    const u=await findUserByEmail(document.getElementById("adminEmail").value.trim());
-    if(!u){showStatus("No user found with that email.");return}
-    const {data,error}=await supabase.rpc("admin_set_admin",{p_user_id:u.user_id,p_enabled:enabled});
-    if(error){showStatus("Admin change failed: "+error.message);return}
-    if(data?.ok===false){showStatus(data.message||"Admin change failed.");return}
-    showStatus(enabled?"Administrator access granted.":"Administrator access removed.",true);
-    await loadRoster();
-  }catch(e){showStatus("Admin change failed: "+e.message)}
+  const userId=document.getElementById("adminUserSelect").value;
+  if(!userId){showStatus("Choose a user first.");return}
+
+  const {data,error}=await supabase.rpc("admin_set_admin",{p_user_id:userId,p_enabled:enabled});
+  if(error){showStatus("Admin change failed: "+error.message);return}
+  if(data?.ok===false){showStatus(data.message||"Admin change failed.");return}
+
+  showStatus(enabled?"Administrator access granted.":"Administrator access removed.",true);
+  await loadUsers();
+  await loadRoster();
 }
 
 document.getElementById("createVoucherBtn").onclick=async()=>{
@@ -390,78 +382,9 @@ document.getElementById("lookupVoucherBtn").onclick=async()=>{
 
 if(await verifyAdmin()){
   await loadOrganizations();
+  await loadUsers();
   await loadRoster();
 }
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
