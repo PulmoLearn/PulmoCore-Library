@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PulmoLearn | Access Management</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+:root{
+  --navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#128486;--mint:#DDF7F2;
+  --bg:#F4FAFC;--border:#D7E6EF;--text:#243B55;--white:#fff;
+  --amber:#F4B860;--danger:#8A1F1F;--danger-bg:#FDE9E9
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--navy)}
+header{background:var(--navy);color:#fff;padding:22px clamp(18px,4vw,52px);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{margin:0;font-size:clamp(1.45rem,3vw,2.2rem)}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.nav a{color:white;text-decoration:none;font-weight:700;background:rgba(255,255,255,.1);padding:10px 14px;border-radius:12px}
+main{padding:28px clamp(16px,4vw,52px);max-width:1600px;margin:auto}
+.grid{display:grid;gap:18px}
+.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 8px 20px rgba(11,31,51,.08)}
+h2,h3{margin-top:0}
+.sub{color:var(--text);font-size:.9rem;line-height:1.45}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+input,select,button{padding:10px 12px;border-radius:10px;border:1px solid var(--border);font:inherit}
+input,select{background:#fff;color:var(--navy)}
+button{background:var(--teal);color:#fff;font-weight:800;cursor:pointer;border:none}
+button:hover{background:var(--teal-dark)}
+button.secondary{background:#E5F0F6;color:var(--navy)}
+button.danger{background:#A23B3B}
+label{display:block;font-weight:700;font-size:.85rem;margin:10px 0 6px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.full{grid-column:1/-1}
+.status{padding:12px 14px;border-radius:10px;margin-bottom:16px;display:none}
+.status.ok{display:block;background:var(--mint);border:1px solid var(--teal)}
+.status.err{display:block;background:var(--danger-bg);border:1px solid #F2B5B5;color:var(--danger)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1000px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:#E5F0F6;position:sticky;top:0}
+.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:.78rem;font-weight:800}
+.good{background:var(--mint)}
+.warn{background:#FFF4DF;color:#7A4B00}
+.bad{background:var(--danger-bg);color:var(--danger)}
+.section{margin-top:18px}
+.small{font-size:.8rem}
+code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
+@media(max-width:900px){.two,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>PulmoLearn Access Management</h1>
+    <div style="opacity:.75">Enrollment roster, vouchers, roles, and organization assignments</div>
+  </div>
+  <nav class="nav" aria-label="Admin navigation">
+    <a href="/admin-dashboard.html">Analytics Dashboard</a>
+    <a href="/dashboard.html">Back to Dashboard</a>
+  </nav>
+</header>
+
+<main>
+  <div id="status" class="status"></div>
+
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap">
+      <div>
+        <h2>Enrolled Users</h2>
+        <div class="sub">Everyone with PulmoLearn access, even if they have not opened a lesson yet.</div>
+      </div>
+      <button id="refreshRoster">Refresh</button>
+    </div>
+
+    <div class="controls">
+      <input id="rosterSearch" type="search" placeholder="Search name, email, voucher, organization, cohort..." style="min-width:300px;flex:1" />
+      <select id="roleFilter">
+        <option value="">All roles</option>
+        <option value="admin">Admin</option>
+        <option value="program_director">Program Director</option>
+        <option value="student">Student</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th><th>Email</th><th>Access</th><th>Role</th><th>Voucher</th>
+            <th>Organization</th><th>Cohort</th><th>Redeemed</th><th>Membership</th>
+          </tr>
+        </thead>
+        <tbody id="rosterBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="grid two section">
+    <div class="card">
+      <h2>Create Voucher</h2>
+      <div class="sub">Creates one or more voucher records. Single-use is the default; enable reusable only for intentionally shared codes.</div>
+      <div class="form-grid">
+        <div><label for="voucherPrefix">Code prefix</label><input id="voucherPrefix" value="GFCMSU-2026" /></div>
+        <div><label for="voucherQuantity">Quantity</label><input id="voucherQuantity" type="number" min="1" max="200" value="1" /></div>
+        <div><label for="voucherType">Voucher type</label><select id="voucherType"><option value="student">Student</option><option value="program_director">Program Director</option></select></div>
+        <div><label for="voucherReusable">Use type</label><select id="voucherReusable"><option value="false">Single-use</option><option value="true">Reusable</option></select></div>
+        <div><label for="voucherOrg">Organization ID</label><input id="voucherOrg" placeholder="UUID (optional)" /></div>
+        <div><label for="voucherCohort">Cohort / school_id</label><input id="voucherCohort" placeholder="e.g. 2028" /></div>
+        <div><label for="voucherSchool">School name</label><input id="voucherSchool" placeholder="Great Falls College MSU" /></div>
+        <div><label for="voucherExpires">Expiration</label><input id="voucherExpires" type="datetime-local" /></div>
+        <div class="full"><button id="createVoucherBtn">Create Voucher(s)</button></div>
+      </div>
+      <div id="createdCodes" class="sub section"></div>
+    </div>
+
+    <div class="card">
+      <h2>Assign User</h2>
+      <div class="sub">Search by email, then assign access and an organization/cohort role.</div>
+      <label for="assignEmail">User email</label>
+      <div class="controls"><input id="assignEmail" type="email" placeholder="person@example.com" style="flex:1;min-width:240px" /><button id="findUserBtn" class="secondary">Find User</button></div>
+      <div id="foundUser" class="sub"></div>
+
+      <div class="form-grid section">
+        <div><label for="assignRole">Role</label><select id="assignRole"><option value="student">Student</option><option value="program_director">Program Director</option></select></div>
+        <div><label for="assignAccess">Access</label><select id="assignAccess"><option value="voucher">Voucher</option><option value="paid">Paid</option></select></div>
+        <div><label for="assignOrg">Organization ID</label><input id="assignOrg" placeholder="UUID (optional)" /></div>
+        <div><label for="assignCohort">Cohort</label><input id="assignCohort" placeholder="e.g. 2028" /></div>
+        <div class="full"><button id="assignUserBtn">Apply Assignment</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Administrator Management</h2>
+      <div class="sub">Grant or remove system administrator access for an existing PulmoLearn account.</div>
+      <label for="adminEmail">User email</label>
+      <input id="adminEmail" type="email" placeholder="admin@example.com" />
+      <div class="controls"><button id="grantAdminBtn">Grant Admin</button><button id="removeAdminBtn" class="danger">Remove Admin</button></div>
+    </div>
+
+    <div class="card">
+      <h2>Voucher Lookup</h2>
+      <div class="sub">Review a code without redeeming it.</div>
+      <label for="lookupVoucher">Voucher code</label>
+      <div class="controls"><input id="lookupVoucher" placeholder="ENTER CODE" style="flex:1;min-width:220px;text-transform:uppercase" /><button id="lookupVoucherBtn" class="secondary">Lookup</button></div>
+      <div id="voucherLookupResult" class="sub"></div>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import { supabase } from "/assets/auth.js";
+let roster = [];
+let selectedUserId = null;
+const statusEl = document.getElementById("status");
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function showStatus(msg,ok=false){statusEl.textContent=msg;statusEl.className=`status ${ok?"ok":"err"}`}
+function clearStatus(){statusEl.textContent="";statusEl.className="status"}
+function dt(v){return v?new Date(v).toLocaleString():"—"}
+
+async function verifyAdmin(){
+  const {data:{user}}=await supabase.auth.getUser();
+  if(!user){location.href="/login.html";return false}
+  const {data,error}=await supabase.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
+  if(error||!data){showStatus("This account is not authorized for Access Management.");return false}
+  return true
+}
+async function loadRoster(){
+  clearStatus();
+  const {data,error}=await supabase.rpc("admin_list_enrollments");
+  if(error){showStatus("Could not load enrollment roster: "+error.message);return}
+  roster=data||[]; renderRoster();
+}
+function renderRoster(){
+  const q=document.getElementById("rosterSearch").value.toLowerCase().trim();
+  const rf=document.getElementById("roleFilter").value;
+  const rows=roster.filter(r=>{
+    const role=r.is_admin?"admin":(r.organization_role||r.profile_role||"student");
+    const hay=[r.full_name,r.email,r.voucher_code,r.school_name,r.organization_id,r.cohort,role].join(" ").toLowerCase();
+    return (!q||hay.includes(q))&&(!rf||role===rf);
+  });
+  document.getElementById("rosterBody").innerHTML=rows.map(r=>{
+    const role=r.is_admin?"admin":(r.organization_role||r.profile_role||"student");
+    const membership=r.organization_id ? (r.organization_role?'<span class="badge good">Assigned</span>':'<span class="badge bad">Missing</span>') : '<span class="badge warn">None</span>';
+    return `<tr><td><strong>${esc(r.full_name||"Unknown User")}</strong></td><td>${esc(r.email||"")}</td><td>${esc(r.access_type||"")}</td><td>${esc(role)}</td><td>${esc(r.voucher_code||"—")}</td><td><span class="small">${esc(r.school_name||r.organization_id||"—")}</span></td><td>${esc(r.cohort||"—")}</td><td>${dt(r.redeemed_at)}</td><td>${membership}</td></tr>`;
+  }).join("") || `<tr><td colspan="9">No enrolled users found.</td></tr>`;
+}
+async function findUserByEmail(email){
+  const {data,error}=await supabase.rpc("admin_find_user",{p_email:email});
+  if(error) throw error;
+  return data?.[0]||null;
+}
+
+document.getElementById("refreshRoster").onclick=loadRoster;
+document.getElementById("rosterSearch").oninput=renderRoster;
+document.getElementById("roleFilter").onchange=renderRoster;
+
+document.getElementById("findUserBtn").onclick=async()=>{
+  clearStatus();
+  try{
+    const u=await findUserByEmail(document.getElementById("assignEmail").value.trim());
+    if(!u){selectedUserId=null;document.getElementById("foundUser").textContent="No user found.";return}
+    selectedUserId=u.user_id;
+    document.getElementById("foundUser").innerHTML=`<strong>${esc(u.full_name||"Unnamed")}</strong><br>${esc(u.email)}<br><code>${esc(u.user_id)}</code>`;
+  }catch(e){showStatus("User lookup failed: "+e.message)}
+};
+
+document.getElementById("assignUserBtn").onclick=async()=>{
+  clearStatus();
+  if(!selectedUserId){showStatus("Find the user by email first.");return}
+  const org=document.getElementById("assignOrg").value.trim()||null;
+  const cohort=document.getElementById("assignCohort").value.trim()||null;
+  const role=document.getElementById("assignRole").value;
+  const access=document.getElementById("assignAccess").value;
+  const {data,error}=await supabase.rpc("admin_assign_user",{p_user_id:selectedUserId,p_access_type:access,p_role:role,p_organization_id:org,p_cohort:cohort});
+  if(error){showStatus("Assignment failed: "+error.message);return}
+  if(data?.ok===false){showStatus(data.message||"Assignment failed.");return}
+  showStatus("User assignment updated.",true); await loadRoster();
+};
+
+document.getElementById("grantAdminBtn").onclick=()=>setAdmin(true);
+document.getElementById("removeAdminBtn").onclick=()=>setAdmin(false);
+async function setAdmin(enabled){
+  clearStatus();
+  try{
+    const u=await findUserByEmail(document.getElementById("adminEmail").value.trim());
+    if(!u){showStatus("No user found with that email.");return}
+    const {data,error}=await supabase.rpc("admin_set_admin",{p_user_id:u.user_id,p_enabled:enabled});
+    if(error){showStatus("Admin change failed: "+error.message);return}
+    if(data?.ok===false){showStatus(data.message||"Admin change failed.");return}
+    showStatus(enabled?"Administrator access granted.":"Administrator access removed.",true); await loadRoster();
+  }catch(e){showStatus("Admin change failed: "+e.message)}
+}
+
+document.getElementById("createVoucherBtn").onclick=async()=>{
+  clearStatus();
+  const prefix=document.getElementById("voucherPrefix").value.trim().toUpperCase();
+  const quantity=Number(document.getElementById("voucherQuantity").value||1);
+  const type=document.getElementById("voucherType").value;
+  const multi=document.getElementById("voucherReusable").value==="true";
+  const org=document.getElementById("voucherOrg").value.trim()||null;
+  const cohort=document.getElementById("voucherCohort").value.trim()||null;
+  const school=document.getElementById("voucherSchool").value.trim()||null;
+  const expRaw=document.getElementById("voucherExpires").value;
+  const expires=expRaw?new Date(expRaw).toISOString():null;
+  const {data,error}=await supabase.rpc("admin_create_vouchers",{p_prefix:prefix,p_quantity:quantity,p_voucher_type:type,p_multi_use:multi,p_organization_id:org,p_school_id:cohort,p_school_name:school,p_expires_at:expires});
+  if(error){showStatus("Voucher creation failed: "+error.message);return}
+  const codes=(data||[]).map(r=>r.code);
+  document.getElementById("createdCodes").innerHTML=codes.length?`<strong>Created:</strong><br><code>${codes.map(esc).join("</code><br><code>")}</code>`:"No codes returned.";
+  showStatus(`${codes.length} voucher${codes.length===1?"":"s"} created.`,true);
+};
+
+document.getElementById("lookupVoucherBtn").onclick=async()=>{
+  clearStatus();
+  const code=document.getElementById("lookupVoucher").value.trim().toUpperCase();
+  const {data,error}=await supabase.rpc("admin_lookup_voucher",{p_code:code});
+  if(error){showStatus("Voucher lookup failed: "+error.message);return}
+  const v=data?.[0];
+  document.getElementById("voucherLookupResult").innerHTML=v?`<strong>${esc(v.code)}</strong><br>Active: ${esc(v.active)} · Reusable: ${esc(v.multi_use)} · Type: ${esc(v.access_type||"")}<br>Redeemed by: ${esc(v.redeemed_by||"—")}<br>Redeemed at: ${dt(v.redeemed_at)}<br>Expires: ${dt(v.expires_at)}`:"Voucher not found.";
+};
+
+if(await verifyAdmin()) await loadRoster();
+</script>
+</body>
+</html>
