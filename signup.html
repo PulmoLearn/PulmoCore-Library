@@ -525,6 +525,14 @@
       aria-live="polite"
     ></div>
 
+    <p
+      class="field-note"
+      id="redeemModeNote"
+      style="display:none;"
+    >
+      Your account already exists. Enter your voucher below to activate access; you do not need to create another account.
+    </p>
+
     <div
       class="lti-voucher-note"
       id="ltiVoucherNote"
@@ -920,6 +928,10 @@
     }
 
 
+    // Tracks a signed-in learner who has an account but no active entitlement.
+    // This allows them to redeem a voucher without trying to create the account again.
+    let existingNoAccessSession = null
+
     // ─────────────────────────────────────────────────────────────────
     // ALREADY LOGGED IN
     // ─────────────────────────────────────────────────────────────────
@@ -931,60 +943,112 @@
 
     if (session) {
 
-      const handled =
-        await handleLtiLinkIfPresent()
+      const { data: adminUser } =
+        await supabase
+          .from('admin_users')
+          .select('user_id')
+          .eq('user_id', session.user.id)
+          .maybeSingle()
 
 
-      if (!handled) {
+      if (adminUser) {
 
-        const { data: adminUser } =
+        const handled =
+          await handleLtiLinkIfPresent()
+
+        if (!handled) {
+          window.location.href = '/dashboard.html'
+        }
+
+      } else {
+
+        const { data: access } =
           await supabase
-            .from('admin_users')
+            .from('user_access')
             .select('user_id')
-            .eq(
-              'user_id',
-              session.user.id
-            )
+            .eq('user_id', session.user.id)
             .maybeSingle()
 
 
-        if (adminUser) {
+        if (access) {
 
-          window.location.href =
-            '/dashboard.html'
+          const handled =
+            await handleLtiLinkIfPresent()
+
+          if (!handled) {
+            window.location.href =
+              getPostSignupRedirect()
+          }
 
         } else {
 
-          const { data: access } =
-            await supabase
-              .from('user_access')
-              .select('user_id')
-              .eq(
-                'user_id',
-                session.user.id
-              )
-              .maybeSingle()
+          // IMPORTANT:
+          // Do NOT send an authenticated no-access learner to payment.
+          // They may be here specifically to activate a bookstore/PD voucher.
+          existingNoAccessSession = session
 
+          console.log(
+            'PulmoLearn: authenticated user has no active access; voucher redemption mode enabled.'
+          )
 
-          if (access) {
+          const subtitle =
+            document.getElementById('subtitle')
 
-            window.location.href =
-              getPostSignupRedirect()
+          if (subtitle) {
+            subtitle.textContent =
+              'Activate your voucher to finish setting up access'
+          }
 
-          } else if (isLtiLaunch) {
+          const emailInput =
+            document.getElementById('email')
 
-            // Canvas user is authenticated but does not have active access.
-            // Stay on signup so they can redeem a bookstore voucher.
+          if (emailInput) {
+            emailInput.value =
+              session.user.email || ''
+            emailInput.readOnly = true
+          }
 
-            console.log(
-              'PulmoLearn: LTI user is authenticated but has no active access.'
-            )
+          const nameInput =
+            document.getElementById('fullName')
 
-          } else {
+          if (nameInput) {
+            nameInput.value =
+              session.user.user_metadata?.full_name || ''
+            nameInput.readOnly = true
+          }
 
-            window.location.href =
-              '/payment.html'
+          const passwordInput =
+            document.getElementById('password')
 
+          if (passwordInput) {
+            passwordInput.value = ''
+            passwordInput.disabled = true
+            passwordInput.placeholder =
+              'Already signed in'
+          }
+
+          const btn =
+            document.getElementById('signupBtn')
+
+          if (btn) {
+            btn.textContent =
+              'Activate Voucher'
+          }
+
+          const redeemModeNote =
+            document.getElementById('redeemModeNote')
+
+          if (redeemModeNote) {
+            redeemModeNote.style.display =
+              'block'
+          }
+
+          const voucherOptional =
+            document.getElementById('voucherOptional')
+
+          if (voucherOptional) {
+            voucherOptional.style.display =
+              'none'
           }
 
         }
@@ -1205,12 +1269,19 @@
             ''
 
 
-          // ── Required account fields ──
+          // ── Account / voucher validation ──
+
+          const redemptionOnly =
+            Boolean(existingNoAccessSession)
+
 
           if (
-            !fullName ||
-            !email ||
-            !password
+            !redemptionOnly &&
+            (
+              !fullName ||
+              !email ||
+              !password
+            )
           ) {
 
             errorMsg.textContent =
@@ -1225,6 +1296,7 @@
 
 
           if (
+            !redemptionOnly &&
             password.length < 8
           ) {
 
@@ -1239,7 +1311,21 @@
           }
 
 
-          // ── Canvas signup requires bookstore voucher ──
+          if (
+            redemptionOnly &&
+            !voucherInput
+          ) {
+
+            errorMsg.textContent =
+              'Enter your bookstore or program voucher code to activate access.'
+
+            errorMsg.style.display =
+              'block'
+
+            return
+
+          }
+
 
           if (
             isLtiLaunch &&
@@ -1257,14 +1343,15 @@
           }
 
 
+          // If a voucher was entered, require the live validator to approve it
+          // before creating/redeeming anything.
           if (
-            isLtiLaunch &&
             voucherInput &&
-            !validVoucher
+            validVoucher !== voucherInput
           ) {
 
             errorMsg.textContent =
-              'Please enter a valid, unused bookstore voucher code before creating your account.'
+              'Please enter a valid, unused voucher code before continuing.'
 
             errorMsg.style.display =
               'block'
@@ -1279,78 +1366,186 @@
 
 
           btn.textContent =
-            'Creating account...'
+            redemptionOnly
+              ? 'Activating voucher...'
+              : 'Creating account...'
 
 
           try {
 
-            // ─────────────────────────────────────────────────────────
-            // CREATE SUPABASE AUTH USER
-            // ─────────────────────────────────────────────────────────
+            let user = null
+            let userId = null
 
-            const {
-              data: authData,
-              error: authError
-            } =
-              await supabase.auth.signUp(
-                {
 
-                  email,
+            if (redemptionOnly) {
 
-                  password,
+              // The learner is already authenticated. Reuse that session
+              // instead of calling signUp() again.
+              user =
+                existingNoAccessSession.user
 
-                  options: {
+              userId =
+                user?.id
 
-                    data: {
+            } else {
 
-                      full_name:
-                        fullName,
+              // ───────────────────────────────────────────────────────
+              // CREATE SUPABASE AUTH USER
+              // ───────────────────────────────────────────────────────
 
-                      school_program:
-                        schoolProgram || null,
+              const {
+                data: authData,
+                error: authError
+              } =
+                await supabase.auth.signUp(
+                  {
 
-                      expected_graduation_date:
-                        graduationDate || null
+                    email,
+
+                    password,
+
+                    options: {
+
+                      data: {
+
+                        full_name:
+                          fullName,
+
+                        school_program:
+                          schoolProgram || null,
+
+                        expected_graduation_date:
+                          graduationDate || null
+
+                      }
 
                     }
 
                   }
+                )
+
+
+              if (authError) {
+
+                errorMsg.textContent =
+                  authError.message
+
+                errorMsg.style.display =
+                  'block'
+
+                btn.disabled =
+                  false
+
+                btn.textContent =
+                  'Create Account'
+
+                return
+
+              }
+
+
+              user =
+                authData.user
+
+
+              if (!user?.id) {
+
+                errorMsg.textContent =
+                  'Your account could not be created. Please try again.'
+
+                errorMsg.style.display =
+                  'block'
+
+                btn.disabled =
+                  false
+
+                btn.textContent =
+                  'Create Account'
+
+                return
+
+              }
+
+
+              // redeem_voucher() uses auth.uid(). Supabase signUp can create
+              // a user without immediately returning a usable session.
+              // Ensure an authenticated session exists before calling the RPC.
+              let activeSession =
+                authData.session
+
+
+              if (!activeSession) {
+
+                const {
+                  data: signInData,
+                  error: signInError
+                } =
+                  await supabase.auth.signInWithPassword(
+                    {
+                      email,
+                      password
+                    }
+                  )
+
+
+                if (
+                  signInError ||
+                  !signInData?.session
+                ) {
+
+                  console.error(
+                    'Account created but session could not be established:',
+                    signInError?.message
+                  )
+
+                  errorMsg.textContent =
+                    'Your account was created, but we could not finish voucher activation. Please sign in with the account you just created; you will be returned here to activate your voucher.'
+
+                  errorMsg.style.display =
+                    'block'
+
+                  btn.disabled =
+                    false
+
+                  btn.textContent =
+                    'Create Account'
+
+                  return
 
                 }
+
+
+                activeSession =
+                  signInData.session
+
+                user =
+                  signInData.user || user
+
+              }
+
+
+              userId =
+                user?.id
+
+
+              // ───────────────────────────────────────────────────────
+              // CREATE / UPDATE PROFILE
+              // ───────────────────────────────────────────────────────
+
+              await createOrUpdateProfile(
+                user,
+                fullName,
+                schoolProgram,
+                graduationDate
               )
 
-
-            if (authError) {
-
-              errorMsg.textContent =
-                authError.message
-
-              errorMsg.style.display =
-                'block'
-
-              btn.disabled =
-                false
-
-              btn.textContent =
-                'Create Account'
-
-              return
-
             }
-
-
-            const user =
-              authData.user
-
-
-            const userId =
-              user?.id
 
 
             if (!userId) {
 
               errorMsg.textContent =
-                'Your account could not be created. Please try again.'
+                'Unable to identify your signed-in account. Please sign in again.'
 
               errorMsg.style.display =
                 'block'
@@ -1359,23 +1554,13 @@
                 false
 
               btn.textContent =
-                'Create Account'
+                redemptionOnly
+                  ? 'Activate Voucher'
+                  : 'Create Account'
 
               return
 
             }
-
-
-            // ─────────────────────────────────────────────────────────
-            // CREATE PROFILE
-            // ─────────────────────────────────────────────────────────
-
-            await createOrUpdateProfile(
-              user,
-              fullName,
-              schoolProgram,
-              graduationDate
-            )
 
 
             // ─────────────────────────────────────────────────────────
@@ -1413,8 +1598,25 @@
 
                 console.error(
                   'Voucher redemption service failed:',
-                  redemptionError.message
+                  redemptionError
                 )
+
+                errorMsg.textContent =
+                  'Voucher activation failed: ' +
+                  redemptionError.message
+
+                errorMsg.style.display =
+                  'block'
+
+                btn.disabled =
+                  false
+
+                btn.textContent =
+                  redemptionOnly
+                    ? 'Activate Voucher'
+                    : 'Create Account'
+
+                return
 
               } else if (redemptionResult?.ok) {
 
@@ -1435,10 +1637,20 @@
 
                 errorMsg.textContent =
                   redemptionResult?.message ||
-                  'Your account was created, but the voucher could not be redeemed. Please contact support before purchasing access.'
+                  'Voucher activation could not be completed. Your code has not been intentionally redirected to payment.'
 
                 errorMsg.style.display =
                   'block'
+
+                btn.disabled =
+                  false
+
+                btn.textContent =
+                  redemptionOnly
+                    ? 'Activate Voucher'
+                    : 'Create Account'
+
+                return
 
               }
 
@@ -1518,6 +1730,24 @@
 
               window.location.href =
                 '/dashboard.html'
+
+            } else if (codeToUse) {
+
+              errorMsg.textContent =
+                'Voucher access was not activated. Please try again or contact support. You will not be redirected to payment.'
+
+              errorMsg.style.display =
+                'block'
+
+              btn.disabled =
+                false
+
+              btn.textContent =
+                redemptionOnly
+                  ? 'Activate Voucher'
+                  : 'Create Account'
+
+              return
 
             } else {
 
