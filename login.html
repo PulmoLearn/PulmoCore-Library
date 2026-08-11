@@ -417,6 +417,85 @@
       return '/dashboard.html'
     }
 
+
+    // ─────────────────────────────────────────────────────────────────
+    // ACCESS-AWARE ROUTING
+    // ─────────────────────────────────────────────────────────────────
+
+    function buildVoucherActivationUrl() {
+      const nextParams = new URLSearchParams()
+      nextParams.set('redeem', '1')
+
+      if (ltiToken) {
+        nextParams.set('lti_token', ltiToken)
+      }
+
+      if (lessonId) {
+        nextParams.set('lesson', lessonId)
+      }
+
+      if (isLtiLaunch) {
+        nextParams.set('lti', '1')
+      }
+
+      return `/signup.html?${nextParams.toString()}`
+    }
+
+
+    async function routeAuthenticatedUser(session) {
+      if (!session?.user?.id) {
+        return false
+      }
+
+      const userId = session.user.id
+
+      const { data: adminUser } =
+        await supabase
+          .from('admin_users')
+          .select('user_id')
+          .eq('user_id', userId)
+          .maybeSingle()
+
+      if (adminUser) {
+        const handled =
+          await handleLtiLinkIfPresent()
+
+        if (!handled) {
+          window.location.href =
+            getPostLoginRedirect()
+        }
+
+        return true
+      }
+
+      const { data: access } =
+        await supabase
+          .from('user_access')
+          .select('user_id')
+          .eq('user_id', userId)
+          .maybeSingle()
+
+      if (access) {
+        const handled =
+          await handleLtiLinkIfPresent()
+
+        if (!handled) {
+          window.location.href =
+            getPostLoginRedirect()
+        }
+
+        return true
+      }
+
+      // Account exists but has no entitlement yet.
+      // Give voucher users a recovery path instead of bouncing them
+      // through dashboard/payment.
+      window.location.href =
+        buildVoucherActivationUrl()
+
+      return true
+    }
+
     // ─────────────────────────────────────────────────────────────────
     // EXISTING LTI ACCOUNT-LINK FLOW
     // ─────────────────────────────────────────────────────────────────
@@ -492,18 +571,9 @@
         'PulmoLearn: Existing authenticated session detected.'
       )
 
-      const handled = await handleLtiLinkIfPresent()
-
-      if (!handled) {
-        const redirect = getPostLoginRedirect()
-
-        console.log(
-          'PulmoLearn: Existing session redirect:',
-          redirect
-        )
-
-        window.location.href = redirect
-      }
+      await routeAuthenticatedUser(
+        existingSession
+      )
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -597,25 +667,15 @@
           'PulmoLearn: Sign in successful.'
         )
 
-        // Preserve your existing account-linking workflow.
-        const handled =
-          await handleLtiLinkIfPresent()
-
-        if (handled) {
-          return
-        }
-
-        // Canvas → selected assignment lesson
-        // Website → dashboard
-        const redirect =
-          getPostLoginRedirect()
-
-        console.log(
-          'PulmoLearn: Redirecting after login:',
-          redirect
+        // Route based on whether this authenticated account
+        // actually has PulmoLearn access. Accounts created during a
+        // failed voucher attempt are sent to voucher activation instead
+        // of dashboard/payment.
+        await routeAuthenticatedUser(
+          data.session
         )
 
-        window.location.href = redirect
+        return
 
       } catch (err) {
         console.error(
