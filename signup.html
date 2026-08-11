@@ -1081,35 +1081,34 @@
 
 
           const { data, error } =
-            await supabase
-              .from('vouchers')
-              .select('code')
-              .eq(
-                'code',
-                code
-              )
-              .eq(
-                'active',
-                true
-              )
-              .is(
-                'redeemed_by',
-                null
-              )
-              .maybeSingle()
+            await supabase.rpc(
+              'validate_voucher',
+              { p_code: code }
+            )
 
 
           if (error) {
 
             console.error(
-              'Voucher lookup failed:',
+              'Voucher validation service failed:',
               error.message
             )
+
+            feedback.textContent =
+              'Unable to verify this code right now. Please try again.'
+
+            feedback.className =
+              'voucher-feedback invalid'
+
+            validVoucher =
+              null
+
+            return
 
           }
 
 
-          if (data) {
+          if (data === true) {
 
             feedback.textContent =
               '✓ Valid code — access will be applied'
