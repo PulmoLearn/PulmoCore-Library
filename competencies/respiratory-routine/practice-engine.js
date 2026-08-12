@@ -416,6 +416,9 @@
   $$('.nav-step').forEach(b=>b.onclick=()=>{const target=Number(b.dataset.section);if(target===0||target<=state.section)showSection(target);});
 
   applyPatientToPage();
+  initMeasureTools();
+  initAuscultationTool();
+  $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(0);
-  console.info('PulmoLearn Respiratory Routine practice engine v2.0 — Patient 2 supported COPD/oxygen context added');
+  console.info('PulmoLearn Respiratory Routine practice engine v2.0.1 — restored tool and inspection event bindings');
 })();
