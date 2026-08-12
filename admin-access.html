@@ -49,30 +49,17 @@ th{background:#E5F0F6}
 code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
 .org-card{border-left:5px solid var(--teal)}
 .member-list{margin-top:12px}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(11,31,51,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;width:100%;max-width:620px;border-radius:18px;padding:24px;box-shadow:0 24px 64px rgba(0,0,0,.28);max-height:90vh;overflow:auto}
+.modal h2{margin-top:0}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;flex-wrap:wrap}
+.notice{background:#FFF4DF;border:1px solid #F4B860;border-radius:10px;padding:10px 12px;font-size:.86rem;line-height:1.45;margin-top:12px}
+
 @media(max-width:900px){.two,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
 :focus-visible{outline:3px solid var(--amber);outline-offset:3px}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <header>
@@ -110,7 +97,7 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
       <table>
         <thead><tr>
           <th>Name</th><th>Email</th><th>Access</th><th>Role</th><th>Voucher</th>
-          <th>Organization</th><th>Cohort</th><th>Redeemed</th><th>Membership</th>
+          <th>Organization</th><th>Cohort</th><th>Redeemed</th><th>Membership</th><th>Actions</th>
         </tr></thead>
         <tbody id="rosterBody"></tbody>
       </table>
@@ -148,43 +135,6 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
     </div>
 
     <div class="card">
-      <h2>Assign User</h2>
-      <div class="sub">Find an existing PulmoLearn account and assign it to an organization/cohort. “Program Director / Instructor” is stored as <code>program_director</code> so it remains compatible with the existing PD dashboard.</div>
-
-      <label for="assignUserSelect">Choose user</label>
-      <select id="assignUserSelect">
-        <option value="">Select a PulmoLearn user...</option>
-      </select>
-      <div id="foundUser" class="sub" style="margin-top:8px"></div>
-
-      <div class="form-grid section">
-        <div>
-          <label for="assignRole">Role</label>
-          <select id="assignRole">
-            <option value="student">Student</option>
-            <option value="program_director">Program Director / Instructor</option>
-          </select>
-        </div>
-        <div>
-          <label for="assignAccess">Access</label>
-          <select id="assignAccess">
-            <option value="voucher">Voucher / Sponsored Access</option>
-            <option value="paid">Paid</option>
-          </select>
-        </div>
-        <div>
-          <label for="assignOrg">Organization</label>
-          <select id="assignOrg"></select>
-        </div>
-        <div>
-          <label for="assignCohort">Cohort</label>
-          <input id="assignCohort" placeholder="e.g. 2028" />
-        </div>
-        <div class="full"><button id="assignUserBtn">Apply Assignment</button></div>
-      </div>
-    </div>
-
-    <div class="card">
       <h2>Create Voucher</h2>
       <div class="sub">Single-use is the default. Use reusable only for deliberately shared codes such as demo or PD access.</div>
       <div class="form-grid">
@@ -202,15 +152,8 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
     </div>
 
     <div class="card">
-      <h2>Administrator Management</h2>
-      <div class="sub">Grant or remove PulmoLearn system administrator access for an existing account.</div>
-      <label for="adminUserSelect">Choose user</label>
-      <select id="adminUserSelect">
-        <option value="">Select a PulmoLearn user...</option>
-      </select>
-      <div class="controls"><button id="grantAdminBtn">Grant Admin</button><button id="removeAdminBtn" class="danger">Remove Admin</button></div>
-
-      <h3 class="section">Voucher Lookup</h3>
+      <h2>Voucher Lookup</h2>
+      <div class="sub">Review a code without redeeming it.</div>
       <label for="lookupVoucher">Voucher code</label>
       <div class="controls">
         <input id="lookupVoucher" placeholder="ENTER CODE" style="flex:1;min-width:220px;text-transform:uppercase" />
@@ -221,13 +164,82 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
   </section>
 </main>
 
+
+<div class="modal-backdrop" id="editModalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <h2 id="editModalTitle">Edit User Enrollment</h2>
+    <div class="sub" id="editUserIdentity"></div>
+
+    <div class="form-grid section">
+      <div>
+        <label for="editRole">Role</label>
+        <select id="editRole">
+          <option value="student">Student</option>
+          <option value="program_director">Program Director / Instructor</option>
+          <option value="admin">Administrator</option>
+        </select>
+      </div>
+      <div>
+        <label for="editAccess">Access</label>
+        <select id="editAccess">
+          <option value="voucher">Voucher / Sponsored Access</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+      <div>
+        <label for="editOrg">Organization</label>
+        <select id="editOrg"></select>
+      </div>
+      <div>
+        <label for="editCohort">Cohort</label>
+        <input id="editCohort" placeholder="e.g. 2028" />
+      </div>
+    </div>
+
+    <div class="notice">
+      <strong>Program Director / Instructor</strong> grants the organization-level role used for the Program Dashboard.
+      <strong>Administrator</strong> grants system-wide admin access. Organization and cohort are not required for administrators.
+    </div>
+
+    <div class="modal-actions">
+      <button id="cancelEditBtn" class="secondary">Cancel</button>
+      <button id="saveEditBtn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="removeModalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="removeModalTitle">
+    <h2 id="removeModalTitle">Remove Enrollment</h2>
+    <div class="sub" id="removeUserIdentity"></div>
+
+    <div class="section">
+      <label style="display:flex;gap:8px;align-items:flex-start;font-weight:700">
+        <input type="radio" name="removeMode" value="access_only" checked style="width:auto;margin-top:3px">
+        <span>Remove access only<br><span class="sub">Keeps the organization/cohort assignment.</span></span>
+      </label>
+      <label style="display:flex;gap:8px;align-items:flex-start;font-weight:700">
+        <input type="radio" name="removeMode" value="access_and_org" style="width:auto;margin-top:3px">
+        <span>Remove access + organization assignment<br><span class="sub">Removes both PulmoLearn enrollment and organization/cohort membership.</span></span>
+      </label>
+    </div>
+
+    <div class="notice">
+      The Supabase Auth account, profile, lesson progress, and activity history are retained.
+    </div>
+
+    <div class="modal-actions">
+      <button id="cancelRemoveBtn" class="secondary">Cancel</button>
+      <button id="confirmRemoveBtn" class="danger">Confirm Removal</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { supabase } from "/assets/auth.js";
 
 let roster = [];
 let organizations = [];
-let users = [];
-let selectedUserId = null;
 const statusEl = document.getElementById("status");
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
@@ -254,7 +266,7 @@ async function loadOrganizations(){
 
 async function loadRoster(){
   clearStatus();
-  const {data,error}=await supabase.rpc("admin_list_enrollments_v2");
+  const {data,error}=await supabase.rpc("admin_list_enrollments_v4");
   if(error){showStatus("Could not load enrollment roster: "+error.message);return}
   roster=data||[];
   renderRoster();
@@ -274,47 +286,23 @@ function renderRoster(){
     return `<tr>
       <td><strong>${esc(r.full_name||"Unknown User")}</strong></td>
       <td>${esc(r.email||"")}</td>
-      <td>${esc(r.access_type||"")}</td>
+      <td>${esc(r.access_type||"none")}</td>
       <td>${esc(role)}</td>
       <td>${esc(r.voucher_code||"—")}</td>
       <td>${esc(r.organization_name||"—")}</td>
       <td>${esc(r.cohort||"—")}</td>
       <td>${dt(r.redeemed_at)}</td>
       <td>${membership}</td>
+      <td>
+        <div class="controls" style="margin:0;gap:6px;flex-wrap:nowrap">
+          <button class="secondary edit-user-btn" data-user-id="${esc(r.user_id)}">Edit</button>
+          <button class="danger remove-user-btn" data-user-id="${esc(r.user_id)}">Remove</button>
+        </div>
+      </td>
     </tr>`;
-  }).join("") || `<tr><td colspan="9">No enrolled users found.</td></tr>`;
+  }).join("") || `<tr><td colspan="10">No enrolled users found.</td></tr>`;
 }
 
-async function loadUsers(){
-  const {data,error}=await supabase.rpc("admin_list_users");
-  if(error){showStatus("Could not load users: "+error.message);return}
-  users=data||[];
-
-  const makeLabel = u =>
-    `${u.full_name || "Unnamed User"} — ${u.email || ""}`;
-
-  const unassigned = users.filter(u => !u.is_assigned);
-
-  const assignmentOptions =
-    `<option value="">Select a PulmoLearn user...</option>` +
-    (unassigned.length
-      ? `<optgroup label="Unassigned Users">${unassigned.map(u =>
-          `<option value="${esc(u.user_id)}">${esc(makeLabel(u))}</option>`
-        ).join("")}</optgroup>`
-      : "") +
-    `<optgroup label="All Users">${users.map(u =>
-      `<option value="${esc(u.user_id)}">${esc(makeLabel(u))}</option>`
-    ).join("")}</optgroup>`;
-
-  const adminOptions =
-    `<option value="">Select a PulmoLearn user...</option>` +
-    users.map(u =>
-      `<option value="${esc(u.user_id)}">${esc(makeLabel(u))}</option>`
-    ).join("");
-
-  document.getElementById("assignUserSelect").innerHTML=assignmentOptions;
-  document.getElementById("adminUserSelect").innerHTML=adminOptions;
-}
 
 document.getElementById("refreshRoster").onclick=loadRoster;
 document.getElementById("rosterSearch").oninput=renderRoster;
@@ -345,45 +333,106 @@ document.getElementById("loadOrgMembersBtn").onclick=async()=>{
     : "No members are assigned to this organization yet.";
 };
 
-document.getElementById("assignUserSelect").onchange=()=>{
-  const id=document.getElementById("assignUserSelect").value;
-  selectedUserId=id||null;
-  const u=users.find(x=>x.user_id===id);
-  document.getElementById("foundUser").innerHTML=u
-    ? `<strong>${esc(u.full_name||"Unnamed User")}</strong><br>${esc(u.email||"")}<br><span class="small">Current role: ${esc(u.role_name||"student")} · Access: ${esc(u.access_type||"none")} · ${u.is_assigned ? "Assigned to organization" : "Unassigned"}</span>`
-    : "";
-};
 
-document.getElementById("assignUserBtn").onclick=async()=>{
-  clearStatus();
-  if(!selectedUserId){showStatus("Find the user by email first.");return}
-  const org=document.getElementById("assignOrg").value||null;
-  const cohort=document.getElementById("assignCohort").value.trim()||null;
-  const role=document.getElementById("assignRole").value;
-  const access=document.getElementById("assignAccess").value;
-  const {data,error}=await supabase.rpc("admin_assign_user",{p_user_id:selectedUserId,p_access_type:access,p_role:role,p_organization_id:org,p_cohort:cohort});
-  if(error){showStatus("Assignment failed: "+error.message);return}
-  if(data?.ok===false){showStatus(data.message||"Assignment failed.");return}
-  showStatus("User assignment updated.",true);
-  await loadUsers();
-  await loadRoster();
-};
 
-document.getElementById("grantAdminBtn").onclick=()=>setAdmin(true);
-document.getElementById("removeAdminBtn").onclick=()=>setAdmin(false);
-async function setAdmin(enabled){
-  clearStatus();
-  const userId=document.getElementById("adminUserSelect").value;
-  if(!userId){showStatus("Choose a user first.");return}
+let activeEditUserId = null;
+let activeRemoveUserId = null;
 
-  const {data,error}=await supabase.rpc("admin_set_admin",{p_user_id:userId,p_enabled:enabled});
-  if(error){showStatus("Admin change failed: "+error.message);return}
-  if(data?.ok===false){showStatus(data.message||"Admin change failed.");return}
-
-  showStatus(enabled?"Administrator access granted.":"Administrator access removed.",true);
-  await loadUsers();
-  await loadRoster();
+function orgOptions(selectedId){
+  return `<option value="">No organization</option>` +
+    organizations.map(o =>
+      `<option value="${esc(o.id)}" ${o.id===selectedId ? "selected" : ""}>${esc(o.name)}</option>`
+    ).join("");
 }
+
+function roleForRow(r){
+  return r.is_admin ? "admin" : (r.organization_role || r.profile_role || "student");
+}
+
+document.getElementById("rosterBody").addEventListener("click", event=>{
+  const editBtn=event.target.closest(".edit-user-btn");
+  const removeBtn=event.target.closest(".remove-user-btn");
+
+  if(editBtn){
+    const r=roster.find(x=>x.user_id===editBtn.dataset.userId);
+    if(!r) return;
+    activeEditUserId=r.user_id;
+    document.getElementById("editUserIdentity").innerHTML=
+      `<strong>${esc(r.full_name||"Unknown User")}</strong><br>${esc(r.email||"")}`;
+    document.getElementById("editRole").value=roleForRow(r);
+    document.getElementById("editAccess").value=(r.access_type==="paid" ? "paid" : "voucher");
+    document.getElementById("editOrg").innerHTML=orgOptions(r.organization_id||"");
+    document.getElementById("editCohort").value=r.cohort||"";
+    document.getElementById("editModalBackdrop").classList.add("open");
+  }
+
+  if(removeBtn){
+    const r=roster.find(x=>x.user_id===removeBtn.dataset.userId);
+    if(!r) return;
+    activeRemoveUserId=r.user_id;
+    document.getElementById("removeUserIdentity").innerHTML=
+      `<strong>${esc(r.full_name||"Unknown User")}</strong><br>${esc(r.email||"")}`;
+    document.querySelector('input[name="removeMode"][value="access_only"]').checked=true;
+    document.getElementById("removeModalBackdrop").classList.add("open");
+  }
+});
+
+document.getElementById("cancelEditBtn").onclick=()=>{
+  document.getElementById("editModalBackdrop").classList.remove("open");
+  activeEditUserId=null;
+};
+
+document.getElementById("saveEditBtn").onclick=async()=>{
+  clearStatus();
+  if(!activeEditUserId) return;
+
+  const role=document.getElementById("editRole").value;
+  const access=document.getElementById("editAccess").value;
+  const org=document.getElementById("editOrg").value||null;
+  const cohort=document.getElementById("editCohort").value.trim()||null;
+
+  const {data,error}=await supabase.rpc("admin_update_enrollment",{
+    p_user_id:activeEditUserId,
+    p_access_type:access,
+    p_role:role,
+    p_organization_id:org,
+    p_cohort:cohort
+  });
+
+  if(error){showStatus("Update failed: "+error.message);return}
+  if(data?.ok===false){showStatus(data.message||"Update failed.");return}
+
+  document.getElementById("editModalBackdrop").classList.remove("open");
+  activeEditUserId=null;
+  showStatus("User enrollment updated.",true);
+  await loadRoster();
+};
+
+document.getElementById("cancelRemoveBtn").onclick=()=>{
+  document.getElementById("removeModalBackdrop").classList.remove("open");
+  activeRemoveUserId=null;
+};
+
+document.getElementById("confirmRemoveBtn").onclick=async()=>{
+  clearStatus();
+  if(!activeRemoveUserId) return;
+
+  const mode=document.querySelector('input[name="removeMode"]:checked')?.value || "access_only";
+  const removeOrg=mode==="access_and_org";
+
+  const {data,error}=await supabase.rpc("admin_remove_enrollment",{
+    p_user_id:activeRemoveUserId,
+    p_remove_organization_membership:removeOrg
+  });
+
+  if(error){showStatus("Removal failed: "+error.message);return}
+  if(data?.ok===false){showStatus(data.message||"Removal failed.");return}
+
+  document.getElementById("removeModalBackdrop").classList.remove("open");
+  activeRemoveUserId=null;
+  showStatus("Enrollment removed. Account and progress history were retained.",true);
+  await loadRoster();
+};
 
 document.getElementById("createVoucherBtn").onclick=async()=>{
   clearStatus();
@@ -418,79 +467,8 @@ document.getElementById("lookupVoucherBtn").onclick=async()=>{
 
 if(await verifyAdmin()){
   await loadOrganizations();
-  await loadUsers();
   await loadRoster();
 }
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
