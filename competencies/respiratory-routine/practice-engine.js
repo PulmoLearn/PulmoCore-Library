@@ -3,17 +3,20 @@
   const STICKY_HEADER_OFFSET = 130;
   const $ = (s,r=document)=>r.querySelector(s);
   const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
-  const state = {section:0,equipment:[],ids:[],measure:null,ox:null,inspection:[],breath:null,interpret:null,doc:null};
+  const state = {
+    section:0, equipment:[], ids:[], measure:null, ox:null, inspectionSingle:null, breath:null, interpret:null, doc:null,
+    collected:{timer:false, pulseOx:false}, inspected:false, listened:false
+  };
 
   const equipment = [
-    ["stethoscope","Stethoscope","assets/stethoscope.png",true],
-    ["pulse-ox","Pulse oximeter","assets/pulse-oximeter-probe.png",true],
-    ["timer","Watch / timer","assets/watch-timer.png",true],
-    ["clipboard","Clipboard / documentation","assets/clipboard.png",true],
-    ["nebulizer","Nebulizer kit","assets/nebulizer-kit.png",false],
-    ["abg","ABG syringe","assets/abg-syringe.png",false],
-    ["suction","Suction catheter","assets/suction-catheter.png",false],
-    ["spirometer","Incentive spirometer","assets/incentive-spirometer.png",false]
+    ["stethoscope","Stethoscope","/competencies/respiratory-routine/assets/stethoscope.png",true],
+    ["pulse-ox","Pulse oximeter","/competencies/respiratory-routine/assets/pulse-oximeter-probe.png",true],
+    ["timer","Watch / timer","/competencies/respiratory-routine/assets/watch-timer.png",true],
+    ["clipboard","Clipboard / documentation","/competencies/respiratory-routine/assets/clipboard.png",true],
+    ["nebulizer","Nebulizer kit","/competencies/respiratory-routine/assets/nebulizer-kit.png",false],
+    ["abg","ABG syringe","/competencies/respiratory-routine/assets/abg-syringe.png",false],
+    ["suction","Suction catheter","/competencies/respiratory-routine/assets/suction-catheter.png",false],
+    ["spirometer","Incentive spirometer","/competencies/respiratory-routine/assets/incentive-spirometer.png",false]
   ];
   const connectExpected=["Perform hand hygiene","Introduce yourself and explain the respiratory assessment","Verify two patient identifiers","Position the patient upright as tolerated"];
   const closeExpected=["Return the patient to a safe, comfortable position","Clean or return equipment according to facility practice","Perform hand hygiene","Document the assessment","Report or escalate clinically significant findings if present"];
@@ -33,8 +36,93 @@
 
   function renderIds(){const opts=[['name','Full name'],['dob','Date of birth'],['room','Room number'],['diagnosis','Surgical diagnosis']];const wrap=$('#identifierChoices');wrap.innerHTML='';opts.forEach(([id,label])=>{const b=document.createElement('button');b.type='button';b.className='choice-chip';b.textContent=label;b.onclick=()=>{if(state.ids.includes(id))state.ids=state.ids.filter(x=>x!==id);else if(state.ids.length<2)state.ids.push(id);else state.ids=[state.ids[1],id];$$('.choice-chip',wrap).forEach(x=>x.classList.toggle('selected',state.ids.includes(x.dataset.id)));$('#toMeasure').disabled=true;clearFeedback($('#connectFeedback'));};b.dataset.id=id;wrap.appendChild(b);});}
   function renderChoiceStack(id,choices,stateKey,dataKey){const wrap=$(id);wrap.innerHTML='';choices.forEach(([value,text])=>{const b=document.createElement('button');b.type='button';b.className='select-option';b.dataset[dataKey]=value;b.textContent=text;b.onclick=()=>{state[stateKey]=value;selectSingle(wrap,dataKey,value);};wrap.appendChild(b);});}
-  function renderInspection(){renderChoiceStack('#inspectionChoices',[["normal","Breathing is regular and unlabored with symmetric chest movement."],["accessory","Accessory muscle use is present despite a normal respiratory rate."],["tripod","The patient is leaning forward in a tripod position."],["retractions","Intercostal retractions are visible during inspiration."]],'inspectionSingle','finding');}
-  function renderBreathSounds(){const cards=[['normal','Normal / clear','assets/breath-sounds-normal-card.png'],['wheeze','Wheezes','assets/breath-sounds-wheeze-card.png'],['crackles','Crackles','assets/breath-sounds-crackles-card.png'],['diminished','Diminished','assets/breath-sounds-diminished-card.png']];const wrap=$('#breathSoundChoices');wrap.innerHTML='';cards.forEach(([id,label,file])=>{const b=document.createElement('button');b.type='button';b.className='breath-card';b.dataset.sound=id;b.innerHTML=`<img src="${file}" alt="${label} breath sound teaching card"><strong>${label}</strong>`;b.onclick=()=>{state.breath=id;$$('.breath-card',wrap).forEach(x=>x.classList.toggle('selected',x===b));};wrap.appendChild(b);});}
+  function renderInspection(){
+    renderChoiceStack('#inspectionChoices',[["normal","Breathing is regular and unlabored with symmetric chest movement."],["accessory","Accessory muscle use is present despite a normal respiratory rate."],["tripod","The patient is leaning forward in a tripod position."],["retractions","Intercostal retractions are visible during inspiration."]],'inspectionSingle','finding');
+    $$('#inspectionChoices .select-option').forEach(b=>b.disabled=true);
+  }
+
+  function renderBreathSounds(){
+    const cards=[['normal','Normal / clear','/competencies/respiratory-routine/assets/breath-sounds-normal-card.png'],['wheeze','Wheezes','/competencies/respiratory-routine/assets/breath-sounds-wheeze-card.png'],['crackles','Crackles','/competencies/respiratory-routine/assets/breath-sounds-crackles-card.png'],['diminished','Diminished','/competencies/respiratory-routine/assets/breath-sounds-diminished-card.png']];
+    const wrap=$('#breathSoundChoices');wrap.innerHTML='';
+    cards.forEach(([id,label,file])=>{
+      const b=document.createElement('button');b.type='button';b.className='breath-card';b.dataset.sound=id;b.disabled=true;
+      b.innerHTML=`<img src="${file}" alt="${label} breath sound teaching card"><strong>${label}</strong>`;
+      b.onclick=()=>{state.breath=id;$$('.breath-card',wrap).forEach(x=>x.classList.toggle('selected',x===b));clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;};
+      wrap.appendChild(b);
+    });
+  }
+
+  function markToolUsed(tool){
+    const target=$('#measurePatientTarget');
+    if(tool==='timer'){
+      state.collected.timer=true;
+      const card=$('#timerFinding');
+      card.classList.remove('locked'); card.classList.add('collected');
+      $('.data-status',card).textContent='✓ Collected';
+      $('.data-value',card).innerHTML='<strong>Pulse 82/min</strong><br><strong>Respiratory rate 16/min</strong> · regular, unlabored';
+      $('#measureTechniquePanel').hidden=false;
+    }
+    if(tool==='pulse-ox'){
+      state.collected.pulseOx=true;
+      const card=$('#oxFinding');
+      card.classList.remove('locked'); card.classList.add('collected');
+      $('.data-status',card).textContent='✓ Collected';
+      $('.data-value',card).innerHTML='<strong>SpO₂ 97%</strong> on room air · pulse displayed 82/min';
+      $('#oxTechniquePanel').hidden=false;
+    }
+    $$('#measureToolTray .bedside-tool').forEach(b=>{const used=(b.dataset.tool==='timer'&&state.collected.timer)||(b.dataset.tool==='pulse-ox'&&state.collected.pulseOx);b.classList.toggle('used',used);b.setAttribute('aria-pressed',used?'true':'false');});
+    if(target){target.classList.add('tool-used');setTimeout(()=>target.classList.remove('tool-used'),450);}
+    clearFeedback($('#measureFeedback')); $('#toInspect').disabled=true;
+  }
+
+  function initMeasureTools(){
+    const target=$('#measurePatientTarget');
+    $$('#measureToolTray .bedside-tool').forEach(tool=>{
+      tool.addEventListener('click',()=>markToolUsed(tool.dataset.tool));
+      tool.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',tool.dataset.tool);e.dataTransfer.effectAllowed='copy';});
+    });
+    if(target){
+      target.addEventListener('dragover',e=>{e.preventDefault();target.classList.add('drag-over');});
+      target.addEventListener('dragleave',()=>target.classList.remove('drag-over'));
+      target.addEventListener('drop',e=>{e.preventDefault();target.classList.remove('drag-over');markToolUsed(e.dataTransfer.getData('text/plain'));});
+    }
+  }
+
+  function inspectPatient(){
+    state.inspected=true;
+    const reveal=$('#inspectionReveal');
+    reveal.classList.remove('locked'); reveal.classList.add('collected');
+    reveal.innerHTML='<span class="data-status">✓ Observed</span><p><strong>Regular, unlabored respirations.</strong> Chest movement is symmetric. No retractions, accessory-muscle use, cyanosis, or tripod positioning are observed.</p>';
+    $$('#inspectionChoices .select-option').forEach(b=>b.disabled=false);
+    $('#inspectPatient').classList.add('used');
+    clearFeedback($('#inspectFeedback')); $('#toInterpret').disabled=true;
+  }
+
+  function useStethoscope(){
+    state.listened=true;
+    const tool=$('#stethoscopeTool'), target=$('#auscultationPatientTarget'), panel=$('#listenPanel'), audio=$('#breathAudio');
+    tool.classList.add('used'); tool.setAttribute('aria-pressed','true');
+    target.classList.add('tool-used');setTimeout(()=>target.classList.remove('tool-used'),450);
+    panel.classList.remove('locked'); panel.classList.add('ready');
+    $('#audioStatus').textContent='Breath sounds unlocked. Listen carefully, then choose the matching card.';
+    $$('#breathSoundChoices .breath-card').forEach(b=>b.disabled=false);
+    if(audio){
+      audio.currentTime=0;
+      const playPromise=audio.play();
+      if(playPromise&&typeof playPromise.catch==='function') playPromise.catch(()=>{$('#audioStatus').textContent='Breath sounds unlocked. Press Play to listen, then choose the matching card.';});
+    }
+    clearFeedback($('#inspectFeedback')); $('#toInterpret').disabled=true;
+  }
+
+  function initAuscultationTool(){
+    const tool=$('#stethoscopeTool'), target=$('#auscultationPatientTarget');
+    if(!tool||!target)return;
+    tool.addEventListener('click',useStethoscope);
+    tool.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain','stethoscope');e.dataTransfer.effectAllowed='copy';});
+    target.addEventListener('dragover',e=>{e.preventDefault();target.classList.add('drag-over');});
+    target.addEventListener('dragleave',()=>target.classList.remove('drag-over'));
+    target.addEventListener('drop',e=>{e.preventDefault();target.classList.remove('drag-over');if(e.dataTransfer.getData('text/plain')==='stethoscope')useStethoscope();});
+  }
 
   $('#startPractice').onclick=()=>showSection(1);
   $('#checkPrepare').onclick=()=>{const expected=equipment.filter(x=>x[3]).map(x=>x[0]);if(sameMembers(state.equipment,expected)){setFeedback($('#prepareFeedback'),'correct','<strong>Correct.</strong> These tools support observation, measurement, auscultation, and documentation. Treatment or diagnostic equipment is not indicated simply because it is available.');$('#toConnect').disabled=false;}else{setFeedback($('#prepareFeedback'),'incorrect','<strong>Adjust the tray.</strong> Bring the tools needed for a routine bedside respiratory assessment. Do not add treatment or invasive diagnostic equipment unless the order or patient condition calls for it.');$('#toConnect').disabled=true;}};
@@ -42,9 +130,25 @@
   $('#toConnect').onclick=()=>showSection(2);
   $('#checkConnect').onclick=()=>{const seq=gradeSortable($('#connectSequence'),connectExpected),ids=sameMembers(state.ids,['name','dob']);if(seq&&ids){setFeedback($('#connectFeedback'),'correct','<strong>Correct.</strong> You entered safely, identified the patient with two valid identifiers, explained the assessment, and positioned the patient for a reliable respiratory exam.');$('#toMeasure').disabled=false;}else{setFeedback($('#connectFeedback'),'incorrect',`<strong>Keep working.</strong> ${!seq?'Check the opening sequence. ':''}${!ids?'Use two person-specific identifiers; room number and diagnosis are not acceptable identifiers.':''}`);$('#toMeasure').disabled=true;}};
   $('#toMeasure').onclick=()=>showSection(3);
-  $('#checkMeasure').onclick=()=>{if(state.measure==='quiet'&&state.ox==='verify'){setFeedback($('#measureFeedback'),'correct','<strong>Correct.</strong> Observe respirations without prompting the patient to consciously change breathing, and trust pulse oximetry only after correct placement and a believable signal.');$('#toInspect').disabled=false;}else{setFeedback($('#measureFeedback'),'incorrect','<strong>Not quite.</strong> Avoid announcing that you are counting respirations. For SpO₂, correct placement alone is not enough—you also need a believable signal/readout.');$('#toInspect').disabled=true;}};
+  $('#checkMeasure').onclick=()=>{
+    const gathered=state.collected.timer&&state.collected.pulseOx;
+    if(gathered&&state.measure==='quiet'&&state.ox==='verify'){
+      setFeedback($('#measureFeedback'),'correct','<strong>Correct.</strong> You used the tools to collect the findings, protected the respiratory rate from observer effect, and verified that the pulse-ox signal was believable before accepting the SpO₂.');$('#toInspect').disabled=false;
+    }else{
+      const missing=[];if(!state.collected.timer)missing.push('use the watch / timer');if(!state.collected.pulseOx)missing.push('use the pulse oximeter');
+      const technique=(state.measure!=='quiet'||state.ox!=='verify')?' Then complete both technique checks.':'';
+      setFeedback($('#measureFeedback'),'incorrect',`<strong>Keep collecting.</strong> ${missing.length?'First '+missing.join(' and ')+'.':''}${technique}`);$('#toInspect').disabled=true;
+    }
+  };
   $('#toInspect').onclick=()=>showSection(4);
-  $('#checkInspect').onclick=()=>{if(state.inspectionSingle==='normal'&&state.breath==='normal'){setFeedback($('#inspectFeedback'),'correct','<strong>Correct.</strong> The visual assessment and bilateral breath sounds agree with the stable vital signs. A systematic side-to-side pattern reduces the chance of missing a region.');$('#toInterpret').disabled=false;}else{setFeedback($('#inspectFeedback'),'incorrect','<strong>Reassess the patient.</strong> The case depicts a comfortable postoperative patient without visible increased work of breathing. Match the breath-sound choice to that stable presentation.');$('#toInterpret').disabled=true;}};
+  $('#checkInspect').onclick=()=>{
+    if(state.inspected&&state.listened&&state.inspectionSingle==='normal'&&state.breath==='normal'){
+      setFeedback($('#inspectFeedback'),'correct','<strong>Correct.</strong> You inspected before auscultating, used the stethoscope to hear the breath sounds, and matched what you heard to the normal/clear finding. The visual assessment, vital signs, and breath sounds all agree.');$('#toInterpret').disabled=false;
+    }else{
+      const prompts=[];if(!state.inspected)prompts.push('inspect Nora');if(!state.listened)prompts.push('use the stethoscope and listen');if(state.inspected&&state.inspectionSingle!=='normal')prompts.push('reconsider the visual finding');if(state.listened&&state.breath!=='normal')prompts.push('listen again and reconsider the breath-sound card');
+      setFeedback($('#inspectFeedback'),'incorrect',`<strong>Finish the bedside assessment.</strong> ${prompts.join('; ')}.`);$('#toInterpret').disabled=true;
+    }
+  };
   $('#toInterpret').onclick=()=>showSection(5);
   $('#checkInterpret').onclick=()=>{if(state.interpret==='routine'){setFeedback($('#interpretFeedback'),'correct','<strong>Correct.</strong> No immediate respiratory intervention is indicated. Continue routine monitoring and document the findings.');$('#toClose').disabled=false;}else{setFeedback($('#interpretFeedback'),'incorrect','<strong>Look at the whole pattern.</strong> Normal work of breathing, RR 16/min, SpO₂ 97% on room air, and clear bilateral breath sounds do not support immediate respiratory treatment or escalation.');$('#toClose').disabled=true;}};
   $('#toClose').onclick=()=>showSection(6);
@@ -57,9 +161,10 @@
   renderEquipment();createSortable($('#connectSequence'),connectExpected);createSortable($('#closeSequence'),closeExpected);renderIds();
   renderChoiceStack('#measureTechnique',[["announce","Tell the patient you are counting respirations, then count for 30 seconds."],["quiet","Continue appearing to assess the pulse while quietly observing respiratory rate, rhythm, depth, and effort."],["estimate","Estimate respirations from the monitor because the patient looks comfortable."]],'measure','measure');
   renderChoiceStack('#oxTechnique',[["verify","Place the probe correctly, minimize motion, and verify that the displayed pulse/signal is believable before accepting the SpO₂."],["instant","Apply the probe and document the first number that appears."],["blanket","Place the probe over any convenient finger even if nail coverage or poor perfusion affects the signal."]],'ox','ox');
-  renderInspection();renderBreathSounds();
+  renderInspection();renderBreathSounds();initMeasureTools();initAuscultationTool();
+  $('#inspectPatient').addEventListener('click',inspectPatient);
   renderChoiceStack('#interpretChoices',[["routine","No immediate respiratory intervention; document findings and continue routine monitoring."],["oxygen","Start supplemental oxygen because the patient is postoperative."],["neb","Administer a bronchodilator treatment to prevent postoperative bronchospasm."],["abg","Obtain an arterial blood gas to confirm the normal pulse-ox reading."]],'interpret','decision');
   renderChoiceStack('#documentationChoices',[["best","RR 16/min, regular and unlabored; chest movement symmetric; breath sounds clear/equal bilaterally; SpO₂ 97% on room air; no acute respiratory distress observed."],["vague","Respiratory assessment normal. Patient doing fine."],["overstate","Postoperative patient has no pulmonary complications and will not require respiratory therapy."],["omit","SpO₂ 97%. No other documentation needed because findings were normal."]],'doc','doc');
   showSection(0);
-  console.info('PulmoLearn Respiratory Routine practice engine v1.0 — Guided Patient 1');
+  console.info('PulmoLearn Respiratory Routine practice engine v1.1 — tool-based Guided Patient 1');
 })();
