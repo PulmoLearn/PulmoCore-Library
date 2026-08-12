@@ -4,7 +4,7 @@
   const $ = (s,r=document)=>r.querySelector(s);
   const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
   const state = {
-    section:0, equipment:[], ids:[], measure:null, ox:null, inspectionSingle:null, breath:null, interpret:null, doc:null,
+    section:0, equipment:[], ids:[], measure:null, ox:null, inspectionSingle:null, breath:null, interpret:null, doc:null, closeActions:[],
     collected:{timer:false, pulseOx:false}, inspected:false, listened:false
   };
 
@@ -19,7 +19,16 @@
     ["spirometer","Incentive spirometer","/competencies/respiratory-routine/assets/incentive-spirometer.png",false]
   ];
   const connectExpected=["Perform hand hygiene","Introduce yourself and explain the respiratory assessment","Verify two patient identifiers","Position the patient upright as tolerated"];
-  const closeExpected=["Return the patient to a safe, comfortable position","Clean or return equipment according to facility practice","Perform hand hygiene","Document the assessment","Report or escalate clinically significant findings if present"];
+  const closeActions = [
+    ["safe","Ensure Nora is safe and comfortable",true],
+    ["document","Document the respiratory assessment findings",true],
+    ["clean","Clean/disinfect the stethoscope and pulse-ox equipment",true],
+    ["hand-hygiene","Perform hand hygiene before leaving the room",true],
+    ["escalate","Escalate care if needed",false],
+    ["report-vitals","Report vital signs outside expected parameters",false],
+    ["repeat","Repeat the entire respiratory assessment regardless of findings",false],
+    ["oxygen-off","Remove oxygen from any patient before leaving the room",false]
+  ];
   const setFeedback=(el,type,html)=>{el.className=`feedback show ${type}`;el.innerHTML=html;};
   const clearFeedback=el=>{el.className="feedback";el.innerHTML="";};
   const sameMembers=(a,b)=>{const x=[...a].sort(),y=[...b].sort();return x.length===y.length&&x.every((v,i)=>v===y[i]);};
@@ -28,14 +37,37 @@
   function showSection(n){state.section=Number(n);$$('.lesson-section').forEach((s,i)=>s.classList.toggle('active',i===state.section));$$('.nav-step').forEach((b,i)=>b.classList.toggle('active',i===state.section));const labels=['Teach','Prepare','Connect','Measure','Inspect & Listen','Interpret','Close the Loop','Complete'];$('#progressText').textContent=labels[state.section];$('#progressBar').style.width=`${state.section/7*100}%`;requestAnimationFrame(()=>{const sec=$(`.lesson-section[data-section-panel="${state.section}"]`);if(sec){window.scrollTo({top:Math.max(0,sec.getBoundingClientRect().top+window.scrollY-STICKY_HEADER_OFFSET),behavior:'smooth'});}});}
 
   function selectSingle(container,key,value){$$('.select-option',container).forEach(b=>b.classList.toggle('selected',b.dataset[key]===value));}
-  function renderEquipment(){const tray=$('#equipmentTray');tray.innerHTML='';equipment.forEach(([id,label,file])=>{const b=document.createElement('button');b.type='button';b.className='equipment-card';b.dataset.id=id;b.innerHTML=`<img src="${file}" alt="${label}"><strong>${label}</strong>`;b.addEventListener('click',()=>{state.equipment.includes(id)?state.equipment=state.equipment.filter(x=>x!==id):state.equipment.push(id);b.classList.toggle('selected',state.equipment.includes(id));clearFeedback($('#prepareFeedback'));$('#toConnect').disabled=true;});tray.appendChild(b);});}
+  function renderEquipment(){const tray=$('#equipmentTray');tray.innerHTML='';shuffle(equipment).forEach(([id,label,file])=>{const b=document.createElement('button');b.type='button';b.className='equipment-card';b.dataset.id=id;b.innerHTML=`<img src="${file}" alt="${label}"><strong>${label}</strong>`;b.addEventListener('click',()=>{state.equipment.includes(id)?state.equipment=state.equipment.filter(x=>x!==id):state.equipment.push(id);b.classList.toggle('selected',state.equipment.includes(id));clearFeedback($('#prepareFeedback'));$('#toConnect').disabled=true;});tray.appendChild(b);});}
 
   function createSortable(container,steps){container.innerHTML='';shuffle(steps).forEach(step=>{const item=document.createElement('div');item.className='sortable-item';item.dataset.step=step;item.innerHTML=`<span class="drag-handle">☰</span><div><div style="display:flex;gap:10px;align-items:center"><span class="order-number"></span><span>${step}</span></div><div class="keyboard-order-controls"><button type="button" class="move-btn up">↑</button><button type="button" class="move-btn down">↓</button></div></div><span class="sort-status"></span>`;item.draggable=true;item.addEventListener('dragstart',()=>item.classList.add('dragging'));item.addEventListener('dragend',()=>{item.classList.remove('dragging');sync(container);});item.addEventListener('dragover',e=>e.preventDefault());item.addEventListener('drop',e=>{e.preventDefault();const d=$('.dragging',container);if(!d||d===item)return;const items=[...container.children],from=items.indexOf(d),to=items.indexOf(item);from<to?item.after(d):item.before(d);sync(container);});$('.up',item).onclick=()=>{const p=item.previousElementSibling;if(p)container.insertBefore(item,p);sync(container);};$('.down',item).onclick=()=>{const n=item.nextElementSibling;if(n)n.after(item);sync(container);};container.appendChild(item);});sync(container);}
   function sync(container){[...container.children].forEach((it,i)=>{$('.order-number',it).textContent=i+1;it.classList.remove('correct-position','wrong-position');$('.sort-status',it).textContent='';});}
   function gradeSortable(container,expected){let c=0;[...container.children].forEach((it,i)=>{const ok=it.dataset.step===expected[i];it.classList.toggle('correct-position',ok);it.classList.toggle('wrong-position',!ok);$('.sort-status',it).textContent=ok?'✓ Correct':'Adjust';if(ok)c++;});return c===expected.length;}
 
-  function renderIds(){const opts=[['name','Full name'],['dob','Date of birth'],['room','Room number'],['diagnosis','Surgical diagnosis']];const wrap=$('#identifierChoices');wrap.innerHTML='';opts.forEach(([id,label])=>{const b=document.createElement('button');b.type='button';b.className='choice-chip';b.textContent=label;b.onclick=()=>{if(state.ids.includes(id))state.ids=state.ids.filter(x=>x!==id);else if(state.ids.length<2)state.ids.push(id);else state.ids=[state.ids[1],id];$$('.choice-chip',wrap).forEach(x=>x.classList.toggle('selected',state.ids.includes(x.dataset.id)));$('#toMeasure').disabled=true;clearFeedback($('#connectFeedback'));};b.dataset.id=id;wrap.appendChild(b);});}
-  function renderChoiceStack(id,choices,stateKey,dataKey){const wrap=$(id);wrap.innerHTML='';choices.forEach(([value,text])=>{const b=document.createElement('button');b.type='button';b.className='select-option';b.dataset[dataKey]=value;b.textContent=text;b.onclick=()=>{state[stateKey]=value;selectSingle(wrap,dataKey,value);};wrap.appendChild(b);});}
+  function renderIds(){const opts=[['name','Full name'],['dob','Date of birth'],['room','Room number'],['diagnosis','Surgical diagnosis']];const wrap=$('#identifierChoices');wrap.innerHTML='';shuffle(opts).forEach(([id,label])=>{const b=document.createElement('button');b.type='button';b.className='choice-chip';b.textContent=label;b.onclick=()=>{if(state.ids.includes(id))state.ids=state.ids.filter(x=>x!==id);else if(state.ids.length<2)state.ids.push(id);else state.ids=[state.ids[1],id];$$('.choice-chip',wrap).forEach(x=>x.classList.toggle('selected',state.ids.includes(x.dataset.id)));$('#toMeasure').disabled=true;clearFeedback($('#connectFeedback'));};b.dataset.id=id;wrap.appendChild(b);});}
+  function renderChoiceStack(id,choices,stateKey,dataKey){const wrap=$(id);wrap.innerHTML='';shuffle(choices).forEach(([value,text])=>{const b=document.createElement('button');b.type='button';b.className='select-option';b.dataset[dataKey]=value;b.textContent=text;b.onclick=()=>{state[stateKey]=value;selectSingle(wrap,dataKey,value);};wrap.appendChild(b);});}
+  function renderCloseActions(){
+    const wrap=$('#closeActionChoices');
+    wrap.innerHTML='';
+    state.closeActions=[];
+    shuffle(closeActions).forEach(([id,label])=>{
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='select-option close-action-option';
+      b.dataset.action=id;
+      b.setAttribute('aria-pressed','false');
+      b.textContent=label;
+      b.onclick=()=>{
+        if(state.closeActions.includes(id)) state.closeActions=state.closeActions.filter(x=>x!==id);
+        else state.closeActions.push(id);
+        const selected=state.closeActions.includes(id);
+        b.classList.toggle('selected',selected);
+        b.setAttribute('aria-pressed',selected?'true':'false');
+        clearFeedback($('#closeFeedback'));
+        $('#finishPatient').disabled=true;
+      };
+      wrap.appendChild(b);
+    });
+  }
   function renderInspection(){
     renderChoiceStack('#inspectionChoices',[["normal","Breathing is regular and unlabored with symmetric chest movement."],["accessory","Accessory muscle use is present despite a normal respiratory rate."],["tripod","The patient is leaning forward in a tripod position."],["retractions","Intercostal retractions are visible during inspiration."]],'inspectionSingle','finding');
     $$('#inspectionChoices .select-option').forEach(b=>b.disabled=true);
@@ -44,7 +76,7 @@
   function renderBreathSounds(){
     const cards=[['normal','Normal / clear','/competencies/respiratory-routine/assets/breath-sounds-normal-card.png'],['wheeze','Wheezes','/competencies/respiratory-routine/assets/breath-sounds-wheeze-card.png'],['crackles','Crackles','/competencies/respiratory-routine/assets/breath-sounds-crackles-card.png'],['diminished','Diminished','/competencies/respiratory-routine/assets/breath-sounds-diminished-card.png']];
     const wrap=$('#breathSoundChoices');wrap.innerHTML='';
-    cards.forEach(([id,label,file])=>{
+    shuffle(cards).forEach(([id,label,file])=>{
       const b=document.createElement('button');b.type='button';b.className='breath-card';b.dataset.sound=id;b.disabled=true;
       b.innerHTML=`<img src="${file}" alt="${label} breath sound teaching card"><strong>${label}</strong>`;
       b.onclick=()=>{state.breath=id;$$('.breath-card',wrap).forEach(x=>x.classList.toggle('selected',x===b));clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;};
@@ -152,13 +184,26 @@
   $('#toInterpret').onclick=()=>showSection(5);
   $('#checkInterpret').onclick=()=>{if(state.interpret==='routine'){setFeedback($('#interpretFeedback'),'correct','<strong>Correct.</strong> No immediate respiratory intervention is indicated. Continue routine monitoring and document the findings.');$('#toClose').disabled=false;}else{setFeedback($('#interpretFeedback'),'incorrect','<strong>Look at the whole pattern.</strong> Normal work of breathing, RR 16/min, SpO₂ 97% on room air, and clear bilateral breath sounds do not support immediate respiratory treatment or escalation.');$('#toClose').disabled=true;}};
   $('#toClose').onclick=()=>showSection(6);
-  $('#checkClose').onclick=()=>{const seq=gradeSortable($('#closeSequence'),closeExpected);if(seq&&state.doc==='best'){setFeedback($('#closeFeedback'),'correct','<strong>Correct.</strong> The encounter is closed completely: patient safety, equipment care, hand hygiene, documentation, and communication are all addressed.');$('#finishPatient').disabled=false;}else{setFeedback($('#closeFeedback'),'incorrect',`<strong>Almost there.</strong> ${!seq?'Adjust the completion sequence. ':''}${state.doc!=='best'?'Choose documentation that records objective findings and oxygen status without adding unsupported conclusions.':''}`);$('#finishPatient').disabled=true;}};
+  $('#checkClose').onclick=()=>{
+    const expected=closeActions.filter(x=>x[2]).map(x=>x[0]);
+    const actionsCorrect=sameMembers(state.closeActions,expected);
+    if(actionsCorrect&&state.doc==='best'){
+      setFeedback($('#closeFeedback'),'correct','<strong>Correct.</strong> Nora is stable, so complete the routine actions that apply: leave her safe and comfortable, document the assessment, clean reusable equipment, and perform hand hygiene before leaving. Her findings do not require escalation or reporting of out-of-range vital signs. The exact order of close-out tasks may vary with the clinical situation and facility workflow.');
+      $('#finishPatient').disabled=false;
+    }else{
+      const parts=[];
+      if(!actionsCorrect) parts.push('Reconsider which close-out actions actually apply to this stable patient. Escalation and abnormal-vital reporting are available because they may be needed in later scenarios, but Nora has no finding that triggers them.');
+      if(state.doc!=='best') parts.push('Choose documentation that records objective findings and oxygen status without adding unsupported conclusions.');
+      setFeedback($('#closeFeedback'),'incorrect',`<strong>Almost there.</strong> ${parts.join(' ')}`);
+      $('#finishPatient').disabled=true;
+    }
+  };
   $('#finishPatient').onclick=()=>showSection(7);
   $('#restartLesson').onclick=()=>location.reload();
 
   $$('.nav-step').forEach(b=>b.onclick=()=>{const target=Number(b.dataset.section);if(target===0||target<=state.section)showSection(target);});
 
-  renderEquipment();createSortable($('#connectSequence'),connectExpected);createSortable($('#closeSequence'),closeExpected);renderIds();
+  renderEquipment();createSortable($('#connectSequence'),connectExpected);renderIds();renderCloseActions();
   renderChoiceStack('#measureTechnique',[["announce","Tell the patient you are counting respirations, then count for 30 seconds."],["quiet","Continue appearing to assess the pulse while quietly observing respiratory rate, rhythm, depth, and effort."],["estimate","Estimate respirations from the monitor because the patient looks comfortable."]],'measure','measure');
   renderChoiceStack('#oxTechnique',[["verify","Place the probe correctly, minimize motion, and verify that the displayed pulse/signal is believable before accepting the SpO₂."],["instant","Apply the probe and document the first number that appears."],["blanket","Place the probe over any convenient finger even if nail coverage or poor perfusion affects the signal."]],'ox','ox');
   renderInspection();renderBreathSounds();initMeasureTools();initAuscultationTool();
@@ -166,5 +211,5 @@
   renderChoiceStack('#interpretChoices',[["routine","No immediate respiratory intervention; document findings and continue routine monitoring."],["oxygen","Start supplemental oxygen because the patient is postoperative."],["neb","Administer a bronchodilator treatment to prevent postoperative bronchospasm."],["abg","Obtain an arterial blood gas to confirm the normal pulse-ox reading."]],'interpret','decision');
   renderChoiceStack('#documentationChoices',[["best","RR 16/min, regular and unlabored; chest movement symmetric; breath sounds clear/equal bilaterally; SpO₂ 97% on room air; no acute respiratory distress observed."],["vague","Respiratory assessment normal. Patient doing fine."],["overstate","Postoperative patient has no pulmonary complications and will not require respiratory therapy."],["omit","SpO₂ 97%. No other documentation needed because findings were normal."]],'doc','doc');
   showSection(0);
-  console.info('PulmoLearn Respiratory Routine practice engine v1.1 — tool-based Guided Patient 1');
+  console.info('PulmoLearn Respiratory Routine practice engine v1.5 — shuffled answers + conditional close-out actions');
 })();

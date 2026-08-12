@@ -40,7 +40,7 @@
       <article class="teach-card teach-aqua"><div class="teach-icon">3</div><div><p class="teach-label">MEASURE</p><h3>Collect Reliable Baseline Data</h3><p>Measure pulse and respiratory rate without cueing the patient to alter breathing. Apply pulse oximetry correctly and judge whether the signal is believable.</p></div></article>
       <article class="teach-card teach-amber"><div class="teach-icon">4</div><div><p class="teach-label">INSPECT & LISTEN</p><h3>Look Before You Interpret</h3><p>Observe breathing pattern, effort, symmetry, color, posture, and general appearance. Auscultate systematically and compare side-to-side.</p></div></article>
       <article class="teach-card teach-purple teach-full-width"><div class="teach-icon">5</div><div><p class="teach-label">INTERPRET</p><h3>Combine the Findings</h3><p>Do not treat respiratory rate, oxygen saturation, breath sounds, or appearance as isolated numbers. Ask whether the findings agree with one another and with the patient's condition.</p><div class="decision-path"><span>What did I observe?</span><span>Are the measurements reliable?</span><span>Do the findings fit together?</span><span>Does the patient need action?</span><span>What must be reassessed?</span></div></div></article>
-      <article class="teach-card teach-coral teach-full-width"><div class="teach-icon">6</div><div><p class="teach-label">CLOSE THE LOOP</p><h3>Finish the Encounter Completely</h3><p>Return the patient to a safe position, clean equipment as appropriate, perform hand hygiene, document the assessment, and communicate clinically significant findings.</p></div></article>
+      <article class="teach-card teach-coral teach-full-width"><div class="teach-icon">6</div><div><p class="teach-label">CLOSE THE LOOP</p><h3>Finish the Encounter Completely</h3><p>Before leaving the encounter, make sure the patient is safe, document the assessment, address findings that require reporting or escalation, clean reusable equipment as appropriate, and perform hand hygiene. The exact order can vary with the patient's condition, isolation requirements, and facility workflow.</p></div></article>
     </div>
     <div class="callout"><strong>Patient 1 is guided.</strong> The interface will coach you through the routine and explain why each step matters. Later patients will remove those supports.</div>
     <div class="actions end"><button id="startPractice" type="button" class="primary">Start Guided Patient</button></div>
@@ -199,8 +199,11 @@
   <section class="lesson-section" data-section-panel="6">
     <div class="patient-progress-row"><span class="patient-badge">Patient 1 of 4</span><span class="step-badge">Close the Loop</span><span class="support-badge">Guided</span></div>
     <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Finish the Encounter Completely</h2></div></div>
-    <div class="guided-note"><strong>Guided cue:</strong> A normal assessment still requires safe completion, equipment care, hand hygiene, and documentation.</div>
-    <div id="closeSequence" class="sortable-list" aria-label="Close the loop sequence"></div>
+    <div class="guided-note"><strong>Guided cue:</strong> Select every action that applies before you complete this encounter. Do not assume every patient needs escalation or abnormal-vital reporting.</div>
+    <div class="sequence-rationale"><strong>Why there is no fixed order:</strong> Close-out tasks can happen in different sequences depending on patient stability, isolation precautions, room setup, and facility workflow. What matters is that you complete the actions that apply. <strong>Immediate patient needs always take priority.</strong></div>
+    <h3>Select all actions needed to complete Nora's care</h3>
+    <p class="hint">More than one answer is correct. Selected actions stay green.</p>
+    <div id="closeActionChoices" class="choice-stack close-action-stack" aria-label="Actions needed to complete care"></div>
     <div class="documentation-layout"><figure class="large-asset"><img src="/competencies/respiratory-routine/assets/documentation-sheet.png" alt="Respiratory assessment documentation sheet"/></figure><div><h3>Choose the best documentation statement</h3><div id="documentationChoices" class="choice-stack"></div></div></div>
     <div class="actions"><button id="checkClose" type="button" class="primary">Check Completion</button></div><div id="closeFeedback" class="feedback" aria-live="polite"></div>
     <div class="actions end"><button id="finishPatient" type="button" class="primary" disabled>Complete Guided Patient</button></div>
@@ -214,75 +217,5 @@
   </section>
 </main>
 <script src="/competencies/respiratory-routine/practice-engine.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
