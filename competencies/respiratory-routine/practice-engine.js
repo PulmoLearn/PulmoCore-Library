@@ -24,7 +24,7 @@
     ["document","Document the respiratory assessment findings",true],
     ["clean","Clean/disinfect the stethoscope and pulse-ox equipment",true],
     ["hand-hygiene","Perform hand hygiene before leaving the room",true],
-    ["escalate","Escalate care if needed",false],
+    ["escalate","Escalate care",false],
     ["report-vitals","Report vital signs outside expected parameters",false],
     ["repeat","Repeat the entire respiratory assessment regardless of findings",false],
     ["oxygen-off","Remove oxygen from any patient before leaving the room",false]
@@ -125,6 +125,8 @@
     const reveal=$('#inspectionReveal');
     reveal.classList.remove('locked'); reveal.classList.add('collected');
     reveal.innerHTML='<span class="data-status">✓ Observed</span><p><strong>Regular, unlabored respirations.</strong> Chest movement is symmetric. No retractions, accessory-muscle use, cyanosis, or tripod positioning are observed.</p>';
+    const interpretPrompt=$('#inspectionInterpretPrompt');
+    if(interpretPrompt) interpretPrompt.hidden=false;
     $$('#inspectionChoices .select-option').forEach(b=>b.disabled=false);
     $('#inspectPatient').classList.add('used');
     clearFeedback($('#inspectFeedback')); $('#toInterpret').disabled=true;
@@ -188,11 +190,19 @@
     const expected=closeActions.filter(x=>x[2]).map(x=>x[0]);
     const actionsCorrect=sameMembers(state.closeActions,expected);
     if(actionsCorrect&&state.doc==='best'){
-      setFeedback($('#closeFeedback'),'correct','<strong>Correct.</strong> Nora is stable, so complete the routine actions that apply: leave her safe and comfortable, document the assessment, clean reusable equipment, and perform hand hygiene before leaving. Her findings do not require escalation or reporting of out-of-range vital signs. The exact order of close-out tasks may vary with the clinical situation and facility workflow.');
+      setFeedback($('#closeFeedback'),'correct','<strong>Correct.</strong> Nora is stable. Complete the routine actions that apply: ensure she is safe and comfortable, document the assessment, clean/disinfect the reusable equipment, and perform hand hygiene before leaving. <strong>There are no indications that Nora needs escalation of care, and none of her measured vital signs are outside expected parameters.</strong>');
       $('#finishPatient').disabled=false;
     }else{
       const parts=[];
-      if(!actionsCorrect) parts.push('Reconsider which close-out actions actually apply to this stable patient. Escalation and abnormal-vital reporting are available because they may be needed in later scenarios, but Nora has no finding that triggers them.');
+      if(!actionsCorrect) {
+        const extra=[];
+        if(state.closeActions.includes('escalate')) extra.push('Nora has no finding that indicates escalation of care');
+        if(state.closeActions.includes('report-vitals')) extra.push('none of Nora\'s measured vital signs are outside expected parameters');
+        const missing=expected.filter(id=>!state.closeActions.includes(id));
+        if(extra.length) parts.push(extra.join('; ')+'.');
+        if(missing.length) parts.push('Make sure you also select all routine close-out actions that apply: patient safety/comfort, documentation, cleaning reusable equipment, and hand hygiene before leaving.');
+        if(!extra.length && !missing.length) parts.push('Reconsider the close-out actions that apply to Nora based on the findings you collected.');
+      }
       if(state.doc!=='best') parts.push('Choose documentation that records objective findings and oxygen status without adding unsupported conclusions.');
       setFeedback($('#closeFeedback'),'incorrect',`<strong>Almost there.</strong> ${parts.join(' ')}`);
       $('#finishPatient').disabled=true;
@@ -211,5 +221,5 @@
   renderChoiceStack('#interpretChoices',[["routine","No immediate respiratory intervention; document findings and continue routine monitoring."],["oxygen","Start supplemental oxygen because the patient is postoperative."],["neb","Administer a bronchodilator treatment to prevent postoperative bronchospasm."],["abg","Obtain an arterial blood gas to confirm the normal pulse-ox reading."]],'interpret','decision');
   renderChoiceStack('#documentationChoices',[["best","RR 16/min, regular and unlabored; chest movement symmetric; breath sounds clear/equal bilaterally; SpO₂ 97% on room air; no acute respiratory distress observed."],["vague","Respiratory assessment normal. Patient doing fine."],["overstate","Postoperative patient has no pulmonary complications and will not require respiratory therapy."],["omit","SpO₂ 97%. No other documentation needed because findings were normal."]],'doc','doc');
   showSection(0);
-  console.info('PulmoLearn Respiratory Routine practice engine v1.5 — shuffled answers + conditional close-out actions');
+  console.info('PulmoLearn Respiratory Routine practice engine v1.6 — inspection interpretation prompt + Nora close-out grading/feedback fixes');
 })();
