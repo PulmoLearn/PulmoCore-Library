@@ -10,7 +10,7 @@
 
   const equipment = [
     ["stethoscope","Stethoscope","/competencies/respiratory-routine/assets/stethoscope.png",true],
-    ["pulse-ox","Pulse oximeter","/competencies/respiratory-routine/assets/pulse-oximeter-probe.png",true],
+    ["pulse-ox","Pulse oximeter","/competencies/respiratory-routine/assets/pulseox-probe.png",true],
     ["timer","Watch / timer","/competencies/respiratory-routine/assets/watch-timer.png",true],
     ["clipboard","Clipboard / documentation","/competencies/respiratory-routine/assets/clipboard.png",true],
     ["nebulizer","Nebulizer kit","/competencies/respiratory-routine/assets/nebulizer-kit.png",false],
