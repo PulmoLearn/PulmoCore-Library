@@ -79,7 +79,8 @@
       orderText:"Routine respiratory assessment · Continue oxygen at 2 L/min by nasal cannula unless the patient's condition or order changes",
       prepareCue:"Use the routine you established with Patient 1. Review the chart and decide which assessment tools you actually need.",
       connectCue:"Complete the opening sequence and verify two person-specific identifiers. Fewer hints are provided this time.",
-      measureCue:"Collect the measurements with the appropriate tools. Interpret the SpO₂ in the context of Elaine's prescribed oxygen and documented usual range.",
+      measureCue:"Collect the measurements with the appropriate tools. Interpret the SpO₂ in the context of Elaine's prescribed oxygen and documented usual range. If the first pulse-ox site is unreliable, troubleshoot the signal before accepting a value.",
+      oxScenario:"nail-polish",
       pulse:88,
       rr:20,
       rrDescription:"regular, no acute distress",
@@ -152,8 +153,8 @@
       ],
       roomImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
       roomImageAlt:"Robert in bed with visible shortness of breath on nasal-cannula oxygen",
-      inspectionImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
-      inspectionAlt:"Robert with visible increased work of breathing",
+      inspectionImage:"/competencies/respiratory-routine/assets/tripod_position_medical_infographic.png",
+      inspectionAlt:"Robert in tripod position with increased work of breathing",
       patientImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
       patientImageAlt:"Robert positioned upright for respiratory assessment while short of breath",
       breathCorrect:"wheeze",
@@ -288,13 +289,42 @@
       state.collected.pulseOx=true;
       const card=$('#oxFinding');
       card.classList.remove('locked'); card.classList.add('collected');
-      $('.data-status',card).textContent='✓ Collected';
-      $('.data-value',card).innerHTML=`<strong>SpO₂ ${cfg().spo2}%</strong> on ${cfg().oxygenText} · pulse displayed ${cfg().pulse}/min`;
+      if(state.patientIndex===1){
+        $('.data-status',card).textContent='Reading pending';
+        $('.data-value',card).innerHTML='<strong>No stable SpO₂ reading yet.</strong><br>The first finger has dark nail polish, so the signal is unreliable.';
+      }else{
+        $('.data-status',card).textContent='✓ Collected';
+        $('.data-value',card).innerHTML=`<strong>SpO₂ ${cfg().spo2}%</strong> on ${cfg().oxygenText} · pulse displayed ${cfg().pulse}/min`;
+      }
       $('#oxTechniquePanel').hidden=false;
     }
     $$('#measureToolTray .bedside-tool').forEach(b=>{const used=(b.dataset.tool==='timer'&&state.collected.timer)||(b.dataset.tool==='pulse-ox'&&state.collected.pulseOx);b.classList.toggle('used',used);b.setAttribute('aria-pressed',used?'true':'false');});
     if(target){target.classList.add('tool-used');setTimeout(()=>target.classList.remove('tool-used'),450);}
     clearFeedback($('#measureFeedback')); $('#toInspect').disabled=true;
+  }
+
+  function getOxTechniqueChoices(){
+    if(state.patientIndex===1){
+      return [
+        ["alt-site","Try a finger without nail polish, or use an alternative site such as the earlobe or toe if needed."],
+        ["remove-polish","Remove the nail polish before trying any other finger or site."],
+        ["accept-none","Document that no pulse-ox reading is available and skip oxygen-saturation assessment."],
+        ["increase-o2","Increase the oxygen flow because the pulse oximeter does not display a number."]
+      ];
+    }
+    return [
+      ["verify","Place the probe correctly, minimize motion, and verify that the displayed pulse/signal is believable before accepting the SpO₂."],
+      ["instant","Apply the probe and document the first number that appears."],
+      ["blanket","Place the probe over any convenient finger even if nail coverage or poor perfusion affects the signal."]
+    ];
+  }
+
+  function updateOxDisplayResolved(){
+    const card=$('#oxFinding');
+    if(!card) return;
+    card.classList.remove('locked'); card.classList.add('collected');
+    $('.data-status',card).textContent='✓ Reliable reading';
+    $('.data-value',card).innerHTML=`<strong>SpO₂ ${cfg().spo2}%</strong> on ${cfg().oxygenText} · pulse displayed ${cfg().pulse}/min`;
   }
 
   function initMeasureTools(){
@@ -437,7 +467,13 @@
     renderInspection();
     renderBreathSounds();
     renderChoiceStack('#measureTechnique',[["announce","Tell the patient you are counting respirations, then count for 30 seconds."],["quiet","Continue appearing to assess the pulse while quietly observing respiratory rate, rhythm, depth, and effort."],["estimate","Estimate respirations from the monitor because the patient looks comfortable."]],'measure','measure');
-    renderChoiceStack('#oxTechnique',[["verify","Place the probe correctly, minimize motion, and verify that the displayed pulse/signal is believable before accepting the SpO₂."],["instant","Apply the probe and document the first number that appears."],["blanket","Place the probe over any convenient finger even if nail coverage or poor perfusion affects the signal."]],'ox','ox');
+    renderChoiceStack('#oxTechnique',getOxTechniqueChoices(),'ox','ox');
+    const oxPrompt=$('#oxTechniquePanel p');
+    if(oxPrompt){
+      oxPrompt.textContent = state.patientIndex===1
+        ? "The probe is first placed on a finger with dark nail polish, and no reliable SpO₂ appears. What is the best next step?"
+        : "What should you verify before accepting the displayed SpO₂?";
+    }
     renderChoiceStack('#interpretChoices',p.interpretationChoices,'interpret','decision');
     renderChoiceStack('#documentationChoices',p.documentationChoices,'doc','doc');
     const audio=$('#breathAudio'); if(audio){audio.src=p.audio;audio.volume=p.audioVolume;}
@@ -452,12 +488,20 @@
   $('#toMeasure').onclick=()=>showSection(3);
   $('#checkMeasure').onclick=()=>{
     const gathered=state.collected.timer&&state.collected.pulseOx;
-    if(gathered&&state.measure==='quiet'&&state.ox==='verify'){
-      setFeedback($('#measureFeedback'),'correct','<strong>Correct.</strong> You used the tools to collect the findings, protected the respiratory rate from observer effect, and verified that the pulse-ox signal was believable before accepting the SpO₂.');$('#toInspect').disabled=false;
+    const oxExpected = state.patientIndex===1 ? 'alt-site' : 'verify';
+    if(gathered&&state.measure==='quiet'&&state.ox===oxExpected){
+      if(state.patientIndex===1){
+        updateOxDisplayResolved();
+        setFeedback($('#measureFeedback'),'correct','<strong>Correct.</strong> You protected the accuracy of the respiratory rate and troubleshot the pulse-ox issue appropriately. Because nail polish interfered with the first site, you moved to a better finger or an alternative site to obtain a reliable SpO₂ reading.');
+      }else{
+        setFeedback($('#measureFeedback'),'correct','<strong>Correct.</strong> You used the tools to collect the findings, protected the respiratory rate from observer effect, and verified that the pulse-ox signal was believable before accepting the SpO₂.');
+      }
+      $('#toInspect').disabled=false;
     }else{
       const missing=[];if(!state.collected.timer)missing.push('use the watch / timer');if(!state.collected.pulseOx)missing.push('use the pulse oximeter');
-      const technique=(state.measure!=='quiet'||state.ox!=='verify')?' Then complete both technique checks.':'';
-      setFeedback($('#measureFeedback'),'incorrect',`<strong>Keep collecting.</strong> ${missing.length?'First '+missing.join(' and ')+'.':''}${technique}`);$('#toInspect').disabled=true;
+      const technique=(state.measure!=='quiet'||state.ox!==oxExpected)?' Then complete both technique checks.':'';
+      const extra = state.patientIndex===1 ? ' For Elaine, do not accept a blank or unreliable pulse-ox display—choose a better finger or an alternative site.' : '';
+      setFeedback($('#measureFeedback'),'incorrect',`<strong>Keep collecting.</strong> ${missing.length?'First '+missing.join(' and ')+'.':''}${technique}${extra}`);$('#toInspect').disabled=true;
     }
   };
   $('#toInspect').onclick=()=>showSection(4);
