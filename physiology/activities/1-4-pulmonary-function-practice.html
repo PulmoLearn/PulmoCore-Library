@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Respiratory Physiology 1.4 • Effective Ventilation & Pulmonary Function Practice</title>
+<style>
+  :root{
+    --navy:#17324d; --teal:#168f90; --sky:#eaf6f8; --ink:#24313d; --muted:#647483;
+    --line:#d7e1e8; --soft:#f7f9fb; --ok:#237a57; --bad:#a33b35; --warn:#936915; --white:#fff;
+    --shadow:0 10px 30px rgba(23,50,77,.10); --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#f4f7f9;color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+  button,input{font:inherit}
+  .wrap{max-width:1120px;margin:auto;padding:24px 18px 60px}
+  .hero{background:linear-gradient(135deg,var(--navy),#244f70);color:white;border-radius:22px;padding:28px;box-shadow:var(--shadow)}
+  .eyebrow{font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;font-weight:800;opacity:.8}
+  h1{font-size:clamp(1.65rem,3vw,2.55rem);line-height:1.1;margin:.45rem 0 .7rem}
+  .hero p{max-width:830px;margin:0;color:#eaf3f8}
+  .progress-shell{margin-top:20px;display:flex;gap:10px;align-items:center}
+  .progress{height:10px;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden;flex:1}
+  .progress>span{display:block;height:100%;width:0;background:white;border-radius:999px;transition:width .3s ease}
+  .progress-text{font-weight:700;font-size:.9rem;white-space:nowrap}
+  .section{margin-top:24px;background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .section-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:flex-start}
+  .num{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:white;font-weight:800;flex:0 0 auto}
+  .section h2{margin:0;color:var(--navy);font-size:1.25rem}
+  .section-head p{margin:.25rem 0 0;color:var(--muted)}
+  .section-body{padding:22px}
+  .goal{background:var(--sky);border-left:5px solid var(--teal);padding:12px 14px;border-radius:10px;margin-bottom:18px}
+  .goal strong{color:var(--navy)}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .card{border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 8px;color:var(--navy);font-size:1rem}
+  .formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef3f6;padding:10px 12px;border-radius:9px;margin:8px 0;font-weight:700;color:var(--navy)}
+  .spiro{position:relative;height:380px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(#fff,#fbfdfe);overflow:hidden}
+  .spiro svg{width:100%;height:100%;display:block}
+  .targets{position:absolute;inset:0;pointer-events:none}
+  .target{position:absolute;pointer-events:auto;border:2px dashed #91a7b6;background:rgba(255,255,255,.78);border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.82rem;font-weight:800;color:#607483;min-width:0;min-height:0;padding:4px;box-shadow:0 1px 4px rgba(23,50,77,.08)}
+  .target.selected{outline:3px solid rgba(22,143,144,.24);border-color:var(--teal)}
+  .target.correct{border-style:solid;border-color:var(--ok);background:#eaf8f1;color:#16563f}
+  .target.wrong{border-color:var(--bad);background:#fff0ef;color:#812d29}
+  .labels{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+  .label-btn,.choice-btn{border:1px solid #b8c7d1;background:white;border-radius:10px;padding:9px 12px;cursor:pointer;font-weight:750;color:var(--navy)}
+  .label-btn:hover,.choice-btn:hover{border-color:var(--teal)}
+  .label-btn.active{background:var(--teal);color:white;border-color:var(--teal)}
+  .label-btn.used{opacity:.42;text-decoration:line-through}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .btn{border:0;border-radius:10px;padding:10px 15px;font-weight:800;cursor:pointer}
+  .btn.primary{background:var(--navy);color:white}.btn.secondary{background:#e9eef2;color:var(--navy)}.btn.teal{background:var(--teal);color:white}
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:10px;display:none}
+  .feedback.show{display:block}.feedback.ok{background:#eaf8f1;color:#16563f;border:1px solid #b6dfca}.feedback.bad{background:#fff0ef;color:#812d29;border:1px solid #edc4c1}.feedback.info{background:#eef6fb;color:#244f70;border:1px solid #c8dfec}
+  .q{border:1px solid var(--line);border-radius:13px;padding:15px;margin:13px 0;background:white}
+  .q legend{font-weight:800;color:var(--navy);padding:0 4px}
+  .q label{display:block;margin:8px 0;padding:8px 9px;border-radius:8px;cursor:pointer}
+  .q label:hover{background:#f2f6f8}
+  .calc-row{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;align-items:start}
+  .inputline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+  input[type="number"],input[type="text"]{width:120px;border:1px solid #afbfca;border-radius:8px;padding:8px 10px;background:#fff}
+  details{margin-top:10px;background:#fbfcfd;border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  summary{cursor:pointer;font-weight:800;color:var(--navy)}
+  .mini-table{width:100%;border-collapse:collapse;margin:10px 0}
+  .mini-table th,.mini-table td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+  .mini-table th{color:var(--navy);font-size:.9rem}
+  .pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#e9f4f4;color:#166f70;font-size:.78rem;font-weight:800;margin-right:6px}
+  .lock{opacity:.55}.lock .section-body{display:none}.done-mark{margin-left:auto;font-weight:900;color:var(--ok);display:none}.complete .done-mark{display:block}
+  .finish{display:none;margin-top:24px;background:white;border:2px solid var(--teal);border-radius:18px;padding:24px;text-align:center;box-shadow:var(--shadow)}
+  .finish.show{display:block}.finish h2{color:var(--navy);margin-top:0}.score{font-size:2rem;font-weight:900;color:var(--teal)}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  @media(max-width:760px){
+  .wrap{padding:12px 10px 40px}.grid,.grid3,.calc-row{grid-template-columns:1fr}.section{margin-top:16px}.section-head{padding:16px;gap:10px}.section-body{padding:14px}.hero{padding:18px;border-radius:16px}.hero p{font-size:.95rem}.progress-shell{align-items:flex-start;flex-direction:column}.progress{width:100%}.progress-text{white-space:normal}.num{width:34px;height:34px}.spiro{height:460px;overflow:visible}.target{font-size:.72rem;min-width:34px;min-height:34px;padding:3px}.labels{gap:8px}.label-btn,.choice-btn,.btn{min-height:44px;padding:10px 12px}.controls{display:grid;grid-template-columns:1fr}.controls .btn{width:100%}.q{padding:12px}.q label{padding:11px 8px;min-height:44px}.inputline{display:grid;grid-template-columns:1fr;gap:6px;align-items:stretch}.inputline input{width:100%}.mini-table{display:block;overflow-x:auto;white-space:nowrap}.formula{font-size:.9rem;overflow-wrap:anywhere}.goal{font-size:.95rem}}
+@media(max-width:430px){.spiro{height:500px}.target{font-size:.66rem;min-width:30px;min-height:30px}.section h2{font-size:1.1rem}.eyebrow{font-size:.74rem}.card{padding:13px}.q legend{font-size:.95rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Respiratory Physiology • 1.4 Practice</div>
+    <h1>Effective Ventilation & Pulmonary Function</h1>
+    <p>Work from measurement → calculation → physiologic meaning. This activity emphasizes the relationships among lung volumes, breathing pattern, dead space, and pulmonary function rather than memorizing isolated numbers.</p>
+    <div class="progress-shell" aria-label="Activity progress"><div class="progress"><span id="progressBar"></span></div><div class="progress-text" id="progressText">0 of 5 sections</div></div>
+  </header>
+
+  <section class="section" id="sec1">
+    <div class="section-head"><div class="num">1</div><div><h2>Build the lung-volume map</h2><p>Connect movable and nonmovable volumes to the capacities they create.</p></div><div class="done-mark">✓ Complete</div></div>
+    <div class="section-body">
+      <div class="goal"><strong>Competency focus:</strong> Identify and calculate VT, IRV, ERV, RV, IC, FRC, VC, and TLC, including which values simple spirometry cannot measure directly.</div>
+      <div class="grid">
+        <div>
+          <div class="spiro" aria-label="Interactive lung volume diagram">
+            <svg viewBox="0 0 620 380" role="img" aria-label="Simplified spirogram with volume bands">
+              <rect x="0" y="0" width="620" height="380" fill="#fff"/>
+              <line x1="48" y1="24" x2="48" y2="342" stroke="#6c7f8d" stroke-width="2"/>
+              <line x1="48" y1="342" x2="595" y2="342" stroke="#6c7f8d" stroke-width="2"/>
+              <g fill="#6c7f8d" font-size="12" font-family="Arial"><text x="10" y="346">0</text><text x="7" y="276">1200</text><text x="7" y="202">2500</text><text x="7" y="145">3000</text><text x="7" y="38">6000</text></g>
+              <path d="M62 204 C78 172 92 172 108 204 S138 236 154 204 S184 172 200 204 S230 236 246 204 C258 178 270 45 286 35 C302 45 309 112 314 160 C320 228 330 284 346 294 C362 300 375 260 386 204 C402 174 418 174 434 204 S464 235 480 204 S510 174 526 204" fill="none" stroke="#bb4d58" stroke-width="4"/>
+              <rect x="390" y="45" width="64" height="122" rx="4" fill="#d7efe9" stroke="#8ab8ae"/>
+              <rect x="390" y="167" width="64" height="38" rx="4" fill="#dceef8" stroke="#8eafc4"/>
+              <rect x="390" y="205" width="64" height="70" rx="4" fill="#f7edc8" stroke="#cabb78"/>
+              <rect x="390" y="275" width="64" height="67" rx="4" fill="#e5e8ef" stroke="#a8afbf"/>
+              <rect x="474" y="45" width="64" height="160" rx="4" fill="rgba(122,166,197,.16)" stroke="#8eafc4"/>
+              <rect x="474" y="205" width="64" height="137" rx="4" fill="rgba(234,185,116,.18)" stroke="#c7a263"/>
+              <rect x="548" y="45" width="58" height="230" rx="4" fill="rgba(61,155,142,.12)" stroke="#72aa9f"/>
+              <rect x="548" y="275" width="58" height="67" rx="4" fill="rgba(167,174,193,.18)" stroke="#a8afbf"/>
+              <text x="236" y="365" fill="#6c7f8d" font-size="13">Time →</text>
+            </svg>
+            <div class="targets">
+              <button class="target" data-answer="IRV" style="left:63%;top:12%;width:10.3%;height:32%" aria-label="Inspiratory reserve volume target"></button>
+              <button class="target" data-answer="VT" style="left:63%;top:44%;width:10.3%;height:10%" aria-label="Tidal volume target"></button>
+              <button class="target" data-answer="ERV" style="left:63%;top:54%;width:10.3%;height:18.5%" aria-label="Expiratory reserve volume target"></button>
+              <button class="target" data-answer="RV" style="left:63%;top:72.5%;width:10.3%;height:17.5%" aria-label="Residual volume target"></button>
+              <button class="target" data-answer="IC" style="left:76.5%;top:12%;width:10.3%;height:42%" aria-label="Inspiratory capacity target"></button>
+              <button class="target" data-answer="FRC" style="left:76.5%;top:54%;width:10.3%;height:36%" aria-label="Functional residual capacity target"></button>
+              <button class="target" data-answer="VC" style="left:88.4%;top:12%;width:7%;height:60.5%" aria-label="Vital capacity target"></button>
+              <button class="target" data-answer="TLC" style="left:95.6%;top:12%;width:4%;height:78%" aria-label="Total lung capacity target"></button>
+            </div>
+          </div>
+          <p style="font-size:.86rem;color:var(--muted)">Select a label, then select its target. Dragging is optional; click/tap also works.</p>
+          <div class="labels" id="labels1"></div>
+        </div>
+        <div class="card">
+          <h3>Capacity relationships</h3>
+          <div class="formula">IC = VT + IRV</div>
+          <div class="formula">FRC = ERV + RV</div>
+          <div class="formula">VC = IRV + VT + ERV</div>
+          <div class="formula">TLC = VC + RV</div>
+          <details><summary>Why does RV matter?</summary><p>Residual volume remains after maximal exhalation. Because it cannot be voluntarily exhaled, simple spirometry cannot directly measure RV or capacities that contain it (FRC and TLC).</p></details>
+          <fieldset class="q" id="s1q"><legend>Check the measurement boundary</legend>
+            <label><input type="radio" name="s1q" value="a"> Simple spirometry directly measures TLC.</label>
+            <label><input type="radio" name="s1q" value="b"> Simple spirometry directly measures RV.</label>
+            <label><input type="radio" name="s1q" value="c"> Simple spirometry cannot directly measure RV, FRC, or TLC.</label>
+          </fieldset>
+          <div class="controls"><button class="btn primary" onclick="checkSection1()">Check Section 1</button><button class="btn secondary" onclick="resetSection1()">Reset</button></div>
+          <div id="fb1" class="feedback" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section lock" id="sec2">
+    <div class="section-head"><div class="num">2</div><div><h2>Same minute ventilation, different effectiveness</h2><p>Calculate VE and VA, then explain why breathing pattern matters.</p></div><div class="done-mark">✓ Complete</div></div>
+    <div class="section-body">
+      <div class="goal"><strong>Competency focus:</strong> Calculate minute ventilation and alveolar ventilation and explain why equal VE does not guarantee equal carbon dioxide clearance.</div>
+      <div class="calc-row">
+        <div>
+          <table class="mini-table">
+            <thead><tr><th></th><th>VT</th><th>Rate</th><th>VD</th></tr></thead>
+            <tbody><tr><td><strong>Patient A</strong></td><td>500 mL</td><td>12/min</td><td>150 mL</td></tr><tr><td><strong>Patient B</strong></td><td>250 mL</td><td>24/min</td><td>150 mL</td></tr></tbody>
+          </table>
+          <div class="formula">VE = VT × f</div><div class="formula">VA = (VT − VD) × f</div>
+          <div class="grid">
+            <div class="card"><h3>Patient A</h3><div class="inputline">VE <input id="aVE" type="number" step="0.1" aria-label="Patient A minute ventilation"> L/min</div><div class="inputline">VA <input id="aVA" type="number" step="0.1" aria-label="Patient A alveolar ventilation"> L/min</div></div>
+            <div class="card"><h3>Patient B</h3><div class="inputline">VE <input id="bVE" type="number" step="0.1" aria-label="Patient B minute ventilation"> L/min</div><div class="inputline">VA <input id="bVA" type="number" step="0.1" aria-label="Patient B alveolar ventilation"> L/min</div></div>
+          </div>
+        </div>
+        <div>
+          <fieldset class="q" id="s2q"><legend>Which patient has the more effective breathing pattern?</legend>
+            <label><input type="radio" name="s2q" value="a"> Patient A, because a smaller fraction of each deeper breath is lost to fixed dead space.</label>
+            <label><input type="radio" name="s2q" value="b"> Patient B, because a faster respiratory rate always increases carbon dioxide clearance.</label>
+            <label><input type="radio" name="s2q" value="c"> They are equivalent because their total minute ventilation is the same.</label>
+          </fieldset>
+          <details><summary>Hint</summary><p>Subtract dead space from <em>each breath</em> before multiplying by respiratory rate. Then compare the amount of gas reaching gas-exchanging alveoli each minute.</p></details>
+          <div class="controls"><button class="btn primary" onclick="checkSection2()">Check Section 2</button></div>
+          <div id="fb2" class="feedback" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section lock" id="sec3">
+    <div class="section-head"><div class="num">3</div><div><h2>Dead space: locate the wasted ventilation</h2><p>Differentiate anatomic, alveolar, and physiologic dead space, then calculate VD/VT.</p></div><div class="done-mark">✓ Complete</div></div>
+    <div class="section-body">
+      <div class="goal"><strong>Competency focus:</strong> Differentiate dead-space types and calculate dead-space fraction using volume data and the Bohr relationship.</div>
+      <div class="grid3">
+        <div class="card"><span class="pill">Anatomic</span><h3>Conducting airways</h3><p>Gas occupies airways that do not contain a gas-exchanging surface.</p></div>
+        <div class="card"><span class="pill">Alveolar</span><h3>Ventilated, poorly perfused</h3><p>Gas reaches an alveolus, but little or no pulmonary blood flow is available for exchange.</p></div>
+        <div class="card"><span class="pill">Physiologic</span><h3>Total wasted volume</h3><p>Anatomic dead space + alveolar dead space.</p></div>
+      </div>
+      <div class="grid" style="margin-top:16px">
+        <div class="card"><h3>Bohr calculation</h3><p>PaCO2 = 40 mm Hg<br>PECO2 = 28 mm Hg<br>VT = 500 mL</p><div class="formula">VD/VT = (PaCO2 − PECO2) / PaCO2</div><div class="inputline">VD/VT <input id="vdvt" type="number" step="0.01" aria-label="Dead space fraction"></div><div class="inputline">Physiologic VD <input id="vdml" type="number" step="1" aria-label="Physiologic dead space milliliters"> mL</div></div>
+        <div>
+          <fieldset class="q" id="s3q"><legend>Interpret the result</legend>
+            <label><input type="radio" name="s3q" value="a"> A larger VD/VT means a greater fraction of each breath is wasted and more total ventilation is required to preserve VA.</label>
+            <label><input type="radio" name="s3q" value="b"> A larger VD/VT means more of each breath reaches perfused alveoli and PaCO2 should fall automatically.</label>
+            <label><input type="radio" name="s3q" value="c"> VD/VT is measured in milliliters and is unrelated to breathing efficiency.</label>
+          </fieldset>
+          <details><summary>Reason from the equation</summary><p>Dead-space gas contains little carbon dioxide, so it dilutes mixed-expired PCO2. A larger PaCO2-to-PECO2 difference therefore indicates a larger fraction of wasted ventilation.</p></details>
+          <div class="controls"><button class="btn primary" onclick="checkSection3()">Check Section 3</button></div><div id="fb3" class="feedback" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section lock" id="sec4">
+    <div class="section-head"><div class="num">4</div><div><h2>Pulmonary function: name the property before the pattern</h2><p>Use the test to identify what physiologic mechanism is abnormal.</p></div><div class="done-mark">✓ Complete</div></div>
+    <div class="section-body">
+      <div class="goal"><strong>Competency focus:</strong> Interpret what spirometry, static lung volumes, DLCO, MIP/MEP, and MVV measure—and use patterns to identify the physiologic mechanism rather than jump to a diagnosis.</div>
+      <div id="caseQuestions"></div>
+      <div class="controls"><button class="btn primary" onclick="checkSection4()">Check Section 4</button></div><div id="fb4" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="section lock" id="sec5">
+    <div class="section-head"><div class="num">5</div><div><h2>Assessment Readiness Challenge</h2><p>Apply the same reasoning patterns used on the Week 1.4 quiz and Unit 1 competency exam—using new numbers and scenarios.</p></div><div class="done-mark">✓ Complete</div></div>
+    <div class="section-body">
+      <div class="goal"><strong>Competency focus:</strong> Verify that you can distinguish what each pulmonary-function measure means, calculate effective ventilation and physiologic dead space, and explain why diffusion limitation may become more apparent during exercise.</div>
+
+      <fieldset class="q">
+        <legend>Challenge 1 • Spirometry limits</legend>
+        <p>Which set contains only measurements that cannot be obtained directly with simple spirometry because each includes residual volume?</p>
+        <label><input type="radio" name="r1" value="a"> FRC and TLC</label>
+        <label><input type="radio" name="r1" value="b"> VC and IC</label>
+        <label><input type="radio" name="r1" value="c"> VT and ERV</label>
+        <label><input type="radio" name="r1" value="d"> FVC and VC</label>
+      </fieldset>
+
+      <fieldset class="q">
+        <legend>Challenge 2 • What does the test measure?</legend>
+        <p>A patient has normal spirometry and lung volumes but a reduced DLCO. Which physiologic property is most directly abnormal?</p>
+        <label><input type="radio" name="r2" value="a"> Gas transfer across the alveolar-capillary interface</label>
+        <label><input type="radio" name="r2" value="b"> Inspiratory muscle pressure generation</label>
+        <label><input type="radio" name="r2" value="c"> Total gas remaining after maximal exhalation</label>
+        <label><input type="radio" name="r2" value="d"> Total ventilation moved each minute</label>
+      </fieldset>
+
+      <div class="q">
+        <strong>Challenge 3 • Effective ventilation</strong>
+        <p>A patient breathes with VT 400 mL, respiratory rate 15/min, and anatomic dead space 150 mL.</p>
+        <div class="formula">VE = VT × f &nbsp;&nbsp; | &nbsp;&nbsp; VA = (VT − VD) × f</div>
+        <div class="inputline"><label for="r3ve">Minute ventilation (L/min)</label><input id="r3ve" type="number" step="0.1" inputmode="decimal"></div>
+        <div class="inputline"><label for="r3va">Alveolar ventilation (L/min)</label><input id="r3va" type="number" step="0.1" inputmode="decimal"></div>
+      </div>
+
+      <div class="q">
+        <strong>Challenge 4 • Bohr dead-space calculation</strong>
+        <p>Given PaCO2 45 mm Hg, mixed-expired PCO2 30 mm Hg, and VT 450 mL, calculate VD/VT and physiologic dead-space volume.</p>
+        <div class="formula">VD/VT = (PaCO2 − PECO2) ÷ PaCO2</div>
+        <div class="inputline"><label for="r4frac">VD/VT</label><input id="r4frac" type="number" step="0.01" inputmode="decimal"></div>
+        <div class="inputline"><label for="r4ml">Dead-space volume (mL)</label><input id="r4ml" type="number" step="1" inputmode="numeric"></div>
+      </div>
+
+      <fieldset class="q">
+        <legend>Challenge 5 • Diffusion during exercise</legend>
+        <p>A patient has a thickened alveolar-capillary membrane. During exercise, pulmonary capillary transit time becomes shorter and arterial oxygenation worsens despite increased ventilation. Which explanation best fits the physiology?</p>
+        <label><input type="radio" name="r5" value="a"> Blood has less time to equilibrate across an already thickened diffusion barrier.</label>
+        <label><input type="radio" name="r5" value="b"> Shorter transit time directly increases anatomic dead-space volume.</label>
+        <label><input type="radio" name="r5" value="c"> Exercise converts residual volume into additional tidal volume.</label>
+        <label><input type="radio" name="r5" value="d"> Increased ventilation prevents oxygen from entering pulmonary capillary blood.</label>
+      </fieldset>
+
+      <details><summary>Assessment strategy</summary><p>For each question, first name the physiologic property being tested: movable volume, total lung size, effective ventilation, wasted ventilation, gas transfer, or muscle strength. Then select the equation or relationship that measures that property.</p></details>
+      <div class="controls"><button class="btn primary" onclick="checkSection5()">Check Readiness</button></div><div id="fb5" class="feedback" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <div class="finish" id="finish">
+    <div class="eyebrow" style="color:var(--teal)">Practice complete</div>
+    <h2>You worked through the full 1.4 physiology chain.</h2>
+    <div class="score" id="scoreText">5 / 5 sections</div>
+    <p>Before moving on, you should be able to explain not only <em>what</em> a value is, but what it tells you about lung size, effective ventilation, wasted ventilation, gas transfer, or respiratory-muscle performance.</p>
+    <button class="btn teal" onclick="restartAll()">Practice Again</button>
+  </div>
+</div>
+<script>
+const labels=['IRV','VT','ERV','RV','IC','FRC','VC','TLC'];
+let selectedLabel=null, completed=new Set();
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function renderLabels(){const box=document.getElementById('labels1');box.innerHTML='';shuffle(labels).forEach(l=>{const b=document.createElement('button');b.className='label-btn';b.textContent=l;b.draggable=true;b.dataset.label=l;b.onclick=()=>selectLabel(b);b.ondragstart=e=>e.dataTransfer.setData('text/plain',l);box.appendChild(b)});}
+function selectLabel(b){document.querySelectorAll('.label-btn').forEach(x=>x.classList.remove('active')); if(b.classList.contains('used')) return; selectedLabel=b.dataset.label;b.classList.add('active')}
+document.querySelectorAll('.target').forEach(t=>{t.onclick=()=>placeLabel(t,selectedLabel);t.ondragover=e=>e.preventDefault();t.ondrop=e=>{e.preventDefault();placeLabel(t,e.dataTransfer.getData('text/plain'))}});
+function placeLabel(t,label){if(!label)return;t.textContent=label;t.dataset.placed=label;t.classList.remove('correct','wrong');document.querySelectorAll('.label-btn').forEach(b=>{b.classList.toggle('used',[...document.querySelectorAll('.target')].some(x=>x.dataset.placed===b.dataset.label));b.classList.remove('active')});selectedLabel=null}
+function getRadio(name){const x=document.querySelector(`input[name="${name}"]:checked`);return x?x.value:null}
+function showFb(id,type,msg){const el=document.getElementById(id);el.className='feedback show '+type;el.innerHTML=msg}
+function finishSection(n){completed.add(n);const s=document.getElementById('sec'+n);s.classList.add('complete'); if(n<5){const next=document.getElementById('sec'+(n+1));next.classList.remove('lock');} updateProgress();window.dispatchEvent(new CustomEvent('pulmolearn:activity-progress',{detail:{activity:'AHRC155-1.4-practice',completedSections:[...completed],totalSections:5}})); if(completed.size===5){document.getElementById('finish').classList.add('show');document.getElementById('finish').scrollIntoView({behavior:'smooth',block:'center'});window.dispatchEvent(new CustomEvent('pulmolearn:activity-complete',{detail:{activity:'AHRC155-1.4-practice',score:100}}));}}
+function updateProgress(){const p=completed.size/5*100;document.getElementById('progressBar').style.width=p+'%';document.getElementById('progressText').textContent=`${completed.size} of 5 sections`;localStorage.setItem('AHRC155_1_4_practice',JSON.stringify([...completed]));}
+function checkSection1(){let right=0;document.querySelectorAll('.target').forEach(t=>{t.classList.remove('correct','wrong');if(t.dataset.placed===t.dataset.answer){t.classList.add('correct');right++}else t.classList.add('wrong')}); const q=getRadio('s1q'); if(right===8&&q==='c'){showFb('fb1','ok','<strong>Correct.</strong> You mapped all eight volumes/capacities and recognized that RV—and therefore FRC and TLC—cannot be measured directly by simple spirometry.');finishSection(1)} else {showFb('fb1','bad',`You have ${right} of 8 diagram labels correct. Recheck the capacity formulas and remember that any capacity containing RV requires an indirect lung-volume method.`)}}
+function resetSection1(){document.querySelectorAll('.target').forEach(t=>{t.textContent='';delete t.dataset.placed;t.classList.remove('correct','wrong')});document.querySelectorAll('input[name="s1q"]').forEach(x=>x.checked=false);renderLabels();showFb('fb1','info','Section reset. Build the relationships from the component volumes rather than memorizing the colored blocks.')}
+function close(a,b,t=.06){return Math.abs(Number(a)-b)<=t}
+function checkSection2(){const nums=close(aVE.value,6,.06)&&close(aVA.value,4.2,.06)&&close(bVE.value,6,.06)&&close(bVA.value,2.4,.06);const q=getRadio('s2q');if(nums&&q==='a'){showFb('fb2','ok','<strong>Correct.</strong> Both patients move 6.0 L/min in total, but Patient A delivers 4.2 L/min to alveoli versus 2.4 L/min for Patient B. Rapid shallow breathing wastes a larger fraction of each breath in fixed dead space.');finishSection(2)}else showFb('fb2','bad','Recalculate in two steps: first find VE, then subtract 150 mL of dead space from every breath before multiplying by rate. Equal VE does not guarantee equal VA.')}
+function checkSection3(){const nums=close(vdvt.value,.30,.015)&&close(vdml.value,150,2);const q=getRadio('s3q');if(nums&&q==='a'){showFb('fb3','ok','<strong>Correct.</strong> VD/VT = 0.30, so physiologic dead space is 0.30 × 500 = 150 mL. As VD/VT rises, a larger portion of ventilation is wasted.');finishSection(3)}else showFb('fb3','bad','Use (40 − 28) ÷ 40 for the fraction, then multiply that fraction by VT to convert the result back to a dead-space volume.')}
+const cases=[
+ {q:'A patient has a reduced vital capacity and reduced TLC, with a normal RV/TLC ratio and normal airway resistance. What is the best physiologic interpretation?',a:'reduced-expansion',choices:['Reduced total lung size / reduced expansion','Obstructive air trapping with preserved TLC','Isolated diffusion limitation','Primary expiratory muscle weakness']},
+ {q:'A patient has a low FVC, normal TLC, and a disproportionately high RV/TLC ratio. Which mechanism best explains the low FVC?',a:'air-trapping',choices:['True reduction in total lung size','Air trapping leaves more gas as residual volume','Low hemoglobin lowers measured FVC','Reduced diffusion surface area']},
+ {q:'Spirometry and static lung volumes are near normal, but DLCO is reduced. Which physiologic property is abnormal?',a:'gas-transfer',choices:['Gas transfer across the alveolar-capillary interface','Total volume moved each minute','Inspiratory muscle pressure generation','Anatomic dead-space volume only']},
+ {q:'Vital capacity is reduced and both MIP and MEP are low. Which mechanism should be considered before labeling the pattern as intrinsic lung restriction?',a:'muscle',choices:['Respiratory-muscle weakness','Increased pulmonary capillary perfusion','Isolated high airway conductance','Increased hemoglobin affinity']}
+];
+const keys={'Reduced total lung size / reduced expansion':'reduced-expansion','Obstructive air trapping with preserved TLC':'x','Isolated diffusion limitation':'x','Primary expiratory muscle weakness':'x','True reduction in total lung size':'x','Air trapping leaves more gas as residual volume':'air-trapping','Low hemoglobin lowers measured FVC':'x','Reduced diffusion surface area':'x','Gas transfer across the alveolar-capillary interface':'gas-transfer','Total volume moved each minute':'x','Inspiratory muscle pressure generation':'x','Anatomic dead-space volume only':'x','Respiratory-muscle weakness':'muscle','Increased pulmonary capillary perfusion':'x','Isolated high airway conductance':'x','Increased hemoglobin affinity':'x'};
+function renderCases(){const box=document.getElementById('caseQuestions');box.innerHTML='';cases.forEach((c,i)=>{const fs=document.createElement('fieldset');fs.className='q';let html=`<legend>Case ${i+1}</legend><p>${c.q}</p>`;shuffle(c.choices).forEach(ch=>{html+=`<label><input type="radio" name="case${i}" value="${keys[ch]}"> ${ch}</label>`});fs.innerHTML=html;box.appendChild(fs)})}
+function checkSection4(){let n=0;cases.forEach((c,i)=>{if(getRadio('case'+i)===c.a)n++});if(n===4){showFb('fb4','ok','<strong>All four mechanisms are coherent.</strong> You identified lung size, air trapping, gas-transfer limitation, and muscle performance by asking what each test actually measures.');finishSection(4)}else showFb('fb4','bad',`${n} of 4 cases are correct. Start with the property measured: TLC = lung size; RV/TLC = trapped fraction; DLCO = gas transfer; MIP/MEP = respiratory-muscle pressure generation.`)}
+function checkSection5(){
+  const q1=getRadio('r1')==='a';
+  const q2=getRadio('r2')==='a';
+  const q3=close(r3ve.value,6,.06)&&close(r3va.value,3.75,.06);
+  const q4=close(r4frac.value,1/3,.015)&&close(r4ml.value,150,2);
+  const q5=getRadio('r5')==='a';
+  const checks=[q1,q2,q3,q4,q5];
+  const n=checks.filter(Boolean).length;
+  if(n===5){
+    showFb('fb5','ok','<strong>Assessment ready.</strong> You correctly applied the spirometry limitation, DLCO meaning, effective-ventilation equations, Bohr dead-space relationship, and exercise diffusion reasoning. These are the same physiologic operations emphasized in the Week 1.4 quiz and Unit 1 competency assessment, using different values and scenarios.');
+    finishSection(5);
+  } else {
+    let tips=[];
+    if(!q1)tips.push('capacities containing RV cannot be measured directly by simple spirometry');
+    if(!q2)tips.push('DLCO reflects gas transfer across the alveolar-capillary interface');
+    if(!q3)tips.push('VE is 0.400 × 15, while VA subtracts 0.150 L from each breath before multiplying');
+    if(!q4)tips.push('use (45 − 30) ÷ 45, then multiply the fraction by 450 mL');
+    if(!q5)tips.push('a thickened membrane plus shorter transit time leaves less time for oxygen equilibration');
+    showFb('fb5','bad',`${n} of 5 readiness challenges are correct. Recheck: ${tips.join('; ')}.`);
+  }
+}
+function restartAll(){localStorage.removeItem('AHRC155_1_4_practice');location.reload()}
+function restore(){try{const x=JSON.parse(localStorage.getItem('AHRC155_1_4_practice')||'[]');x.forEach(n=>completed.add(n));for(let n=1;n<=5;n++){if(completed.has(n))document.getElementById('sec'+n).classList.add('complete');if(n===1||completed.has(n-1))document.getElementById('sec'+n).classList.remove('lock')}if(completed.size===5)document.getElementById('finish').classList.add('show');updateProgress()}catch(e){}}
+renderLabels();renderCases();restore();
+</script>
+</body>
+</html>
