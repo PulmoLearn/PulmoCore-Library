@@ -3,7 +3,8 @@
   const STICKY_HEADER_OFFSET = 130;
   const $ = (s,r=document)=>r.querySelector(s);
   const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
-  const STORAGE_KEY = "pulmolearn.respiratoryRoutine.v4_1";
+  const STORAGE_KEY = "pulmolearn.chestAssessment.v4_4";
+  const LEGACY_STORAGE_KEY = "pulmolearn.respiratoryRoutine.v4_1";
   const state = {
     section:0, unlockedThrough:0, patientIndex:0, equipment:[], ids:[], measure:null, ox:null, inspectionSingle:null, breath:null, interpret:null, doc:null, closeActions:[],
     collected:{timer:false, pulseOx:false}, inspected:false, expansionDone:false, fremitusDone:false, crepitusDone:false, percussionSides:[], percussionChoice:null, listened:false, connectOrder:[], completedPatients:[]
@@ -14,7 +15,14 @@
   }
   function loadProgress(){
     try{
-      const raw=localStorage.getItem(STORAGE_KEY);
+      let raw=localStorage.getItem(STORAGE_KEY);
+      if(!raw){
+        const legacy=localStorage.getItem(LEGACY_STORAGE_KEY);
+        if(legacy){
+          raw=legacy;
+          localStorage.setItem(STORAGE_KEY,legacy);
+        }
+      }
       if(!raw) return;
       const saved=JSON.parse(raw);
       if(saved && typeof saved==='object') Object.assign(state,saved);
@@ -67,11 +75,11 @@
         ["tripod","The patient is leaning forward in a tripod position."],
         ["retractions","Intercostal retractions are visible during inspiration."]
       ],
-      roomImage:"/competencies/respiratory-routine/assets/patient-bed-scene.png",
+      roomImage:"/competencies/chest-assessment/assets/patient-bed-scene.png",
       roomImageAlt:"Nora resting in a hospital bed",
-      inspectionImage:"/competencies/respiratory-routine/assets/chest-inspection-normal.png",
+      inspectionImage:"/competencies/chest-assessment/assets/chest-inspection-normal.png",
       inspectionAlt:"Nora with a normal respiratory appearance",
-      patientImage:"/competencies/respiratory-routine/assets/patient-upright.png",
+      patientImage:"/competencies/chest-assessment/assets/patient-upright.png",
       patientImageAlt:"Nora sitting upright in bed",
       breathCorrect:"normal",
       audio:"/assessment/pa-1-2-vesicular.m4a",
@@ -132,11 +140,11 @@
         ["tripod","Elaine is leaning forward in a tripod position to support ventilation."],
         ["retractions","Intercostal retractions are visible with each inspiration."]
       ],
-      roomImage:"/competencies/respiratory-routine/assets/patient-elaine-copd-stable-room-scene.png",
+      roomImage:"/competencies/chest-assessment/assets/patient-elaine-copd-stable-room-scene.png",
       roomImageAlt:"Elaine resting comfortably in her hospital room on prescribed oxygen",
-      inspectionImage:"/competencies/respiratory-routine/assets/patient-elaine-copd-stable-reference.png",
+      inspectionImage:"/competencies/chest-assessment/assets/patient-elaine-copd-stable-reference.png",
       inspectionAlt:"Elaine with chronic stable COPD on prescribed nasal-cannula oxygen",
-      patientImage:"/competencies/respiratory-routine/assets/patient-elaine-copd-stable-cutout.png",
+      patientImage:"/competencies/chest-assessment/assets/patient-elaine-copd-stable-cutout.png",
       patientImageAlt:"Elaine sitting comfortably in bed on prescribed nasal-cannula oxygen",
       breathCorrect:"diminished",
       audio:"/assessment/pa-1-2-vesicular.m4a",
@@ -196,11 +204,11 @@
         ["normal-posture","The forward position is only a comfort preference and does not affect the respiratory assessment."],
         ["isolated-tachypnea","The only abnormal visual finding is the respiratory rate; work of breathing appears normal."]
       ],
-      roomImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
+      roomImage:"/competencies/chest-assessment/assets/patient-robert-acute-wheezing.png",
       roomImageAlt:"Robert in bed with visible shortness of breath on nasal-cannula oxygen",
-      inspectionImage:"/competencies/respiratory-routine/assets/tripod_position_medical_infographic.png",
+      inspectionImage:"/competencies/chest-assessment/assets/tripod_position_medical_infographic.png",
       inspectionAlt:"Robert in tripod position with increased work of breathing",
-      patientImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
+      patientImage:"/competencies/chest-assessment/assets/patient-robert-acute-wheezing.png",
       patientImageAlt:"Robert positioned upright for respiratory assessment while short of breath",
       breathCorrect:"wheeze",
       audio:"/assessment/pa-1-2-sibilant-wheeze.m4a",
@@ -260,11 +268,11 @@
         ["normal-aging","These findings are expected for age and do not represent a meaningful change from baseline."],
         ["isolated-rr","The only concerning finding is the respiratory rate; the rest of the appearance is not clinically important."]
       ],
-      roomImage:"/competencies/respiratory-routine/assets/elderly_patient_receiving_hospital_care.png",
+      roomImage:"/competencies/chest-assessment/assets/elderly_patient_receiving_hospital_care.png",
       roomImageAlt:"Older woman with CHF resting upright in a hospital bed on nasal-cannula oxygen",
-      inspectionImage:"/competencies/respiratory-routine/assets/elderly_patient_resting_in_hospital_bed.png",
+      inspectionImage:"/competencies/chest-assessment/assets/elderly_patient_resting_in_hospital_bed.png",
       inspectionAlt:"Older woman upright in bed with dyspnea and visible pedal edema",
-      patientImage:"/competencies/respiratory-routine/assets/elderly_patient_resting_in_hospital_bed.png",
+      patientImage:"/competencies/chest-assessment/assets/elderly_patient_resting_in_hospital_bed.png",
       patientImageAlt:"Older woman upright in bed for respiratory assessment",
       breathCorrect:"crackles",
       audio:"/assessment/pa-1-2-fine-crackles.m4a",
@@ -295,14 +303,14 @@
   const cfg = () => patients[state.patientIndex];
 
   const equipment = [
-    ["stethoscope","Stethoscope","/competencies/respiratory-routine/assets/stethoscope.png",true],
-    ["pulse-ox","Pulse oximeter","/competencies/respiratory-routine/assets/pulseox-probe.png",true],
-    ["timer","Watch / timer","/competencies/respiratory-routine/assets/watch-timer.png",true],
-    ["clipboard","Clipboard / documentation","/competencies/respiratory-routine/assets/clipboard.png",true],
-    ["nebulizer","Nebulizer kit","/competencies/respiratory-routine/assets/nebulizer-kit.png",false],
-    ["abg","ABG syringe","/competencies/respiratory-routine/assets/abg-syringe.png",false],
-    ["suction","Suction catheter","/competencies/respiratory-routine/assets/suction-catheter.png",false],
-    ["spirometer","Incentive spirometer","/competencies/respiratory-routine/assets/incentive-spirometer.png",false]
+    ["stethoscope","Stethoscope","/competencies/chest-assessment/assets/stethoscope.png",true],
+    ["pulse-ox","Pulse oximeter","/competencies/chest-assessment/assets/pulseox-probe.png",true],
+    ["timer","Watch / timer","/competencies/chest-assessment/assets/watch-timer.png",true],
+    ["clipboard","Clipboard / documentation","/competencies/chest-assessment/assets/clipboard.png",true],
+    ["nebulizer","Nebulizer kit","/competencies/chest-assessment/assets/nebulizer-kit.png",false],
+    ["abg","ABG syringe","/competencies/chest-assessment/assets/abg-syringe.png",false],
+    ["suction","Suction catheter","/competencies/chest-assessment/assets/suction-catheter.png",false],
+    ["spirometer","Incentive spirometer","/competencies/chest-assessment/assets/incentive-spirometer.png",false]
   ];
   const connectExpected=["Perform hand hygiene","Introduce yourself and explain the respiratory assessment","Verify two patient identifiers","Position the patient upright as tolerated"];
   function closeActions(){
@@ -453,7 +461,7 @@
   }
 
   function renderBreathSounds(){
-    const cards=[['normal','Normal / clear','/competencies/respiratory-routine/assets/breath-sounds-normal-card.png'],['wheeze','Wheezes','/competencies/respiratory-routine/assets/breath-sounds-wheeze-card.png'],['crackles','Crackles','/competencies/respiratory-routine/assets/breath-sounds-crackles-card.png'],['diminished','Diminished','/competencies/respiratory-routine/assets/breath-sounds-diminished-card.png']];
+    const cards=[['normal','Normal / clear','/competencies/chest-assessment/assets/breath-sounds-normal-card.png'],['wheeze','Wheezes','/competencies/chest-assessment/assets/breath-sounds-wheeze-card.png'],['crackles','Crackles','/competencies/chest-assessment/assets/breath-sounds-crackles-card.png'],['diminished','Diminished','/competencies/chest-assessment/assets/breath-sounds-diminished-card.png']];
     const wrap=$('#breathSoundChoices');wrap.innerHTML='';
     shuffle(cards).forEach(([id,label,file])=>{
       const b=document.createElement('button');b.type='button';b.className='breath-card';b.dataset.sound=id;b.disabled=true;
@@ -837,7 +845,7 @@
   $('#startPatient2').onclick=()=>{state.patientIndex=1;resetPatientState();applyPatientToPage();showSection(1);};
   $('#startPatient3').onclick=()=>{state.patientIndex=2;resetPatientState();applyPatientToPage();showSection(1);};
   $('#startPatient4').onclick=()=>{state.patientIndex=3;resetPatientState();applyPatientToPage();showSection(1);};
-  $('#restartLesson').onclick=()=>{try{localStorage.removeItem(STORAGE_KEY);}catch(e){} location.reload();};
+  $('#restartLesson').onclick=()=>{try{localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(LEGACY_STORAGE_KEY);}catch(e){} location.reload();};
 
   $$('.nav-step').forEach(b=>b.onclick=()=>{const target=Number(b.dataset.section);if(target===0||target<=state.unlockedThrough)showSection(target);});
 
