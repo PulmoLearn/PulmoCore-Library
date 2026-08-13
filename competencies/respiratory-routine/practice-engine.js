@@ -57,6 +57,7 @@
       crepitusFinding:"No crepitus or subcutaneous air is palpated.",
       percussionCorrect:"resonant",
       percussionFinding:"Percussion is resonant and symmetric over the lung fields.",
+      percussionCue:"Both sides produce a similar hollow, low-pitched tone over the lung fields.",
       percussionChoices:[["resonant","Resonant and symmetric bilaterally"],["dull","Dullness over both bases"],["hyper","Marked hyperresonance throughout"],["asymmetric","Unilateral dullness compared with the opposite side"]],
       inspectionCorrect:"normal",
       inspectionReveal:"<strong>Regular, unlabored respirations.</strong> Chest movement is symmetric. No retractions, accessory-muscle use, cyanosis, or tripod positioning are observed.",
@@ -121,6 +122,7 @@
       crepitusFinding:"No crepitus or subcutaneous air is palpated.",
       percussionCorrect:"hyper",
       percussionFinding:"Percussion is more resonant to hyperresonant bilaterally, consistent with chronic hyperinflation.",
+      percussionCue:"Both sides produce a more hollow, booming tone than expected, without a focal side-to-side difference.",
       percussionChoices:[["hyper","More resonant to hyperresonant and symmetric bilaterally"],["dull","Dullness over both bases"],["resonant","Completely normal resonance without any chronic change"],["asymmetric","Unilateral dullness compared with the opposite side"]],
       inspectionCorrect:"stable",
       inspectionReveal:"<strong>Chronically stable COPD appearance without acute distress.</strong> Elaine is resting comfortably on her prescribed oxygen. Chest movement is symmetric, with no retractions, marked accessory-muscle use, cyanosis, or tripod positioning.",
@@ -184,6 +186,7 @@
       crepitusFinding:"No crepitus or subcutaneous air is palpated.",
       percussionCorrect:"resonant",
       percussionFinding:"Percussion is resonant and symmetric over the lung fields.",
+      percussionCue:"Both sides produce a similar hollow, low-pitched tone over the lung fields.",
       percussionChoices:[["resonant","Resonant and symmetric bilaterally"],["dull","Dullness over both bases"],["hyper","Marked hyperresonance throughout"],["asymmetric","Unilateral dullness compared with the opposite side"]],
       inspectionCorrect:"increased-wob",
       inspectionReveal:"<strong>Increased work of breathing is visible.</strong> Robert is sitting forward, breathing with his mouth open, and using neck and shoulder muscles to assist ventilation.",
@@ -247,6 +250,7 @@
       crepitusFinding:"No crepitus or subcutaneous air is palpated.",
       percussionCorrect:"dull-bases",
       percussionFinding:"Percussion is resonant over the upper fields with relative dullness at the bilateral bases.",
+      percussionCue:"The upper fields sound hollow, but the tone becomes shorter and more thudding over both bases.",
       percussionChoices:[["dull-bases","Resonant upper fields with relative dullness at both bases"],["resonant","Uniformly resonant throughout all lung fields"],["hyper","Marked hyperresonance throughout both lungs"],["asymmetric","Isolated unilateral dullness with a normal opposite base"]],
       inspectionCorrect:"chf-pattern",
       inspectionReveal:"<strong>Increased respiratory effort with peripheral edema is visible.</strong> Maggie is in high-Fowler position, appears dyspneic, and has bilateral pedal edema at the ankles. The pattern suggests a cardiopulmonary fluid problem rather than isolated bronchospasm.",
@@ -391,8 +395,20 @@
     const el=$(id);if(!el)return;el.classList.remove('locked');el.classList.add('collected');el.innerHTML=`<strong>✓ Finding:</strong> ${html}`;
   }
 
-  function assessExpansion(){state.expansionDone=true;revealMiniResult('#expansionReveal',cfg().expansionFinding);saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;}
-  function assessCrepitus(){state.crepitusDone=true;revealMiniResult('#crepitusReveal',cfg().crepitusFinding);saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;}
+  function assessExpansion(){
+    state.expansionDone=true;
+    const tool=$('#expansionHands'),target=$('#expansionTarget');
+    if(tool){tool.classList.add('used');tool.setAttribute('aria-pressed','true');}
+    if(target){target.classList.add('tool-used');setTimeout(()=>target.classList.remove('tool-used'),450);}
+    revealMiniResult('#expansionReveal',cfg().expansionFinding);saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;
+  }
+  function assessCrepitus(){
+    state.crepitusDone=true;
+    const tool=$('#crepitusHands'),target=$('#crepitusTarget');
+    if(tool){tool.classList.add('used');tool.setAttribute('aria-pressed','true');}
+    if(target){target.classList.add('tool-used');setTimeout(()=>target.classList.remove('tool-used'),450);}
+    revealMiniResult('#crepitusReveal',cfg().crepitusFinding);saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;
+  }
 
   function useFremitusHands(){
     const target=$('#fremitusTarget'),hands=$('#fremitusHands'),audio=$('#fremitusAudio'),status=$('#fremitusStatus'),reveal=$('#fremitusReveal');
@@ -408,16 +424,18 @@
   }
 
   function initPalpationPercussion(){
-    const exp=$('#checkExpansion'),crep=$('#checkCrepitus'),hands=$('#fremitusHands'),target=$('#fremitusTarget');
-    if(exp)exp.addEventListener('click',assessExpansion);if(crep)crep.addEventListener('click',assessCrepitus);
-    if(hands&&target){
-      hands.addEventListener('click',useFremitusHands);
-      hands.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain','fremitus-hands');e.dataTransfer.effectAllowed='copy';});
+    const wirePalpationTool=(toolSel,targetSel,kind,action)=>{
+      const tool=$(toolSel),target=$(targetSel);if(!tool||!target)return;
+      tool.addEventListener('click',action);
+      tool.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',kind);e.dataTransfer.effectAllowed='copy';});
       target.addEventListener('dragover',e=>{e.preventDefault();target.classList.add('drag-over');});
       target.addEventListener('dragleave',()=>target.classList.remove('drag-over'));
-      target.addEventListener('drop',e=>{e.preventDefault();target.classList.remove('drag-over');if(e.dataTransfer.getData('text/plain')==='fremitus-hands')useFremitusHands();});
-    }
-    [['#percussLeft','left'],['#percussRight','right']].forEach(([sel,side])=>{const b=$(sel);if(!b)return;b.addEventListener('click',()=>{if(!state.percussionSides.includes(side))state.percussionSides.push(side);b.classList.add('used');if(state.percussionSides.length===2){revealMiniResult('#percussionReveal',cfg().percussionFinding);renderPercussionChoices();}saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;});});
+      target.addEventListener('drop',e=>{e.preventDefault();target.classList.remove('drag-over');if(e.dataTransfer.getData('text/plain')===kind)action();});
+    };
+    wirePalpationTool('#expansionHands','#expansionTarget','expansion-hands',assessExpansion);
+    wirePalpationTool('#fremitusHands','#fremitusTarget','fremitus-hands',useFremitusHands);
+    wirePalpationTool('#crepitusHands','#crepitusTarget','crepitus-hands',assessCrepitus);
+    [['#percussLeft','left'],['#percussRight','right']].forEach(([sel,side])=>{const b=$(sel);if(!b)return;b.addEventListener('click',()=>{if(!state.percussionSides.includes(side))state.percussionSides.push(side);b.classList.add('used');if(state.percussionSides.length===2){const reveal=$('#percussionReveal');if(reveal){reveal.classList.remove('locked');reveal.classList.add('collected');reveal.innerHTML=`<strong>✓ Bilateral comparison complete.</strong> ${cfg().percussionCue} <strong>Now interpret the result below.</strong>`;}renderPercussionChoices();}saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;});});
   }
 
   function renderBreathSounds(){
@@ -551,7 +569,7 @@
     $('#inspectPatient').classList.remove('used');
     ['#expansionReveal','#fremitusReveal','#crepitusReveal','#percussionReveal'].forEach(id=>{const el=$(id);if(el){el.className='mini-result locked';el.innerHTML='<span>Not assessed</span>';}});
     if($('#fremitusStatus'))$('#fremitusStatus').textContent='Place your hands to begin. The patient will say “ninety-nine.”';
-    if($('#fremitusHands')){$('#fremitusHands').classList.remove('used');$('#fremitusHands').setAttribute('aria-pressed','false');}
+    ['#expansionHands','#fremitusHands','#crepitusHands'].forEach(sel=>{const el=$(sel);if(el){el.classList.remove('used');el.setAttribute('aria-pressed','false');}});
     state.percussionSides=[];$$('.percussion-site').forEach(b=>b.classList.remove('used'));
     renderPercussionChoices();
     const lp=$('#listenPanel'); lp.className='listen-panel locked';
@@ -578,10 +596,12 @@
     $('#toInspect').disabled=!(state.collected.timer&&state.collected.pulseOx&&state.measure==='quiet'&&state.ox===oxExpected);
     if(state.inspected){ inspectPatient(); }
     if(state.expansionDone) revealMiniResult('#expansionReveal',cfg().expansionFinding);
+    if(state.expansionDone){if($('#expansionHands')){$('#expansionHands').classList.add('used');$('#expansionHands').setAttribute('aria-pressed','true');}revealMiniResult('#expansionReveal',cfg().expansionFinding);}
     if(state.fremitusDone){if($('#fremitusHands')){$('#fremitusHands').classList.add('used');$('#fremitusHands').setAttribute('aria-pressed','true');}revealMiniResult('#fremitusReveal',cfg().fremitusFinding);if($('#fremitusStatus'))$('#fremitusStatus').textContent='Tactile fremitus assessment complete.';}
+    if(state.crepitusDone){if($('#crepitusHands')){$('#crepitusHands').classList.add('used');$('#crepitusHands').setAttribute('aria-pressed','true');}revealMiniResult('#crepitusReveal',cfg().crepitusFinding);}
     if(state.crepitusDone) revealMiniResult('#crepitusReveal',cfg().crepitusFinding);
     $$('.percussion-site').forEach(b=>b.classList.toggle('used',state.percussionSides.includes(b.id==='percussLeft'?'left':'right')));
-    if(state.percussionSides.length===2) revealMiniResult('#percussionReveal',cfg().percussionFinding);
+    if(state.percussionSides.length===2){const reveal=$('#percussionReveal');if(reveal){reveal.classList.remove('locked');reveal.classList.add('collected');reveal.innerHTML=`<strong>✓ Bilateral comparison complete.</strong> ${cfg().percussionCue} <strong>Now interpret the result below.</strong>`;}}
     renderPercussionChoices();
     if(state.listened){
       const panel=$('#listenPanel'); panel.classList.remove('locked');panel.classList.add('ready');$('#audioStatus').textContent='Breath sounds unlocked. Press Play to listen again, then choose the matching card.';$('#stethoscopeTool').classList.add('used');$('#stethoscopeTool').setAttribute('aria-pressed','true');$$('#breathSoundChoices .breath-card').forEach(b=>b.disabled=false);
@@ -642,7 +662,9 @@
     const measureImg=$('#measurePatientTarget img'); if(measureImg){measureImg.src=p.patientImage;measureImg.alt=p.patientImageAlt;}
 
     const inspectImg=$('#inspectPatient img'); inspectImg.src=p.inspectionImage; inspectImg.alt=p.inspectionAlt;
+    const expansionImg=$('#expansionTarget img'); if(expansionImg){expansionImg.src=p.patientImage;expansionImg.alt=`${p.firstName} upright for chest expansion palpation`;}
     const fremitusImg=$('#fremitusTarget img'); if(fremitusImg){fremitusImg.src=p.patientImage;fremitusImg.alt=`${p.firstName} upright for tactile fremitus palpation`;}
+    const crepitusImg=$('#crepitusTarget img'); if(crepitusImg){crepitusImg.src=p.patientImage;crepitusImg.alt=`${p.firstName} upright for chest wall palpation`;}
     if($('#fremitusTarget'))$('#fremitusTarget').setAttribute('aria-label',`${p.firstName}, chest target for tactile fremitus assessment.`);
     $('#inspectPatient strong').textContent=`Inspect ${p.firstName}`;
     $('#inspectPatient span').textContent='Tap the patient to collect visual findings';
@@ -809,5 +831,5 @@
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(state.section);
-  console.info('PulmoLearn Respiratory Routine practice engine v4.2 — palpation, tactile fremitus audio, percussion, persistent progress');
+  console.info('PulmoLearn Respiratory Routine practice engine v4.3 — draggable palpation tools and percussion interpretation cue');
 })();
