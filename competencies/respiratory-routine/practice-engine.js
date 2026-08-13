@@ -36,6 +36,8 @@
         ["tripod","The patient is leaning forward in a tripod position."],
         ["retractions","Intercostal retractions are visible during inspiration."]
       ],
+      roomImage:"/competencies/respiratory-routine/assets/patient-bed-scene.png",
+      roomImageAlt:"Nora resting in a hospital bed",
       inspectionImage:"/competencies/respiratory-routine/assets/chest-inspection-normal.png",
       inspectionAlt:"Nora with a normal respiratory appearance",
       patientImage:"/competencies/respiratory-routine/assets/patient-upright.png",
@@ -72,8 +74,8 @@
       dob:"09/02/1958",
       support:"Supported",
       patientNumber:"Patient 2 of 4",
-      caseText:"History of chronic obstructive pulmonary disease (COPD) with prescribed home oxygen at 2 L/min by nasal cannula. Awake, cooperative, and resting comfortably. Recent stable assessments document SpO₂ 91–93% on 2 L/min. A routine respiratory assessment is ordered. No isolation order is present.",
-      bedsideText:"Elaine is awake and comfortable on her prescribed 2 L/min nasal-cannula oxygen. Use the same opening routine you established with Nora.",
+      caseText:"History of chronic obstructive pulmonary disease (COPD) with prescribed home oxygen at 2 L/min by nasal cannula and inhaled treatments at home. Elaine was admitted for a non-respiratory reason. She is awake, cooperative, and resting comfortably. Her documented baseline SpO₂ is about 92% on 2 L/min. A routine respiratory assessment is ordered. No isolation order is present.",
+      bedsideText:"Elaine is awake and comfortable on her prescribed 2 L/min nasal-cannula oxygen. She was admitted for another reason and normally uses oxygen and inhaled respiratory treatments at home.",
       orderText:"Routine respiratory assessment · Continue oxygen at 2 L/min by nasal cannula unless the patient's condition or order changes",
       prepareCue:"Use the routine you established with Patient 1. Review the chart and decide which assessment tools you actually need.",
       connectCue:"Complete the opening sequence and verify two person-specific identifiers. Fewer hints are provided this time.",
@@ -84,23 +86,25 @@
       spo2:92,
       oxygenText:"2 L/min nasal cannula",
       inspectionCorrect:"stable",
-      inspectionReveal:"<strong>Breathing is regular with symmetric chest movement.</strong> Elaine is comfortable at rest. No retractions, marked accessory-muscle use, cyanosis, or tripod positioning are observed.",
+      inspectionReveal:"<strong>Chronically stable COPD appearance without acute distress.</strong> Elaine is resting comfortably on her prescribed oxygen. Chest movement is symmetric, with no retractions, marked accessory-muscle use, cyanosis, or tripod positioning.",
       inspectionChoices:[
-        ["stable","Breathing is regular with symmetric chest movement and no acute respiratory distress."],
+        ["stable","Chronic COPD features are present, but Elaine is comfortable with symmetric chest movement and no acute respiratory distress."],
         ["accessory","Marked accessory-muscle use and shoulder elevation indicate increased work of breathing."],
         ["tripod","Elaine is leaning forward in a tripod position to support ventilation."],
         ["retractions","Intercostal retractions are visible with each inspiration."]
       ],
-      inspectionImage:"/competencies/respiratory-routine/assets/chest-inspection-normal.png",
-      inspectionAlt:"Elaine with a stable respiratory appearance",
-      patientImage:"/competencies/respiratory-routine/assets/patient-upright.png",
-      patientImageAlt:"Elaine sitting upright for respiratory assessment",
+      roomImage:"/competencies/respiratory-routine/assets/patient-elaine-copd-stable-room-scene.png",
+      roomImageAlt:"Elaine resting comfortably in her hospital room on prescribed oxygen",
+      inspectionImage:"/competencies/respiratory-routine/assets/patient-elaine-copd-stable-reference.png",
+      inspectionAlt:"Elaine with chronic stable COPD on prescribed nasal-cannula oxygen",
+      patientImage:"/competencies/respiratory-routine/assets/patient-elaine-copd-stable-cutout.png",
+      patientImageAlt:"Elaine sitting comfortably in bed on prescribed nasal-cannula oxygen",
       breathCorrect:"diminished",
       audio:"/assessment/pa-1-2-vesicular.m4a",
       audioVolume:0.38,
       interpretationCorrect:"continue-o2",
       interpretationChoices:[
-        ["continue-o2","Continue the prescribed 2 L/min oxygen, document the assessment, and continue routine monitoring."],
+        ["continue-o2","Maintain Elaine\'s prescribed 2 L/min oxygen and home respiratory regimen, document the assessment, and continue routine monitoring."],
         ["remove-o2","Remove the oxygen because an SpO₂ of 92% is below the usual normal range for adults."],
         ["increase-o2","Increase oxygen immediately based only on the SpO₂ value of 92%."],
         ["escalate","Escalate care immediately because diminished breath sounds always indicate acute deterioration."]
@@ -109,12 +113,12 @@
       interpretCorrectFeedback:"<strong>Correct.</strong> Elaine's current findings fit the patient-specific context documented in the chart: prescribed oxygen at 2 L/min, SpO₂ within her recent stable range, no acute distress, and diminished bilateral breath sounds. Continue the ordered oxygen, document, and monitor.",
       interpretIncorrectFeedback:"<strong>Use the patient-specific context.</strong> Elaine is comfortable, her SpO₂ is within the recent range documented on the same prescribed oxygen flow, and there is no new sign of acute deterioration. A single value should not automatically trigger oxygen removal, an unprescribed increase, or escalation.",
       documentationChoices:[
-        ["best","RR 20/min, regular; chest movement symmetric; breath sounds diminished bilaterally; SpO₂ 92% on 2 L/min nasal cannula; no acute respiratory distress observed."],
+        ["best","RR 20/min, regular; chest movement symmetric; breath sounds diminished bilaterally; SpO₂ 92% on 2 L/min nasal cannula, consistent with documented baseline; no acute respiratory distress observed."],
         ["vague","COPD assessment unchanged. Patient seems okay."],
         ["overstate","SpO₂ is low, so the patient requires more oxygen immediately."],
         ["omit","SpO₂ 92%. Oxygen therapy and breath sounds do not need documentation because they are chronic."]
       ],
-      noEscalationReason:"Elaine has no new finding that indicates escalation of care, and the measured SpO₂ is within the patient-specific recent range documented on the prescribed 2 L/min oxygen.",
+      noEscalationReason:"Elaine has no new finding that indicates escalation of care, and her SpO₂ of 92% on 2 L/min matches her documented baseline.",
       completeHeading:"Patient 2: Context Matters",
       completeClinical:"Elaine's assessment shows why respiratory findings must be interpreted in context. Her prescribed oxygen, documented recent SpO₂ range, appearance, measurements, and breath sounds fit together without evidence of acute deterioration.",
       completeNext:"Patient 3 will keep the same routine but reduce support further and introduce an acute finding that requires action."
@@ -136,16 +140,22 @@
   const connectExpected=["Perform hand hygiene","Introduce yourself and explain the respiratory assessment","Verify two patient identifiers","Position the patient upright as tolerated"];
   function closeActions(){
     const p=cfg();
-    return [
+    const actions = [
       ["safe",`Ensure ${p.firstName} is safe and comfortable`,true],
       ["document","Document the respiratory assessment findings",true],
       ["clean","Clean/disinfect the stethoscope and pulse-ox equipment",true],
-      ["hand-hygiene","Perform hand hygiene before leaving the room",true],
+      ["hand-hygiene","Perform hand hygiene before leaving the room",true]
+    ];
+    if(state.patientIndex===1){
+      actions.push(["maintain-regimen","Maintain prescribed oxygen / home respiratory regimen",true]);
+    }
+    actions.push(
       ["escalate","Escalate care",false],
       ["report-vitals","Report vital signs outside expected parameters",false],
       ["repeat","Repeat the entire respiratory assessment regardless of findings",false],
       ["oxygen-off","Remove oxygen from the patient before leaving the room",false]
-    ];
+    );
+    return actions;
   }
   const setFeedback=(el,type,html)=>{el.className=`feedback show ${type}`;el.innerHTML=html;};
   const clearFeedback=el=>{el.className="feedback";el.innerHTML="";};
@@ -312,15 +322,24 @@
     const sec2=$('.lesson-section[data-section-panel="2"]');
     $('.patient-case',sec2).textContent=p.bedsideText;
     $('.guided-note',sec2).innerHTML=`<strong>${p.support} cue:</strong> ${p.connectCue}`;
+    const bedsideImg=$('.patient-figure img',sec2);
+    if(bedsideImg){bedsideImg.src=p.roomImage;bedsideImg.alt=p.roomImageAlt;}
 
     const sec3=$('.lesson-section[data-section-panel="3"]');
     $('.guided-note',sec3).innerHTML=`<strong>${p.support} cue:</strong> ${p.measureCue}`;
+    const measureHeading=$('.subhead', $('#measurePatientTarget').parentElement);
+    if(measureHeading) measureHeading.textContent=p.firstName;
+    $('#measurePatientTarget').setAttribute('aria-label',`${p.firstName}, patient assessment target. Select a tool and use it on the patient.`);
     const measureImg=$('#measurePatientTarget img'); if(measureImg){measureImg.src=p.patientImage;measureImg.alt=p.patientImageAlt;}
 
     const inspectImg=$('#inspectPatient img'); inspectImg.src=p.inspectionImage; inspectImg.alt=p.inspectionAlt;
     $('#inspectPatient strong').textContent=`Inspect ${p.firstName}`;
     $('#inspectPatient span').textContent='Tap the patient to collect visual findings';
     $('#inspectionInterpretPrompt').innerHTML=`<strong>Interpret what you observed:</strong> Choose the one statement below that best describes ${p.firstName}'s visual respiratory findings.`;
+    const stethScope=$('#stethoscopeTool span');
+    if(stethScope) stethScope.textContent=`Click or drag to ${p.firstName}`;
+    const ausHeading=$('.subhead', $('#auscultationPatientTarget').parentElement);
+    if(ausHeading) ausHeading.textContent=`Auscultate ${p.firstName}`;
     const ausImg=$('#auscultationPatientTarget img'); ausImg.src=p.patientImage; ausImg.alt=`${p.firstName} sitting upright for lung auscultation`;
     $('#auscultationPatientTarget').setAttribute('aria-label',`${p.firstName}, auscultation target. Drag or click the stethoscope to listen.`);
     $('#listenPanel h3').textContent=`Listen to ${p.firstName}'s breath sounds`;
@@ -380,7 +399,7 @@
     if(state.inspected&&state.listened&&state.inspectionSingle===cfg().inspectionCorrect&&state.breath===cfg().breathCorrect){
       setFeedback($('#inspectFeedback'),'correct',`<strong>Correct.</strong> You inspected before auscultating, used the stethoscope to hear the breath sounds, and matched the sound to the rest of ${cfg().firstName}'s assessment.`);$('#toInterpret').disabled=false;
     }else{
-      const prompts=[];if(!state.inspected)prompts.push('inspect Nora');if(!state.listened)prompts.push('use the stethoscope and listen');if(state.inspected&&state.inspectionSingle!==cfg().inspectionCorrect)prompts.push('reconsider the visual finding');if(state.listened&&state.breath!==cfg().breathCorrect)prompts.push('listen again and reconsider the breath-sound card');
+      const prompts=[];if(!state.inspected)prompts.push(`inspect ${cfg().firstName}`);if(!state.listened)prompts.push('use the stethoscope and listen');if(state.inspected&&state.inspectionSingle!==cfg().inspectionCorrect)prompts.push('reconsider the visual finding');if(state.listened&&state.breath!==cfg().breathCorrect)prompts.push('listen again and reconsider the breath-sound card');
       setFeedback($('#inspectFeedback'),'incorrect',`<strong>Finish the bedside assessment.</strong> ${prompts.join('; ')}.`);$('#toInterpret').disabled=true;
     }
   };
@@ -391,7 +410,13 @@
     const expected=closeActions().filter(x=>x[2]).map(x=>x[0]);
     const actionsCorrect=sameMembers(state.closeActions,expected);
     if(actionsCorrect&&state.doc==='best'){
-      setFeedback($('#closeFeedback'),'correct',`<strong>Correct.</strong> Complete the routine actions that apply: ensure ${cfg().firstName} is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`);
+      setFeedback(
+        $('#closeFeedback'),
+        'correct',
+        state.patientIndex===1
+          ? `<strong>Correct.</strong> Elaine is stable on her prescribed respiratory regimen. Maintain her ordered 2 L/min oxygen and home respiratory regimen, ensure she is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`
+          : `<strong>Correct.</strong> Complete the routine actions that apply: ensure ${cfg().firstName} is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`
+      );
       $('#finishPatient').disabled=false;
     }else{
       const parts=[];
@@ -400,6 +425,9 @@
         if(state.closeActions.includes('escalate')) extra.push(`${cfg().firstName} has no finding that indicates escalation of care`);
         if(state.closeActions.includes('report-vitals')) extra.push(state.patientIndex===0?'none of Nora\'s measured vital signs are outside expected parameters':'Elaine\'s measured SpO₂ is within the patient-specific recent range documented on her prescribed oxygen');
         const missing=expected.filter(id=>!state.closeActions.includes(id));
+        if(state.patientIndex===1 && missing.includes('maintain-regimen')){
+          extra.push('Elaine should remain on her prescribed 2 L/min oxygen and home respiratory regimen');
+        }
         if(extra.length) parts.push(extra.join('; ')+'.');
         if(missing.length) parts.push('Make sure you also select all routine close-out actions that apply: patient safety/comfort, documentation, cleaning reusable equipment, and hand hygiene before leaving.');
         if(!extra.length && !missing.length) parts.push(`Reconsider the close-out actions that apply to ${cfg().firstName} based on the findings you collected.`);
@@ -420,5 +448,5 @@
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(0);
-  console.info('PulmoLearn Respiratory Routine practice engine v2.0.1 — restored tool and inspection event bindings');
+  console.info('PulmoLearn Respiratory Routine practice engine v2.1 — Elaine COPD stable visuals, labels, and regimen logic');
 })();
