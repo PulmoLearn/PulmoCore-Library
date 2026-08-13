@@ -179,7 +179,64 @@
       noEscalationReason:"",
       completeHeading:"Patient 3: Recognize and Act",
       completeClinical:"Robert's findings demonstrate an acute change rather than a stable baseline pattern. The learner must connect tachypnea, increased work of breathing, wheezing, and vital-sign abnormalities to timely reporting and escalation.",
-      completeNext:"Patient 4 will remove procedural hints and require an independent assessment of pneumonia with worsening oxygenation."
+      completeNext:"Patient 4 will require an independent assessment of dyspnea in a patient with CHF, bibasilar fine crackles, pedal edema, and worsening oxygenation."
+    },
+    {
+      firstName:"Maggie",
+      shortName:"Maggie L.",
+      displayName:"Maggie L., 76 years",
+      fullName:"Margaret Lewis",
+      dob:"02/27/1950",
+      support:"Independent",
+      patientNumber:"Patient 4 of 4",
+      caseText:"History of congestive heart failure (CHF) and hypertension. Admitted for worsening edema and shortness of breath. Oxygen is ordered at 2 L/min by nasal cannula. Earlier in the shift, respiratory rate was 20/min and SpO₂ was 94% on 2 L/min. Nursing notes describe increasing dyspnea and difficulty lying flat. A routine respiratory assessment is ordered. No isolation order is present.",
+      bedsideText:"Maggie is upright in bed and says, 'I feel more short of breath than I did earlier.' She is on 2 L/min by nasal cannula and has visible ankle swelling.",
+      orderText:"Respiratory assessment · Oxygen 2 L/min by nasal cannula · Report changes from baseline",
+      prepareCue:"Use the routine independently. Compare what you collect with the earlier baseline documented in the chart.",
+      connectCue:"Complete the same safe opening sequence and verify two patient identifiers before beginning the assessment.",
+      measureCue:"Collect pulse, respiratory rate, and SpO₂. Interpret the measurements in the context of Maggie's ordered oxygen and documented earlier values.",
+      pulse:108,
+      rr:28,
+      rrDescription:"tachypneic with increased effort",
+      spo2:88,
+      oxygenText:"2 L/min nasal cannula",
+      inspectionCorrect:"chf-pattern",
+      inspectionReveal:"<strong>Increased respiratory effort with peripheral edema is visible.</strong> Maggie is in high-Fowler position, appears dyspneic, and has bilateral pedal edema at the ankles. The pattern suggests a cardiopulmonary fluid problem rather than isolated bronchospasm.",
+      inspectionChoices:[
+        ["chf-pattern","High-Fowler positioning, increased work of breathing, and pedal edema suggest a meaningful cardiopulmonary change rather than an isolated airway problem."],
+        ["bronchospasm","The visible findings point most strongly to bronchoconstriction, so wheezing should be assumed even before auscultation."],
+        ["normal-aging","These findings are expected for age and do not represent a meaningful change from baseline."],
+        ["isolated-rr","The only concerning finding is the respiratory rate; the rest of the appearance is not clinically important."]
+      ],
+      roomImage:"/competencies/respiratory-routine/assets/elderly_patient_receiving_hospital_care.png",
+      roomImageAlt:"Older woman with CHF resting upright in a hospital bed on nasal-cannula oxygen",
+      inspectionImage:"/competencies/respiratory-routine/assets/elderly_patient_resting_in_hospital_bed.png",
+      inspectionAlt:"Older woman upright in bed with dyspnea and visible pedal edema",
+      patientImage:"/competencies/respiratory-routine/assets/elderly_patient_resting_in_hospital_bed.png",
+      patientImageAlt:"Older woman upright in bed for respiratory assessment",
+      breathCorrect:"crackles",
+      audio:"/assessment/pa-1-2-fine-crackles.m4a",
+      audioVolume:1,
+      interpretationCorrect:"report-chf",
+      interpretationChoices:[
+        ["report-chf","Recognize deterioration from baseline, keep the ordered oxygen in place, and report the findings to the nurse/provider, including fine bibasilar crackles, pedal edema, worsening SpO₂, and the need to review fluid status and diuretic therapy."],
+        ["bronchodilator","Assume the dyspnea is due to bronchoconstriction and request a bronchodilator treatment before discussing other causes."],
+        ["routine","Document the findings and continue routine monitoring because crackles can be expected in a patient with CHF."],
+        ["room-air","Remove oxygen briefly to determine Maggie's true room-air SpO₂ before reporting the change."]
+      ],
+      findingSummary:["High-Fowler position, dyspnea, bilateral pedal edema","28/min, increased effort","88% on 2 L/min nasal cannula","Fine bibasilar crackles; no wheeze heard"],
+      interpretCorrectFeedback:"<strong>Correct.</strong> Maggie's respiratory status has worsened from the earlier baseline. Fine bibasilar crackles, lower SpO₂ despite ordered oxygen, increased work of breathing, and pedal edema should be reported promptly. Do not anchor on bronchospasm when wheezing is absent and the broader picture suggests fluid overload.",
+      interpretIncorrectFeedback:"<strong>Synthesize the pattern.</strong> Maggie has no wheeze, but she does have fine bibasilar crackles, worsening oxygenation on the same oxygen flow, dyspnea, and pedal edema with a history of CHF. Those findings support prompt reporting and discussion of fluid status rather than assuming bronchoconstriction.",
+      documentationChoices:[
+        ["best","RR 28/min with increased effort; patient upright in high-Fowler position with bilateral pedal edema; pulse 108/min; SpO₂ 88% on 2 L/min nasal cannula, decreased from earlier baseline; fine bibasilar crackles present, no wheeze heard; findings reported for further evaluation."],
+        ["vague","Patient seems short of breath and may be fluid overloaded. Nurse notified."],
+        ["broncho","Shortness of breath likely due to bronchospasm. Bronchodilator needed."],
+        ["omit","Crackles heard. No other details are needed because the patient has CHF."]
+      ],
+      noEscalationReason:"",
+      completeHeading:"Patient 4: Complex Pattern Recognition",
+      completeClinical:"Maggie's case requires the learner to compare current findings with baseline and avoid anchoring on bronchospasm. Fine bibasilar crackles, pedal edema, worsening SpO₂ on the same oxygen flow, and increased work of breathing support prompt reporting and collaboration about fluid status and diuretic therapy.",
+      completeNext:"You have completed the four-patient respiratory routine sequence. The next step is a cumulative patient encounter that combines the skills from all four patients."
     }
   ];
 
@@ -207,12 +264,15 @@
     if(state.patientIndex===1){
       actions.push(["maintain-regimen","Maintain prescribed oxygen / home respiratory regimen",true]);
     }
-    if(state.patientIndex===2){
+    if(state.patientIndex===2 || state.patientIndex===3){
       actions.push(["escalate","Escalate care",true]);
       actions.push(["report-vitals","Report vital signs outside expected parameters",true]);
     }else{
       actions.push(["escalate","Escalate care",false]);
       actions.push(["report-vitals","Report vital signs outside expected parameters",false]);
+    }
+    if(state.patientIndex===3){
+      actions.push(["review-fluid","Discuss fluid status / current diuretic plan with the nurse or provider",true]);
     }
     actions.push(
       ["repeat","Repeat the entire respiratory assessment regardless of findings",false],
@@ -459,6 +519,8 @@
     if(nextBtn) nextBtn.style.display=state.patientIndex===0?'inline-block':'none';
     const nextBtn3=$('#startPatient3');
     if(nextBtn3) nextBtn3.style.display=state.patientIndex===1?'inline-block':'none';
+    const nextBtn4=$('#startPatient4');
+    if(nextBtn4) nextBtn4.style.display=state.patientIndex===2?'inline-block':'none';
 
     renderEquipment();
     createSortable($('#connectSequence'),connectExpected);
@@ -525,6 +587,8 @@
         message=`<strong>Correct.</strong> Elaine is stable on her prescribed respiratory regimen. Maintain her ordered 2 L/min oxygen and home respiratory regimen, ensure she is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`;
       }else if(state.patientIndex===2){
         message='<strong>Correct.</strong> Robert has findings that require action. Ensure he is safe, report the out-of-range vital signs and abnormal respiratory findings, escalate care, document objectively, clean reusable equipment when appropriate, and perform hand hygiene.';
+      }else if(state.patientIndex===3){
+        message='<strong>Correct.</strong> Maggie has a clinically important change from baseline. Keep her safe and upright, report the abnormal vital signs and respiratory findings, escalate care, discuss fluid status and current diuretic therapy with the nurse/provider, document objectively, clean reusable equipment as appropriate, and perform hand hygiene. Do not assume a bronchodilator is the answer when wheezing is absent and the broader picture suggests fluid overload.';
       }else{
         message=`<strong>Correct.</strong> Complete the routine actions that apply: ensure ${cfg().firstName} is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`;
       }
@@ -549,6 +613,12 @@
           if(missing.includes('escalate')) extra.push("Robert's acute respiratory worsening requires escalation of care");
           if(missing.includes('report-vitals')) extra.push("Robert has vital signs and respiratory findings outside expected parameters that should be reported");
         }
+        if(state.patientIndex===3){
+          if(missing.includes('escalate')) extra.push("Maggie's change from baseline requires escalation of care");
+          if(missing.includes('report-vitals')) extra.push("Maggie has worsening vital signs and respiratory findings that should be reported");
+          if(missing.includes('review-fluid')) extra.push("Maggie's CHF history, pedal edema, and bibasilar crackles should prompt discussion of fluid status and current diuretic therapy");
+          if(state.closeActions.includes('repeat')) extra.push("do not delay reporting by automatically repeating the entire assessment");
+        }
         if(selectedWrong.includes('oxygen-off')) extra.push('do not remove ordered oxygen as a routine close-out action');
         if(selectedWrong.includes('repeat')) extra.push('a complete reassessment should be driven by clinical need rather than repeated automatically');
         if(extra.length) parts.push(extra.join('; ')+'.');
@@ -563,6 +633,7 @@
   $('#finishPatient').onclick=()=>{applyPatientToPage();showSection(7);};
   $('#startPatient2').onclick=()=>{state.patientIndex=1;resetPatientState();applyPatientToPage();showSection(1);};
   $('#startPatient3').onclick=()=>{state.patientIndex=2;resetPatientState();applyPatientToPage();showSection(1);};
+  $('#startPatient4').onclick=()=>{state.patientIndex=3;resetPatientState();applyPatientToPage();showSection(1);};
   $('#restartLesson').onclick=()=>location.reload();
 
   $$('.nav-step').forEach(b=>b.onclick=()=>{const target=Number(b.dataset.section);if(target===0||target<=state.section)showSection(target);});
@@ -572,5 +643,5 @@
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(0);
-  console.info('PulmoLearn Respiratory Routine practice engine v3.0 — Patient 3 acute wheezing and escalation added');
+  console.info('PulmoLearn Respiratory Routine practice engine v4.0 — Patient 4 CHF / fine crackles scenario added');
 })();
