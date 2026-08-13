@@ -122,6 +122,63 @@
       completeHeading:"Patient 2: Context Matters",
       completeClinical:"Elaine's assessment shows why respiratory findings must be interpreted in context. Her prescribed oxygen, documented recent SpO₂ range, appearance, measurements, and breath sounds fit together without evidence of acute deterioration.",
       completeNext:"Patient 3 will keep the same routine but reduce support further and introduce an acute finding that requires action."
+    },
+    {
+      firstName:"Robert",
+      shortName:"Robert K.",
+      displayName:"Robert K., 72 years",
+      fullName:"Robert Keller",
+      dob:"11/14/1953",
+      support:"Reduced support",
+      patientNumber:"Patient 3 of 4",
+      caseText:"Robert is admitted with acute shortness of breath and wheezing that has worsened over the last hour. He is awake and alert but appears uncomfortable and is sitting forward to breathe. Low-flow oxygen is in place. A respiratory assessment is ordered. No isolation order is present.",
+      bedsideText:"Robert is alert but visibly short of breath. Use the same respiratory-assessment routine and determine which findings require action.",
+      orderText:"Respiratory assessment · Oxygen 2 L/min by nasal cannula · Report worsening respiratory status",
+      prepareCue:"Review the case and gather the equipment needed to assess Robert. Use the routine you have already practiced.",
+      connectCue:"Complete the opening routine and verify two patient identifiers. Use your prior practice rather than relying on step-by-step hints.",
+      measureCue:"Collect Robert's pulse, respiratory rate, and SpO₂. Decide whether the values fit a stable pattern or support the visible change in his respiratory status.",
+      pulse:112,
+      rr:30,
+      rrDescription:"tachypneic with increased effort",
+      spo2:93,
+      oxygenText:"2 L/min nasal cannula",
+      inspectionCorrect:"increased-wob",
+      inspectionReveal:"<strong>Increased work of breathing is visible.</strong> Robert is sitting forward, breathing with his mouth open, and using neck and shoulder muscles to assist ventilation.",
+      inspectionChoices:[
+        ["stable","Breathing is mildly faster but otherwise comfortable without increased work of breathing."],
+        ["increased-wob","Forward positioning and accessory-muscle use indicate increased work of breathing."],
+        ["normal-posture","The forward position is only a comfort preference and does not affect the respiratory assessment."],
+        ["isolated-tachypnea","The only abnormal visual finding is the respiratory rate; work of breathing appears normal."]
+      ],
+      roomImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
+      roomImageAlt:"Robert in bed with visible shortness of breath on nasal-cannula oxygen",
+      inspectionImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
+      inspectionAlt:"Robert with visible increased work of breathing",
+      patientImage:"/competencies/respiratory-routine/assets/patient-robert-acute-wheezing.png",
+      patientImageAlt:"Robert positioned upright for respiratory assessment while short of breath",
+      breathCorrect:"wheeze",
+      audio:"/assessment/pa-1-2-sibilant-wheeze.m4a",
+      audioVolume:1,
+      interpretationCorrect:"escalate",
+      interpretationChoices:[
+        ["escalate","Recognize acute respiratory worsening, keep the ordered oxygen in place, report the abnormal findings and vital signs, and escalate care for prompt evaluation and treatment."],
+        ["routine","Document the findings and continue routine monitoring because the SpO₂ is above 90%."],
+        ["remove-o2","Remove the oxygen and repeat the assessment on room air before deciding whether the patient is deteriorating."],
+        ["document-first","Finish documentation and equipment cleanup before notifying anyone about the abnormal assessment findings."]
+      ],
+      findingSummary:["Sitting forward with accessory-muscle use","30/min, increased effort","93% on 2 L/min nasal cannula","Wheezes bilaterally"],
+      interpretCorrectFeedback:"<strong>Correct.</strong> Robert has a pattern of acute respiratory worsening: tachypnea, increased work of breathing, wheezing, and abnormal vital signs. Keep the ordered oxygen in place, report the findings, and escalate care so treatment can be evaluated promptly.",
+      interpretIncorrectFeedback:"<strong>Reassess the pattern.</strong> Robert is not simply showing one isolated abnormal value. Tachypnea, accessory-muscle use, forward positioning, and wheezing together indicate an acute change that should be reported and escalated rather than handled as routine monitoring.",
+      documentationChoices:[
+        ["best","RR 30/min with increased effort; patient sitting forward with accessory-muscle use; bilateral wheezes; pulse 112/min; SpO₂ 93% on 2 L/min nasal cannula; acute change reported and care escalated."],
+        ["vague","Patient wheezing and looks short of breath. Provider aware."],
+        ["understate","Respiratory assessment completed. SpO₂ 93% on oxygen; continue routine monitoring."],
+        ["omit","Wheezes present. Other findings do not need documentation because care was escalated."]
+      ],
+      noEscalationReason:"",
+      completeHeading:"Patient 3: Recognize and Act",
+      completeClinical:"Robert's findings demonstrate an acute change rather than a stable baseline pattern. The learner must connect tachypnea, increased work of breathing, wheezing, and vital-sign abnormalities to timely reporting and escalation.",
+      completeNext:"Patient 4 will remove procedural hints and require an independent assessment of pneumonia with worsening oxygenation."
     }
   ];
 
@@ -149,9 +206,14 @@
     if(state.patientIndex===1){
       actions.push(["maintain-regimen","Maintain prescribed oxygen / home respiratory regimen",true]);
     }
+    if(state.patientIndex===2){
+      actions.push(["escalate","Escalate care",true]);
+      actions.push(["report-vitals","Report vital signs outside expected parameters",true]);
+    }else{
+      actions.push(["escalate","Escalate care",false]);
+      actions.push(["report-vitals","Report vital signs outside expected parameters",false]);
+    }
     actions.push(
-      ["escalate","Escalate care",false],
-      ["report-vitals","Report vital signs outside expected parameters",false],
       ["repeat","Repeat the entire respiratory assessment regardless of findings",false],
       ["oxygen-off","Remove oxygen from the patient before leaving the room",false]
     );
@@ -318,6 +380,8 @@
     $('#faceSheetSummary').textContent=`Name: ${p.fullName} · DOB: ${p.dob}`;
     $('#orderSummary').textContent=p.orderText;
     $('.guided-note',sec1).innerHTML=`<strong>${p.support} cue:</strong> ${p.prepareCue}`;
+    const prepareImg=$('.patient-figure img',sec1);
+    if(prepareImg){prepareImg.src=p.roomImage;prepareImg.alt=p.roomImageAlt;}
 
     const sec2=$('.lesson-section[data-section-panel="2"]');
     $('.patient-case',sec2).textContent=p.bedsideText;
@@ -359,10 +423,12 @@
       if(ps[0]) ps[0].textContent=p.completeClinical;
       if(ps[1]) ps[1].innerHTML=`<strong>Next level:</strong> ${p.completeNext}`;
     }
-    $('.section-kicker',sec7).textContent=state.patientIndex===0?'Guided patient complete':'Supported patient complete';
+    $('.section-kicker',sec7).textContent=`${p.support} patient complete`;
     $('.callout.success',sec7).innerHTML=`<strong>${p.support} practice complete.</strong> The bedside routine stays consistent while the clinical context and level of support change.`;
     const nextBtn=$('#startPatient2');
     if(nextBtn) nextBtn.style.display=state.patientIndex===0?'inline-block':'none';
+    const nextBtn3=$('#startPatient3');
+    if(nextBtn3) nextBtn3.style.display=state.patientIndex===1?'inline-block':'none';
 
     renderEquipment();
     createSortable($('#connectSequence'),connectExpected);
@@ -410,35 +476,49 @@
     const expected=closeActions().filter(x=>x[2]).map(x=>x[0]);
     const actionsCorrect=sameMembers(state.closeActions,expected);
     if(actionsCorrect&&state.doc==='best'){
-      setFeedback(
-        $('#closeFeedback'),
-        'correct',
-        state.patientIndex===1
-          ? `<strong>Correct.</strong> Elaine is stable on her prescribed respiratory regimen. Maintain her ordered 2 L/min oxygen and home respiratory regimen, ensure she is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`
-          : `<strong>Correct.</strong> Complete the routine actions that apply: ensure ${cfg().firstName} is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`
-      );
+      let message;
+      if(state.patientIndex===1){
+        message=`<strong>Correct.</strong> Elaine is stable on her prescribed respiratory regimen. Maintain her ordered 2 L/min oxygen and home respiratory regimen, ensure she is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`;
+      }else if(state.patientIndex===2){
+        message='<strong>Correct.</strong> Robert has findings that require action. Ensure he is safe, report the out-of-range vital signs and abnormal respiratory findings, escalate care, document objectively, clean reusable equipment when appropriate, and perform hand hygiene.';
+      }else{
+        message=`<strong>Correct.</strong> Complete the routine actions that apply: ensure ${cfg().firstName} is safe and comfortable, document the assessment, clean/disinfect reusable equipment, and perform hand hygiene before leaving. <strong>${cfg().noEscalationReason}</strong>`;
+      }
+      setFeedback($('#closeFeedback'),'correct',message);
       $('#finishPatient').disabled=false;
     }else{
       const parts=[];
-      if(!actionsCorrect) {
+      if(!actionsCorrect){
         const extra=[];
-        if(state.closeActions.includes('escalate')) extra.push(`${cfg().firstName} has no finding that indicates escalation of care`);
-        if(state.closeActions.includes('report-vitals')) extra.push(state.patientIndex===0?'none of Nora\'s measured vital signs are outside expected parameters':'Elaine\'s measured SpO₂ is within the patient-specific recent range documented on her prescribed oxygen');
         const missing=expected.filter(id=>!state.closeActions.includes(id));
-        if(state.patientIndex===1 && missing.includes('maintain-regimen')){
-          extra.push('Elaine should remain on her prescribed 2 L/min oxygen and home respiratory regimen');
+        const selectedWrong=state.closeActions.filter(id=>!expected.includes(id));
+        if(state.patientIndex===0){
+          if(state.closeActions.includes('escalate')) extra.push('Nora has no finding that indicates escalation of care');
+          if(state.closeActions.includes('report-vitals')) extra.push('none of Nora's measured vital signs are outside expected parameters');
         }
+        if(state.patientIndex===1){
+          if(state.closeActions.includes('escalate')) extra.push('Elaine has no new finding that indicates escalation of care');
+          if(state.closeActions.includes('report-vitals')) extra.push('Elaine's SpO₂ is at her documented baseline on prescribed oxygen');
+          if(missing.includes('maintain-regimen')) extra.push('Elaine should remain on her prescribed oxygen and home respiratory regimen');
+        }
+        if(state.patientIndex===2){
+          if(missing.includes('escalate')) extra.push('Robert's acute respiratory worsening requires escalation of care');
+          if(missing.includes('report-vitals')) extra.push('Robert has vital signs and respiratory findings outside expected parameters that should be reported');
+        }
+        if(selectedWrong.includes('oxygen-off')) extra.push('do not remove ordered oxygen as a routine close-out action');
+        if(selectedWrong.includes('repeat')) extra.push('a complete reassessment should be driven by clinical need rather than repeated automatically');
         if(extra.length) parts.push(extra.join('; ')+'.');
-        if(missing.length) parts.push('Make sure you also select all routine close-out actions that apply: patient safety/comfort, documentation, cleaning reusable equipment, and hand hygiene before leaving.');
+        if(missing.length) parts.push('Select every close-out action that applies to this patient.');
         if(!extra.length && !missing.length) parts.push(`Reconsider the close-out actions that apply to ${cfg().firstName} based on the findings you collected.`);
       }
-      if(state.doc!=='best') parts.push('Choose documentation that records objective findings and oxygen status without adding unsupported conclusions.');
+      if(state.doc!=='best') parts.push('Choose documentation that records objective findings, oxygen status, and the action taken without vague or unsupported conclusions.');
       setFeedback($('#closeFeedback'),'incorrect',`<strong>Almost there.</strong> ${parts.join(' ')}`);
       $('#finishPatient').disabled=true;
     }
   };
   $('#finishPatient').onclick=()=>{applyPatientToPage();showSection(7);};
   $('#startPatient2').onclick=()=>{state.patientIndex=1;resetPatientState();applyPatientToPage();showSection(1);};
+  $('#startPatient3').onclick=()=>{state.patientIndex=2;resetPatientState();applyPatientToPage();showSection(1);};
   $('#restartLesson').onclick=()=>location.reload();
 
   $$('.nav-step').forEach(b=>b.onclick=()=>{const target=Number(b.dataset.section);if(target===0||target<=state.section)showSection(target);});
@@ -448,5 +528,5 @@
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(0);
-  console.info('PulmoLearn Respiratory Routine practice engine v2.1 — Elaine COPD stable visuals, labels, and regimen logic');
+  console.info('PulmoLearn Respiratory Routine practice engine v3.0 — Patient 3 acute wheezing and escalation added');
 })();
