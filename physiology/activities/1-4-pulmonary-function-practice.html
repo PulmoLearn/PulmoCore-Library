@@ -32,6 +32,9 @@
   .goal strong{color:var(--navy)}
   .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
   .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .section1-layout{grid-template-columns:1fr}
+  .steps{margin:.4rem 0 0 1.15rem;padding:0}
+  .steps li{margin:.35rem 0}
   .card{border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:16px}
   .card h3{margin:0 0 8px;color:var(--navy);font-size:1rem}
   .formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef3f6;padding:10px 12px;border-radius:9px;margin:8px 0;font-weight:700;color:var(--navy)}
@@ -72,28 +75,7 @@
   @media(max-width:760px){
   .wrap{padding:12px 10px 40px}.grid,.grid3,.calc-row{grid-template-columns:1fr}.section{margin-top:16px}.section-head{padding:16px;gap:10px}.section-body{padding:14px}.hero{padding:18px;border-radius:16px}.hero p{font-size:.95rem}.progress-shell{align-items:flex-start;flex-direction:column}.progress{width:100%}.progress-text{white-space:normal}.num{width:34px;height:34px}.spiro{height:460px;overflow:visible}.target{font-size:.72rem;min-width:34px;min-height:34px;padding:3px}.labels{gap:8px}.label-btn,.choice-btn,.btn{min-height:44px;padding:10px 12px}.controls{display:grid;grid-template-columns:1fr}.controls .btn{width:100%}.q{padding:12px}.q label{padding:11px 8px;min-height:44px}.inputline{display:grid;grid-template-columns:1fr;gap:6px;align-items:stretch}.inputline input{width:100%}.mini-table{display:block;overflow-x:auto;white-space:nowrap}.formula{font-size:.9rem;overflow-wrap:anywhere}.goal{font-size:.95rem}}
 @media(max-width:430px){.spiro{height:500px}.target{font-size:.66rem;min-width:30px;min-height:30px}.section h2{font-size:1.1rem}.eyebrow{font-size:.74rem}.card{padding:13px}.q legend{font-size:.95rem}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -108,7 +90,7 @@
     <div class="section-head"><div class="num">1</div><div><h2>Build the lung-volume map</h2><p>Connect movable and nonmovable volumes to the capacities they create.</p></div><div class="done-mark">✓ Complete</div></div>
     <div class="section-body">
       <div class="goal"><strong>Competency focus:</strong> Identify and calculate VT, IRV, ERV, RV, IC, FRC, VC, and TLC, including which values simple spirometry cannot measure directly.</div>
-      <div class="grid">
+      <div class="grid section1-layout">
         <div>
           <div class="spiro" aria-label="Interactive lung volume diagram">
             <svg viewBox="0 0 620 380" role="img" aria-label="Simplified spirogram with volume bands">
@@ -199,8 +181,19 @@
         <div class="card"><span class="pill">Alveolar</span><h3>Ventilated, poorly perfused</h3><p>Gas reaches an alveolus, but little or no pulmonary blood flow is available for exchange.</p></div>
         <div class="card"><span class="pill">Physiologic</span><h3>Total wasted volume</h3><p>Anatomic dead space + alveolar dead space.</p></div>
       </div>
+      <div class="card" style="margin-top:16px">
+        <h3>How to calculate physiologic dead space</h3>
+        <p>Use the Bohr relationship in <strong>two steps</strong>. First find the <strong>fraction</strong> of the tidal breath that is wasted. Then convert that fraction into a <strong>volume in milliliters</strong>.</p>
+        <ol class="steps">
+          <li><strong>Calculate VD/VT:</strong> subtract mixed-expired PCO2 from PaCO2, then divide by PaCO2.</li>
+          <li><strong>Convert the fraction to mL:</strong> multiply VD/VT by tidal volume.</li>
+        </ol>
+        <div class="formula">Step 1: VD/VT = (40 − 28) ÷ 40 = 12 ÷ 40 = 0.30</div>
+        <div class="formula">Step 2: Physiologic VD = 0.30 × 500 mL = 150 mL</div>
+        <p style="margin:.5rem 0 0;color:var(--muted)"><strong>Remember:</strong> VD/VT is a ratio (or percent). Physiologic dead space is the wasted volume from that breath in <strong>mL</strong>.</p>
+      </div>
       <div class="grid" style="margin-top:16px">
-        <div class="card"><h3>Bohr calculation</h3><p>PaCO2 = 40 mm Hg<br>PECO2 = 28 mm Hg<br>VT = 500 mL</p><div class="formula">VD/VT = (PaCO2 − PECO2) / PaCO2</div><div class="inputline">VD/VT <input id="vdvt" type="number" step="0.01" aria-label="Dead space fraction"></div><div class="inputline">Physiologic VD <input id="vdml" type="number" step="1" aria-label="Physiologic dead space milliliters"> mL</div></div>
+        <div class="card"><h3>Now try the Bohr calculation</h3><p>PaCO2 = 40 mm Hg<br>PECO2 = 28 mm Hg<br>VT = 500 mL</p><div class="formula">VD/VT = (PaCO2 − PECO2) / PaCO2</div><div class="inputline">VD/VT <input id="vdvt" type="number" step="0.01" aria-label="Dead space fraction"></div><div class="inputline">Physiologic VD <input id="vdml" type="number" step="1" aria-label="Physiologic dead space milliliters"> mL</div></div>
         <div>
           <fieldset class="q" id="s3q"><legend>Interpret the result</legend>
             <label><input type="radio" name="s3q" value="a"> A larger VD/VT means a greater fraction of each breath is wasted and more total ventilation is required to preserve VA.</label>
@@ -335,75 +328,5 @@ function restartAll(){localStorage.removeItem('AHRC155_1_4_practice');location.r
 function restore(){try{const x=JSON.parse(localStorage.getItem('AHRC155_1_4_practice')||'[]');x.forEach(n=>completed.add(n));for(let n=1;n<=5;n++){if(completed.has(n))document.getElementById('sec'+n).classList.add('complete');if(n===1||completed.has(n-1))document.getElementById('sec'+n).classList.remove('lock')}if(completed.size===5)document.getElementById('finish').classList.add('show');updateProgress()}catch(e){}}
 renderLabels();renderCases();restore();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
