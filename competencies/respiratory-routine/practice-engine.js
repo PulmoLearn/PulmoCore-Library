@@ -494,16 +494,16 @@
         const selectedWrong=state.closeActions.filter(id=>!expected.includes(id));
         if(state.patientIndex===0){
           if(state.closeActions.includes('escalate')) extra.push('Nora has no finding that indicates escalation of care');
-          if(state.closeActions.includes('report-vitals')) extra.push('none of Nora's measured vital signs are outside expected parameters');
+          if(state.closeActions.includes('report-vitals')) extra.push("none of Nora's measured vital signs are outside expected parameters");
         }
         if(state.patientIndex===1){
-          if(state.closeActions.includes('escalate')) extra.push('Elaine has no new finding that indicates escalation of care');
-          if(state.closeActions.includes('report-vitals')) extra.push('Elaine's SpO₂ is at her documented baseline on prescribed oxygen');
-          if(missing.includes('maintain-regimen')) extra.push('Elaine should remain on her prescribed oxygen and home respiratory regimen');
+          if(state.closeActions.includes('escalate')) extra.push("Elaine has no new finding that indicates escalation of care");
+          if(state.closeActions.includes('report-vitals')) extra.push("Elaine's SpO₂ is at her documented baseline on prescribed oxygen");
+          if(missing.includes('maintain-regimen')) extra.push("Elaine should remain on her prescribed oxygen and home respiratory regimen");
         }
         if(state.patientIndex===2){
-          if(missing.includes('escalate')) extra.push('Robert's acute respiratory worsening requires escalation of care');
-          if(missing.includes('report-vitals')) extra.push('Robert has vital signs and respiratory findings outside expected parameters that should be reported');
+          if(missing.includes('escalate')) extra.push("Robert's acute respiratory worsening requires escalation of care");
+          if(missing.includes('report-vitals')) extra.push("Robert has vital signs and respiratory findings outside expected parameters that should be reported");
         }
         if(selectedWrong.includes('oxygen-off')) extra.push('do not remove ordered oxygen as a routine close-out action');
         if(selectedWrong.includes('repeat')) extra.push('a complete reassessment should be driven by clinical need rather than repeated automatically');
