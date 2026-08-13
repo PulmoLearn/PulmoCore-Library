@@ -19,7 +19,28 @@
 .chain{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}.chain-node{border:1px solid #b8c7d1;background:#fff;border-radius:10px;padding:9px 11px;font-weight:750;color:var(--navy)}.chain-arrow{font-weight:900;color:var(--teal)}.challenge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mini{font-size:.9rem;color:var(--muted)}details{margin-top:10px;background:#fbfcfd;border:1px solid var(--line);border-radius:10px;padding:9px 12px}summary{cursor:pointer;font-weight:800;color:var(--navy)}
 @media(max-width:800px){.grid,.grid3,.challenge-grid{grid-template-columns:1fr}.defense-map{grid-template-columns:1fr 1fr}.cough-chain{grid-template-columns:1fr 1fr}.failure-cards{grid-template-columns:1fr}.condition-strip{grid-template-columns:1fr 1fr}.wrap{padding:12px 10px 40px}.section{margin-top:16px}.section-head{padding:16px;gap:10px}.section-body{padding:14px}.hero{padding:18px;border-radius:16px}.progress-shell{align-items:flex-start;flex-direction:column}.progress{width:100%}.progress-text{white-space:normal}.btn,.token,.scenario-buttons button{min-height:44px}.controls{display:grid;grid-template-columns:1fr}.controls .btn{width:100%}.q label{padding:11px 8px;min-height:44px}.airway-anatomy{max-width:460px;max-height:none}}
 @media(max-width:500px){.defense-map,.cough-chain,.condition-strip{grid-template-columns:1fr}.airway-anatomy{max-width:100%}.section h2{font-size:1.1rem}.card{padding:13px}.zone{padding:10px}.token-bank{display:grid;grid-template-columns:1fr 1fr}.token{width:100%}}
-</style>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 <body>
 <div class="wrap">
@@ -270,4 +291,74 @@ shuffleQuestionOptions();
 
 try{const saved=JSON.parse(localStorage.getItem('AHRC155_1_1_complete')||'[]');saved.forEach(n=>{complete.add(n);document.getElementById('sec'+n)?.classList.add('complete');if(n<total)document.getElementById('sec'+(n+1))?.classList.remove('lock')});if(complete.size===total)document.getElementById('finish').classList.add('show');update()}catch(e){}
 </script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body></html>
