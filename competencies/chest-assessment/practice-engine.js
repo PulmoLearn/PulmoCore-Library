@@ -349,7 +349,7 @@
 
   function clearAnswerStatus(container){
     if(!container) return;
-    $$('.select-option, .breath-card',container).forEach(b=>b.classList.remove('answer-wrong','answer-correct'));
+    $$('.select-option, .breath-card, .equipment-card, .choice-chip',container).forEach(b=>b.classList.remove('answer-wrong','answer-correct'));
   }
   function selectSingle(container,key,value){
     clearAnswerStatus(container);
@@ -362,13 +362,23 @@
     selected.classList.remove('answer-wrong','answer-correct');
     selected.classList.add(selectedValue===correctValue?'answer-correct':'answer-wrong');
   }
-  function renderEquipment(){const tray=$('#equipmentTray');tray.innerHTML='';shuffle(equipment).forEach(([id,label,file])=>{const b=document.createElement('button');b.type='button';b.className='equipment-card';b.dataset.id=id;b.innerHTML=`<img src="${file}" alt="${label}"><strong>${label}</strong>`;b.classList.toggle('selected',state.equipment.includes(id));b.addEventListener('click',()=>{state.equipment.includes(id)?state.equipment=state.equipment.filter(x=>x!==id):state.equipment.push(id);b.classList.toggle('selected',state.equipment.includes(id));clearFeedback($('#prepareFeedback'));$('#toConnect').disabled=true;saveProgress();});tray.appendChild(b);});}
+  function markSelectedSet(container,dataKey,selectedValues,correctValues){
+    if(!container) return;
+    const selectedSet=new Set(selectedValues||[]), correctSet=new Set(correctValues||[]);
+    $$(`[data-${dataKey}]`,container).forEach(b=>{
+      b.classList.remove('answer-wrong','answer-correct');
+      const value=b.dataset[dataKey];
+      if(selectedSet.has(value)) b.classList.add(correctSet.has(value)?'answer-correct':'answer-wrong');
+    });
+  }
+  function clearStatusOnChoice(container){ clearAnswerStatus(container); }
+  function renderEquipment(){const tray=$('#equipmentTray');tray.innerHTML='';shuffle(equipment).forEach(([id,label,file])=>{const b=document.createElement('button');b.type='button';b.className='equipment-card';b.dataset.id=id;b.innerHTML=`<img src="${file}" alt="${label}"><strong>${label}</strong>`;b.classList.toggle('selected',state.equipment.includes(id));b.addEventListener('click',()=>{clearAnswerStatus(tray);state.equipment.includes(id)?state.equipment=state.equipment.filter(x=>x!==id):state.equipment.push(id);b.classList.toggle('selected',state.equipment.includes(id));clearFeedback($('#prepareFeedback'));$('#toConnect').disabled=true;saveProgress();});tray.appendChild(b);});}
 
   function createSortable(container,steps){container.innerHTML='';const ordered=(state.connectOrder.length===steps.length&&sameMembers(state.connectOrder,steps))?[...state.connectOrder]:shuffle(steps);ordered.forEach(step=>{const item=document.createElement('div');item.className='sortable-item';item.dataset.step=step;item.innerHTML=`<span class="drag-handle">☰</span><div><div style="display:flex;gap:10px;align-items:center"><span class="order-number"></span><span>${step}</span></div><div class="keyboard-order-controls"><button type="button" class="move-btn up">↑</button><button type="button" class="move-btn down">↓</button></div></div><span class="sort-status"></span>`;item.draggable=true;item.addEventListener('dragstart',()=>item.classList.add('dragging'));item.addEventListener('dragend',()=>{item.classList.remove('dragging');sync(container);});item.addEventListener('dragover',e=>e.preventDefault());item.addEventListener('drop',e=>{e.preventDefault();const d=$('.dragging',container);if(!d||d===item)return;const items=[...container.children],from=items.indexOf(d),to=items.indexOf(item);from<to?item.after(d):item.before(d);sync(container);});$('.up',item).onclick=()=>{const p=item.previousElementSibling;if(p)container.insertBefore(item,p);sync(container);};$('.down',item).onclick=()=>{const n=item.nextElementSibling;if(n)n.after(item);sync(container);};container.appendChild(item);});sync(container);}
   function sync(container){state.connectOrder=[...container.children].map(it=>it.dataset.step);[...container.children].forEach((it,i)=>{$('.order-number',it).textContent=i+1;it.classList.remove('correct-position','wrong-position');$('.sort-status',it).textContent='';});saveProgress();}
   function gradeSortable(container,expected){let c=0;[...container.children].forEach((it,i)=>{const ok=it.dataset.step===expected[i];it.classList.toggle('correct-position',ok);it.classList.toggle('wrong-position',!ok);$('.sort-status',it).textContent=ok?'✓ Correct':'Adjust';if(ok)c++;});return c===expected.length;}
 
-  function renderIds(){const opts=[['name','Full name'],['dob','Date of birth'],['room','Room number'],['diagnosis','Surgical diagnosis']];const wrap=$('#identifierChoices');wrap.innerHTML='';shuffle(opts).forEach(([id,label])=>{const b=document.createElement('button');b.type='button';b.className='choice-chip';b.textContent=label;b.dataset.id=id;b.classList.toggle('selected',state.ids.includes(id));b.onclick=()=>{if(state.ids.includes(id))state.ids=state.ids.filter(x=>x!==id);else if(state.ids.length<2)state.ids.push(id);else state.ids=[state.ids[1],id];$$('.choice-chip',wrap).forEach(x=>x.classList.toggle('selected',state.ids.includes(x.dataset.id)));$('#toMeasure').disabled=true;clearFeedback($('#connectFeedback'));saveProgress();};wrap.appendChild(b);});}
+  function renderIds(){const opts=[['name','Full name'],['dob','Date of birth'],['room','Room number'],['diagnosis','Surgical diagnosis']];const wrap=$('#identifierChoices');wrap.innerHTML='';shuffle(opts).forEach(([id,label])=>{const b=document.createElement('button');b.type='button';b.className='choice-chip';b.textContent=label;b.dataset.id=id;b.classList.toggle('selected',state.ids.includes(id));b.onclick=()=>{clearAnswerStatus(wrap);if(state.ids.includes(id))state.ids=state.ids.filter(x=>x!==id);else if(state.ids.length<2)state.ids.push(id);else state.ids=[state.ids[1],id];$$('.choice-chip',wrap).forEach(x=>x.classList.toggle('selected',state.ids.includes(x.dataset.id)));$('#toMeasure').disabled=true;clearFeedback($('#connectFeedback'));saveProgress();};wrap.appendChild(b);});}
   function renderChoiceStack(id,choices,stateKey,dataKey){const wrap=$(id);wrap.innerHTML='';shuffle(choices).forEach(([value,text])=>{const b=document.createElement('button');b.type='button';b.className='select-option';b.dataset[dataKey]=value;b.textContent=text;b.classList.toggle('selected',state[stateKey]===value);b.onclick=()=>{state[stateKey]=value;selectSingle(wrap,dataKey,value);saveProgress();};wrap.appendChild(b);});}
   function renderCloseActions(){
     const wrap=$('#closeActionChoices');
@@ -381,6 +391,7 @@
       b.setAttribute('aria-pressed','false');
       b.textContent=label;
       b.onclick=()=>{
+        clearAnswerStatus(wrap);
         if(state.closeActions.includes(id)) state.closeActions=state.closeActions.filter(x=>x!==id);
         else state.closeActions.push(id);
         const selected=state.closeActions.includes(id);
@@ -748,14 +759,16 @@
 
 
   $('#startPractice').onclick=()=>showSection(1);
-  $('#checkPrepare').onclick=()=>{const expected=equipment.filter(x=>x[3]).map(x=>x[0]);if(sameMembers(state.equipment,expected)){setFeedback($('#prepareFeedback'),'correct','<strong>Correct.</strong> These tools support observation, measurement, auscultation, and documentation. Treatment or diagnostic equipment is not indicated simply because it is available.');$('#toConnect').disabled=false;}else{setFeedback($('#prepareFeedback'),'incorrect',state.patientIndex===0?'<strong>Adjust the tray.</strong> Bring the tools needed for a routine bedside respiratory assessment. Do not add treatment or invasive diagnostic equipment unless the order or patient condition calls for it.':'<strong>Adjust the tray.</strong> Recheck the order and choose only the tools needed to complete the respiratory assessment.');$('#toConnect').disabled=true;}};
+  $('#checkPrepare').onclick=()=>{const expected=equipment.filter(x=>x[3]).map(x=>x[0]);markSelectedSet($('#equipmentTray'),'id',state.equipment,expected);if(sameMembers(state.equipment,expected)){setFeedback($('#prepareFeedback'),'correct','<strong>Correct.</strong> These tools support observation, measurement, auscultation, and documentation. Treatment or diagnostic equipment is not indicated simply because it is available.');$('#toConnect').disabled=false;}else{setFeedback($('#prepareFeedback'),'incorrect',state.patientIndex===0?'<strong>Adjust the tray.</strong> Any selected equipment outlined in red does not belong in this routine assessment. Also check whether a required assessment tool is still missing.':'<strong>Adjust the tray.</strong> Selected equipment outlined in red is not needed for this assessment. Also check whether a required assessment tool is missing.');$('#toConnect').disabled=true;}};
   $('#resetPrepare').onclick=()=>{state.equipment=[];renderEquipment();clearFeedback($('#prepareFeedback'));$('#toConnect').disabled=true;saveProgress();};
   $('#toConnect').onclick=()=>showSection(2);
-  $('#checkConnect').onclick=()=>{const seq=gradeSortable($('#connectSequence'),connectExpected),ids=sameMembers(state.ids,['name','dob']);if(seq&&ids){setFeedback($('#connectFeedback'),'correct',`<strong>Correct.</strong> You entered safely, identified ${cfg().firstName} with two valid identifiers, explained the assessment, and positioned the patient for a reliable respiratory exam.`);$('#toMeasure').disabled=false;}else{setFeedback($('#connectFeedback'),'incorrect',`<strong>Keep working.</strong> ${!seq?'Check the opening sequence. ':''}${!ids?'Use two person-specific identifiers; room number and diagnosis are not acceptable identifiers.':''}`);$('#toMeasure').disabled=true;}};
+  $('#checkConnect').onclick=()=>{const seq=gradeSortable($('#connectSequence'),connectExpected),ids=sameMembers(state.ids,['name','dob']);markSelectedSet($('#identifierChoices'),'id',state.ids,['name','dob']);if(seq&&ids){setFeedback($('#connectFeedback'),'correct',`<strong>Correct.</strong> You entered safely, identified ${cfg().firstName} with two valid identifiers, explained the assessment, and positioned the patient for a reliable respiratory exam.`);$('#toMeasure').disabled=false;}else{setFeedback($('#connectFeedback'),'incorrect',`<strong>Keep working.</strong> ${!seq?'Steps marked “Adjust” are out of sequence. ':''}${!ids?'Any selected identifier outlined in red is not an acceptable patient identifier.':''}`);$('#toMeasure').disabled=true;}};
   $('#toMeasure').onclick=()=>showSection(3);
   $('#checkMeasure').onclick=()=>{
     const gathered=state.collected.timer&&state.collected.pulseOx;
     const oxExpected = state.patientIndex===1 ? 'alt-site' : 'verify';
+    if(state.measure) markSelectedAnswer($('#measureTechnique'),'measure',state.measure,'quiet');
+    if(state.ox) markSelectedAnswer($('#oxTechnique'),'ox',state.ox,oxExpected);
     if(gathered&&state.measure==='quiet'&&state.ox===oxExpected){
       if(state.patientIndex===1){
         updateOxDisplayResolved();
@@ -766,7 +779,7 @@
       $('#toInspect').disabled=false;
     }else{
       const missing=[];if(!state.collected.timer)missing.push('use the watch / timer');if(!state.collected.pulseOx)missing.push('use the pulse oximeter');
-      const technique=(state.measure!=='quiet'||state.ox!==oxExpected)?' Then complete both technique checks.':'';
+      const technique=(state.measure!=='quiet'||state.ox!==oxExpected)?' Any selected technique outlined in red is incorrect—change that selection and recheck.':'';
       const extra = state.patientIndex===1 ? ' For Elaine, do not accept a blank or unreliable pulse-ox display—choose a better finger or an alternative site.' : '';
       setFeedback($('#measureFeedback'),'incorrect',`<strong>Keep collecting.</strong> ${missing.length?'First '+missing.join(' and ')+'.':''}${technique}${extra}`);$('#toInspect').disabled=true;
     }
@@ -787,11 +800,13 @@
     saveProgress();
   };
   $('#toInterpret').onclick=()=>showSection(5);
-  $('#checkInterpret').onclick=()=>{if(state.interpret===cfg().interpretationCorrect){setFeedback($('#interpretFeedback'),'correct',cfg().interpretCorrectFeedback);$('#toClose').disabled=false;}else{setFeedback($('#interpretFeedback'),'incorrect',cfg().interpretIncorrectFeedback);$('#toClose').disabled=true;}};
+  $('#checkInterpret').onclick=()=>{if(state.interpret) markSelectedAnswer($('#interpretChoices'),'decision',state.interpret,cfg().interpretationCorrect);if(state.interpret===cfg().interpretationCorrect){setFeedback($('#interpretFeedback'),'correct',cfg().interpretCorrectFeedback);$('#toClose').disabled=false;}else{setFeedback($('#interpretFeedback'),'incorrect',cfg().interpretIncorrectFeedback);$('#toClose').disabled=true;}};
   $('#toClose').onclick=()=>showSection(6);
   $('#checkClose').onclick=()=>{
     const expected=closeActions().filter(x=>x[2]).map(x=>x[0]);
     const actionsCorrect=sameMembers(state.closeActions,expected);
+    markSelectedSet($('#closeActionChoices'),'action',state.closeActions,expected);
+    if(state.doc) markSelectedAnswer($('#documentationChoices'),'doc',state.doc,'best');
     if(actionsCorrect&&state.doc==='best'){
       let message;
       if(state.patientIndex===1){
@@ -837,7 +852,7 @@
         if(!extra.length && !missing.length) parts.push(`Reconsider the close-out actions that apply to ${cfg().firstName} based on the findings you collected.`);
       }
       if(state.doc!=='best') parts.push('Choose documentation that records objective findings, oxygen status, and the action taken without vague or unsupported conclusions.');
-      setFeedback($('#closeFeedback'),'incorrect',`<strong>Almost there.</strong> ${parts.join(' ')}`);
+      setFeedback($('#closeFeedback'),'incorrect',`<strong>Almost there.</strong> ${parts.join(' ')} <strong>Selections outlined in red are incorrect.</strong>`);
       $('#finishPatient').disabled=true;
     }
   };
@@ -856,5 +871,5 @@
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(state.section);
-  console.info('PulmoLearn Respiratory Routine practice engine v4.4 — incorrect assessment selections remain red after checking');
+  console.info('PulmoLearn Respiratory Routine practice engine v4.5 — incorrect selections are identified in red across all checked questions');
 })();
