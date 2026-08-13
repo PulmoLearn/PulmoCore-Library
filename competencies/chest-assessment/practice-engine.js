@@ -871,5 +871,5 @@
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(state.section);
-  console.info('PulmoLearn Respiratory Routine practice engine v4.5 — incorrect selections are identified in red across all checked questions');
+  console.info('PulmoLearn Chest Assessment practice engine v4.5.1 — path hotfix + incorrect-selection highlighting');
 })();
