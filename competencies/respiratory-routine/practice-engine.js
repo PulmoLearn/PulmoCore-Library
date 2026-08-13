@@ -6,7 +6,7 @@
   const STORAGE_KEY = "pulmolearn.respiratoryRoutine.v4_1";
   const state = {
     section:0, unlockedThrough:0, patientIndex:0, equipment:[], ids:[], measure:null, ox:null, inspectionSingle:null, breath:null, interpret:null, doc:null, closeActions:[],
-    collected:{timer:false, pulseOx:false}, inspected:false, listened:false, connectOrder:[], completedPatients:[]
+    collected:{timer:false, pulseOx:false}, inspected:false, expansionDone:false, fremitusDone:false, crepitusDone:false, percussionSides:[], percussionChoice:null, listened:false, connectOrder:[], completedPatients:[]
   };
 
   function saveProgress(){
@@ -21,6 +21,11 @@
       if(!Array.isArray(state.completedPatients)) state.completedPatients=[];
       if(!Array.isArray(state.connectOrder)) state.connectOrder=[];
       if(!state.collected || typeof state.collected!=='object') state.collected={timer:false,pulseOx:false};
+      if(!Array.isArray(state.percussionSides)) state.percussionSides=[];
+      if(typeof state.expansionDone!=='boolean') state.expansionDone=false;
+      if(typeof state.fremitusDone!=='boolean') state.fremitusDone=false;
+      if(typeof state.crepitusDone!=='boolean') state.crepitusDone=false;
+      if(typeof state.percussionChoice!=='string') state.percussionChoice=null;
       state.patientIndex=Math.min(Math.max(Number(state.patientIndex)||0,0),3);
       state.section=Math.min(Math.max(Number(state.section)||0,0),7);
       state.unlockedThrough=Math.max(Number(state.unlockedThrough)||0,state.section);
@@ -47,6 +52,12 @@
       rrDescription:"regular, unlabored",
       spo2:97,
       oxygenText:"room air",
+      expansionFinding:"Chest expansion is symmetric bilaterally.",
+      fremitusFinding:"Tactile fremitus is equal bilaterally with expected vibration intensity.",
+      crepitusFinding:"No crepitus or subcutaneous air is palpated.",
+      percussionCorrect:"resonant",
+      percussionFinding:"Percussion is resonant and symmetric over the lung fields.",
+      percussionChoices:[["resonant","Resonant and symmetric bilaterally"],["dull","Dullness over both bases"],["hyper","Marked hyperresonance throughout"],["asymmetric","Unilateral dullness compared with the opposite side"]],
       inspectionCorrect:"normal",
       inspectionReveal:"<strong>Regular, unlabored respirations.</strong> Chest movement is symmetric. No retractions, accessory-muscle use, cyanosis, or tripod positioning are observed.",
       inspectionChoices:[
@@ -75,7 +86,7 @@
       interpretCorrectFeedback:"<strong>Correct.</strong> No immediate respiratory intervention is indicated. Continue routine monitoring and document the findings.",
       interpretIncorrectFeedback:"<strong>Look at the whole pattern.</strong> Normal work of breathing, RR 16/min, SpO₂ 97% on room air, and clear bilateral breath sounds do not support immediate respiratory treatment or escalation.",
       documentationChoices:[
-        ["best","RR 16/min, regular and unlabored; chest movement symmetric; breath sounds clear/equal bilaterally; SpO₂ 97% on room air; no acute respiratory distress observed."],
+        ["best","RR 16/min, regular and unlabored; chest expansion and tactile fremitus symmetric; percussion resonant bilaterally; no crepitus; breath sounds clear/equal bilaterally; SpO₂ 97% on room air."],
         ["vague","Respiratory assessment normal. Patient doing fine."],
         ["overstate","Postoperative patient has no pulmonary complications and will not require respiratory therapy."],
         ["omit","SpO₂ 97%. No other documentation needed because findings were normal."]
@@ -105,6 +116,12 @@
       rrDescription:"regular, no acute distress",
       spo2:92,
       oxygenText:"2 L/min nasal cannula",
+      expansionFinding:"Chest expansion is mildly reduced but symmetric bilaterally.",
+      fremitusFinding:"Tactile fremitus is decreased but symmetric bilaterally.",
+      crepitusFinding:"No crepitus or subcutaneous air is palpated.",
+      percussionCorrect:"hyper",
+      percussionFinding:"Percussion is more resonant to hyperresonant bilaterally, consistent with chronic hyperinflation.",
+      percussionChoices:[["hyper","More resonant to hyperresonant and symmetric bilaterally"],["dull","Dullness over both bases"],["resonant","Completely normal resonance without any chronic change"],["asymmetric","Unilateral dullness compared with the opposite side"]],
       inspectionCorrect:"stable",
       inspectionReveal:"<strong>Chronically stable COPD appearance without acute distress.</strong> Elaine is resting comfortably on her prescribed oxygen. Chest movement is symmetric, with no retractions, marked accessory-muscle use, cyanosis, or tripod positioning.",
       inspectionChoices:[
@@ -133,7 +150,7 @@
       interpretCorrectFeedback:"<strong>Correct.</strong> Elaine's current findings fit the patient-specific context documented in the chart: prescribed oxygen at 2 L/min, SpO₂ within her recent stable range, no acute distress, and diminished bilateral breath sounds. Continue the ordered oxygen, document, and monitor.",
       interpretIncorrectFeedback:"<strong>Use the patient-specific context.</strong> Elaine is comfortable, her SpO₂ is within the recent range documented on the same prescribed oxygen flow, and there is no new sign of acute deterioration. A single value should not automatically trigger oxygen removal, an unprescribed increase, or escalation.",
       documentationChoices:[
-        ["best","RR 20/min, regular; chest movement symmetric; breath sounds diminished bilaterally; SpO₂ 92% on 2 L/min nasal cannula, consistent with documented baseline; no acute respiratory distress observed."],
+        ["best","RR 20/min, regular; chest expansion mildly reduced but symmetric; tactile fremitus decreased bilaterally; percussion hyperresonant; no crepitus; breath sounds diminished bilaterally; SpO₂ 92% on 2 L/min nasal cannula, consistent with baseline."],
         ["vague","COPD assessment unchanged. Patient seems okay."],
         ["overstate","SpO₂ is low, so the patient requires more oxygen immediately."],
         ["omit","SpO₂ 92%. Oxygen therapy and breath sounds do not need documentation because they are chronic."]
@@ -162,6 +179,12 @@
       rrDescription:"tachypneic with increased effort",
       spo2:93,
       oxygenText:"2 L/min nasal cannula",
+      expansionFinding:"Chest movement remains symmetric despite increased respiratory effort.",
+      fremitusFinding:"Tactile fremitus is equal bilaterally without a focal increase or decrease.",
+      crepitusFinding:"No crepitus or subcutaneous air is palpated.",
+      percussionCorrect:"resonant",
+      percussionFinding:"Percussion is resonant and symmetric over the lung fields.",
+      percussionChoices:[["resonant","Resonant and symmetric bilaterally"],["dull","Dullness over both bases"],["hyper","Marked hyperresonance throughout"],["asymmetric","Unilateral dullness compared with the opposite side"]],
       inspectionCorrect:"increased-wob",
       inspectionReveal:"<strong>Increased work of breathing is visible.</strong> Robert is sitting forward, breathing with his mouth open, and using neck and shoulder muscles to assist ventilation.",
       inspectionChoices:[
@@ -190,7 +213,7 @@
       interpretCorrectFeedback:"<strong>Correct.</strong> Robert has a pattern of acute respiratory worsening: tachypnea, increased work of breathing, wheezing, and abnormal vital signs. Keep the ordered oxygen in place, report the findings, and escalate care so treatment can be evaluated promptly.",
       interpretIncorrectFeedback:"<strong>Reassess the pattern.</strong> Robert is not simply showing one isolated abnormal value. Tachypnea, accessory-muscle use, forward positioning, and wheezing together indicate an acute change that should be reported and escalated rather than handled as routine monitoring.",
       documentationChoices:[
-        ["best","RR 30/min with increased effort; patient sitting forward with accessory-muscle use; bilateral wheezes; pulse 112/min; SpO₂ 93% on 2 L/min nasal cannula; acute change reported and care escalated."],
+        ["best","RR 30/min with increased effort; symmetric chest expansion and fremitus; resonant percussion; no crepitus; patient in tripod position with accessory-muscle use; bilateral wheezes; pulse 112/min; SpO₂ 93% on 2 L/min nasal cannula; change reported and care escalated."],
         ["vague","Patient wheezing and looks short of breath. Provider aware."],
         ["understate","Respiratory assessment completed. SpO₂ 93% on oxygen; continue routine monitoring."],
         ["omit","Wheezes present. Other findings do not need documentation because care was escalated."]
@@ -219,6 +242,12 @@
       rrDescription:"tachypneic with increased effort",
       spo2:88,
       oxygenText:"2 L/min nasal cannula",
+      expansionFinding:"Chest expansion is symmetric but somewhat reduced as Maggie breathes with increased effort.",
+      fremitusFinding:"Tactile fremitus is equal bilaterally without a focal tactile abnormality.",
+      crepitusFinding:"No crepitus or subcutaneous air is palpated.",
+      percussionCorrect:"dull-bases",
+      percussionFinding:"Percussion is resonant over the upper fields with relative dullness at the bilateral bases.",
+      percussionChoices:[["dull-bases","Resonant upper fields with relative dullness at both bases"],["resonant","Uniformly resonant throughout all lung fields"],["hyper","Marked hyperresonance throughout both lungs"],["asymmetric","Isolated unilateral dullness with a normal opposite base"]],
       inspectionCorrect:"chf-pattern",
       inspectionReveal:"<strong>Increased respiratory effort with peripheral edema is visible.</strong> Maggie is in high-Fowler position, appears dyspneic, and has bilateral pedal edema at the ankles. The pattern suggests a cardiopulmonary fluid problem rather than isolated bronchospasm.",
       inspectionChoices:[
@@ -247,7 +276,7 @@
       interpretCorrectFeedback:"<strong>Correct.</strong> Maggie's respiratory status has worsened from the earlier baseline. Fine bibasilar crackles, lower SpO₂ despite ordered oxygen, increased work of breathing, and pedal edema should be reported promptly. Do not anchor on bronchospasm when wheezing is absent and the broader picture suggests fluid overload.",
       interpretIncorrectFeedback:"<strong>Synthesize the pattern.</strong> Maggie has no wheeze, but she does have fine bibasilar crackles, worsening oxygenation on the same oxygen flow, dyspnea, and pedal edema with a history of CHF. Those findings support prompt reporting and discussion of fluid status rather than assuming bronchoconstriction.",
       documentationChoices:[
-        ["best","RR 28/min with increased effort; patient upright in high-Fowler position with bilateral pedal edema; pulse 108/min; SpO₂ 88% on 2 L/min nasal cannula, decreased from earlier baseline; fine bibasilar crackles present, no wheeze heard; findings reported for further evaluation."],
+        ["best","RR 28/min with increased effort; chest expansion symmetric but reduced; tactile fremitus equal; relative dullness at bilateral bases; no crepitus; high-Fowler position with pedal edema; pulse 108/min; SpO₂ 88% on 2 L/min nasal cannula; fine bibasilar crackles, no wheeze; findings reported."],
         ["vague","Patient seems short of breath and may be fluid overloaded. Nurse notified."],
         ["broncho","Shortness of breath likely due to bronchospasm. Bronchodilator needed."],
         ["omit","Crackles heard. No other details are needed because the patient has CHF."]
@@ -304,7 +333,7 @@
   const sameMembers=(a,b)=>{const x=[...a].sort(),y=[...b].sort();return x.length===y.length&&x.every((v,i)=>v===y[i]);};
   const shuffle=a=>{const c=[...a];for(let i=c.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[c[i],c[j]]=[c[j],c[i]];}return c;};
 
-  function showSection(n){state.section=Number(n);state.unlockedThrough=Math.max(state.unlockedThrough,state.section);saveProgress();$$('.lesson-section').forEach((s,i)=>s.classList.toggle('active',i===state.section));$$('.nav-step').forEach((b,i)=>b.classList.toggle('active',i===state.section));const labels=['Teach','Prepare','Connect','Measure','Inspect & Listen','Interpret','Close the Loop','Complete'];$('#progressText').textContent=labels[state.section];$('#progressBar').style.width=`${state.section/7*100}%`;requestAnimationFrame(()=>{const sec=$(`.lesson-section[data-section-panel="${state.section}"]`);if(sec){window.scrollTo({top:Math.max(0,sec.getBoundingClientRect().top+window.scrollY-STICKY_HEADER_OFFSET),behavior:'smooth'});}});}
+  function showSection(n){state.section=Number(n);state.unlockedThrough=Math.max(state.unlockedThrough,state.section);saveProgress();$$('.lesson-section').forEach((s,i)=>s.classList.toggle('active',i===state.section));$$('.nav-step').forEach((b,i)=>b.classList.toggle('active',i===state.section));const labels=['Teach','Prepare','Connect','Measure','Physical Assessment','Interpret','Close the Loop','Complete'];$('#progressText').textContent=labels[state.section];$('#progressBar').style.width=`${state.section/7*100}%`;requestAnimationFrame(()=>{const sec=$(`.lesson-section[data-section-panel="${state.section}"]`);if(sec){window.scrollTo({top:Math.max(0,sec.getBoundingClientRect().top+window.scrollY-STICKY_HEADER_OFFSET),behavior:'smooth'});}});}
 
   function selectSingle(container,key,value){$$('.select-option',container).forEach(b=>b.classList.toggle('selected',b.dataset[key]===value));}
   function renderEquipment(){const tray=$('#equipmentTray');tray.innerHTML='';shuffle(equipment).forEach(([id,label,file])=>{const b=document.createElement('button');b.type='button';b.className='equipment-card';b.dataset.id=id;b.innerHTML=`<img src="${file}" alt="${label}"><strong>${label}</strong>`;b.classList.toggle('selected',state.equipment.includes(id));b.addEventListener('click',()=>{state.equipment.includes(id)?state.equipment=state.equipment.filter(x=>x!==id):state.equipment.push(id);b.classList.toggle('selected',state.equipment.includes(id));clearFeedback($('#prepareFeedback'));$('#toConnect').disabled=true;saveProgress();});tray.appendChild(b);});}
@@ -343,6 +372,52 @@
   function renderInspection(){
     renderChoiceStack('#inspectionChoices',cfg().inspectionChoices,'inspectionSingle','finding');
     $$('#inspectionChoices .select-option').forEach(b=>b.disabled=true);
+  }
+
+  function renderPercussionChoices(){
+    const wrap=$('#percussionChoices');
+    if(!wrap) return;
+    wrap.innerHTML='';
+    shuffle(cfg().percussionChoices).forEach(([value,text])=>{
+      const b=document.createElement('button');b.type='button';b.className='select-option';b.dataset.percussion=value;b.textContent=text;
+      b.classList.toggle('selected',state.percussionChoice===value);
+      b.disabled=state.percussionSides.length<2;
+      b.onclick=()=>{state.percussionChoice=value;selectSingle(wrap,'percussion',value);clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;saveProgress();};
+      wrap.appendChild(b);
+    });
+  }
+
+  function revealMiniResult(id,html){
+    const el=$(id);if(!el)return;el.classList.remove('locked');el.classList.add('collected');el.innerHTML=`<strong>✓ Finding:</strong> ${html}`;
+  }
+
+  function assessExpansion(){state.expansionDone=true;revealMiniResult('#expansionReveal',cfg().expansionFinding);saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;}
+  function assessCrepitus(){state.crepitusDone=true;revealMiniResult('#crepitusReveal',cfg().crepitusFinding);saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;}
+
+  function useFremitusHands(){
+    const target=$('#fremitusTarget'),hands=$('#fremitusHands'),audio=$('#fremitusAudio'),status=$('#fremitusStatus'),reveal=$('#fremitusReveal');
+    if(!target||!hands||!audio)return;
+    hands.classList.add('used');hands.setAttribute('aria-pressed','true');target.classList.add('listening');
+    reveal.classList.add('locked');reveal.classList.remove('collected');reveal.innerHTML='<span>Feeling transmitted vibration while the patient speaks…</span>';
+    status.textContent='Patient is saying “ninety-nine”… Compare the vibration on both sides.';
+    audio.currentTime=0;
+    const finish=()=>{state.fremitusDone=true;target.classList.remove('listening');status.textContent='Tactile fremitus assessment complete.';revealMiniResult('#fremitusReveal',cfg().fremitusFinding);saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;};
+    audio.onended=finish;
+    const promise=audio.play();
+    if(promise&&typeof promise.catch==='function')promise.catch(()=>{status.textContent='Press the hands again to play the patient saying “ninety-nine.”';});
+  }
+
+  function initPalpationPercussion(){
+    const exp=$('#checkExpansion'),crep=$('#checkCrepitus'),hands=$('#fremitusHands'),target=$('#fremitusTarget');
+    if(exp)exp.addEventListener('click',assessExpansion);if(crep)crep.addEventListener('click',assessCrepitus);
+    if(hands&&target){
+      hands.addEventListener('click',useFremitusHands);
+      hands.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain','fremitus-hands');e.dataTransfer.effectAllowed='copy';});
+      target.addEventListener('dragover',e=>{e.preventDefault();target.classList.add('drag-over');});
+      target.addEventListener('dragleave',()=>target.classList.remove('drag-over'));
+      target.addEventListener('drop',e=>{e.preventDefault();target.classList.remove('drag-over');if(e.dataTransfer.getData('text/plain')==='fremitus-hands')useFremitusHands();});
+    }
+    [['#percussLeft','left'],['#percussRight','right']].forEach(([sel,side])=>{const b=$(sel);if(!b)return;b.addEventListener('click',()=>{if(!state.percussionSides.includes(side))state.percussionSides.push(side);b.classList.add('used');if(state.percussionSides.length===2){revealMiniResult('#percussionReveal',cfg().percussionFinding);renderPercussionChoices();}saveProgress();clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;});});
   }
 
   function renderBreathSounds(){
@@ -463,7 +538,7 @@
   function resetPatientState(){
     state.equipment=[]; state.ids=[]; state.measure=null; state.ox=null; state.inspectionSingle=null;
     state.breath=null; state.interpret=null; state.doc=null; state.closeActions=[]; state.connectOrder=[];
-    state.collected={timer:false,pulseOx:false}; state.inspected=false; state.listened=false; state.unlockedThrough=1;
+    state.collected={timer:false,pulseOx:false}; state.inspected=false; state.expansionDone=false; state.fremitusDone=false; state.crepitusDone=false; state.percussionSides=[]; state.percussionChoice=null; state.listened=false; state.unlockedThrough=1;
     ['#toConnect','#toMeasure','#toInspect','#toInterpret','#toClose','#finishPatient'].forEach(id=>{const el=$(id);if(el)el.disabled=true;});
     ['#prepareFeedback','#connectFeedback','#measureFeedback','#inspectFeedback','#interpretFeedback','#closeFeedback'].forEach(id=>{const el=$(id);if(el)clearFeedback(el);});
     const tf=$('#timerFinding'), of=$('#oxFinding');
@@ -474,6 +549,11 @@
     const rev=$('#inspectionReveal'); rev.className='observation-reveal locked'; rev.innerHTML='<span class="data-status">Not collected</span><p>Inspect the patient before choosing a finding.</p>';
     $('#inspectionInterpretPrompt').hidden=true;
     $('#inspectPatient').classList.remove('used');
+    ['#expansionReveal','#fremitusReveal','#crepitusReveal','#percussionReveal'].forEach(id=>{const el=$(id);if(el){el.className='mini-result locked';el.innerHTML='<span>Not assessed</span>';}});
+    if($('#fremitusStatus'))$('#fremitusStatus').textContent='Place your hands to begin. The patient will say “ninety-nine.”';
+    if($('#fremitusHands')){$('#fremitusHands').classList.remove('used');$('#fremitusHands').setAttribute('aria-pressed','false');}
+    state.percussionSides=[];$$('.percussion-site').forEach(b=>b.classList.remove('used'));
+    renderPercussionChoices();
     const lp=$('#listenPanel'); lp.className='listen-panel locked';
     $('#audioStatus').textContent='Use the stethoscope to unlock the recording.';
     $('#stethoscopeTool').classList.remove('used'); $('#stethoscopeTool').setAttribute('aria-pressed','false');
@@ -497,10 +577,16 @@
     const oxExpected=state.patientIndex===1?'alt-site':'verify';
     $('#toInspect').disabled=!(state.collected.timer&&state.collected.pulseOx&&state.measure==='quiet'&&state.ox===oxExpected);
     if(state.inspected){ inspectPatient(); }
+    if(state.expansionDone) revealMiniResult('#expansionReveal',cfg().expansionFinding);
+    if(state.fremitusDone){if($('#fremitusHands')){$('#fremitusHands').classList.add('used');$('#fremitusHands').setAttribute('aria-pressed','true');}revealMiniResult('#fremitusReveal',cfg().fremitusFinding);if($('#fremitusStatus'))$('#fremitusStatus').textContent='Tactile fremitus assessment complete.';}
+    if(state.crepitusDone) revealMiniResult('#crepitusReveal',cfg().crepitusFinding);
+    $$('.percussion-site').forEach(b=>b.classList.toggle('used',state.percussionSides.includes(b.id==='percussLeft'?'left':'right')));
+    if(state.percussionSides.length===2) revealMiniResult('#percussionReveal',cfg().percussionFinding);
+    renderPercussionChoices();
     if(state.listened){
       const panel=$('#listenPanel'); panel.classList.remove('locked');panel.classList.add('ready');$('#audioStatus').textContent='Breath sounds unlocked. Press Play to listen again, then choose the matching card.';$('#stethoscopeTool').classList.add('used');$('#stethoscopeTool').setAttribute('aria-pressed','true');$$('#breathSoundChoices .breath-card').forEach(b=>b.disabled=false);
     }
-    $('#toInterpret').disabled=!(state.inspected&&state.listened&&state.inspectionSingle===cfg().inspectionCorrect&&state.breath===cfg().breathCorrect);
+    $('#toInterpret').disabled=!(state.inspected&&state.expansionDone&&state.fremitusDone&&state.crepitusDone&&state.percussionSides.length===2&&state.percussionChoice===cfg().percussionCorrect&&state.listened&&state.inspectionSingle===cfg().inspectionCorrect&&state.breath===cfg().breathCorrect);
     $('#toClose').disabled=!(state.interpret===cfg().interpretationCorrect);
     const expectedClose=closeActions().filter(x=>x[2]).map(x=>x[0]);
     $('#finishPatient').disabled=!(sameMembers(state.closeActions,expectedClose)&&state.doc==='best');
@@ -556,6 +642,8 @@
     const measureImg=$('#measurePatientTarget img'); if(measureImg){measureImg.src=p.patientImage;measureImg.alt=p.patientImageAlt;}
 
     const inspectImg=$('#inspectPatient img'); inspectImg.src=p.inspectionImage; inspectImg.alt=p.inspectionAlt;
+    const fremitusImg=$('#fremitusTarget img'); if(fremitusImg){fremitusImg.src=p.patientImage;fremitusImg.alt=`${p.firstName} upright for tactile fremitus palpation`;}
+    if($('#fremitusTarget'))$('#fremitusTarget').setAttribute('aria-label',`${p.firstName}, chest target for tactile fremitus assessment.`);
     $('#inspectPatient strong').textContent=`Inspect ${p.firstName}`;
     $('#inspectPatient span').textContent='Tap the patient to collect visual findings';
     $('#inspectionInterpretPrompt').innerHTML=`<strong>Interpret what you observed:</strong> Choose the one statement below that best describes ${p.firstName}'s visual respiratory findings.`;
@@ -598,6 +686,7 @@
     renderIds();
     renderCloseActions();
     renderInspection();
+    renderPercussionChoices();
     renderBreathSounds();
     renderChoiceStack('#measureTechnique',[["announce","Tell the patient you are counting respirations, then count for 30 seconds."],["quiet","Continue appearing to assess the pulse while quietly observing respiratory rate, rhythm, depth, and effort."],["estimate","Estimate respirations from the monitor because the patient looks comfortable."]],'measure','measure');
     renderChoiceStack('#oxTechnique',getOxTechniqueChoices(),'ox','ox');
@@ -640,12 +729,15 @@
   };
   $('#toInspect').onclick=()=>showSection(4);
   $('#checkInspect').onclick=()=>{
-    if(state.inspected&&state.listened&&state.inspectionSingle===cfg().inspectionCorrect&&state.breath===cfg().breathCorrect){
-      setFeedback($('#inspectFeedback'),'correct',`<strong>Correct.</strong> You inspected before auscultating, used the stethoscope to hear the breath sounds, and matched the sound to the rest of ${cfg().firstName}'s assessment.`);$('#toInterpret').disabled=false;
+    const complete=state.inspected&&state.expansionDone&&state.fremitusDone&&state.crepitusDone&&state.percussionSides.length===2&&state.listened;
+    const interpreted=state.inspectionSingle===cfg().inspectionCorrect&&state.percussionChoice===cfg().percussionCorrect&&state.breath===cfg().breathCorrect;
+    if(complete&&interpreted){
+      setFeedback($('#inspectFeedback'),'correct',`<strong>Correct.</strong> You completed the full physical assessment sequence: inspection, palpation, percussion, and auscultation. You compared findings side-to-side and interpreted them in the context of ${cfg().firstName}'s overall presentation.`);$('#toInterpret').disabled=false;
     }else{
-      const prompts=[];if(!state.inspected)prompts.push(`inspect ${cfg().firstName}`);if(!state.listened)prompts.push('use the stethoscope and listen');if(state.inspected&&state.inspectionSingle!==cfg().inspectionCorrect)prompts.push('reconsider the visual finding');if(state.listened&&state.breath!==cfg().breathCorrect)prompts.push('listen again and reconsider the breath-sound card');
-      setFeedback($('#inspectFeedback'),'incorrect',`<strong>Finish the bedside assessment.</strong> ${prompts.join('; ')}.`);$('#toInterpret').disabled=true;
+      const prompts=[];if(!state.inspected)prompts.push(`inspect ${cfg().firstName}`);if(!state.expansionDone)prompts.push('assess chest expansion');if(!state.fremitusDone)prompts.push('place the hands and assess tactile fremitus while the patient says “ninety-nine”');if(!state.crepitusDone)prompts.push('palpate for crepitus');if(state.percussionSides.length<2)prompts.push('percuss and compare both sides');if(state.percussionSides.length===2&&state.percussionChoice!==cfg().percussionCorrect)prompts.push('reconsider the percussion interpretation');if(!state.listened)prompts.push('use the stethoscope and listen');if(state.inspected&&state.inspectionSingle!==cfg().inspectionCorrect)prompts.push('reconsider the visual finding');if(state.listened&&state.breath!==cfg().breathCorrect)prompts.push('listen again and reconsider the breath-sound card');
+      setFeedback($('#inspectFeedback'),'incorrect',`<strong>Finish the physical assessment.</strong> ${prompts.join('; ')}.`);$('#toInterpret').disabled=true;
     }
+    saveProgress();
   };
   $('#toInterpret').onclick=()=>showSection(5);
   $('#checkInterpret').onclick=()=>{if(state.interpret===cfg().interpretationCorrect){setFeedback($('#interpretFeedback'),'correct',cfg().interpretCorrectFeedback);$('#toClose').disabled=false;}else{setFeedback($('#interpretFeedback'),'incorrect',cfg().interpretIncorrectFeedback);$('#toClose').disabled=true;}};
@@ -713,8 +805,9 @@
   loadProgress();
   applyPatientToPage();
   initMeasureTools();
+  initPalpationPercussion();
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(state.section);
-  console.info('PulmoLearn Respiratory Routine practice engine v4.1 — persistent progress, completion review tabs, and balanced decision choices');
+  console.info('PulmoLearn Respiratory Routine practice engine v4.2 — palpation, tactile fremitus audio, percussion, persistent progress');
 })();
