@@ -339,7 +339,21 @@
 
   function showSection(n){state.section=Number(n);state.unlockedThrough=Math.max(state.unlockedThrough,state.section);saveProgress();$$('.lesson-section').forEach((s,i)=>s.classList.toggle('active',i===state.section));$$('.nav-step').forEach((b,i)=>b.classList.toggle('active',i===state.section));const labels=['Teach','Prepare','Connect','Measure','Physical Assessment','Interpret','Close the Loop','Complete'];$('#progressText').textContent=labels[state.section];$('#progressBar').style.width=`${state.section/7*100}%`;requestAnimationFrame(()=>{const sec=$(`.lesson-section[data-section-panel="${state.section}"]`);if(sec){window.scrollTo({top:Math.max(0,sec.getBoundingClientRect().top+window.scrollY-STICKY_HEADER_OFFSET),behavior:'smooth'});}});}
 
-  function selectSingle(container,key,value){$$('.select-option',container).forEach(b=>b.classList.toggle('selected',b.dataset[key]===value));}
+  function clearAnswerStatus(container){
+    if(!container) return;
+    $$('.select-option, .breath-card',container).forEach(b=>b.classList.remove('answer-wrong','answer-correct'));
+  }
+  function selectSingle(container,key,value){
+    clearAnswerStatus(container);
+    $$('.select-option',container).forEach(b=>b.classList.toggle('selected',b.dataset[key]===value));
+  }
+  function markSelectedAnswer(container,dataKey,selectedValue,correctValue){
+    if(!container || !selectedValue) return;
+    const selected=$(`[data-${dataKey}="${selectedValue}"]`,container);
+    if(!selected) return;
+    selected.classList.remove('answer-wrong','answer-correct');
+    selected.classList.add(selectedValue===correctValue?'answer-correct':'answer-wrong');
+  }
   function renderEquipment(){const tray=$('#equipmentTray');tray.innerHTML='';shuffle(equipment).forEach(([id,label,file])=>{const b=document.createElement('button');b.type='button';b.className='equipment-card';b.dataset.id=id;b.innerHTML=`<img src="${file}" alt="${label}"><strong>${label}</strong>`;b.classList.toggle('selected',state.equipment.includes(id));b.addEventListener('click',()=>{state.equipment.includes(id)?state.equipment=state.equipment.filter(x=>x!==id):state.equipment.push(id);b.classList.toggle('selected',state.equipment.includes(id));clearFeedback($('#prepareFeedback'));$('#toConnect').disabled=true;saveProgress();});tray.appendChild(b);});}
 
   function createSortable(container,steps){container.innerHTML='';const ordered=(state.connectOrder.length===steps.length&&sameMembers(state.connectOrder,steps))?[...state.connectOrder]:shuffle(steps);ordered.forEach(step=>{const item=document.createElement('div');item.className='sortable-item';item.dataset.step=step;item.innerHTML=`<span class="drag-handle">☰</span><div><div style="display:flex;gap:10px;align-items:center"><span class="order-number"></span><span>${step}</span></div><div class="keyboard-order-controls"><button type="button" class="move-btn up">↑</button><button type="button" class="move-btn down">↓</button></div></div><span class="sort-status"></span>`;item.draggable=true;item.addEventListener('dragstart',()=>item.classList.add('dragging'));item.addEventListener('dragend',()=>{item.classList.remove('dragging');sync(container);});item.addEventListener('dragover',e=>e.preventDefault());item.addEventListener('drop',e=>{e.preventDefault();const d=$('.dragging',container);if(!d||d===item)return;const items=[...container.children],from=items.indexOf(d),to=items.indexOf(item);from<to?item.after(d):item.before(d);sync(container);});$('.up',item).onclick=()=>{const p=item.previousElementSibling;if(p)container.insertBefore(item,p);sync(container);};$('.down',item).onclick=()=>{const n=item.nextElementSibling;if(n)n.after(item);sync(container);};container.appendChild(item);});sync(container);}
@@ -444,7 +458,7 @@
     shuffle(cards).forEach(([id,label,file])=>{
       const b=document.createElement('button');b.type='button';b.className='breath-card';b.dataset.sound=id;b.disabled=true;
       b.innerHTML=`<img src="${file}" alt="${label} breath sound teaching card"><strong>${label}</strong>`;
-      b.classList.toggle('selected',state.breath===id);b.onclick=()=>{state.breath=id;$$('.breath-card',wrap).forEach(x=>x.classList.toggle('selected',x===b));clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;saveProgress();};
+      b.classList.toggle('selected',state.breath===id);b.onclick=()=>{state.breath=id;clearAnswerStatus(wrap);$$('.breath-card',wrap).forEach(x=>x.classList.toggle('selected',x===b));clearFeedback($('#inspectFeedback'));$('#toInterpret').disabled=true;saveProgress();};
       wrap.appendChild(b);
     });
   }
@@ -753,6 +767,9 @@
   $('#checkInspect').onclick=()=>{
     const complete=state.inspected&&state.expansionDone&&state.fremitusDone&&state.crepitusDone&&state.percussionSides.length===2&&state.listened;
     const interpreted=state.inspectionSingle===cfg().inspectionCorrect&&state.percussionChoice===cfg().percussionCorrect&&state.breath===cfg().breathCorrect;
+    if(state.inspectionSingle) markSelectedAnswer($('#inspectionChoices'),'finding',state.inspectionSingle,cfg().inspectionCorrect);
+    if(state.percussionChoice) markSelectedAnswer($('#percussionChoices'),'percussion',state.percussionChoice,cfg().percussionCorrect);
+    if(state.breath) markSelectedAnswer($('#breathSoundChoices'),'sound',state.breath,cfg().breathCorrect);
     if(complete&&interpreted){
       setFeedback($('#inspectFeedback'),'correct',`<strong>Correct.</strong> You completed the full physical assessment sequence: inspection, palpation, percussion, and auscultation. You compared findings side-to-side and interpreted them in the context of ${cfg().firstName}'s overall presentation.`);$('#toInterpret').disabled=false;
     }else{
@@ -831,5 +848,5 @@
   initAuscultationTool();
   $('#inspectPatient').addEventListener('click',inspectPatient);
   showSection(state.section);
-  console.info('PulmoLearn Respiratory Routine practice engine v4.3 — draggable palpation tools and percussion interpretation cue');
+  console.info('PulmoLearn Respiratory Routine practice engine v4.4 — incorrect assessment selections remain red after checking');
 })();
