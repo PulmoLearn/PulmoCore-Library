@@ -211,6 +211,7 @@
   </section>
 
   <section class="lesson-section" data-section-panel="7">
+    <div id="completionReviewTabs" class="completion-review-tabs" aria-label="Review completed patients"></div>
     <div class="section-heading"><div><p class="section-kicker">Guided patient complete</p><h2>Patient 1: Routine Established</h2></div></div>
     <div class="challenge-grid"><article class="info-card"><h3>Routine Completed</h3><ul class="check-list"><li>Prepare from chart/order</li><li>Connect and verify identity</li><li>Measure pulse, respirations, and SpO₂</li><li>Inspect and auscultate systematically</li><li>Interpret findings together</li><li>Close the loop and document</li></ul></article><article class="info-card"><h3>Clinical Judgment</h3><p>Nora's findings are internally consistent with a stable postoperative patient on room air. No immediate respiratory intervention is indicated.</p><p><strong>Next level:</strong> Patient 2 will preserve the same routine but introduce chronic oxygen therapy and fewer hints.</p></article></div>
     <div class="callout success"><strong>Guided practice complete.</strong> The routine stays the same. What changes in later patients is the clinical information and how much support you receive.</div>
@@ -223,75 +224,5 @@
   </section>
 </main>
 <script src="/competencies/respiratory-routine/practice-engine.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
