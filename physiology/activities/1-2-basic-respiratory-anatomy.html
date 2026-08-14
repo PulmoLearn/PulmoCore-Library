@@ -76,34 +76,82 @@ button,.btn{font:inherit}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .small{font-size:.9rem;color:var(--muted)}
 code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3px 7px;border-radius:6px;font-weight:800;color:var(--navy)}
+
+.sex-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 20px;
+  margin:8px 0 16px;
+}
+.sex-option{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:44px;
+  padding:8px 12px;
+  border:1px solid #c8d6df;
+  border-radius:10px;
+  background:#fff;
+  cursor:pointer;
+  font-weight:700;
+  color:var(--navy);
+}
+.sex-option input{
+  margin:0;
+  width:18px;
+  height:18px;
+  flex:0 0 auto;
+}
+.ibw-choice{
+  background:#fff !important;
+  color:var(--navy) !important;
+  border:2px solid #8da8b8 !important;
+  box-shadow:0 2px 6px rgba(18,53,91,.08);
+}
+.ibw-choice:hover{
+  border-color:var(--teal) !important;
+  background:#f3fbfa !important;
+}
+.ibw-choice.teal{
+  background:var(--teal) !important;
+  color:#fff !important;
+  border-color:var(--teal) !important;
+}
+.q label.answer-correct{
+  background:#eaf7ee;
+  border:2px solid #55a46a;
+  color:#1f5f32;
+}
+.q label.answer-incorrect{
+  background:#fff0ee;
+  border:2px solid #cf665a;
+  color:#7e2e27;
+}
+.q label.answer-neutral{
+  opacity:.78;
+}
+.answer-note{
+  margin-top:8px;
+  padding:10px 12px;
+  border-radius:9px;
+  font-size:.92rem;
+}
+.answer-note.good{
+  background:#eaf7ee;
+  border-left:4px solid #55a46a;
+}
+.answer-note.bad{
+  background:#fff4f1;
+  border-left:4px solid #cf665a;
+}
+
 @media(max-width:760px){
   main{padding:12px}
   .grid,.grid3,.calc,.diff-grid{grid-template-columns:1fr}
   section.card{padding:18px}
   .hero{padding:22px}
 }
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <main>
@@ -171,8 +219,10 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
 
       <fieldset style="border:0;padding:0;margin:0 0 12px">
         <legend style="font-weight:800;color:var(--navy);margin-bottom:8px">Patient sex</legend>
-        <label style="margin-right:18px"><input type="radio" name="ibwSex" value="male" checked> Male</label>
-        <label><input type="radio" name="ibwSex" value="female"> Female</label>
+        <div class="sex-options">
+          <label class="sex-option"><input type="radio" name="ibwSex" value="male" checked> <span>Male</span></label>
+          <label class="sex-option"><input type="radio" name="ibwSex" value="female"> <span>Female</span></label>
+        </div>
       </fieldset>
 
       <label for="heightSlider"><strong>Height</strong></label>
@@ -334,6 +384,7 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
     <label><input type="radio" name="f1" value="c">Alveolar membrane thickness</label>
     <label><input type="radio" name="f1" value="d">Type II cell surfactant production</label>
   </fieldset>
+  <div id="finalNote1" class="answer-note" style="display:none" aria-live="polite"></div>
 
   <fieldset class="q" data-answer="b">
     <legend>2. Gas reaches an alveolus, but its capillary is not receiving meaningful blood flow. Which mechanism is present?</legend>
@@ -342,6 +393,7 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
     <label><input type="radio" name="f2" value="c">True shunt</label>
     <label><input type="radio" name="f2" value="d">Normal gas exchange</label>
   </fieldset>
+  <div id="finalNote2" class="answer-note" style="display:none" aria-live="polite"></div>
 
   <fieldset class="q" data-answer="c">
     <legend>3. Blood continues to perfuse an alveolus after its ventilation falls to essentially zero. What does the unit become?</legend>
@@ -350,6 +402,7 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
     <label><input type="radio" name="f3" value="c">Shunt-like unit</label>
     <label><input type="radio" name="f3" value="d">Normal respiratory-zone unit</label>
   </fieldset>
+  <div id="finalNote3" class="answer-note" style="display:none" aria-live="polite"></div>
 
   <fieldset class="q" data-answer="d">
     <legend>4. A patient has patent airways and normal perfusion but thickened interstitial tissue between alveolar gas and capillary blood. What is the primary problem?</legend>
@@ -358,6 +411,7 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
     <label><input type="radio" name="f4" value="c">Absent respiratory drive</label>
     <label><input type="radio" name="f4" value="d">Increased diffusion distance</label>
   </fieldset>
+  <div id="finalNote4" class="answer-note" style="display:none" aria-live="polite"></div>
 
   <fieldset class="q" data-answer="a">
     <legend>5. Air enters the pleural space while the trachea and main bronchus remain open. Why can the affected lung still collapse?</legend>
@@ -366,6 +420,7 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
     <label><input type="radio" name="f5" value="c">Pulmonary capillary blood flow automatically falls to zero</label>
     <label><input type="radio" name="f5" value="d">Type I pneumocytes stop moving gas through the trachea</label>
   </fieldset>
+  <div id="finalNote5" class="answer-note" style="display:none" aria-live="polite"></div>
 
   <fieldset class="q" data-answer="b">
     <legend>6. A student's data claim that a terminal bronchiole is a major gas-exchanging structure conflicts with the anatomy diagram and lesson definition. What should the student do first?</legend>
@@ -374,6 +429,7 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
     <label><input type="radio" name="f6" value="c">Assume perfusion must be absent in that region</label>
     <label><input type="radio" name="f6" value="d">Convert the terminal bronchiole volume directly into alveolar dead space</label>
   </fieldset>
+  <div id="finalNote6" class="answer-note" style="display:none" aria-live="polite"></div>
 
   <div class="controls">
     <button class="btn teal" onclick="checkFinal()">Check Assessment Readiness</button>
@@ -627,93 +683,112 @@ function updateDiff(){
 surface.onchange=thick.onchange=grad.onchange=updateDiff;
 
 // Final
-function checkFinal(){
-  const fs=[...document.querySelectorAll('#s5 fieldset.q')];
-  let score=0,answered=0;
-  fs.forEach(q=>{const c=q.querySelector('input:checked');if(c){answered++;if(c.value===q.dataset.answer)score++}});
-  const fb=document.getElementById('fb5');
-  if(answered<fs.length){fb.className='feedback show bad';fb.innerHTML=`Answer all ${fs.length} questions before checking.`;return}
-  if(score===fs.length){
-    fb.className='feedback show good';fb.innerHTML=`<strong>${score}/${fs.length} correct.</strong> You correctly localized each failure by asking where gas stopped, whether perfusion was present, and whether the diffusion barrier could function.`;markComplete(5)
-  }else{
-    fb.className='feedback show bad';fb.innerHTML=`<strong>${score}/${fs.length} correct.</strong> Retry the missed items. Use the same sequence every time: <strong>Did gas reach the respiratory zone? Is perfusion present? Is the membrane capable of diffusion? Is pleural coupling intact?</strong>`;
+const finalGuidance = {
+  1: {
+    hint: 'Start at the earliest failed step. The alveoli may be intact, but ask whether gas can reach them through the conducting airway.',
+    success: 'Correct. The first failure is gas delivery through the conducting airway. The downstream alveoli cannot be effectively ventilated even though their structure and perfusion may initially be normal.'
+  },
+  2: {
+    hint: 'Ask what is present and what is missing. Air reaches the alveolus, but meaningful blood flow does not.',
+    success: 'Correct. Ventilation without adequate perfusion is alveolar dead-space physiology: the breath reaches an alveolus but cannot exchange normally because little or no blood is available.'
+  },
+  3: {
+    hint: 'This is the opposite of dead space. Blood is still arriving, but fresh gas is not.',
+    success: 'Correct. Perfusion with essentially no ventilation creates a shunt-like unit because blood passes a region that is not receiving fresh alveolar gas.'
+  },
+  4: {
+    hint: 'The airway and perfusion are both intact. Focus on what has changed between alveolar gas and capillary blood.',
+    success: 'Correct. Thickened interstitial tissue increases diffusion distance, slowing transfer across the alveolar-capillary barrier.'
+  },
+  5: {
+    hint: 'The airway is open, so obstruction is not the first problem. Think about the pressure relationship that normally keeps lung and chest wall mechanically coupled.',
+    success: 'Correct. Air in the pleural space disrupts pleural coupling and reduces transpulmonary distending pressure, allowing the lung to recoil inward despite a patent airway.'
+  },
+  6: {
+    hint: 'Compare the statement with the course boundary between conducting and respiratory zones. Which structure is the final conducting airway?',
+    success: 'Correct. The terminal bronchiole belongs to the conducting zone. The respiratory bronchiole is where alveoli first appear and the respiratory zone begins.'
+  }
+};
+
+function clearFinalStyles(){
+  document.querySelectorAll('#s5 .q label').forEach(l=>{
+    l.classList.remove('answer-correct','answer-incorrect','answer-neutral');
+  });
+  for(let i=1;i<=6;i++){
+    const note=document.getElementById('finalNote'+i);
+    if(note){note.style.display='none';note.className='answer-note';note.innerHTML='';}
   }
 }
+
+function checkFinal(){
+  clearFinalStyles();
+  const fs=[...document.querySelectorAll('#s5 fieldset.q')];
+  let score=0,answered=0;
+
+  fs.forEach((q,index)=>{
+    const num=index+1;
+    const checked=q.querySelector('input:checked');
+    const note=document.getElementById('finalNote'+num);
+
+    if(!checked){
+      if(note){
+        note.style.display='block';
+        note.className='answer-note bad';
+        note.innerHTML='<strong>Choose an answer.</strong> Then submit again.';
+      }
+      return;
+    }
+
+    answered++;
+    const selectedLabel=checked.closest('label');
+
+    if(checked.value===q.dataset.answer){
+      score++;
+      selectedLabel.classList.add('answer-correct');
+      q.querySelectorAll('label').forEach(l=>{
+        if(l!==selectedLabel)l.classList.add('answer-neutral');
+      });
+      if(note){
+        note.style.display='block';
+        note.className='answer-note good';
+        note.innerHTML='<strong>Correct.</strong> '+finalGuidance[num].success.replace(/^Correct\. /,'');
+      }
+    }else{
+      selectedLabel.classList.add('answer-incorrect');
+      q.querySelectorAll('label').forEach(l=>{
+        if(l!==selectedLabel)l.classList.add('answer-neutral');
+      });
+      if(note){
+        note.style.display='block';
+        note.className='answer-note bad';
+        note.innerHTML='<strong>Not yet.</strong> '+finalGuidance[num].hint;
+      }
+    }
+  });
+
+  const fb=document.getElementById('fb5');
+  if(answered<fs.length){
+    fb.className='feedback show bad';
+    fb.innerHTML=`You answered ${answered} of ${fs.length}. Complete the remaining items, then submit again.`;
+    return;
+  }
+
+  if(score===fs.length){
+    fb.className='feedback show good';
+    fb.innerHTML=`<strong>${score}/${fs.length} correct.</strong> You correctly localized each failure by asking where gas stopped, whether perfusion was present, and whether the diffusion barrier and pleural mechanics could function.`;
+    markComplete(5);
+  }else{
+    fb.className='feedback show bad';
+    fb.innerHTML=`<strong>${score}/${fs.length} correct.</strong> Review the red selections and use the hint beneath each item. Change only the answers you want to retry, then submit again.`;
+  }
+}
+
 function resetFinal(){
   document.querySelectorAll('#s5 input[type=radio]').forEach(x=>x.checked=false);
+  clearFinalStyles();
   document.getElementById('fb5').className='feedback';
   shuffleQuestions();
 }
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
