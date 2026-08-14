@@ -116,28 +116,7 @@ fieldset.q label.mc-wrong{background:#fff0ef;border:2px solid #cc665d;color:#7f3
 @media(max-width:760px){
   .wrap{padding:12px 10px 40px}.grid,.grid3,.calc-row{grid-template-columns:1fr}.section{margin-top:16px}.section-head{padding:16px;gap:10px}.section-body{padding:14px}.hero{padding:18px;border-radius:16px}.hero p{font-size:.95rem}.progress-shell{align-items:flex-start;flex-direction:column}.progress{width:100%}.progress-text{white-space:normal}.num{width:34px;height:34px}.spiro{height:460px;overflow:visible}.target{font-size:.72rem;min-width:34px;min-height:34px;padding:3px}.labels{gap:8px}.label-btn,.choice-btn,.btn{min-height:44px;padding:10px 12px}.controls{display:grid;grid-template-columns:1fr}.controls .btn{width:100%}.q{padding:12px}.q label{padding:11px 8px;min-height:44px}.inputline{display:grid;grid-template-columns:1fr;gap:6px;align-items:stretch}.inputline input{width:100%}.mini-table{display:block;overflow-x:auto;white-space:nowrap}.formula{font-size:.9rem;overflow-wrap:anywhere}.goal{font-size:.95rem}}
 @media(max-width:430px){.spiro{height:500px}.target{font-size:.66rem;min-width:30px;min-height:30px}.section h2{font-size:1.1rem}.eyebrow{font-size:.74rem}.card{padding:13px}.q legend{font-size:.95rem}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -350,6 +329,7 @@ fieldset.q label.mc-wrong{background:#fff0ef;border:2px solid #cc665d;color:#7f3
     <div class="section-head"><div class="num">4</div><div><h2>Pulmonary function: name the property before the pattern</h2><p>Use the test to identify what physiologic mechanism is abnormal.</p></div><div class="done-mark">✓ Complete</div></div>
     <div class="section-body">
       <div class="goal"><strong>Competency focus:</strong> Interpret what spirometry, static lung volumes, DLCO, MIP/MEP, and MVV measure—and use patterns to identify the physiologic mechanism rather than jump to a diagnosis.</div>
+      <p style="margin:18px 0 8px"><strong>Name the property first.</strong> For each case, decide whether the abnormality primarily reflects <em>lung size, air trapping, gas transfer, or respiratory-muscle performance</em>.</p>
       <div id="caseQuestions"></div>
       <div class="controls"><button class="btn primary" onclick="checkSection4()">Check Section 4</button></div><div id="fb4" class="feedback" aria-live="polite"></div>
     </div>
@@ -498,8 +478,8 @@ function guideMC(name,correctValue,noteId,correctText,hintText){
 }
 
 function showFb(id,type,msg){const el=document.getElementById(id);el.className='feedback show '+type;el.innerHTML=msg}
-function finishSection(n){completed.add(n);const s=document.getElementById('sec'+n);s.classList.add('complete'); if(n<5){const next=document.getElementById('sec'+(n+1));next.classList.remove('lock');} updateProgress();window.dispatchEvent(new CustomEvent('pulmolearn:activity-progress',{detail:{activity:'AHRC155-1.4-practice-v9',completedSections:[...completed],totalSections:5}})); if(completed.size===5){document.getElementById('finish').classList.add('show');document.getElementById('finish').scrollIntoView({behavior:'smooth',block:'center'});window.dispatchEvent(new CustomEvent('pulmolearn:activity-complete',{detail:{activity:'AHRC155-1.4-practice-v9',score:100}}));}}
-function updateProgress(){const p=completed.size/5*100;document.getElementById('progressBar').style.width=p+'%';document.getElementById('progressText').textContent=`${completed.size} of 5 sections`;localStorage.setItem('AHRC155_1_4_practice_v9',JSON.stringify([...completed]));}
+function finishSection(n){completed.add(n);const s=document.getElementById('sec'+n);s.classList.add('complete'); if(n<5){const next=document.getElementById('sec'+(n+1));next.classList.remove('lock');} updateProgress();window.dispatchEvent(new CustomEvent('pulmolearn:activity-progress',{detail:{activity:'AHRC155-1.4-practice-v10',completedSections:[...completed],totalSections:5}})); if(completed.size===5){document.getElementById('finish').classList.add('show');document.getElementById('finish').scrollIntoView({behavior:'smooth',block:'center'});window.dispatchEvent(new CustomEvent('pulmolearn:activity-complete',{detail:{activity:'AHRC155-1.4-practice-v10',score:100}}));}}
+function updateProgress(){const p=completed.size/5*100;document.getElementById('progressBar').style.width=p+'%';document.getElementById('progressText').textContent=`${completed.size} of 5 sections`;localStorage.setItem('AHRC155_1_4_practice_v10',JSON.stringify([...completed]));}
 function checkSection1(){
   let right=0;document.querySelectorAll('.target').forEach(t=>{t.classList.remove('correct','wrong');if(t.dataset.placed===t.dataset.answer){t.classList.add('correct');right++}else t.classList.add('wrong')});
   const mc=guideMC('s1q','c','s1qNote','Any volume or capacity containing RV cannot be measured directly by simple spirometry, so FRC and TLC require an indirect lung-volume method.','Look at the capacity formulas and identify which choices contain residual volume (RV).');
@@ -551,6 +531,73 @@ function shuffleStaticChoices(){
     if(labels.length>1)shuffle(labels).forEach(l=>fs.appendChild(l));
   });
 }
+
+
+const cases=[
+  {
+    q:'A patient has a reduced vital capacity and reduced TLC, with a normal RV/TLC ratio and normal airway resistance. What is the best physiologic interpretation?',
+    a:'reduced-expansion',
+    choices:[
+      'Reduced total lung size / reduced expansion',
+      'Obstructive air trapping with preserved TLC',
+      'Isolated diffusion limitation',
+      'Primary expiratory muscle weakness'
+    ],
+    fb:'Reduced TLC confirms reduced total lung size. A normal RV/TLC ratio and normal airway resistance make disproportionate air trapping less likely.'
+  },
+  {
+    q:'A patient has a low FVC, normal TLC, and a disproportionately high RV/TLC ratio. Which mechanism best explains the low FVC?',
+    a:'air-trapping',
+    choices:[
+      'True reduction in total lung size',
+      'Air trapping leaves more gas as residual volume',
+      'Low hemoglobin lowers measured FVC',
+      'Reduced diffusion surface area'
+    ],
+    fb:'Normal TLC argues against true restriction. The high RV/TLC ratio shows that a larger fraction of total lung volume remains trapped as residual volume.'
+  },
+  {
+    q:'Spirometry and static lung volumes are near normal, but DLCO is reduced. Which physiologic property is abnormal?',
+    a:'gas-transfer',
+    choices:[
+      'Gas transfer across the alveolar-capillary interface',
+      'Total volume moved each minute',
+      'Inspiratory muscle pressure generation',
+      'Anatomic dead-space volume only'
+    ],
+    fb:'DLCO evaluates transfer across the alveolar-capillary interface. Near-normal airflow and lung volumes isolate gas transfer as the abnormal physiologic property.'
+  },
+  {
+    q:'Vital capacity is reduced and both MIP and MEP are low. Which mechanism should be considered before labeling the pattern as intrinsic lung restriction?',
+    a:'muscle',
+    choices:[
+      'Respiratory-muscle weakness',
+      'Increased pulmonary capillary perfusion',
+      'Isolated high airway conductance',
+      'Increased hemoglobin affinity'
+    ],
+    fb:'MIP and MEP measure inspiratory- and expiratory-muscle pressure generation. Low values can explain reduced vital capacity without requiring intrinsic restriction.'
+  }
+];
+
+const keys={
+  'Reduced total lung size / reduced expansion':'reduced-expansion',
+  'Obstructive air trapping with preserved TLC':'x1',
+  'Isolated diffusion limitation':'x2',
+  'Primary expiratory muscle weakness':'x3',
+  'True reduction in total lung size':'x4',
+  'Air trapping leaves more gas as residual volume':'air-trapping',
+  'Low hemoglobin lowers measured FVC':'x5',
+  'Reduced diffusion surface area':'x6',
+  'Gas transfer across the alveolar-capillary interface':'gas-transfer',
+  'Total volume moved each minute':'x7',
+  'Inspiratory muscle pressure generation':'x8',
+  'Anatomic dead-space volume only':'x9',
+  'Respiratory-muscle weakness':'muscle',
+  'Increased pulmonary capillary perfusion':'x10',
+  'Isolated high airway conductance':'x11',
+  'Increased hemoglobin affinity':'x12'
+};
 
 function renderCases(){
   const box=document.getElementById('caseQuestions');box.innerHTML='';
@@ -633,79 +680,9 @@ function checkSection5(){
     showFb('fb5','bad',`${n} of 5 readiness challenges are correct. Review the red selections and the targeted guidance beneath the challenge set, then revise only the items you missed.`);
   }
 }
-function restartAll(){localStorage.removeItem('AHRC155_1_4_practice_v9');location.reload()}
-function restore(){try{const x=JSON.parse(localStorage.getItem('AHRC155_1_4_practice_v9')||'[]');x.forEach(n=>completed.add(n));for(let n=1;n<=5;n++){if(completed.has(n))document.getElementById('sec'+n).classList.add('complete');if(n===1||completed.has(n-1))document.getElementById('sec'+n).classList.remove('lock')}if(completed.size===5)document.getElementById('finish').classList.add('show');updateProgress()}catch(e){}}
+function restartAll(){localStorage.removeItem('AHRC155_1_4_practice_v10');location.reload()}
+function restore(){try{const x=JSON.parse(localStorage.getItem('AHRC155_1_4_practice_v10')||'[]');x.forEach(n=>completed.add(n));for(let n=1;n<=5;n++){if(completed.has(n))document.getElementById('sec'+n).classList.add('complete');if(n===1||completed.has(n-1))document.getElementById('sec'+n).classList.remove('lock')}if(completed.size===5)document.getElementById('finish').classList.add('show');updateProgress()}catch(e){}}
 renderLabels();renderCases();shuffleStaticChoices();restore();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
