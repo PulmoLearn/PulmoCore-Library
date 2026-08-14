@@ -137,10 +137,6 @@
       font-size:14px;
     }
 
-    /*
-      Dark text on PulmoLearn teal gives better contrast
-      than white text and avoids Canvas accessibility warnings.
-    */
     .primary {
       background:var(--teal);
       color:var(--navy);
@@ -356,8 +352,8 @@
 
         <p>
           Copy the complete Canvas-ready competency guide HTML, then paste it
-          into the Canvas HTML Editor. Accessibility fixes for table captions
-          and header scope attributes are applied automatically when copied.
+          into the Canvas HTML Editor. Table captions and accessible column
+          and row header attributes are added automatically when needed.
         </p>
 
         <button
@@ -395,13 +391,11 @@
 
 
     <section class="note">
-
       In Canvas, create the assignment, paste this HTML into the assignment
       description, choose <strong>External Tool → PulmoLearn</strong>, and
       select the same course and lesson. Canvas will place the
       “Load [assignment name] in a new window” link below the assignment
       description.
-
     </section>
 
   </main>
@@ -446,150 +440,73 @@
     /*
       Respiratory Equipment exception
       --------------------------------
-
       Equipment competency guides keep their original descriptive filenames
-      directly inside /equipment/ and do not use a competency-guides folder.
+      directly inside /equipment/ (no competency-guides subfolder).
     */
 
     const equipmentLegacyGuideMap = [
 
       {
-        keywords:[
-          "professional",
-          "communication",
-          "documentation"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Professionalism_Communication_Documentation_Competency_Guide_Canvas.html"
+        keywords:["professional","communication","documentation"],
+        url:"/equipment/Respiratory_Equipment_Professionalism_Communication_Documentation_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "patient",
-          "assessment"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_RT_Patient_Assessment_Competency_Guide_Canvas.html"
+        keywords:["patient","assessment"],
+        url:"/equipment/Respiratory_Equipment_RT_Patient_Assessment_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "infection",
-          "ppe",
-          "isolation"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Infection_Control_PPE_Isolation_Competency_Guide_Canvas.html"
+        keywords:["infection","ppe","isolation"],
+        url:"/equipment/Respiratory_Equipment_Infection_Control_PPE_Isolation_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "pft",
-          "spirometry",
-          "peak flow"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_PFT_Spirometry_Peak_Flow_Respiratory_Pressure_Competency_Guide_Canvas.html"
+        keywords:["pft","spirometry","peak flow"],
+        url:"/equipment/Respiratory_Equipment_PFT_Spirometry_Peak_Flow_Respiratory_Pressure_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "cardiovascular",
-          "monitor"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Cardiovascular_Monitoring_Competency_Guide_Canvas.html"
+        keywords:["cardiovascular","monitor"],
+        url:"/equipment/Respiratory_Equipment_Cardiovascular_Monitoring_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "blood gas",
-          "abg"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Blood_Gas_Monitoring_Competency_Guide_Canvas.html"
+        keywords:["blood gas","abg"],
+        url:"/equipment/Respiratory_Equipment_Blood_Gas_Monitoring_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "airway management"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Airway_Management_Competency_Guide_Canvas.html"
+        keywords:["airway management"],
+        url:"/equipment/Respiratory_Equipment_Airway_Management_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "airway pharmacology",
-          "pharmacology"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Airway_Pharmacology_Competency_Guide_Canvas.html"
+        keywords:["airway pharmacology","pharmacology"],
+        url:"/equipment/Respiratory_Equipment_Airway_Pharmacology_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "aerosol",
-          "drug therapy"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Aerosol_Drug_Therapy_Competency_Guide_Canvas.html"
+        keywords:["aerosol","drug therapy"],
+        url:"/equipment/Respiratory_Equipment_Aerosol_Drug_Therapy_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "humidity",
-          "bland aerosol"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Humidity_Bland_Aerosol_Competency_Guide_Canvas.html"
+        keywords:["humidity","bland aerosol"],
+        url:"/equipment/Respiratory_Equipment_Humidity_Bland_Aerosol_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "oxygen delivery"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Oxygen_Delivery_Competency_Guide_Canvas.html"
+        keywords:["oxygen delivery"],
+        url:"/equipment/Respiratory_Equipment_Oxygen_Delivery_Competency_Guide_Canvas.html"
       },
 
       {
-        keywords:[
-          "medical gas",
-          "gas system",
-          "cylinder",
-          "flowmeter"
-        ],
-        url:
-          "/equipment/Respiratory_Equipment_Medical_Gas_Systems_Competency_Guide_Canvas.html"
+        keywords:["medical gas","gas system","cylinder","flowmeter"],
+        url:"/equipment/Respiratory_Equipment_Medical_Gas_Systems_Competency_Guide_Canvas.html"
       }
 
     ];
-
-
-    /*
-      Competency guide naming convention
-      -----------------------------------
-
-      Store guides inside each course folder:
-
-      /<course-folder>/competency-guides/<Course_Prefix>_<lesson>_CG.html
-
-
-      Examples:
-
-      /Neonatal_Pediatric/competency-guides/Neonatal_Pediatric_1_1_CG.html
-
-      /assessment/competency-guides/Pulmonary_Assessment_1_1_CG.html
-
-
-      Respiratory Equipment is handled separately above and continues using
-      its existing descriptive filenames directly inside /equipment/.
-
-      The builder derives the folder from the lesson URL whenever possible.
-      Add/edit a course entry below only when its filename prefix differs from
-      the folder name converted to underscores.
-    */
 
 
     const competencyGuideCoursePrefixes = {
@@ -620,7 +537,6 @@
       "ventilators":"Mechanical_Ventilation",
 
       "oxygenation":"Oxygenation",
-
       "pharmacology":"Pharmacology"
 
     };
@@ -641,7 +557,6 @@
     function lessonNumberForGuide(lesson) {
 
       const candidates = [
-
         lesson?.id,
         lesson?.lessonId,
         lesson?.moduleId,
@@ -649,18 +564,20 @@
         lesson?.title,
         lesson?.url,
         lesson?.lessonUrl
-
       ].filter(Boolean);
 
 
       for (const value of candidates) {
 
-        const text = String(value);
+        const text =
+          String(value);
+
 
         const match =
           text.match(
             /(?:^|[^0-9])(\d+)[._-](\d+)(?:[^0-9]|$)/
           );
+
 
         if (match) {
           return `${match[1]}_${match[2]}`;
@@ -676,13 +593,11 @@
     function lessonUrlValue(lesson) {
 
       return String(
-
         lesson?.url ||
         lesson?.lessonUrl ||
         lesson?.lesson_url ||
         lesson?.href ||
         ""
-
       ).trim();
 
     }
@@ -704,10 +619,12 @@
               window.location.origin
             );
 
+
           const segments =
             parsed.pathname
               .split("/")
               .filter(Boolean);
+
 
           if (segments.length) {
             return segments[0];
@@ -727,13 +644,11 @@
 
 
       return String(
-
         course?.folder ||
         course?.path ||
         course?.key ||
         course?.slug ||
         ""
-
       ).replace(/^\/+|\/+$/g, "");
 
     }
@@ -742,19 +657,14 @@
     function titleCasePrefix(folder) {
 
       return String(folder || "")
-
         .replace(/[-\s]+/g, "_")
-
         .split("_")
-
         .filter(Boolean)
-
         .map(
           part =>
             part.charAt(0).toUpperCase() +
             part.slice(1)
         )
-
         .join("_");
 
     }
@@ -763,13 +673,11 @@
     function coursePrefixForGuide(course, folder) {
 
       const candidates = [
-
         folder,
         course?.key,
         course?.slug,
         course?.label,
         course?.title
-
       ].filter(Boolean);
 
 
@@ -782,11 +690,7 @@
         if (
           competencyGuideCoursePrefixes[normalized]
         ) {
-
-          return competencyGuideCoursePrefixes[
-            normalized
-          ];
-
+          return competencyGuideCoursePrefixes[normalized];
         }
 
 
@@ -795,26 +699,18 @@
 
 
         if (
-          competencyGuideCoursePrefixes[
-            underscored
-          ]
+          competencyGuideCoursePrefixes[underscored]
         ) {
-
-          return competencyGuideCoursePrefixes[
-            underscored
-          ];
-
+          return competencyGuideCoursePrefixes[underscored];
         }
 
       }
 
 
       return titleCasePrefix(
-
         folder ||
         course?.key ||
         course?.label
-
       );
 
     }
@@ -831,27 +727,21 @@
 
       const courseText =
         normalizeMatchText(
-
           [
-
             folder,
             course?.key,
             course?.slug,
             course?.label,
             course?.title
-
           ]
           .filter(Boolean)
           .join(" ")
-
         );
 
 
       const lessonText =
         normalizeMatchText(
-
           [
-
             lesson?.id,
             lesson?.lessonId,
             lesson?.moduleId,
@@ -860,17 +750,15 @@
             lesson?.description,
             lesson?.url,
             lesson?.lessonUrl
-
           ]
           .filter(Boolean)
           .join(" ")
-
         );
 
 
       /*
         Respiratory Equipment keeps its existing descriptive filenames
-        directly in /equipment/.
+        directly inside /equipment/.
       */
 
       if (
@@ -880,17 +768,13 @@
 
         const equipmentMatch =
           equipmentLegacyGuideMap.find(
-
             guide =>
               guide.keywords.some(
-
                 keyword =>
                   lessonText.includes(
                     normalizeMatchText(keyword)
                   )
-
               )
-
           );
 
 
@@ -901,6 +785,7 @@
 
       const lessonNumber =
         lessonNumberForGuide(lesson);
+
 
       const prefix =
         coursePrefixForGuide(
@@ -914,15 +799,12 @@
         !lessonNumber ||
         !prefix
       ) {
-
         return "";
-
       }
 
 
       return (
-        `/${folder}` +
-        `/competency-guides/` +
+        `/${folder}/competency-guides/` +
         `${prefix}_${lessonNumber}_CG.html`
       );
 
@@ -931,9 +813,7 @@
 
     function escapeText(value) {
 
-      return String(
-        value ?? ""
-      );
+      return String(value ?? "");
 
     }
 
@@ -941,26 +821,10 @@
     function escapeHtml(value) {
 
       return String(value ?? "")
-
-        .replaceAll(
-          "&",
-          "&amp;"
-        )
-
-        .replaceAll(
-          "<",
-          "&lt;"
-        )
-
-        .replaceAll(
-          ">",
-          "&gt;"
-        )
-
-        .replaceAll(
-          '"',
-          "&quot;"
-        );
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
 
     }
 
@@ -968,15 +832,12 @@
     function currentCourse() {
 
       return (
-
         courses.find(
           course =>
             course.key ===
             courseSelect.value
         ) ||
-
         courses[0]
-
       );
 
     }
@@ -989,33 +850,31 @@
 
 
       return (
-
         course?.lessons.find(
           lesson =>
             lesson.id ===
             lessonSelect.value
         ) ||
-
         course?.lessons[0]
-
       );
 
     }
 
 
     /*
-      ───────────────────────────────────────────────
-      CANVAS TABLE ACCESSIBILITY REPAIR
-      ───────────────────────────────────────────────
+      ============================================================
+      CANVAS COMPETENCY GUIDE TABLE ACCESSIBILITY REPAIR
+      ============================================================
 
-      Runs automatically when a competency guide is copied.
+      Applied only to the HTML copied into Canvas.
 
       Repairs:
-      • tables missing captions
-      • TH cells missing scope="col"
-      • TH cells missing scope="row"
-
-      Existing valid captions and scope attributes are preserved.
+        1. Missing table captions
+        2. First-row cells converted to TH column headers
+        3. First cell of each later row converted to TH row header
+        4. scope="col" added to column headers
+        5. scope="row" added to row headers
+        6. Existing attributes/styles preserved
     */
 
 
@@ -1039,177 +898,128 @@
 
 
       tables.forEach(
-        (table, index) => {
+        (table, tableIndex) => {
 
 
-          /*
-            ── CAPTION ──
+          /* =====================================================
+             1. TABLE CAPTION
+             ===================================================== */
 
-            If there is already a caption,
-            leave it alone.
+          let caption =
+            table.querySelector("caption");
 
-            Otherwise look for the closest
-            heading preceding the table.
-          */
 
-          if (
-            !table.querySelector(":scope > caption")
-          ) {
+          if (!caption) {
 
-            let captionText = "";
+            caption =
+              doc.createElement("caption");
+
+
+            let captionText =
+              "";
 
 
             /*
-              First check headings directly
-              above the table.
+              Search backward through the document structure
+              for the nearest preceding heading.
             */
 
-            let previous =
-              table.previousElementSibling;
+            let node =
+              table;
 
 
             while (
-              previous &&
+              node &&
+              node !== doc.body &&
               !captionText
             ) {
 
-              if (
-                /^H[1-6]$/.test(
-                  previous.tagName
-                )
-              ) {
-
-                captionText =
-                  previous.textContent
-                    .trim();
-
-                break;
-
-              }
-
-
-              const nestedHeading =
-                previous.querySelector?.(
-                  "h1, h2, h3, h4, h5, h6"
-                );
-
-
-              if (nestedHeading) {
-
-                captionText =
-                  nestedHeading.textContent
-                    .trim();
-
-                break;
-
-              }
-
-
-              previous =
-                previous.previousElementSibling;
-
-            }
-
-
-            /*
-              If the table is wrapped in another
-              element, search outward through its
-              parent structure for a nearby heading.
-            */
-
-            if (!captionText) {
-
-              let parent =
-                table.parentElement;
+              let previous =
+                node.previousElementSibling;
 
 
               while (
-                parent &&
-                parent !== doc.body &&
+                previous &&
                 !captionText
               ) {
 
-                let sibling =
-                  parent.previousElementSibling;
-
-
-                while (
-                  sibling &&
-                  !captionText
+                if (
+                  /^H[1-6]$/.test(
+                    previous.tagName
+                  )
                 ) {
 
-                  if (
-                    /^H[1-6]$/.test(
-                      sibling.tagName
-                    )
-                  ) {
+                  captionText =
+                    previous.textContent
+                      .trim();
 
-                    captionText =
-                      sibling.textContent
-                        .trim();
-
-                    break;
-
-                  }
-
-
-                  const heading =
-                    sibling.querySelector?.(
-                      "h1, h2, h3, h4, h5, h6"
-                    );
-
-
-                  if (heading) {
-
-                    captionText =
-                      heading.textContent
-                        .trim();
-
-                    break;
-
-                  }
-
-
-                  sibling =
-                    sibling.previousElementSibling;
+                  break;
 
                 }
 
 
-                parent =
-                  parent.parentElement;
+                const heading =
+                  previous.querySelector(
+                    "h1, h2, h3, h4, h5, h6"
+                  );
+
+
+                if (heading) {
+
+                  captionText =
+                    heading.textContent
+                      .trim();
+
+                  break;
+
+                }
+
+
+                previous =
+                  previous.previousElementSibling;
 
               }
+
+
+              node =
+                node.parentElement;
 
             }
 
 
             /*
-              Another useful source:
-              first table header text.
+              If no heading was found, build a caption from
+              the first row's visible text.
             */
 
             if (!captionText) {
 
-              const headerCells =
-                Array.from(
-                  table.querySelectorAll(
-                    "tr:first-child th"
+              const firstRow =
+                table.querySelector("tr");
+
+
+              if (firstRow) {
+
+                const values =
+                  Array.from(
+                    firstRow.children
                   )
-                )
-                .map(
-                  cell =>
-                    cell.textContent.trim()
-                )
-                .filter(Boolean);
+                  .map(
+                    cell =>
+                      cell.textContent
+                        .trim()
+                  )
+                  .filter(Boolean);
 
 
-              if (headerCells.length) {
+                if (values.length) {
 
-                captionText =
-                  headerCells
-                    .slice(0, 3)
-                    .join(" / ");
+                  captionText =
+                    values
+                      .slice(0, 3)
+                      .join(" — ");
+
+                }
 
               }
 
@@ -1218,23 +1028,14 @@
 
             /*
               Final fallback.
-
-              We use a meaningful generic caption
-              instead of leaving the table unidentified.
             */
 
             if (!captionText) {
 
               captionText =
-                `Competency Guide Reference Table ${index + 1}`;
+                `Competency Guide Table ${tableIndex + 1}`;
 
             }
-
-
-            const caption =
-              doc.createElement(
-                "caption"
-              );
 
 
             caption.textContent =
@@ -1260,12 +1061,9 @@
           }
 
 
-
-          /*
-            ── HEADER SCOPE ──
-
-            Preserve existing scope attributes.
-          */
+          /* =====================================================
+             2. FIND TABLE ROWS
+             ===================================================== */
 
           const rows =
             Array.from(
@@ -1273,71 +1071,253 @@
             );
 
 
+          if (!rows.length) {
+            return;
+          }
+
+
           const firstRow =
-            rows[0] || null;
+            rows[0];
 
 
-          table
-            .querySelectorAll("th")
+          /* =====================================================
+             3. FIRST ROW = COLUMN HEADERS
+             ===================================================== */
+
+          Array.from(
+            firstRow.children
+          ).forEach(
+            cell => {
+
+
+              let headerCell =
+                cell;
+
+
+              /*
+                Convert TD → TH if required.
+              */
+
+              if (
+                cell.tagName === "TD"
+              ) {
+
+                headerCell =
+                  doc.createElement("th");
+
+
+                /*
+                  Preserve all existing attributes:
+                  style, class, colspan, rowspan, width, etc.
+                */
+
+                Array.from(
+                  cell.attributes
+                ).forEach(
+                  attribute => {
+
+                    headerCell.setAttribute(
+                      attribute.name,
+                      attribute.value
+                    );
+
+                  }
+                );
+
+
+                headerCell.innerHTML =
+                  cell.innerHTML;
+
+
+                cell.replaceWith(
+                  headerCell
+                );
+
+              }
+
+
+              /*
+                Tell screen readers this is a column heading.
+              */
+
+              headerCell.setAttribute(
+                "scope",
+                "col"
+              );
+
+            }
+          );
+
+
+          /* =====================================================
+             4. REMAINING ROWS = FIRST CELL IS ROW HEADER
+             ===================================================== */
+
+          rows
+            .slice(1)
             .forEach(
-              th => {
+              row => {
 
 
-                if (
-                  th.hasAttribute("scope")
-                ) {
-
-                  return;
-
-                }
-
-
-                const row =
-                  th.closest("tr");
-
-
-                /*
-                  Any header cell located inside THEAD
-                  is treated as a column heading.
-                */
-
-                if (
-                  th.closest("thead")
-                ) {
-
-                  th.setAttribute(
-                    "scope",
-                    "col"
+                const cells =
+                  Array.from(
+                    row.children
                   );
 
-                  return;
 
+                if (!cells.length) {
+                  return;
                 }
 
 
+                let firstCell =
+                  cells[0];
+
+
                 /*
-                  Header cells in the first table row
-                  are normally column headers.
+                  Convert first TD → TH.
                 */
 
                 if (
-                  row === firstRow
+                  firstCell.tagName === "TD"
                 ) {
 
-                  th.setAttribute(
-                    "scope",
-                    "col"
+                  const rowHeader =
+                    doc.createElement("th");
+
+
+                  /*
+                    Preserve all existing attributes.
+                  */
+
+                  Array.from(
+                    firstCell.attributes
+                  ).forEach(
+                    attribute => {
+
+                      rowHeader.setAttribute(
+                        attribute.name,
+                        attribute.value
+                      );
+
+                    }
                   );
 
-                  return;
+
+                  rowHeader.innerHTML =
+                    firstCell.innerHTML;
+
+
+                  firstCell.replaceWith(
+                    rowHeader
+                  );
+
+
+                  firstCell =
+                    rowHeader;
 
                 }
 
 
                 /*
-                  Header cells in later rows are
-                  normally row headers.
+                  Explicitly identify it as the row header.
                 */
+
+                if (
+                  firstCell.tagName === "TH"
+                ) {
+
+                  firstCell.setAttribute(
+                    "scope",
+                    "row"
+                  );
+
+                }
+
+
+                /*
+                  Any other TH cells already present in the row
+                  must also have an explicit scope.
+                */
+
+                Array.from(
+                  row.querySelectorAll("th")
+                ).forEach(
+                  th => {
+
+
+                    if (
+                      th.hasAttribute("scope")
+                    ) {
+                      return;
+                    }
+
+
+                    const colspan =
+                      Number(
+                        th.getAttribute(
+                          "colspan"
+                        ) || 1
+                      );
+
+
+                    if (colspan > 1) {
+
+                      th.setAttribute(
+                        "scope",
+                        "colgroup"
+                      );
+
+                    }
+                    else {
+
+                      th.setAttribute(
+                        "scope",
+                        "row"
+                      );
+
+                    }
+
+                  }
+                );
+
+              }
+            );
+
+
+          /* =====================================================
+             5. FINAL SAFETY CHECK FOR EVERY TH
+             ===================================================== */
+
+          Array.from(
+            table.querySelectorAll("th")
+          ).forEach(
+            th => {
+
+
+              if (
+                th.hasAttribute("scope")
+              ) {
+                return;
+              }
+
+
+              const row =
+                th.closest("tr");
+
+
+              if (
+                row === firstRow ||
+                th.closest("thead")
+              ) {
+
+                th.setAttribute(
+                  "scope",
+                  "col"
+                );
+
+              }
+              else {
 
                 th.setAttribute(
                   "scope",
@@ -1345,20 +1325,22 @@
                 );
 
               }
-            );
+
+            }
+          );
 
         }
       );
 
 
       /*
-        Return Canvas-ready body HTML only.
+        Return only the Canvas-ready body contents,
+        not a second HTML/head/body document.
       */
 
       return doc.body.innerHTML;
 
     }
-
 
 
     function buildCanvasHtml(
@@ -1380,8 +1362,7 @@
 
 
       /*
-        Custom Canvas assignment description
-        for Respiratory Physiology practice activities.
+        Respiratory Physiology practice activities.
       */
 
       if (
@@ -1389,203 +1370,93 @@
         "physiology-activities"
       ) {
 
-        return `
-<div style="max-width: 900px; margin: 0 auto 24px auto; font-family: Arial, Helvetica, sans-serif; color: #0b1f33;">
-
-    <div style="background: #0B1F33; border-radius: 18px; padding: 28px 30px; color: #ffffff; margin-bottom: 18px;">
-        <br />
-
-        <div style="font-size: 13px; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; color: #8fe0d5; margin-bottom: 8px;">
-            PulmoLearn Practice Activity
-        </div>
-
-        <h2 style="margin: 0 0 10px 0; font-size: 26px; line-height: 1.25; color: #ffffff;">
-            ${title}
-        </h2>
-
-        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #e8f3f6;">
-            ${description}
-        </p>
-
+        return `<div style="max-width: 900px; margin: 0 auto 24px auto; font-family: Arial, Helvetica, sans-serif; color: #0b1f33;">
+    <div style="background: #0B1F33; border-radius: 18px; padding: 28px 30px; color: #ffffff; margin-bottom: 18px;"><br />
+        <div style="font-size: 13px; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; color: #8fe0d5; margin-bottom: 8px;">PulmoLearn Practice Activity</div>
+        <h2 style="margin: 0 0 10px 0; font-size: 26px; line-height: 1.25; color: #ffffff;">${title}</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #e8f3f6;">${description}</p>
     </div>
 
-
-    <div style="background: #F4FAFC; border: 1px solid #D7E6EF; border-left: 5px solid #1CA7A8; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;">
-        <br />
-
-        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">
-            Purpose of this activity
-        </h3>
-
-        <p style="margin: 0 0 10px 0; line-height: 1.6; color: #415a77;">
-            This focused practice activity reinforces concepts from the related Respiratory Physiology lesson through interactive application.
-        </p>
-
-        <p style="margin: 0; line-height: 1.6; color: #415a77;">
-            <strong>
-                Use the activity to practice, check your understanding, and identify anything you may want to review before moving on.
-            </strong>
-        </p>
-
+    <div style="background: #F4FAFC; border: 1px solid #D7E6EF; border-left: 5px solid #1CA7A8; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;"><br />
+        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">Purpose of this activity</h3>
+        <p style="margin: 0 0 10px 0; line-height: 1.6; color: #415a77;">This focused practice activity reinforces concepts from the related Respiratory Physiology lesson through interactive application.</p>
+        <p style="margin: 0; line-height: 1.6; color: #415a77;"><strong>Use the activity to practice, check your understanding, and identify anything you may want to review before moving on.</strong></p>
     </div>
 
-
-    <div style="background: #DDF7F2; border: 1px solid #B9E5DC; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;">
-        <br />
-
-        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">
-            How to complete it
-        </h3>
+    <div style="background: #DDF7F2; border: 1px solid #B9E5DC; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;"><br />
+        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">How to complete it</h3>
 
         <ol style="margin: 0; padding-left: 22px; color: #334e68; line-height: 1.7;">
-
-            <li>
-                Select
-                <strong>
-                    “Load ${title} in a new window”
-                </strong>
-                at the bottom of this page.
-            </li>
-
-            <li>
-                Work through the activity and complete each required interaction.
-            </li>
-
-            <li>
-                Use the feedback to correct mistakes and reinforce the concept.
-            </li>
-
-            <li>
-                When finished, return to Canvas and check your completion status below.
-            </li>
-
+            <li>Select <strong>“Load ${title} in a new window”</strong> at the bottom of this page.</li>
+            <li>Work through the activity and complete each required interaction.</li>
+            <li>Use the feedback to correct mistakes and reinforce the concept.</li>
+            <li>When finished, return to Canvas and check your completion status below.</li>
         </ol>
-
     </div>
 
-
-    <div style="background: #FFF7E8; border: 1px solid #F4B860; border-radius: 12px; padding: 18px 20px; text-align: center;">
-        <br />
-
-        <p style="margin: 0 0 14px 0; color: #0b1f33; line-height: 1.55; font-size: 15px;">
-            <strong>
-                Finished the practice activity?
-            </strong>
-            <br />
-            Your completion is sent automatically to Canvas.
-        </p>
+    <div style="background: #FFF7E8; border: 1px solid #F4B860; border-radius: 12px; padding: 18px 20px; text-align: center;"><br />
+        <p style="margin: 0 0 14px 0; color: #0b1f33; line-height: 1.55; font-size: 15px;"><strong>Finished the practice activity?</strong><br />Your completion is sent automatically to Canvas.</p>
 
         <a
-            href=""
-            style="display: inline-block; background: #1CA7A8; color: #0B1F33; text-decoration: none; border-radius: 10px; padding: 12px 22px; font-weight: bold; font-size: 15px;"
-            target="_self"
-        >
-            ✓ Check My Completion
-        </a>
+          href=""
+          style="display: inline-block; background: #1CA7A8; color: #0B1F33; text-decoration: none; border-radius: 10px; padding: 12px 22px; font-weight: bold; font-size: 15px;"
+          target="_self"
+        >✓ Check My Completion</a>
 
-        <p style="margin: 10px 0 0 0; color: #415a77; font-size: 13px; line-height: 1.45;">
-            Use this button after finishing the activity to refresh the assignment and display your updated submission status.
-        </p>
-
+        <p style="margin: 10px 0 0 0; color: #415a77; font-size: 13px; line-height: 1.45;">Use this button after finishing the activity to refresh the assignment and display your updated submission status.</p>
     </div>
-
 </div>`;
 
       }
 
 
       /*
-        Standard PulmoLearn lesson assignment description.
+        Standard PulmoLearn lesson assignment.
       */
 
-      return `
-<div style="max-width: 900px; margin: 0 auto 24px auto; font-family: Arial, Helvetica, sans-serif; color: #0b1f33;">
-
-    <div style="background: #0B1F33; border-radius: 18px; padding: 28px 30px; color: #ffffff; margin-bottom: 18px;">
-        <br />
-
-        <div style="font-size: 13px; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; color: #8fe0d5; margin-bottom: 8px;">
-            PulmoLearn Assignment
-        </div>
-
-        <h2 style="margin: 0 0 10px 0; font-size: 26px; line-height: 1.25; color: #ffffff;">
-            ${title}
-        </h2>
-
-        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #e8f3f6;">
-            ${description}
-        </p>
-
+      return `<div style="max-width: 900px; margin: 0 auto 24px auto; font-family: Arial, Helvetica, sans-serif; color: #0b1f33;">
+    <div style="background: #0B1F33; border-radius: 18px; padding: 28px 30px; color: #ffffff; margin-bottom: 18px;"><br />
+        <div style="font-size: 13px; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; color: #8fe0d5; margin-bottom: 8px;">PulmoLearn Assignment</div>
+        <h2 style="margin: 0 0 10px 0; font-size: 26px; line-height: 1.25; color: #ffffff;">${title}</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #e8f3f6;">${description}</p>
     </div>
 
+    <div style="background: #F4FAFC; border: 1px solid #D7E6EF; border-left: 5px solid #1CA7A8; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;"><br />
+        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">Before you begin</h3>
 
-    <div style="background: #F4FAFC; border: 1px solid #D7E6EF; border-left: 5px solid #1CA7A8; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;">
-        <br />
+        <p style="margin: 0 0 10px 0; line-height: 1.6; color: #415a77;">PulmoLearn opens in a separate browser window so the interactive lesson has enough space to function properly.</p>
 
-        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">
-            Before you begin
-        </h3>
-
-        <p style="margin: 0 0 10px 0; line-height: 1.6; color: #415a77;">
-            PulmoLearn opens in a separate browser window so the interactive lesson has enough space to function properly.
-        </p>
-
-        <p style="margin: 0; line-height: 1.6; color: #415a77;">
-            <strong>
-                Select “Load ${title} in a new window” at the bottom of this page to begin.
-            </strong>
-            If prompted, sign in with the PulmoLearn account you activated using your bookstore voucher.
-        </p>
-
+        <p style="margin: 0; line-height: 1.6; color: #415a77;"><strong>Select “Load ${title} in a new window” at the bottom of this page to begin.</strong> If prompted, sign in with the PulmoLearn account you activated using your bookstore voucher.</p>
     </div>
 
-
-    <div style="background: #FFF7E8; border: 1px solid #F4B860; border-radius: 12px; padding: 18px 20px; text-align: center;">
-        <br />
-
-        <p style="margin: 0 0 14px 0; color: #0b1f33; line-height: 1.55; font-size: 15px;">
-            <strong>
-                Finished your PulmoLearn lesson?
-            </strong>
-            <br />
-            Your completion is sent automatically to Canvas.
-        </p>
+    <div style="background: #FFF7E8; border: 1px solid #F4B860; border-radius: 12px; padding: 18px 20px; text-align: center;"><br />
+        <p style="margin: 0 0 14px 0; color: #0b1f33; line-height: 1.55; font-size: 15px;"><strong>Finished your PulmoLearn lesson?</strong><br />Your completion is sent automatically to Canvas.</p>
 
         <a
-            href=""
-            style="display: inline-block; background: #1CA7A8; color: #0B1F33; text-decoration: none; border-radius: 10px; padding: 12px 22px; font-weight: bold; font-size: 15px;"
-            target="_self"
-        >
-            ✓ Check My Completion
-        </a>
+          href=""
+          style="display: inline-block; background: #1CA7A8; color: #0B1F33; text-decoration: none; border-radius: 10px; padding: 12px 22px; font-weight: bold; font-size: 15px;"
+          target="_self"
+        >✓ Check My Completion</a>
 
-        <p style="margin: 10px 0 0 0; color: #415a77; font-size: 13px; line-height: 1.45;">
-            Use this button after finishing the lesson to refresh the assignment and display your updated submission status.
-        </p>
-
+        <p style="margin: 10px 0 0 0; color: #415a77; font-size: 13px; line-height: 1.45;">Use this button after finishing the lesson to refresh the assignment and display your updated submission status.</p>
     </div>
-
 </div>`;
 
     }
-
 
 
     function fillCourses() {
 
       courseSelect.innerHTML =
         courses.map(
-
           course =>
             `<option value="${escapeHtml(course.key)}">${escapeHtml(course.label)}</option>`
-
         ).join("");
 
 
       fillLessons();
 
     }
-
 
 
     function fillLessons() {
@@ -1596,17 +1467,14 @@
 
       lessonSelect.innerHTML =
         course.lessons.map(
-
           lesson =>
             `<option value="${escapeHtml(lesson.id)}">${escapeHtml(lesson.displayTitle || lesson.title)}</option>`
-
         ).join("");
 
 
       render();
 
     }
-
 
 
     function render() {
@@ -1630,7 +1498,6 @@
 
 
       selectedMeta.textContent =
-
         [
           course.label,
           lesson.time,
@@ -1686,7 +1553,6 @@
     }
 
 
-
     async function copyText(
       text,
       message
@@ -1707,7 +1573,6 @@
       catch {
 
         htmlOutput.focus();
-
         htmlOutput.select();
 
 
@@ -1719,11 +1584,8 @@
     }
 
 
-
     document
-      .getElementById(
-        "copyTitleBtn"
-      )
+      .getElementById("copyTitleBtn")
       .addEventListener(
         "click",
         () => {
@@ -1733,23 +1595,17 @@
 
 
           copyText(
-
             lesson.displayTitle ||
             lesson.title,
-
             "Assignment title copied."
-
           );
 
         }
       );
 
 
-
     document
-      .getElementById(
-        "copyHtmlBtn"
-      )
+      .getElementById("copyHtmlBtn")
       .addEventListener(
         "click",
         () => {
@@ -1763,20 +1619,15 @@
       );
 
 
-
     /*
-      ───────────────────────────────────────────────
+      ============================================================
       COPY COMPETENCY GUIDE
-      ───────────────────────────────────────────────
+      ============================================================
 
-      The original competency guide is fetched from PulmoLearn.
+      The guide is fetched from its existing PulmoLearn HTML file.
 
-      Before copying it to the clipboard, the builder automatically repairs:
-
-      • missing table captions
-      • missing TH scope attributes
-
-      The original source file on the website is not changed.
+      Before it reaches the clipboard, accessibility repair is applied
+      to every table.
     */
 
 
@@ -1835,8 +1686,8 @@
 
 
           /*
-            Apply Canvas accessibility repairs
-            before copying.
+            Strong Canvas accessibility repair:
+            caption + column headers + row headers + scopes.
           */
 
           const accessibleGuideHtml =
@@ -1855,7 +1706,7 @@
 
 
           guideStatus.textContent =
-            "Competency guide copied with Canvas table accessibility fixes applied.";
+            "Competency guide copied with accessible table captions, column headers, row headers, and scope attributes.";
 
 
           window.setTimeout(
@@ -1872,9 +1723,7 @@
 
         catch (error) {
 
-          console.error(
-            error
-          );
+          console.error(error);
 
 
           copyGuideBtn.textContent =
@@ -1897,17 +1746,13 @@
     );
 
 
-
     document
-      .getElementById(
-        "selectHtmlBtn"
-      )
+      .getElementById("selectHtmlBtn")
       .addEventListener(
         "click",
         () => {
 
           htmlOutput.focus();
-
           htmlOutput.select();
 
 
@@ -1916,7 +1761,6 @@
 
         }
       );
-
 
 
     courseSelect.addEventListener(
@@ -1931,10 +1775,7 @@
     );
 
 
-
-    fetch(
-      "/api/lti/catalog"
-    )
+    fetch("/api/lti/catalog")
 
       .then(
         response => {
@@ -1969,15 +1810,9 @@
         error => {
 
           document.body.innerHTML =
-
             '<main style="max-width:800px;margin:40px auto;font-family:Arial,sans-serif;padding:20px;">' +
-
             '<h1>Unable to load course catalog</h1><p>' +
-
-            escapeHtml(
-              error.message
-            ) +
-
+            escapeHtml(error.message) +
             '</p></main>';
 
         }
@@ -1995,49 +1830,31 @@
 
     (function () {
 
-
       function initA11yHotspots() {
 
-
         document
-          .querySelectorAll(
-            ".hotspot-demo"
-          )
+          .querySelectorAll(".hotspot-demo")
           .forEach(
             function (demo) {
 
-
               var buttons =
                 Array.from(
-                  demo.querySelectorAll(
-                    ".hotspot-btn"
-                  )
+                  demo.querySelectorAll(".hotspot-btn")
                 );
 
 
               var panel =
-                demo.querySelector(
-                  ".hotspot-panel"
-                );
+                demo.querySelector(".hotspot-panel");
 
-
-              /*
-                aria-live region so screen readers
-                hear hotspot content.
-              */
 
               var live =
-                demo.querySelector(
-                  "[data-a11y-live]"
-                );
+                demo.querySelector("[data-a11y-live]");
 
 
               if (!live) {
 
                 live =
-                  document.createElement(
-                    "div"
-                  );
+                  document.createElement("div");
 
 
                 live.setAttribute(
@@ -2070,21 +1887,11 @@
 
 
               buttons.forEach(
-                function (
-                  btn,
-                  idx
-                ) {
-
-
-                  /*
-                    Arrow-key, Home and End navigation
-                    within hotspot group.
-                  */
+                function (btn, idx) {
 
                   btn.addEventListener(
                     "keydown",
                     function (e) {
-
 
                       var target;
 
@@ -2095,7 +1902,6 @@
                       ) {
 
                         e.preventDefault();
-
 
                         target =
                           buttons[
@@ -2111,7 +1917,6 @@
                       ) {
 
                         e.preventDefault();
-
 
                         target =
                           buttons[
@@ -2150,24 +1955,16 @@
 
 
                       if (target) {
-
                         target.focus();
-
                       }
 
                     }
                   );
 
 
-                  /*
-                    Push hotspot content to aria-live
-                    region on activation.
-                  */
-
                   btn.addEventListener(
                     "click",
                     function () {
-
 
                       var title =
                         btn.dataset.title ||
@@ -2203,16 +2000,8 @@
               );
 
 
-              /*
-                When focus enters the hotspot
-                container, route to the first
-                unvisited hotspot.
-              */
-
               var container =
-                demo.querySelector(
-                  ".hotspot-lung"
-                );
+                demo.querySelector(".hotspot-lung");
 
 
               if (
@@ -2223,7 +2012,6 @@
                 container.addEventListener(
                   "focus",
                   function () {
-
 
                     var first =
                       buttons.find(
