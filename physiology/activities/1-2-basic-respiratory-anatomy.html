@@ -82,28 +82,7 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
   section.card{padding:18px}
   .hero{padding:22px}
 }
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <main>
@@ -120,35 +99,32 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
 
 <section id="s1" class="card">
   <div class="kicker">Section 1</div>
-  <h2>Follow the Breath: Conducting → Transitional → Respiratory</h2>
-  <p>Gas must travel through many structures before it reaches a true gas-exchanging surface. The <strong>terminal bronchiole is the final conducting airway</strong>. Gas exchange begins as alveoli first appear in the respiratory bronchioles and becomes increasingly important distally.</p>
+  <h2>Follow the Breath: Conducting → Respiratory</h2>
+  <p>Gas must travel through many structures before it reaches a true gas-exchanging surface. The <strong>terminal bronchiole is the final conducting airway</strong>. The <strong>respiratory bronchiole begins the respiratory zone</strong> and is the transition point where alveoli first appear; gas exchange becomes increasingly important through the alveolar ducts and alveoli.</p>
 
   <img class="asset" src="https://www.pulmolearn.com/physiology/activities/gas-pathway-zones.png" alt="Diagram tracing gas from the nose and mouth through the conducting zone, respiratory bronchioles, alveolar ducts, and alveoli.">
+  <div class="warning"><strong>Course boundary to use:</strong> terminal bronchiole = final <strong>conducting-zone</strong> airway; respiratory bronchiole = beginning of the <strong>respiratory zone</strong> and the transition point where alveoli first appear.</div>
 
   <div class="takeaway"><strong>Core rule:</strong> The conducting zone moves gas but does not directly exchange gases. The respiratory zone contains alveoli and is where gas exchange becomes possible.</div>
 
-  <h3>Sort the structures by functional region</h3>
+  <h3>Sort the structures by whether gas exchange can occur</h3>
   <p class="small"><strong>Mouse:</strong> drag a structure into a region or click the structure then the region. <strong>Keyboard:</strong> Tab to a structure, press Enter/Space, then Tab to a region and press Enter/Space. <strong>Touch:</strong> tap a structure, then tap a region.</p>
   <div id="zoneStatus" class="sr-only" aria-live="polite"></div>
 
   <div id="zoneTokens" class="tokens"></div>
-  <div class="grid3">
+  <div class="grid">
     <button class="zone" data-zone="conducting" aria-label="Conducting zone drop target">
       <h4>Conducting Zone</h4>
-      <div class="small">No alveoli required for this function</div>
-      <div class="placed"></div>
-    </button>
-    <button class="zone" data-zone="transitional" aria-label="Transitional region drop target">
-      <h4>Transitional Region</h4>
-      <div class="small">Where alveoli begin appearing</div>
+      <div class="small">Moves gas; no alveoli are present. Ends at the terminal bronchiole.</div>
       <div class="placed"></div>
     </button>
     <button class="zone" data-zone="respiratory" aria-label="Respiratory zone drop target">
-      <h4>Respiratory Zone</h4>
-      <div class="small">Increasing alveolar surface for exchange</div>
+      <h4>Respiratory / Gas-Exchange Zone</h4>
+      <div class="small">Begins at the respiratory bronchiole, where alveoli first appear.</div>
       <div class="placed"></div>
     </button>
   </div>
+  <div class="takeaway"><strong>Transition point:</strong> The respiratory bronchiole is the first airway in the respiratory zone. It still conducts gas, but because alveoli begin appearing along its walls, gas exchange also becomes possible here.</div>
   <div class="controls">
     <button class="btn teal" onclick="checkZones()">Check My Map</button>
     <button class="btn secondary" onclick="resetZones()">Reset</button>
@@ -163,28 +139,68 @@ code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3
 
   <img class="asset" src="https://www.pulmolearn.com/physiology/activities/conducting-vs-gas-exchange-zone.png" alt="Comparison of the conducting zone, which is anatomic dead space, and the respiratory zone where gas exchange occurs.">
 
+  <div class="takeaway">
+    <strong>Use ideal body weight (IBW), not actual body weight.</strong>
+    Conducting-airway size is related to predicted body size and height; excess body mass does not proportionally enlarge the conducting airways.
+  </div>
+
   <div class="calc">
     <div class="calc-box">
-      <h3>Estimate anatomic dead space</h3>
-      <label for="ibw">Ideal body weight (lb)</label>
-      <input id="ibw" type="number" min="50" max="500" value="150" inputmode="decimal">
-      <p class="small">Course estimate: approximately <strong>1 mL per 1 lb of ideal body weight</strong>.</p>
-      <div class="result" id="vdResult">Estimated anatomic VD ≈ 150 mL</div>
+      <h3>1. Find the patient's IBW</h3>
+
+      <fieldset style="border:0;padding:0;margin:0 0 12px">
+        <legend style="font-weight:800;color:var(--navy);margin-bottom:8px">Patient sex</legend>
+        <label style="margin-right:18px"><input type="radio" name="ibwSex" value="male" checked> Male</label>
+        <label><input type="radio" name="ibwSex" value="female"> Female</label>
+      </fieldset>
+
+      <label for="heightSlider"><strong>Height</strong></label>
+      <input id="heightSlider" type="range" min="58" max="80" step="1" value="66" style="width:100%">
+      <div class="result" id="heightDisplay">5′6″ (66 in)</div>
+
+      <div class="grid" style="margin-top:14px">
+        <div class="panel">
+          <div class="small">IBW in kilograms</div>
+          <div class="result" id="ibwKg">63.8 kg</div>
+        </div>
+        <div class="panel">
+          <div class="small">IBW in pounds</div>
+          <div class="result" id="ibwLb">143 lb</div>
+        </div>
+      </div>
+
+      <p class="small" id="ibwFormulaNote">Male formula: 50 kg + 2.3 kg × inches over 60; 110 lb + 5.5 lb × inches over 60.</p>
     </div>
 
     <div class="calc-box">
-      <h3>See one breath partitioned</h3>
-      <label for="vt">Tidal volume (mL)</label>
-      <input id="vt" type="number" min="100" max="1500" value="500" inputmode="decimal">
-      <div id="breathbar" class="breathbar" aria-label="Tidal breath partition bar">
-        <div class="dead" id="deadSeg">150 mL dead space</div>
-        <div class="exchange" id="exchangeSeg">350 mL toward gas exchange</div>
+      <h3>2. Estimate anatomic dead space</h3>
+      <p>Which displayed IBW value should you use with the course estimate <strong>1 mL dead space per 1 lb IBW</strong>?</p>
+
+      <div class="grid">
+        <button type="button" class="btn secondary ibw-choice" data-unit="kg">Use <span id="kgChoice">63.8 kg</span></button>
+        <button type="button" class="btn secondary ibw-choice" data-unit="lb">Use <span id="lbChoice">143 lb</span></button>
       </div>
-      <p class="small" id="breathText">Before perfusion is considered, 350 mL of this 500 mL breath reaches the gas-exchanging region.</p>
+
+      <div id="unitFeedback" class="feedback" aria-live="polite"></div>
+
+      <div id="deadSpaceReveal" style="display:none;margin-top:14px">
+        <div class="result" id="vdResult">Estimated anatomic VD ≈ 143 mL</div>
+
+        <label for="vt" style="display:block;margin-top:14px"><strong>Tidal volume (mL)</strong></label>
+        <input id="vt" type="number" min="100" max="1500" value="500" inputmode="decimal">
+
+        <div id="breathbar" class="breathbar" aria-label="Tidal breath partition bar">
+          <div class="dead" id="deadSeg">143 mL dead space</div>
+          <div class="exchange" id="exchangeSeg">357 mL toward gas exchange</div>
+        </div>
+        <p class="small" id="breathText">Before perfusion is considered, 357 mL of this 500 mL breath reaches beyond the conducting-zone dead space.</p>
+      </div>
     </div>
   </div>
 
-  <div class="warning"><strong>Important distinction:</strong> Reaching the respiratory zone does not guarantee effective gas exchange. The alveolus must also be perfused and the diffusion barrier must function.</div>
+  <div class="warning">
+    <strong>Watch the units:</strong> the activity displays IBW in both kilograms and pounds because both are clinically useful. For this specific course estimate, however, <strong>1 mL/lb requires the pound value</strong>. Using the kilogram number would underestimate anatomic dead space.
+  </div>
 
   <fieldset class="q" data-answer="b">
     <legend>A patient has a tidal volume of 450 mL and estimated anatomic dead space of 150 mL. What does the remaining 300 mL represent at this point in the reasoning?</legend>
@@ -389,7 +405,7 @@ shuffleQuestions();
 // Section 1 sorter
 const zoneItems=[
   ['Trachea','conducting'],['Main bronchus','conducting'],['Terminal bronchiole','conducting'],
-  ['Respiratory bronchiole','transitional'],['Alveolar duct','respiratory'],['Alveoli','respiratory']
+  ['Respiratory bronchiole','respiratory'],['Alveolar duct','respiratory'],['Alveoli','respiratory']
 ];
 let selectedToken=null;
 function zoneAnnounce(t){document.getElementById('zoneStatus').textContent=t}
@@ -440,28 +456,100 @@ function checkZones(){
   });
   const fb=document.getElementById('fb1');
   if(count<zoneItems.length){fb.className='feedback show bad';fb.innerHTML='<strong>Keep going.</strong> Place every structure before checking.';return}
-  if(ok){fb.className='feedback show good';fb.innerHTML='<strong>Correct.</strong> Terminal bronchioles are the final conducting airways. Respiratory bronchioles mark the transition as alveoli begin to appear, and alveolar ducts/alveoli provide increasing gas-exchange surface.';markComplete(1)}
-  else{fb.className='feedback show bad';fb.innerHTML='<strong>Not quite.</strong> Recheck where alveoli first appear. Conducting airways end at the terminal bronchiole.'}
+  if(ok){fb.className='feedback show good';fb.innerHTML='<strong>Correct.</strong> The terminal bronchiole is the final conducting airway. The respiratory bronchiole begins the respiratory zone and serves as the transition point because alveoli first appear there; alveolar ducts and alveoli then provide progressively greater gas-exchange surface.';markComplete(1)}
+  else{fb.className='feedback show bad';fb.innerHTML='<strong>Not quite.</strong> Remember the boundary: the terminal bronchiole is the last conducting airway, and the respiratory bronchiole is the first part of the respiratory zone because alveoli begin appearing there.'}
 }
 buildZoneTokens();
 
-// Section 2 calculator
+// Section 2 IBW + anatomic dead-space interaction
+let currentSex='male';
+let currentHeight=66;
+let currentIbwKg=0;
+let currentIbwLb=0;
+let selectedDeadSpaceLb=null;
+
+function heightFeetInches(inches){
+  const ft=Math.floor(inches/12);
+  const inch=inches%12;
+  return `${ft}′${inch}″ (${inches} in)`;
+}
+
+function calculateIbw(){
+  currentHeight=Number(document.getElementById('heightSlider').value);
+  const over60=currentHeight-60;
+
+  if(currentSex==='male'){
+    currentIbwKg=50 + 2.3*over60;
+    currentIbwLb=110 + 5.5*over60;
+    document.getElementById('ibwFormulaNote').textContent=
+      'Male formula: 50 kg + 2.3 kg × inches over 60; 110 lb + 5.5 lb × inches over 60.';
+  }else{
+    currentIbwKg=45.5 + 2.3*over60;
+    currentIbwLb=100 + 5.5*over60;
+    document.getElementById('ibwFormulaNote').textContent=
+      'Female formula: 45.5 kg + 2.3 kg × inches over 60; 100 lb + 5.5 lb × inches over 60.';
+  }
+
+  document.getElementById('heightDisplay').textContent=heightFeetInches(currentHeight);
+  document.getElementById('ibwKg').textContent=`${currentIbwKg.toFixed(1)} kg`;
+  document.getElementById('ibwLb').textContent=`${Math.round(currentIbwLb)} lb`;
+  document.getElementById('kgChoice').textContent=`${currentIbwKg.toFixed(1)} kg`;
+  document.getElementById('lbChoice').textContent=`${Math.round(currentIbwLb)} lb`;
+
+  selectedDeadSpaceLb=null;
+  document.getElementById('deadSpaceReveal').style.display='none';
+  document.getElementById('unitFeedback').className='feedback';
+  document.querySelectorAll('.ibw-choice').forEach(b=>b.classList.remove('teal'));
+}
+
 function updateDeadSpace(){
-  const ibw=Math.max(0,Number(document.getElementById('ibw').value)||0);
+  if(selectedDeadSpaceLb===null)return;
   const vt=Math.max(1,Number(document.getElementById('vt').value)||1);
-  const vd=ibw;
+  const vd=selectedDeadSpaceLb;
   const toward=Math.max(0,vt-vd);
+
   document.getElementById('vdResult').textContent=`Estimated anatomic VD ≈ ${Math.round(vd)} mL`;
   const pct=Math.min(90,Math.max(10,vd/vt*100));
   document.getElementById('deadSeg').style.width=pct+'%';
   document.getElementById('exchangeSeg').style.width=(100-pct)+'%';
   document.getElementById('deadSeg').textContent=`${Math.round(vd)} mL dead space`;
   document.getElementById('exchangeSeg').textContent=`${Math.round(toward)} mL toward gas exchange`;
-  document.getElementById('breathText').textContent=`Before perfusion is considered, ${Math.round(toward)} mL of this ${Math.round(vt)} mL breath reaches beyond the conducting-zone dead space.`;
+  document.getElementById('breathText').textContent=
+    `Before perfusion is considered, ${Math.round(toward)} mL of this ${Math.round(vt)} mL breath reaches beyond the conducting-zone dead space.`;
 }
-document.getElementById('ibw').addEventListener('input',updateDeadSpace);
+
+document.querySelectorAll('input[name="ibwSex"]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    currentSex=r.value;
+    calculateIbw();
+  });
+});
+
+document.getElementById('heightSlider').addEventListener('input',calculateIbw);
+
+document.querySelectorAll('.ibw-choice').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const fb=document.getElementById('unitFeedback');
+    document.querySelectorAll('.ibw-choice').forEach(b=>b.classList.remove('teal'));
+
+    if(btn.dataset.unit==='kg'){
+      fb.className='feedback show bad';
+      fb.innerHTML='<strong>Check the units.</strong> The displayed kilogram IBW is useful clinically, but the course estimate here is <strong>1 mL per 1 lb IBW</strong>. Choose the pound value.';
+      document.getElementById('deadSpaceReveal').style.display='none';
+      selectedDeadSpaceLb=null;
+    }else{
+      btn.classList.add('teal');
+      selectedDeadSpaceLb=currentIbwLb;
+      fb.className='feedback show good';
+      fb.innerHTML=`<strong>Correct unit.</strong> ${Math.round(currentIbwLb)} lb IBW gives an estimated anatomic dead space of about <strong>${Math.round(currentIbwLb)} mL</strong>.`;
+      document.getElementById('deadSpaceReveal').style.display='block';
+      updateDeadSpace();
+    }
+  });
+});
+
 document.getElementById('vt').addEventListener('input',updateDeadSpace);
-updateDeadSpace();
+calculateIbw();
 
 function checkSingle(sectionId,fbId){
   const fs=document.querySelector('#'+sectionId+' fieldset.q');
@@ -536,75 +624,5 @@ function resetFinal(){
   shuffleQuestions();
 }
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
