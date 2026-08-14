@@ -53,29 +53,39 @@ h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--m
 .extra{display:none;margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fbfdfe}.extra.show{display:block}
 .final{display:none;text-align:center;padding:22px;border-radius:16px;background:linear-gradient(135deg,#edf8f6,#eef3fa);border:1px solid #cadce6;margin:24px 0}.final.show{display:block}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:760px){main{padding:12px}.grid,.grid3,.lung-wrap,.sequence-slots{grid-template-columns:1fr}.card{padding:18px}.lung{min-height:180px}.sequence-slots{gap:8px}}
 
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+.teach-box{
+  background:#f8fbfc;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 16px;
+  margin:12px 0;
+}
+.teach-box strong{color:var(--navy)}
+.calc-steps{
+  margin:10px 0 0;
+  padding-left:22px;
+}
+.calc-steps li{margin:6px 0}
+.unit-guide{
+  background:#fff8e8;
+  border-left:5px solid #c39532;
+  border-radius:10px;
+  padding:12px 14px;
+  margin:12px 0;
+}
+.required-calc{
+  border:2px solid #b9cbd6;
+  border-radius:14px;
+  padding:16px;
+  background:#fff;
+  margin:14px 0;
+}
+.required-calc h3{margin-top:0}
+.required-calc .resultline{font-weight:800;margin-top:8px}
+
+@media(max-width:760px){main{padding:12px}.grid,.grid3,.lung-wrap,.sequence-slots{grid-template-columns:1fr}.card{padding:18px}.lung{min-height:180px}.sequence-slots{gap:8px}}
+</style>
 </head>
 <body>
 <main>
@@ -140,12 +150,32 @@ h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--m
    <h3>Same pressure, different lung units</h3>
    <label><strong>Distending-pressure change: <span id="pSlideVal">10</span> cm H₂O</strong></label>
    <input id="pSlide" class="slider" type="range" min="2" max="20" value="10">
+   <div class="teach-box">
+     <strong>What the slider demonstrates:</strong>
+     moving the slider changes the <em>same distending-pressure change</em> applied to both lung units.
+     Because Unit B has the higher compliance, its volume rises more for every pressure increase.
+     Watch the two volume values below as you move the slider and compare the size of each response.
+   </div>
    <div class="pv-box"><div class="axis-y">Volume change</div><div class="axis-x">Pressure change</div><div class="curve"><svg viewBox="0 0 300 230" preserveAspectRatio="none"><path d="M5 225 L285 75" fill="none" stroke="#3f9291" stroke-width="5"/><path d="M5 225 L285 155" fill="none" stroke="#276395" stroke-width="5"/></svg></div></div>
    <div><strong>Unit A:</strong> C = 20 mL/cm H₂O → <span id="unitAvol">200</span> mL</div>
    <div><strong>Unit B:</strong> C = 50 mL/cm H₂O → <span id="unitBvol">500</span> mL</div>
   </div>
  </div>
  <div class="takeaway"><strong>Think property first:</strong> compliance is pressure → volume. Resistance is pressure → flow. A stiff lung has <strong>low compliance and high elastance</strong>.</div>
+ <div class="required-calc">
+   <h3>Required calculation practice • Compliance</h3>
+   <div class="formula">C = ΔV ÷ ΔP</div>
+   <div class="unit-guide"><strong>Units:</strong> If ΔV is in mL and ΔP is in cm H₂O, your answer will be in <strong>mL/cm H₂O</strong>. No volume conversion is needed unless the question asks for L/cm H₂O.</div>
+   <p>A lung unit changes volume by <strong>480 mL</strong> when distending pressure changes by <strong>8 cm H₂O</strong>.</p>
+   <ol class="calc-steps">
+     <li>Write the formula: C = ΔV ÷ ΔP</li>
+     <li>Insert the values: C = 480 mL ÷ 8 cm H₂O</li>
+     <li>Calculate and keep the units with the result.</li>
+   </ol>
+   <div class="inputline"><label for="reqComp">Compliance</label><input id="reqComp" type="number" step="1"> mL/cm H₂O</div>
+   <div id="reqCompResult" class="resultline"></div>
+   <div class="controls"><button class="btn teal" type="button" onclick="checkReqComp()">Check calculation</button></div>
+ </div>
 
  <fieldset class="q" data-answer="d" id="q2"><legend>Two regions receive the same distending-pressure change. Region A changes volume much less than Region B. Which interpretation is best?</legend>
   <label><input type="radio" name="q2" value="a"> Region A has greater compliance because it receives less volume.</label>
@@ -176,6 +206,21 @@ h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--m
    <p id="gasVariable" class="small"><strong>Dominant gas property:</strong> viscosity has the larger influence in laminar flow.</p>
    <div class="warning"><strong>Do not confuse mechanism with treatment.</strong> A lower-density gas can reduce turbulence-related pressure loss, but it does not enlarge the narrowed airway.</div>
   </div>
+ </div>
+
+ <div class="required-calc">
+   <h3>Required calculation practice • Airway resistance</h3>
+   <div class="formula">R = ΔP ÷ Flow</div>
+   <div class="unit-guide"><strong>Units:</strong> If pressure is in cm H₂O and flow is in L/s, resistance is reported as <strong>cm H₂O/L/s</strong>.</div>
+   <p>The pressure difference across an airway is <strong>9 cm H₂O</strong> and flow is <strong>1.5 L/s</strong>.</p>
+   <ol class="calc-steps">
+     <li>Write the formula: R = ΔP ÷ Flow</li>
+     <li>Insert the values: R = 9 ÷ 1.5</li>
+     <li>Report the result with units.</li>
+   </ol>
+   <div class="inputline"><label for="reqRes">Resistance</label><input id="reqRes" type="number" step="0.1"> cm H₂O/L/s</div>
+   <div id="reqResResult" class="resultline"></div>
+   <div class="controls"><button class="btn teal" type="button" onclick="checkReqRes()">Check calculation</button></div>
  </div>
 
  <fieldset class="q" data-answer="a" id="q3"><legend>A narrowed irregular airway has high-velocity turbulent flow. Which gas property becomes especially important to the pressure requirement?</legend>
@@ -225,6 +270,13 @@ h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--m
    <div class="tc-track"><div id="tcY" class="tc-fill"></div></div>
    <label>Available filling time: <strong><span id="timeVal">0.4</span> s</strong></label>
    <input id="timeSlider" class="slider" type="range" min="1" max="20" value="4">
+   <div class="teach-box">
+     <strong>What the slider demonstrates:</strong>
+     this changes how much time both lung units are allowed to fill.
+     Unit X has a short time constant, so it approaches equilibrium quickly.
+     Unit Y has a long time constant, so it needs more time.
+     Move the slider shorter and longer and watch how the gap between the two units changes.
+   </div>
    <p id="tcText" class="small"></p>
   </div>
   <div class="panel">
@@ -234,6 +286,41 @@ h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--m
   </div>
  </div>
 
+ 
+ <div class="required-calc">
+   <h3>Required calculation practice • Time constant</h3>
+   <div class="formula">τ = Resistance × Compliance</div>
+   <div class="unit-guide">
+     <strong>Unit check:</strong> R is usually in cm H₂O/L/s and C in L/cm H₂O.
+     The cm H₂O and L units cancel, leaving <strong>seconds</strong>.<br>
+     If compliance is given in mL/cm H₂O, convert mL to L first: <strong>1000 mL = 1 L</strong>.
+   </div>
+   <p>A lung unit has resistance of <strong>6 cm H₂O/L/s</strong> and compliance of <strong>0.07 L/cm H₂O</strong>.</p>
+   <ol class="calc-steps">
+     <li>Write the formula: τ = R × C</li>
+     <li>Insert the values: τ = 6 × 0.07</li>
+     <li>Report the answer in seconds.</li>
+   </ol>
+   <div class="inputline"><label for="reqTc">Time constant</label><input id="reqTc" type="number" step="0.01"> seconds</div>
+   <div id="reqTcResult" class="resultline"></div>
+   <div class="controls"><button class="btn teal" type="button" onclick="checkReqTc()">Check calculation</button></div>
+ </div>
+
+ <div class="required-calc">
+   <h3>Required calculation practice • Convert compliance before calculating τ</h3>
+   <div class="formula">τ = R × C</div>
+   <div class="unit-guide"><strong>Conversion:</strong> 80 mL/cm H₂O = <strong>0.080 L/cm H₂O</strong> because 80 ÷ 1000 = 0.080.</div>
+   <p>Resistance = <strong>4 cm H₂O/L/s</strong><br>Compliance = <strong>80 mL/cm H₂O</strong></p>
+   <ol class="calc-steps">
+     <li>Convert compliance to liters: 80 mL ÷ 1000 = 0.080 L/cm H₂O</li>
+     <li>Multiply: τ = 4 × 0.080</li>
+     <li>Report the result in seconds.</li>
+   </ol>
+   <div class="inputline"><label for="reqTcConv">Time constant</label><input id="reqTcConv" type="number" step="0.01"> seconds</div>
+   <div id="reqTcConvResult" class="resultline"></div>
+   <div class="controls"><button class="btn teal" type="button" onclick="checkReqTcConv()">Check calculation</button></div>
+ </div>
+
  <h3>Assessment Readiness Challenge</h3>
  <div id="finalQs"></div>
  <div class="controls"><button class="btn teal" onclick="checkFinal()">Check readiness</button><button class="btn ghost" onclick="resetFinal()">Retry</button></div><div id="fb5" class="feedback"></div>
@@ -241,6 +328,13 @@ h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--m
  <div class="controls"><button class="btn ghost" onclick="toggleExtra()">I want more calculation practice</button></div>
  <div id="extra" class="extra">
   <h3>Optional Mechanics Calculations</h3>
+  <div class="teach-box">
+    <strong>Use the same three formulas you just practiced:</strong>
+    <div class="formula">Compliance: C = ΔV ÷ ΔP</div>
+    <div class="formula">Resistance: R = ΔP ÷ Flow</div>
+    <div class="formula">Time constant: τ = R × C</div>
+    <p class="small">For time constants, compliance must be in <strong>L/cm H₂O</strong>. Convert mL to L by dividing by 1000 when needed.</p>
+  </div>
   <div class="grid3">
    <div class="panel"><strong>Compliance</strong><p>ΔV 420 mL, ΔP 7 cm H₂O</p><div class="inputline"><input id="ep1" type="number"> mL/cm H₂O</div><div id="er1" class="small"></div></div>
    <div class="panel"><strong>Resistance</strong><p>ΔP 6 cm H₂O, flow 1.5 L/s</p><div class="inputline"><input id="ep2" type="number" step=".1"> cm H₂O/L/s</div><div id="er2" class="small"></div></div>
@@ -254,7 +348,7 @@ h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--m
 </main>
 
 <script>
-const KEY='AHRC155_1_3_mechanics_v1';
+const KEY='AHRC155_1_3_mechanics_v2';
 let done=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'));
 function progress(){const n=done.size;prog.style.width=(n/5*100)+'%';progText.textContent=`${n} of 5 sections complete`;for(let i=2;i<=5;i++)if(done.has(i-1))document.getElementById('s'+i).classList.remove('locked');if(n===5){complete.classList.add('show');window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'1.3'}}))}window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'1.3',completed:n,total:5,percent:n/5*100}}))}
 function finish(n){done.add(n);localStorage.setItem(KEY,JSON.stringify([...done]));progress();if(n<5)setTimeout(()=>document.getElementById('s'+(n+1)).scrollIntoView({behavior:'smooth'}),250)}
@@ -278,17 +372,56 @@ function checkSequence(){let n=0;document.querySelectorAll('.seq-slot').forEach(
 buildSeq();
 function checkS1(){const seq=[...document.querySelectorAll('.seq-slot')].every((s,i)=>s.dataset.item===seqItems[i]);const mc=guideMC('q1','b','q1note','Flow stops when alveolar and atmospheric pressures equalize, even though the lung is still expanded.','Airflow depends on a pressure gradient, not simply on whether lung volume is high or low.');if(seq&&mc){show('fb1','good','<strong>Section complete.</strong> You linked muscle contraction to volume, pressure, and airflow.');finish(1)}else show('fb1','bad','Complete the breath sequence and use the guidance under the end-inspiration question.')}
 
+
+function markCalc(inputId,resultId,ok,good,hint){
+  const inp=document.getElementById(inputId),res=document.getElementById(resultId);
+  inp.style.borderColor=ok?'#55a36b':'#ce655b';
+  inp.style.background=ok?'#f2fbf6':'#fff5f3';
+  res.style.color=ok?'#2f7d4a':'#b84b42';
+  res.textContent=ok?'Correct. '+good:'Not yet. '+hint;
+}
+function checkReqComp(){
+  const ok=close(reqComp.value,60,1);
+  markCalc('reqComp','reqCompResult',ok,'480 ÷ 8 = 60 mL/cm H₂O.','Divide the volume change by the pressure change and keep the mL/cm H₂O units.');
+  return ok;
+}
+function checkReqRes(){
+  const ok=close(reqRes.value,6,.1);
+  markCalc('reqRes','reqResResult',ok,'9 ÷ 1.5 = 6 cm H₂O/L/s.','Resistance is pressure difference divided by flow.');
+  return ok;
+}
+function checkReqTc(){
+  const ok=close(reqTc.value,.42,.01);
+  markCalc('reqTc','reqTcResult',ok,'6 × 0.07 = 0.42 s.','Multiply resistance by compliance. The units cancel to seconds.');
+  return ok;
+}
+function checkReqTcConv(){
+  const ok=close(reqTcConv.value,.32,.01);
+  markCalc('reqTcConv','reqTcConvResult',ok,'80 mL/cm H₂O = 0.080 L/cm H₂O; 4 × 0.080 = 0.32 s.','Convert mL to L first by dividing by 1000, then multiply R × C.');
+  return ok;
+}
+
 /* S2 */
 function comp(){const v=Number(dv.value)||0,p=Number(dp.value)||0;const c=p?v/p:0;compResult.textContent=`${c.toFixed(1).replace('.0','')} mL/cm H₂O`;compMeaning.textContent=`This means ${c.toFixed(1).replace('.0','')} mL of volume change occurs for each 1 cm H₂O of distending-pressure change.`}
 dv.oninput=dp.oninput=comp;comp();
 pSlide.oninput=()=>{pSlideVal.textContent=pSlide.value;unitAvol.textContent=20*pSlide.value;unitBvol.textContent=50*pSlide.value};
-function checkS2(){const mc=guideMC('q2','d','q2note','Less volume for the same pressure means lower compliance. Because elastance is inverse to compliance, Region A also has greater elastance.','Hold pressure constant and compare the resulting volume change. Which unit is easier to expand?');if(mc){show('fb2','good','<strong>Section complete.</strong> You separated compliance/elastance from resistance and used equal pressure to compare regional mechanics.');finish(2)}else show('fb2','bad','Use ΔV/ΔP: when pressure is the same, the region with the smaller volume change is less compliant.')}
+function checkS2(){
+  const calc=checkReqComp();
+  const mc=guideMC('q2','d','q2note','Less volume for the same pressure means lower compliance. Because elastance is inverse to compliance, Region A also has greater elastance.','Hold pressure constant and compare the resulting volume change. Which unit is easier to expand?');
+  if(calc&&mc){show('fb2','good','<strong>Section complete.</strong> You calculated compliance and used equal pressure to compare regional mechanics.');finish(2)}
+  else show('fb2','bad','Complete the required compliance calculation and use ΔV/ΔP to interpret the regional comparison.');
+}
 
 /* S3 */
 function airway(){const r=Number(radius.value);radiusVal.textContent=r;lumen.style.height=Math.max(22,64*r/100)+'px';const burden=Math.pow(100/r,4);rBurden.textContent=burden.toFixed(1)+'×'}
 radius.oninput=airway;airway();
 velocity.oninput=()=>{const v=Number(velocity.value);velocityVal.textContent=['','Low','Moderate','High'][v];if(v===1){flowPattern.textContent='Mostly laminar';stream.className='stream';gasVariable.innerHTML='<strong>Dominant gas property:</strong> viscosity has the larger influence in laminar flow.'}else if(v===2){flowPattern.textContent='Transitional / mixed';stream.className='stream turbulent';gasVariable.innerHTML='<strong>Mixed influences:</strong> branching, velocity, radius, viscosity, and density all matter.'}else{flowPattern.textContent='More turbulent';stream.className='stream turbulent';gasVariable.innerHTML='<strong>Dominant gas property:</strong> density becomes especially important to turbulent pressure losses.'}};
-function checkS3(){const mc=guideMC('q3','a','q3note','Turbulent pressure losses are strongly influenced by gas density, especially when velocity is high and geometry is irregular.','First name the flow pattern. Viscosity dominates laminar flow; which gas property becomes more important in turbulence?');if(mc){show('fb3','good','<strong>Section complete.</strong> You linked radius and flow pattern to the pressure cost of moving gas.');finish(3)}else show('fb3','bad','Use the guiding explanation under the question and manipulate the flow-velocity control again.')}
+function checkS3(){
+  const calc=checkReqRes();
+  const mc=guideMC('q3','a','q3note','Turbulent pressure losses are strongly influenced by gas density, especially when velocity is high and geometry is irregular.','First name the flow pattern. Viscosity dominates laminar flow; which gas property becomes more important in turbulence?');
+  if(calc&&mc){show('fb3','good','<strong>Section complete.</strong> You calculated resistance and linked radius and flow pattern to the pressure cost of moving gas.');finish(3)}
+  else show('fb3','bad','Complete the required resistance calculation and use the guiding explanation under the flow-pattern question.');
+}
 
 /* S4 */
 function surfactant(on){alveoli.className='alveoli '+(on?'surfactant':'high-tension');surfText.textContent=on?'Surfactant lowers surface tension, improves compliance, and stabilizes smaller alveoli.':'Low surfactant raises surface tension, increases collapse tendency, lowers compliance, and increases elastic work.'}
@@ -316,80 +449,28 @@ const finalData=[
 ];
 function renderFinal(){finalQs.innerHTML='';finalData.forEach((c,i)=>{const f=document.createElement('fieldset');f.className='q';let h=`<legend>Challenge ${i+1}</legend><p>${c.q}</p>`;const keyMap={};shuffle([...c.choices]).forEach(ch=>{let val='x'+Math.random();if(ch.includes('60 mL'))val='60';if(ch==='It becomes lower')val='lower';if(ch.startsWith('Surface tension rises'))val='surf';if(ch.startsWith('Unit B continues'))val='lag';if(ch.startsWith('Incomplete emptying'))val='trap';if(ch.startsWith('Verify sign'))val='verify';if(ch.startsWith('More pressure is required to produce'))val='elastic';h+=`<label><input type="radio" name="f${i}" value="${val}"> ${ch}</label>`});h+=`<div id="fn${i}" class="mc-note"></div>`;f.innerHTML=h;finalQs.appendChild(f)})}
 renderFinal();
-function checkFinal(){let n=0;finalData.forEach((c,i)=>{clearMC('f'+i);const s=document.querySelector(`input[name="f${i}"]:checked`),note=document.getElementById('fn'+i);if(!s){note.className='mc-note show bad';note.innerHTML='<strong>Choose an answer.</strong>';return}const ok=s.value===c.a;if(ok)n++;s.closest('label').classList.add(ok?'correct':'wrong');note.className='mc-note show '+(ok?'good':'bad');note.innerHTML='<strong>'+(ok?'Correct.':'Not yet.')+'</strong> '+(ok?c.good:c.hint)});if(n===7){show('fb5','good','<strong>7/7 correct.</strong> You are applying the same mechanics reasoning expected on the Unit 1 competency exam.');finish(5)}else show('fb5','bad',`${n}/7 correct. Revise the red selections using the hint beneath each item; the correct answer is not revealed until you reason to it.`)}
+function checkFinal(){
+  const tc1=checkReqTc(),tc2=checkReqTcConv();
+  let n=0;
+  finalData.forEach((c,i)=>{
+    clearMC('f'+i);
+    const s=document.querySelector(`input[name="f${i}"]:checked`),note=document.getElementById('fn'+i);
+    if(!s){note.className='mc-note show bad';note.innerHTML='<strong>Choose an answer.</strong>';return}
+    const ok=s.value===c.a;if(ok)n++;
+    s.closest('label').classList.add(ok?'correct':'wrong');
+    note.className='mc-note show '+(ok?'good':'bad');
+    note.innerHTML='<strong>'+(ok?'Correct.':'Not yet.')+'</strong> '+(ok?c.good:c.hint);
+  });
+  if(n===7&&tc1&&tc2){
+    show('fb5','good','<strong>7/7 correct plus both required time-constant calculations.</strong> You are applying the same mechanics reasoning expected on the Unit 1 competency exam.');
+    finish(5);
+  }else{
+    show('fb5','bad',`${n}/7 challenge questions are correct. Also complete both required time-constant calculations above before finishing the activity.`);
+  }
+}
 function resetFinal(){document.querySelectorAll('#finalQs input').forEach(x=>x.checked=false);renderFinal();fb5.className='feedback'}
 function toggleExtra(){extra.classList.toggle('show')}
 function checkExtra(){const vals=[[ep1,60,er1,'Compliance = 420 ÷ 7 = 60 mL/cm H₂O.'],[ep2,4,er2,'Resistance = 6 ÷ 1.5 = 4 cm H₂O/L/s.'],[ep3,.40,er3,'τ = 5 × 0.08 = 0.40 s.']];vals.forEach(([inp,t,res,msg])=>{const ok=close(inp.value,t,.02);inp.style.borderColor=ok?'#55a36b':'#ce655b';res.style.color=ok?'#2f7d4a':'#b84b42';res.textContent=ok?'Correct. '+msg:'Not yet. Write the governing equation first, then insert the units.'})}
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
