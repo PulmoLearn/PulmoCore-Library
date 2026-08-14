@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AHRC 155 • 1.3 Mechanics of Ventilation Practice</title>
+<style>
+:root{
+ --navy:#17365d;--blue:#276395;--teal:#3f9291;--teal2:#eaf6f5;--ink:#20303f;--muted:#667884;
+ --bg:#f4f7f9;--line:#d6e1e8;--white:#fff;--good:#2f7d4a;--bad:#b84b42;--amber:#a57518;
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+main{max-width:1120px;margin:auto;padding:20px}
+.hero{background:linear-gradient(135deg,#14375e,#246981);color:#fff;border-radius:18px;padding:28px;box-shadow:0 8px 30px rgba(17,53,91,.14)}
+.hero h1{margin:0 0 8px;font-size:clamp(1.7rem,3vw,2.5rem)}.hero p{margin:0;max-width:900px}
+.kicker{text-transform:uppercase;letter-spacing:.05em;font-size:.84rem;font-weight:850;color:#a3e2de}
+.progress-wrap{position:sticky;top:0;z-index:20;background:rgba(244,247,249,.96);padding:10px 0 12px;backdrop-filter:blur(5px)}
+.progressbar{height:10px;background:#dce6eb;border-radius:99px;overflow:hidden}.progressbar span{height:100%;display:block;background:linear-gradient(90deg,var(--teal),var(--blue));width:0;transition:.3s}
+.progress-text{font-size:.88rem;color:var(--muted);margin-top:5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;margin:22px 0;padding:24px;box-shadow:0 4px 18px rgba(20,46,68,.06)}
+.card.locked{opacity:.5;pointer-events:none}.section-head{display:flex;gap:14px;align-items:flex-start}
+.num{flex:0 0 44px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-size:1.25rem;font-weight:900}
+h2,h3{color:var(--navy)}h2{margin:0 0 5px}.section-head p{margin:0;color:var(--muted)}
+.goal,.takeaway,.warning{padding:14px 16px;border-radius:11px;margin:16px 0}.goal,.takeaway{background:var(--teal2);border-left:5px solid var(--teal)}.warning{background:#fff3ef;border-left:5px solid #d46c5f}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.panel{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fbfdfe}
+.btn{border:0;border-radius:10px;padding:11px 16px;min-height:44px;font-weight:850;cursor:pointer;font:inherit}.btn.primary{background:var(--navy);color:#fff}.btn.teal{background:var(--teal);color:#fff}.btn.ghost{background:#f1f5f8;color:var(--navy);border:1px solid #c7d5de}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.feedback,.mc-note{display:none;margin-top:12px;padding:12px 14px;border-radius:10px}.feedback.show,.mc-note.show{display:block}.good{background:#eaf7ee;border-left:5px solid #4e9b69}.bad{background:#fff0ee;border-left:5px solid #c95e54}.info{background:#eef4f8;border-left:5px solid #7f9cac}
+.q{border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}.q legend{font-weight:850;color:var(--navy);padding:0 6px}.q label{display:block;border:1px solid #d4dfe6;border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff;cursor:pointer}.q input{margin-right:8px}
+.q label.correct{background:#eaf7ee;border:2px solid #55a36b;color:#1e5b33}.q label.wrong{background:#fff0ee;border:2px solid #ce655b;color:#7e2e27}
+.formula{background:#eef4f7;border-radius:9px;padding:10px 12px;color:var(--navy);font-weight:850;margin:8px 0}
+.small{font-size:.9rem;color:var(--muted)}input[type=number]{padding:10px;border:1px solid #b7c8d3;border-radius:9px;max-width:140px;font-size:1rem}
+.inputline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}.inputline label{font-weight:800;color:var(--navy)}
+/* Breath cycle */
+.pressure-stage{border:1px solid var(--line);border-radius:14px;background:#f9fcfd;padding:18px}
+.lung-wrap{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:12px;align-items:center}
+.atmos,.pleural{border-radius:12px;padding:14px;text-align:center;border:2px solid #c4d3dc;background:#fff}.lung{min-height:220px;border-radius:46% 46% 42% 42%;background:#dfeef6;border:4px solid #6590af;position:relative;display:grid;place-items:center;transition:.35s;overflow:hidden}.lung.inhale{transform:scale(1.06);background:#e8f4fa}.lung.exhale{transform:scale(.92);background:#d7e8f2}
+.alvP{font-size:1.4rem;font-weight:900;color:var(--navy)}.flowArrow{font-size:2.2rem;font-weight:900;color:var(--teal);height:45px}
+.sequence-bank{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}.seq-token{border:1px solid #b9c9d3;background:#fff;color:var(--navy);padding:9px 11px;border-radius:10px;font-weight:800;cursor:grab}.seq-token.used{opacity:.48;text-decoration:line-through}.seq-token.active{background:var(--teal);color:#fff}
+.sequence-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.seq-slot{min-height:86px;border:2px dashed #99adba;border-radius:11px;background:#fbfdfe;padding:8px;display:grid;place-items:center;text-align:center;font-weight:800;color:#6c7e8a;cursor:pointer}.seq-slot.filled{color:var(--navy);border-style:solid}.seq-slot.correct{background:#eaf7ee;border-color:#55a36b}.seq-slot.wrong{background:#fff0ee;border-color:#ce655b}
+/* compliance */
+.pv-box{height:260px;position:relative;border-left:3px solid #8097a6;border-bottom:3px solid #8097a6;margin:16px 16px 30px 42px;background:linear-gradient(to top,#f9fcfd,#fff)}
+.curve{position:absolute;bottom:0;left:0;width:100%;height:100%}.curve svg{width:100%;height:100%}.axis-y{position:absolute;left:-45px;top:50%;transform:rotate(-90deg) translateY(-50%);font-weight:800;color:var(--muted)}.axis-x{position:absolute;bottom:-28px;left:40%;font-weight:800;color:var(--muted)}
+.metric{font-size:1.35rem;font-weight:900;color:var(--teal)}
+/* resistance */
+.airway-demo{height:110px;border-radius:55px;background:#dcecf5;position:relative;overflow:hidden;border:2px solid #9ab5c5;margin:14px 0;transition:.3s}.airway-lumen{position:absolute;top:50%;left:0;right:0;height:64px;transform:translateY(-50%);background:#fff;border-top:4px solid #7da5ba;border-bottom:4px solid #7da5ba;transition:.3s}.stream{position:absolute;left:4%;right:4%;top:50%;height:3px;background:var(--teal);box-shadow:0 -13px 0 var(--teal),0 13px 0 var(--teal);transition:.3s}.stream.turbulent{height:0;background:transparent;box-shadow:none}.stream.turbulent:after{content:"↝   ↜   ↝   ↜   ↝";position:absolute;left:8%;right:0;top:-22px;font-size:2rem;color:var(--teal);letter-spacing:8px}
+.slider{width:100%}
+/* alveoli */
+.alveoli{display:flex;justify-content:center;gap:18px;align-items:flex-end;height:170px;margin:10px 0}.alveolus{border-radius:50%;background:#f5d9d5;border:4px solid #d37d72;display:grid;place-items:center;text-align:center;font-weight:850;color:#75413c;transition:.3s}.a1{width:120px;height:120px}.a2{width:80px;height:80px}.alveoli.high-tension .a2{width:56px;height:56px;background:#efc2bc}.alveoli.surfactant .a1,.alveoli.surfactant .a2{box-shadow:inset 0 0 0 7px #e8c86f}
+/* time constants */
+.tc-track{height:42px;background:#e5edf2;border-radius:99px;overflow:hidden;margin:8px 0}.tc-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .5s;border-radius:99px}.unitrow{margin:14px 0}
+.extra{display:none;margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fbfdfe}.extra.show{display:block}
+.final{display:none;text-align:center;padding:22px;border-radius:16px;background:linear-gradient(135deg,#edf8f6,#eef3fa);border:1px solid #cadce6;margin:24px 0}.final.show{display:block}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:760px){main{padding:12px}.grid,.grid3,.lung-wrap,.sequence-slots{grid-template-columns:1fr}.card{padding:18px}.lung{min-height:180px}.sequence-slots{gap:8px}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+ <div class="kicker">Respiratory Physiology • 1.3 Practice</div>
+ <h1>Mechanics of Ventilation: Pressure → Volume → Flow</h1>
+ <p>Build a spontaneous breath from the pressure gradient forward, then determine whether a mechanical problem is caused by <strong>stiffness, resistance, surface tension, or insufficient filling/emptying time</strong>.</p>
+</header>
+<div class="progress-wrap"><div class="progressbar"><span id="prog"></span></div><div id="progText" class="progress-text">0 of 5 sections complete</div></div>
+
+<section id="s1" class="card">
+ <div class="section-head"><div class="num">1</div><div><h2>Build the Spontaneous Breath</h2><p>Keep the useful idea from the original Storyline activity—but connect every step to pressure and flow.</p></div></div>
+ <div class="goal"><strong>Competency focus:</strong> Boyle's law, diaphragm/intercostal action, pleural pressure, alveolar pressure, pressure gradients, and passive expiration.</div>
+
+ <div class="pressure-stage">
+  <div class="lung-wrap">
+   <div class="atmos"><strong>Atmosphere</strong><div class="metric">0 cm H₂O</div><div class="small">reference pressure</div></div>
+   <div id="lung" class="lung"><div><div id="phaseName" style="font-weight:900;color:var(--navy)">Rest</div><div id="alvP" class="alvP">PA = 0</div><div id="flowText">No airflow</div><div id="flowArrow" class="flowArrow">↔</div></div></div>
+   <div class="pleural"><strong>Pleural pressure</strong><div id="plP" class="metric">−5 cm H₂O</div><div class="small">supports transpulmonary distending pressure</div></div>
+  </div>
+  <div class="controls">
+   <button class="btn teal" onclick="setBreath('inspire')">Begin inspiration</button>
+   <button class="btn ghost" onclick="setBreath('end')">End inspiration</button>
+   <button class="btn ghost" onclick="setBreath('expire')">Quiet expiration</button>
+   <button class="btn ghost" onclick="setBreath('rest')">Return to rest</button>
+  </div>
+ </div>
+
+ <div class="takeaway"><strong>No flow does not mean no lung volume.</strong> At end inspiration, alveolar pressure has returned to atmospheric pressure, so airflow stops even though lung volume remains above resting volume.</div>
+
+ <h3>Sequence quiet inspiration</h3>
+ <p class="small">Drag or click/tap. Select a used item again to move it. Keyboard: Enter/Space selects an item, then activate a slot.</p>
+ <div id="seqBank" class="sequence-bank"></div>
+ <div id="seqSlots" class="sequence-slots"></div>
+ <div class="controls"><button class="btn teal" onclick="checkSequence()">Check sequence</button><button class="btn ghost" onclick="resetSequence()">Reset sequence</button></div>
+ <div id="seqFb" class="feedback"></div>
+
+ <fieldset class="q" data-answer="b" id="q1">
+  <legend>At the end of a normal inspiration, airflow stops even though lung volume is elevated. Why?</legend>
+  <label><input type="radio" name="q1" value="a"> Pleural pressure has become identical to alveolar pressure.</label>
+  <label><input type="radio" name="q1" value="b"> Alveolar pressure has returned to atmospheric pressure, eliminating the airflow gradient.</label>
+  <label><input type="radio" name="q1" value="c"> Elastic recoil has disappeared completely from the respiratory system.</label>
+  <label><input type="radio" name="q1" value="d"> The diaphragm must actively contract to hold expiration closed.</label>
+ </fieldset><div id="q1note" class="mc-note"></div>
+ <div class="controls"><button class="btn primary" onclick="checkS1()">Check Section 1</button></div><div id="fb1" class="feedback"></div>
+</section>
+
+<section id="s2" class="card locked">
+ <div class="section-head"><div class="num">2</div><div><h2>Compliance & Elastance: How Pressure Becomes Volume</h2><p>Separate a pressure-volume problem from a pressure-flow problem.</p></div></div>
+ <div class="goal"><strong>Competency focus:</strong> C = ΔV/ΔP, compliance versus elastance, unequal regional volume distribution, and data plausibility.</div>
+
+ <div class="grid">
+  <div class="panel">
+   <h3>Compliance calculator</h3>
+   <div class="inputline"><label for="dv">ΔV</label><input id="dv" type="number" value="300"> mL</div>
+   <div class="inputline"><label for="dp">ΔP</label><input id="dp" type="number" value="5"> cm H₂O</div>
+   <div class="formula">Compliance = ΔV ÷ ΔP</div>
+   <div id="compResult" class="metric">60 mL/cm H₂O</div>
+   <p id="compMeaning" class="small">This means 60 mL of volume change occurs for each 1 cm H₂O of distending-pressure change.</p>
+  </div>
+  <div class="panel">
+   <h3>Same pressure, different lung units</h3>
+   <label><strong>Distending-pressure change: <span id="pSlideVal">10</span> cm H₂O</strong></label>
+   <input id="pSlide" class="slider" type="range" min="2" max="20" value="10">
+   <div class="pv-box"><div class="axis-y">Volume change</div><div class="axis-x">Pressure change</div><div class="curve"><svg viewBox="0 0 300 230" preserveAspectRatio="none"><path d="M5 225 L285 75" fill="none" stroke="#3f9291" stroke-width="5"/><path d="M5 225 L285 155" fill="none" stroke="#276395" stroke-width="5"/></svg></div></div>
+   <div><strong>Unit A:</strong> C = 20 mL/cm H₂O → <span id="unitAvol">200</span> mL</div>
+   <div><strong>Unit B:</strong> C = 50 mL/cm H₂O → <span id="unitBvol">500</span> mL</div>
+  </div>
+ </div>
+ <div class="takeaway"><strong>Think property first:</strong> compliance is pressure → volume. Resistance is pressure → flow. A stiff lung has <strong>low compliance and high elastance</strong>.</div>
+
+ <fieldset class="q" data-answer="d" id="q2"><legend>Two regions receive the same distending-pressure change. Region A changes volume much less than Region B. Which interpretation is best?</legend>
+  <label><input type="radio" name="q2" value="a"> Region A has greater compliance because it receives less volume.</label>
+  <label><input type="radio" name="q2" value="b"> Both regions have identical mechanics because pressure was equal.</label>
+  <label><input type="radio" name="q2" value="c"> Region B has greater elastance because it expands more.</label>
+  <label><input type="radio" name="q2" value="d"> Region A has lower compliance and greater elastance.</label>
+ </fieldset><div id="q2note" class="mc-note"></div>
+ <div class="controls"><button class="btn primary" onclick="checkS2()">Check Section 2</button></div><div id="fb2" class="feedback"></div>
+</section>
+
+<section id="s3" class="card locked">
+ <div class="section-head"><div class="num">3</div><div><h2>Airway Resistance & Flow Pattern</h2><p>Manipulate the variables that change the pressure cost of moving gas.</p></div></div>
+ <div class="goal"><strong>Competency focus:</strong> airway radius, ΔP/flow, laminar versus turbulent flow, viscosity versus density, velocity, and geometry.</div>
+ <div class="grid">
+  <div class="panel">
+   <h3>Narrow the airway</h3>
+   <label>Airway radius: <strong><span id="radiusVal">100</span>%</strong></label>
+   <input id="radius" class="slider" type="range" min="35" max="100" value="100">
+   <div class="airway-demo"><div id="lumen" class="airway-lumen"><div id="stream" class="stream"></div></div></div>
+   <div>Relative resistance burden: <span id="rBurden" class="metric">1.0×</span></div>
+   <p class="small">This visual uses the strong inverse radius relationship qualitatively; the course focus is recognizing why small radius changes can sharply increase pressure requirements.</p>
+  </div>
+  <div class="panel">
+   <h3>Change flow conditions</h3>
+   <label>Flow velocity: <strong><span id="velocityVal">Low</span></strong></label>
+   <input id="velocity" class="slider" type="range" min="1" max="3" value="1">
+   <div id="flowPattern" class="metric">Mostly laminar</div>
+   <p id="gasVariable" class="small"><strong>Dominant gas property:</strong> viscosity has the larger influence in laminar flow.</p>
+   <div class="warning"><strong>Do not confuse mechanism with treatment.</strong> A lower-density gas can reduce turbulence-related pressure loss, but it does not enlarge the narrowed airway.</div>
+  </div>
+ </div>
+
+ <fieldset class="q" data-answer="a" id="q3"><legend>A narrowed irregular airway has high-velocity turbulent flow. Which gas property becomes especially important to the pressure requirement?</legend>
+  <label><input type="radio" name="q3" value="a"> Gas density</label>
+  <label><input type="radio" name="q3" value="b"> Gas viscosity only</label>
+  <label><input type="radio" name="q3" value="c"> Hemoglobin concentration</label>
+  <label><input type="radio" name="q3" value="d"> Alveolar surface tension only</label>
+ </fieldset><div id="q3note" class="mc-note"></div>
+ <div class="controls"><button class="btn primary" onclick="checkS3()">Check Section 3</button></div><div id="fb3" class="feedback"></div>
+</section>
+
+<section id="s4" class="card locked">
+ <div class="section-head"><div class="num">4</div><div><h2>Surface Tension & Work of Breathing</h2><p>Decide whether the patient is paying an elastic or resistive pressure cost.</p></div></div>
+ <div class="goal"><strong>Competency focus:</strong> surfactant, alveolar stability, elastic work, resistive work, and mixed mechanical loading.</div>
+
+ <div class="grid">
+  <div class="panel">
+   <h3>Alveolar stability</h3>
+   <div id="alveoli" class="alveoli surfactant"><div class="alveolus a1">larger<br>alveolus</div><div class="alveolus a2">smaller<br>alveolus</div></div>
+   <div class="controls"><button class="btn teal" onclick="surfactant(true)">Surfactant present</button><button class="btn ghost" onclick="surfactant(false)">Surfactant deficient</button></div>
+   <p id="surfText" class="small">Surfactant lowers surface tension, improves compliance, and stabilizes smaller alveoli.</p>
+  </div>
+  <div class="panel">
+   <h3>Name the mechanical burden</h3>
+   <div class="formula"><strong>Elastic work:</strong> pressure needed to overcome recoil/stiffness.</div>
+   <div class="formula"><strong>Resistive work:</strong> pressure needed to move flow through resistance.</div>
+   <p><strong>Stiff lung:</strong> large ΔP, small ΔV → elastic burden.</p>
+   <p><strong>Narrowed airway:</strong> large ΔP needed for same flow → resistive burden.</p>
+  </div>
+ </div>
+
+ <div id="workCases"></div>
+ <div class="controls"><button class="btn primary" onclick="checkS4()">Check Section 4</button></div><div id="fb4" class="feedback"></div>
+</section>
+
+<section id="s5" class="card locked">
+ <div class="section-head"><div class="num">5</div><div><h2>Time Constants & Assessment Readiness</h2><p>Predict which units fill, empty, lag, or trap gas when time is limited.</p></div></div>
+ <div class="goal"><strong>Competency focus:</strong> τ = R × C, 63% at one time constant, long versus short time constants, maldistribution, and air trapping.</div>
+
+ <div class="grid">
+  <div class="panel">
+   <h3>Compare two lung units</h3>
+   <div class="formula">τ = Resistance × Compliance</div>
+   <p><strong>Unit X:</strong> R 2 × C 0.05 = <strong>0.10 s</strong></p>
+   <div class="tc-track"><div id="tcX" class="tc-fill"></div></div>
+   <p><strong>Unit Y:</strong> R 8 × C 0.10 = <strong>0.80 s</strong></p>
+   <div class="tc-track"><div id="tcY" class="tc-fill"></div></div>
+   <label>Available filling time: <strong><span id="timeVal">0.4</span> s</strong></label>
+   <input id="timeSlider" class="slider" type="range" min="1" max="20" value="4">
+   <p id="tcText" class="small"></p>
+  </div>
+  <div class="panel">
+   <h3>Interpret the timing</h3>
+   <p>One time constant achieves about <strong>63%</strong> of the available volume change. A long-τ unit needs more time to approach equilibrium and also more time to empty.</p>
+   <div class="warning"><strong>Rate is not part of the τ equation.</strong> Respiratory rate matters because it determines how much inspiratory and expiratory time is available.</div>
+  </div>
+ </div>
+
+ <h3>Assessment Readiness Challenge</h3>
+ <div id="finalQs"></div>
+ <div class="controls"><button class="btn teal" onclick="checkFinal()">Check readiness</button><button class="btn ghost" onclick="resetFinal()">Retry</button></div><div id="fb5" class="feedback"></div>
+
+ <div class="controls"><button class="btn ghost" onclick="toggleExtra()">I want more calculation practice</button></div>
+ <div id="extra" class="extra">
+  <h3>Optional Mechanics Calculations</h3>
+  <div class="grid3">
+   <div class="panel"><strong>Compliance</strong><p>ΔV 420 mL, ΔP 7 cm H₂O</p><div class="inputline"><input id="ep1" type="number"> mL/cm H₂O</div><div id="er1" class="small"></div></div>
+   <div class="panel"><strong>Resistance</strong><p>ΔP 6 cm H₂O, flow 1.5 L/s</p><div class="inputline"><input id="ep2" type="number" step=".1"> cm H₂O/L/s</div><div id="er2" class="small"></div></div>
+   <div class="panel"><strong>Time constant</strong><p>R 5 cm H₂O/L/s, C 0.08 L/cm H₂O</p><div class="inputline"><input id="ep3" type="number" step=".01"> seconds</div><div id="er3" class="small"></div></div>
+  </div>
+  <div class="controls"><button class="btn teal" onclick="checkExtra()">Check extra practice</button></div>
+ </div>
+</section>
+
+<div id="complete" class="final"><h2>1.3 Practice Complete</h2><p>You used pressure-volume-flow relationships to distinguish <strong>elastic, resistive, surface-tension, and time-dependent mechanical problems</strong>.</p></div>
+</main>
+
+<script>
+const KEY='AHRC155_1_3_mechanics_v1';
+let done=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'));
+function progress(){const n=done.size;prog.style.width=(n/5*100)+'%';progText.textContent=`${n} of 5 sections complete`;for(let i=2;i<=5;i++)if(done.has(i-1))document.getElementById('s'+i).classList.remove('locked');if(n===5){complete.classList.add('show');window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'1.3'}}))}window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'1.3',completed:n,total:5,percent:n/5*100}}))}
+function finish(n){done.add(n);localStorage.setItem(KEY,JSON.stringify([...done]));progress();if(n<5)setTimeout(()=>document.getElementById('s'+(n+1)).scrollIntoView({behavior:'smooth'}),250)}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function shuffleStatic(){document.querySelectorAll('fieldset.q').forEach(fs=>{const labs=[...fs.children].filter(x=>x.tagName==='LABEL');shuffle(labs).forEach(l=>fs.appendChild(l))})}
+function clearMC(name){document.querySelectorAll(`input[name="${name}"]`).forEach(i=>i.closest('label').classList.remove('correct','wrong'))}
+function guideMC(name,ans,note,good,hint){clearMC(name);const s=document.querySelector(`input[name="${name}"]:checked`),n=document.getElementById(note);if(!s){n.className='mc-note show bad';n.innerHTML='<strong>Choose an answer.</strong>';return false}const ok=s.value===ans;s.closest('label').classList.add(ok?'correct':'wrong');n.className='mc-note show '+(ok?'good':'bad');n.innerHTML='<strong>'+(ok?'Correct.':'Not yet.')+'</strong> '+(ok?good:hint);return ok}
+function show(id,type,msg){const e=document.getElementById(id);e.className='feedback show '+type;e.innerHTML=msg}
+function close(v,t,tol){return Math.abs(Number(v)-t)<=tol}
+progress();shuffleStatic();
+
+/* S1 breath */
+function setBreath(p){lung.className='lung';if(p==='inspire'){lung.classList.add('inhale');phaseName.textContent='Inspiration';alvP.textContent='PA = −1';plP.textContent='−7 cm H₂O';flowText.textContent='Air flows inward';flowArrow.textContent='→'}else if(p==='end'){lung.classList.add('inhale');phaseName.textContent='End inspiration';alvP.textContent='PA = 0';plP.textContent='−7 cm H₂O';flowText.textContent='No pressure gradient → no airflow';flowArrow.textContent='↔'}else if(p==='expire'){lung.classList.add('exhale');phaseName.textContent='Quiet expiration';alvP.textContent='PA = +1';plP.textContent='−5 cm H₂O';flowText.textContent='Air flows outward';flowArrow.textContent='←'}else{phaseName.textContent='Rest';alvP.textContent='PA = 0';plP.textContent='−5 cm H₂O';flowText.textContent='No airflow';flowArrow.textContent='↔'}}
+const seqItems=['Diaphragm + external intercostals contract','Thoracic volume increases','Pleural pressure becomes more negative','Transpulmonary pressure increases','Alveoli expand; alveolar pressure falls below atmosphere','Air flows inward until alveolar pressure returns to atmospheric'];
+let selectedSeq=null;
+function buildSeq(){seqBank.innerHTML='';shuffle([...seqItems]).forEach(x=>{const b=document.createElement('button');b.type='button';b.className='seq-token';b.textContent=x;b.dataset.item=x;b.draggable=true;b.onclick=()=>selectSeq(b);b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',x);selectSeq(b)});seqBank.appendChild(b)});seqSlots.innerHTML='';for(let i=0;i<6;i++){const s=document.createElement('button');s.type='button';s.className='seq-slot';s.dataset.idx=i;s.innerHTML=`Step ${i+1}`;s.onclick=()=>placeSeq(s,selectedSeq);s.addEventListener('dragover',e=>e.preventDefault());s.addEventListener('drop',e=>{e.preventDefault();placeSeq(s,e.dataTransfer.getData('text/plain'))});seqSlots.appendChild(s)}}
+function selectSeq(b){document.querySelectorAll('.seq-token').forEach(x=>x.classList.remove('active'));if(b.classList.contains('used')){const old=[...document.querySelectorAll('.seq-slot')].find(s=>s.dataset.item===b.dataset.item);if(old){delete old.dataset.item;old.className='seq-slot';old.innerHTML=`Step ${Number(old.dataset.idx)+1}`}b.classList.remove('used')}selectedSeq=b.dataset.item;b.classList.add('active')}
+function placeSeq(s,item){if(!item)return;if(s.dataset.item){const old=[...document.querySelectorAll('.seq-token')].find(b=>b.dataset.item===s.dataset.item);if(old)old.classList.remove('used')}document.querySelectorAll('.seq-slot').forEach(x=>{if(x!==s&&x.dataset.item===item){delete x.dataset.item;x.className='seq-slot';x.innerHTML=`Step ${Number(x.dataset.idx)+1}`}});s.dataset.item=item;s.textContent=item;s.classList.add('filled');document.querySelectorAll('.seq-token').forEach(b=>{b.classList.toggle('used',[...document.querySelectorAll('.seq-slot')].some(x=>x.dataset.item===b.dataset.item));b.classList.remove('active')});selectedSeq=null}
+function resetSequence(){buildSeq();seqFb.className='feedback'}
+function checkSequence(){let n=0;document.querySelectorAll('.seq-slot').forEach((s,i)=>{s.classList.remove('correct','wrong');if(s.dataset.item===seqItems[i]){s.classList.add('correct');n++}else s.classList.add('wrong')});if(n===6)show('seqFb','good','<strong>Correct.</strong> Muscle action creates the volume change; pressure changes follow; airflow then follows the alveolar-to-atmospheric gradient.');else show('seqFb','bad',`${n}/6 steps are in the correct position. Start with the muscle action and ask what changes next: volume → pleural/transpulmonary pressure → alveolar pressure → flow.`)}
+buildSeq();
+function checkS1(){const seq=[...document.querySelectorAll('.seq-slot')].every((s,i)=>s.dataset.item===seqItems[i]);const mc=guideMC('q1','b','q1note','Flow stops when alveolar and atmospheric pressures equalize, even though the lung is still expanded.','Airflow depends on a pressure gradient, not simply on whether lung volume is high or low.');if(seq&&mc){show('fb1','good','<strong>Section complete.</strong> You linked muscle contraction to volume, pressure, and airflow.');finish(1)}else show('fb1','bad','Complete the breath sequence and use the guidance under the end-inspiration question.')}
+
+/* S2 */
+function comp(){const v=Number(dv.value)||0,p=Number(dp.value)||0;const c=p?v/p:0;compResult.textContent=`${c.toFixed(1).replace('.0','')} mL/cm H₂O`;compMeaning.textContent=`This means ${c.toFixed(1).replace('.0','')} mL of volume change occurs for each 1 cm H₂O of distending-pressure change.`}
+dv.oninput=dp.oninput=comp;comp();
+pSlide.oninput=()=>{pSlideVal.textContent=pSlide.value;unitAvol.textContent=20*pSlide.value;unitBvol.textContent=50*pSlide.value};
+function checkS2(){const mc=guideMC('q2','d','q2note','Less volume for the same pressure means lower compliance. Because elastance is inverse to compliance, Region A also has greater elastance.','Hold pressure constant and compare the resulting volume change. Which unit is easier to expand?');if(mc){show('fb2','good','<strong>Section complete.</strong> You separated compliance/elastance from resistance and used equal pressure to compare regional mechanics.');finish(2)}else show('fb2','bad','Use ΔV/ΔP: when pressure is the same, the region with the smaller volume change is less compliant.')}
+
+/* S3 */
+function airway(){const r=Number(radius.value);radiusVal.textContent=r;lumen.style.height=Math.max(22,64*r/100)+'px';const burden=Math.pow(100/r,4);rBurden.textContent=burden.toFixed(1)+'×'}
+radius.oninput=airway;airway();
+velocity.oninput=()=>{const v=Number(velocity.value);velocityVal.textContent=['','Low','Moderate','High'][v];if(v===1){flowPattern.textContent='Mostly laminar';stream.className='stream';gasVariable.innerHTML='<strong>Dominant gas property:</strong> viscosity has the larger influence in laminar flow.'}else if(v===2){flowPattern.textContent='Transitional / mixed';stream.className='stream turbulent';gasVariable.innerHTML='<strong>Mixed influences:</strong> branching, velocity, radius, viscosity, and density all matter.'}else{flowPattern.textContent='More turbulent';stream.className='stream turbulent';gasVariable.innerHTML='<strong>Dominant gas property:</strong> density becomes especially important to turbulent pressure losses.'}};
+function checkS3(){const mc=guideMC('q3','a','q3note','Turbulent pressure losses are strongly influenced by gas density, especially when velocity is high and geometry is irregular.','First name the flow pattern. Viscosity dominates laminar flow; which gas property becomes more important in turbulence?');if(mc){show('fb3','good','<strong>Section complete.</strong> You linked radius and flow pattern to the pressure cost of moving gas.');finish(3)}else show('fb3','bad','Use the guiding explanation under the question and manipulate the flow-velocity control again.')}
+
+/* S4 */
+function surfactant(on){alveoli.className='alveoli '+(on?'surfactant':'high-tension');surfText.textContent=on?'Surfactant lowers surface tension, improves compliance, and stabilizes smaller alveoli.':'Low surfactant raises surface tension, increases collapse tendency, lowers compliance, and increases elastic work.'}
+const workData=[
+ {q:'A patient needs a much larger pressure change for a small tidal-volume increase, but airway resistance is near normal.',a:'elastic',choices:['Elastic work is increased','Resistive work is increased','Only dead-space work is increased','No work component is increased'],good:'The pressure-volume relationship is abnormal: stiffness/low compliance increases elastic work.',hint:'Ask whether the abnormality is primarily pressure-to-volume or pressure-to-flow.'},
+ {q:'A patient has near-normal compliance but requires much more pressure to maintain the same inspiratory flow through mucus-narrowed airways.',a:'resistive',choices:['Elastic work is increased','Resistive work is increased','Surface tension is necessarily zero','Compliance is necessarily increased'],good:'The pressure-flow burden is increased while pressure-volume behavior is preserved, so resistive work is increased.',hint:'The key clue is the extra pressure needed to preserve flow through a narrowed airway.'},
+ {q:'A patient has both severe airway narrowing and very low compliance.',a:'both',choices:['Only elastic work rises','Only resistive work rises','Both elastic and resistive work rise','The two loads cancel each other'],good:'The patient must spend pressure both to move gas through high resistance and to expand a stiff respiratory system.',hint:'Treat resistance and compliance as separate burdens; one does not cancel the other.'}
+];
+const workKeys={'Elastic work is increased':'elastic','Resistive work is increased':'resistive','Only dead-space work is increased':'x1','No work component is increased':'x2','Surface tension is necessarily zero':'x3','Compliance is necessarily increased':'x4','Only elastic work rises':'x5','Only resistive work rises':'x6','Both elastic and resistive work rise':'both','The two loads cancel each other':'x7'};
+function renderWork(){workCases.innerHTML='';workData.forEach((c,i)=>{const f=document.createElement('fieldset');f.className='q';let h=`<legend>Mechanical case ${i+1}</legend><p>${c.q}</p>`;shuffle([...c.choices]).forEach(ch=>h+=`<label><input type="radio" name="w${i}" value="${workKeys[ch]}"> ${ch}</label>`);h+=`<div id="wn${i}" class="mc-note"></div>`;f.innerHTML=h;workCases.appendChild(f)})}
+renderWork();
+function checkS4(){let n=0;workData.forEach((c,i)=>{clearMC('w'+i);const s=document.querySelector(`input[name="w${i}"]:checked`),note=document.getElementById('wn'+i);if(!s){note.className='mc-note show bad';note.innerHTML='<strong>Choose an answer.</strong>';return}const ok=s.value===c.a;if(ok)n++;s.closest('label').classList.add(ok?'correct':'wrong');note.className='mc-note show '+(ok?'good':'bad');note.innerHTML='<strong>'+(ok?'Correct.':'Not yet.')+'</strong> '+(ok?c.good:c.hint)});if(n===3){show('fb4','good','<strong>Section complete.</strong> You distinguished elastic, resistive, and mixed mechanical work.');finish(4)}else show('fb4','bad',`${n}/3 cases are correct. Review the red selection and targeted hint beneath each missed case.`)}
+
+/* S5 */
+function tcUpdate(){const t=Number(timeSlider.value)/10;timeVal.textContent=t.toFixed(1);const fx=100*(1-Math.exp(-t/.10)),fy=100*(1-Math.exp(-t/.80));tcX.style.width=Math.min(100,fx)+'%';tcY.style.width=Math.min(100,fy)+'%';tcText.textContent=`At ${t.toFixed(1)} s, Unit X is ~${Math.round(fx)}% toward equilibrium while Unit Y is ~${Math.round(fy)}%. The longer-τ unit lags behind when available time is short.`}
+timeSlider.oninput=tcUpdate;tcUpdate();
+const finalData=[
+ {q:'A lung unit changes volume by 360 mL when distending pressure changes by 6 cm H₂O. What is compliance?',a:'60',choices:['30 mL/cm H₂O','60 mL/cm H₂O','120 mL/cm H₂O','2160 mL/cm H₂O'],hint:'Compliance = ΔV ÷ ΔP. Keep mL and cm H₂O visible.',good:'360 ÷ 6 = 60 mL/cm H₂O.'},
+ {q:'A narrowed airway has high resistance. If flow is intentionally reduced while resistance is otherwise unchanged, what happens to the pressure gradient required?',a:'lower',choices:['It becomes lower','It becomes higher','It remains fixed','It reverses direction'],hint:'Use R = ΔP/Flow and rearrange to ΔP = R × Flow.',good:'At a fixed resistance, lower flow requires a smaller pressure gradient.'},
+ {q:'A surfactant-deficient lung unit is difficult to open. Which causal chain is most coherent?',a:'surf',choices:['Surface tension rises → stability falls → compliance falls → elastic work rises','Surface tension falls → compliance falls → resistive work rises','Airway radius rises → turbulent resistance rises → elastic work falls','Viscosity falls → alveolar collapse increases → compliance rises'],hint:'Start with the direct action of surfactant on surface tension.',good:'Loss of surfactant raises surface tension, promoting instability, lower compliance, and greater elastic work.'},
+ {q:'Unit A has τ = 0.12 s; Unit B has τ = 0.90 s. During a brief inspiration, which finding best demonstrates maldistribution?',a:'lag',choices:['Unit B continues filling after Unit A is nearly equilibrated','Both units must fill at identical rates','Unit A must trap more gas because its time constant is shorter','Perfusion must stop in the slower unit'],hint:'A longer time constant means slower approach to equilibrium.',good:'The long-τ unit lags behind the short-τ unit during limited filling time.'},
+ {q:'A long-time-constant region is given too little expiratory time for several breaths. What is the expected mechanical consequence?',a:'trap',choices:['Incomplete emptying and progressive gas trapping','Faster emptying and lower end-expiratory volume','Immediate loss of perfusion','Conversion to anatomic dead space'],hint:'A long time constant delays emptying as well as filling.',good:'If expiration ends before the slow unit empties, end-expiratory volume accumulates and gas trapping develops.'},
+ {q:'A calculated compliance value is negative even though both volume and distending pressure increased in the recorded maneuver. What should happen first?',a:'verify',choices:['Verify sign convention, pressure data, and the calculation','Interpret the negative result as extremely high compliance','Diagnose airway turbulence from the negative number','Assume compliance cannot be measured during inspiration'],hint:'Before physiologic interpretation, ask whether the data and calculation are internally plausible.',good:'An internally inconsistent result should be verified before assigning a physiologic mechanism.'},
+ {q:'A patient has strong respiratory drive and intact muscles but a very stiff respiratory system. Which statement best explains the increased work?',a:'elastic',choices:['More pressure is required to produce each volume change','More pressure is required only because blood viscosity increased','The diaphragm is failing to contract','Airway radius must be severely narrowed'],hint:'The clue is stiffness: identify the pressure-volume property.',good:'Low compliance means more distending pressure is required for a given volume, increasing elastic work.'}
+];
+function renderFinal(){finalQs.innerHTML='';finalData.forEach((c,i)=>{const f=document.createElement('fieldset');f.className='q';let h=`<legend>Challenge ${i+1}</legend><p>${c.q}</p>`;const keyMap={};shuffle([...c.choices]).forEach(ch=>{let val='x'+Math.random();if(ch.includes('60 mL'))val='60';if(ch==='It becomes lower')val='lower';if(ch.startsWith('Surface tension rises'))val='surf';if(ch.startsWith('Unit B continues'))val='lag';if(ch.startsWith('Incomplete emptying'))val='trap';if(ch.startsWith('Verify sign'))val='verify';if(ch.startsWith('More pressure is required to produce'))val='elastic';h+=`<label><input type="radio" name="f${i}" value="${val}"> ${ch}</label>`});h+=`<div id="fn${i}" class="mc-note"></div>`;f.innerHTML=h;finalQs.appendChild(f)})}
+renderFinal();
+function checkFinal(){let n=0;finalData.forEach((c,i)=>{clearMC('f'+i);const s=document.querySelector(`input[name="f${i}"]:checked`),note=document.getElementById('fn'+i);if(!s){note.className='mc-note show bad';note.innerHTML='<strong>Choose an answer.</strong>';return}const ok=s.value===c.a;if(ok)n++;s.closest('label').classList.add(ok?'correct':'wrong');note.className='mc-note show '+(ok?'good':'bad');note.innerHTML='<strong>'+(ok?'Correct.':'Not yet.')+'</strong> '+(ok?c.good:c.hint)});if(n===7){show('fb5','good','<strong>7/7 correct.</strong> You are applying the same mechanics reasoning expected on the Unit 1 competency exam.');finish(5)}else show('fb5','bad',`${n}/7 correct. Revise the red selections using the hint beneath each item; the correct answer is not revealed until you reason to it.`)}
+function resetFinal(){document.querySelectorAll('#finalQs input').forEach(x=>x.checked=false);renderFinal();fb5.className='feedback'}
+function toggleExtra(){extra.classList.toggle('show')}
+function checkExtra(){const vals=[[ep1,60,er1,'Compliance = 420 ÷ 7 = 60 mL/cm H₂O.'],[ep2,4,er2,'Resistance = 6 ÷ 1.5 = 4 cm H₂O/L/s.'],[ep3,.40,er3,'τ = 5 × 0.08 = 0.40 s.']];vals.forEach(([inp,t,res,msg])=>{const ok=close(inp.value,t,.02);inp.style.borderColor=ok?'#55a36b':'#ce655b';res.style.color=ok?'#2f7d4a':'#b84b42';res.textContent=ok?'Correct. '+msg:'Not yet. Write the governing equation first, then insert the units.'})}
+</script>
+</body>
+</html>
