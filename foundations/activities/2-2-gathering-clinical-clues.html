@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Respiratory Care | Assignment 2.2 Gathering Clinical Clues</title>
+<style>
+:root{
+ --navy:#0B1F33;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;--mist:#F4FAFC;
+ --mint:#DDF7F2;--amber:#F4B860;--coral:#E85D5D;--white:#fff;--slate:#415A77;
+ --border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);--radius:22px;
+ --body:Arial,Helvetica,sans-serif;--mono:"Courier New",monospace
+}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}html{scroll-behavior:smooth}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:var(--body);line-height:1.55}
+button,input{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}
+.mark svg{width:40px;height:40px}.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}.tag{font-size:.8rem;opacity:.9;margin-top:4px}
+.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}
+.hero,.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}.hero p{max-width:1120px;font-size:1.13rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:20;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue))}
+.card{padding:24px;margin-bottom:18px}.teach{border-left:8px solid var(--teal);padding:4px 0 4px 18px}
+h2,h3,h4{line-height:1.15}h2{font-size:clamp(1.75rem,3vw,2.55rem);margin:0 0 12px}h3{font-size:1.3rem}
+.clue,.warning,.normal,.danger{border-radius:14px;padding:14px 16px;margin:14px 0}.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}.normal{background:#F4FAFC;border:1px solid var(--border);border-left:6px solid var(--teal)}.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.sequence{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:8px;margin:18px 0}.seq{border:1px solid var(--border);border-radius:14px;padding:12px;background:#FAFDFF;text-align:center}.seq b{color:var(--teal);display:block;margin-bottom:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mini{border:1px solid var(--border);border-radius:14px;padding:14px;background:#FAFDFF}.mini strong{display:block;margin-bottom:4px}
+.table-wrap{overflow-x:auto}.ref{width:100%;border-collapse:collapse;margin:12px 0}.ref th,.ref td{border:1px solid var(--border);padding:9px 10px;text-align:left;vertical-align:top}.ref th{background:#EDF6FA}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#E8F7F4;margin:3px;font-size:.9rem}
+.station-head{display:flex;gap:12px;align-items:center}.num{width:42px;height:42px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q:first-of-type{border-top:0}.q-title{font-weight:800;margin-bottom:8px}
+.options{display:grid;gap:10px;margin:12px 0}.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:12px 14px;border-radius:12px;background:#fff;cursor:pointer}.option:hover{border-color:var(--blue);background:#F2F8FE}
+button{font-weight:800;border:0;border-radius:12px;padding:10px 14px}.btn{background:var(--teal);color:#fff}.btn:hover{background:var(--teal2)}.btn2{background:#fff;color:var(--navy);border:1px solid var(--border)}.btn2:hover{background:var(--mint)}.btn3{background:#FFF4DF;color:#7A4B00;border:1px solid #F8D9A5}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.more{display:none;border-top:2px dashed var(--border);margin-top:18px;padding-top:18px}.more.open{display:block}.small{font-size:.92rem;color:var(--slate)}
+.lock{opacity:.5;pointer-events:none}.complete{display:none;background:var(--mint);border:1px solid #86D9C8;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}.complete.show{display:block}
+details.reference summary{list-style:none;cursor:pointer;font-weight:800}details.reference summary::-webkit-details-marker{display:none}details.reference summary::after{content:"+";float:right;color:var(--teal);font-size:1.4rem}details.reference[open] summary::after{content:"–"}
+footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:1100px){.sequence{grid-template-columns:repeat(3,1fr)}.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.sequence,.grid2,.grid3{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top">
+<div class="brand"><div class="mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Respiratory care learning for future RTs.</div></div></div>
+<div class="course">Respiratory Care</div>
+</header>
+
+<main>
+<header class="hero">
+<span class="eyebrow">Respiratory Care · Assignment 2.2</span>
+<h1>Gathering Clinical Clues</h1>
+<p>A lab result, breath sound, sputum color, or x-ray finding is a <strong>clue—not a diagnosis by itself.</strong> Learn to compare each finding with what is expected, decide what it means physiologically, connect it with the rest of the patient, and recognize which abnormalities need action first.</p>
+</header>
+
+<div class="progress-wrap"><div class="progress-row"><strong id="progressText">0% complete</strong><div class="progress"><div id="progressBar"></div></div></div></div>
+
+<section class="card">
+<span class="kicker">Your interpretation routine</span><h2>VERIFY → COMPARE → EXPLAIN → CORRELATE → PRIORITIZE → REASSESS</h2>
+<div class="sequence">
+<div class="seq"><b>1 · VERIFY</b>Is the finding reliable and current?</div>
+<div class="seq"><b>2 · COMPARE</b>Normal, high, low, or new change?</div>
+<div class="seq"><b>3 · EXPLAIN</b>What physiology could cause it?</div>
+<div class="seq"><b>4 · CORRELATE</b>What other findings support or contradict it?</div>
+<div class="seq"><b>5 · PRIORITIZE</b>What threatens airway, oxygenation, ventilation, perfusion, or neurologic status?</div>
+<div class="seq"><b>6 · REASSESS</b>What should be checked next?</div>
+</div>
+<div class="warning"><strong>Avoid the one-clue diagnosis:</strong> Green sputum does not prove a bacterial infection. Crackles do not prove pneumonia. A high WBC does not prove infection. A normal SpO₂ does not prove normal oxygen delivery. Strong conclusions come from <strong>clusters of consistent findings.</strong></div>
+</section>
+
+<details class="card reference">
+<summary>Quick Reference — keep open while practicing</summary>
+<div class="warning"><strong>Always use the reference range printed with the patient's actual results.</strong> The values below are common adult reference ranges to help you recognize the expected magnitude and direction of an abnormality. Laboratories may use different analyzers, methods, units, populations, and cutoffs, so a value should ultimately be classified as high, low, or normal using the reference interval reported by that laboratory.</div>
+
+<h3>Common Adult CBC Reference Ranges</h3>
+<div class="table-wrap"><table class="ref">
+<tr><th>Test</th><th>Common adult reference range</th><th>Why it matters in respiratory care</th></tr>
+<tr><td>RBC — male</td><td>About 4.2–5.7 million/µL</td><td>Low values may support anemia; high values may occur with polycythemia.</td></tr>
+<tr><td>RBC — female</td><td>About 3.8–5.1 million/µL</td><td>Interpret with hemoglobin, hematocrit, symptoms, and trend.</td></tr>
+<tr><td>Hemoglobin — male</td><td>About 13–18 g/dL</td><td>Major determinant of blood oxygen-carrying capacity.</td></tr>
+<tr><td>Hemoglobin — female</td><td>About 12–16 g/dL</td><td>A normal SpO₂ does not exclude low oxygen content when Hb is low.</td></tr>
+<tr><td>Hematocrit — male</td><td>About 40–55%</td><td>Represents the proportion of blood volume occupied by RBCs.</td></tr>
+<tr><td>Hematocrit — female</td><td>About 36–48%</td><td>Interpret with hydration status and the rest of the CBC.</td></tr>
+<tr><td>WBC</td><td>About 4,500–11,000/µL</td><td>Elevation or depression is interpreted with the differential, symptoms, medications, and trend.</td></tr>
+<tr><td>Platelets</td><td>About 150,000–400,000/µL</td><td>Important when evaluating bleeding risk before invasive procedures.</td></tr>
+</table></div>
+
+<h3>Common WBC Differential Reference Ranges</h3>
+<div class="table-wrap"><table class="ref">
+<tr><th>Cell type</th><th>Common adult percentage</th><th>Useful association</th></tr>
+<tr><td>Neutrophils</td><td>About 40–60%</td><td>Neutrophilia may support acute bacterial inflammation when the clinical pattern agrees.</td></tr>
+<tr><td>Bands</td><td>About 0–3%</td><td>Increased immature neutrophils can occur with an acute inflammatory response.</td></tr>
+<tr><td>Lymphocytes</td><td>About 20–40%</td><td>Interpret with the total WBC and clinical context.</td></tr>
+<tr><td>Monocytes</td><td>About 2–8%</td><td>May increase in selected chronic inflammatory or infectious processes.</td></tr>
+<tr><td>Eosinophils</td><td>About 1–4%</td><td>Elevation may support allergic/eosinophilic disease such as some asthma phenotypes.</td></tr>
+<tr><td>Basophils</td><td>About 0.5–1%</td><td>Usually a small fraction of circulating WBCs.</td></tr>
+</table></div>
+
+<h3>Common Adult Chemistry & Electrolyte Reference Ranges</h3>
+<div class="table-wrap"><table class="ref">
+<tr><th>Test</th><th>Common adult reference range</th><th>Respiratory relevance</th></tr>
+<tr><td>Sodium (Na⁺)</td><td>About 136–144 mEq/L</td><td>Major abnormalities can affect fluid balance and neurologic status.</td></tr>
+<tr><td>Potassium (K⁺)</td><td>About 3.7–5.2 mEq/L</td><td>Marked abnormalities can cause weakness and dysrhythmias.</td></tr>
+<tr><td>Chloride (Cl⁻)</td><td>About 96–106 mEq/L</td><td>Useful in fluid and acid-base pattern recognition.</td></tr>
+<tr><td>Serum CO₂ / total CO₂</td><td>About 23–29 mEq/L</td><td>On a chemistry panel, this largely reflects bicarbonate and helps assess metabolic acid-base status.</td></tr>
+<tr><td>BUN</td><td>About 6–20 mg/dL</td><td>Helps assess renal function, hydration, and the context of fluid balance.</td></tr>
+<tr><td>Creatinine</td><td>About 0.8–1.2 mg/dL</td><td>Renal dysfunction can affect fluid, electrolyte, acid-base, and medication management.</td></tr>
+<tr><td>Glucose</td><td>About 64–100 mg/dL fasting</td><td>Severe abnormalities may contribute to altered mental status and metabolic acid-base disorders.</td></tr>
+<tr><td>Calcium</td><td>About 8.5–10.2 mg/dL</td><td>Abnormalities can affect neuromuscular and cardiac function.</td></tr>
+<tr><td>Magnesium</td><td>About 1.7–2.2 mg/dL</td><td>Low or high values may affect muscle function and cardiac rhythm.</td></tr>
+<tr><td>Phosphorus</td><td>About 2.8–4.5 mg/dL</td><td>Low phosphorus can contribute to muscle weakness, including respiratory muscle weakness.</td></tr>
+</table></div>
+
+<h3>Selected Cardiac Biomarkers</h3>
+<div class="table-wrap"><table class="ref">
+<tr><th>Test</th><th>Common reference concept</th><th>Important interpretation note</th></tr>
+<tr><td>BNP</td><td>Often &lt;100 pg/mL is considered within a common reference range</td><td>Age, obesity, renal function, assay, and clinical setting affect interpretation. Use the range on the report.</td></tr>
+<tr><td>NT-proBNP</td><td>Age-dependent and assay-dependent</td><td>Do not substitute an NT-proBNP cutoff for a BNP cutoff; use the laboratory's reported reference interval and the patient's clinical context.</td></tr>
+<tr><td>Troponin</td><td>Assay-specific; compare with the laboratory's upper reference limit/99th percentile</td><td>A value above the reference limit indicates myocardial injury, but the cause requires symptoms, ECG, serial trend, and clinical evaluation.</td></tr>
+</table></div>
+
+<p class="small"><strong>Reference-range rule:</strong> These are common adult examples for learning. The patient's laboratory report is the source of truth for whether a result is flagged high, low, or within range. Reference intervals can vary with laboratory method, units, age, sex, altitude, and clinical population.</p>
+</details>
+
+<div id="stations"></div>
+
+<section class="card">
+<span class="kicker">Final clinical challenge</span><h2>Build the pattern from multiple clues.</h2>
+<p>The final cases unlock after all required station questions are correct. Each case asks you to identify the dominant pattern, the evidence that supports it, and the finding or action that matters most.</p>
+<div id="finalLock" class="warning">Complete all required station practice to unlock the integrated cases.</div>
+<div id="finalQuestions" class="lock" aria-disabled="true"></div>
+</section>
+
+<section id="completeBox" class="complete"><h2>Assignment complete ✓</h2><p>You practiced the Week 2.2 skill that matters most: <strong>combine assessment, laboratory, microbiology, and imaging clues into a coherent patient picture—and prioritize the threatened function rather than the most interesting number.</strong></p></section>
+</main>
+
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Respiratory Care · Assignment 2.2 · Gathering Clinical Clues</div><div>Optional “More Practice” questions do not affect completion.<br>Progress is saved in this browser.</div></footer>
+</div>
+
+<script>
+const STORE='ahrc152_assignment_2_2_clinical_clue_lab_v1';
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{}}');
+const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const S=[
+{id:'priority',num:1,title:'Vital Signs, Work of Breathing & Respiratory Fatigue',subtitle:'A number moving toward normal is not always improvement.',
+teach:`<p>Start with the patient before the lab sheet. A respiratory rate only has meaning when you also look at <strong>depth, rhythm, work of breathing, speech, oxygen requirement, and mental status.</strong></p>
+<div class="normal"><strong>Common resting adult respiratory-rate reference:</strong> approximately 12–20 breaths/min. A value outside the range is a clue; the patient’s depth, effort, pattern, mental status, and trend determine urgency.</div>
+<div class="grid2"><div class="mini"><strong>Distress</strong>Tachypnea, accessory-muscle use, retractions, inability to speak full sentences, diaphoresis, agitation.</div><div class="mini"><strong>Fatigue / impending failure</strong>Previously rapid breathing becomes shallow or slow while confusion, somnolence, or poor air movement worsens.</div></div>
+<div class="danger"><strong>Priority rule:</strong> New confusion, severe hypoxemia, inability to protect the airway, or declining ventilation outranks a chronic or mildly abnormal laboratory result.</div>`,
+req:[
+{q:'Which respiratory rate is within the common expected resting adult reference range?',a:'16 breaths/min',opts:['16 breaths/min','7 breaths/min','30 breaths/min','38 breaths/min'],why:'About 12–20 breaths/min is a commonly cited resting adult reference range; always interpret the rate with the patient’s overall presentation.'},
+{q:'A patient’s RR falls from 34 to 10/min after prolonged severe distress, and the patient becomes difficult to arouse. What does this most likely mean?',a:'Respiratory fatigue and worsening ventilatory failure',opts:['Respiratory fatigue and worsening ventilatory failure','Definite improvement because the rate is closer to normal','Resolution of hypoxemia','Normal response to treatment'],why:'A falling rate with worsening mental status and shallow breathing can signal exhaustion rather than recovery.'},
+{q:'Which finding should be prioritized first?',a:'New confusion with RR 32/min and SpO₂ 85%',opts:['New confusion with RR 32/min and SpO₂ 85%','Chronic productive cough with stable vital signs','Mildly elevated WBC without symptoms','Long-standing clubbing without acute change'],why:'This cluster threatens oxygenation and neurologic function and requires immediate attention.'},
+{q:'A patient has RR 34/min, HR 126/min, accessory-muscle use, can speak only one to two words at a time, and SpO₂ 86% on room air. Best interpretation?',a:'Severe respiratory distress requiring immediate intervention',opts:['Severe respiratory distress requiring immediate intervention','Mild anxiety only','Stable chronic disease','Normal compensation'],why:'Multiple findings indicate substantial respiratory compromise.'},
+{q:'Why should respiratory rate never be interpreted alone?',a:'Depth, effort, speech, mental status, and trend determine whether the rate reflects distress, compensation, or fatigue.',opts:['Depth, effort, speech, mental status, and trend determine whether the rate reflects distress, compensation, or fatigue.','Rate is only useful during sleep.','Respiratory rate has no relationship to patient status.','Only laboratory results determine respiratory severity.'],why:'The same rate can have very different meaning in different patients.'}
+],
+more:[
+{q:'Which finding most supports increased work of breathing?',a:'Accessory-muscle use and retractions',opts:['Accessory-muscle use and retractions','Normal conversational speech','Relaxed breathing at 14/min','Warm hands only'],why:'Accessory muscles and retractions reflect increased respiratory effort.'},
+{q:'A patient is tachypneic from metabolic acidosis but alert and moving large tidal volumes. What is the respiratory rate most likely representing?',a:'A compensatory response that must be interpreted with the underlying physiology',opts:['A compensatory response that must be interpreted with the underlying physiology','Automatic respiratory failure','A normal resting pattern','Proof of pneumonia'],why:'Tachypnea may be compensatory rather than the primary respiratory disorder.'},
+{q:'Which new mental-status change is concerning in respiratory assessment?',a:'Increasing somnolence',opts:['Increasing somnolence','Normal orientation','Calm conversation','Appropriate questions'],why:'Somnolence can reflect hypercapnia, hypoxemia, fatigue, or poor perfusion.'},
+{q:'A patient’s RR decreases after bronchodilator therapy while speech, wheezing, SpO₂, and work of breathing all improve. This trend is:',a:'Reassuring because multiple independent findings improve together',opts:['Reassuring because multiple independent findings improve together','Automatically evidence of respiratory fatigue','Meaningless because RR should never change','Proof of pneumonia'],why:'Trend interpretation depends on the entire patient response.'},
+{q:'Which threat generally takes priority over routine diagnostic interpretation?',a:'Inability to protect the airway',opts:['Inability to protect the airway','Stable chronic anemia','Old x-ray changes','Mild sputum-color change'],why:'Immediate airway threats override routine tasks.'}
+]},
+{id:'sounds',num:2,title:'Breath Sounds & Focused Chest Assessment',subtitle:'Locate the sound, identify the mechanism, then correlate it.',
+teach:`<p>Breath sounds become useful when you ask <strong>where the sound is, when it occurs, what mechanism could produce it, and whether the rest of the exam agrees.</strong></p>
+<div class="grid3"><div class="mini"><strong>Wheezes</strong>Musical, usually expiratory → narrowed lower airways.</div><div class="mini"><strong>Crackles</strong>Opening of small airways or air moving through fluid → focal or diffuse context matters.</div><div class="mini"><strong>Stridor</strong>Harsh inspiratory upper-airway sound → potentially urgent airway narrowing.</div><div class="mini"><strong>Diminished/absent</strong>Poor air movement, obstruction, pleural air/fluid, hyperinflation, or technical issue.</div><div class="mini"><strong>Dull percussion</strong>Supports fluid or consolidation.</div><div class="mini"><strong>Hyperresonance</strong>Supports excess air or hyperinflation.</div></div>
+<div class="clue"><strong>Compare sides.</strong> Sudden unilateral absence after central-line placement is much more concerning for pneumothorax than chronically diminished bilateral sounds in emphysema.</div>`,
+req:[
+{q:'Where are normal vesicular breath sounds usually heard?',a:'Over most peripheral lung fields',opts:['Over most peripheral lung fields','Only over the trachea','Only over the sternum','Only at the lung apices'],why:'Vesicular breath sounds are the expected soft peripheral breath sounds.'},
+{q:'Which adventitious sound most strongly suggests narrowed lower airways?',a:'Wheezes',opts:['Wheezes','Stridor','Pleural rub only','Normal vesicular sounds'],why:'Wheezing commonly reflects airflow through narrowed lower airways.'},
+{q:'A patient develops sudden dyspnea and unilateral absent breath sounds immediately after central-line placement. What should be suspected first?',a:'Pneumothorax',opts:['Pneumothorax','Chronic bronchitis','Stable pleural effusion','Anemia'],why:'The abrupt post-procedural timing plus unilateral loss of breath sounds is a high-risk pneumothorax pattern.'},
+{q:'Unilateral diminished breath sounds with dullness to percussion most strongly supports:',a:'Pleural fluid or dense consolidation',opts:['Pleural fluid or dense consolidation','Pneumothorax with excess pleural air','Normal lung inflation','Isolated anemia'],why:'Fluid and dense tissue tend to produce dullness rather than hyperresonance.'},
+{q:'A COPD patient has barrel chest, diminished breath sounds, prolonged exhalation, and hyperresonance. What process best explains the cluster?',a:'Air trapping and hyperinflation',opts:['Air trapping and hyperinflation','Pleural effusion','Pulmonary edema only','Upper-airway obstruction'],why:'These findings together support obstructive physiology with trapped gas.'}
+],
+more:[
+{q:'Which sound most strongly localizes a problem to the upper airway?',a:'Stridor',opts:['Stridor','Expiratory wheeze','Fine bibasilar crackles','Vesicular sounds'],why:'Stridor is a harsh upper-airway sound and can indicate airway compromise.'},
+{q:'Diffuse bilateral crackles with orthopnea and edema are more suggestive of:',a:'Pulmonary edema',opts:['Pulmonary edema','Isolated asthma','Pneumothorax','Normal lung mechanics'],why:'The diffuse bilateral pattern and volume-overload symptoms fit edema.'},
+{q:'Focal crackles plus fever and focal infiltrate are more suggestive of:',a:'Pneumonia',opts:['Pneumonia','Normal lungs','Isolated anemia','Pneumothorax'],why:'Focal respiratory findings plus infection evidence support pneumonia.'},
+{q:'Absent breath sounds always prove pneumothorax.',a:'False',opts:['True','False'],why:'Pleural fluid, obstruction, hyperinflation, poor effort, and technical factors can also reduce sounds.'},
+{q:'Why should auscultation findings be compared bilaterally?',a:'Asymmetry can help localize focal airway, pleural, or parenchymal problems.',opts:['Asymmetry can help localize focal airway, pleural, or parenchymal problems.','Only one lung needs assessment.','Breath sounds are always identical by definition.','Comparison is only needed in children.'],why:'Side-to-side comparison strengthens pattern recognition.'}
+]},
+{id:'cbc',num:3,title:'CBC: Oxygen-Carrying Capacity & Infection Clues',subtitle:'The CBC answers different questions about red cells, white cells, and procedural safety.',
+teach:`<p><strong>Hemoglobin is central to oxygen transport.</strong> SpO₂ tells you how saturated the available hemoglobin is; it does not tell you how much hemoglobin is present.</p>
+<div class="normal"><strong>Key concept:</strong> A patient with Hb 6.9 g/dL, SpO₂ 98%, and PaO₂ 96 mmHg can still have markedly reduced oxygen content because there is much less hemoglobin available to carry oxygen.</div>
+<div class="grid3"><div class="mini"><strong>RBC / Hb / Hct low</strong>Supports anemia or blood loss depending on context.</div><div class="mini"><strong>WBC + neutrophils high</strong>Can support acute bacterial inflammation when the clinical picture fits.</div><div class="mini"><strong>Eosinophils high</strong>Can support an allergic/eosinophilic process such as some asthma phenotypes.</div><div class="mini"><strong>Platelets / coagulation</strong>Important before procedures with bleeding risk.</div><div class="mini"><strong>Trend</strong>A rapid change may matter more than a mildly abnormal isolated value.</div><div class="mini"><strong>Do not overcall</strong>A CBC supports a diagnosis; it rarely proves one by itself.</div></div>`,
+req:[
+{q:'A patient has RBC 3 million/µL, Hb 10 g/dL, and Hct 35%. Which problem is most supported?',a:'Anemia',opts:['Anemia','Polycythemia','Normal oxygen-carrying capacity','Hyperkalemia'],why:'The red-cell indices are reduced and support anemia.'},
+{q:'A patient has Hb 6.9 g/dL, SpO₂ 98%, and PaO₂ 96 mmHg. Which interpretation is most accurate?',a:'Oxygen saturation is normal, but oxygen content is likely reduced because of severe anemia.',opts:['Oxygen saturation is normal, but oxygen content is likely reduced because of severe anemia.','Normal SpO₂ proves normal oxygen delivery.','PaO₂ must be low whenever hemoglobin is low.','Anemia directly causes hypercapnia.'],why:'Oxygen content depends heavily on hemoglobin concentration.'},
+{q:'Which laboratory pattern most supports an acute bacterial infection?',a:'WBC 18,000/µL with neutrophilia',opts:['WBC 18,000/µL with neutrophilia','Hemoglobin 15 g/dL','Sodium 140 mEq/L','Platelets 250,000/µL'],why:'Leukocytosis with neutrophilia can support acute bacterial inflammation when correlated clinically.'},
+{q:'An increased eosinophil count is most consistent with which type of respiratory clue?',a:'Allergic/eosinophilic inflammation such as some asthma patterns',opts:['Allergic/eosinophilic inflammation such as some asthma patterns','Definite myocardial infarction','Isolated pleural effusion','Hypernatremia'],why:'Eosinophilia can accompany allergic and eosinophilic respiratory conditions.'},
+{q:'Why is a coagulation study relevant before bronchoscopic lung biopsy?',a:'The procedure carries bleeding risk, so hemostatic status matters.',opts:['The procedure carries bleeding risk, so hemostatic status matters.','It diagnoses asthma.','It measures oxygen saturation.','It identifies bacterial species.'],why:'Procedural planning must account for bleeding risk.'}
+],
+more:[
+{q:'Hemoglobin 18 g/dL is most consistent with:',a:'Polycythemia / elevated hemoglobin',opts:['Polycythemia / elevated hemoglobin','Anemia','Leukopenia','Thrombocytopenia'],why:'An elevated hemoglobin concentration may reflect polycythemia depending on laboratory range and context.'},
+{q:'WBC 16,000/µL with neutrophilia should be interpreted as:',a:'Supportive of bacterial inflammation when symptoms and other data agree',opts:['Supportive of bacterial inflammation when symptoms and other data agree','Proof of bacterial pneumonia by itself','Proof of viral infection','Evidence that oxygenation is normal'],why:'WBC patterns are supporting evidence, not stand-alone diagnoses.'},
+{q:'Which value most directly reflects the protein that binds oxygen?',a:'Hemoglobin',opts:['Hemoglobin','Sodium','Platelets','BNP'],why:'Hemoglobin is the primary oxygen-carrying protein.'},
+{q:'A normal SpO₂ in severe anemia means:',a:'The available hemoglobin may be well saturated even though total oxygen content is low.',opts:['The available hemoglobin may be well saturated even though total oxygen content is low.','Oxygen delivery is automatically normal.','Hemoglobin concentration must be normal.','PaCO₂ must be normal.'],why:'Saturation is a percentage, not the amount of hemoglobin present.'},
+{q:'A platelet count is most relevant to RT procedural planning when:',a:'An invasive procedure with bleeding risk is planned',opts:['An invasive procedure with bleeding risk is planned','The patient needs pulse oximetry','A respiratory rate is counted','A nasal cannula is applied'],why:'Platelets contribute to hemostasis and may affect procedural safety.'}
+]},
+{id:'chem',num:4,title:'Electrolytes, Renal/Cardiac Labs & Special Tests',subtitle:'Ask how the abnormal value could change respiratory function, rhythm, perfusion, or treatment safety.',
+teach:`<p>Electrolytes and chemistry values are not “someone else’s labs.” They can affect <strong>respiratory muscle strength, cardiac rhythm, mental status, acid-base balance, fluid status, and medication safety.</strong></p>
+<div class="grid3"><div class="mini"><strong>Potassium</strong>Marked low or high values can cause weakness and dysrhythmias.</div><div class="mini"><strong>Sodium</strong>Severe derangement can affect neurologic status and fluid balance.</div><div class="mini"><strong>Chloride / bicarbonate</strong>Useful in acid-base pattern recognition.</div><div class="mini"><strong>Renal function / urine output</strong>Low output can signal reduced perfusion or fluid/renal problems.</div><div class="mini"><strong>BNP</strong>Can support heart-failure physiology when the patient pattern fits.</div><div class="mini"><strong>Troponin</strong>Supports myocardial injury; interpret with symptoms, ECG, trend, and assay.</div></div>
+<div class="warning"><strong>Modernized from the old assignment:</strong> Do not choose a medication solely because one BNP or troponin number is abnormal. The RT recognizes the pattern, supports airway/breathing/oxygenation as indicated, communicates urgent findings, and follows the interdisciplinary treatment plan.</div>`,
+req:[
+{q:'A weak patient has potassium 2.6 mEq/L and new ectopy. What is the most appropriate RT response?',a:'Recognize a potentially dangerous electrolyte abnormality, assess the patient, and communicate promptly before proceeding routinely.',opts:['Recognize a potentially dangerous electrolyte abnormality, assess the patient, and communicate promptly before proceeding routinely.','Ignore it because electrolytes do not affect respiratory care.','Give potassium independently without an order.','Proceed with all routine treatments without reassessment.'],why:'Severe hypokalemia can affect muscle function and cardiac rhythm and requires prompt communication.'},
+{q:'A patient has low urine output and increasing dyspnea with edema and crackles. What should the low urine output make you consider?',a:'Fluid retention or impaired renal/perfusion status contributing to congestion',opts:['Fluid retention or impaired renal/perfusion status contributing to congestion','Normal fluid balance','Isolated asthma only','Improved kidney function'],why:'Low urine output in the right context can support fluid-retention or perfusion concerns.'},
+{q:'A dyspneic patient has bilateral crackles, edema, orthopnea, and a markedly elevated BNP. What does the BNP do?',a:'It supports the heart-failure/cardiac-congestion pattern but should be interpreted with the rest of the patient.',opts:['It supports the heart-failure/cardiac-congestion pattern but should be interpreted with the rest of the patient.','It proves bacterial pneumonia.','It directly measures PaCO₂.','It rules out pulmonary disease.'],why:'BNP is a supporting cardiac biomarker, not a stand-alone diagnosis.'},
+{q:'A patient has chest discomfort and elevated troponin. What is the safest interpretation?',a:'Myocardial injury is possible and requires urgent clinical correlation and escalation.',opts:['Myocardial injury is possible and requires urgent clinical correlation and escalation.','Troponin alone tells the RT exactly which four medications to give.','The value diagnoses asthma.','No action is needed unless SpO₂ is low.'],why:'Troponin is a biomarker of myocardial injury and must be interpreted with ECG, symptoms, trend, and the care team.'},
+{q:'What condition is a sweat chloride test classically used to help diagnose?',a:'Cystic fibrosis',opts:['Cystic fibrosis','Congestive heart failure','Myocardial infarction','Pulmonary embolism'],why:'Sweat chloride testing is used in the diagnostic evaluation of cystic fibrosis.'}
+],
+more:[
+{q:'Hyponatremia means which electrolyte is low?',a:'Sodium',opts:['Sodium','Potassium','Chloride','Calcium'],why:'The prefix “natremia” refers to sodium concentration in blood.'},
+{q:'Hematuria means:',a:'Blood is present in the urine',opts:['Blood is present in the urine','Protein is present in sputum','Glucose is absent from blood','Sodium is elevated'],why:'Hematuria refers to blood in urine.'},
+{q:'Which chemistry abnormality can contribute directly to respiratory muscle weakness?',a:'Severe potassium abnormality',opts:['Severe potassium abnormality','Normal sodium','Normal glucose','Normal chloride'],why:'Potassium disturbances can impair muscle and cardiac electrical function.'},
+{q:'An isolated elevated BNP should be treated as:',a:'A clue that must be correlated with symptoms, examination, imaging, renal function, and trend',opts:['A clue that must be correlated with symptoms, examination, imaging, renal function, and trend','Proof that every wheezing patient needs a diuretic','A direct measure of oxygenation','A bacterial culture'],why:'No single biomarker replaces clinical assessment.'},
+{q:'A Mantoux/TB skin test is typically read:',a:'At the appropriate follow-up interval rather than immediately after placement',opts:['At the appropriate follow-up interval rather than immediately after placement','Within 10 minutes only','Only after one week','Only when SpO₂ falls'],why:'The legacy assignment correctly emphasized that the test requires delayed reading rather than immediate interpretation.'}
+]},
+{id:'micro',num:5,title:'Sputum, Specimen Quality & Microbiology',subtitle:'Color is a clue. Sample quality and laboratory testing determine what you can conclude.',
+teach:`<p>Sputum <strong>amount, color, thickness, odor, blood, and change from baseline</strong> can guide assessment, but appearance alone does not reliably identify the organism.</p>
+<div class="grid2"><div class="mini"><strong>Gram stain</strong>Provides a rapid early clue about bacterial morphology/Gram characteristics while culture is pending.</div><div class="mini"><strong>Culture + sensitivity</strong>Provides more definitive organism identification and antimicrobial susceptibility information.</div><div class="mini"><strong>Acid-fast testing</strong>Used when mycobacterial disease such as tuberculosis is suspected.</div><div class="mini"><strong>Sample quality</strong>A specimen that is mostly saliva or contaminated with oral flora may not represent lower-airway secretions.</div></div>
+<div class="warning"><strong>Important update from the old review:</strong> Do not teach “green = gram negative” or “yellow = gram positive” as a diagnostic rule. Purulence and color can occur for many reasons. Use microbiology results plus the clinical picture.</div>`,
+req:[
+{q:'Which test can provide the fastest early clue about bacterial type while a full culture is pending?',a:'Gram stain',opts:['Gram stain','Culture and sensitivity completed days later','Sweat chloride test','Urinalysis'],why:'A Gram stain can provide rapid preliminary information before full culture identification.'},
+{q:'Which test is most appropriate when Mycobacterium tuberculosis is suspected?',a:'Acid-fast testing',opts:['Acid-fast testing','Routine pulse oximetry','BNP','Troponin'],why:'Mycobacteria are evaluated with acid-fast methods rather than relying on routine Gram stain alone.'},
+{q:'A sputum specimen is described as mostly saliva and culture reports mixed oral flora. Best interpretation?',a:'The sample may be contaminated and may need recollection before using the result to guide conclusions.',opts:['The sample may be contaminated and may need recollection before using the result to guide conclusions.','The result proves lower-airway polymicrobial pneumonia.','The culture is always definitive regardless of specimen quality.','The patient definitely has a fungal infection.'],why:'Specimen quality determines whether the laboratory result represents lower-airway material.'},
+{q:'A patient with pulmonary edema produces pink frothy sputum. This appearance is best used as:',a:'A clue that supports pulmonary edema when the rest of the clinical pattern agrees',opts:['A clue that supports pulmonary edema when the rest of the clinical pattern agrees','Proof of a specific bacterial species','Proof of tuberculosis','A normal sputum finding'],why:'Pink frothy sputum can support edema but still requires clinical correlation.'},
+{q:'A patient develops new green purulent sputum. Which statement is most accurate?',a:'Purulent sputum supports airway inflammation/infection, but color alone does not identify the organism.',opts:['Purulent sputum supports airway inflammation/infection, but color alone does not identify the organism.','Green sputum proves a gram-negative organism.','Green sputum proves Pseudomonas.','Color alone determines antibiotic selection.'],why:'Sputum appearance is nonspecific and should not replace microbiology.'}
+],
+more:[
+{q:'Which organism is a gram-positive respiratory pathogen commonly taught in this course?',a:'Streptococcus pneumoniae',opts:['Streptococcus pneumoniae','Haemophilus influenzae','Pseudomonas aeruginosa','Klebsiella pneumoniae'],why:'S. pneumoniae is gram positive.'},
+{q:'Which organism is a gram-negative respiratory pathogen?',a:'Haemophilus influenzae',opts:['Haemophilus influenzae','Staphylococcus aureus','Streptococcus pneumoniae','Mycobacterium tuberculosis'],why:'H. influenzae is gram negative.'},
+{q:'Which organism belongs in the mycobacterial category?',a:'Mycobacterium tuberculosis',opts:['Mycobacterium tuberculosis','Rhinovirus','Aspergillus','Pseudomonas aeruginosa'],why:'Tuberculosis is caused by a mycobacterium.'},
+{q:'Which pathogen is viral?',a:'Respiratory syncytial virus',opts:['Respiratory syncytial virus','Klebsiella pneumoniae','Staphylococcus aureus','Mycobacterium tuberculosis'],why:'RSV is a respiratory virus.'},
+{q:'Which is a fungal respiratory pathogen?',a:'Aspergillus species',opts:['Aspergillus species','Rhinovirus','Legionella pneumophila','Streptococcus pneumoniae'],why:'Aspergillus is a fungus.'}
+]},
+{id:'imaging',num:6,title:'Chest Radiograph Correlation',subtitle:'Read the image as another piece of evidence—not the entire diagnosis.',
+teach:`<p>Before interpreting an x-ray finding, consider <strong>image quality, position, rotation, penetration, and lung inflation.</strong> Then connect the radiographic pattern with the physical examination and history.</p>
+<div class="grid3"><div class="mini"><strong>Pleural effusion</strong>Blunted costophrenic angle + diminished sounds + dullness.</div><div class="mini"><strong>Pneumothorax</strong>Pleural air / absent peripheral markings + sudden unilateral diminished sounds + hyperresonance.</div><div class="mini"><strong>Pneumonia</strong>Focal infiltrate + fever + productive cough + focal crackles + leukocytosis.</div><div class="mini"><strong>Obstructive hyperinflation</strong>Increased lucency/large volumes + barrel chest + prolonged exhalation + hyperresonance.</div><div class="mini"><strong>Cardiogenic edema</strong>Diffuse bilateral opacities + orthopnea + JVD/edema + bilateral crackles.</div><div class="mini"><strong>Always correlate</strong>A radiograph supports the pattern; it does not replace the patient assessment.</div></div>`,
+req:[
+{q:'A chest radiograph shows blunting of the right costophrenic angle. Which finding is most likely?',a:'Pleural effusion',opts:['Pleural effusion','Hyperinflation','Pneumothorax','Normal diaphragm'],why:'Blunting commonly reflects pleural fluid accumulation.'},
+{q:'A febrile patient has productive cough, focal RLL crackles, WBC 17,800/µL, and a RLL infiltrate. Best interpretation?',a:'The findings together strongly support pneumonia.',opts:['The findings together strongly support pneumonia.','The WBC alone proves pneumonia.','Crackles alone prove pneumonia.','The chest radiograph should be ignored.'],why:'History, exam, laboratory, and imaging form a coherent pneumonia pattern.'},
+{q:'A patient with orthopnea has bilateral crackles, JVD, edema, and diffuse bilateral interstitial opacities. Most likely pattern?',a:'Cardiogenic pulmonary edema',opts:['Cardiogenic pulmonary edema','Pneumothorax','Isolated asthma','Normal chest radiograph'],why:'The respiratory and cardiovascular findings together support pulmonary edema from cardiac congestion.'},
+{q:'Which finding would strengthen suspicion for pleural effusion rather than pneumothorax?',a:'Dullness to percussion',opts:['Dullness to percussion','Hyperresonance','Sudden pleuritic pain only','Shark-fin capnogram'],why:'Pleural fluid tends to cause dullness, whereas pleural air tends toward hyperresonance.'},
+{q:'Why should x-ray quality be considered before interpreting disease?',a:'Poor positioning, penetration, rotation, or inspiration can mimic or hide abnormalities.',opts:['Poor positioning, penetration, rotation, or inspiration can mimic or hide abnormalities.','Image quality never affects interpretation.','Only the radiologist needs to consider quality.','Quality only matters for CT scans.'],why:'Technical quality affects the reliability of radiographic findings.'}
+],
+more:[
+{q:'Which cluster best supports obstructive hyperinflation?',a:'Barrel chest, prolonged exhalation, diminished sounds, hyperresonance, hyperinflated lungs',opts:['Barrel chest, prolonged exhalation, diminished sounds, hyperresonance, hyperinflated lungs','Focal crackles, fever, single-lobe infiltrate','JVD, edema, diffuse opacities','Dullness and blunted costophrenic angle'],why:'The cluster reflects air trapping and increased lung volume.'},
+{q:'Which cluster most strongly supports pleural fluid?',a:'Diminished sounds, dullness, and blunted costophrenic angle',opts:['Diminished sounds, dullness, and blunted costophrenic angle','Hyperresonance and absent peripheral markings','Wheezes and shark-fin capnogram','Normal sounds and clear x-ray'],why:'Those findings consistently point toward pleural effusion.'},
+{q:'Diffuse bilateral opacities can be caused by more than one condition.',a:'True',opts:['True','False'],why:'Distribution, heart size, symptoms, volume status, and time course help narrow the cause.'},
+{q:'A sudden unilateral abnormality after an invasive thoracic procedure should make you ask first:',a:'Could this be a procedure-related pneumothorax?',opts:['Could this be a procedure-related pneumothorax?','Could this be chronic anemia?','Is this normal variation?','Could this be hypernatremia?'],why:'Timing can be a major localization clue.'},
+{q:'What makes a pneumonia interpretation stronger?',a:'Consistency across history, exam, laboratory data, and imaging',opts:['Consistency across history, exam, laboratory data, and imaging','A single high WBC','Sputum color alone','One crackle'],why:'Integrated data are more convincing than isolated findings.'}
+]},
+{id:'integration',num:7,title:'Special Tests & Putting the Whole Picture Together',subtitle:'Know what a test is for, when the result is valid, and what you would do with it.',
+teach:`<p>The old assignment included Mantoux testing, allergy testing, urinalysis, sweat chloride, cardiac biomarkers, microbiology, sputum, and CBC interpretation. The new goal is to keep those useful associations while making the reasoning safer: <strong>know the purpose of the test, timing/quality requirements, and what additional data are needed before acting.</strong></p>
+<div class="grid2"><div class="mini"><strong>Mantoux/TB skin testing</strong>Requires appropriate delayed reading; a result checked too early is not interpretable.</div><div class="mini"><strong>Positive TB screening</strong>Requires follow-up evaluation rather than being treated as a complete diagnosis by itself.</div><div class="mini"><strong>Allergy skin testing</strong>Requires observation for an appropriate interval because reactions can occur after placement.</div><div class="mini"><strong>Sweat chloride</strong>Supports diagnostic evaluation for cystic fibrosis.</div></div>
+<div class="clue"><strong>Final habit:</strong> Before naming a diagnosis, be able to cite at least three supporting findings—or clearly state what additional test would increase your confidence.</div>`,
+req:[
+{q:'A Mantoux test was placed only 12 hours ago and there is no reaction. What is the best response?',a:'It is too early to interpret; the patient needs the test read at the appropriate follow-up interval.',opts:['It is too early to interpret; the patient needs the test read at the appropriate follow-up interval.','Document it as definitively negative.','Document it as definitively positive.','Diagnose tuberculosis immediately.'],why:'The legacy assignment emphasized that the test should not be interpreted too early.'},
+{q:'A TB skin test is positive at the appropriate reading time. What is the safest interpretation?',a:'The screening result requires follow-up evaluation for tuberculosis rather than being treated as a complete diagnosis by itself.',opts:['The screening result requires follow-up evaluation for tuberculosis rather than being treated as a complete diagnosis by itself.','The patient automatically has active contagious pulmonary TB.','No further evaluation is ever needed.','The result diagnoses asthma.'],why:'A positive screening test needs clinical follow-up to determine infection status and disease.'},
+{q:'Why must a patient remain for observation after an intracutaneous allergy test rather than immediately leaving?',a:'A reaction may develop during the observation period and must be assessed appropriately.',opts:['A reaction may develop during the observation period and must be assessed appropriately.','The test measures oxygen saturation continuously.','The test directly diagnoses pneumonia.','The patient must wait for urine output.'],why:'Timing and observation are part of safe allergy-test interpretation.'},
+{q:'Which statement best describes a good integrated interpretation?',a:'Name the dominant pattern, cite supporting data, identify the urgent threat, and state what should be checked or done next.',opts:['Name the dominant pattern, cite supporting data, identify the urgent threat, and state what should be checked or done next.','Choose the diagnosis from the most abnormal single number.','Ignore data that do not fit the first diagnosis.','Treat every abnormal laboratory value independently.'],why:'Clinical reasoning requires synthesis, prioritization, and next-step planning.'},
+{q:'A sputum culture, CBC, and chest radiograph all point in different directions. What should the therapist do?',a:'Verify data quality/timing, reassess the patient, and avoid forcing a diagnosis until the inconsistency is explained.',opts:['Verify data quality/timing, reassess the patient, and avoid forcing a diagnosis until the inconsistency is explained.','Average the findings.','Choose whichever result is newest without checking quality.','Ignore the clinical assessment.'],why:'Conflicting data require verification and additional assessment.'}
+],
+more:[
+{q:'Which test is most relevant before a procedure with substantial bleeding risk?',a:'Coagulation study',opts:['Coagulation study','Sweat chloride','Mantoux test','BNP'],why:'Coagulation testing helps evaluate bleeding risk.'},
+{q:'Which test provides organism susceptibility information?',a:'Culture and sensitivity',opts:['Culture and sensitivity','Pulse oximetry','BNP','Sweat chloride'],why:'Sensitivity testing helps determine which antimicrobials inhibit the isolated organism.'},
+{q:'Which principle applies to every special test?',a:'Know the timing, specimen/sample quality, and clinical question before interpreting the result.',opts:['Know the timing, specimen/sample quality, and clinical question before interpreting the result.','Every positive test is a final diagnosis.','Every abnormal value requires immediate medication.','The patient’s presentation is irrelevant.'],why:'Test validity and intended purpose determine what the result means.'},
+{q:'A result does not fit the patient’s presentation. What should happen?',a:'Verify the result and reassess the patient before making a major decision.',opts:['Verify the result and reassess the patient before making a major decision.','Assume the patient is wrong.','Ignore the result forever.','Treat the number without checking context.'],why:'Discordant data are a patient-safety signal.'},
+{q:'Which statement best reflects Week 2.2?',a:'Findings are connected evidence; they become clinically meaningful when interpreted together.',opts:['Findings are connected evidence; they become clinically meaningful when interpreted together.','Each lab value is a diagnosis by itself.','Imaging always outranks bedside assessment.','Sputum color alone identifies the organism.'],why:'Integration is the central competency for the week.'}
+]}
+];
+
+const F=[
+{q:'Case 1: Patient has fever, productive cough, focal RLL crackles, WBC 17,800/µL with neutrophilia, and a RLL infiltrate. Which conclusion is strongest?',a:'The integrated pattern strongly supports pneumonia.',opts:['The integrated pattern strongly supports pneumonia.','The WBC alone proves pneumonia.','Sputum alone is enough to diagnose the organism.','The x-ray should be ignored.'],why:'Four consistent data sources support the same pulmonary infection pattern.'},
+{q:'Case 2: Patient has Hb 6.9 g/dL, SpO₂ 98%, PaO₂ 96 mmHg, fatigue, and tachycardia. What important problem can still be present?',a:'Reduced oxygen-carrying capacity from severe anemia',opts:['Reduced oxygen-carrying capacity from severe anemia','Normal oxygen delivery because SpO₂ is normal','Definite hypercapnic failure','Pneumothorax'],why:'Saturation and PaO₂ can look normal while total arterial oxygen content is reduced by low hemoglobin.'},
+{q:'Case 3: After central-line placement, patient suddenly becomes dyspneic with unilateral absent breath sounds and hyperresonance. Priority concern?',a:'Pneumothorax',opts:['Pneumothorax','Pleural effusion','Chronic anemia','Stable COPD'],why:'Timing plus unilateral findings and hyperresonance form a classic high-risk pneumothorax pattern.'},
+{q:'Case 4: Orthopnea, JVD, peripheral edema, bilateral crackles, diffuse bilateral opacities, and elevated BNP. Dominant pattern?',a:'Cardiogenic pulmonary edema / heart-failure congestion',opts:['Cardiogenic pulmonary edema / heart-failure congestion','Isolated asthma','Pneumothorax','Tuberculosis'],why:'Cardiac volume-overload and respiratory findings agree.'},
+{q:'Case 5: Patient has green purulent sputum but is afebrile, WBC normal, chest x-ray clear, and symptoms unchanged from baseline. Best interpretation?',a:'Sputum color alone is insufficient to diagnose bacterial pneumonia or identify an organism.',opts:['Sputum color alone is insufficient to diagnose bacterial pneumonia or identify an organism.','Green sputum proves gram-negative pneumonia.','Pseudomonas is confirmed.','The patient definitely needs antibiotics based on color alone.'],why:'Color is nonspecific and must be correlated with the rest of the patient.'},
+{q:'Case 6: Patient was breathing 36/min, is now 10/min, shallow, confused, and difficult to arouse. What is the highest-priority interpretation?',a:'Respiratory muscle fatigue with impending ventilatory failure',opts:['Respiratory muscle fatigue with impending ventilatory failure','Improvement because the rate is lower','Stable anxiety','Normal sleepiness'],why:'The trend and mental-status decline signal deterioration.'},
+{q:'Case 7: Patient scheduled for bronchoscopy with biopsy has very low platelets and abnormal coagulation studies. What should the RT do?',a:'Recognize increased bleeding risk and communicate/verify procedural readiness before proceeding routinely.',opts:['Recognize increased bleeding risk and communicate/verify procedural readiness before proceeding routinely.','Ignore the results because they are not respiratory labs.','Proceed because SpO₂ is normal.','Give anticoagulation independently.'],why:'Laboratory data affect procedural safety.'},
+{q:'Case 8: Sputum specimen is mostly saliva; Gram stain shows mixed organisms and culture later reports mixed oral flora. What is the best next thought?',a:'The specimen may not represent lower-airway secretions and recollection may be needed.',opts:['The specimen may not represent lower-airway secretions and recollection may be needed.','The culture proves severe polymicrobial pneumonia.','The sample quality does not matter.','This result confirms tuberculosis.'],why:'Poor specimen quality can make microbiology misleading.'},
+{q:'Case 9: Patient has barrel chest, prolonged exhalation, diminished sounds, hyperresonance, and hyperinflated lungs on x-ray. What mechanism best explains the pattern?',a:'Air trapping and hyperinflation from obstructive physiology',opts:['Air trapping and hyperinflation from obstructive physiology','Pleural fluid accumulation','Focal bacterial consolidation','Upper-airway edema'],why:'The physical and imaging findings consistently support obstructive air trapping.'},
+{q:'Case 10: Which sequence best matches the Week 2.2 competency?',a:'Verify → compare with expected → explain physiology → correlate multiple data sources → prioritize threats → reassess/follow up',opts:['Verify → compare with expected → explain physiology → correlate multiple data sources → prioritize threats → reassess/follow up','Read one abnormal value → diagnose → stop','Start with the x-ray → ignore patient assessment','Treat sputum color → confirm later'],why:'A repeatable integrated interpretation process is the central skill for this week.'}
+];
+
+function addQ(q,host,key,required=false,final=false){
+ const w=document.createElement('div');w.className='q';
+ const title=document.createElement('div');title.className='q-title';title.textContent=q.q;w.appendChild(title);
+ const box=document.createElement('div');box.className='options';
+ shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box);
+ const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
+ const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
+ b.onclick=()=>{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}
+ const ok=c.value===q.a;if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true;save();update()}
+ else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Return to the interpretation routine and identify which clue you may be over-weighting.'}};
+ w.appendChild(b);w.appendChild(f);host.appendChild(w)
+}
+function renderStations(){
+ const host=document.getElementById('stations');
+ S.forEach(s=>{
+   const sec=document.createElement('section');sec.className='card';
+   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
+   host.appendChild(sec);
+   s.req.forEach((q,i)=>addQ(q,sec.querySelector('.req'),`${s.id}-r${i}`,true,false));
+   const redraw=()=>{const m=sec.querySelector('.moreQs');m.innerHTML='';shuffle(s.more).forEach((q,i)=>addQ(q,m,`${s.id}-m${Date.now()}-${i}`))};redraw();
+   sec.querySelector('.moreBtn').onclick=()=>{const m=sec.querySelector('.more');m.classList.toggle('open');sec.querySelector('.moreBtn').textContent=m.classList.contains('open')?'Hide More Practice':'More Practice +5'};
+   sec.querySelector('.resetMore').onclick=redraw;
+ })
+}
+function reqTotal(){return S.reduce((n,s)=>n+s.req.length,0)}
+function reqDone(){return Object.keys(state.required).filter(k=>state.required[k]).length}
+function finDone(){return Object.keys(state.final).filter(k=>state.final[k]).length}
+function renderFinal(){const h=document.getElementById('finalQuestions');F.forEach((q,i)=>addQ(q,h,`final-${i}`,false,true))}
+function update(){
+ const total=reqTotal()+F.length,done=Math.min(reqDone(),reqTotal())+Math.min(finDone(),F.length),p=Math.round(done/total*100);
+ document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';
+ const unlocked=reqDone()>=reqTotal(),fq=document.getElementById('finalQuestions'),lock=document.getElementById('finalLock');
+ if(unlocked){fq.classList.remove('lock');fq.setAttribute('aria-disabled','false');lock.style.display='none'}else{fq.classList.add('lock');fq.setAttribute('aria-disabled','true');lock.style.display='block'}
+ if(done===total)document.getElementById('completeBox').classList.add('show')
+}
+renderStations();renderFinal();update();
+</script>
+</body>
+</html>
