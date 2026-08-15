@@ -60,28 +60,7 @@ button{font-weight:800;border:0;border-radius:12px;padding:10px 14px}.btn{backgr
 @media(max-width:1050px){.journey{grid-template-columns:repeat(4,1fr)}.step::after{display:none}}
 @media(max-width:800px){.interpret-grid{grid-template-columns:1fr}.normal-list{grid-template-columns:1fr}.meta-grid{grid-template-columns:1fr}.progress-wrap{top:82px}}
 @media(max-width:700px){.top-nav{padding:14px 16px}.brand-mark{width:48px;height:48px}.brand-tagline,.nav-course{display:none}.main-content{padding:20px 14px 56px}.hero,.card{padding:20px}.journey{grid-template-columns:1fr 1fr}.station-head{display:block}.station-title{margin-bottom:12px}.progress-wrap{top:76px}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="page-shell">
@@ -153,7 +132,10 @@ button{font-weight:800;border:0;border-radius:12px;padding:10px 14px}.btn{backgr
 
 <script>
 const STORE='ahrc152_assignment_1_3_oxygen_v1';
-const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{}}');
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{},"answers":{}}');
+if(!state.required)state.required={};
+if(!state.final)state.final={};
+if(!state.answers)state.answers={};
 const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
 const close=(x,y,t=.02)=>Math.abs(Number(x)-Number(y))<=t;
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -351,15 +333,24 @@ function question(q,host,key,required=false,final=false){
  const w=document.createElement('div');w.className='q';
  const t=document.createElement('div');t.className='q-title';t.textContent=q.q;w.appendChild(t);
  let inp;
- if(q.type==='num'){const row=document.createElement('div');inp=document.createElement('input');inp.type='number';inp.step='any';inp.setAttribute('aria-label',q.q);row.appendChild(inp);if(q.unit){let u=document.createElement('span');u.textContent=' '+q.unit;u.style.marginLeft='8px';row.appendChild(u)}w.appendChild(row)}
- else{const box=document.createElement('div');box.className='options';shuffle(q.opts).forEach(o=>{let l=document.createElement('label');l.className='option';let r=document.createElement('input');r.type='radio';r.name=key;r.value=o;l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box)}
+ if(q.type==='num'){
+   const row=document.createElement('div');inp=document.createElement('input');inp.type='number';inp.step='any';inp.setAttribute('aria-label',q.q);
+   if(state.answers[key]!==undefined)inp.value=state.answers[key];
+   inp.addEventListener('input',()=>{state.answers[key]=inp.value;save()});
+   row.appendChild(inp);if(q.unit){let u=document.createElement('span');u.textContent=' '+q.unit;u.style.marginLeft='8px';row.appendChild(u)}w.appendChild(row)
+ }else{
+   const box=document.createElement('div');box.className='options';
+   shuffle(q.opts).forEach(o=>{let l=document.createElement('label');l.className='option';let r=document.createElement('input');r.type='radio';r.name=key;r.value=o;if(state.answers[key]===o)r.checked=true;r.addEventListener('change',()=>{state.answers[key]=o;save()});l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box)
+ }
  const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
  const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
+ if((required&&state.required[key])||(final&&state.final[key])){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why+'<br><strong>What it means:</strong> '+q.clue}
  b.onclick=()=>{let ok=false;
-  if(q.type==='num'){if(inp.value===''){f.className='feedback bad';f.textContent='Enter an answer first.';return}ok=close(inp.value,q.a,q.tol??.02)}
-  else{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}ok=c.value===q.a}
-  if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why+'<br><strong>What it means:</strong> '+q.clue;if(required)state.required[key]=true;if(final)state.final[key]=true;save();progress()}
-  else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> Recheck the formula, units, and physiologic stage. '+q.why+'<br><strong>Then ask:</strong> '+q.clue}
+   if(q.type==='num'){if(inp.value===''){f.className='feedback bad';f.textContent='Enter an answer first.';return}state.answers[key]=inp.value;ok=close(inp.value,q.a,q.tol??.02)}
+   else{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}state.answers[key]=c.value;ok=c.value===q.a}
+   if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why+'<br><strong>What it means:</strong> '+q.clue;if(required)state.required[key]=true;if(final)state.final[key]=true}
+   else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> Recheck the formula, units, and physiologic stage. '+q.why+'<br><strong>Then ask:</strong> '+q.clue;if(required)delete state.required[key];if(final)delete state.final[key]}
+   save();progress()
  };
  w.appendChild(b);w.appendChild(f);host.appendChild(w)
 }
@@ -385,75 +376,5 @@ function progress(){
 function renderFinal(){const h=document.getElementById('finalQuestions');FINAL.forEach((q,i)=>question(q,h,`final-${i}`,false,true))}
 renderStations();renderFinal();progress();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
