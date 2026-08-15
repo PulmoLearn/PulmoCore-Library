@@ -44,27 +44,9 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 @media(max-width:1100px){.sequence{grid-template-columns:repeat(3,1fr)}.grid3{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.sequence,.grid2,.grid3{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
 
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+.competency-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.competency-tag{display:inline-block;background:#EDF6FA;border:1px solid var(--soft-border,var(--border,#D7E6EF));border-radius:999px;padding:4px 9px;font-size:.76rem;font-weight:800;color:var(--slate,#415A77)}
+</style>
 </head>
 <body>
 <div class="page">
@@ -166,15 +148,12 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 
 <script>
 const STORE='ahrc152_assignment_2_2_clinical_clue_lab_v1';
-const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{},"answers":{}}');
-if(!state.required)state.required={};
-if(!state.final)state.final={};
-if(!state.answers)state.answers={};
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{}}');
 const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
 const S=[
-{id:'priority',num:1,title:'Vital Signs, Work of Breathing & Respiratory Fatigue',subtitle:'A number moving toward normal is not always improvement.',
+{id:'priority',c:'C1 C7',num:1,title:'Vital Signs, Work of Breathing & Respiratory Fatigue',subtitle:'A number moving toward normal is not always improvement.',
 teach:`<p>Start with the patient before the lab sheet. A respiratory rate only has meaning when you also look at <strong>depth, rhythm, work of breathing, speech, oxygen requirement, and mental status.</strong></p>
 <div class="normal"><strong>Common resting adult respiratory-rate reference:</strong> approximately 12–20 breaths/min. A value outside the range is a clue; the patient’s depth, effort, pattern, mental status, and trend determine urgency.</div>
 <div class="grid2"><div class="mini"><strong>Distress</strong>Tachypnea, accessory-muscle use, retractions, inability to speak full sentences, diaphoresis, agitation.</div><div class="mini"><strong>Fatigue / impending failure</strong>Previously rapid breathing becomes shallow or slow while confusion, somnolence, or poor air movement worsens.</div></div>
@@ -193,7 +172,7 @@ more:[
 {q:'A patient’s RR decreases after bronchodilator therapy while speech, wheezing, SpO₂, and work of breathing all improve. This trend is:',a:'Reassuring because multiple independent findings improve together',opts:['Reassuring because multiple independent findings improve together','Automatically evidence of respiratory fatigue','Meaningless because RR should never change','Proof of pneumonia'],why:'Trend interpretation depends on the entire patient response.'},
 {q:'Which threat generally takes priority over routine diagnostic interpretation?',a:'Inability to protect the airway',opts:['Inability to protect the airway','Stable chronic anemia','Old x-ray changes','Mild sputum-color change'],why:'Immediate airway threats override routine tasks.'}
 ]},
-{id:'sounds',num:2,title:'Breath Sounds & Focused Chest Assessment',subtitle:'Locate the sound, identify the mechanism, then correlate it.',
+{id:'sounds',c:'C2 C6',num:2,title:'Breath Sounds & Focused Chest Assessment',subtitle:'Locate the sound, identify the mechanism, then correlate it.',
 teach:`<p>Breath sounds become useful when you ask <strong>where the sound is, when it occurs, what mechanism could produce it, and whether the rest of the exam agrees.</strong></p>
 <div class="grid3"><div class="mini"><strong>Wheezes</strong>Musical, usually expiratory → narrowed lower airways.</div><div class="mini"><strong>Crackles</strong>Opening of small airways or air moving through fluid → focal or diffuse context matters.</div><div class="mini"><strong>Stridor</strong>Harsh inspiratory upper-airway sound → potentially urgent airway narrowing.</div><div class="mini"><strong>Diminished/absent</strong>Poor air movement, obstruction, pleural air/fluid, hyperinflation, or technical issue.</div><div class="mini"><strong>Dull percussion</strong>Supports fluid or consolidation.</div><div class="mini"><strong>Hyperresonance</strong>Supports excess air or hyperinflation.</div></div>
 <div class="clue"><strong>Compare sides.</strong> Sudden unilateral absence after central-line placement is much more concerning for pneumothorax than chronically diminished bilateral sounds in emphysema.</div>`,
@@ -211,7 +190,7 @@ more:[
 {q:'Absent breath sounds always prove pneumothorax.',a:'False',opts:['True','False'],why:'Pleural fluid, obstruction, hyperinflation, poor effort, and technical factors can also reduce sounds.'},
 {q:'Why should auscultation findings be compared bilaterally?',a:'Asymmetry can help localize focal airway, pleural, or parenchymal problems.',opts:['Asymmetry can help localize focal airway, pleural, or parenchymal problems.','Only one lung needs assessment.','Breath sounds are always identical by definition.','Comparison is only needed in children.'],why:'Side-to-side comparison strengthens pattern recognition.'}
 ]},
-{id:'cbc',num:3,title:'CBC: Oxygen-Carrying Capacity & Infection Clues',subtitle:'The CBC answers different questions about red cells, white cells, and procedural safety.',
+{id:'cbc',c:'C3 C4',num:3,title:'CBC: Oxygen-Carrying Capacity & Infection Clues',subtitle:'The CBC answers different questions about red cells, white cells, and procedural safety.',
 teach:`<p><strong>Hemoglobin is central to oxygen transport.</strong> SpO₂ tells you how saturated the available hemoglobin is; it does not tell you how much hemoglobin is present.</p>
 <div class="normal"><strong>Key concept:</strong> A patient with Hb 6.9 g/dL, SpO₂ 98%, and PaO₂ 96 mmHg can still have markedly reduced oxygen content because there is much less hemoglobin available to carry oxygen.</div>
 <div class="grid3"><div class="mini"><strong>RBC / Hb / Hct low</strong>Supports anemia or blood loss depending on context.</div><div class="mini"><strong>WBC + neutrophils high</strong>Can support acute bacterial inflammation when the clinical picture fits.</div><div class="mini"><strong>Eosinophils high</strong>Can support an allergic/eosinophilic process such as some asthma phenotypes.</div><div class="mini"><strong>Platelets / coagulation</strong>Important before procedures with bleeding risk.</div><div class="mini"><strong>Trend</strong>A rapid change may matter more than a mildly abnormal isolated value.</div><div class="mini"><strong>Do not overcall</strong>A CBC supports a diagnosis; it rarely proves one by itself.</div></div>`,
@@ -229,7 +208,7 @@ more:[
 {q:'A normal SpO₂ in severe anemia means:',a:'The available hemoglobin may be well saturated even though total oxygen content is low.',opts:['The available hemoglobin may be well saturated even though total oxygen content is low.','Oxygen delivery is automatically normal.','Hemoglobin concentration must be normal.','PaCO₂ must be normal.'],why:'Saturation is a percentage, not the amount of hemoglobin present.'},
 {q:'A platelet count is most relevant to RT procedural planning when:',a:'An invasive procedure with bleeding risk is planned',opts:['An invasive procedure with bleeding risk is planned','The patient needs pulse oximetry','A respiratory rate is counted','A nasal cannula is applied'],why:'Platelets contribute to hemostasis and may affect procedural safety.'}
 ]},
-{id:'chem',num:4,title:'Electrolytes, Renal/Cardiac Labs & Special Tests',subtitle:'Ask how the abnormal value could change respiratory function, rhythm, perfusion, or treatment safety.',
+{id:'chem',c:'C5 C7',num:4,title:'Electrolytes, Renal/Cardiac Labs & Special Tests',subtitle:'Ask how the abnormal value could change respiratory function, rhythm, perfusion, or treatment safety.',
 teach:`<p>Electrolytes and chemistry values are not “someone else’s labs.” They can affect <strong>respiratory muscle strength, cardiac rhythm, mental status, acid-base balance, fluid status, and medication safety.</strong></p>
 <div class="grid3"><div class="mini"><strong>Potassium</strong>Marked low or high values can cause weakness and dysrhythmias.</div><div class="mini"><strong>Sodium</strong>Severe derangement can affect neurologic status and fluid balance.</div><div class="mini"><strong>Chloride / bicarbonate</strong>Useful in acid-base pattern recognition.</div><div class="mini"><strong>Renal function / urine output</strong>Low output can signal reduced perfusion or fluid/renal problems.</div><div class="mini"><strong>BNP</strong>Can support heart-failure physiology when the patient pattern fits.</div><div class="mini"><strong>Troponin</strong>Supports myocardial injury; interpret with symptoms, ECG, trend, and assay.</div></div>
 <div class="warning"><strong>Modernized from the old assignment:</strong> Do not choose a medication solely because one BNP or troponin number is abnormal. The RT recognizes the pattern, supports airway/breathing/oxygenation as indicated, communicates urgent findings, and follows the interdisciplinary treatment plan.</div>`,
@@ -247,7 +226,7 @@ more:[
 {q:'An isolated elevated BNP should be treated as:',a:'A clue that must be correlated with symptoms, examination, imaging, renal function, and trend',opts:['A clue that must be correlated with symptoms, examination, imaging, renal function, and trend','Proof that every wheezing patient needs a diuretic','A direct measure of oxygenation','A bacterial culture'],why:'No single biomarker replaces clinical assessment.'},
 {q:'A Mantoux/TB skin test is typically read:',a:'At the appropriate follow-up interval rather than immediately after placement',opts:['At the appropriate follow-up interval rather than immediately after placement','Within 10 minutes only','Only after one week','Only when SpO₂ falls'],why:'The legacy assignment correctly emphasized that the test requires delayed reading rather than immediate interpretation.'}
 ]},
-{id:'micro',num:5,title:'Sputum, Specimen Quality & Microbiology',subtitle:'Color is a clue. Sample quality and laboratory testing determine what you can conclude.',
+{id:'micro',c:'C5 C7',num:5,title:'Sputum, Specimen Quality & Microbiology',subtitle:'Color is a clue. Sample quality and laboratory testing determine what you can conclude.',
 teach:`<p>Sputum <strong>amount, color, thickness, odor, blood, and change from baseline</strong> can guide assessment, but appearance alone does not reliably identify the organism.</p>
 <div class="grid2"><div class="mini"><strong>Gram stain</strong>Provides a rapid early clue about bacterial morphology/Gram characteristics while culture is pending.</div><div class="mini"><strong>Culture + sensitivity</strong>Provides more definitive organism identification and antimicrobial susceptibility information.</div><div class="mini"><strong>Acid-fast testing</strong>Used when mycobacterial disease such as tuberculosis is suspected.</div><div class="mini"><strong>Sample quality</strong>A specimen that is mostly saliva or contaminated with oral flora may not represent lower-airway secretions.</div></div>
 <div class="warning"><strong>Important update from the old review:</strong> Do not teach “green = gram negative” or “yellow = gram positive” as a diagnostic rule. Purulence and color can occur for many reasons. Use microbiology results plus the clinical picture.</div>`,
@@ -265,7 +244,7 @@ more:[
 {q:'Which pathogen is viral?',a:'Respiratory syncytial virus',opts:['Respiratory syncytial virus','Klebsiella pneumoniae','Staphylococcus aureus','Mycobacterium tuberculosis'],why:'RSV is a respiratory virus.'},
 {q:'Which is a fungal respiratory pathogen?',a:'Aspergillus species',opts:['Aspergillus species','Rhinovirus','Legionella pneumophila','Streptococcus pneumoniae'],why:'Aspergillus is a fungus.'}
 ]},
-{id:'imaging',num:6,title:'Chest Radiograph Correlation',subtitle:'Read the image as another piece of evidence—not the entire diagnosis.',
+{id:'imaging',c:'C6 C7',num:6,title:'Chest Radiograph Correlation',subtitle:'Read the image as another piece of evidence—not the entire diagnosis.',
 teach:`<p>Before interpreting an x-ray finding, consider <strong>image quality, position, rotation, penetration, and lung inflation.</strong> Then connect the radiographic pattern with the physical examination and history.</p>
 <div class="grid3"><div class="mini"><strong>Pleural effusion</strong>Blunted costophrenic angle + diminished sounds + dullness.</div><div class="mini"><strong>Pneumothorax</strong>Pleural air / absent peripheral markings + sudden unilateral diminished sounds + hyperresonance.</div><div class="mini"><strong>Pneumonia</strong>Focal infiltrate + fever + productive cough + focal crackles + leukocytosis.</div><div class="mini"><strong>Obstructive hyperinflation</strong>Increased lucency/large volumes + barrel chest + prolonged exhalation + hyperresonance.</div><div class="mini"><strong>Cardiogenic edema</strong>Diffuse bilateral opacities + orthopnea + JVD/edema + bilateral crackles.</div><div class="mini"><strong>Always correlate</strong>A radiograph supports the pattern; it does not replace the patient assessment.</div></div>`,
 req:[
@@ -282,7 +261,7 @@ more:[
 {q:'A sudden unilateral abnormality after an invasive thoracic procedure should make you ask first:',a:'Could this be a procedure-related pneumothorax?',opts:['Could this be a procedure-related pneumothorax?','Could this be chronic anemia?','Is this normal variation?','Could this be hypernatremia?'],why:'Timing can be a major localization clue.'},
 {q:'What makes a pneumonia interpretation stronger?',a:'Consistency across history, exam, laboratory data, and imaging',opts:['Consistency across history, exam, laboratory data, and imaging','A single high WBC','Sputum color alone','One crackle'],why:'Integrated data are more convincing than isolated findings.'}
 ]},
-{id:'integration',num:7,title:'Special Tests & Putting the Whole Picture Together',subtitle:'Know what a test is for, when the result is valid, and what you would do with it.',
+{id:'integration',c:'C1 C5 C6 C7',num:7,title:'Special Tests & Putting the Whole Picture Together',subtitle:'Know what a test is for, when the result is valid, and what you would do with it.',
 teach:`<p>The old assignment included Mantoux testing, allergy testing, urinalysis, sweat chloride, cardiac biomarkers, microbiology, sputum, and CBC interpretation. The new goal is to keep those useful associations while making the reasoning safer: <strong>know the purpose of the test, timing/quality requirements, and what additional data are needed before acting.</strong></p>
 <div class="grid2"><div class="mini"><strong>Mantoux/TB skin testing</strong>Requires appropriate delayed reading; a result checked too early is not interpretable.</div><div class="mini"><strong>Positive TB screening</strong>Requires follow-up evaluation rather than being treated as a complete diagnosis by itself.</div><div class="mini"><strong>Allergy skin testing</strong>Requires observation for an appropriate interval because reactions can occur after placement.</div><div class="mini"><strong>Sweat chloride</strong>Supports diagnostic evaluation for cystic fibrosis.</div></div>
 <div class="clue"><strong>Final habit:</strong> Before naming a diagnosis, be able to cite at least three supporting findings—or clearly state what additional test would increase your confidence.</div>`,
@@ -319,23 +298,19 @@ function addQ(q,host,key,required=false,final=false){
  const w=document.createElement('div');w.className='q';
  const title=document.createElement('div');title.className='q-title';title.textContent=q.q;w.appendChild(title);
  const box=document.createElement('div');box.className='options';
- shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;if(state.answers[key]===o)r.checked=true;r.addEventListener('change',()=>{state.answers[key]=o;save()});l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box);
+ shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box);
  const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
  const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
- if((required&&state.required[key])||(final&&state.final[key])){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why}
  b.onclick=()=>{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}
-   state.answers[key]=c.value;const ok=c.value===q.a;
-   if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true}
-   else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Return to the interpretation routine and identify which clue you may be over-weighting.';if(required)delete state.required[key];if(final)delete state.final[key]}
-   save();update()
- };
+ const ok=c.value===q.a;if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true;save();update()}
+ else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Return to the interpretation routine and identify which clue you may be over-weighting.'}};
  w.appendChild(b);w.appendChild(f);host.appendChild(w)
 }
 function renderStations(){
  const host=document.getElementById('stations');
  S.forEach(s=>{
    const sec=document.createElement('section');sec.className='card';
-   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
+   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div><div class="competency-tags">${s.c ? s.c.split(" ").map(x=>`<span class="competency-tag">${x}</span>`).join("") : ""}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
    host.appendChild(sec);
    s.req.forEach((q,i)=>addQ(q,sec.querySelector('.req'),`${s.id}-r${i}`,true,false));
    const redraw=()=>{const m=sec.querySelector('.moreQs');m.innerHTML='';shuffle(s.more).forEach((q,i)=>addQ(q,m,`${s.id}-m${Date.now()}-${i}`))};redraw();
@@ -356,75 +331,5 @@ function update(){
 }
 renderStations();renderFinal();update();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>

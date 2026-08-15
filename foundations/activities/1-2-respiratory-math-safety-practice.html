@@ -269,27 +269,9 @@ button{
   *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
 }
 
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+.competency-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.competency-tag{display:inline-block;background:#EDF6FA;border:1px solid var(--soft-border,var(--border,#D7E6EF));border-radius:999px;padding:4px 9px;font-size:.76rem;font-weight:800;color:var(--slate,#415A77)}
+</style>
 
 </head>
 <body>
@@ -390,10 +372,7 @@ button{
 
 <script>
 const STORAGE='ahrc152_math_safety_lab_v1';
-const state=JSON.parse(localStorage.getItem(STORAGE)||'{"required":{},"final":{},"answers":{}}');
-if(!state.required)state.required={};
-if(!state.final)state.final={};
-if(!state.answers)state.answers={};
+const state=JSON.parse(localStorage.getItem(STORAGE)||'{"required":{},"final":{}}');
 const save=()=>localStorage.setItem(STORAGE,JSON.stringify(state));
 const nclose=(a,b,t=.01)=>Math.abs(Number(a)-Number(b))<=t;
 
@@ -401,7 +380,7 @@ function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.fl
 
 const stations=[
 {
- id:'metric',num:1,title:'Metric Conversions',subtitle:'Smaller unit = larger number; larger unit = smaller number.',
+ id:'metric',c:'C1 C2 C5',num:1,title:'Metric Conversions',subtitle:'Smaller unit = larger number; larger unit = smaller number.',
  teach:`<p>Metric conversions become much safer when you let the <strong>units</strong> choose the direction. To convert to a smaller unit, the numerical value grows. To convert to a larger unit, the numerical value shrinks.</p>
  <div class="tip"><strong>Build the conversion:</strong> 0.961 L × (1,000 mL / 1 L) = 961 mL. Liters cancel; milliliters remain.</div>
  <p><strong>Magnitude check:</strong> 0.961 L is almost 1 L, so an answer near 1,000 mL makes sense. An answer of 0.000961 mL does not.</p>`,
@@ -424,7 +403,7 @@ const stations=[
  ]
 },
 {
- id:'weight',num:2,title:'Height, Weight & Imperial/Metric',subtitle:'Use unit size to catch multiply-vs-divide errors.',
+ id:'weight',c:'C1 C2 C5',num:2,title:'Height, Weight & Imperial/Metric',subtitle:'Use unit size to catch multiply-vs-divide errors.',
  teach:`<p>For weight, remember: <strong>a kilogram is a larger unit than a pound</strong>. Therefore the kilogram number should be smaller.</p>
  <div class="tip"><strong>176 lb → kg:</strong> 176 lb × (1 kg / 2.2 lb) = 80 kg. If you get 387 kg, the direction check tells you to stop before trusting it.</div>
  <p>For height, first convert feet to inches, add the remaining inches, then convert inches to centimeters.</p>`,
@@ -447,7 +426,7 @@ const stations=[
  ]
 },
 {
- id:'resp',num:3,title:'Respiratory Calculations',subtitle:'Use estimation and reverse checks before a number reaches a ventilator.',
+ id:'resp',c:'C2 C4 C5',num:3,title:'Respiratory Calculations',subtitle:'Use estimation and reverse checks before a number reaches a ventilator.',
  teach:`<p>Weight-based tidal volume uses <strong>mL/kg</strong>. Multiply the verified weight by the prescribed mL/kg target, then check whether the result is plausible.</p>
  <div class="tip"><strong>Estimate first:</strong> 63 kg × 6 mL/kg should be near 60 × 6 = 360 mL. Exact result: 378 mL. A result of 3,780 mL is a tenfold warning.</div>
  <p><strong>Minute ventilation:</strong> VT × RR. Convert mL to L when the final answer is requested in L/min. A reverse check can recover the original VT.</p>`,
@@ -470,7 +449,7 @@ const stations=[
  ]
 },
 {
- id:'temp',num:4,title:'Temperature Conversions',subtitle:'Choose the scale first, then apply the matching formula.',
+ id:'temp',c:'C1 C2 C5',num:4,title:'Temperature Conversions',subtitle:'Choose the scale first, then apply the matching formula.',
  teach:`<p>Temperature conversion is not a simple decimal shift. First identify the starting scale and the requested scale.</p>
  <div class="tip"><span class="formula">°C = (°F − 32) × 5/9</span> &nbsp; <span class="formula">°F = (°C × 9/5) + 32</span> &nbsp; <span class="formula">K = °C + 273</span></div>
  <p><strong>Reasonableness check:</strong> normal body temperature is around the high 30s °C and around 100 °F. If you convert 100 °F and get 212 °C, stop and rebuild the formula.</p>`,
@@ -493,7 +472,7 @@ const stations=[
  ]
 },
 {
- id:'meds',num:5,title:'Medication & Percent Solutions',subtitle:'Order → supply → units → volume → safety check.',
+ id:'meds',c:'C2 C3 C5',num:5,title:'Medication & Percent Solutions',subtitle:'Order → supply → units → volume → safety check.',
  teach:`<p>Before calculating, identify the <strong>ordered dose</strong>, the <strong>available dose</strong>, and the <strong>volume containing the available dose</strong>.</p>
  <div class="tip"><strong>Dose-volume setup:</strong> ordered dose × available volume / available dose. Arrange it so the medication unit cancels and mL remains.</div>
  <p><strong>Percent solutions:</strong> 1% = 1 g/100 mL = 10 mg/mL. Therefore 0.5% = 5 mg/mL and 10% = 100 mg/mL.</p>
@@ -536,40 +515,30 @@ function renderQuestion(q, container, key, required){
  if(q.type==='num'){
    const row=document.createElement('div');
    input=document.createElement('input');input.type='number';input.step='any';input.setAttribute('aria-label',q.q);
-   if(state.answers[key]!==undefined)input.value=state.answers[key];
-   input.addEventListener('input',()=>{state.answers[key]=input.value;save()});
    row.appendChild(input);
    if(q.unit){const u=document.createElement('span');u.textContent=' '+q.unit;u.style.marginLeft='8px';row.appendChild(u)}
    wrap.appendChild(row);
- }else{
+ } else {
    const opts=document.createElement('div');opts.className='options';
-   shuffle(q.opts).forEach(o=>{
+   shuffle(q.opts).forEach((o,i)=>{
      const lab=document.createElement('label');lab.className='option';
      const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;
-     if(state.answers[key]===o)r.checked=true;
-     r.addEventListener('change',()=>{state.answers[key]=o;save()});
      lab.appendChild(r);lab.appendChild(document.createTextNode(o));opts.appendChild(lab);
    });wrap.appendChild(opts);
  }
  const btn=document.createElement('button');btn.className='btn';btn.textContent='Check answer';btn.style.marginTop='10px';
  const fb=document.createElement('div');fb.className='feedback';fb.setAttribute('role','status');
- if((required&&state.required[key])||(key.startsWith('final-')&&state.final[key])){
-   fb.className='feedback ok';fb.innerHTML='<strong>Correct.</strong> '+q.why+'<br><em>Safety check: Unit right? Direction right? Magnitude reasonable?</em>';
- }
  btn.onclick=()=>{
-   let ok=false,val;
-   if(q.type==='num'){val=input.value;if(val===''){fb.className='feedback bad';fb.textContent='Enter an answer first.';return}state.answers[key]=val;ok=nclose(val,q.a,q.tol??.01)}
-   else{const c=wrap.querySelector('input[type=radio]:checked');if(!c){fb.className='feedback bad';fb.textContent='Choose an answer first.';return}val=c.value;state.answers[key]=val;ok=val===q.a}
+   let ok=false, val;
+   if(q.type==='num'){val=input.value; if(val===''){fb.className='feedback bad';fb.textContent='Enter an answer first.';return} ok=nclose(val,q.a,q.tol??.01)}
+   else {const c=wrap.querySelector('input[type=radio]:checked');if(!c){fb.className='feedback bad';fb.textContent='Choose an answer first.';return} val=c.value;ok=val===q.a}
    if(ok){
      fb.className='feedback ok';fb.innerHTML='<strong>Correct.</strong> '+q.why+'<br><em>Safety check: Unit right? Direction right? Magnitude reasonable?</em>';
-     if(required)state.required[key]=true;
-     if(key.startsWith('final-'))state.final[key]=true;
-   }else{
+     if(required){state.required[key]=true;save();updateProgress()}
+     if(key.startsWith('final-')){state.final[key]=true;save();updateProgress()}
+   } else {
      fb.className='feedback bad';fb.innerHTML='<strong>Not yet.</strong> Recheck the setup before changing numbers at random.<br>'+q.why+'<br><em>Ask: What unit should remain? Should the number get larger or smaller? Is the magnitude reasonable?</em>';
-     if(required)delete state.required[key];
-     if(key.startsWith('final-'))delete state.final[key];
    }
-   save();updateProgress()
  };
  wrap.appendChild(btn);wrap.appendChild(fb);container.appendChild(wrap);
 }
@@ -578,7 +547,7 @@ function renderStations(){
  const host=document.getElementById('stations');
  stations.forEach(s=>{
    const sec=document.createElement('section');sec.className='card';sec.id='station-'+s.id;
-   sec.innerHTML=`<div class="station-head"><div class="station-title"><div class="station-number">${s.num}</div><div><div class="kicker">Required learning station</div><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div></div>
+   sec.innerHTML=`<div class="station-head"><div class="station-title"><div class="station-number">${s.num}</div><div><div class="kicker">Required learning station</div><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div><div class="competency-tags">${s.c ? s.c.split(" ").map(x=>`<span class="competency-tag">${x}</span>`).join("") : ""}</div></div></div></div>
    <div class="teach" style="margin-top:18px">${s.teach}</div>
    <h3>Required mastery practice</h3><p class="small">Complete all 8 required questions in this section. You may retry immediately. After mastery, you can choose 5 additional optional practice questions.</p>
    <div class="req"></div>
@@ -632,75 +601,5 @@ function renderFinal(){
 
 renderStations();renderFinal();updateProgress();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Respiratory Care | Assignment 3.2 ECG Interpretation Practice</title>
+<style>
+:root{
+  --navy:#0B1F33;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;--mist:#F4FAFC;
+  --mint:#DDF7F2;--amber:#F4B860;--coral:#E85D5D;--white:#fff;--slate:#415A77;
+  --border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);--radius:22px;
+}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}html{scroll-behavior:smooth}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}
+.mark svg{width:40px;height:40px}.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}.tag{font-size:.8rem;opacity:.9;margin-top:4px}
+.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}.hero,.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}.hero p{max-width:1120px;font-size:1.13rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:20;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue))}
+.card{padding:24px;margin-bottom:18px}.teach{border-left:8px solid var(--teal);padding:4px 0 4px 18px}
+h2,h3{line-height:1.15}h2{font-size:clamp(1.75rem,3vw,2.55rem);margin:0 0 12px}h3{font-size:1.3rem}
+.clue,.warning,.normal,.danger{border-radius:14px;padding:14px 16px;margin:14px 0}.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}.normal{background:#F4FAFC;border:1px solid var(--border);border-left:6px solid var(--teal)}.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mini{border:1px solid var(--border);border-radius:14px;padding:14px;background:#FAFDFF}.mini strong{display:block;margin-bottom:4px}
+.station-head{display:flex;gap:12px;align-items:center}.num{width:42px;height:42px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.ecg{border:1px solid #E3D9DD;border-radius:14px;overflow:hidden;background:#fff;margin:14px 0}.ecg svg{display:block;width:100%;height:auto}
+.key{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.key div{background:#FAFDFF;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}.key b{display:block;color:var(--teal)}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q-title{font-weight:800;margin-bottom:8px}.options{display:grid;gap:10px;margin:12px 0}.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:12px 14px;border-radius:12px;background:#fff;cursor:pointer}.option:hover{border-color:var(--blue);background:#F2F8FE}
+input[type=number]{max-width:180px;border:1px solid #AFC4D2;border-radius:10px;padding:10px 12px}
+button{font-weight:800;border:0;border-radius:12px;padding:10px 14px}.btn{background:var(--teal);color:#fff}.btn:hover{background:var(--teal2)}.btn.secondary{background:#EDF6FA;color:var(--navy);border:1px solid var(--border)}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.more{display:none;border-top:2px dashed var(--border);margin-top:18px;padding-top:18px}.more.open{display:block}.small{font-size:.92rem;color:var(--slate)}
+.lock{opacity:.5;pointer-events:none}.complete{display:none;background:var(--mint);border:1px solid #86D9C8;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}.complete.show{display:block}
+.badge{display:inline-block;background:var(--navy);color:#fff;border-radius:999px;padding:5px 10px;font-size:.82rem;font-weight:800}.shock{background:#FDE9E9;border-color:#F2B5B5}.nonshock{background:#FFF4DF;border-color:#F8D9A5}
+footer{background:var(--navy);color:#fff;padding:30px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:1000px){.grid4,.grid3,.key{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.grid2,.grid3,.grid4,.key{grid-template-columns:1fr}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+
+.competency-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.competency-tag{display:inline-block;background:#EDF6FA;border:1px solid var(--soft-border,var(--border,#D7E6EF));border-radius:999px;padding:4px 9px;font-size:.76rem;font-weight:800;color:var(--slate,#415A77)}
+</style></head>
+<body><div class="page">
+<header class="top"><div class="brand"><div class="mark"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Respiratory care learning for future RTs.</div></div></div><div class="course">Respiratory Care</div></header>
+<main>
+<header class="hero"><span class="eyebrow">Respiratory Care · Assignment 3.2</span><h1>ECG Interpretation: Read the Rhythm, Treat the Patient</h1>
+<p>Build a repeatable approach to ECG interpretation that works under pressure. You will learn the paper, measure rate and intervals, identify common sinus and atrial rhythms, recognize ventricular and arrest rhythms, then connect the monitor to the patient’s <strong>pulse, perfusion, oxygenation, ventilation, and urgency.</strong></p></header>
+
+<div class="progress-wrap"><div class="progress-row"><strong id="progressText">0% complete</strong><div class="progress"><div id="progressBar"></div></div></div></div>
+
+<section class="card"><span class="kicker">Your interpretation routine</span>
+<div class="grid4">
+<div class="mini"><strong>1 · VERIFY</strong>Does the tracing match the patient? Check leads, artifact, paper speed, and pulse.</div>
+<div class="mini"><strong>2 · MEASURE</strong>Rate and regularity first. Choose the correct rate method.</div>
+<div class="mini"><strong>3 · ANALYZE</strong>P waves/PR, then QRS width and morphology.</div>
+<div class="mini"><strong>4 · RESPOND</strong>Name the rhythm, assess stability, act, and reassess.</div>
+</div>
+<div class="warning"><strong>Monitor ≠ circulation.</strong> Organized electrical activity does not prove there is a pulse. A flat line does not prove true asystole until the patient and the signal have been checked.</div>
+</section>
+
+<div id="stations"></div>
+
+<section class="card"><span class="kicker">Final rhythm rounds</span><h2>Put the whole process together.</h2>
+<p>The final cases unlock after all required station questions are correct. These scenarios mirror the application level of the weekly quiz and Unit 3 competency exam without reproducing those assessment items verbatim.</p>
+<div id="finalLock" class="warning">Complete the required station practice to unlock the final cases.</div><div id="final" class="lock"></div></section>
+
+<section id="done" class="complete"><h2>Assignment complete ✓</h2><p>You practiced the full ECG sequence: <strong>verify → rate → regularity → P/PR → QRS → rhythm → pulse/perfusion → action → reassessment.</strong></p></section>
+</main>
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Respiratory Care · Assignment 3.2</div><div>Answers and progress are saved in this browser.<br>Previously mastered questions restore when you return.</div></footer>
+</div>
+
+<script>
+const STORE='respiratory_care_assignment_3_2_ecg_v1';
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{},"answers":{}}');
+if(!state.required)state.required={};if(!state.final)state.final={};if(!state.answers)state.answers={};
+const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function grid(){
+ let s='<defs><pattern id="sm" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M8 0H0V8" fill="none" stroke="#f3c9d5" stroke-width=".7"/></pattern><pattern id="lg" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="url(#sm)"/><path d="M40 0H0V40" fill="none" stroke="#dc8da4" stroke-width="1.2"/></pattern></defs><rect width="800" height="180" fill="url(#lg)"/>';
+ return s;
+}
+function ecg(type){
+ const c='#0B1F33';
+ const paths={
+ sinus:'M0 100 L30 100 Q40 100 45 88 Q50 74 58 88 Q64 100 75 100 L92 100 L98 106 L104 42 L110 122 L118 100 L150 100 Q165 100 180 75 Q195 100 210 100 L230 100',
+ brady:'M0 100 L40 100 Q50 100 56 88 Q62 76 70 88 Q76 100 90 100 L108 100 L114 106 L120 42 L126 122 L135 100 L170 100 Q186 100 202 75 Q218 100 235 100 L300 100',
+ tachy:'M0 100 L15 100 Q19 100 23 90 Q27 80 31 90 Q35 100 40 100 L48 100 L52 105 L56 45 L60 119 L66 100 L78 100 Q85 100 92 78 Q99 100 106 100 L116 100',
+ flutter:'M0 100 Q12 82 24 100 Q36 118 48 100 Q60 82 72 100 Q84 118 96 100 L108 100 L113 44 L119 122 L126 100 Q138 82 150 100 Q162 118 174 100 Q186 82 198 100 L210 100',
+ svt:'M0 100 L14 100 L18 105 L22 48 L27 119 L34 100 L48 100 Q54 100 60 82 Q66 100 72 100 L84 100',
+ vt:'M0 105 Q10 40 24 118 Q38 35 52 120 Q66 38 80 116 Q94 35 108 121 Q122 40 136 116',
+ vf:'M0 100 Q8 60 16 110 Q25 135 34 68 Q44 45 54 125 Q64 145 75 72 Q85 50 96 118 Q106 142 116 80 Q127 50 138 120 Q149 145 160 70 Q170 48 180 125',
+ asystole:'M0 100 Q80 98 160 101 Q240 99 320 100',
+ afib:'M0 100 Q5 92 10 103 Q15 108 20 97 Q25 91 30 104 Q35 110 40 99 L48 100 L53 105 L58 45 L64 121 L70 100 Q75 92 80 106 Q85 111 90 98 Q95 90 100 105 Q105 108 110 96 L124 100 L130 105 L136 45 L142 121 L148 100',
+ pea:'M0 100 L30 100 Q40 100 45 88 Q50 74 58 88 Q64 100 75 100 L92 100 L98 106 L104 42 L110 122 L118 100 L150 100 Q165 100 180 75 Q195 100 210 100 L230 100'
+ };
+ let d=paths[type]||paths.sinus, repeat=type==='brady'?3:type==='vt'?5:type==='vf'?4:type==='asystole'?1:type==='pea'?3: type==='afib'?5: type==='svt'?7: type==='flutter'?4:type==='tachy'?6:4;
+ let seg= type==='brady'?300:type==='vt'?136:type==='vf'?180:type==='asystole'?800:type==='pea'?230:type==='afib'?148:type==='svt'?84:type==='flutter'?210:type==='tachy'?116:230;
+ let p='';for(let i=0;i<repeat;i++)p+=`<path d="${d}" transform="translate(${i*seg},0)" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+ return `<div class="ecg"><svg viewBox="0 0 800 180" role="img" aria-label="${type} ECG rhythm illustration">${grid()}${p}</svg></div>`;
+}
+const S=[
+{id:'paper',c:'C1',n:1,title:'ECG Paper, Waves & Intervals',sub:'Know what one box means before you calculate anything.',
+teach:`<p>At the standard paper speed of <strong>25 mm/sec</strong>, time is fixed by the grid.</p>
+<div class="key"><div><b>1 small box</b>0.04 sec</div><div><b>1 large box</b>0.20 sec</div><div><b>5 large boxes</b>1 sec</div><div><b>30 large boxes</b>6 sec</div></div>
+${ecg('sinus')}
+<div class="grid3"><div class="mini"><strong>P wave</strong>Atrial depolarization. Ask: present, upright, uniform, one before each QRS?</div><div class="mini"><strong>PR interval</strong>Beginning of P to beginning of QRS. Normal adult ≈ <strong>0.12–0.20 sec</strong>.</div><div class="mini"><strong>QRS complex</strong>Ventricular depolarization. Usually <strong>&lt;0.12 sec</strong>; a wide complex raises concern for ventricular origin or delayed conduction.</div><div class="mini"><strong>ST segment</strong>After QRS and before T wave; part of ventricular repolarization.</div><div class="mini"><strong>T wave</strong>Ventricular repolarization.</div><div class="mini"><strong>QT interval</strong>Ventricular depolarization + repolarization; changes with heart rate.</div></div>
+<div class="clue"><strong>Before interpreting:</strong> verify lead attachment, artifact, paper speed/gain when available, and whether the tracing matches the patient.</div>`,
+q:[
+{q:'At standard ECG paper speed, how much time does one small box represent?',a:'0.04 second',o:['0.04 second','0.20 second','1.0 second','6.0 seconds'],w:'One small box equals 0.04 second at 25 mm/sec.'},
+{q:'How much time does one large box represent at standard speed?',a:'0.20 second',o:['0.20 second','0.04 second','0.50 second','1.00 second'],w:'A large box contains five small boxes: 5 × 0.04 = 0.20 second.'},
+{q:'Which interval is measured from the beginning of the P wave to the beginning of the QRS?',a:'PR interval',o:['PR interval','QT interval','ST segment','R-R interval'],w:'The PR interval represents atrial depolarization and conduction toward the ventricles.'},
+{q:'Which finding describes a generally narrow QRS complex?',a:'Less than 0.12 second',o:['Less than 0.12 second','Greater than 0.20 second','Exactly 0.40 second','More than 6 seconds'],w:'A QRS under about 0.12 second is generally considered narrow.'},
+{q:'The monitor suddenly looks like a flat line, but the patient is awake and talking. What should you do first?',a:'Verify the patient, leads, and signal before accepting the tracing as asystole.',o:['Verify the patient, leads, and signal before accepting the tracing as asystole.','Defibrillate immediately because a flat line is shockable.','Start CPR without checking the patient.','Ignore the patient because the monitor is more reliable.'],w:'Always correlate the monitor with the patient and verify the signal.'}
+]},
+{id:'system',c:'C2',n:2,title:'Use the Same Rhythm Analysis Every Time',sub:'Pattern recognition is helpful; a repeatable sequence is safer.',
+teach:`<div class="grid4"><div class="mini"><strong>Step 1 · Rate</strong>How fast is the ventricular rate? Which method fits the rhythm?</div><div class="mini"><strong>Step 2 · Regularity</strong>Compare R-R intervals. Are they regular, regularly irregular, or irregularly irregular?</div><div class="mini"><strong>Step 3 · P waves / PR</strong>Are P waves present? One before each QRS? Is the PR consistent?</div><div class="mini"><strong>Step 4 · QRS</strong>Narrow or wide? Similar morphology from beat to beat?</div></div>
+<div class="warning"><strong>Then—and only then—name the rhythm.</strong> After that, assess pulse, blood pressure, mental status, chest discomfort, dyspnea, oxygenation, ventilation, skin signs, and overall stability.</div>`,
+q:[
+{q:'What should be assessed before naming the rhythm?',a:'Rate, regularity, P-wave/PR pattern, and QRS width',o:['Rate, regularity, P-wave/PR pattern, and QRS width','Only the heart rate','Only whether QRS complexes are present','Only the patient’s oxygen saturation'],w:'The systematic method prevents rate-only or appearance-only errors.'},
+{q:'Which interval should be compared to assess ventricular regularity?',a:'R-R intervals',o:['R-R intervals','P-wave height only','QT intervals only','ST segments only'],w:'R-R spacing shows whether ventricular depolarizations are occurring regularly.'},
+{q:'Which finding most strongly supports sinus origin?',a:'A uniform P wave precedes each QRS with a consistent PR relationship.',o:['A uniform P wave precedes each QRS with a consistent PR relationship.','The heart rate is above 100.','The QRS is wide and bizarre.','No P waves are visible.'],w:'Sinus rhythms preserve organized atrial depolarization before each QRS.'},
+{q:'Why must a pulse be checked after rhythm interpretation?',a:'Electrical activity may be present without effective mechanical circulation.',o:['Electrical activity may be present without effective mechanical circulation.','The pulse determines ECG paper speed.','A pulse is needed only for sinus rhythms.','A pulse confirms the PR interval is normal.'],w:'PEA is organized electrical activity without a palpable pulse.'},
+{q:'Which statement best reflects safe ECG interpretation?',a:'Treat the patient, not the monitor alone.',o:['Treat the patient, not the monitor alone.','The monitor always proves perfusion.','A rhythm name determines treatment without bedside assessment.','A normal rate rules out instability.'],w:'Patient correlation determines urgency and response.'}
+]},
+{id:'rate',c:'C3',n:3,title:'Heart-Rate Calculation: Choose the Right Tool',sub:'Regular rhythms permit box-based precision; irregular rhythms need an average.',
+teach:`<div class="grid3"><div class="mini"><strong>300 method</strong>Regular rhythm: <strong>300 ÷ large boxes</strong> between R waves. Fast estimate.</div><div class="mini"><strong>1500 method</strong>Regular rhythm: <strong>1500 ÷ small boxes</strong> between R waves. More precise.</div><div class="mini"><strong>6-second method</strong>Especially useful for irregular rhythms: count QRS in 6 sec × <strong>10</strong>.</div></div>
+<div class="clue"><strong>Plausibility check:</strong> 18 small boxes between R waves should not produce a heart rate of 17. Using the correct formula gives 1500 ÷ 18 ≈ 83 beats/min.</div>`,
+q:[
+{q:'A regular rhythm has 4 large boxes between consecutive R waves. What is the approximate rate?',a:'75 beats/min',o:['75 beats/min','50 beats/min','120 beats/min','300 beats/min'],w:'300 ÷ 4 = 75 beats/min.'},
+{q:'A regular rhythm has 18 small boxes between R waves. What is the approximate rate?',a:'83 beats/min',o:['83 beats/min','18 beats/min','54 beats/min','108 beats/min'],w:'1500 ÷ 18 ≈ 83 beats/min.'},
+{q:'An irregular 6-second strip contains 9 QRS complexes. What is the estimated ventricular rate?',a:'90 beats/min',o:['90 beats/min','54 beats/min','150 beats/min','180 beats/min'],w:'9 × 10 = 90 beats/min.'},
+{q:'Which method is generally most appropriate for estimating the average rate of an irregular rhythm?',a:'Count QRS complexes in 6 seconds and multiply by 10.',o:['Count QRS complexes in 6 seconds and multiply by 10.','Use 300 divided by one R-R interval.','Use 1500 divided by one R-R interval only.','Count P waves for exactly 1 second.'],w:'A single R-R interval may not represent an irregular rhythm; the 6-second method samples several beats.'},
+{q:'Six large boxes represent how much time?',a:'1.2 seconds',o:['1.2 seconds','0.24 second','6 seconds','0.20 second'],w:'Each large box is 0.20 sec, so 6 × 0.20 = 1.2 sec.'}
+],
+more:[
+{q:'Seven large boxes represent how much time?',a:'1.4 seconds',o:['1.4 seconds','0.28 second','2.8 seconds','7 seconds'],w:'7 × 0.20 = 1.4 sec.'},
+{q:'Six small boxes represent how much time?',a:'0.24 second',o:['0.24 second','1.2 seconds','2.4 seconds','0.06 second'],w:'6 × 0.04 = 0.24 sec.'},
+{q:'Thirty large boxes represent how much time?',a:'6 seconds',o:['6 seconds','30 seconds','1.5 seconds','0.6 second'],w:'30 × 0.20 = 6 seconds.'},
+{q:'A regular rhythm has 3 large boxes between R waves. Approximate rate?',a:'100 beats/min',o:['100 beats/min','60 beats/min','75 beats/min','150 beats/min'],w:'300 ÷ 3 = 100 beats/min.'},
+{q:'A regular rhythm has 25 small boxes between R waves. Approximate rate?',a:'60 beats/min',o:['60 beats/min','25 beats/min','75 beats/min','100 beats/min'],w:'1500 ÷ 25 = 60 beats/min.'}
+]},
+{id:'sinus',c:'C4',n:4,title:'Sinus Rhythms: Same Origin, Different Rate',sub:'Use the P-wave pattern and the clinical story—not rate alone.',
+teach:`${ecg('sinus')}<div class="grid4"><div class="mini"><strong>Normal sinus rhythm</strong>60–100, regular, one uniform P before each QRS, consistent PR, narrow QRS.</div><div class="mini"><strong>Sinus bradycardia</strong>&lt;60 with sinus P waves. Decide whether the patient is asymptomatic or poorly perfused.</div><div class="mini"><strong>Sinus tachycardia</strong>Usually &gt;100 with sinus P waves and a physiologic driver such as fever, pain, hypoxemia, hypovolemia, anxiety, or work of breathing.</div><div class="mini"><strong>Sinus arrhythmia</strong>Sinus P waves remain present but R-R intervals vary cyclically, often with respiration.</div></div>
+<div class="warning"><strong>Do not treat sinus tachycardia as SVT just because it is fast.</strong> Look for gradual onset, visible sinus P waves, and an underlying cause.</div>`,
+q:[
+{q:'Which findings best define normal sinus rhythm?',a:'Rate 60–100, regular, uniform P before every QRS, consistent PR, narrow QRS',o:['Rate 60–100, regular, uniform P before every QRS, consistent PR, narrow QRS','Any regular rhythm between 40 and 160','Irregular rhythm without P waves','Wide-complex rhythm above 150'],w:'Normal sinus rhythm requires rate, regularity, atrial activity, conduction, and QRS assessment.'},
+{q:'A patient has a sinus pattern at 48 beats/min but is alert, normotensive, and asymptomatic. Best interpretation?',a:'Sinus bradycardia; correlate with the patient rather than treating the number alone.',o:['Sinus bradycardia; correlate with the patient rather than treating the number alone.','Pulseless electrical activity','Ventricular fibrillation','Unstable ventricular tachycardia'],w:'Sinus bradycardia can be physiologic; treatment depends on symptoms and perfusion.'},
+{q:'A patient with pneumonia has a regular narrow rhythm at 128/min, a visible P before each QRS, fever, and hypoxemia. Most likely rhythm?',a:'Sinus tachycardia',o:['Sinus tachycardia','Supraventricular tachycardia','Atrial fibrillation','Ventricular tachycardia'],w:'Visible sinus P waves and a physiologic trigger support sinus tachycardia.'},
+{q:'What is the preferred approach to sinus tachycardia caused by fever and hypoxemia?',a:'Treat the underlying physiologic cause and support oxygenation.',o:['Treat the underlying physiologic cause and support oxygenation.','Defibrillate immediately.','Begin CPR because the rate is above 100.','Ignore the cause and treat only the heart rate.'],w:'Sinus tachycardia is commonly a response to physiologic stress.'},
+{q:'Which finding distinguishes sinus arrhythmia from atrial fibrillation?',a:'Sinus arrhythmia retains identifiable sinus P waves before QRS complexes.',o:['Sinus arrhythmia retains identifiable sinus P waves before QRS complexes.','Sinus arrhythmia has no P waves.','Sinus arrhythmia is always wide-complex.','Sinus arrhythmia is always pulseless.'],w:'The changing R-R intervals do not erase the sinus P-wave pattern.'}
+]},
+{id:'atrial',c:'C5',n:5,title:'Atrial Rhythms: Look at Regularity and Atrial Activity',sub:'AFib, flutter, and SVT can be fast—but they do not look the same.',
+teach:`<div class="grid3"><div>${ecg('afib')}<div class="mini"><strong>Atrial fibrillation</strong>Irregularly irregular ventricular response, no consistent discrete P waves, fibrillatory baseline.</div></div><div>${ecg('flutter')}<div class="mini"><strong>Atrial flutter</strong>Organized repetitive “sawtooth” atrial activity. Ventricular response may be fixed or variable.</div></div><div>${ecg('svt')}<div class="mini"><strong>SVT</strong>Usually sudden, very rapid, regular, narrow-complex; P waves may be hidden. Commonly 150–250/min.</div></div></div>
+<div class="clue"><strong>Stable narrow-complex SVT:</strong> assess stability, attempt vagal maneuvers, and prepare adenosine per protocol if needed. <strong>Unstable tachycardia with a pulse:</strong> synchronized cardioversion may be required.</div>`,
+q:[
+{q:'Which rhythm is classically irregularly irregular with no consistent discrete P waves?',a:'Atrial fibrillation',o:['Atrial fibrillation','Atrial flutter with fixed conduction','Sinus arrhythmia','Regular SVT'],w:'Irregularly irregular R-R intervals and absent discrete P waves are hallmark AFib findings.'},
+{q:'Which atrial rhythm is associated with repetitive sawtooth flutter waves?',a:'Atrial flutter',o:['Atrial flutter','Atrial fibrillation','Sinus bradycardia','Ventricular fibrillation'],w:'Flutter produces organized rapid atrial activity, often seen as sawtooth waves.'},
+{q:'A stable patient has sudden-onset regular narrow-complex tachycardia at 190/min. Best next approach?',a:'Assess stability, attempt a vagal maneuver, and prepare adenosine per protocol if needed.',o:['Assess stability, attempt a vagal maneuver, and prepare adenosine per protocol if needed.','Defibrillate immediately because the rate is above 180.','Begin CPR because all rapid rhythms are pulseless.','Assume sinus tachycardia without further assessment.'],w:'The pattern fits stable SVT, for which vagal maneuvers and adenosine may be appropriate by protocol.'},
+{q:'Which feature most strongly favors SVT over sinus tachycardia?',a:'Sudden onset of a very rapid regular narrow-complex rhythm with P waves difficult to identify',o:['Sudden onset of a very rapid regular narrow-complex rhythm with P waves difficult to identify','Gradual rate increase with fever and visible sinus P waves','Irregularly irregular rhythm with no P waves','Wide bizarre QRS complexes'],w:'SVT typically begins abruptly and is very regular; sinus tachycardia commonly has a physiologic driver and visible sinus P waves.'},
+{q:'Why can atrial fibrillation increase thromboembolic risk?',a:'Ineffective atrial contraction can allow blood to pool and form thrombi.',o:['Ineffective atrial contraction can allow blood to pool and form thrombi.','The ventricles stop depolarizing completely.','Every episode immediately causes cardiac arrest.','The QRS becomes absent and blood cannot enter the ventricles.'],w:'Loss of effective atrial contraction promotes blood stasis and clot formation.'}
+]},
+{id:'vt',c:'C6',n:6,title:'Wide-Complex Tachycardia: Assume VT Until Proven Otherwise',sub:'The same rhythm can require very different treatment depending on pulse and stability.',
+teach:`${ecg('vt')}<div class="grid3"><div class="mini"><strong>Stable VT with a pulse</strong>Wide regular tachycardia, but perfusion is adequate. Antiarrhythmic therapy may be used per protocol.</div><div class="mini"><strong>Unstable VT with a pulse</strong>Hypotension, altered mental status, shock, ischemic discomfort, or acute heart failure → synchronized cardioversion.</div><div class="mini"><strong>Pulseless VT</strong>Cardiac arrest → high-quality CPR + unsynchronized defibrillation as soon as possible.</div></div>
+<div class="danger"><strong>Pulse changes the pathway.</strong> Do not select synchronized cardioversion or defibrillation from the tracing alone.</div>`,
+q:[
+{q:'A regular wide-complex tachycardia at 180/min should be treated as what in an emergency until proven otherwise?',a:'Ventricular tachycardia',o:['Ventricular tachycardia','Normal sinus rhythm','Atrial fibrillation','Asystole'],w:'A regular wide-complex tachycardia is presumed VT in the emergency setting until proven otherwise.'},
+{q:'A patient with VT has BP 74/42, confusion, and a pulse. Priority rhythm treatment?',a:'Synchronized cardioversion',o:['Synchronized cardioversion','Unsynchronized defibrillation because any wide rhythm is shockable','CPR despite a palpable pulse','Observation because a pulse guarantees stability'],w:'The patient has a pulse but clear hemodynamic instability, supporting synchronized cardioversion.'},
+{q:'A patient is pulseless with a regular wide-complex rhythm at 190/min. First response?',a:'Begin high-quality CPR and defibrillate as soon as the defibrillator is ready.',o:['Begin high-quality CPR and defibrillate as soon as the defibrillator is ready.','Perform synchronized cardioversion.','Give adenosine before checking the pulse.','Obtain a 12-lead ECG before treatment.'],w:'Pulseless VT is a shockable cardiac-arrest rhythm.'},
+{q:'What finding most strongly separates VT from typical SVT?',a:'A wide bizarre QRS complex suggesting ventricular origin',o:['A wide bizarre QRS complex suggesting ventricular origin','A heart rate above 100','Presence of chest discomfort','A regular rhythm'],w:'SVT is usually narrow-complex; VT is usually wide and ventricular in appearance.'},
+{q:'Which patient with VT is unstable?',a:'The patient with hypotension and altered mental status',o:['The patient with hypotension and altered mental status','The alert patient with normal blood pressure and no symptoms','The patient whose SpO₂ is 98% and perfusion is normal','The patient whose heart rate is 150 but has no symptoms'],w:'Instability is defined by poor perfusion or serious symptoms, not rate alone.'}
+]},
+{id:'arrest',c:'C7',n:7,title:'Cardiac Arrest Rhythms: Shockable or Non-Shockable?',sub:'Identify the rhythm—but always pair it with a pulse assessment.',
+teach:`<div class="grid3"><div>${ecg('vf')}<div class="mini shock"><strong>VFib · SHOCKABLE</strong>Chaotic disorganized activity, no organized QRS, no effective circulation → CPR + defibrillation.</div></div><div>${ecg('asystole')}<div class="mini nonshock"><strong>Asystole · NON-SHOCKABLE</strong>No discernible ventricular electrical activity → CPR, verify leads/rhythm, epinephrine per protocol, reversible causes.</div></div><div>${ecg('pea')}<div class="mini nonshock"><strong>PEA · NON-SHOCKABLE</strong>Organized electrical activity but no pulse → CPR + reversible causes. Do not defibrillate PEA.</div></div></div>
+<div class="normal"><strong>Shockable:</strong> VFib and pulseless VT. <strong>Non-shockable:</strong> asystole and PEA.</div>`,
+q:[
+{q:'Chaotic disorganized waveforms without organized QRS complexes during cardiac arrest most strongly indicate what?',a:'Ventricular fibrillation',o:['Ventricular fibrillation','Asystole','Pulseless electrical activity','Atrial fibrillation'],w:'VFib is chaotic ventricular electrical activity and is shockable.'},
+{q:'What is the correct response to ventricular fibrillation?',a:'High-quality CPR and unsynchronized defibrillation, then immediately resume CPR.',o:['High-quality CPR and unsynchronized defibrillation, then immediately resume CPR.','Synchronized cardioversion only','Adenosine first','Observe until a pulse appears'],w:'VFib is a shockable cardiac-arrest rhythm.'},
+{q:'The monitor shows asystole during CPR. What should occur while compressions continue?',a:'Verify lead attachment and confirm the rhythm in another lead when possible.',o:['Verify lead attachment and confirm the rhythm in another lead when possible.','Defibrillate because all flat lines are shockable.','Stop CPR until a 12-lead ECG is complete.','Ignore lead disconnection because the first lead is always correct.'],w:'Asystole should be verified, but CPR should not be unnecessarily interrupted.'},
+{q:'An unresponsive patient has organized electrical complexes at 70/min but no palpable pulse. What is this?',a:'Pulseless electrical activity',o:['Pulseless electrical activity','Normal sinus rhythm','Ventricular fibrillation','Sinus bradycardia'],w:'PEA means organized electrical activity exists without effective mechanical circulation.'},
+{q:'Which rhythms are shockable cardiac-arrest rhythms?',a:'Ventricular fibrillation and pulseless ventricular tachycardia',o:['Ventricular fibrillation and pulseless ventricular tachycardia','Asystole and PEA','Atrial fibrillation and atrial flutter','Sinus bradycardia and sinus tachycardia'],w:'VFib and pulseless VT receive defibrillation; asystole and PEA do not.'}
+]},
+{id:'patient',c:'C8',n:8,title:'The ECG Is Only One Piece of the Patient',sub:'Pulse, perfusion, oxygenation, ventilation, and reversible causes decide urgency.',
+teach:`<div class="grid3"><div class="mini"><strong>Check perfusion</strong>Pulse, blood pressure, skin, mental status, chest discomfort, shock, heart failure.</div><div class="mini"><strong>Support respiratory status</strong>Airway, oxygenation, ventilation, respiratory effort, SpO₂/ETCO₂, assisted ventilation when needed.</div><div class="mini"><strong>Reassess after intervention</strong>Rhythm conversion alone does not prove recovery. Confirm pulse, blood pressure, perfusion, breathing, and neurologic status.</div></div>
+<div class="normal"><strong>Hs:</strong> hypovolemia, hypoxia, hydrogen ion excess/acidosis, hypo-/hyperkalemia, hypothermia.</div>
+<div class="normal"><strong>Ts:</strong> tension pneumothorax, cardiac tamponade, toxins, pulmonary thrombosis, coronary thrombosis.</div>
+<div class="danger"><strong>ROSC is a clinical finding, not just a prettier rhythm.</strong> An organized rhythm after defibrillation must be accompanied by a palpable pulse and improving perfusion.</div>`,
+q:[
+{q:'A ventilated patient suddenly develops PEA, severe hypotension, unilateral absent breath sounds, and rising airway pressure. Most likely reversible cause?',a:'Tension pneumothorax',o:['Tension pneumothorax','Hypothermia','Coronary thrombosis','Sinus tachycardia'],w:'The abrupt unilateral breath-sound loss, hypotension, and rising airway pressure strongly support tension pneumothorax.'},
+{q:'Which is one of the Hs of reversible cardiac-arrest causes?',a:'Hypoxia',o:['Hypoxia','Hypertension','Hyperventilation','Hyperthermia'],w:'Hypoxia is a major reversible cause of cardiac arrest and is especially relevant to respiratory therapists.'},
+{q:'Which is one of the Ts of reversible cardiac-arrest causes?',a:'Pulmonary thrombosis',o:['Pulmonary thrombosis','Tachycardia','Tachypnea','Thrombocytopenia'],w:'Pulmonary thrombosis/embolism is one of the Ts.'},
+{q:'After defibrillation the monitor shows sinus rhythm at 84/min. What confirms ROSC?',a:'A palpable pulse with improving blood pressure and perfusion',o:['A palpable pulse with improving blood pressure and perfusion','The organized ECG rhythm alone','A normal P wave before each QRS','Heart rate between 60 and 100 regardless of pulse'],w:'Electrical organization does not prove circulation; ROSC requires evidence of mechanical perfusion.'},
+{q:'A patient converts from SVT to sinus rhythm but remains hypotensive and confused. What does the conversion fail to prove?',a:'That adequate perfusion and clinical stability have been restored',o:['That adequate perfusion and clinical stability have been restored','That the ECG leads are attached','That P waves exist','That the QRS is narrow'],w:'Reassessment must continue after rhythm conversion because the patient may remain unstable.'}
+]}
+];
+
+const F=[
+{q:'Case 1: A regular rhythm has 20 small boxes between R waves. What is the approximate rate?',a:'75 beats/min',o:['75 beats/min','20 beats/min','100 beats/min','150 beats/min'],w:'1500 ÷ 20 = 75 beats/min.'},
+{q:'Case 2: An irregular 6-second strip contains 11 QRS complexes. Approximate ventricular rate?',a:'110 beats/min',o:['110 beats/min','66 beats/min','150 beats/min','220 beats/min'],w:'11 × 10 = 110 beats/min.'},
+{q:'Case 3: The rhythm is irregularly irregular, narrow-complex, and has no consistent P waves. Interpretation?',a:'Atrial fibrillation',o:['Atrial fibrillation','Atrial flutter with fixed conduction','Sinus arrhythmia','SVT'],w:'The combination of irregularly irregular ventricular response and absent discrete P waves supports AFib.'},
+{q:'Case 4: Sudden regular narrow-complex tachycardia at 185/min; patient alert with stable blood pressure. Best next approach?',a:'Assess stability, attempt vagal maneuvers, and prepare adenosine per protocol if needed.',o:['Assess stability, attempt vagal maneuvers, and prepare adenosine per protocol if needed.','Defibrillate immediately.','Begin CPR.','Assume ventricular fibrillation.'],w:'Stable SVT is commonly approached with vagal maneuvers and adenosine by protocol.'},
+{q:'Case 5: Regular wide-complex tachycardia at 175/min; BP 78/44; patient confused; pulse present. Priority?',a:'Prepare synchronized cardioversion for unstable VT with a pulse.',o:['Prepare synchronized cardioversion for unstable VT with a pulse.','Defibrillate because all VT is pulseless.','Use vagal maneuvers only.','Observe because a pulse is present.'],w:'A pulse is present, but hypotension and altered mental status make the VT unstable.'},
+{q:'Case 6: Wide-complex tachycardia at 190/min with no pulse. Priority?',a:'High-quality CPR and defibrillation as soon as possible',o:['High-quality CPR and defibrillation as soon as possible','Synchronized cardioversion','Adenosine first','12-lead ECG before treatment'],w:'Pulseless VT is shockable cardiac arrest.'},
+{q:'Case 7: During CPR, the rhythm becomes chaotic with no organized QRS. What should happen?',a:'Recognize VFib, defibrillate, and resume CPR immediately after the shock.',o:['Recognize VFib, defibrillate, and resume CPR immediately after the shock.','Treat as asystole and never shock.','Treat as PEA and avoid defibrillation.','Treat as AFib and use rate control.'],w:'VFib is a shockable arrest rhythm.'},
+{q:'Case 8: The monitor appears flat during CPR. What is the safest concurrent action?',a:'Continue CPR while verifying leads and confirming the rhythm in another lead when possible.',o:['Continue CPR while verifying leads and confirming the rhythm in another lead when possible.','Stop CPR to inspect the cable carefully.','Defibrillate the flat line.','Assume asystole without checking the signal.'],w:'Signal verification matters, but compressions should not be unnecessarily interrupted.'},
+{q:'Case 9: Organized complexes at 64/min are present, but the patient is pulseless. Rhythm category?',a:'Pulseless electrical activity',o:['Pulseless electrical activity','Normal sinus rhythm','Atrial fibrillation','Ventricular fibrillation'],w:'An organized electrical rhythm without a pulse is PEA.'},
+{q:'Case 10: PEA appears in a ventilated patient with sudden hypotension, rising airway pressure, and absent breath sounds on one side. Most likely cause?',a:'Tension pneumothorax',o:['Tension pneumothorax','Hypothermia','Medication-induced sinus tachycardia','Stable atrial flutter'],w:'This cluster strongly supports obstructive shock from tension pneumothorax.'},
+{q:'Case 11: Pneumonia patient has fever, hypoxemia, rate 126, narrow QRS, and a P wave before every QRS. Interpretation?',a:'Sinus tachycardia caused by physiologic stress',o:['Sinus tachycardia caused by physiologic stress','SVT requiring immediate adenosine','Atrial fibrillation','Ventricular tachycardia'],w:'The visible sinus P waves and illness-related trigger support sinus tachycardia.'},
+{q:'Case 12: After defibrillation, an organized rhythm appears at 82/min. What finding is most important before declaring ROSC?',a:'A palpable pulse with improving perfusion',o:['A palpable pulse with improving perfusion','A normal-looking ECG strip','A narrow QRS alone','A rate above 60'],w:'ROSC is confirmed by mechanical circulation and perfusion, not the rhythm strip alone.'}
+];
+
+function addQ(q,host,key,required=false,final=false){
+ const w=document.createElement('div');w.className='q';
+ const title=document.createElement('div');title.className='q-title';title.textContent=q.q;w.appendChild(title);
+ const box=document.createElement('div');box.className='options';
+ shuffle(q.o).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;if(state.answers[key]===o)r.checked=true;r.addEventListener('change',()=>{state.answers[key]=o;save()});l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box);
+ const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
+ const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
+ if((required&&state.required[key])||(final&&state.final[key])){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.w}
+ b.onclick=()=>{const c=w.querySelector('input:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}
+   state.answers[key]=c.value;const ok=c.value===q.a;
+   if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.w;if(required)state.required[key]=true;if(final)state.final[key]=true}
+   else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.w+' Return to the interpretation routine and identify the first step that changes your decision.';if(required)delete state.required[key];if(final)delete state.final[key]}
+   save();update()
+ };
+ w.appendChild(b);w.appendChild(f);host.appendChild(w)
+}
+function render(){
+ const host=document.getElementById('stations');
+ S.forEach(s=>{
+   const sec=document.createElement('section');sec.className='card';
+   sec.innerHTML=`<div class="station-head"><div class="num">${s.n}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.sub}</div><div class="competency-tags">${s.c ? s.c.split(" ").map(x=>`<span class="competency-tag">${x}</span>`).join("") : ""}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Mastery practice</h3><p class="small">Correct all 5 questions. You may retry immediately.</p><div class="qs"></div>`;
+   host.appendChild(sec);s.q.forEach((q,i)=>addQ(q,sec.querySelector('.qs'),`${s.id}-${i}`,true,false));
+   if(s.more){
+     const btn=document.createElement('button');btn.className='btn secondary';btn.textContent='More Practice +5';btn.style.marginTop='14px';
+     const more=document.createElement('div');more.className='more';
+     btn.onclick=()=>{more.classList.toggle('open');btn.textContent=more.classList.contains('open')?'Hide More Practice':'More Practice +5'};
+     sec.appendChild(btn);sec.appendChild(more);s.more.forEach((q,i)=>addQ(q,more,`${s.id}-more-${i}`,false,false));
+   }
+ });
+ F.forEach((q,i)=>addQ(q,document.getElementById('final'),`final-${i}`,false,true));
+}
+function totalReq(){return S.reduce((n,s)=>n+s.q.length,0)}
+function update(){
+ const rt=totalReq(),rd=Object.keys(state.required).filter(k=>state.required[k]).length,fd=Object.keys(state.final).filter(k=>state.final[k]).length,total=rt+F.length,done=Math.min(rd,rt)+Math.min(fd,F.length),p=Math.round(done/total*100);
+ document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';
+ if(rd>=rt){document.getElementById('final').classList.remove('lock');document.getElementById('finalLock').style.display='none'}else{document.getElementById('final').classList.add('lock');document.getElementById('finalLock').style.display='block'}
+ if(done>=total)document.getElementById('done').classList.add('show')
+}
+render();update();
+</script>
+</body></html>

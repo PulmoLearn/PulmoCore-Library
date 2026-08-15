@@ -43,27 +43,9 @@ details.reference summary{list-style:none;cursor:pointer;font-weight:800}details
 footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
 @media(max-width:1100px){.sequence{grid-template-columns:repeat(4,1fr)}.card-grid{grid-template-columns:1fr 1fr}}@media(max-width:760px){.compare,.sequence,.legend,.card-grid{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
 
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+.competency-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.competency-tag{display:inline-block;background:#EDF6FA;border:1px solid var(--soft-border,var(--border,#D7E6EF));border-radius:999px;padding:4px 9px;font-size:.76rem;font-weight:800;color:var(--slate,#415A77)}
+</style>
 </head>
 <body>
 <div class="page">
@@ -133,10 +115,7 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 
 <script>
 const STORE='ahrc152_assignment_2_1_monitor_detective_v1';
-const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{},"answers":{}}');
-if(!state.required)state.required={};
-if(!state.final)state.final={};
-if(!state.answers)state.answers={};
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{}}');
 const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function W(type){
@@ -156,7 +135,7 @@ function W(type){
  return base+grid+`</g><path d="${p}" fill="none" stroke="#63E5D5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
 }
 const S=[
-{id:'oxvvent',num:1,title:'Oxygenation or Ventilation?',subtitle:'Name the physiologic question before you interpret the value.',
+{id:'oxvvent',c:'C1 C4',num:1,title:'Oxygenation or Ventilation?',subtitle:'Name the physiologic question before you interpret the value.',
 teach:`<p>SpO₂ and ETCO₂ are complementary—not interchangeable.</p><div class="compare"><div class="panel"><div class="big">SpO₂ answers an oxygenation question.</div><p>It estimates peripheral oxygen saturation.</p></div><div class="panel"><div class="big">ETCO₂ answers a ventilation/perfusion question.</div><p>It reports exhaled CO₂ at end expiration and adds waveform information.</p></div></div><div class="warning"><strong>Scenario:</strong> A sedated patient on oxygen can have SpO₂ 97% and still be dangerously hypoventilating. If RR is 7 and ETCO₂ is 59, the ventilatory problem outranks the reassuring saturation.</div>`,
 req:[
 {q:'Which physiologic variable does a pulse oximeter estimate?',a:'Peripheral oxygen saturation (SpO₂)',opts:['Peripheral oxygen saturation (SpO₂)','Arterial oxygen tension (PaO₂)','Arterial carbon dioxide tension (PaCO₂)','Hemoglobin concentration'],why:'Pulse oximetry estimates the percentage of functional hemoglobin carrying oxygen.'},
@@ -172,7 +151,7 @@ more:[
 {q:'Which value best tells you exhaled CO₂ at end expiration?',a:'ETCO₂',opts:['ETCO₂','SpO₂','PaO₂','SaO₂ only'],why:'That is the definition of ETCO₂.'},
 {q:'A patient on oxygen has SpO₂ 100% and ETCO₂ 60. What must you avoid?',a:'Assuming ventilation is normal because saturation is high',opts:['Assuming ventilation is normal because saturation is high','Checking respiratory rate','Assessing mental status','Looking at the waveform'],why:'High SpO₂ can coexist with dangerous CO₂ retention.'}
 ]},
-{id:'trustspo2',num:2,title:'Can You Trust the SpO₂?',subtitle:'An unexpected number is a prompt to assess—not a reason to automatically believe or dismiss it.',
+{id:'trustspo2',c:'C2 C6',num:2,title:'Can You Trust the SpO₂?',subtitle:'An unexpected number is a prompt to assess—not a reason to automatically believe or dismiss it.',
 teach:`<p>Pulse oximetry depends on a reliable pulsatile signal and adequate light transmission. Accuracy can be reduced by <strong>motion, poor perfusion, probe problems, ambient light, nail coverings, dyshemoglobinemias, venous pulsation, and other patient/device factors.</strong></p>
 <div class="clue"><strong>Two-track response:</strong> assess the patient <em>and</em> verify the equipment at the same time.</div>
 <div class="card-grid"><div class="mini"><strong>1 · Patient first</strong>Distress? Color? Work of breathing? Mental status?</div><div class="mini"><strong>2 · Pulse agreement</strong>Does monitor pulse match the palpated pulse?</div><div class="mini"><strong>3 · Perfusion</strong>Warm site? Capillary refill? Shock/hypotension?</div><div class="mini"><strong>4 · Probe</strong>Correct size, alignment, site, contact?</div><div class="mini"><strong>5 · Interference</strong>Motion, nail coverings, bright light, dyshemoglobin?</div><div class="mini"><strong>6 · Confirm</strong>Try another site/device or obtain blood-gas/hemoximetry data when needed.</div></div>`,
@@ -190,7 +169,7 @@ more:[
 {q:'Which action should NOT be your only response to an unexpected pulse-ox value?',a:'Changing the probe without assessing the patient',opts:['Changing the probe without assessing the patient','Checking pulse agreement','Assessing work of breathing','Evaluating perfusion'],why:'Troubleshooting should never replace patient assessment.'},
 {q:'If uncertainty remains after troubleshooting a concerning SpO₂ value, an appropriate escalation may include:',a:'Confirmatory blood-gas or hemoximetry testing',opts:['Confirmatory blood-gas or hemoximetry testing','Averaging several random monitor values','Ignoring the result','Only changing rooms'],why:'Confirmatory testing may be needed when noninvasive data remain unreliable or clinically discordant.'}
 ]},
-{id:'coox',num:3,title:'Co-oximetry: When “98%” Can Be Misleading',subtitle:'Understand measured hemoglobin species when dyshemoglobinemia is suspected.',
+{id:'coox',c:'C1 C2 C6',num:3,title:'Co-oximetry: When “98%” Can Be Misleading',subtitle:'Understand measured hemoglobin species when dyshemoglobinemia is suspected.',
 teach:`<p>Co-oximetry uses multiple wavelengths of light on a blood sample to directly measure hemoglobin species such as <strong>O₂Hb, COHb, and MetHb.</strong> That makes it important when carbon monoxide poisoning or another dyshemoglobinemia is suspected.</p>
 <div class="normal"><strong>Legacy course example:</strong> a patient may show a reassuring pulse-ox reading while COHb is markedly elevated and true oxyhemoglobin is reduced. In that situation, co-oximetry provides the more useful hemoglobin-species information.</div>
 <div class="warning"><strong>Clinical response in the supplied course material:</strong> suspected significant CO poisoning is treated with high-concentration oxygen while the patient is further evaluated.</div>`,
@@ -208,7 +187,7 @@ more:[
 {q:'A normal pulse-ox value should rule out carbon monoxide poisoning.',a:'False',opts:['True','False'],why:'Standard SpO₂ may be falsely reassuring in dyshemoglobinemia.'},
 {q:'If CO poisoning is suspected despite normal SpO₂, the next monitoring question is:',a:'What do the co-oximetry hemoglobin species show?',opts:['What do the co-oximetry hemoglobin species show?','Is the pulse-ox battery full?','Is the patient tall?','What is the respiratory rate only?'],why:'The clinical uncertainty centers on dyshemoglobin species.'}
 ]},
-{id:'capbasics',num:4,title:'Read the Capnogram Before You Name the Problem',subtitle:'Number + waveform + respiratory rate + patient context.',
+{id:'capbasics',c:'C3 C4',num:4,title:'Read the Capnogram Before You Name the Problem',subtitle:'Number + waveform + respiratory rate + patient context.',
 teach:`<p>A normal capnogram returns near zero during inspiration, rises during exhalation, forms an alveolar plateau, and reports ETCO₂ at the end of expiration.</p>${W('normal')}
 <div class="legend"><div><strong>Baseline</strong>Inspiratory CO₂ should return near zero.</div><div><strong>Expiratory upstroke + plateau</strong>Shape reflects CO₂ emptying from the lungs.</div><div><strong>ETCO₂</strong>Measured at the end of the expiratory plateau.</div></div>
 <div class="clue"><strong>Never interpret ETCO₂ by number alone.</strong> The same low value can result from hyperventilation, reduced perfusion, increased dead space, leak, disconnection, or poor sampling.</div>`,
@@ -226,7 +205,7 @@ more:[
 {q:'An increasing ETCO₂ could reflect:',a:'Hypoventilation',opts:['Hypoventilation','Hyperventilation only','Pulmonary embolism only','Complete disconnection'],why:'Reduced ventilation commonly raises exhaled CO₂.'},
 {q:'Why is waveform shape important?',a:'It can reveal airway obstruction, rebreathing, leak, patient effort, or loss of ventilation/perfusion.',opts:['It can reveal airway obstruction, rebreathing, leak, patient effort, or loss of ventilation/perfusion.','It only decorates the numerical value.','It measures hemoglobin concentration.','It replaces patient assessment.'],why:'The waveform contains physiologic and equipment clues beyond the number.'}
 ]},
-{id:'waveforms',num:5,title:'Waveform Lab: Match Shape to Cause',subtitle:'Recognize the patterns that should trigger immediate bedside thinking.',
+{id:'waveforms',c:'C3 C6',num:5,title:'Waveform Lab: Match Shape to Cause',subtitle:'Recognize the patterns that should trigger immediate bedside thinking.',
 teach:`<p>Use the shape before memorizing a label. Ask: <strong>Does inspiration return to zero? Is the expiratory plateau flat? Is the height changing? Did the waveform suddenly disappear?</strong></p>
 <div class="card-grid">
 <div class="mini">${W('shark')}<strong>Shark fin</strong>Delayed exhalation → airflow obstruction such as asthma/COPD/mucus.</div>
@@ -250,7 +229,7 @@ more:[
 {q:'A shark-fin waveform should make you assess for:',a:'Airway obstruction and expiratory flow limitation',opts:['Airway obstruction and expiratory flow limitation','CO poisoning','Nail polish','A normal pulse-ox probe'],why:'The waveform reflects delayed exhalation.'},
 {q:'An inspiratory baseline that does not return to zero should make you inspect:',a:'Circuit/exhalation system for rebreathing',opts:['Circuit/exhalation system for rebreathing','Only the pulse-ox probe','Only hemoglobin level','Only respiratory rate'],why:'Inspired gas should not normally contain measurable exhaled CO₂.'}
 ]},
-{id:'airway',num:6,title:'Artificial Airway: Confirm It, Then Keep Watching It',subtitle:'Waveform capnography is not only a one-time placement check.',
+{id:'airway',c:'C5 C6',num:6,title:'Artificial Airway: Confirm It, Then Keep Watching It',subtitle:'Waveform capnography is not only a one-time placement check.',
 teach:`<p>After intubation, <strong>persistent exhaled CO₂ with an appropriate waveform</strong> strongly supports tracheal placement. A colorimetric detector can provide rapid initial evidence of exhaled CO₂, but waveform capnography is preferred when available and provides ongoing monitoring.</p>
 <div class="warning"><strong>Important:</strong> Absence of exhaled CO₂ after intubation can mean esophageal placement—but also consider disconnection, apnea, obstruction, or extremely poor perfusion/cardiac arrest. Assess the patient and airway immediately.</div>
 <div class="normal"><strong>Colorimetric detector in the supplied course:</strong> purple → yellow indicates detected exhaled CO₂. Persistent purple after several breaths is concerning for absent exhaled CO₂.</div>`,
@@ -268,7 +247,7 @@ more:[
 {q:'If waveform disappears but the patient still has a pulse, one possibility is:',a:'Ventilator/circuit disconnection',opts:['Ventilator/circuit disconnection','Normal ventilation','CO poisoning','Polysomnography'],why:'Loss of gas flow to the detector can flatten the waveform.'},
 {q:'If waveform disappears during cardiac arrest, one possible cause is:',a:'Very low or absent pulmonary perfusion',opts:['Very low or absent pulmonary perfusion','Normal perfusion','Pulse-ox motion only','Nail polish'],why:'CO₂ must be delivered by circulation to the lungs before it can be exhaled.'}
 ]},
-{id:'code',num:7,title:'Capnography in CPR: Follow Perfusion in Real Time',subtitle:'During arrest, ETCO₂ becomes a clue to blood flow generated by compressions.',
+{id:'code',c:'C3 C6',num:7,title:'Capnography in CPR: Follow Perfusion in Real Time',subtitle:'During arrest, ETCO₂ becomes a clue to blood flow generated by compressions.',
 teach:`<p>During CPR, pulmonary blood flow carries CO₂ to the lungs. That means ETCO₂ can help trend the effectiveness of chest compressions and may rise abruptly when spontaneous circulation returns.</p>${W('rosc')}
 <div class="clue"><strong>Legacy course teaching:</strong> very low ETCO₂ during CPR should prompt attention to compression quality and fatigue. A sudden substantial rise can suggest return of spontaneous circulation (ROSC).</div>
 <div class="warning"><strong>Do not use ETCO₂ in isolation.</strong> Continue the resuscitation algorithm and assess the whole clinical situation.</div>`,
@@ -305,23 +284,19 @@ function addQ(q,host,key,required=false,final=false){
  const w=document.createElement('div');w.className='q';
  const title=document.createElement('div');title.className='q-title';title.innerHTML=q.q;w.appendChild(title);
  const box=document.createElement('div');box.className='options';
- shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;if(state.answers[key]===o)r.checked=true;r.addEventListener('change',()=>{state.answers[key]=o;save()});l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box);
+ shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box);
  const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
  const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
- if((required&&state.required[key])||(final&&state.final[key])){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why}
  b.onclick=()=>{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}
-   state.answers[key]=c.value;const ok=c.value===q.a;
-   if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true}
-   else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Go back to the monitor-response routine and identify which step you skipped.';if(required)delete state.required[key];if(final)delete state.final[key]}
-   save();update()
- };
+ const ok=c.value===q.a;if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true;save();update()}
+ else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Go back to the monitor-response routine and identify which step you skipped.'}};
  w.appendChild(b);w.appendChild(f);host.appendChild(w)
 }
 function renderStations(){
  const host=document.getElementById('stations');
  S.forEach(s=>{
    const sec=document.createElement('section');sec.className='card';
-   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
+   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div><div class="competency-tags">${s.c ? s.c.split(" ").map(x=>`<span class="competency-tag">${x}</span>`).join("") : ""}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
    host.appendChild(sec);s.req.forEach((q,i)=>addQ(q,sec.querySelector('.req'),`${s.id}-r${i}`,true,false));
    const redraw=()=>{const m=sec.querySelector('.moreQs');m.innerHTML='';shuffle(s.more).forEach((q,i)=>addQ(q,m,`${s.id}-m${Date.now()}-${i}`))};redraw();
    sec.querySelector('.moreBtn').onclick=()=>{const m=sec.querySelector('.more');m.classList.toggle('open');sec.querySelector('.moreBtn').textContent=m.classList.contains('open')?'Hide More Practice':'More Practice +5'};
@@ -341,75 +316,5 @@ function update(){
 }
 renderStations();renderFinal();update();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>

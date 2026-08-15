@@ -48,27 +48,9 @@ details.reference summary{list-style:none;cursor:pointer;font-family:var(--headi
 footer{background:var(--navy);color:#fff;padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
 @media(max-width:1100px){.sequence{grid-template-columns:repeat(4,1fr)}.arrows{grid-template-columns:repeat(2,1fr)}}@media(max-width:800px){.values{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.top{padding:14px 16px}.mark{width:48px;height:48px}.tag,.course{display:none}main{padding:20px 14px 56px}.hero,.card{padding:20px}.progress-wrap{top:76px}.sequence,.values,.arrows{grid-template-columns:1fr}.station-head{align-items:flex-start}}
 
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+.competency-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.competency-tag{display:inline-block;background:#EDF6FA;border:1px solid var(--soft-border,var(--border,#D7E6EF));border-radius:999px;padding:4px 9px;font-size:.76rem;font-weight:800;color:var(--slate,#415A77)}
+</style>
 </head>
 <body>
 <div class="page">
@@ -142,16 +124,13 @@ footer{background:var(--navy);color:#fff;padding:34px clamp(20px,4vw,56px);displ
 
 <script>
 const STORE='ahrc152_assignment_2_3_abg_v1';
-const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{},"answers":{}}');
-if(!state.required)state.required={};
-if(!state.final)state.final={};
-if(!state.answers)state.answers={};
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{}}');
 const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function close(a,b,t=.02){return Math.abs(Number(a)-Number(b))<=t}
 
 const S=[
-{id:'basics',num:1,title:'Start With the pH',subtitle:'Normal values first; then decide which direction the blood is moving.',
+{id:'basics',c:'C1 C2',num:1,title:'Start With the pH',subtitle:'Normal values first; then decide which direction the blood is moving.',
 teach:`<p><strong>Do not begin with PaCO₂.</strong> Begin with pH. It tells you the direction of the acid-base disturbance.</p>
 <div class="normal"><strong>Reference ranges:</strong> pH 7.35–7.45 · PaCO₂ 35–45 mmHg · HCO₃⁻ 22–26 mEq/L. Use PaO₂ only after the acid-base sequence, and interpret oxygenation in relation to FiO₂, age, and clinical condition.</div>
 <p>Then ask: <strong>Which component explains the pH?</strong> PaCO₂ acts as the respiratory acid. HCO₃⁻ acts as the metabolic base.</p>
@@ -171,7 +150,7 @@ more:[
 {q:'HCO₃⁻ 18 mEq/L tends to push pH in which direction?',a:'Down toward acidosis',opts:['Down toward acidosis','Up toward alkalosis','It has no effect on pH','It only changes oxygenation'],why:'Bicarbonate acts as the metabolic base; less base favors acidemia.'},
 {q:'PaCO₂ behaves most like which component in acid-base interpretation?',a:'An acid',opts:['An acid','A base','An oxygen carrier','A buffer with no pH effect'],why:'CO₂ retention increases acidity and lowers pH.'}
 ]},
-{id:'comp',num:2,title:'Compensation: Is the Other System Helping?',subtitle:'Compensation moves pH toward normal. It does not erase the primary disorder.',
+{id:'comp',c:'C3 C4',num:2,title:'Compensation: Is the Other System Helping?',subtitle:'Compensation moves pH toward normal. It does not erase the primary disorder.',
 teach:`<p>After identifying the primary process, look at the other component. If it moves in the direction that <strong>opposes the pH disturbance</strong>, compensation may be occurring.</p>
 <div class="normal"><strong>Respiratory primary problem:</strong> the kidneys change HCO₃⁻ over time.<br><strong>Metabolic primary problem:</strong> the lungs change ventilation and therefore PaCO₂.</div>
 <div class="warning"><strong>Compensation never overshoots and becomes a new primary disorder.</strong> If the “compensating” value is too high, too low, or moves the wrong direction, suspect a mixed disorder.</div>
@@ -190,7 +169,7 @@ more:[
 {q:'In metabolic alkalosis, respiratory compensation tends to move PaCO₂:',a:'Up',opts:['Up','Down','To zero','It must remain normal'],why:'Reduced ventilation retains CO₂, adding respiratory acid.'},
 {q:'Which statement is correct?',a:'Compensation limits the pH change but does not remove the primary disorder.',opts:['Compensation limits the pH change but does not remove the primary disorder.','Compensation means the original disease is cured.','A normal pH always means no acid-base disorder exists.','Compensation always creates a second primary disorder.'],why:'The underlying disturbance remains even when pH moves toward normal.'}
 ]},
-{id:'chronic',num:3,title:'Acute vs Chronic Respiratory Disorders',subtitle:'Use expected pH and bicarbonate changes plus the patient’s history—not PaCO₂ alone.',
+{id:'chronic',c:'C3 C4',num:3,title:'Acute vs Chronic Respiratory Disorders',subtitle:'Use expected pH and bicarbonate changes plus the patient’s history—not PaCO₂ alone.',
 teach:`<p>Respiratory disturbances change immediately when ventilation changes, but renal bicarbonate compensation takes time. That is why the <strong>same PaCO₂ can produce different pH/HCO₃⁻ patterns depending on chronicity.</strong></p>
 <div class="table-wrap"><table class="ref"><tr><th>Primary respiratory disorder</th><th>Acute expected change per 10 mmHg PaCO₂</th><th>Chronic expected change per 10 mmHg PaCO₂</th></tr>
 <tr><td>Respiratory acidosis</td><td>pH ↓ 0.08; HCO₃⁻ ↑ 1</td><td>pH ↓ 0.03; HCO₃⁻ ↑ 4</td></tr>
@@ -211,7 +190,7 @@ more:[
 {q:'PaCO₂ falls from 40 to 30 in chronic respiratory alkalosis. Expected pH is about:',a:'7.43',opts:['7.43','7.48','7.32','7.37'],why:'One chronic 10-mmHg fall raises pH about 0.03.'},
 {q:'What information is most helpful when deciding whether a high PaCO₂ is chronic?',a:'pH, HCO₃⁻, prior ABGs, history, mental status, and respiratory effort',opts:['pH, HCO₃⁻, prior ABGs, history, mental status, and respiratory effort','PaCO₂ alone','Age alone','FiO₂ alone'],why:'Chronicity is an integrated interpretation, not a single-number decision.'}
 ]},
-{id:'mixed',num:4,title:'Mixed Disorders: When Compensation Does Not Fit',subtitle:'Two primary disorders may push pH in the same direction—or oppose each other and hide severity.',
+{id:'mixed',c:'C4 C7',num:4,title:'Mixed Disorders: When Compensation Does Not Fit',subtitle:'Two primary disorders may push pH in the same direction—or oppose each other and hide severity.',
 teach:`<p>Do not call every second abnormal value “compensation.” Ask whether it is <strong>appropriate for the primary problem.</strong></p>
 <div class="arrows"><div class="arrow-card"><b>Both acidifying</b>PaCO₂ ↑ + HCO₃⁻ ↓ → mixed respiratory + metabolic acidosis.</div><div class="arrow-card"><b>Both alkalinizing</b>PaCO₂ ↓ + HCO₃⁻ ↑ → mixed respiratory + metabolic alkalosis.</div><div class="arrow-card"><b>Opposing</b>PaCO₂ ↑ + HCO₃⁻ ↑ may be chronic compensation—or respiratory acidosis + metabolic alkalosis if HCO₃⁻ is higher than expected.</div><div class="arrow-card"><b>Opposing</b>PaCO₂ ↓ + HCO₃⁻ ↓ may be compensation—or respiratory alkalosis + metabolic acidosis if the change is excessive.</div></div>
 <div class="danger"><strong>Near-normal pH can be dangerous.</strong> Two serious processes may oppose one another and pull the pH toward 7.40.</div>`,
@@ -229,7 +208,7 @@ more:[
 {q:'When should you calculate or compare expected compensation?',a:'Whenever the other acid-base component is abnormal and you need to decide compensation versus a second process.',opts:['Whenever the other acid-base component is abnormal and you need to decide compensation versus a second process.','Only when PaO₂ is low','Only when pH is exactly 7.40','Never in respiratory disorders'],why:'Expected compensation helps distinguish physiologic response from mixed disease.'},
 {q:'The safest interpretation of markedly abnormal PaCO₂ and HCO₃⁻ with pH 7.40 is:',a:'Possible compensation or opposing mixed disorders; evaluate expected changes and the patient.',opts:['Possible compensation or opposing mixed disorders; evaluate expected changes and the patient.','Normal ABG','No need for further assessment','Oxygenation failure only'],why:'Normal pH does not exclude major acid-base abnormalities.'}
 ]},
-{id:'vent',num:5,title:'Ventilation: What Does PaCO₂ Tell You?',subtitle:'PaCO₂ is inversely related to effective alveolar ventilation.',
+{id:'vent',c:'C2 C6 C7',num:5,title:'Ventilation: What Does PaCO₂ Tell You?',subtitle:'PaCO₂ is inversely related to effective alveolar ventilation.',
 teach:`<p>Once you identify a respiratory acid-base disturbance, translate it into physiology.</p>
 <div class="arrows"><div class="arrow-card"><b>PaCO₂ ↑</b>Effective alveolar ventilation is inadequate relative to CO₂ production.</div><div class="arrow-card"><b>PaCO₂ ↓</b>Effective alveolar ventilation is increased relative to CO₂ production.</div><div class="arrow-card"><b>High respiratory rate ≠ guaranteed hyperventilation</b>A patient can breathe fast but move tiny ineffective tidal volumes and retain CO₂.</div><div class="arrow-card"><b>Treat the mechanism</b>Assess airway, rate, depth, tidal volume, fatigue, sedation, neuromuscular strength, circuit, settings, and synchrony.</div></div>
 <div class="danger"><strong>Clinical red flag:</strong> A distressed patient whose respiratory rate falls while PaCO₂ rises and mental status worsens may be tiring—not improving.</div>`,
@@ -247,7 +226,7 @@ more:[
 {q:'PaCO₂ 28 mmHg most directly suggests:',a:'Increased effective alveolar ventilation',opts:['Increased effective alveolar ventilation','Inadequate alveolar ventilation','Anemia','A low FiO₂'],why:'Hypocapnia generally reflects increased effective ventilation relative to CO₂ production.'},
 {q:'Which bedside variable helps you connect PaCO₂ to actual respiratory performance?',a:'Respiratory depth and effective tidal volume',opts:['Respiratory depth and effective tidal volume','Serum sodium alone','Hemoglobin alone','Temperature alone'],why:'Rate without depth does not tell you how much alveolar ventilation is occurring.'}
 ]},
-{id:'oxygen',num:6,title:'Oxygenation: A Separate Question',subtitle:'Do not let a normal acid-base pattern distract you from hypoxemia.',
+{id:'oxygen',c:'C5 C7',num:6,title:'Oxygenation: A Separate Question',subtitle:'Do not let a normal acid-base pattern distract you from hypoxemia.',
 teach:`<p>After acid-base and ventilation, assess oxygenation separately. The legacy course materials use these teaching categories for PaO₂ on an adult ABG:</p>
 <div class="table-wrap"><table class="ref"><tr><th>PaO₂</th><th>Teaching category</th></tr><tr><td>80–100 mmHg</td><td>Normal oxygenation</td></tr><tr><td>60–79 mmHg</td><td>Mild hypoxemia</td></tr><tr><td>40–59 mmHg</td><td>Moderate hypoxemia</td></tr><tr><td>&lt;40 mmHg</td><td>Severe hypoxemia</td></tr></table></div>
 <div class="warning"><strong>Context matters:</strong> PaO₂ must be interpreted with FiO₂, altitude, age, SpO₂/co-oximetry, and the patient. These teaching ranges are not stand-alone treatment thresholds.</div>
@@ -268,7 +247,7 @@ more:[
 {q:'Which FiO₂ form belongs in the P/F calculation for 40% oxygen?',a:'0.40',opts:['0.40','40','4.0','400'],why:'Use FiO₂ as a decimal fraction.'},
 {q:'Why can oxygenation improve while the patient still worsens?',a:'Ventilation, work of breathing, perfusion, or mental status may be deteriorating independently.',opts:['Ventilation, work of breathing, perfusion, or mental status may be deteriorating independently.','Improved oxygenation guarantees overall improvement.','PaCO₂ cannot worsen after SpO₂ improves.','Oxygenation and ventilation are the same physiologic process.'],why:'Respiratory status requires separate assessment of oxygenation and ventilation plus the patient.'}
 ]},
-{id:'verify',num:7,title:'Verify the Result & Finish With the Patient',subtitle:'An ABG is only useful if the sample is valid and the interpretation changes patient care.',
+{id:'verify',c:'C1 C7',num:7,title:'Verify the Result & Finish With the Patient',subtitle:'An ABG is only useful if the sample is valid and the interpretation changes patient care.',
 teach:`<p>Before and after the math, ask whether the result makes sense. The older ABG review emphasized checking the <strong>patient, laboratory relationships, sampling technique, oxygen device/FiO₂, and timing.</strong></p>
 <div class="arrows"><div class="arrow-card"><b>Patient mismatch</b>“Good gases” in a severely distressed patient—or very poor gases in a comfortable patient—deserve verification.</div><div class="arrow-card"><b>Venous contamination</b>Can produce a lower PaO₂ and higher PaCO₂ than expected for arterial blood.</div><div class="arrow-card"><b>Air in sample</b>Can pull gases toward room-air values and distort PaO₂/PaCO₂.</div><div class="arrow-card"><b>Wrong context</b>Verify the patient’s actual FiO₂/device and allow a reasonable steady state after therapy changes.</div></div>
 <div class="danger"><strong>Patient first:</strong> If the patient is unstable, do not delay stabilization just to obtain or finish interpreting an ABG. Treat immediate airway, breathing, oxygenation, ventilation, perfusion, and neurologic threats while obtaining needed data.</div>
@@ -308,23 +287,19 @@ function addQ(q,host,key,required=false,final=false){
  const title=document.createElement('div');title.className='q-title';title.textContent=q.q;w.appendChild(title);
  let inp=null;
  if(q.type==='num'){
-   const row=document.createElement('div');inp=document.createElement('input');inp.type='number';inp.step='any';inp.setAttribute('aria-label',q.q);
-   if(state.answers[key]!==undefined)inp.value=state.answers[key];
-   inp.addEventListener('input',()=>{state.answers[key]=inp.value;save()});
-   row.appendChild(inp);if(q.unit){const u=document.createElement('span');u.textContent=' '+q.unit;u.style.marginLeft='8px';row.appendChild(u)}w.appendChild(row);
+   const row=document.createElement('div');inp=document.createElement('input');inp.type='number';inp.step='any';inp.setAttribute('aria-label',q.q);row.appendChild(inp);
+   if(q.unit){const u=document.createElement('span');u.textContent=' '+q.unit;u.style.marginLeft='8px';row.appendChild(u)}w.appendChild(row);
  }else{
    const box=document.createElement('div');box.className='options';
-   shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;if(state.answers[key]===o)r.checked=true;r.addEventListener('change',()=>{state.answers[key]=o;save()});l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box)
+   shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box)
  }
  const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
  const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
- if((required&&state.required[key])||(final&&state.final[key])){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why}
  b.onclick=()=>{let ok=false;
-   if(q.type==='num'){if(inp.value===''){f.className='feedback bad';f.textContent='Enter an answer first.';return}state.answers[key]=inp.value;ok=close(inp.value,q.a,q.tol??.02)}
-   else{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}state.answers[key]=c.value;ok=c.value===q.a}
-   if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true}
-   else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Go back to the roadmap and identify the first step where your reasoning changed.';if(required)delete state.required[key];if(final)delete state.final[key]}
-   save();update()
+   if(q.type==='num'){if(inp.value===''){f.className='feedback bad';f.textContent='Enter an answer first.';return}ok=close(inp.value,q.a,q.tol??.02)}
+   else{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}ok=c.value===q.a}
+   if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true;save();update()}
+   else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Go back to the roadmap and identify the first step where your reasoning changed.'}
  };
  w.appendChild(b);w.appendChild(f);host.appendChild(w)
 }
@@ -332,7 +307,7 @@ function renderStations(){
  const host=document.getElementById('stations');
  S.forEach(s=>{
    const sec=document.createElement('section');sec.className='card';
-   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
+   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div><div class="competency-tags">${s.c ? s.c.split(" ").map(x=>`<span class="competency-tag">${x}</span>`).join("") : ""}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
    host.appendChild(sec);s.req.forEach((q,i)=>addQ(q,sec.querySelector('.req'),`${s.id}-r${i}`,true,false));
    const redraw=()=>{const m=sec.querySelector('.moreQs');m.innerHTML='';shuffle(s.more).forEach((q,i)=>addQ(q,m,`${s.id}-m${Date.now()}-${i}`))};redraw();
    sec.querySelector('.moreBtn').onclick=()=>{const m=sec.querySelector('.more');m.classList.toggle('open');sec.querySelector('.moreBtn').textContent=m.classList.contains('open')?'Hide More Practice':'More Practice +5'};
@@ -352,75 +327,5 @@ function update(){
 }
 renderStations();renderFinal();update();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
