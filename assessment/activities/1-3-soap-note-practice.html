@@ -18,27 +18,17 @@
 .chip:disabled{opacity:.42;cursor:default;text-decoration:line-through}
 
 
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+.soap-card .soap-prompt{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.soap-card .soap-prompt .soap-letter{flex:0 0 44px;width:44px;height:44px;margin:0;font-size:1.05rem}
+.soap-card .soap-prompt strong{display:block;line-height:1.25}
+.choice{min-height:74px;display:flex;align-items:center;line-height:1.35}
+@media(max-width:560px){
+  .soap-card .soap-prompt{align-items:flex-start;gap:10px}
+  .soap-card .soap-prompt .soap-letter{flex-basis:40px;width:40px;height:40px}
+  .choice{min-height:auto}
+}
+
+</style>
 </head>
 <body>
 <main class="wrap" id="activity">
@@ -199,11 +189,35 @@ function reviewPlaced(items,map,bank,dropSelector){
 document.getElementById('guidedCheck').addEventListener('click',()=>{const result=reviewPlaced(guided,gp,document.getElementById('guidedBank'),'.drop[data-bucket]');const f=document.getElementById('guidedFeedback');if(result.right===guided.length){f.innerHTML='<strong>Complete.</strong> You separated patient-reported information, measured findings, interpretation, and next actions correctly.';done.add('guided');setTimeout(()=>show('conversation'),650)}else{f.innerHTML=`<strong>${result.right} of ${guided.length} are correct and will stay in place.</strong> ${result.returned?`${result.returned} incorrect item${result.returned===1?' was':'s were'} returned to the question bank for another attempt. `:''}Recheck the source of each remaining statement. Remember: a patient-reported medication or symptom belongs in Subjective until independently verified.`;}});
 
 const sections={
-S:{q:'Which is the strongest Subjective entry?',opts:[['Patient reports chest tightness, dyspnea with walking, and increased rescue-inhaler use from baseline.',1],['Patient has asthma and therefore has an acute asthma exacerbation.',0],['RR 26/min with bilateral expiratory wheezes.',0]]},
-O:{q:'Which is the strongest Objective entry?',opts:[['RR 26/min, HR 104/min, SpO₂ 91% on room air; mild accessory-muscle use and bilateral expiratory wheezes.',1],['Patient says the inhaler is albuterol and uses it as needed.',0],['Breathing is bad and patient appears uncomfortable.',0]]},
-A:{q:'Which is the strongest Assessment statement?',opts:[['Findings support increased work of breathing with airflow-obstruction findings and low oxygen saturation.',1],['Acute severe asthma caused by dust exposure.',0],['Albuterol MDI ordered now.',0]]},
-P:{q:'Which is the strongest Plan?',opts:[['Administer ordered albuterol; reassess symptoms, HR, RR, SpO₂, work of breathing, and breath sounds; communicate/escalate if worsening or inadequate response.',1],['Continue to monitor.',0],['Patient should feel better after the inhaler.',0]]}}
-const secBox=document.getElementById('sectionChoices');let secCorrect=new Set();Object.entries(sections).forEach(([k,v])=>{const block=document.createElement('div');block.className='soap-card';block.innerHTML=`<div class="soap-letter">${k}</div><strong>${v.q}</strong>`;v.opts.forEach(([t,ok])=>{const b=document.createElement('button');b.className='choice';b.type='button';b.textContent=t;b.addEventListener('click',()=>{block.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','incorrect'));b.classList.add(ok?'correct':'incorrect');if(ok)secCorrect.add(k);else secCorrect.delete(k);if(secCorrect.size===4){document.getElementById('conversationFeedback').innerHTML='<strong>Complete.</strong> Your four sections connect logically: evidence → interpretation → action and reassessment.';done.add('conversation');setTimeout(()=>show('challenge'),700)}else document.getElementById('conversationFeedback').textContent=ok?'Good choice. Complete the remaining SOAP sections.':'Not quite. Check whether the statement belongs in this section and whether it is specific enough to guide care.'});block.appendChild(b)});secBox.appendChild(block)});
+S:{q:'Which is the strongest Subjective entry?',opts:[
+['Patient reports chest tightness, dyspnea with walking, and rescue-inhaler use increased from usual baseline.',1],
+['Patient reports chest tightness; RR is 26/min with bilateral expiratory wheezes and mild accessory-muscle use.',0],
+['Patient has worsening asthma after dust exposure, with chest tightness and increased rescue-inhaler use today.',0]
+]},
+O:{q:'Which is the strongest Objective entry?',opts:[
+['RR 26/min, HR 104/min, SpO₂ 91% on room air; mild accessory-muscle use and bilateral expiratory wheezes.',1],
+['RR 26/min with bilateral wheezes; patient reports chest tightness and says the rescue inhaler is needed more often.',0],
+['Patient appears uncomfortable and says breathing is worse; SpO₂ is 91% on room air after cleaning a dusty garage.',0]
+]},
+A:{q:'Which is the strongest Assessment statement?',opts:[
+['Findings support increased work of breathing with airflow-obstruction findings and low oxygen saturation.',1],
+['Patient reports chest tightness with RR 26/min and wheezing, indicating an acute asthma attack caused by dust.',0],
+['Low SpO₂ and wheezing are present; administer the ordered bronchodilator and reassess respiratory status afterward.',0]
+]},
+P:{q:'Which is the strongest Plan?',opts:[
+['Administer ordered albuterol; reassess symptoms, HR, RR, SpO₂, work of breathing, and breath sounds; escalate if needed.',1],
+['Continue respiratory monitoring because the patient reports chest tightness, with RR 26/min and bilateral wheezing.',0],
+['Findings suggest airflow obstruction with low oxygen saturation; expect improvement after the prescribed inhaler.',0]
+]}}
+function shuffled(arr){
+  const copy=[...arr];
+  for(let i=copy.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]]=[copy[j],copy[i]];
+  }
+  return copy;
+}
+const secBox=document.getElementById('sectionChoices');let secCorrect=new Set();Object.entries(sections).forEach(([k,v])=>{const block=document.createElement('div');block.className='soap-card';block.innerHTML=`<div class="soap-prompt"><div class="soap-letter">${k}</div><strong>${v.q}</strong></div>`;shuffled(v.opts).forEach(([t,ok])=>{const b=document.createElement('button');b.className='choice';b.type='button';b.textContent=t;b.addEventListener('click',()=>{block.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','incorrect'));b.classList.add(ok?'correct':'incorrect');if(ok)secCorrect.add(k);else secCorrect.delete(k);if(secCorrect.size===4){document.getElementById('conversationFeedback').innerHTML='<strong>Complete.</strong> Your four sections connect logically: evidence → interpretation → action and reassessment.';done.add('conversation');setTimeout(()=>show('challenge'),700)}else document.getElementById('conversationFeedback').textContent=ok?'Good choice. Complete the remaining SOAP sections.':'Not quite. Check whether the statement belongs in this section and whether it is specific enough to guide care.'});block.appendChild(b)});secBox.appendChild(block)});
 
 const challenge=[
 {id:'c1',t:'Reports breathing worse since last night and chest tightness.',a:'S'},
@@ -216,75 +230,5 @@ const cp={};makeChips(challenge,document.getElementById('challengeBank'),'.drop[
 document.getElementById('challengeCheck').addEventListener('click',()=>{const result=reviewPlaced(challenge,cp,document.getElementById('challengeBank'),'.drop[data-cbucket]');const f=document.getElementById('challengeFeedback');if(result.right===challenge.length){f.innerHTML='<strong>Competency complete.</strong> You built the SOAP note from a narrative without relying on section labels.';done.add('challenge');setTimeout(()=>show('review'),650)}else{f.innerHTML=`<strong>${result.right} of ${challenge.length} are correct and will stay in place.</strong> ${result.returned?`${result.returned} incorrect item${result.returned===1?' was':'s were'} returned to the question bank for another attempt. `:''}Check Subjective versus Objective by source, then make sure Assessment interprets the evidence and Plan contains a specific action plus reassessment.`;}});
 document.getElementById('printBtn').addEventListener('click',()=>window.print());
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
