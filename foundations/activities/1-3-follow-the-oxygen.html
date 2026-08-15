@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Respiratory Care | Assignment 1.3 Follow the Oxygen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Montserrat:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --core-navy:#0B1F33;--core-navy-2:#102A43;--pulmo-teal:#1CA7A8;--pulmo-teal-dark:#128486;
+  --oxygen-blue:#4BA3F2;--mist-blue:#F4FAFC;--airway-mint:#DDF7F2;--clinical-amber:#F4B860;
+  --alert-coral:#E85D5D;--white:#FFFFFF;--slate:#415A77;--soft-border:#D7E6EF;
+  --shadow:0 14px 35px rgba(11,31,51,.10);--shadow-soft:0 8px 20px rgba(11,31,51,.08);
+  --radius-lg:22px;--radius-md:16px;--font-heading:"Montserrat","Inter",Arial,sans-serif;
+  --font-body:"Atkinson Hyperlegible","Inter",Arial,sans-serif;--font-data:"IBM Plex Mono","Roboto Mono",monospace
+}
+*{box-sizing:border-box} html,body{width:100%;max-width:100%;overflow-x:hidden} html{scroll-behavior:smooth}
+body{margin:0;background:var(--mist-blue);color:var(--core-navy);font-family:var(--font-body);line-height:1.55}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--clinical-amber);outline-offset:3px}
+.page-shell{max-width:1440px;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f7fbfd 100%);min-height:100vh}
+.top-nav{position:sticky;top:0;z-index:30;background:var(--core-navy);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(18px,4vw,52px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.brand-mark{width:58px;height:58px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.brand-mark svg{width:42px;height:42px}
+.brand-name{font-family:var(--font-heading);font-size:clamp(1.45rem,2vw,2.1rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--pulmo-teal)}.brand-tagline{font-size:.8rem;opacity:.9;margin-top:4px}
+.nav-course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);min-height:46px;padding:10px 16px;display:flex;align-items:center;font-family:var(--font-heading);font-weight:700}
+.main-content{padding:32px clamp(20px,4vw,56px) 76px}.shell{max-width:none;margin:0}
+.hero{padding:32px;background:var(--white);border:1px solid var(--soft-border);border-top:10px solid var(--pulmo-teal);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft)}
+.hero h1{font-family:var(--font-heading);font-size:clamp(2.35rem,5vw,4.2rem);line-height:1.05;letter-spacing:-.055em;margin:8px 0 14px}
+.hero p{font-size:1.14rem;max-width:1000px;color:#243b55}.eyebrow{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem;margin-bottom:4px}
+.meta-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0 0}.meta-grid div{background:#F7FBFD;border:1px solid var(--soft-border);border-radius:12px;padding:12px}
+.progress-wrap{position:sticky;top:94px;z-index:20;background:rgba(255,255,255,.97);border:1px solid var(--soft-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft);padding:12px 16px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--pulmo-teal),var(--oxygen-blue));transition:width .2s ease}
+.card{background:var(--white);border:1px solid var(--soft-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);padding:24px;margin:0 0 18px}
+.teach{background:var(--white);border-left:8px solid var(--pulmo-teal);padding:4px 0 4px 18px}
+.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--oxygen-blue);border-radius:14px;padding:14px 16px;margin:14px 0}
+.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--clinical-amber);border-radius:14px;padding:14px 16px;margin:14px 0}.normal-box{background:#F4FAFC;border:1px solid var(--soft-border);border-left:6px solid var(--pulmo-teal);border-radius:14px;padding:14px 16px;margin:14px 0}.normal-box h4{margin:0 0 8px;color:var(--core-navy)}.normal-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin:0;padding-left:20px}.normal-list li{padding:2px 0}
+h2,h3,h4{font-family:var(--font-heading);letter-spacing:-.035em;line-height:1.15}h2{font-size:clamp(1.8rem,3vw,2.7rem);margin:0 0 12px}h3{font-size:1.35rem}
+.kicker{display:inline-block;color:var(--pulmo-teal);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;margin-bottom:8px}
+.journey{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));gap:8px;align-items:stretch;margin:18px 0}
+.step{border:1px solid var(--soft-border);border-radius:14px;padding:12px;background:#FAFDFF;text-align:center;position:relative}
+.step:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);font-size:1.35rem;font-weight:800;color:var(--pulmo-teal);z-index:2}
+.step strong{display:block;font-family:var(--font-heading);color:var(--core-navy);margin-bottom:4px}.step small{color:var(--slate)}
+.formula{font-family:var(--font-data);background:#F8FBFD;border:1px solid var(--soft-border);padding:8px 10px;border-radius:10px;display:inline-block;color:#18344E;margin:4px 4px 4px 0}
+.q{border-top:1px solid var(--soft-border);padding:18px 0 6px}.q:first-of-type{border-top:0}.q-title{font-weight:800;margin-bottom:8px;color:var(--core-navy)}
+.options{display:grid;gap:10px;margin:12px 0}.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--soft-border);padding:12px 14px;border-radius:12px;cursor:pointer;background:#fff}.option:hover{border-color:var(--oxygen-blue);background:#F2F8FE}
+input[type=number]{font:inherit;padding:11px 12px;border:1px solid var(--soft-border);border-radius:12px;width:min(100%,320px);color:var(--core-navy);background:#fff}
+button{font-weight:800;border:0;border-radius:12px;padding:10px 14px}.btn{background:var(--pulmo-teal);color:#fff;box-shadow:0 8px 16px rgba(28,167,168,.22)}.btn:hover{background:var(--pulmo-teal-dark)}
+.btn2{background:#fff;color:var(--core-navy);border:1px solid var(--soft-border)}.btn2:hover{background:var(--airway-mint)}
+.btn3{background:#FFF4DF;color:#7A4B00;border:1px solid #F8D9A5}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--airway-mint);color:var(--core-navy);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.station-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.station-number{width:42px;height:42px;border-radius:14px;background:var(--core-navy);color:#fff;display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;flex:none}.station-title{display:flex;gap:12px;align-items:center}
+.more{display:none;border-top:2px dashed var(--soft-border);margin-top:18px;padding-top:18px}.more.open{display:block}.small{font-size:.92rem;color:var(--slate)}
+.reference summary{list-style:none;cursor:pointer;font-family:var(--font-heading);font-weight:800}.reference summary::-webkit-details-marker{display:none}.reference summary::after{content:"+";float:right;color:var(--pulmo-teal);font-size:1.4rem}.reference[open] summary::after{content:"–"}
+.reference table{width:100%;border-collapse:collapse;margin-top:14px}.reference th,.reference td{padding:9px 10px;border:1px solid var(--soft-border);text-align:left;vertical-align:top}.reference th{background:#EDF6FA;font-family:var(--font-heading)}
+.interpret-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}.interpret{border-radius:14px;padding:14px;border:1px solid var(--soft-border);background:#FAFDFF}.interpret strong{font-family:var(--font-heading)}
+.lock{opacity:.55}.complete-box{display:none;background:var(--airway-mint);border:1px solid #86D9C8;border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);padding:24px}.complete-box.show{display:block}
+.footer{background:var(--core-navy);color:#fff;padding:34px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;font-size:.92rem}.footer strong span{color:var(--pulmo-teal)}
+@media(max-width:1050px){.journey{grid-template-columns:repeat(4,1fr)}.step::after{display:none}}
+@media(max-width:800px){.interpret-grid{grid-template-columns:1fr}.normal-list{grid-template-columns:1fr}.meta-grid{grid-template-columns:1fr}.progress-wrap{top:82px}}
+@media(max-width:700px){.top-nav{padding:14px 16px}.brand-mark{width:48px;height:48px}.brand-tagline,.nav-course{display:none}.main-content{padding:20px 14px 56px}.hero,.card{padding:20px}.journey{grid-template-columns:1fr 1fr}.station-head{display:block}.station-title{margin-bottom:12px}.progress-wrap{top:76px}}
+</style>
+</head>
+<body>
+<div class="page-shell">
+<header class="top-nav">
+  <div class="brand"><div class="brand-mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-linecap="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="brand-tagline">Respiratory care learning for future RTs.</div></div></div>
+  <div class="nav-course">Respiratory Care</div>
+</header>
+
+<div class="main-content"><div class="shell">
+<header class="hero">
+  <span class="eyebrow">Respiratory Care · Assignment 1.3</span>
+  <h1>Follow the Oxygen: Gas Exchange &amp; Delivery Practice</h1>
+  <p>Follow oxygen from the atmosphere to the alveoli, across the alveolar-capillary membrane, onto hemoglobin, through the circulation, and finally into the tissues. At every stop, calculate what you can measure—and decide what an abnormal result tells you about <strong>where the oxygen pathway may be failing.</strong></p>
+  <div class="meta-grid"><div><strong>Course</strong><br>Respiratory Care</div><div><strong>Assignment</strong><br>1.3 Follow the Oxygen</div><div><strong>Points</strong><br>20 points</div></div>
+</header>
+
+<div class="progress-wrap"><div class="progress-row"><strong id="progressText">0% complete</strong><div class="progress"><div id="progressBar"></div></div></div></div>
+
+<section class="card">
+  <span class="kicker">The oxygen journey</span><h2>Do not memorize these as isolated formulas.</h2>
+  <p>Each value answers a different question. The clinical skill is knowing <strong>where you are in the oxygen pathway</strong> and what a normal or abnormal result means.</p>
+  <div class="journey">
+    <div class="step"><strong>FiO₂ / PiO₂</strong><small>Did enough oxygen enter?</small></div>
+    <div class="step"><strong>PAO₂</strong><small>Is enough O₂ available in the alveoli?</small></div>
+    <div class="step"><strong>A–a / P:F</strong><small>Did oxygen cross into blood?</small></div>
+    <div class="step"><strong>CaO₂</strong><small>How much O₂ is carried?</small></div>
+    <div class="step"><strong>DO₂</strong><small>How much reaches tissues?</small></div>
+    <div class="step"><strong>CvO₂ / SvO₂</strong><small>How much came back?</small></div>
+    <div class="step"><strong>VO₂ / O₂ER</strong><small>How much did tissues use?</small></div>
+  </div>
+  <div class="warning"><strong>Your recurring question:</strong> “If this value is abnormal, is the problem with inspired oxygen, alveolar ventilation, gas transfer, hemoglobin, circulation, or tissue extraction?”</div>
+<div class="clue"><strong>About “normal” values:</strong> The ranges shown in this assignment are approximate resting-adult teaching references, not stand-alone treatment thresholds. Age, FiO₂, altitude/barometric pressure, hemoglobin, cardiac output, metabolic demand, disease state, and institutional reference ranges can change what is expected.</div>
+</section>
+
+<details class="card reference">
+<summary>Formula &amp; Interpretation Reference Drawer</summary>
+<table>
+<tr><th>Value</th><th>Formula</th><th>What it tells you</th></tr>
+<tr><td>PiO₂</td><td>FiO₂ × (PB − PH₂O)</td><td>Inspired oxygen pressure after accounting for barometric pressure and humidification.</td></tr>
+<tr><td>PAO₂</td><td>PiO₂ − (PaCO₂ / RQ)</td><td>Estimated oxygen pressure available in the alveoli.</td></tr>
+<tr><td>A–a gradient</td><td>PAO₂ − PaO₂</td><td>How much oxygen pressure is lost between alveolus and arterial blood.</td></tr>
+<tr><td>P/F ratio</td><td>PaO₂ / FiO₂</td><td>How effectively the lungs oxygenate relative to supplied oxygen. This assignment uses &gt;380 as normal.</td></tr>
+<tr><td>CaO₂</td><td>(1.34 × Hb × SaO₂) + (0.003 × PaO₂)</td><td>Total arterial oxygen content; most is carried on hemoglobin.</td></tr>
+<tr><td>CO</td><td>HR × SV ÷ 1000</td><td>Liters of blood pumped each minute.</td></tr>
+<tr><td>DO₂</td><td>CO × (CaO₂ × 10)</td><td>Oxygen delivered to tissues each minute.</td></tr>
+<tr><td>CvO₂</td><td>(1.34 × Hb × SvO₂) + (0.003 × PvO₂)</td><td>Oxygen content returning after tissue extraction.</td></tr>
+<tr><td>C(a-v)O₂</td><td>CaO₂ − CvO₂</td><td>Arterial-to-venous oxygen content difference.</td></tr>
+<tr><td>VO₂</td><td>CO × [C(a-v)O₂ × 10]</td><td>Oxygen consumed by tissues each minute.</td></tr>
+<tr><td>O₂ER</td><td>(VO₂ / DO₂) × 100</td><td>Fraction of delivered oxygen extracted by tissues.</td></tr>
+</table>
+<p class="small"><strong>Standard values used in practice:</strong> sea-level PB = 760 mmHg, PH₂O = 47 mmHg at normal body temperature, and RQ = 0.8 unless otherwise stated.</p>
+</details>
+
+<div id="stations"></div>
+
+<section class="card">
+  <span class="kicker">Integrated patient challenge</span>
+  <h2>Follow one patient from atmosphere → tissues.</h2>
+  <p>Complete all five required stations to unlock the final case. In this case, round each calculated result to the nearest whole number <strong>before using it in the next calculation</strong>.</p>
+  <div class="clue"><strong>Mrs. Jones:</strong> FiO₂ 0.24 at sea level, PaO₂ 68 mmHg, PaCO₂ 40 mmHg, Hb 14 g/dL, SaO₂ 87%, cardiac output 4.5 L/min, PvO₂ 40 mmHg, SvO₂ 65%. Use PH₂O 47 mmHg and RQ 0.8.</div>
+  <div id="finalLock" class="warning">Complete all required station questions to unlock this case.</div>
+  <div id="finalQuestions" class="lock" aria-disabled="true"></div>
+</section>
+
+<section id="completeBox" class="complete-box"><h2>Assignment complete ✓</h2><p>You followed oxygen from inspired gas to tissue extraction and used each measurement to localize possible problems along the pathway.</p><p><strong>Clinical habit:</strong> Do not stop at “abnormal.” Ask <em>where in the oxygen pathway did the abnormality first appear, and what physiologic problem could create it?</em></p></section>
+</div></div>
+
+<footer class="footer"><div><strong>Pulmo<span>Learn</span></strong><br>Respiratory Care · Assignment 1.3</div><div>Optional “More Practice” questions do not affect completion or points.<br>Progress is saved on this device/browser.</div></footer>
+</div>
+
+<script>
+const STORE='ahrc152_assignment_1_3_oxygen_v1';
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{}}');
+const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
+const close=(x,y,t=.02)=>Math.abs(Number(x)-Number(y))<=t;
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const S=[
+{
+id:'inspired',num:1,title:'Atmosphere → Inspired Gas → Alveoli',
+subtitle:'PiO₂ and PAO₂ tell you whether oxygen is available before it ever reaches arterial blood.',
+teach:`<p><strong>First stop: inspired oxygen.</strong> FiO₂ is only one part of inspired oxygen pressure. Barometric pressure and water vapor also matter.</p>
+<div><span class="formula">PiO₂ = FiO₂ × (PB − PH₂O)</span><span class="formula">PAO₂ = PiO₂ − (PaCO₂ / RQ)</span></div>
+<div class="interpret-grid"><div class="interpret"><strong>If PiO₂ is unexpectedly low...</strong><br>Think about low FiO₂, lower barometric pressure/elevation, or an incorrect input—not an alveolar-capillary diffusion problem yet.</div><div class="interpret"><strong>If PAO₂ is low compared with PiO₂...</strong><br>PaCO₂ and alveolar ventilation matter. Rising PaCO₂ reduces calculated alveolar oxygen.</div></div>
+<div class="clue"><strong>Localize the problem:</strong> A low PaO₂ with a low PAO₂ can occur even when transfer across the membrane is intact. A low PaO₂ despite adequate PAO₂ points you farther downstream.</div>
+<div class="normal-box">
+<h4>Typical resting adult reference values</h4>
+<ul class="normal-list">
+<li><strong>PiO₂:</strong> no single fixed normal. On room air (FiO₂ 0.21) at sea level with PH₂O 47 mmHg, expect about <strong>150 mmHg</strong>.</li>
+<li><strong>PAO₂:</strong> no single fixed normal because it changes with FiO₂, barometric pressure, PaCO₂, and RQ. On room air at sea level with PaCO₂ about 40, expect roughly <strong>100 mmHg</strong>.</li>
+<li><strong>PaCO₂ used in the equation:</strong> commonly about <strong>35–45 mmHg</strong> in a resting adult.</li>
+</ul>
+<p class="small"><strong>Interpretation:</strong> Do not label PiO₂ or PAO₂ “low” without first checking FiO₂, altitude/barometric pressure, and PaCO₂. These are calculated expectations for the conditions, not universal fixed lab ranges.</p>
+</div>`,
+required:[
+{type:'num',q:'At sea level, a patient breathes FiO₂ 0.21. Using PB 760 and PH₂O 47, calculate PiO₂. Round to the nearest whole number.',a:150,tol:.49,unit:'mmHg',why:'0.21 × (760 − 47) = 149.7 ≈ 150 mmHg.',clue:'This is the oxygen pressure entering the lower respiratory tract after humidification.'},
+{type:'num',q:'A patient breathes FiO₂ 0.30 at sea level. Calculate PiO₂ using PB 760 and PH₂O 47.',a:214,tol:.49,unit:'mmHg',why:'0.30 × 713 = 213.9 ≈ 214 mmHg.',clue:'Increasing FiO₂ increases inspired oxygen pressure when barometric pressure is unchanged.'},
+{type:'num',q:'PiO₂ is 200 mmHg, PaCO₂ is 40 mmHg, and RQ is 0.8. Calculate PAO₂.',a:150,tol:.49,unit:'mmHg',why:'200 − (40/0.8) = 200 − 50 = 150 mmHg.',clue:'The alveolar gas equation accounts for CO₂ occupying part of the alveolar gas mixture.'},
+{type:'num',q:'PiO₂ is 150 mmHg, PaCO₂ rises to 60 mmHg, and RQ is 0.8. Calculate PAO₂.',a:75,tol:.49,unit:'mmHg',why:'150 − (60/0.8) = 75 mmHg.',clue:'High PaCO₂ can lower alveolar oxygen. This points toward inadequate alveolar ventilation rather than a primary diffusion problem.'},
+{type:'mc',q:'A patient travels to a lower barometric-pressure environment without changing FiO₂. What happens to PiO₂?',a:'PiO₂ decreases because the total pressure available to oxygen is lower.',opts:['PiO₂ decreases because the total pressure available to oxygen is lower.','PiO₂ increases because oxygen concentration automatically rises.','PiO₂ stays identical because FiO₂ is the only variable that matters.','PiO₂ becomes equal to PaO₂ because barometric pressure is lower.'],why:'Dalton-style partial pressure depends on both gas fraction and total pressure.',clue:'Altitude can create an inspired-oxygen problem before any lung disease is present.'},
+{type:'mc',q:'A patient has a low PAO₂ and a high PaCO₂. Which mechanism should you consider first?',a:'Inadequate alveolar ventilation is reducing alveolar oxygen.',opts:['Inadequate alveolar ventilation is reducing alveolar oxygen.','Low hemoglobin is directly lowering PAO₂.','Low cardiac output is directly lowering inspired oxygen pressure.','Tissues are extracting too much oxygen from the alveoli.'],why:'PaCO₂ is part of the alveolar gas equation; when ventilation falls and CO₂ rises, PAO₂ falls.',clue:'This abnormality appears at the alveolar-ventilation stage.'},
+{type:'mc',q:'Which variables directly determine PiO₂ in this assignment?',a:'FiO₂, barometric pressure, and water-vapor pressure',opts:['FiO₂, barometric pressure, and water-vapor pressure','Hemoglobin, cardiac output, and SaO₂','PaO₂, PvO₂, and SvO₂','Heart rate, stroke volume, and PaCO₂'],why:'PiO₂ = FiO₂ × (PB − PH₂O).',clue:'Know which part of the oxygen pathway each variable belongs to.'},
+{type:'mc',q:'PAO₂ is adequate, but measured PaO₂ is much lower. Where should you investigate next?',a:'Gas transfer from alveoli to arterial blood',opts:['Gas transfer from alveoli to arterial blood','Inspired FiO₂ only','Hemoglobin production only','Tissue oxygen consumption only'],why:'Adequate alveolar oxygen with low arterial oxygen suggests oxygen is being lost between alveoli and arterial blood.',clue:'The next tools are the A–a gradient and P/F ratio.'}
+],
+more:[
+{type:'num',q:'Calculate PiO₂ for FiO₂ 0.40 at sea level.',a:285,tol:.49,unit:'mmHg',why:'0.40 × 713 = 285.2 ≈ 285 mmHg.',clue:'Higher FiO₂ raises inspired oxygen pressure.'},
+{type:'num',q:'PiO₂ is 180 mmHg, PaCO₂ 32 mmHg, RQ 0.8. Calculate PAO₂.',a:140,tol:.49,unit:'mmHg',why:'180 − 40 = 140 mmHg.',clue:'Lower PaCO₂ subtracts less from PiO₂.'},
+{type:'num',q:'PiO₂ is 160 mmHg, PaCO₂ 48 mmHg, RQ 0.8. Calculate PAO₂.',a:100,tol:.49,unit:'mmHg',why:'160 − 60 = 100 mmHg.',clue:'Use the value to decide whether alveolar oxygen itself is adequate.'},
+{type:'mc',q:'Which change would lower PAO₂ if all other variables remain constant?',a:'An increase in PaCO₂',opts:['An increase in PaCO₂','An increase in FiO₂','An increase in barometric pressure','A decrease in water-vapor pressure'],why:'More PaCO₂/RQ is subtracted from inspired oxygen pressure.',clue:'Think alveolar ventilation.'},
+{type:'mc',q:'A normal hemoglobin concentration can directly correct a low PiO₂.',a:'False',opts:['True','False'],why:'Hemoglobin affects oxygen content after gas reaches blood; it does not determine inspired oxygen pressure.',clue:'Keep each stage of the oxygen pathway separate.'}
+]
+},
+{
+id:'transfer',num:2,title:'Alveoli → Arterial Blood',
+subtitle:'A–a gradient and P/F ratio help determine whether oxygen is crossing from alveoli into blood effectively.',
+teach:`<p>Now compare <strong>what should be in the alveoli</strong> with <strong>what actually reached arterial blood</strong>.</p>
+<div><span class="formula">A–a = PAO₂ − PaO₂</span><span class="formula">P/F = PaO₂ ÷ FiO₂</span></div>
+<div class="interpret-grid"><div class="interpret"><strong>Large A–a gradient</strong><br>Think V/Q mismatch, shunt/collapsed alveoli, diffusion limitation, or impaired perfusion matching. Oxygen was available in the alveoli but did not efficiently appear in arterial blood.</div><div class="interpret"><strong>Low P/F ratio</strong><br>The patient requires disproportionately more FiO₂ to achieve a given PaO₂. This assignment uses <strong>&gt;380</strong> as the normal benchmark.</div></div>
+<div class="warning"><strong>Important distinction:</strong> Hemoglobin concentration changes oxygen <em>content</em>, but anemia by itself does not create a large A–a pressure gradient. A–a compares oxygen partial pressures.</div>
+<div class="normal-box">
+<h4>Typical resting adult reference values</h4>
+<ul class="normal-list">
+<li><strong>PaO₂:</strong> approximately <strong>80–100 mmHg</strong> for a healthy adult at sea level; it normally declines with age.</li>
+<li><strong>A–a gradient:</strong> often <strong>&lt;20 mmHg</strong> on room air in younger adults, but it increases with age and with higher FiO₂. A useful age estimate is <strong>&lt; (age ÷ 4) + 4</strong>.</li>
+<li><strong>P/F ratio:</strong> typically about <strong>400–500</strong> at sea level. For this course assignment, use <strong>&gt;380</strong> as the normal benchmark.</li>
+</ul>
+<p class="small"><strong>Interpretation:</strong> A widened A–a gradient or reduced P/F ratio suggests impaired oxygen transfer/oxygenation efficiency. Always interpret the number in the context of age, FiO₂, altitude, and the clinical picture.</p>
+</div>`,
+required:[
+{type:'num',q:'PAO₂ is 157 mmHg and PaO₂ is 69 mmHg. Calculate the A–a gradient.',a:88,tol:.01,unit:'mmHg',why:'157 − 69 = 88 mmHg.',clue:'A large difference means oxygen is being lost between alveoli and arterial blood.'},
+{type:'num',q:'PAO₂ is 120 mmHg and PaO₂ is 100 mmHg. Calculate the A–a gradient.',a:20,tol:.01,unit:'mmHg',why:'120 − 100 = 20 mmHg.',clue:'The smaller the difference, the less pressure is lost across the lung.'},
+{type:'num',q:'PaO₂ is 107 mmHg on FiO₂ 0.31. Calculate the P/F ratio. Round to the nearest whole number.',a:345,tol:.49,unit:'',why:'107 ÷ 0.31 = 345.',clue:'This is below the >380 benchmark used in this assignment, suggesting reduced oxygenation efficiency.'},
+{type:'num',q:'PaO₂ is 80 mmHg on room air FiO₂ 0.21. Calculate the P/F ratio. Round to the nearest whole number.',a:381,tol:.49,unit:'',why:'80 ÷ 0.21 ≈ 381.',clue:'This meets the assignment benchmark of >380.'},
+{type:'mc',q:'PAO₂ is high enough, but PaO₂ remains low and the A–a gradient is widened. Which category best fits?',a:'A problem transferring oxygen from alveoli into arterial blood',opts:['A problem transferring oxygen from alveoli into arterial blood','A problem with inspired FiO₂ only','A problem caused only by low hemoglobin','A tissue-extraction problem after oxygen delivery'],why:'The oxygen was present in the alveoli but did not fully appear in arterial blood.',clue:'Localize the abnormality to the lung gas-transfer stage.'},
+{type:'mc',q:'Which finding can widen the A–a gradient?',a:'A thickened alveolar-capillary membrane',opts:['A thickened alveolar-capillary membrane','Isolated anemia with normal lung function','A higher hemoglobin concentration','A faster heart rate with unchanged lungs'],why:'Greater diffusion distance can impair oxygen transfer.',clue:'Pulmonary edema and fibrosis are examples of increased diffusion distance.'},
+{type:'mc',q:'Which lung problem can create shunt-like oxygen loss and increase the A–a difference?',a:'Collapsed, nonventilated alveoli that remain perfused',opts:['Collapsed, nonventilated alveoli that remain perfused','A high hemoglobin concentration','A high platelet count','A low tissue oxygen demand'],why:'Perfusion through nonventilated alveoli allows blood to pass without adequate oxygen loading.',clue:'Think alveolar recruitment and shunt.'},
+{type:'mc',q:'A low P/F ratio most directly means:',a:'PaO₂ is low relative to the amount of inspired oxygen being supplied.',opts:['PaO₂ is low relative to the amount of inspired oxygen being supplied.','Hemoglobin is necessarily low.','Cardiac output is necessarily low.','Tissue oxygen consumption is necessarily high.'],why:'P/F normalizes arterial oxygen pressure to FiO₂.',clue:'It is an oxygenation-efficiency measure, not a direct measure of oxygen content or circulation.'}
+],
+more:[
+{type:'num',q:'PaO₂ 95 mmHg on FiO₂ 0.28. Calculate P/F.',a:339,tol:.49,unit:'',why:'95 ÷ .28 ≈ 339.',clue:'Below the >380 benchmark used here.'},
+{type:'num',q:'PAO₂ 210 mmHg and PaO₂ 160 mmHg. Calculate A–a.',a:50,tol:.01,unit:'mmHg',why:'210 − 160 = 50.',clue:'Quantify the pressure loss across the lung.'},
+{type:'num',q:'PaO₂ 90 mmHg on FiO₂ 0.60. Calculate P/F.',a:150,tol:.49,unit:'',why:'90 ÷ .60 = 150.',clue:'A PaO₂ that looks acceptable in isolation can still reflect poor efficiency when high FiO₂ is required.'},
+{type:'mc',q:'Why can a PaO₂ of 90 mmHg be misleading if the patient requires FiO₂ 0.60?',a:'The P/F ratio reveals that a large amount of oxygen is required to achieve that PaO₂.',opts:['The P/F ratio reveals that a large amount of oxygen is required to achieve that PaO₂.','PaO₂ should always be divided by hemoglobin instead.','FiO₂ does not affect interpretation of PaO₂.','A PaO₂ of 90 always proves normal gas exchange.'],why:'90/.60 = 150, showing impaired oxygenation efficiency.',clue:'Always interpret PaO₂ in the context of oxygen support.'},
+{type:'mc',q:'Which condition primarily reduces diffusion surface area?',a:'Emphysema',opts:['Emphysema','Anemia','Bradycardia','Low tissue metabolism'],why:'Loss of alveolar walls reduces area available for gas transfer.',clue:'Surface area and membrane thickness are major diffusion variables.'}
+]
+},
+{
+id:'content',num:3,title:'Arterial Blood → Oxygen Content',
+subtitle:'PaO₂ tells you pressure; CaO₂ tells you how much oxygen the blood is actually carrying.',
+teach:`<p>Once oxygen reaches arterial blood, ask a different question: <strong>How much oxygen is being carried?</strong></p>
+<div><span class="formula">CaO₂ = (1.34 × Hb × SaO₂) + (0.003 × PaO₂)</span></div>
+<p>The first term—oxygen bound to hemoglobin—provides most arterial oxygen content. The dissolved oxygen term is much smaller.</p>
+<div class="interpret-grid"><div class="interpret"><strong>Low PaO₂ / low SaO₂</strong><br>Think oxygenation failure upstream.</div><div class="interpret"><strong>Acceptable PaO₂ but low CaO₂</strong><br>Think low hemoglobin or reduced saturation. A normal pressure does not guarantee normal oxygen-carrying capacity.</div></div>
+<div class="normal-box">
+<h4>Typical resting adult reference values</h4>
+<ul class="normal-list">
+<li><strong>SaO₂:</strong> approximately <strong>95–100%</strong> in a healthy adult at sea level.</li>
+<li><strong>PaO₂:</strong> approximately <strong>80–100 mmHg</strong> at sea level, with expected age-related decline.</li>
+<li><strong>CaO₂:</strong> approximately <strong>18–20 mL O₂/dL</strong> with a typical hemoglobin concentration and near-normal saturation.</li>
+</ul>
+<p class="small"><strong>Interpretation:</strong> CaO₂ is not a fixed “oxygenation” number; it changes substantially with hemoglobin. A patient can have a normal PaO₂ and SaO₂ but a low CaO₂ when hemoglobin is low.</p>
+</div>`,
+required:[
+{type:'num',q:'PaO₂ 88 mmHg, Hb 14.9 g/dL, SaO₂ 95%. Calculate CaO₂ and round to the nearest whole number.',a:19,tol:.49,unit:'mL/dL',why:'(1.34×14.9×0.95)+(0.003×88) ≈ 19.2 → 19 mL/dL.',clue:'Most of this content is oxygen bound to hemoglobin.'},
+{type:'num',q:'PaO₂ 95, Hb 15 g/dL, SaO₂ 98%. Calculate CaO₂ to the nearest whole number.',a:20,tol:.49,unit:'mL/dL',why:'The result is about 20 mL/dL.',clue:'With adequate Hb and saturation, arterial content is robust.'},
+{type:'num',q:'PaO₂ 95, Hb 7 g/dL, SaO₂ 98%. Calculate CaO₂ to the nearest whole number.',a:9,tol:.49,unit:'mL/dL',why:'(1.34×7×.98)+(.003×95) ≈ 9.5 → 9 using standard rounding convention near the calculated result.',clue:'Despite a normal PaO₂ and high saturation, low Hb sharply lowers total oxygen content.'},
+{type:'mc',q:'Two patients have the same PaO₂ and SaO₂. One has Hb 15 g/dL and the other Hb 7 g/dL. Who has lower CaO₂?',a:'The patient with Hb 7 g/dL',opts:['The patient with Hb 7 g/dL','The patient with Hb 15 g/dL','They must have identical CaO₂','CaO₂ cannot be affected by hemoglobin'],why:'Hemoglobin-bound oxygen is the dominant component of CaO₂.',clue:'Anemia is an oxygen-content problem even when PaO₂ looks normal.'},
+{type:'mc',q:'Which measurement reflects dissolved oxygen pressure rather than total oxygen content?',a:'PaO₂',opts:['PaO₂','CaO₂','Hemoglobin concentration','Cardiac output'],why:'PaO₂ is a partial pressure generated by dissolved oxygen molecules.',clue:'Pressure and content answer different questions.'},
+{type:'mc',q:'Which two components make up CaO₂?',a:'Oxygen bound to hemoglobin plus oxygen dissolved in plasma',opts:['Oxygen bound to hemoglobin plus oxygen dissolved in plasma','PaCO₂ plus bicarbonate','Cardiac output plus stroke volume','FiO₂ plus barometric pressure'],why:'The CaO₂ formula contains both Hb-bound and dissolved oxygen.',clue:'The hemoglobin-bound component is much larger.'},
+{type:'mc',q:'A patient has normal PaO₂ but severe anemia. What is the key oxygen concern?',a:'Total oxygen content and later tissue delivery may still be low.',opts:['Total oxygen content and later tissue delivery may still be low.','PAO₂ must automatically be zero.','The A–a gradient must automatically be very large.','PiO₂ must be lower because hemoglobin is low.'],why:'PaO₂ does not measure how many hemoglobin binding sites are available.',clue:'The problem emerges at the oxygen-carrying stage, not necessarily gas transfer.'},
+{type:'mc',q:'If SaO₂ decreases while Hb and PaO₂ are unchanged, CaO₂ will generally:',a:'Decrease',opts:['Decrease','Increase','Stay exactly the same','Become equal to PaO₂'],why:'Lower saturation means fewer hemoglobin binding sites carry oxygen.',clue:'Saturation is a major driver of content.'}
+],
+more:[
+{type:'num',q:'PaO₂ 80, Hb 12, SaO₂ 90%. Calculate CaO₂ to nearest whole number.',a:15,tol:.49,unit:'mL/dL',why:'(1.34×12×.90)+(.003×80) ≈ 14.7 → 15.',clue:'Both Hb and saturation matter.'},
+{type:'num',q:'PaO₂ 60, Hb 10, SaO₂ 88%. Calculate CaO₂ to nearest whole number.',a:12,tol:.49,unit:'mL/dL',why:'≈12.0 mL/dL.',clue:'Low oxygenation plus lower Hb compounds the content problem.'},
+{type:'mc',q:'Which term contributes less to CaO₂ under usual conditions?',a:'0.003 × PaO₂',opts:['0.003 × PaO₂','1.34 × Hb × SaO₂'],why:'Only a small amount of oxygen is dissolved in plasma.',clue:'Raising PaO₂ alone cannot fully compensate for major loss of hemoglobin.'},
+{type:'mc',q:'A PaO₂ increase with no change in Hb or saturation will usually cause CaO₂ to:',a:'Increase only slightly through the dissolved oxygen term.',opts:['Increase only slightly through the dissolved oxygen term.','Double immediately.','Fall to zero.','Become unrelated to hemoglobin.'],why:'The dissolved component is small.',clue:'Content depends primarily on Hb-bound oxygen.'},
+{type:'mc',q:'Which abnormality is most directly localized by CaO₂ when PaO₂ is adequate?',a:'Reduced oxygen-carrying capacity in blood',opts:['Reduced oxygen-carrying capacity in blood','Low barometric pressure','Alveolar hypoventilation only','Excessive tissue extraction only'],why:'CaO₂ evaluates how much oxygen arterial blood carries.',clue:'Look at Hb and SaO₂.'}
+]
+},
+{
+id:'delivery',num:4,title:'Arterial Content → Tissue Oxygen Delivery',
+subtitle:'Good oxygen content is not enough if the circulation cannot move that oxygen to the tissues.',
+teach:`<p>Now oxygen must be <strong>delivered</strong>. Tissue delivery depends on two major things: how much oxygen each unit of blood carries and how much blood the heart pumps each minute.</p>
+<div><span class="formula">CO = HR × SV ÷ 1000</span><span class="formula">DO₂ = CO × (CaO₂ × 10)</span></div>
+<div class="interpret-grid"><div class="interpret"><strong>Low CaO₂ + normal CO</strong><br>Delivery can still be inadequate because each deciliter of blood carries less oxygen.</div><div class="interpret"><strong>Normal CaO₂ + low CO</strong><br>Delivery can still be inadequate because too little oxygenated blood reaches tissues per minute.</div></div>
+<div class="clue"><strong>Localization rule:</strong> DO₂ combines lung/blood oxygen content with circulation. When DO₂ is low, determine whether the problem is <em>content, cardiac output, or both.</em></div>
+<div class="normal-box">
+<h4>Typical resting adult reference values</h4>
+<ul class="normal-list">
+<li><strong>Cardiac output (CO):</strong> roughly <strong>4–8 L/min</strong> in a resting adult; about 5 L/min is a common teaching reference.</li>
+<li><strong>DO₂:</strong> approximately <strong>900–1,100 mL O₂/min</strong> in a healthy resting adult; about <strong>1,000 mL/min</strong> is a common reference value.</li>
+</ul>
+<p class="small"><strong>Interpretation:</strong> A DO₂ below the expected resting range should prompt you to split the equation apart: Is CaO₂ low because of saturation/hemoglobin, is cardiac output low, or are both contributing?</p>
+</div>`,
+required:[
+{type:'num',q:'Heart rate is 100/min and stroke volume is 50 mL/beat. Calculate cardiac output.',a:5,tol:.01,unit:'L/min',why:'100×50 = 5,000 mL/min = 5 L/min.',clue:'Cardiac output is the circulation component of oxygen delivery.'},
+{type:'num',q:'CaO₂ is 18 mL/dL and CO is 5 L/min. Calculate DO₂.',a:900,tol:.01,unit:'mL/min',why:'5 × (18×10) = 900 mL/min.',clue:'The ×10 converts oxygen content per dL to per liter.'},
+{type:'num',q:'CaO₂ is 20 mL/dL and CO is 4 L/min. Calculate DO₂.',a:800,tol:.01,unit:'mL/min',why:'4 × 200 = 800 mL/min.',clue:'A reduction in CO lowers delivery even with strong arterial content.'},
+{type:'num',q:'HR 80/min and SV 75 mL/beat. Calculate CO.',a:6,tol:.01,unit:'L/min',why:'80×75 = 6,000 mL/min = 6 L/min.',clue:'Both rate and stroke volume influence systemic oxygen transport.'},
+{type:'mc',q:'A patient has normal CaO₂ but very low cardiac output. What happens to DO₂?',a:'DO₂ decreases because less oxygenated blood reaches tissues each minute.',opts:['DO₂ decreases because less oxygenated blood reaches tissues each minute.','DO₂ stays normal because CaO₂ is normal.','PiO₂ decreases automatically.','The A–a gradient becomes zero.'],why:'DO₂ is the product of CO and arterial oxygen content.',clue:'This is a circulation problem, not necessarily a lung problem.'},
+{type:'mc',q:'A patient has severe anemia but cardiac output is normal. Which variable is most directly reduced first in the delivery equation?',a:'CaO₂',opts:['CaO₂','PiO₂','PAO₂','Barometric pressure'],why:'Anemia reduces arterial oxygen-carrying capacity.',clue:'Low CaO₂ then pulls DO₂ down.'},
+{type:'mc',q:'Which two values are multiplied to determine cardiac output?',a:'Heart rate and stroke volume',opts:['Heart rate and stroke volume','Systolic and diastolic pressure','PaO₂ and FiO₂','CaO₂ and CvO₂'],why:'CO = HR × SV, with volume converted to L/min.',clue:'Cardiac output is how much blood moves, not how much oxygen each blood volume contains.'},
+{type:'mc',q:'A patient has adequate PAO₂, PaO₂, SaO₂, Hb, and CaO₂, but DO₂ is low. Where should you look next?',a:'Cardiac output / circulation',opts:['Cardiac output / circulation','Inspired oxygen pressure only','Alveolar oxygen only','Hemoglobin binding only'],why:'If content is adequate, low delivery points to insufficient blood flow.',clue:'Follow the oxygen pathway downstream.'}
+],
+more:[
+{type:'num',q:'HR 120 and SV 40 mL/beat. Calculate CO.',a:4.8,tol:.01,unit:'L/min',why:'120×40=4,800 mL/min=4.8 L/min.',clue:'Tachycardia does not guarantee high CO if stroke volume is small.'},
+{type:'num',q:'CaO₂ 16 and CO 4.5 L/min. Calculate DO₂.',a:720,tol:.01,unit:'mL/min',why:'4.5×160=720.',clue:'Compare content and flow if delivery seems low.'},
+{type:'num',q:'CaO₂ 20 and CO 2.5 L/min. Calculate DO₂.',a:500,tol:.01,unit:'mL/min',why:'2.5×200=500.',clue:'Low flow can cut delivery despite good content.'},
+{type:'mc',q:'Which scenario can produce low DO₂ with a normal PaO₂?',a:'Severe anemia or low cardiac output',opts:['Severe anemia or low cardiac output','Only low FiO₂','Only elevated barometric pressure','Only a low A–a gradient'],why:'PaO₂ is only one piece of oxygen transport.',clue:'Think content and circulation.'},
+{type:'mc',q:'If both CaO₂ and CO fall, DO₂ will generally:',a:'Fall because both factors in the delivery equation are reduced.',opts:['Fall because both factors in the delivery equation are reduced.','Rise because the effects cancel.','Remain independent of both variables.','Become equal to PiO₂.'],why:'DO₂ = CO × CaO₂ × 10.',clue:'Multiple abnormalities can compound tissue hypoxia risk.'}
+]
+},
+{
+id:'tissue',num:5,title:'Tissues → Venous Return → Extraction',
+subtitle:'Venous oxygen shows what is left after tissues remove oxygen; VO₂ and O₂ER quantify use and extraction.',
+teach:`<p>After oxygen is delivered, tissues extract what they need. Venous blood tells you what is <strong>left over</strong>.</p>
+<div><span class="formula">CvO₂ = (1.34 × Hb × SvO₂) + (0.003 × PvO₂)</span><span class="formula">C(a-v)O₂ = CaO₂ − CvO₂</span><span class="formula">VO₂ = CO × [C(a-v)O₂ × 10]</span><span class="formula">O₂ER = VO₂ ÷ DO₂ × 100</span></div>
+<div class="interpret-grid"><div class="interpret"><strong>Low SvO₂ / CvO₂</strong><br>Less oxygen returned to the heart. Tissues may be extracting more because delivery is inadequate or demand is increased.</div><div class="interpret"><strong>High O₂ER</strong><br>Tissues are using a larger fraction of delivered oxygen. Investigate inadequate delivery (low CaO₂ or CO) and/or increased tissue demand.</div></div>
+<div class="warning"><strong>Do not reverse the physiology:</strong> When extraction increases, <em>less</em> oxygen returns in venous blood—not more.</div>
+<div class="normal-box">
+<h4>Typical resting adult reference values</h4>
+<ul class="normal-list">
+<li><strong>SvO₂:</strong> approximately <strong>60–80%</strong>; about 70–75% is a common resting reference.</li>
+<li><strong>CvO₂:</strong> approximately <strong>12–16 mL O₂/dL</strong>; about 14 mL/dL is a common resting value when Hb is normal.</li>
+<li><strong>C(a-v)O₂:</strong> approximately <strong>4–5 mL O₂/dL</strong> at rest.</li>
+<li><strong>VO₂:</strong> approximately <strong>200–250 mL O₂/min</strong> at rest; about 250 mL/min is a common reference.</li>
+<li><strong>O₂ER:</strong> approximately <strong>20–30%</strong> at rest; about 25% is typical.</li>
+</ul>
+<p class="small"><strong>Interpretation:</strong> A falling SvO₂/CvO₂, widening C(a-v)O₂, or O₂ER above the usual resting range means tissues are extracting a larger fraction of delivered oxygen. Look for reduced DO₂, increased metabolic demand, or both.</p>
+</div>`,
+required:[
+{type:'num',q:'PvO₂ 43 mmHg, Hb 8.7 g/dL, SvO₂ 56%. Calculate CvO₂ to nearest whole number.',a:7,tol:.49,unit:'mL/dL',why:'(1.34×8.7×.56)+(.003×43) ≈ 6.7 → 7.',clue:'Low Hb and low venous saturation both reduce venous oxygen content.'},
+{type:'num',q:'CaO₂ is 19 and CvO₂ is 8 mL/dL. Calculate C(a-v)O₂.',a:11,tol:.01,unit:'mL/dL',why:'19−8=11.',clue:'A larger arterial-venous difference means more oxygen was removed from each dL of blood.'},
+{type:'num',q:'CaO₂ 16, CvO₂ 12, CO 5 L/min. Calculate VO₂.',a:200,tol:.01,unit:'mL/min',why:'C(a-v)=4; 5×(4×10)=200 mL/min.',clue:'VO₂ represents tissue oxygen consumption.'},
+{type:'num',q:'DO₂ is 1,054 mL/min and VO₂ is 283 mL/min. Calculate O₂ER as a percent. Round to nearest whole number.',a:27,tol:.49,unit:'%',why:'283/1054×100 ≈ 26.9% → 27%.',clue:'The ratio tells you what fraction of delivered oxygen was extracted.'},
+{type:'mc',q:'SvO₂ falls while arterial oxygen content is unchanged. What does this suggest?',a:'More oxygen is being extracted from blood before it returns to the heart.',opts:['More oxygen is being extracted from blood before it returns to the heart.','More oxygen is returning unused to the heart.','Inspired oxygen pressure must have increased.','The A–a gradient must have normalized.'],why:'Lower venous saturation means less oxygen remains after tissue passage.',clue:'Ask whether delivery fell or demand increased.'},
+{type:'mc',q:'Which two broad mechanisms can raise O₂ER?',a:'Reduced oxygen delivery and/or increased tissue oxygen demand',opts:['Reduced oxygen delivery and/or increased tissue oxygen demand','Higher barometric pressure and lower humidity only','Higher hemoglobin and lower tissue demand','Lower PaCO₂ and lower respiratory rate only'],why:'Tissues extract a larger fraction when supply is limited or demand rises.',clue:'Trace low delivery back to CaO₂ and CO.'},
+{type:'mc',q:'What does C(a-v)O₂ represent?',a:'The difference between arterial and venous oxygen content',opts:['The difference between arterial and venous oxygen content','The difference between PAO₂ and PaO₂','The ratio of PaO₂ to FiO₂','The pressure of inspired oxygen'],why:'CaO₂−CvO₂ is the oxygen content removed from blood across tissues.',clue:'Do not confuse content differences with pressure gradients.'},
+{type:'mc',q:'A patient has low DO₂, low SvO₂, and a high O₂ER. Which interpretation best fits?',a:'Tissues are compensating for inadequate delivery by extracting a greater fraction of available oxygen.',opts:['Tissues are compensating for inadequate delivery by extracting a greater fraction of available oxygen.','The patient is returning more unused oxygen to the heart.','Gas exchange must be normal because extraction is high.','Hemoglobin must be high because SvO₂ is low.'],why:'When supply falls, tissues can extract more, leaving less oxygen in venous blood.',clue:'This pattern points to supply-demand stress.'}
+],
+more:[
+{type:'num',q:'CaO₂ 18 and CvO₂ 13. Calculate C(a-v)O₂.',a:5,tol:.01,unit:'mL/dL',why:'18−13=5.',clue:'This is oxygen removed per dL.'},
+{type:'num',q:'CO 4 L/min and C(a-v)O₂ 5 mL/dL. Calculate VO₂.',a:200,tol:.01,unit:'mL/min',why:'4×(5×10)=200.',clue:'Consumption depends on flow and extraction.'},
+{type:'num',q:'VO₂ 250 and DO₂ 800. Calculate O₂ER to nearest whole percent.',a:31,tol:.49,unit:'%',why:'250/800×100=31.25%→31%.',clue:'A higher extraction fraction warrants a supply-demand check.'},
+{type:'mc',q:'If tissue demand increases while DO₂ stays unchanged, O₂ER tends to:',a:'Increase',opts:['Increase','Decrease','Always become zero','Become identical to PaO₂'],why:'More of the delivered oxygen is consumed.',clue:'Venous oxygen may fall as extraction rises.'},
+{type:'mc',q:'If cardiac output falls substantially with unchanged CaO₂, which downstream pattern is plausible?',a:'Lower DO₂, lower SvO₂, and higher extraction',opts:['Lower DO₂, lower SvO₂, and higher extraction','Higher DO₂ and higher unused venous oxygen','No change in oxygen transport at all','Higher PiO₂ caused by low flow'],why:'Reduced delivery can force tissues to remove a greater fraction of available oxygen.',clue:'Circulation problems can appear downstream as low venous oxygen.'}
+]
+}
+];
+
+const FINAL=[
+{type:'num',q:'1. Calculate PiO₂ for Mrs. Jones. FiO₂ 0.24, PB 760, PH₂O 47. Round before continuing.',a:171,tol:.49,unit:'mmHg',why:'0.24×713=171.12→171.',clue:'Inspired oxygen is available; now account for alveolar CO₂.'},
+{type:'num',q:'2. Using rounded PiO₂ 171, PaCO₂ 40, RQ 0.8, calculate PAO₂.',a:121,tol:.49,unit:'mmHg',why:'171−50=121.',clue:'There is adequate estimated alveolar oxygen relative to the measured PaO₂ of 68.'},
+{type:'num',q:'3. Using PAO₂ 121 and PaO₂ 68, calculate the A–a gradient.',a:53,tol:.01,unit:'mmHg',why:'121−68=53.',clue:'Oxygen pressure is being lost between alveoli and arterial blood.'},
+{type:'num',q:'4. Calculate the P/F ratio using PaO₂ 68 and FiO₂ 0.24. Round to whole number.',a:283,tol:.49,unit:'',why:'68/.24=283.',clue:'Below the >380 benchmark used in this assignment, supporting impaired oxygenation efficiency.'},
+{type:'num',q:'5. Calculate CaO₂ from Hb 14, SaO₂ 87%, PaO₂ 68. Round to whole number before continuing.',a:17,tol:.49,unit:'mL/dL',why:'≈16.5→17.',clue:'Arterial oxygen content is affected by the reduced saturation.'},
+{type:'num',q:'6. Calculate CvO₂ from Hb 14, SvO₂ 65%, PvO₂ 40. Round to whole number.',a:12,tol:.49,unit:'mL/dL',why:'≈12.3→12.',clue:'This is oxygen content remaining after tissue passage.'},
+{type:'num',q:'7. Using rounded CaO₂ 17 and CvO₂ 12, calculate C(a-v)O₂.',a:5,tol:.01,unit:'mL/dL',why:'17−12=5.',clue:'This is the oxygen-content difference extracted across tissues.'},
+{type:'num',q:'8. Using CO 4.5 L/min and rounded CaO₂ 17, calculate DO₂.',a:765,tol:.01,unit:'mL/min',why:'4.5×(17×10)=765.',clue:'Delivery combines arterial content and circulation.'},
+{type:'num',q:'9. Using CO 4.5 and C(a-v)O₂ 5, calculate VO₂.',a:225,tol:.01,unit:'mL/min',why:'4.5×(5×10)=225.',clue:'This is estimated tissue oxygen consumption.'},
+{type:'num',q:'10. Calculate O₂ER from VO₂ 225 and DO₂ 765. Round to whole percent.',a:29,tol:.49,unit:'%',why:'225/765×100≈29.4%→29%.',clue:'Now interpret the entire chain rather than the number alone.'},
+{type:'mc',q:'11. Where does Mrs. Jones’s oxygen pathway first show a clear problem?',a:'Between alveolar oxygen and arterial oxygen, shown by the widened A–a difference and reduced P/F ratio.',opts:['Between alveolar oxygen and arterial oxygen, shown by the widened A–a difference and reduced P/F ratio.','At inspired oxygen only because FiO₂ 0.24 cannot create adequate PiO₂.','At hemoglobin only because Hb 14 is severely low.','At tissue extraction only because the lungs are clearly normal.'],why:'PAO₂ is estimated around 121 while PaO₂ is only 68, and P/F is reduced.',clue:'The chain helps localize a pulmonary gas-transfer/oxygenation problem before evaluating downstream delivery.'},
+{type:'mc',q:'12. Which summary best describes the value of following the oxygen pathway?',a:'It separates oxygen availability, gas transfer, blood carrying capacity, circulation, and tissue extraction so the abnormal stage can be localized.',opts:['It separates oxygen availability, gas transfer, blood carrying capacity, circulation, and tissue extraction so the abnormal stage can be localized.','It proves every low PaO₂ is caused by anemia.','It eliminates the need to consider FiO₂ or cardiac output.','It shows all oxygen measurements are interchangeable.'],why:'Each calculation answers a different physiologic question.',clue:'The goal is localization and clinical interpretation—not formula memorization.'}
+];
+
+function question(q,host,key,required=false,final=false){
+ const w=document.createElement('div');w.className='q';
+ const t=document.createElement('div');t.className='q-title';t.textContent=q.q;w.appendChild(t);
+ let inp;
+ if(q.type==='num'){const row=document.createElement('div');inp=document.createElement('input');inp.type='number';inp.step='any';inp.setAttribute('aria-label',q.q);row.appendChild(inp);if(q.unit){let u=document.createElement('span');u.textContent=' '+q.unit;u.style.marginLeft='8px';row.appendChild(u)}w.appendChild(row)}
+ else{const box=document.createElement('div');box.className='options';shuffle(q.opts).forEach(o=>{let l=document.createElement('label');l.className='option';let r=document.createElement('input');r.type='radio';r.name=key;r.value=o;l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box)}
+ const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
+ const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
+ b.onclick=()=>{let ok=false;
+  if(q.type==='num'){if(inp.value===''){f.className='feedback bad';f.textContent='Enter an answer first.';return}ok=close(inp.value,q.a,q.tol??.02)}
+  else{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}ok=c.value===q.a}
+  if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why+'<br><strong>What it means:</strong> '+q.clue;if(required)state.required[key]=true;if(final)state.final[key]=true;save();progress()}
+  else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> Recheck the formula, units, and physiologic stage. '+q.why+'<br><strong>Then ask:</strong> '+q.clue}
+ };
+ w.appendChild(b);w.appendChild(f);host.appendChild(w)
+}
+function renderStations(){
+ const host=document.getElementById('stations');
+ S.forEach(s=>{let sec=document.createElement('section');sec.className='card';sec.innerHTML=`<div class="station-head"><div class="station-title"><div class="station-number">${s.num}</div><div><div class="kicker">Required learning station</div><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Complete all 8 required questions. Correct answers include both the calculation and what the result means clinically.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--soft-border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect points or completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
+ host.appendChild(sec);s.required.forEach((q,i)=>question(q,sec.querySelector('.req'),`${s.id}-r${i}`,true,false));
+ const draw=()=>{let m=sec.querySelector('.moreQs');m.innerHTML='';shuffle(s.more).forEach((q,i)=>question(q,m,`${s.id}-m${Date.now()}-${i}`))};draw();
+ sec.querySelector('.moreBtn').onclick=()=>{let m=sec.querySelector('.more');m.classList.toggle('open');sec.querySelector('.moreBtn').textContent=m.classList.contains('open')?'Hide More Practice':'More Practice +5'};
+ sec.querySelector('.resetMore').onclick=draw;
+ })
+}
+function reqTotal(){return S.reduce((n,s)=>n+s.required.length,0)}
+function reqDone(){return Object.keys(state.required).filter(k=>state.required[k]).length}
+function finDone(){return Object.keys(state.final).filter(k=>state.final[k]).length}
+function progress(){
+ const total=reqTotal()+FINAL.length,done=Math.min(reqDone(),reqTotal())+Math.min(finDone(),FINAL.length),p=Math.round(done/total*100);
+ document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';
+ const unlocked=reqDone()>=reqTotal(),fq=document.getElementById('finalQuestions'),lock=document.getElementById('finalLock');
+ if(unlocked){fq.classList.remove('lock');fq.setAttribute('aria-disabled','false');lock.style.display='none'}else{fq.classList.add('lock');fq.setAttribute('aria-disabled','true');lock.style.display='block'}
+ if(done===total)document.getElementById('completeBox').classList.add('show')
+}
+function renderFinal(){const h=document.getElementById('finalQuestions');FINAL.forEach((q,i)=>question(q,h,`final-${i}`,false,true))}
+renderStations();renderFinal();progress();
+</script>
+</body>
+</html>
