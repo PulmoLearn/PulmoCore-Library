@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AHRC 152 Assignment 2.1 | Oximetry & Capnography</title>
+<style>
+:root{
+ --navy:#0B1F33;--navy2:#173A5E;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;
+ --mist:#F4FAFC;--mint:#DDF7F2;--amber:#F4B860;--coral:#E85D5D;--white:#fff;
+ --slate:#415A77;--border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);
+ --radius:22px;--heading:Arial,Helvetica,sans-serif;--body:Arial,Helvetica,sans-serif;--mono:"Courier New",monospace
+}
+*{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}html{scroll-behavior:smooth}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:var(--body);line-height:1.55}
+button,input{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}
+.mark svg{width:40px;height:40px}.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}.tag{font-size:.8rem;opacity:.9;margin-top:4px}
+.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}
+.hero,.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}.hero p{max-width:1120px;font-size:1.13rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:20;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue))}
+.card{padding:24px;margin-bottom:18px}.teach{border-left:8px solid var(--teal);padding:4px 0 4px 18px}
+h2,h3,h4{line-height:1.15}h2{font-size:clamp(1.75rem,3vw,2.55rem);margin:0 0 12px}h3{font-size:1.3rem}
+.clue,.warning,.normal,.danger{border-radius:14px;padding:14px 16px;margin:14px 0}.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}.normal{background:#F4FAFC;border:1px solid var(--border);border-left:6px solid var(--teal)}.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.sequence{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:8px;margin:18px 0}.seq{border:1px solid var(--border);border-radius:14px;padding:12px;background:#FAFDFF;text-align:center}.seq b{color:var(--teal);display:block;margin-bottom:4px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}.panel{border:1px solid var(--border);border-radius:16px;padding:16px;background:#FAFDFF}.panel h3{margin:.15rem 0 .6rem}.big{font-size:1.12rem;font-weight:800}
+.station-head{display:flex;gap:12px;align-items:center}.num{width:42px;height:42px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q:first-of-type{border-top:0}.q-title{font-weight:800;margin-bottom:8px}.options{display:grid;gap:10px;margin:12px 0}.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:12px 14px;border-radius:12px;background:#fff;cursor:pointer}.option:hover{border-color:var(--blue);background:#F2F8FE}
+button{font-weight:800;border:0;border-radius:12px;padding:10px 14px}.btn{background:var(--teal);color:#fff}.btn:hover{background:var(--teal2)}.btn2{background:#fff;color:var(--navy);border:1px solid var(--border)}.btn2:hover{background:var(--mint)}.btn3{background:#FFF4DF;color:#7A4B00;border:1px solid #F8D9A5}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.more{display:none;border-top:2px dashed var(--border);margin-top:18px;padding-top:18px}.more.open{display:block}.small{font-size:.92rem;color:var(--slate)}
+.lock{opacity:.5;pointer-events:none}.complete{display:none;background:var(--mint);border:1px solid #86D9C8;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}.complete.show{display:block}
+.wavebox{border:1px solid var(--border);border-radius:16px;background:#071727;padding:14px;margin:12px 0;overflow:hidden}.wavebox svg{width:100%;height:auto;display:block}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.legend div{padding:12px;border-radius:12px;border:1px solid var(--border);background:#FAFDFF}.legend strong{display:block;color:var(--teal)}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mini{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}.mini strong{display:block;margin-bottom:4px}
+details.reference summary{list-style:none;cursor:pointer;font-weight:800}details.reference summary::-webkit-details-marker{display:none}details.reference summary::after{content:"+";float:right;color:var(--teal);font-size:1.4rem}details.reference[open] summary::after{content:"–"}
+footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:1100px){.sequence{grid-template-columns:repeat(4,1fr)}.card-grid{grid-template-columns:1fr 1fr}}@media(max-width:760px){.compare,.sequence,.legend,.card-grid{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top">
+ <div class="brand"><div class="mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Respiratory care learning for future RTs.</div></div></div>
+ <div class="course">Respiratory Care · Week 2.1</div>
+</header>
+
+<main>
+<header class="hero">
+ <span class="eyebrow">Respiratory Care · Assignment 2.1</span>
+ <h1>Monitor Detective: Oximetry & Capnography</h1>
+ <p>Monitors give you clues—not diagnoses. In this activity, you will learn to decide <strong>what each monitor is actually telling you, whether the signal is trustworthy, what changed physiologically, and what you should do next.</strong> The biggest idea for this week: <strong>oxygenation and ventilation are different problems.</strong></p>
+</header>
+
+<div class="progress-wrap"><div class="progress-row"><strong id="progressText">0% complete</strong><div class="progress"><div id="progressBar"></div></div></div></div>
+
+<section class="card">
+<span class="kicker">Your monitor-response routine</span><h2>Use the same sequence every time.</h2>
+<div class="sequence">
+ <div class="seq"><b>1 · PATIENT</b>Do they look okay?</div>
+ <div class="seq"><b>2 · SIGNAL</b>Can I trust the number?</div>
+ <div class="seq"><b>3 · MONITOR</b>Oxygenation or ventilation?</div>
+ <div class="seq"><b>4 · TREND</b>What changed?</div>
+ <div class="seq"><b>5 · CAUSE</b>Patient, perfusion, airway, or equipment?</div>
+ <div class="seq"><b>6 · ACT</b>What matters first?</div>
+ <div class="seq"><b>7 · RECHECK</b>Did the patient improve?</div>
+</div>
+<div class="danger"><strong>False reassurance trap:</strong> Supplemental oxygen can keep SpO₂ looking acceptable while a patient hypoventilates, retains CO₂, becomes somnolent, and moves toward respiratory failure.</div>
+</section>
+
+<section class="card">
+<span class="kicker">The foundation</span><h2>Two monitors. Two different questions.</h2>
+<div class="compare">
+ <div class="panel"><h3>Pulse Oximetry → Oxygenation</h3><p><strong>SpO₂</strong> estimates the percentage of functional hemoglobin carrying oxygen. It does <em>not</em> directly tell you PaO₂, PaCO₂, ventilation, oxygen content, or hemoglobin concentration.</p><div class="normal"><strong>Think:</strong> “How well is hemoglobin being oxygenated?”</div></div>
+ <div class="panel"><h3>Capnography → Ventilation + Perfusion Clues</h3><p><strong>ETCO₂</strong> is the exhaled CO₂ measured at the end of expiration. The number and waveform help you assess ventilation, airway patency, respiratory pattern, and changes in pulmonary perfusion.</p><div class="normal"><strong>Think:</strong> “Is CO₂ reaching the lungs and being exhaled effectively?”</div></div>
+</div>
+<div class="clue"><strong>Say the category before the number:</strong> “SpO₂ is oxygenation.” “ETCO₂ is ventilation/perfusion.” This simple habit prevents a surprising number of interpretation errors.</div>
+</section>
+
+<details class="card reference">
+<summary>Quick Reference — open while you practice</summary>
+<div class="card-grid" style="margin-top:16px">
+ <div class="mini"><strong>SpO₂</strong>Healthy adults at sea level are commonly in the mid-to-upper 90s, but context matters.</div>
+ <div class="mini"><strong>ETCO₂</strong>Usual adult reference range is approximately 35–45 mmHg.</div>
+ <div class="mini"><strong>High ETCO₂</strong>Think reduced effective ventilation, increased metabolism/CO₂ load, or rebreathing depending on waveform and context.</div>
+ <div class="mini"><strong>Low ETCO₂</strong>Think increased ventilation, decreased perfusion, increased dead space, leak/disconnection, or sampling problem.</div>
+ <div class="mini"><strong>SpO₂ reliability</strong>Check patient, pleth/pulse agreement, perfusion, motion, probe placement, ambient light, coverings, and dyshemoglobinemia.</div>
+ <div class="mini"><strong>Airway placement</strong>Persistent waveform capnography is the strongest immediate bedside evidence supporting tracheal placement.</div>
+</div>
+</details>
+
+<div id="stations"></div>
+
+<section class="card">
+<span class="kicker">Final clinical challenge</span><h2>Can you choose what matters first?</h2>
+<p>The final cases unlock when all required station questions are correct. These cases combine SpO₂, ETCO₂, respiratory rate, waveform changes, mental status, airway placement, perfusion, and patient presentation.</p>
+<div id="finalLock" class="warning">Complete all required station practice to unlock the integrated cases.</div>
+<div id="finalQuestions" class="lock" aria-disabled="true"></div>
+</section>
+
+<section id="completeBox" class="complete"><h2>Assignment complete ✓</h2><p>You practiced the Week 2.1 workflow: <strong>assess patient → verify signal → identify oxygenation vs ventilation → interpret value + waveform → identify likely cause → act → reassess.</strong></p></section>
+</main>
+
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Respiratory Care · Assignment 2.1</div><div>Optional “More Practice” questions do not affect completion.<br>Progress is saved in this browser.</div></footer>
+</div>
+
+<script>
+const STORE='ahrc152_assignment_2_1_monitor_detective_v1';
+const state=JSON.parse(localStorage.getItem(STORE)||'{"required":{},"final":{}}');
+const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function W(type){
+ const base=`<div class="wavebox"><svg viewBox="0 0 520 170" role="img" aria-label="${type} capnography waveform"><g stroke="#27485F" stroke-width="1">`;
+ let grid='';for(let x=20;x<520;x+=50)grid+=`<line x1="${x}" y1="15" x2="${x}" y2="150"/>`;for(let y=20;y<160;y+=30)grid+=`<line x1="15" y1="${y}" x2="505" y2="${y}"/>`;
+ let p='';
+ if(type==='normal')p='M20 145 L55 145 Q60 80 82 68 L160 65 Q180 65 185 145 L250 145 Q255 80 278 68 L355 65 Q375 65 380 145 L500 145';
+ if(type==='high')p='M20 145 L55 145 Q60 55 82 45 L160 42 Q180 42 185 145 L250 145 Q255 55 278 45 L355 42 Q375 42 380 145 L500 145';
+ if(type==='low')p='M20 145 L55 145 Q60 105 82 98 L160 95 Q180 95 185 145 L250 145 Q255 105 278 98 L355 95 Q375 95 380 145 L500 145';
+ if(type==='shark')p='M20 145 L55 145 Q60 120 78 105 L150 55 Q170 45 185 145 L250 145 Q255 120 273 105 L345 55 Q365 45 380 145 L500 145';
+ if(type==='rebreath')p='M20 130 L55 130 Q60 75 82 66 L160 63 Q180 63 185 125 L250 118 Q255 72 278 62 L355 59 Q375 59 380 118 L500 112';
+ if(type==='cleft')p='M20 145 L55 145 Q60 75 82 66 L142 64 Q154 65 160 90 Q168 112 176 66 L185 145 L250 145 Q255 75 278 66 L338 64 Q350 65 356 90 Q364 112 372 66 L380 145 L500 145';
+ if(type==='leak')p='M20 145 L55 145 Q60 78 82 65 L160 65 Q178 70 190 95 Q205 120 220 145 L250 145 Q255 78 278 65 L355 65 Q373 70 385 95 Q400 120 415 145 L500 145';
+ if(type==='zero')p='M20 145 L500 145';
+ if(type==='drop')p='M20 145 L55 145 Q60 75 82 66 L160 64 Q180 64 185 145 L250 145 Q255 105 278 100 L355 98 Q375 98 380 145 L500 145';
+ if(type==='rosc')p='M20 145 L55 145 Q60 118 82 110 L130 108 Q145 110 150 145 L195 145 Q200 117 222 110 L270 108 Q285 110 290 145 L335 145 Q340 50 365 40 L430 38 Q450 40 455 145 L500 145';
+ return base+grid+`</g><path d="${p}" fill="none" stroke="#63E5D5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+}
+const S=[
+{id:'oxvvent',num:1,title:'Oxygenation or Ventilation?',subtitle:'Name the physiologic question before you interpret the value.',
+teach:`<p>SpO₂ and ETCO₂ are complementary—not interchangeable.</p><div class="compare"><div class="panel"><div class="big">SpO₂ answers an oxygenation question.</div><p>It estimates peripheral oxygen saturation.</p></div><div class="panel"><div class="big">ETCO₂ answers a ventilation/perfusion question.</div><p>It reports exhaled CO₂ at end expiration and adds waveform information.</p></div></div><div class="warning"><strong>Scenario:</strong> A sedated patient on oxygen can have SpO₂ 97% and still be dangerously hypoventilating. If RR is 7 and ETCO₂ is 59, the ventilatory problem outranks the reassuring saturation.</div>`,
+req:[
+{q:'Which physiologic variable does a pulse oximeter estimate?',a:'Peripheral oxygen saturation (SpO₂)',opts:['Peripheral oxygen saturation (SpO₂)','Arterial oxygen tension (PaO₂)','Arterial carbon dioxide tension (PaCO₂)','Hemoglobin concentration'],why:'Pulse oximetry estimates the percentage of functional hemoglobin carrying oxygen.'},
+{q:'Which variable is displayed numerically at the end of exhalation by capnography?',a:'ETCO₂',opts:['ETCO₂','SpO₂','PaO₂','HCO₃⁻'],why:'ETCO₂ is end-tidal carbon dioxide—the exhaled CO₂ value at the end of expiration.'},
+{q:'A sedated patient has SpO₂ 98% on supplemental oxygen, RR 7/min, ETCO₂ 59 mmHg, and increasing drowsiness. What is the priority problem?',a:'Hypoventilation despite a reassuring SpO₂',opts:['Hypoventilation despite a reassuring SpO₂','Normal ventilation because SpO₂ is 98%','Isolated oxygenation failure','Pulse-oximeter malfunction'],why:'Rising ETCO₂, bradypnea, and altered mental status indicate respiratory depression even if oxygen preserves saturation.'},
+{q:'Which monitor can reveal worsening ventilation before SpO₂ falls in a patient receiving oxygen?',a:'Capnography',opts:['Capnography','Pulse oximetry alone','Blood pressure cuff','Temperature probe'],why:'Supplemental oxygen can delay desaturation while ventilation deteriorates; capnography can reveal that change earlier.'},
+{q:'Which statement is correct?',a:'A normal SpO₂ does not prove ventilation is adequate.',opts:['A normal SpO₂ does not prove ventilation is adequate.','SpO₂ directly measures PaCO₂.','ETCO₂ is an oxygenation measurement.','SpO₂ and ETCO₂ answer the same clinical question.'],why:'Oxygenation and ventilation are related but distinct physiologic domains.'}
+],
+more:[
+{q:'SpO₂ 97% in a healthy adult at sea level is generally:',a:'Within the expected range',opts:['Within the expected range','Always too high','Proof of hyperventilation','Proof of normal PaCO₂'],why:'Mid-to-upper 90s is commonly expected, but the value still requires context.'},
+{q:'ETCO₂ 40 mmHg is generally:',a:'Within the usual adult reference range',opts:['Within the usual adult reference range','Severely elevated','Severely decreased','A direct PaO₂ measurement'],why:'A usual adult ETCO₂ range is approximately 35–45 mmHg.'},
+{q:'Which value best tells you oxygen saturation?',a:'SpO₂',opts:['SpO₂','ETCO₂','Respiratory rate','PaCO₂'],why:'SpO₂ estimates hemoglobin oxygen saturation.'},
+{q:'Which value best tells you exhaled CO₂ at end expiration?',a:'ETCO₂',opts:['ETCO₂','SpO₂','PaO₂','SaO₂ only'],why:'That is the definition of ETCO₂.'},
+{q:'A patient on oxygen has SpO₂ 100% and ETCO₂ 60. What must you avoid?',a:'Assuming ventilation is normal because saturation is high',opts:['Assuming ventilation is normal because saturation is high','Checking respiratory rate','Assessing mental status','Looking at the waveform'],why:'High SpO₂ can coexist with dangerous CO₂ retention.'}
+]},
+{id:'trustspo2',num:2,title:'Can You Trust the SpO₂?',subtitle:'An unexpected number is a prompt to assess—not a reason to automatically believe or dismiss it.',
+teach:`<p>Pulse oximetry depends on a reliable pulsatile signal and adequate light transmission. Accuracy can be reduced by <strong>motion, poor perfusion, probe problems, ambient light, nail coverings, dyshemoglobinemias, venous pulsation, and other patient/device factors.</strong></p>
+<div class="clue"><strong>Two-track response:</strong> assess the patient <em>and</em> verify the equipment at the same time.</div>
+<div class="card-grid"><div class="mini"><strong>1 · Patient first</strong>Distress? Color? Work of breathing? Mental status?</div><div class="mini"><strong>2 · Pulse agreement</strong>Does monitor pulse match the palpated pulse?</div><div class="mini"><strong>3 · Perfusion</strong>Warm site? Capillary refill? Shock/hypotension?</div><div class="mini"><strong>4 · Probe</strong>Correct size, alignment, site, contact?</div><div class="mini"><strong>5 · Interference</strong>Motion, nail coverings, bright light, dyshemoglobin?</div><div class="mini"><strong>6 · Confirm</strong>Try another site/device or obtain blood-gas/hemoximetry data when needed.</div></div>`,
+req:[
+{q:'A monitor reads SpO₂ 82%, but the patient is awake, speaking normally, warm, and not distressed. What should happen first?',a:'Assess the patient and verify pulse/signal quality before deciding what the number means.',opts:['Assess the patient and verify pulse/signal quality before deciding what the number means.','Immediately assume severe hypoxemia and ignore signal quality.','Dismiss the reading as artifact without assessment.','Recalibrate the monitor before looking at the patient.'],why:'Unexpected values require patient assessment plus signal verification, not blind acceptance or dismissal.'},
+{q:'Which finding most directly reduces confidence in a displayed SpO₂ value?',a:'The monitor pulse rate does not match the patient’s palpated pulse.',opts:['The monitor pulse rate does not match the patient’s palpated pulse.','The patient is sitting upright.','The patient is breathing quietly.','The patient has a normal temperature.'],why:'Pulse mismatch suggests the monitor may not be tracking the true arterial pulsatile signal.'},
+{q:'Which combination is most likely to make pulse oximetry unreliable?',a:'Cold fingers, weak perfusion, and patient motion',opts:['Cold fingers, weak perfusion, and patient motion','Warm hands and a strong pulse','Stable pulse with good pleth waveform','Quiet breathing with good perfusion'],why:'Poor perfusion and motion weaken or distort the pulsatile signal.'},
+{q:'A low SpO₂ appears suddenly with no patient change and a poor pleth waveform. What is an appropriate next step?',a:'Reposition or replace the probe and reassess signal at a better-perfused site.',opts:['Reposition or replace the probe and reassess signal at a better-perfused site.','Increase FiO₂ without checking the patient.','Assume the patient has a pulmonary embolism.','Ignore the reading permanently.'],why:'Probe/site verification is appropriate when signal quality is poor, while continuing to assess the patient.'},
+{q:'Why can carbon monoxide exposure make a standard pulse oximeter falsely reassuring?',a:'Dyshemoglobinemia can limit standard pulse-ox interpretation, so co-oximetry may be needed.',opts:['Dyshemoglobinemia can limit standard pulse-ox interpretation, so co-oximetry may be needed.','Carbon monoxide always drives SpO₂ to zero.','Pulse oximetry directly measures COHb accurately.','Carbon monoxide only affects respiratory rate.'],why:'Standard pulse oximetry cannot reliably quantify carboxyhemoglobin.'}
+],
+more:[
+{q:'Bright ambient light can affect pulse-ox accuracy because it can interfere with:',a:'Optical signal detection',opts:['Optical signal detection','Serum bicarbonate','Blood pressure','Chest movement'],why:'Pulse oximeters depend on light absorption measurements.'},
+{q:'Nail polish or artificial nails may interfere primarily with:',a:'Light transmission through the sensor site',opts:['Light transmission through the sensor site','Carbon dioxide production','Respiratory drive','Cardiac output directly'],why:'They can alter optical transmission.'},
+{q:'If fingers are cold and poorly perfused, a reasonable action is to:',a:'Warm the site or choose a better-perfused location',opts:['Warm the site or choose a better-perfused location','Turn the monitor off permanently','Assume the value is always correct','Ignore the patient’s pulse'],why:'Improving or changing the monitoring site may improve signal reliability.'},
+{q:'Which action should NOT be your only response to an unexpected pulse-ox value?',a:'Changing the probe without assessing the patient',opts:['Changing the probe without assessing the patient','Checking pulse agreement','Assessing work of breathing','Evaluating perfusion'],why:'Troubleshooting should never replace patient assessment.'},
+{q:'If uncertainty remains after troubleshooting a concerning SpO₂ value, an appropriate escalation may include:',a:'Confirmatory blood-gas or hemoximetry testing',opts:['Confirmatory blood-gas or hemoximetry testing','Averaging several random monitor values','Ignoring the result','Only changing rooms'],why:'Confirmatory testing may be needed when noninvasive data remain unreliable or clinically discordant.'}
+]},
+{id:'coox',num:3,title:'Co-oximetry: When “98%” Can Be Misleading',subtitle:'Understand measured hemoglobin species when dyshemoglobinemia is suspected.',
+teach:`<p>Co-oximetry uses multiple wavelengths of light on a blood sample to directly measure hemoglobin species such as <strong>O₂Hb, COHb, and MetHb.</strong> That makes it important when carbon monoxide poisoning or another dyshemoglobinemia is suspected.</p>
+<div class="normal"><strong>Legacy course example:</strong> a patient may show a reassuring pulse-ox reading while COHb is markedly elevated and true oxyhemoglobin is reduced. In that situation, co-oximetry provides the more useful hemoglobin-species information.</div>
+<div class="warning"><strong>Clinical response in the supplied course material:</strong> suspected significant CO poisoning is treated with high-concentration oxygen while the patient is further evaluated.</div>`,
+req:[
+{q:'Which test is most useful for directly measuring COHb?',a:'Co-oximetry',opts:['Co-oximetry','Standard pulse oximetry','Chest radiograph','ECG alone'],why:'Co-oximetry directly measures hemoglobin species using multiple wavelengths.'},
+{q:'A blood gas analyzer reports SaO₂ 95%, while co-oximetry reports O₂Hb 75% and COHb 25%. Which result better reflects the measured oxyhemoglobin fraction?',a:'O₂Hb 75%',opts:['O₂Hb 75%','SaO₂ 95%','Both are identical measurements','Neither can be interpreted'],why:'O₂Hb from co-oximetry is a measured hemoglobin species; SaO₂ may be calculated by the blood gas analyzer.'},
+{q:'Which measurement is commonly elevated in cigarette smokers?',a:'COHb',opts:['COHb','O₂Hb only','PaO₂ always','HCO₃⁻ always'],why:'The legacy material notes that smokers can have higher carboxyhemoglobin than nonsmokers.'},
+{q:'A patient has SpO₂ 100%, O₂Hb 70%, and COHb 30% after smoke exposure. Which action best matches the supplied course material?',a:'Initiate high-concentration oxygen and continue evaluation.',opts:['Initiate high-concentration oxygen and continue evaluation.','Send the patient home because SpO₂ is 100%.','Use the pulse oximeter alone to rule out poisoning.','Order polysomnography as the priority test.'],why:'A high COHb with reduced O₂Hb indicates clinically significant carbon monoxide exposure despite reassuring SpO₂.'},
+{q:'Why is co-oximetry more informative than standard pulse oximetry for suspected CO poisoning?',a:'It can directly separate and quantify multiple hemoglobin species.',opts:['It can directly separate and quantify multiple hemoglobin species.','It measures respiratory rate more accurately.','It is always noninvasive.','It directly measures PaCO₂.'],why:'Multiple wavelengths allow measurement of oxyhemoglobin, carboxyhemoglobin, methemoglobin, and other species.'}
+],
+more:[
+{q:'Standard pulse oximetry is most limited in CO poisoning because:',a:'It may display a falsely reassuring saturation.',opts:['It may display a falsely reassuring saturation.','It always reads 0%.','It directly measures COHb too high.','It measures blood pressure instead.'],why:'Dyshemoglobin can confound the displayed saturation.'},
+{q:'Which hemoglobin species represents hemoglobin bound to carbon monoxide?',a:'COHb',opts:['COHb','O₂Hb','HbA1c','HCO₃⁻'],why:'COHb stands for carboxyhemoglobin.'},
+{q:'Which value is directly measured by co-oximetry?',a:'O₂Hb',opts:['O₂Hb','Respiratory rate','Tidal volume','PaCO₂ only'],why:'Co-oximetry measures hemoglobin species.'},
+{q:'A normal pulse-ox value should rule out carbon monoxide poisoning.',a:'False',opts:['True','False'],why:'Standard SpO₂ may be falsely reassuring in dyshemoglobinemia.'},
+{q:'If CO poisoning is suspected despite normal SpO₂, the next monitoring question is:',a:'What do the co-oximetry hemoglobin species show?',opts:['What do the co-oximetry hemoglobin species show?','Is the pulse-ox battery full?','Is the patient tall?','What is the respiratory rate only?'],why:'The clinical uncertainty centers on dyshemoglobin species.'}
+]},
+{id:'capbasics',num:4,title:'Read the Capnogram Before You Name the Problem',subtitle:'Number + waveform + respiratory rate + patient context.',
+teach:`<p>A normal capnogram returns near zero during inspiration, rises during exhalation, forms an alveolar plateau, and reports ETCO₂ at the end of expiration.</p>${W('normal')}
+<div class="legend"><div><strong>Baseline</strong>Inspiratory CO₂ should return near zero.</div><div><strong>Expiratory upstroke + plateau</strong>Shape reflects CO₂ emptying from the lungs.</div><div><strong>ETCO₂</strong>Measured at the end of the expiratory plateau.</div></div>
+<div class="clue"><strong>Never interpret ETCO₂ by number alone.</strong> The same low value can result from hyperventilation, reduced perfusion, increased dead space, leak, disconnection, or poor sampling.</div>`,
+req:[
+{q:'Which part of the capnogram contains the ETCO₂ measurement?',a:'The end of the expiratory plateau',opts:['The end of the expiratory plateau','The middle of inspiration','The zero baseline only','The beginning of inspiration'],why:'ETCO₂ is measured at the end of expiration.'},
+{q:'A spontaneously breathing patient has RR 32/min and ETCO₂ 24 mmHg with a normal-shaped waveform. What is the most likely initial interpretation?',a:'Hyperventilation is likely.',opts:['Hyperventilation is likely.','Hypoventilation is likely.','The patient is apneic.','A cuff leak is certain.'],why:'Low ETCO₂ with tachypnea and a preserved waveform supports increased ventilation.'},
+{q:'A sedated patient has RR 7/min and ETCO₂ 59 mmHg. What problem is most likely?',a:'Hypoventilation',opts:['Hypoventilation','Hyperventilation','Normal ventilation','Isolated oxygenation failure'],why:'Slow breathing with elevated ETCO₂ is a classic respiratory-depression pattern.'},
+{q:'Which condition can decrease ETCO₂ even without hyperventilation?',a:'Reduced pulmonary perfusion such as hypovolemia or pulmonary embolism',opts:['Reduced pulmonary perfusion such as hypovolemia or pulmonary embolism','Increased alveolar ventilation only','Normal perfusion only','A stable pulse-ox waveform'],why:'Less CO₂ delivery to ventilated alveoli can lower ETCO₂.'},
+{q:'A sudden rise in ETCO₂ to 50 mmHg in a previously stable patient should prompt you to:',a:'Assess the patient and correlate with an ABG/clinical ventilation data rather than automatically changing one setting.',opts:['Assess the patient and correlate with an ABG/clinical ventilation data rather than automatically changing one setting.','Increase FiO₂ automatically.','Decrease minute ventilation automatically.','Ignore the change if SpO₂ is normal.'],why:'A sudden ETCO₂ change requires assessment of ventilation, perfusion, airway, equipment, and trend.'}
+],
+more:[
+{q:'ETCO₂ usually reads compared with PaCO₂:',a:'Lower',opts:['Lower','Always identical','Always higher','Unrelated in all patients'],why:'End-tidal CO₂ is commonly lower than arterial CO₂ because of dead-space effects.'},
+{q:'Which factors are required for exhaled CO₂ to reach the detector?',a:'CO₂ production, circulation/perfusion, and ventilation',opts:['CO₂ production, circulation/perfusion, and ventilation','Oxygen saturation alone','Blood pressure alone','FiO₂ alone'],why:'CO₂ must be produced, transported by blood, and ventilated to the detector.'},
+{q:'A decreasing ETCO₂ could reflect:',a:'Hyperventilation or decreased perfusion',opts:['Hyperventilation or decreased perfusion','Only hypoventilation','Only rebreathing','Only fever'],why:'Low ETCO₂ is not specific; both ventilation and perfusion changes can cause it.'},
+{q:'An increasing ETCO₂ could reflect:',a:'Hypoventilation',opts:['Hypoventilation','Hyperventilation only','Pulmonary embolism only','Complete disconnection'],why:'Reduced ventilation commonly raises exhaled CO₂.'},
+{q:'Why is waveform shape important?',a:'It can reveal airway obstruction, rebreathing, leak, patient effort, or loss of ventilation/perfusion.',opts:['It can reveal airway obstruction, rebreathing, leak, patient effort, or loss of ventilation/perfusion.','It only decorates the numerical value.','It measures hemoglobin concentration.','It replaces patient assessment.'],why:'The waveform contains physiologic and equipment clues beyond the number.'}
+]},
+{id:'waveforms',num:5,title:'Waveform Lab: Match Shape to Cause',subtitle:'Recognize the patterns that should trigger immediate bedside thinking.',
+teach:`<p>Use the shape before memorizing a label. Ask: <strong>Does inspiration return to zero? Is the expiratory plateau flat? Is the height changing? Did the waveform suddenly disappear?</strong></p>
+<div class="card-grid">
+<div class="mini">${W('shark')}<strong>Shark fin</strong>Delayed exhalation → airflow obstruction such as asthma/COPD/mucus.</div>
+<div class="mini">${W('rebreath')}<strong>Elevated baseline</strong>Inspired CO₂ remains above zero → rebreathing/circuit issue.</div>
+<div class="mini">${W('cleft')}<strong>Cleft in plateau</strong>Patient inspiratory effort during a mechanical breath.</div>
+<div class="mini">${W('leak')}<strong>Loss/sloping plateau</strong>Consider leak in cuff or circuit.</div>
+<div class="mini">${W('zero')}<strong>Near-zero waveform</strong>Think apnea, disconnection, esophageal placement, cardiac arrest/very low perfusion—assess immediately.</div>
+<div class="mini">${W('drop')}<strong>Sudden fall</strong>Think ventilation interruption, disconnection, reduced perfusion, or sampling problem.</div>
+</div>`,
+req:[
+{q:'Which waveform is most consistent with airflow obstruction such as asthma or COPD?'+W('shark'),a:'Shark-fin waveform',opts:['Shark-fin waveform','Normal capnogram','Rebreathing baseline','Complete loss of exhaled CO₂'],why:'Delayed expiratory emptying creates the slanted “shark-fin” contour.'},
+{q:'What does this elevated inspiratory baseline most strongly suggest?'+W('rebreath'),a:'Rebreathing CO₂ / circuit problem',opts:['Rebreathing CO₂ / circuit problem','Normal inspiration','Hyperventilation only','Carbon monoxide poisoning'],why:'Inspired CO₂ should return near zero; an elevated baseline suggests rebreathing or circuit-related CO₂ retention.'},
+{q:'What does this cleft in the expiratory plateau suggest?'+W('cleft'),a:'Patient inspiratory effort during the breath',opts:['Patient inspiratory effort during the breath','Complete apnea','Pulmonary embolism','Normal passive exhalation'],why:'A cleft can reflect patient effort interrupting the plateau.'},
+{q:'What does this loss/sloping expiratory plateau suggest?'+W('leak'),a:'Leak in the cuff or breathing circuit',opts:['Leak in the cuff or breathing circuit','Normal ventilation/perfusion','Hyperventilation only','Carbon monoxide poisoning'],why:'A leak can prevent a stable expiratory plateau.'},
+{q:'A previously normal waveform suddenly becomes nearly flat. What should you do first?',a:'Assess the patient and airway/circuit immediately.',opts:['Assess the patient and airway/circuit immediately.','Wait for SpO₂ to fall before doing anything.','Assume hyperventilation.','Only recalibrate the monitor.'],why:'Sudden waveform loss can reflect apnea, disconnection, airway displacement, or catastrophic perfusion loss and requires immediate assessment.'}
+],
+more:[
+{q:'Which waveform indicates normal ventilation/perfusion shape?'+W('normal'),a:'Square-shaped waveform with near-zero inspiratory baseline',opts:['Square-shaped waveform with near-zero inspiratory baseline','Shark-fin contour','Elevated inspiratory baseline','Completely flat line'],why:'Normal inspiration returns near zero and expiration forms a plateau.'},
+{q:'Which waveform best matches an elevated ETCO₂ with preserved shape?'+W('high'),a:'Hypoventilation pattern',opts:['Hypoventilation pattern','Hyperventilation pattern','Complete circuit disconnect','No perfusion'],why:'A taller preserved waveform can accompany elevated ETCO₂ from reduced ventilation.'},
+{q:'Which waveform best matches low ETCO₂ with preserved shape?'+W('low'),a:'Possible hyperventilation or reduced perfusion',opts:['Possible hyperventilation or reduced perfusion','Rebreathing only','Normal ETCO₂ always','Cuff leak only'],why:'Low waveform height with preserved shape suggests a lower exhaled CO₂ value but still needs context.'},
+{q:'A shark-fin waveform should make you assess for:',a:'Airway obstruction and expiratory flow limitation',opts:['Airway obstruction and expiratory flow limitation','CO poisoning','Nail polish','A normal pulse-ox probe'],why:'The waveform reflects delayed exhalation.'},
+{q:'An inspiratory baseline that does not return to zero should make you inspect:',a:'Circuit/exhalation system for rebreathing',opts:['Circuit/exhalation system for rebreathing','Only the pulse-ox probe','Only hemoglobin level','Only respiratory rate'],why:'Inspired gas should not normally contain measurable exhaled CO₂.'}
+]},
+{id:'airway',num:6,title:'Artificial Airway: Confirm It, Then Keep Watching It',subtitle:'Waveform capnography is not only a one-time placement check.',
+teach:`<p>After intubation, <strong>persistent exhaled CO₂ with an appropriate waveform</strong> strongly supports tracheal placement. A colorimetric detector can provide rapid initial evidence of exhaled CO₂, but waveform capnography is preferred when available and provides ongoing monitoring.</p>
+<div class="warning"><strong>Important:</strong> Absence of exhaled CO₂ after intubation can mean esophageal placement—but also consider disconnection, apnea, obstruction, or extremely poor perfusion/cardiac arrest. Assess the patient and airway immediately.</div>
+<div class="normal"><strong>Colorimetric detector in the supplied course:</strong> purple → yellow indicates detected exhaled CO₂. Persistent purple after several breaths is concerning for absent exhaled CO₂.</div>`,
+req:[
+{q:'After intubation, which finding provides the strongest immediate bedside evidence supporting tracheal placement?',a:'Persistent waveform capnography showing exhaled CO₂',opts:['Persistent waveform capnography showing exhaled CO₂','A single pulse-ox value','Chest rise alone','A color change without continued monitoring'],why:'Persistent waveform capnography provides continuous evidence that exhaled CO₂ is reaching the detector.'},
+{q:'A colorimetric CO₂ detector remains purple after several breaths following intubation. What should you suspect?',a:'Possible esophageal placement or absent exhaled CO₂ requiring immediate reassessment',opts:['Possible esophageal placement or absent exhaled CO₂ requiring immediate reassessment','Confirmed tracheal placement','Normal capnography','Carbon monoxide poisoning'],why:'Failure to detect exhaled CO₂ after intubation is concerning and requires immediate airway reassessment.'},
+{q:'A colorimetric detector turns yellow after ventilation. According to the supplied course, what does that indicate?',a:'Exhaled CO₂ is present, supporting tracheal placement.',opts:['Exhaled CO₂ is present, supporting tracheal placement.','The patient is definitely hyperventilating.','The tube is in the esophagus.','The pulse-ox probe is working.'],why:'The color change indicates detected CO₂.'},
+{q:'A patient has confirmed tracheal placement, then the capnogram suddenly disappears. What should the therapist do?',a:'Immediately assess the patient, tube position/patency, and circuit continuity.',opts:['Immediately assess the patient, tube position/patency, and circuit continuity.','Wait for a chest x-ray before looking at the airway.','Assume the patient is hyperventilating.','Ignore the waveform if SpO₂ is still 100%.'],why:'Sudden waveform loss after prior confirmation suggests an acute airway, circuit, ventilation, or perfusion problem.'},
+{q:'Why is continuous waveform capnography better than a one-time placement check?',a:'It can detect later changes in airway position, ventilation, circuit integrity, and perfusion.',opts:['It can detect later changes in airway position, ventilation, circuit integrity, and perfusion.','It directly measures hemoglobin concentration.','It replaces all clinical assessment.','It prevents every airway complication.'],why:'Ongoing waveform monitoring can reveal new problems after initial placement.'}
+],
+more:[
+{q:'Where should the capnography sensor/adapter be placed?',a:'Proximal to the patient’s airway connection',opts:['Proximal to the patient’s airway connection','At the oxygen source only','On the pulse-ox probe','On the chest wall'],why:'The detector must sample exhaled gas near the airway connection.'},
+{q:'A nearly flat waveform immediately after intubation should raise concern for:',a:'Esophageal placement or absent exhaled CO₂',opts:['Esophageal placement or absent exhaled CO₂','Guaranteed normal placement','High COHb','Nail-polish artifact'],why:'Persistent exhaled CO₂ is expected with tracheal ventilation when perfusion is present.'},
+{q:'Waveform capnography is useful after airway placement because it:',a:'Monitors both ongoing exhaled CO₂ and waveform changes over time',opts:['Monitors both ongoing exhaled CO₂ and waveform changes over time','Measures PaO₂ directly','Detects hemoglobin level','Only works for one breath'],why:'Continuous monitoring adds trend and shape information.'},
+{q:'If waveform disappears but the patient still has a pulse, one possibility is:',a:'Ventilator/circuit disconnection',opts:['Ventilator/circuit disconnection','Normal ventilation','CO poisoning','Polysomnography'],why:'Loss of gas flow to the detector can flatten the waveform.'},
+{q:'If waveform disappears during cardiac arrest, one possible cause is:',a:'Very low or absent pulmonary perfusion',opts:['Very low or absent pulmonary perfusion','Normal perfusion','Pulse-ox motion only','Nail polish'],why:'CO₂ must be delivered by circulation to the lungs before it can be exhaled.'}
+]},
+{id:'code',num:7,title:'Capnography in CPR: Follow Perfusion in Real Time',subtitle:'During arrest, ETCO₂ becomes a clue to blood flow generated by compressions.',
+teach:`<p>During CPR, pulmonary blood flow carries CO₂ to the lungs. That means ETCO₂ can help trend the effectiveness of chest compressions and may rise abruptly when spontaneous circulation returns.</p>${W('rosc')}
+<div class="clue"><strong>Legacy course teaching:</strong> very low ETCO₂ during CPR should prompt attention to compression quality and fatigue. A sudden substantial rise can suggest return of spontaneous circulation (ROSC).</div>
+<div class="warning"><strong>Do not use ETCO₂ in isolation.</strong> Continue the resuscitation algorithm and assess the whole clinical situation.</div>`,
+req:[
+{q:'During CPR, ETCO₂ suddenly rises from 5 to 30 mmHg. What does that suggest?',a:'Return of spontaneous circulation (ROSC) may have occurred.',opts:['Return of spontaneous circulation (ROSC) may have occurred.','The patient is definitely hyperventilating.','The pulse-ox probe failed.','A cuff leak is certain.'],why:'A sudden rise in ETCO₂ during CPR can reflect a sudden increase in pulmonary perfusion from ROSC.'},
+{q:'During CPR, ETCO₂ remains around 10 mmHg. According to the supplied course, what should be addressed?',a:'Chest-compression quality and compressor fatigue',opts:['Chest-compression quality and compressor fatigue','Nail polish','Overnight oximetry','Carbon monoxide exposure'],why:'Low ETCO₂ during CPR can reflect poor forward blood flow from inadequate compressions.'},
+{q:'Why does ETCO₂ provide information about CPR quality?',a:'CO₂ must be carried by blood flow to the lungs before it can be exhaled.',opts:['CO₂ must be carried by blood flow to the lungs before it can be exhaled.','SpO₂ directly controls ETCO₂.','The capnograph measures chest-compression depth directly.','ETCO₂ is independent of perfusion.'],why:'Perfusion is part of the path from tissue CO₂ production to exhaled CO₂.'},
+{q:'Which trend is most concerning during ongoing CPR?',a:'ETCO₂ progressively falls as compressions continue.',opts:['ETCO₂ progressively falls as compressions continue.','ETCO₂ abruptly rises with signs of circulation.','A stable waveform is present.','The waveform becomes taller after ROSC.'],why:'Falling ETCO₂ can suggest decreasing perfusion or CPR effectiveness and should prompt reassessment.'},
+{q:'A sudden ETCO₂ rise during CPR should prompt the team to:',a:'Assess for ROSC while continuing appropriate resuscitation actions.',opts:['Assess for ROSC while continuing appropriate resuscitation actions.','Stop all monitoring permanently.','Assume airway obstruction.','Increase ventilation automatically without assessment.'],why:'The rise is a perfusion clue, not a stand-alone diagnosis.'}
+],
+more:[
+{q:'A capnograph reading during CPR is influenced strongly by:',a:'Pulmonary blood flow generated by compressions',opts:['Pulmonary blood flow generated by compressions','Nail polish color','Room lighting','Hemoglobin concentration only'],why:'Perfusion determines how much tissue CO₂ reaches the lungs.'},
+{q:'Compressor fatigue may cause ETCO₂ to:',a:'Fall',opts:['Fall','Always rise','Remain fixed by definition','Become SpO₂'],why:'Less effective compressions may reduce pulmonary blood flow and exhaled CO₂.'},
+{q:'A sudden ETCO₂ rise with a palpable pulse most strongly supports:',a:'ROSC',opts:['ROSC','Rebreathing only','Pulse-ox artifact','Carbon monoxide poisoning'],why:'Improved circulation increases delivery of CO₂ to the lungs.'},
+{q:'During CPR, capnography is most useful as a:',a:'Trend of perfusion and ventilation during resuscitation',opts:['Trend of perfusion and ventilation during resuscitation','Direct measure of oxygen content','Direct measure of blood pressure','Replacement for all pulse checks and algorithms'],why:'It provides continuous physiologic trend information.'},
+{q:'Which action is appropriate when ETCO₂ unexpectedly falls during CPR?',a:'Reassess compression quality, airway/circuit, ventilation, and patient status.',opts:['Reassess compression quality, airway/circuit, ventilation, and patient status.','Ignore it until SpO₂ changes.','Remove all monitors.','Assume normal circulation.'],why:'Multiple factors can lower ETCO₂, so immediate system-level reassessment is appropriate.'}
+]}
+];
+
+const F=[
+{q:'Case 1: Post-op patient on 3 L/min nasal cannula: SpO₂ 96%, RR 8/min, ETCO₂ rises from 42 to 58, and the patient is increasingly difficult to arouse. What matters most?',a:'Ventilatory failure/respiratory depression despite acceptable oxygen saturation',opts:['Ventilatory failure/respiratory depression despite acceptable oxygen saturation','Normal respiratory status because SpO₂ is 96%','Pulse-oximeter failure only','Isolated oxygenation failure'],why:'The ventilatory and neurologic findings are deteriorating even though oxygen preserves SpO₂.'},
+{q:'Case 2: SpO₂ fluctuates from 79% to 96% in a restless patient with cold hands, a weak pleth, and monitor pulse that does not match the palpated pulse. What should you do?',a:'Assess the patient, improve/choose a better-perfused site, reduce motion, and verify the sensor before trusting the value.',opts:['Assess the patient, improve/choose a better-perfused site, reduce motion, and verify the sensor before trusting the value.','Assume every low value is true severe hypoxemia.','Ignore the monitor because the patient is moving.','Increase oxygen without any assessment.'],why:'Signal quality is poor and the patient/device must be assessed together.'},
+{q:'Case 3: ETCO₂ falls from 38 to 24 while RR rises from 16 to 32 and the waveform shape remains normal. What is most likely?',a:'Hyperventilation',opts:['Hyperventilation','Hypoventilation','Rebreathing','Cuff leak'],why:'Low ETCO₂ plus tachypnea with preserved shape supports increased ventilation.'},
+{q:'Case 4: ETCO₂ falls from 36 to 20, RR remains 16, BP falls to 72/40, and the patient is pale and cool. What should you suspect?',a:'Decreased perfusion rather than simple hyperventilation',opts:['Decreased perfusion rather than simple hyperventilation','Normal ventilation/perfusion','Rebreathing','Pulse-ox nail-polish artifact'],why:'Low ETCO₂ can reflect reduced pulmonary blood flow when ventilation is unchanged.'},
+{q:'Case 5: Which waveform best fits acute airflow obstruction?'+W('shark'),a:'The displayed shark-fin waveform',opts:['The displayed shark-fin waveform','A flat zero waveform','An elevated inspiratory baseline only','A normal square waveform'],why:'A slanted expiratory upstroke/plateau reflects obstructed exhalation.'},
+{q:'Case 6: After intubation, the waveform is nearly flat despite ventilation. What should happen first?',a:'Immediately reassess tube placement, airway, circuit, and patient/perfusion.',opts:['Immediately reassess tube placement, airway, circuit, and patient/perfusion.','Wait for SpO₂ to fall before acting.','Assume adequate placement because chest rise is present.','Increase FiO₂ only.'],why:'Absent exhaled CO₂ after intubation is an airway emergency until explained.'},
+{q:'Case 7: During CPR, ETCO₂ is 8–10 mmHg and trending downward. What is the best next thought?',a:'Reassess compression quality, fatigue, airway/circuit, and ventilation.',opts:['Reassess compression quality, fatigue, airway/circuit, and ventilation.','The patient has definitely achieved ROSC.','The pulse oximeter must be wrong.','Decrease compression depth.'],why:'Low/falling ETCO₂ during CPR can indicate inadequate pulmonary blood flow or another resuscitation problem.'},
+{q:'Case 8: During CPR, ETCO₂ suddenly jumps from 9 to 35 mmHg and stays there. What should the team suspect?',a:'ROSC',opts:['ROSC','Hyperventilation only','Rebreathing only','Nail-polish interference'],why:'A sudden sustained rise can indicate restored circulation.'},
+{q:'Case 9: Smoke-exposure patient has headache and nausea, SpO₂ 99%, but CO poisoning is suspected. Which test best addresses that concern?',a:'Co-oximetry',opts:['Co-oximetry','Pulse oximetry alone','Overnight oximetry','Capillary refill only'],why:'Co-oximetry directly measures COHb and other hemoglobin species.'},
+{q:'Case 10: What sequence best matches the Week 2.1 approach?',a:'Assess patient → verify signal/equipment → identify oxygenation vs ventilation → interpret number + waveform/trend → identify cause → act → reassess',opts:['Assess patient → verify signal/equipment → identify oxygenation vs ventilation → interpret number + waveform/trend → identify cause → act → reassess','Read the number → diagnose → stop','SpO₂ first → ignore ETCO₂ if saturation is normal','Change settings first → assess later'],why:'The fixed sequence keeps monitor interpretation patient-centered and prevents false reassurance.'}
+];
+
+function addQ(q,host,key,required=false,final=false){
+ const w=document.createElement('div');w.className='q';
+ const title=document.createElement('div');title.className='q-title';title.innerHTML=q.q;w.appendChild(title);
+ const box=document.createElement('div');box.className='options';
+ shuffle(q.opts).forEach(o=>{const l=document.createElement('label');l.className='option';const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;l.appendChild(r);l.appendChild(document.createTextNode(o));box.appendChild(l)});w.appendChild(box);
+ const b=document.createElement('button');b.className='btn';b.textContent='Check answer';b.style.marginTop='10px';
+ const f=document.createElement('div');f.className='feedback';f.setAttribute('role','status');
+ b.onclick=()=>{const c=w.querySelector('input[type=radio]:checked');if(!c){f.className='feedback bad';f.textContent='Choose an answer first.';return}
+ const ok=c.value===q.a;if(ok){f.className='feedback ok';f.innerHTML='<strong>Correct.</strong> '+q.why;if(required)state.required[key]=true;if(final)state.final[key]=true;save();update()}
+ else{f.className='feedback bad';f.innerHTML='<strong>Not yet.</strong> '+q.why+' Go back to the monitor-response routine and identify which step you skipped.'}};
+ w.appendChild(b);w.appendChild(f);host.appendChild(w)
+}
+function renderStations(){
+ const host=document.getElementById('stations');
+ S.forEach(s=>{
+   const sec=document.createElement('section');sec.className='card';
+   sec.innerHTML=`<div class="station-head"><div class="num">${s.num}</div><div><span class="kicker">Required learning station</span><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div><div class="teach" style="margin-top:18px">${s.teach}</div><h3>Required mastery practice</h3><p class="small">Correct all 5 required questions. You may retry immediately.</p><div class="req"></div><div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)"><button class="btn2 moreBtn">More Practice +5</button></div><div class="more"><span class="kicker">Optional • does not affect completion</span><h3>More Practice: 5 additional questions</h3><div class="moreQs"></div><button class="btn3 resetMore">Practice Again</button></div>`;
+   host.appendChild(sec);s.req.forEach((q,i)=>addQ(q,sec.querySelector('.req'),`${s.id}-r${i}`,true,false));
+   const redraw=()=>{const m=sec.querySelector('.moreQs');m.innerHTML='';shuffle(s.more).forEach((q,i)=>addQ(q,m,`${s.id}-m${Date.now()}-${i}`))};redraw();
+   sec.querySelector('.moreBtn').onclick=()=>{const m=sec.querySelector('.more');m.classList.toggle('open');sec.querySelector('.moreBtn').textContent=m.classList.contains('open')?'Hide More Practice':'More Practice +5'};
+   sec.querySelector('.resetMore').onclick=redraw;
+ })
+}
+function reqTotal(){return S.reduce((n,s)=>n+s.req.length,0)}
+function reqDone(){return Object.keys(state.required).filter(k=>state.required[k]).length}
+function finDone(){return Object.keys(state.final).filter(k=>state.final[k]).length}
+function renderFinal(){const h=document.getElementById('finalQuestions');F.forEach((q,i)=>addQ(q,h,`final-${i}`,false,true))}
+function update(){
+ const total=reqTotal()+F.length,done=Math.min(reqDone(),reqTotal())+Math.min(finDone(),F.length),p=Math.round(done/total*100);
+ document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';
+ const unlocked=reqDone()>=reqTotal(),fq=document.getElementById('finalQuestions'),lock=document.getElementById('finalLock');
+ if(unlocked){fq.classList.remove('lock');fq.setAttribute('aria-disabled','false');lock.style.display='none'}else{fq.classList.add('lock');fq.setAttribute('aria-disabled','true');lock.style.display='block'}
+ if(done===total)document.getElementById('completeBox').classList.add('show')
+}
+renderStations();renderFinal();update();
+</script>
+</body>
+</html>
