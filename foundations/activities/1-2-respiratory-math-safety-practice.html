@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assignment 1.2 – Respiratory Math Safety Practice</title>
+<style>
+:root{
+  --ink:#173042;--muted:#5d6d78;--line:#d9e2e8;--panel:#f7fafb;--accent:#177f86;
+  --accent2:#0f646a;--ok:#156a48;--warn:#875a00;--bad:#9b2c2c;--soft:#eaf5f5;--white:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef3f5;color:var(--ink);line-height:1.55}
+a{color:var(--accent2)}
+.shell{max-width:1080px;margin:auto;background:#fff;min-height:100vh;box-shadow:0 0 24px rgba(0,0,0,.08)}
+.hero{padding:34px 34px 26px;background:linear-gradient(135deg,#143b4a,#176c72);color:#fff}
+.hero h1{margin:0 0 8px;font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.15}
+.hero p{margin:.4rem 0;max-width:850px}
+.badge{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:5px 10px;border-radius:999px;font-size:.9rem;font-weight:700}
+.progress-wrap{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:12px 28px}
+.progress-row{display:flex;gap:14px;align-items:center}
+.progress{height:12px;background:#dce6e8;border-radius:99px;overflow:hidden;flex:1}
+.progress>div{height:100%;width:0;background:var(--accent);transition:width .3s}
+main{padding:28px}
+.card{border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 24px;background:#fff}
+.teach{background:var(--panel);border-left:5px solid var(--accent)}
+.safety{background:#fff8e6;border:1px solid #ead49d}
+.safety h3{color:#684600}
+h2{margin-top:0;font-size:1.5rem}
+h3{margin:1.2rem 0 .5rem}
+h4{margin:.7rem 0}
+.kicker{text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;font-weight:700;color:var(--accent2)}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.flow div{border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center;background:#fff}
+.flow b{display:block;color:var(--accent2)}
+.tip{border-radius:10px;background:var(--soft);padding:13px 15px;margin:12px 0}
+.formula{font-family:Consolas,monospace;background:#f1f5f7;padding:8px 10px;border-radius:7px;display:inline-block}
+.q{border-top:1px solid var(--line);padding:18px 0 6px}
+.q:first-of-type{border-top:0}
+.q-title{font-weight:700;margin-bottom:8px}
+.options{display:grid;gap:8px;margin:10px 0}
+.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);padding:10px;border-radius:9px;cursor:pointer}
+.option:hover{background:#f7fbfb}
+input[type=number],input[type=text]{font:inherit;padding:10px 12px;border:1px solid #9fb0ba;border-radius:8px;width:min(100%,300px)}
+button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:10px 14px;cursor:pointer}
+.btn{background:var(--accent);color:#fff}
+.btn:hover{background:var(--accent2)}
+.btn2{background:#eef5f6;color:var(--accent2);border:1px solid #bdd4d7}
+.btn3{background:#fff;color:var(--ink);border:1px solid #aab9c1}
+.feedback{display:none;margin-top:10px;padding:11px 13px;border-radius:8px}
+.feedback.ok{display:block;background:#e8f6ef;color:#0b5538;border:1px solid #9dd1b9}
+.feedback.bad{display:block;background:#fff0f0;color:#7f1f1f;border:1px solid #e3aaaa}
+.feedback.info{display:block;background:#eef7fb;color:#244c60;border:1px solid #bcd7e4}
+.station-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.station-number{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.station-title{display:flex;gap:12px;align-items:center}
+.more{display:none;border-top:2px dashed #bdd0d6;margin-top:18px;padding-top:18px}
+.more.open{display:block}
+.more-label{font-size:.88rem;color:var(--muted)}
+.reference table{width:100%;border-collapse:collapse}
+.reference th,.reference td{padding:8px 9px;border:1px solid var(--line);text-align:left}
+.reference th{background:#edf4f5}
+.checkline{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.checkpill{background:#edf5f6;border:1px solid #c8dcde;border-radius:999px;padding:6px 10px;font-size:.9rem}
+.lock{opacity:.58}
+.complete-box{display:none;background:#e8f6ef;border:2px solid #87c7aa;border-radius:14px;padding:22px}
+.complete-box.show{display:block}
+.small{font-size:.9rem;color:var(--muted)}
+.footer{padding:26px 28px 40px;color:var(--muted);font-size:.9rem}
+@media(max-width:700px){
+ .hero{padding:26px 20px}.progress-wrap{padding:10px 14px}main{padding:16px}
+ .flow{grid-template-columns:1fr 1fr}.station-head{display:block}.station-title{margin-bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="hero">
+  <span class="badge">AHRC 152 • Week 1.2 • 20 points</span>
+  <h1>Respiratory Math Safety Lab</h1>
+  <p>Learn the math, show the units, and decide whether the answer is safe to use. The goal is not just to get a number—it is to produce a result you can defend before it affects a patient.</p>
+</header>
+
+<div class="progress-wrap" aria-label="Assignment progress">
+  <div class="progress-row"><strong id="progressText">0% complete</strong><div class="progress"><div id="progressBar"></div></div></div>
+</div>
+
+<main>
+<section class="card teach">
+  <div class="kicker">Your repeatable safety process</div>
+  <h2>STOP → SET UP → SOLVE → CHECK</h2>
+  <div class="flow">
+    <div><b>STOP</b>What am I finding? What unit should remain?</div>
+    <div><b>SET UP</b>Write the known value and orient conversion factors so units cancel.</div>
+    <div><b>SOLVE</b>Do the arithmetic. Keep units visible. Round only at the end.</div>
+    <div><b>CHECK</b>Does the direction, magnitude, unit, and clinical result make sense?</div>
+  </div>
+  <div class="safety card" style="margin-bottom:0">
+    <h3>“Does my answer make sense?” is part of the calculation.</h3>
+    <p><strong>Example:</strong> A patient weighs 176 lb. If you calculate <strong>387 kg</strong>, something is wrong. A kilogram is a larger unit than a pound, so the numerical value in kilograms must be <strong>smaller</strong>. You likely multiplied by 2.2 instead of dividing.</p>
+    <p class="formula">176 lb ÷ 2.2 lb/kg = 80 kg</p>
+    <div class="checkline">
+      <span class="checkpill">Unit right?</span><span class="checkpill">Direction right?</span><span class="checkpill">Magnitude reasonable?</span><span class="checkpill">Safe to use?</span>
+    </div>
+  </div>
+</section>
+
+<details class="card reference">
+<summary><strong>Quick Reference Drawer</strong> — open whenever you need it</summary>
+<table style="margin-top:14px">
+<tr><th>Relationship</th><th>Use</th></tr>
+<tr><td>1 L = 1,000 mL</td><td>Volume</td></tr>
+<tr><td>1 g = 1,000 mg; 1 mg = 1,000 mcg</td><td>Medication mass</td></tr>
+<tr><td>1 ft = 12 in; 1 in = 2.54 cm</td><td>Height</td></tr>
+<tr><td>1 kg ≈ 2.2 lb</td><td>Weight</td></tr>
+<tr><td>°C = (°F − 32) × 5/9</td><td>Fahrenheit → Celsius</td></tr>
+<tr><td>°F = (°C × 9/5) + 32</td><td>Celsius → Fahrenheit</td></tr>
+<tr><td>K = °C + 273</td><td>Celsius → Kelvin</td></tr>
+<tr><td>1% solution = 1 g/100 mL = 10 mg/mL</td><td>Percent solutions</td></tr>
+</table>
+</details>
+
+<div id="stations"></div>
+
+<section class="card" id="finalCard">
+  <div class="kicker">Final clinical math challenge</div>
+  <h2>Now you are on your own.</h2>
+  <p>Complete all five required stations first. Then solve the final challenge with minimal scaffolding. You may still use the reference drawer.</p>
+  <div id="finalLock" class="tip">Complete all required station mastery checks to unlock this challenge.</div>
+  <div id="finalQuestions" class="lock" aria-disabled="true"></div>
+</section>
+
+<section id="completeBox" class="complete-box">
+  <h2>Assignment complete ✓</h2>
+  <p>You completed all required mastery checks and the final clinical math challenge.</p>
+  <p><strong>Remember the habit:</strong> a calculator can perform arithmetic, but it cannot tell you whether you used the wrong unit, reversed a conversion, misplaced a decimal, or produced a clinically unreasonable answer.</p>
+  <div class="checkline"><span class="checkpill">Unit right</span><span class="checkpill">Direction right</span><span class="checkpill">Magnitude reasonable</span><span class="checkpill">Safe to use</span></div>
+</section>
+</main>
+
+<div class="footer">Optional “More Practice” questions do not affect completion or points. Progress is saved on this device/browser.</div>
+</div>
+
+<script>
+const STORAGE='ahrc152_math_safety_lab_v1';
+const state=JSON.parse(localStorage.getItem(STORAGE)||'{"required":{},"final":{}}');
+const save=()=>localStorage.setItem(STORAGE,JSON.stringify(state));
+const nclose=(a,b,t=.01)=>Math.abs(Number(a)-Number(b))<=t;
+
+function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const stations=[
+{
+ id:'metric',num:1,title:'Metric Conversions',subtitle:'Smaller unit = larger number; larger unit = smaller number.',
+ teach:`<p>Metric conversions become much safer when you let the <strong>units</strong> choose the direction. To convert to a smaller unit, the numerical value grows. To convert to a larger unit, the numerical value shrinks.</p>
+ <div class="tip"><strong>Build the conversion:</strong> 0.961 L × (1,000 mL / 1 L) = 961 mL. Liters cancel; milliliters remain.</div>
+ <p><strong>Magnitude check:</strong> 0.961 L is almost 1 L, so an answer near 1,000 mL makes sense. An answer of 0.000961 mL does not.</p>`,
+ required:[
+  {type:'num',q:'Convert 0.961 L to mL. Round to the nearest whole number.',a:961,tol:.01,unit:'mL',why:'You moved from liters to the smaller milliliter unit, so the number should become larger: 0.961 × 1,000 = 961 mL.'},
+  {type:'num',q:'Convert 4,483 mcg to mg. Round to the nearest thousandth.',a:4.483,tol:.0005,unit:'mg',why:'You moved from micrograms to the larger milligram unit, so the number should become smaller: 4,483 ÷ 1,000 = 4.483 mg.'},
+  {type:'mc',q:'A student converts 402 mL to 402,000 L. What is the best safety check?',a:'The answer should be smaller because liters are larger units than milliliters.',opts:['The answer should be smaller because liters are larger units than milliliters.','The answer should be larger because liters are larger units than milliliters.','The number is acceptable because the calculator produced it.','Units can be added after the arithmetic is complete.'],why:'402 mL is less than 1 L. Converting to liters must produce a smaller numerical value: 0.402 L.'}
+ ],
+ more:[
+  {type:'num',q:'Convert 2.75 L to mL.',a:2750,tol:.01,unit:'mL',why:'2.75 × 1,000 = 2,750 mL. Smaller unit → larger number.'},
+  {type:'num',q:'Convert 650 mL to L.',a:.65,tol:.0005,unit:'L',why:'650 ÷ 1,000 = 0.650 L. Larger unit → smaller number.'},
+  {type:'num',q:'Convert 0.84 mg to mcg.',a:840,tol:.01,unit:'mcg',why:'0.84 × 1,000 = 840 mcg.'},
+  {type:'num',q:'Convert 7,250 mcg to mg.',a:7.25,tol:.0005,unit:'mg',why:'7,250 ÷ 1,000 = 7.25 mg.'},
+  {type:'num',q:'If 100 cm = 1 m and 1,000 m = 1 km, how many cm are in 1.8 km?',a:180000,tol:.01,unit:'cm',why:'1.8 km × 1,000 m/km × 100 cm/m = 180,000 cm.'}
+ ]
+},
+{
+ id:'weight',num:2,title:'Height, Weight & Imperial/Metric',subtitle:'Use unit size to catch multiply-vs-divide errors.',
+ teach:`<p>For weight, remember: <strong>a kilogram is a larger unit than a pound</strong>. Therefore the kilogram number should be smaller.</p>
+ <div class="tip"><strong>176 lb → kg:</strong> 176 lb × (1 kg / 2.2 lb) = 80 kg. If you get 387 kg, the direction check tells you to stop before trusting it.</div>
+ <p>For height, first convert feet to inches, add the remaining inches, then convert inches to centimeters.</p>`,
+ required:[
+  {type:'num',q:'How many inches tall is a person who is 4 ft 2 in?',a:50,tol:.01,unit:'in',why:'4 ft × 12 in/ft = 48 in; 48 + 2 = 50 in.'},
+  {type:'num',q:'A patient weighs 90 lb. Approximately how many kg? Round to the nearest whole number.',a:41,tol:.49,unit:'kg',why:'90 ÷ 2.2 ≈ 40.9 kg → 41 kg. The kg number is smaller than the lb number, which passes the direction check.'},
+  {type:'mc',q:'A 154-lb patient is calculated as 339 kg. What most likely happened?',a:'The student multiplied pounds by 2.2 instead of dividing.',opts:['The student multiplied pounds by 2.2 instead of dividing.','The student divided pounds by 2.2 correctly.','The student converted kilograms to pounds correctly.','The student rounded too late in the calculation.'],why:'Because kilograms are larger units, the numerical value should decrease. 154 ÷ 2.2 = 70 kg.'}
+ ],
+ more:[
+  {type:'num',q:'Convert 132 lb to kg. Round to the nearest whole number.',a:60,tol:.49,unit:'kg',why:'132 ÷ 2.2 = 60 kg.'},
+  {type:'num',q:'Convert 72 kg to lb. Round to the nearest whole number.',a:158,tol:.49,unit:'lb',why:'72 × 2.2 = 158.4 lb → 158 lb. Moving to pounds makes the number larger.'},
+  {type:'num',q:'How many inches are in 5 ft 7 in?',a:67,tol:.01,unit:'in',why:'5 × 12 + 7 = 67 in.'},
+  {type:'num',q:'Convert 67 in to cm. Round to the nearest whole number.',a:170,tol:.49,unit:'cm',why:'67 × 2.54 = 170.18 cm → 170 cm.'},
+  {type:'num',q:'A patient is 6 ft 1 in. Convert height to cm. Round to the nearest whole number.',a:185,tol:.49,unit:'cm',why:'6 ft 1 in = 73 in; 73 × 2.54 = 185.42 cm → 185 cm.'}
+ ]
+},
+{
+ id:'resp',num:3,title:'Respiratory Calculations',subtitle:'Use estimation and reverse checks before a number reaches a ventilator.',
+ teach:`<p>Weight-based tidal volume uses <strong>mL/kg</strong>. Multiply the verified weight by the prescribed mL/kg target, then check whether the result is plausible.</p>
+ <div class="tip"><strong>Estimate first:</strong> 63 kg × 6 mL/kg should be near 60 × 6 = 360 mL. Exact result: 378 mL. A result of 3,780 mL is a tenfold warning.</div>
+ <p><strong>Minute ventilation:</strong> VT × RR. Convert mL to L when the final answer is requested in L/min. A reverse check can recover the original VT.</p>`,
+ required:[
+  {type:'num',q:'A patient has an ideal/predicted body weight of 63 kg. At 6 mL/kg, what tidal volume is this in mL?',a:378,tol:.01,unit:'mL',why:'63 kg × 6 mL/kg = 378 mL. kg cancels, leaving mL.'},
+  {type:'num',q:'Convert that 378 mL tidal volume to liters. Round to the nearest thousandth.',a:.378,tol:.0005,unit:'L',why:'378 ÷ 1,000 = 0.378 L. Liters are larger units, so the number becomes smaller.'},
+  {type:'mc',q:'A student reports minute ventilation of 54 L/min from VT 450 mL and RR 12/min. What should you suspect first?',a:'A tenfold decimal error converting 450 mL to liters.',opts:['A tenfold decimal error converting 450 mL to liters.','The respiratory rate should have been divided by tidal volume.','The patient weight was omitted from the equation.','The value is normal and can be used without verification.'],why:'450 mL = 0.45 L; 0.45 × 12 = 5.4 L/min. The 54 L/min result suggests 4.5 L was used instead.'}
+ ],
+ more:[
+  {type:'num',q:'Calculate VT at 6 mL/kg for a predicted body weight of 70 kg.',a:420,tol:.01,unit:'mL',why:'70 × 6 = 420 mL.'},
+  {type:'num',q:'Calculate VT at 8 mL/kg for a predicted body weight of 55 kg.',a:440,tol:.01,unit:'mL',why:'55 × 8 = 440 mL.'},
+  {type:'num',q:'VT is 500 mL and RR is 14/min. What is minute ventilation in L/min?',a:7,tol:.01,unit:'L/min',why:'500 mL = 0.5 L; 0.5 L/breath × 14 breaths/min = 7 L/min.'},
+  {type:'num',q:'Minute ventilation is 6.6 L/min and RR is 12/min. What is VT in mL? Use a reverse check.',a:550,tol:.01,unit:'mL',why:'6.6 ÷ 12 = 0.55 L/breath = 550 mL.'},
+  {type:'mc',q:'Two students calculate 450 mL and 600 mL for the same patient. What is safest?',a:'Independently rebuild the calculation and verify the patient data and target before recommending a setting.',opts:['Independently rebuild the calculation and verify the patient data and target before recommending a setting.','Average the two answers and use 525 mL.','Choose the smaller answer because smaller is always safer.','Choose the larger answer to ensure enough ventilation.'],why:'Conflicting calculations must be resolved before clinical use; averaging or choosing by preference does not establish correctness.'}
+ ]
+},
+{
+ id:'temp',num:4,title:'Temperature Conversions',subtitle:'Choose the scale first, then apply the matching formula.',
+ teach:`<p>Temperature conversion is not a simple decimal shift. First identify the starting scale and the requested scale.</p>
+ <div class="tip"><span class="formula">°C = (°F − 32) × 5/9</span> &nbsp; <span class="formula">°F = (°C × 9/5) + 32</span> &nbsp; <span class="formula">K = °C + 273</span></div>
+ <p><strong>Reasonableness check:</strong> normal body temperature is around the high 30s °C and around 100 °F. If you convert 100 °F and get 212 °C, stop and rebuild the formula.</p>`,
+ required:[
+  {type:'num',q:'Convert 29 °C to Kelvin using K = °C + 273.',a:302,tol:.01,unit:'K',why:'29 + 273 = 302 K.'},
+  {type:'num',q:'Convert 100 °F to °C. Round to the nearest tenth.',a:37.8,tol:.05,unit:'°C',why:'(100 − 32) × 5/9 = 37.8 °C.'},
+  {type:'num',q:'Convert 39 °C to °F. Round to the nearest tenth.',a:102.2,tol:.05,unit:'°F',why:'(39 × 9/5) + 32 = 102.2 °F.'}
+ ],
+ more:[
+  {type:'num',q:'Convert 98.6 °F to °C. Round to the nearest tenth.',a:37.0,tol:.05,unit:'°C',why:'(98.6 − 32) × 5/9 = 37.0 °C.'},
+  {type:'num',q:'Convert 36 °C to °F. Round to the nearest tenth.',a:96.8,tol:.05,unit:'°F',why:'(36 × 9/5) + 32 = 96.8 °F.'},
+  {type:'num',q:'Convert 20 °C to K.',a:293,tol:.01,unit:'K',why:'20 + 273 = 293 K.'},
+  {type:'num',q:'Convert 104 °F to °C. Round to the nearest tenth.',a:40,tol:.05,unit:'°C',why:'(104 − 32) × 5/9 = 40.0 °C.'},
+  {type:'num',q:'Convert 102.2 °F to Kelvin. Convert to °C first, then K. Round to nearest whole number.',a:312,tol:.49,unit:'K',why:'102.2 °F = 39 °C; 39 + 273 = 312 K.'}
+ ]
+},
+{
+ id:'meds',num:5,title:'Medication & Percent Solutions',subtitle:'Order → supply → units → volume → safety check.',
+ teach:`<p>Before calculating, identify the <strong>ordered dose</strong>, the <strong>available dose</strong>, and the <strong>volume containing the available dose</strong>.</p>
+ <div class="tip"><strong>Dose-volume setup:</strong> ordered dose × available volume / available dose. Arrange it so the medication unit cancels and mL remains.</div>
+ <p><strong>Percent solutions:</strong> 1% = 1 g/100 mL = 10 mg/mL. Therefore 0.5% = 5 mg/mL and 10% = 100 mg/mL.</p>
+ <div class="safety card" style="margin:12px 0 0"><strong>Before You Give It:</strong> If two calculations disagree—or if the answer is off by 10×, 100×, or 1,000×—STOP. Rebuild the setup, verify the label, and independently recalculate before administration.</div>`,
+ required:[
+  {type:'num',q:'Albuterol contains 2.5 mg/0.5 mL. The order is 5 mg. How many mL should be given?',a:1,tol:.01,unit:'mL',why:'5 mg × 0.5 mL / 2.5 mg = 1 mL. mg cancels and mL remains.'},
+  {type:'num',q:'Albuterol is a 0.5% solution (5 mg/mL). To give 10 mg, how many mL are needed?',a:2,tol:.01,unit:'mL',why:'10 mg ÷ 5 mg/mL = 2 mL.'},
+  {type:'mc',q:'A medication calculation gives 0.4 mL for one student and 4 mL for another. What should happen next?',a:'Withhold preparation and independently rebuild the calculation with units and the medication label.',opts:['Withhold preparation and independently rebuild the calculation with units and the medication label.','Average the answers and administer 2.2 mL.','Choose 0.4 mL because the smaller dose is always safer.','Choose 4 mL because it is easier to measure accurately.'],why:'A tenfold discrepancy must be resolved before clinical use. Do not average or choose based on preference.'}
+ ],
+ more:[
+  {type:'num',q:'Albuterol contains 2.5 mg/0.5 mL. If 4 mL are administered, how many mg are given?',a:20,tol:.01,unit:'mg',why:'2.5 mg/0.5 mL = 5 mg/mL; 5 × 4 = 20 mg.'},
+  {type:'num',q:'Each albuterol ampule contains 2.5 mg. How many mg are in 4 ampules?',a:10,tol:.01,unit:'mg',why:'2.5 mg × 4 = 10 mg.'},
+  {type:'num',q:'Mucomyst is a 10% solution (100 mg/mL). If 2 mL are given, how many mg are administered?',a:200,tol:.01,unit:'mg',why:'100 mg/mL × 2 mL = 200 mg.'},
+  {type:'num',q:'A vial contains 2.5 mg in 5 mL. What is the concentration in mg/mL?',a:.5,tol:.01,unit:'mg/mL',why:'2.5 mg ÷ 5 mL = 0.5 mg/mL.'},
+  {type:'num',q:'An order is 1.25 mg. Available concentration is 0.5 mg/mL. How many mL should be administered?',a:2.5,tol:.01,unit:'mL',why:'1.25 mg ÷ 0.5 mg/mL = 2.5 mL.'}
+ ]
+}
+];
+
+const finalQs=[
+ {type:'num',q:'Convert 1.35 L to mL.',a:1350,tol:.01,unit:'mL',why:'1.35 × 1,000 = 1,350 mL.'},
+ {type:'num',q:'A patient weighs 198 lb. Approximately how many kg? Round to nearest whole number.',a:90,tol:.49,unit:'kg',why:'198 ÷ 2.2 = 90 kg. kg number should be smaller than lb number.'},
+ {type:'num',q:'Predicted body weight is 68 kg. Calculate VT at 6 mL/kg.',a:408,tol:.01,unit:'mL',why:'68 × 6 = 408 mL.'},
+ {type:'num',q:'VT is 450 mL and RR is 16/min. Calculate minute ventilation in L/min.',a:7.2,tol:.01,unit:'L/min',why:'450 mL = 0.45 L; 0.45 × 16 = 7.2 L/min.'},
+ {type:'num',q:'Convert 101.3 °F to °C. Round to nearest tenth.',a:38.5,tol:.05,unit:'°C',why:'(101.3 − 32) × 5/9 = 38.5 °C.'},
+ {type:'num',q:'A medication is 2 mg/mL. The order is 3 mg. How many mL should be administered?',a:1.5,tol:.01,unit:'mL',why:'3 mg ÷ 2 mg/mL = 1.5 mL.'},
+ {type:'mc',q:'You calculate 4,200 mL for a 70-kg adult at 6 mL/kg. What is the safest interpretation?',a:'The result is implausible and likely contains a tenfold error; stop and recalculate before use.',opts:['The result is implausible and likely contains a tenfold error; stop and recalculate before use.','The result is acceptable because 70 × 6 was entered into a calculator.','The result should be rounded to 4 L and used.','The result is low and should be increased before use.'],why:'70 × 6 = 420 mL, not 4,200 mL. Clinical plausibility is part of calculation safety.'},
+ {type:'mc',q:'A dimensional-analysis setup produces the expected number but leaves mg²/mL when the answer should be mL. What should you do?',a:'Reject the setup and rebuild it so unwanted units cancel and mL remains.',opts:['Reject the setup and rebuild it so unwanted units cancel and mL remains.','Accept it because the number matches the expected value.','Erase the units and write mL after the answer.','Round the number to remove the unit problem.'],why:'Incorrect remaining units show that the setup is invalid even if the numerical answer happens to match.'}
+];
+
+function renderQuestion(q, container, key, required){
+ const wrap=document.createElement('div');wrap.className='q';wrap.dataset.key=key;
+ const title=document.createElement('div');title.className='q-title';title.textContent=q.q;wrap.appendChild(title);
+ let input;
+ if(q.type==='num'){
+   const row=document.createElement('div');
+   input=document.createElement('input');input.type='number';input.step='any';input.setAttribute('aria-label',q.q);
+   row.appendChild(input);
+   if(q.unit){const u=document.createElement('span');u.textContent=' '+q.unit;u.style.marginLeft='8px';row.appendChild(u)}
+   wrap.appendChild(row);
+ } else {
+   const opts=document.createElement('div');opts.className='options';
+   shuffle(q.opts).forEach((o,i)=>{
+     const lab=document.createElement('label');lab.className='option';
+     const r=document.createElement('input');r.type='radio';r.name=key;r.value=o;
+     lab.appendChild(r);lab.appendChild(document.createTextNode(o));opts.appendChild(lab);
+   });wrap.appendChild(opts);
+ }
+ const btn=document.createElement('button');btn.className='btn';btn.textContent='Check answer';btn.style.marginTop='10px';
+ const fb=document.createElement('div');fb.className='feedback';fb.setAttribute('role','status');
+ btn.onclick=()=>{
+   let ok=false, val;
+   if(q.type==='num'){val=input.value; if(val===''){fb.className='feedback bad';fb.textContent='Enter an answer first.';return} ok=nclose(val,q.a,q.tol??.01)}
+   else {const c=wrap.querySelector('input[type=radio]:checked');if(!c){fb.className='feedback bad';fb.textContent='Choose an answer first.';return} val=c.value;ok=val===q.a}
+   if(ok){
+     fb.className='feedback ok';fb.innerHTML='<strong>Correct.</strong> '+q.why+'<br><em>Safety check: Unit right? Direction right? Magnitude reasonable?</em>';
+     if(required){state.required[key]=true;save();updateProgress()}
+     if(key.startsWith('final-')){state.final[key]=true;save();updateProgress()}
+   } else {
+     fb.className='feedback bad';fb.innerHTML='<strong>Not yet.</strong> Recheck the setup before changing numbers at random.<br>'+q.why+'<br><em>Ask: What unit should remain? Should the number get larger or smaller? Is the magnitude reasonable?</em>';
+   }
+ };
+ wrap.appendChild(btn);wrap.appendChild(fb);container.appendChild(wrap);
+}
+
+function renderStations(){
+ const host=document.getElementById('stations');
+ stations.forEach(s=>{
+   const sec=document.createElement('section');sec.className='card';sec.id='station-'+s.id;
+   sec.innerHTML=`<div class="station-head"><div class="station-title"><div class="station-number">${s.num}</div><div><div class="kicker">Required learning station</div><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div><button class="btn2 moreBtn" type="button">More Practice +5</button></div>
+   <div class="teach" style="margin-top:18px">${s.teach}</div>
+   <h3>Required mastery</h3><p class="small">Correct all required items. You may retry immediately.</p>
+   <div class="req"></div>
+   <div class="more"><div class="kicker">Optional • does not affect points or completion</div><h3>More Practice: 5 additional questions</h3><p class="more-label">Use this whenever you want extra repetition. Immediate feedback is provided.</p><div class="moreQs"></div><button type="button" class="btn3 resetMore">Practice Again</button></div>`;
+   host.appendChild(sec);
+   const req=sec.querySelector('.req');s.required.forEach((q,i)=>renderQuestion(q,req,`${s.id}-r${i}`,true));
+   const renderMore=()=>{const m=sec.querySelector('.moreQs');m.innerHTML='';shuffle(s.more).forEach((q,i)=>renderQuestion(q,m,`${s.id}-m${Date.now()}-${i}`,false))};
+   renderMore();
+   sec.querySelector('.moreBtn').onclick=()=>{const m=sec.querySelector('.more');m.classList.toggle('open');sec.querySelector('.moreBtn').textContent=m.classList.contains('open')?'Hide More Practice':'More Practice +5'};
+   sec.querySelector('.resetMore').onclick=()=>{renderMore();sec.querySelector('.more').scrollIntoView({behavior:'smooth',block:'start'})};
+ });
+}
+
+function requiredTotal(){return stations.reduce((n,s)=>n+s.required.length,0)}
+function requiredDone(){return Object.keys(state.required).filter(k=>state.required[k]).length}
+function finalDone(){return Object.keys(state.final).filter(k=>state.final[k]).length}
+function unlockFinal(){
+ const unlocked=requiredDone()>=requiredTotal();
+ const fq=document.getElementById('finalQuestions'), lock=document.getElementById('finalLock');
+ if(unlocked){fq.classList.remove('lock');fq.setAttribute('aria-disabled','false');lock.style.display='none'}
+ else {fq.classList.add('lock');fq.setAttribute('aria-disabled','true');lock.style.display='block'}
+ return unlocked;
+}
+function updateProgress(){
+ const total=requiredTotal()+finalQs.length;
+ const done=Math.min(requiredDone(),requiredTotal())+Math.min(finalDone(),finalQs.length);
+ const pct=Math.round(done/total*100);
+ document.getElementById('progressText').textContent=pct+'% complete';
+ document.getElementById('progressBar').style.width=pct+'%';
+ unlockFinal();
+ if(done===total){document.getElementById('completeBox').classList.add('show')}
+}
+function renderFinal(){
+ const host=document.getElementById('finalQuestions');
+ finalQs.forEach((q,i)=>renderQuestion(q,host,`final-${i}`,false));
+ // override check buttons to track final answers too
+ [...host.querySelectorAll('.q')].forEach((wrap,i)=>{
+   const btn=wrap.querySelector('button'),fb=wrap.querySelector('.feedback'),q=finalQs[i],key=`final-${i}`;
+   btn.onclick=()=>{
+     let ok=false,val;
+     if(q.type==='num'){const input=wrap.querySelector('input[type=number]');val=input.value;if(val===''){fb.className='feedback bad';fb.textContent='Enter an answer first.';return}ok=nclose(val,q.a,q.tol??.01)}
+     else {const c=wrap.querySelector('input[type=radio]:checked');if(!c){fb.className='feedback bad';fb.textContent='Choose an answer first.';return}val=c.value;ok=val===q.a}
+     if(ok){fb.className='feedback ok';fb.innerHTML='<strong>Correct.</strong> '+q.why+'<br><em>Safety check passed: unit, direction, magnitude, and clinical plausibility.</em>';state.final[key]=true;save();updateProgress()}
+     else{fb.className='feedback bad';fb.innerHTML='<strong>Not yet.</strong> '+q.why+'<br><em>Stop and rebuild the calculation rather than guessing.</em>'}
+   }
+ });
+}
+
+renderStations();renderFinal();updateProgress();
+</script>
+</body>
+</html>
