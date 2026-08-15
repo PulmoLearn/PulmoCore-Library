@@ -264,28 +264,7 @@ button{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
 }
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 
 </head>
 <body>
@@ -401,7 +380,12 @@ const stations=[
  required:[
   {type:'num',q:'Convert 0.961 L to mL. Round to the nearest whole number.',a:961,tol:.01,unit:'mL',why:'You moved from liters to the smaller milliliter unit, so the number should become larger: 0.961 × 1,000 = 961 mL.'},
   {type:'num',q:'Convert 4,483 mcg to mg. Round to the nearest thousandth.',a:4.483,tol:.0005,unit:'mg',why:'You moved from micrograms to the larger milligram unit, so the number should become smaller: 4,483 ÷ 1,000 = 4.483 mg.'},
-  {type:'mc',q:'A student converts 402 mL to 402,000 L. What is the best safety check?',a:'The answer should be smaller because liters are larger units than milliliters.',opts:['The answer should be smaller because liters are larger units than milliliters.','The answer should be larger because liters are larger units than milliliters.','The number is acceptable because the calculator produced it.','Units can be added after the arithmetic is complete.'],why:'402 mL is less than 1 L. Converting to liters must produce a smaller numerical value: 0.402 L.'}
+  {type:'mc',q:'A student converts 402 mL to 402,000 L. What is the best safety check?',a:'The answer should be smaller because liters are larger units than milliliters.',opts:['The answer should be smaller because liters are larger units than milliliters.','The answer should be larger because liters are larger units than milliliters.','The number is acceptable because the calculator produced it.','Units can be added after the arithmetic is complete.'],why:'402 mL is less than 1 L. Converting to liters must produce a smaller numerical value: 0.402 L.'},
+  {type:'num',q:'Convert 1.6 L to mL.',a:1600,tol:.01,unit:'mL',why:'1.6 × 1,000 = 1,600 mL. Moving to the smaller milliliter unit makes the numerical value larger.'},
+  {type:'num',q:'Convert 875 mL to L. Round to the nearest thousandth.',a:.875,tol:.0005,unit:'L',why:'875 ÷ 1,000 = 0.875 L. Moving to the larger liter unit makes the numerical value smaller.'},
+  {type:'num',q:'Convert 3.25 mg to mcg.',a:3250,tol:.01,unit:'mcg',why:'3.25 × 1,000 = 3,250 mcg. Micrograms are smaller units, so the number increases.'},
+  {type:'num',q:'Convert 12,600 mcg to mg. Round to the nearest tenth.',a:12.6,tol:.05,unit:'mg',why:'12,600 ÷ 1,000 = 12.6 mg. Milligrams are larger units, so the number decreases.'},
+  {type:'mc',q:'You convert 0.75 L to 0.00075 mL. Which check identifies the problem?',a:'The numerical value should increase when converting liters to milliliters.',opts:['The numerical value should increase when converting liters to milliliters.','The numerical value should decrease when converting liters to milliliters.','The answer is reasonable because both units measure volume.','The units do not matter if the decimal was moved consistently.'],why:'A milliliter is smaller than a liter, so 0.75 L must equal a larger numerical value: 750 mL.'}
  ],
  more:[
   {type:'num',q:'Convert 2.75 L to mL.',a:2750,tol:.01,unit:'mL',why:'2.75 × 1,000 = 2,750 mL. Smaller unit → larger number.'},
@@ -419,7 +403,12 @@ const stations=[
  required:[
   {type:'num',q:'How many inches tall is a person who is 4 ft 2 in?',a:50,tol:.01,unit:'in',why:'4 ft × 12 in/ft = 48 in; 48 + 2 = 50 in.'},
   {type:'num',q:'A patient weighs 90 lb. Approximately how many kg? Round to the nearest whole number.',a:41,tol:.49,unit:'kg',why:'90 ÷ 2.2 ≈ 40.9 kg → 41 kg. The kg number is smaller than the lb number, which passes the direction check.'},
-  {type:'mc',q:'A 154-lb patient is calculated as 339 kg. What most likely happened?',a:'The student multiplied pounds by 2.2 instead of dividing.',opts:['The student multiplied pounds by 2.2 instead of dividing.','The student divided pounds by 2.2 correctly.','The student converted kilograms to pounds correctly.','The student rounded too late in the calculation.'],why:'Because kilograms are larger units, the numerical value should decrease. 154 ÷ 2.2 = 70 kg.'}
+  {type:'mc',q:'A 154-lb patient is calculated as 339 kg. What most likely happened?',a:'The student multiplied pounds by 2.2 instead of dividing.',opts:['The student multiplied pounds by 2.2 instead of dividing.','The student divided pounds by 2.2 correctly.','The student converted kilograms to pounds correctly.','The student rounded too late in the calculation.'],why:'Because kilograms are larger units, the numerical value should decrease. 154 ÷ 2.2 = 70 kg.'},
+  {type:'num',q:'Convert 176 lb to kg. Round to the nearest whole number.',a:80,tol:.49,unit:'kg',why:'176 ÷ 2.2 = 80 kg. The kilogram value is smaller than the pound value, so the direction makes sense.'},
+  {type:'num',q:'Convert 65 kg to lb. Round to the nearest whole number.',a:143,tol:.49,unit:'lb',why:'65 × 2.2 = 143 lb. Pounds are smaller units than kilograms, so the numerical value becomes larger.'},
+  {type:'num',q:'How many inches are in 5 ft 4 in?',a:64,tol:.01,unit:'in',why:'5 ft × 12 in/ft = 60 in; 60 + 4 = 64 in.'},
+  {type:'num',q:'Convert 64 in to cm. Round to the nearest whole number.',a:163,tol:.49,unit:'cm',why:'64 × 2.54 = 162.56 cm, which rounds to 163 cm.'},
+  {type:'mc',q:'A patient weighs 220 lb. Which kilogram result passes a quick reasonableness check?',a:'About 100 kg, because the kilogram value should be smaller than the pound value.',opts:['About 100 kg, because the kilogram value should be smaller than the pound value.','About 484 kg, because pounds should be multiplied by 2.2.','About 220 kg, because pounds and kilograms have the same numerical value.','About 10 kg, because kilogram values should always be one-tenth of pounds.'],why:'220 ÷ 2.2 = 100 kg. The magnitude and direction both make sense.'}
  ],
  more:[
   {type:'num',q:'Convert 132 lb to kg. Round to the nearest whole number.',a:60,tol:.49,unit:'kg',why:'132 ÷ 2.2 = 60 kg.'},
@@ -437,7 +426,12 @@ const stations=[
  required:[
   {type:'num',q:'A patient has an ideal/predicted body weight of 63 kg. At 6 mL/kg, what tidal volume is this in mL?',a:378,tol:.01,unit:'mL',why:'63 kg × 6 mL/kg = 378 mL. kg cancels, leaving mL.'},
   {type:'num',q:'Convert that 378 mL tidal volume to liters. Round to the nearest thousandth.',a:.378,tol:.0005,unit:'L',why:'378 ÷ 1,000 = 0.378 L. Liters are larger units, so the number becomes smaller.'},
-  {type:'mc',q:'A student reports minute ventilation of 54 L/min from VT 450 mL and RR 12/min. What should you suspect first?',a:'A tenfold decimal error converting 450 mL to liters.',opts:['A tenfold decimal error converting 450 mL to liters.','The respiratory rate should have been divided by tidal volume.','The patient weight was omitted from the equation.','The value is normal and can be used without verification.'],why:'450 mL = 0.45 L; 0.45 × 12 = 5.4 L/min. The 54 L/min result suggests 4.5 L was used instead.'}
+  {type:'mc',q:'A student reports minute ventilation of 54 L/min from VT 450 mL and RR 12/min. What should you suspect first?',a:'A tenfold decimal error converting 450 mL to liters.',opts:['A tenfold decimal error converting 450 mL to liters.','The respiratory rate should have been divided by tidal volume.','The patient weight was omitted from the equation.','The value is normal and can be used without verification.'],why:'450 mL = 0.45 L; 0.45 × 12 = 5.4 L/min. The 54 L/min result suggests 4.5 L was used instead.'},
+  {type:'num',q:'A patient has a predicted body weight of 60 kg. Calculate VT at 6 mL/kg.',a:360,tol:.01,unit:'mL',why:'60 × 6 = 360 mL. A quick estimate of 6 × 60 also predicts a value in the mid-300 mL range.'},
+  {type:'num',q:'A patient has a predicted body weight of 75 kg. Calculate VT at 8 mL/kg.',a:600,tol:.01,unit:'mL',why:'75 × 8 = 600 mL. The units cancel to leave mL.'},
+  {type:'num',q:'VT is 400 mL and RR is 15/min. Calculate minute ventilation in L/min.',a:6,tol:.01,unit:'L/min',why:'400 mL = 0.4 L; 0.4 × 15 = 6 L/min.'},
+  {type:'num',q:'Minute ventilation is 8.4 L/min and RR is 14/min. What is VT in mL?',a:600,tol:.01,unit:'mL',why:'8.4 ÷ 14 = 0.6 L/breath, and 0.6 L = 600 mL.'},
+  {type:'mc',q:'You calculate a VT of 4,500 mL for a 75-kg patient at 6 mL/kg. What should you do?',a:'Stop and recalculate because the expected result is a few hundred milliliters, not several liters.',opts:['Stop and recalculate because the expected result is a few hundred milliliters, not several liters.','Use the result because 4,500 is larger and will provide more ventilation.','Round the result to 5,000 mL to simplify the setting.','Convert the result to kilograms before deciding whether it is reasonable.'],why:'75 × 6 = 450 mL. A result of 4,500 mL is ten times too large and fails the plausibility check.'}
  ],
  more:[
   {type:'num',q:'Calculate VT at 6 mL/kg for a predicted body weight of 70 kg.',a:420,tol:.01,unit:'mL',why:'70 × 6 = 420 mL.'},
@@ -455,7 +449,12 @@ const stations=[
  required:[
   {type:'num',q:'Convert 29 °C to Kelvin using K = °C + 273.',a:302,tol:.01,unit:'K',why:'29 + 273 = 302 K.'},
   {type:'num',q:'Convert 100 °F to °C. Round to the nearest tenth.',a:37.8,tol:.05,unit:'°C',why:'(100 − 32) × 5/9 = 37.8 °C.'},
-  {type:'num',q:'Convert 39 °C to °F. Round to the nearest tenth.',a:102.2,tol:.05,unit:'°F',why:'(39 × 9/5) + 32 = 102.2 °F.'}
+  {type:'num',q:'Convert 39 °C to °F. Round to the nearest tenth.',a:102.2,tol:.05,unit:'°F',why:'(39 × 9/5) + 32 = 102.2 °F.'},
+  {type:'num',q:'Convert 100.3 °F to °C. Round to the nearest tenth.',a:37.9,tol:.05,unit:'°C',why:'(100.3 − 32) × 5/9 = 37.9 °C.'},
+  {type:'num',q:'Convert 37 °C to °F. Round to the nearest tenth.',a:98.6,tol:.05,unit:'°F',why:'(37 × 9/5) + 32 = 98.6 °F.'},
+  {type:'num',q:'Convert 25 °C to K.',a:298,tol:.01,unit:'K',why:'25 + 273 = 298 K.'},
+  {type:'num',q:'Convert 103.4 °F to K. Convert to °C first, then K. Round to the nearest whole number.',a:313,tol:.49,unit:'K',why:'103.4 °F = 39.7 °C; 39.7 + 273 = 312.7 K, which rounds to 313 K.'},
+  {type:'mc',q:'A student converts 100 °F to 212 °C. What should the reasonableness check tell you?',a:'The result is implausible because a temperature near 100 °F should be near the high 30s °C.',opts:['The result is implausible because a temperature near 100 °F should be near the high 30s °C.','The result is reasonable because Celsius values are always larger than Fahrenheit values.','The result is reasonable because 212 is the normal Celsius body temperature.','The result only needs to be converted to Kelvin before it can be checked.'],why:'100 °F converts to about 37.8 °C. Knowing the approximate relationship around body temperature helps catch formula errors.'}
  ],
  more:[
   {type:'num',q:'Convert 98.6 °F to °C. Round to the nearest tenth.',a:37.0,tol:.05,unit:'°C',why:'(98.6 − 32) × 5/9 = 37.0 °C.'},
@@ -474,7 +473,12 @@ const stations=[
  required:[
   {type:'num',q:'Albuterol contains 2.5 mg/0.5 mL. The order is 5 mg. How many mL should be given?',a:1,tol:.01,unit:'mL',why:'5 mg × 0.5 mL / 2.5 mg = 1 mL. mg cancels and mL remains.'},
   {type:'num',q:'Albuterol is a 0.5% solution (5 mg/mL). To give 10 mg, how many mL are needed?',a:2,tol:.01,unit:'mL',why:'10 mg ÷ 5 mg/mL = 2 mL.'},
-  {type:'mc',q:'A medication calculation gives 0.4 mL for one student and 4 mL for another. What should happen next?',a:'Withhold preparation and independently rebuild the calculation with units and the medication label.',opts:['Withhold preparation and independently rebuild the calculation with units and the medication label.','Average the answers and administer 2.2 mL.','Choose 0.4 mL because the smaller dose is always safer.','Choose 4 mL because it is easier to measure accurately.'],why:'A tenfold discrepancy must be resolved before clinical use. Do not average or choose based on preference.'}
+  {type:'mc',q:'A medication calculation gives 0.4 mL for one student and 4 mL for another. What should happen next?',a:'Withhold preparation and independently rebuild the calculation with units and the medication label.',opts:['Withhold preparation and independently rebuild the calculation with units and the medication label.','Average the answers and administer 2.2 mL.','Choose 0.4 mL because the smaller dose is always safer.','Choose 4 mL because it is easier to measure accurately.'],why:'A tenfold discrepancy must be resolved before clinical use. Do not average or choose based on preference.'},
+  {type:'num',q:'A medication contains 5 mg/mL. The order is 7.5 mg. How many mL should be administered?',a:1.5,tol:.01,unit:'mL',why:'7.5 mg ÷ 5 mg/mL = 1.5 mL. mg cancels, leaving mL.'},
+  {type:'num',q:'A medication contains 1.25 mg in 0.5 mL. How many mg are in 2 mL?',a:5,tol:.01,unit:'mg',why:'1.25 mg/0.5 mL = 2.5 mg/mL; 2.5 × 2 = 5 mg.'},
+  {type:'num',q:'A 1% solution contains 10 mg/mL. How many mg are in 3 mL?',a:30,tol:.01,unit:'mg',why:'10 mg/mL × 3 mL = 30 mg.'},
+  {type:'num',q:'A 0.5% solution contains 5 mg/mL. How many mL are needed for a 15 mg dose?',a:3,tol:.01,unit:'mL',why:'15 mg ÷ 5 mg/mL = 3 mL.'},
+  {type:'mc',q:'An order is 2.5 mg and the available concentration is 5 mg/mL. A student calculates 5 mL. What should the safety check show?',a:'The volume is too large; 2.5 mg at 5 mg/mL requires 0.5 mL.',opts:['The volume is too large; 2.5 mg at 5 mg/mL requires 0.5 mL.','The volume is correct because 2.5 multiplied by 5 equals 12.5.','The volume is too small; the patient needs at least 10 mL.','The dose cannot be checked unless the medication is converted to kilograms.'],why:'2.5 mg ÷ 5 mg/mL = 0.5 mL. The calculated 5 mL would be ten times the required volume.'}
  ],
  more:[
   {type:'num',q:'Albuterol contains 2.5 mg/0.5 mL. If 4 mL are administered, how many mg are given?',a:20,tol:.01,unit:'mg',why:'2.5 mg/0.5 mL = 5 mg/mL; 5 × 4 = 20 mg.'},
@@ -538,7 +542,7 @@ function renderStations(){
    const sec=document.createElement('section');sec.className='card';sec.id='station-'+s.id;
    sec.innerHTML=`<div class="station-head"><div class="station-title"><div class="station-number">${s.num}</div><div><div class="kicker">Required learning station</div><h2 style="margin:.1rem 0">${s.title}</h2><div class="small">${s.subtitle}</div></div></div></div>
    <div class="teach" style="margin-top:18px">${s.teach}</div>
-   <h3>Required mastery</h3><p class="small">Correct all required items. You may retry immediately.</p>
+   <h3>Required mastery practice</h3><p class="small">Complete all 8 required questions in this section. You may retry immediately. After mastery, you can choose 5 additional optional practice questions.</p>
    <div class="req"></div>
    <div style="display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--soft-border);">
      <button class="btn2 moreBtn" type="button">More Practice +5</button>
@@ -590,75 +594,5 @@ function renderFinal(){
 
 renderStations();renderFinal();updateProgress();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
