@@ -46,28 +46,7 @@ input[type=number],select{padding:10px;border:1px solid #B8CAD4;border-radius:10
 footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
 @media(max-width:900px){.grid3,.grid4{grid-template-columns:1fr 1fr}.slots{grid-template-columns:repeat(2,1fr)}.region{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.grid,.grid3,.grid4,.slots{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}.region{grid-template-columns:1fr 1fr}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="page">
@@ -307,17 +286,16 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 </div>
 
 <script>
-const STORE='AHRC155_2_2_neural_control_vq_v3';
+const STORE='AHRC155_2_2_neural_control_vq_v5';
 let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"seq":[],"inputs":{}}')}catch(e){state={done:[],answers:{},seq:[],inputs:{}}}
 state.done=state.done||[];state.answers=state.answers||{};state.seq=state.seq||[];state.inputs=state.inputs||{};
 const byId=id=>document.getElementById(id);
 const progressText=byId('progressText'),progressBar=byId('progressBar'),completeBox=byId('completeBox');
-const seqBank=byId('seqBank'),seqSlots=byId('seqSlots'),seqFb=byId('seqFb');
 const po2=byId('po2'),po2val=byId('po2val'),hypoxFill=byId('hypoxFill'),po2msg=byId('po2msg');
 const vslide=byId('vslide'),qslide=byId('qslide'),vval=byId('vval'),qval=byId('qval'),vbar=byId('vbar'),qbar=byId('qbar'),vqratio=byId('vqratio'),vqmsg=byId('vqmsg'),gasmsg=byId('gasmsg');
 const vqcalc=byId('vqcalc'),vqcalcFb=byId('vqcalcFb');
 const fb1=byId('fb1'),fb2=byId('fb2'),fb3=byId('fb3'),fb4=byId('fb4'),fb5=byId('fb5'),fb6=byId('fb6'),fb7=byId('fb7');
-const finalQs=byId('finalQs');
+const finalQs=byId('finalQs'),assembledPath=byId('assembledPath');
 const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function progress(){let n=state.done.length;progressText.textContent=`${n} of 7 sections complete`;progressBar.style.width=(n/7*100)+'%';for(let i=2;i<=7;i++)if(state.done.includes(i-1))byId('s'+i).classList.remove('locked');completeBox.classList.toggle('show',n===7);if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'2.2'}}));window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'2.2',completed:n,total:7,percent:n/7*100}}))}
@@ -463,9 +441,6 @@ function updateAssembled(){
 }
 [1,2,3].forEach(buildSeqPart);
 updateAssembled();
-seqFb.className='feedback'}
-function checkSeq(){let n=0;document.querySelectorAll('.slot').forEach((s,i)=>{s.classList.remove('correct','wrong');if(state.seq[i]===seqItems[i]){s.classList.add('correct');n++}else s.classList.add('wrong')});seqFb.className='feedback '+(n===10?'ok':'bad');seqFb.textContent=n===10?'✓ Correct. You traced the complete negative-feedback loop from hypercapnia to increased alveolar ventilation and CO₂ removal.':`${n}/10 are in the correct position. Follow the chemistry first, then chemoreceptor stimulation, neural output, motor transmission, muscle contraction, ventilation, and finally CO₂ removal.`;return n===10}
-buildSeq();
 
 po2.oninput=()=>{let x=+po2.value;po2val.textContent=x;let stim=x>=60?Math.max(8,(100-x)*.6):24+(60-x)*2.1;stim=Math.min(100,stim);hypoxFill.style.width=stim+'%';po2msg.textContent=x>=60?'Peripheral hypoxemic stimulation is present but relatively modest in this range.':'Below ~60 mm Hg, peripheral hypoxemic stimulation rises much more steeply.';state.inputs.po2=x;save()};if(state.inputs.po2)po2.value=state.inputs.po2;po2.oninput();
 
@@ -497,74 +472,4 @@ function complete7(){let n=checkFinal();if(n===F.length){fb7.className='feedback
 progress();
 window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.2',course:'Respiratory Physiology'});
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body></html>
