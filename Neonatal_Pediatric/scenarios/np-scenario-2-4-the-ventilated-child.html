@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scenario 2.4 | The Ventilated Child</title>
+<style>
+:root{
+ --navy:#0B1F33;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;--mist:#F4FAFC;--mint:#DDF7F2;
+ --amber:#F4B860;--coral:#E85D5D;--slate:#415A77;--border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);--radius:22px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+button,select,input{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.mark svg{width:40px;height:40px}
+.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}.tag{font-size:.8rem;opacity:.9;margin-top:4px}
+.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}.hero,.card,.complete{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}.hero p{max-width:1120px;font-size:1.12rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:40;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:.25s}
+.resume{font-size:.87rem;color:var(--slate);margin-top:5px;min-height:1.1em}
+.card{padding:24px;margin-bottom:20px}.locked{opacity:.48;pointer-events:none}.station-head{display:flex;gap:12px;align-items:flex-start}.num{width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:900;flex:none}
+h2,h3{line-height:1.15}h2{font-size:clamp(1.7rem,3vw,2.45rem);margin:0 0 8px}h3{font-size:1.25rem}.small{font-size:.92rem;color:var(--slate)}
+.goal,.clue,.warning,.danger,.patient{border-radius:14px;padding:14px 16px;margin:14px 0}.goal{background:var(--mint);border:1px solid #9FDCCF;border-left:6px solid var(--teal)}.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.patient{background:linear-gradient(145deg,#F8FDFF,#EEF8F9);border:1px solid #BFD9DF;border-left:7px solid var(--navy)}.patient .label{font-size:.76rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--teal)}.patient h3{margin:.25rem 0 .45rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.panel,.term{border:1px solid var(--border);border-radius:16px;padding:16px;background:#FAFDFF}.term{background:#fff}.term strong{color:var(--teal);display:block;margin-bottom:4px}
+.table-wrap{overflow:auto}.compare{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:14px;overflow:hidden}.compare th,.compare td{padding:10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}.compare th{background:var(--navy);color:#fff}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q:first-child{border-top:0}.q-title{font-weight:800;margin-bottom:9px}.options{display:grid;gap:9px}.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:11px 13px;border-radius:12px;background:#fff;cursor:pointer;text-align:left;width:100%}.option:hover{background:#F2F8FE;border-color:var(--blue)}.option.selected{background:#F3FFFC;border:2px solid var(--teal);box-shadow:0 0 0 3px rgba(28,167,168,.12)}.option.correct{background:var(--mint);border:2px solid #70CBB9}.option.wrong{background:#FDE9E9;border:2px solid #E58C8C}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800}.primary{background:var(--teal);color:#fff}.primary:hover{background:var(--teal2)}.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.match-row{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}.match-row label{font-weight:800;display:block;margin-bottom:7px}.match-row select{width:100%;padding:9px;border:1px solid #B8CAD4;border-radius:10px;background:#fff}
+.calc{border:2px solid #BFD0DA;border-radius:16px;padding:17px;background:#fff;margin:14px 0}.calcrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.calcrow input{max-width:150px;padding:10px;border:1px solid #B8CAD4;border-radius:10px}.formula{background:#EEF4F7;border-radius:12px;padding:12px 14px;font-weight:850;margin:10px 0}
+.complete{display:none;padding:24px;background:var(--mint);border-color:#86D9C8}.complete.show{display:block}
+footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:900px){.grid3{grid-template-columns:1fr 1fr}.match-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.grid,.grid3{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top">
+ <div class="brand"><div class="mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Neonatal & pediatric respiratory care learning for future RTs.</div></div></div>
+ <div class="course">Neonatal & Pediatric Respiratory Care · Scenario 2.4</div>
+</header>
+
+<main>
+<header class="hero">
+ <span class="eyebrow">Scenario 2.4 · The Ventilated Child</span>
+ <h1>Every Ventilator Change Has a Physiologic Consequence.</h1>
+ <p>Follow an intubated child from the first ventilator setup through obstructive mechanics, pediatric ARDS, oxygenation-index calculation, rescue strategies, sudden deterioration, and liberation. Your job is to change the variable that actually addresses the problem—without creating a new one.</p>
+</header>
+
+<div class="progress-wrap">
+ <div class="progress-row"><strong id="progressText">0 of 7 sections complete</strong><div class="progress"><div id="progressBar"></div></div></div>
+ <div id="resumeMessage" class="resume" aria-live="polite"></div>
+</div>
+
+<section id="s1" class="card">
+ <div class="station-head"><div class="num">1</div><div><span class="kicker">Guided</span><h2>Choose the Mode Based on What You Want Guaranteed</h2></div></div>
+ <div class="goal"><strong>Mode names matter less than what is controlled, what is allowed to vary, and how the patient participates.</strong></div>
+ <div class="table-wrap"><table class="compare"><thead><tr><th>Mode</th><th>What is controlled</th><th>What varies</th></tr></thead><tbody>
+  <tr><td>Pressure control</td><td>Inspiratory pressure and inspiratory time</td><td>Tidal volume changes with compliance, resistance, effort, and leak.</td></tr>
+  <tr><td>Volume control</td><td>Delivered tidal volume and flow pattern</td><td>Airway pressure changes with mechanics.</td></tr>
+  <tr><td>PRVC</td><td>Target tidal volume using automatically adjusted pressure</td><td>Breath-to-breath pressure changes within limits.</td></tr>
+  <tr><td>Pressure support</td><td>Inspiratory pressure assistance for spontaneous breaths</td><td>Rate, inspiratory time, and tidal volume depend on the patient and cycling.</td></tr>
+ </tbody></table></div>
+ <div id="modeMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkModes()">Check modes</button></div><div id="modeFb" class="feedback"></div>
+</section>
+
+<section id="s2" class="card locked">
+ <div class="station-head"><div class="num">2</div><div><span class="kicker">Supported</span><h2>Separate Oxygenation From Ventilation</h2></div></div>
+ <div class="grid">
+  <div class="panel"><h3>Oxygenation</h3><p>Think <strong>FiO₂ + recruitment + mean airway pressure</strong>. PEEP helps maintain end-expiratory lung volume.</p></div>
+  <div class="panel"><h3>Ventilation</h3><p>Think <strong>effective minute ventilation</strong>: breath size × frequency, while avoiding overdistention.</p></div>
+ </div>
+ <div class="clue"><strong>Pressure concepts:</strong> plateau pressure approximates alveolar pressure during no flow. Driving pressure = plateau pressure − PEEP. Both should be interpreted with delivered volume and chest-wall mechanics.</div>
+ <div id="controlMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkControls()">Check controls</button></div><div id="controlFb" class="feedback"></div>
+</section>
+
+<section id="s3" class="card locked">
+ <div class="station-head"><div class="num">3</div><div><span class="kicker">Supported</span><h2>Obstruction Changes the Timing Strategy</h2></div></div>
+ <div class="patient"><span class="label">Patient A</span><h3>8-year-old intubated for status asthmaticus</h3><p>Severe airflow obstruction persists. Peak pressures are high. Expiratory flow has not returned to baseline before the next breath begins.</p></div>
+ <div class="goal"><strong>Obstructive strategy:</strong> lower rate, shorter inspiratory time, longer expiratory time, cautious tidal volume, and tolerance of some hypercapnia when appropriate. The major danger is dynamic hyperinflation and auto-PEEP.</div>
+ <div id="q3"></div>
+</section>
+
+<section id="s4" class="card locked">
+ <div class="station-head"><div class="num">4</div><div><span class="kicker">Reduced support</span><h2>Now the Child Develops Pediatric ARDS</h2></div></div>
+ <div class="patient"><span class="label">Patient B</span><h3>Child with septic shock</h3><p>New bilateral infiltrates, poor compliance, and severe hypoxemia develop. Pulmonary edema is not fully explained by cardiac failure or fluid overload. Tidal volume is 10 mL/kg and plateau pressure is rising.</p></div>
+ <div class="goal"><strong>PARDS lung protection:</strong> use smaller tidal volumes when compliance is poor, limit excessive pressure, optimize PEEP, consider permissive hypercapnia when appropriate, and avoid unnecessary positive fluid balance after stabilization.</div>
+ <div id="q4"></div>
+</section>
+
+<section id="s5" class="card locked">
+ <div class="station-head"><div class="num">5</div><div><span class="kicker">Reduced support</span><h2>Track Severity With Oxygenation Index</h2></div></div>
+ <div class="formula">OI = (FiO₂ × Mean Airway Pressure × 100) ÷ PaO₂</div>
+ <div class="patient"><span class="label">Current data</span><h3>FiO₂ 0.70 · MAP 16 cmH₂O · PaO₂ 56 mmHg</h3></div>
+ <div class="calc"><h3>Calculate OI</h3><div class="calcrow"><label for="oi"><strong>OI ≈</strong></label><input id="oi" type="number" step=".1"><button class="btn primary" onclick="checkOI()">Check</button></div><div id="oiFb" class="feedback"></div></div>
+ <div class="warning"><strong>Trend severity, not just one number.</strong> A rising OI suggests worsening oxygenation failure and may support escalation when combined with the child’s overall clinical condition.</div>
+</section>
+
+<section id="s6" class="card locked">
+ <div class="station-head"><div class="num">6</div><div><span class="kicker">Reduced support</span><h2>Rescue Therapies Should Solve a Specific Problem</h2></div></div>
+ <div class="grid3">
+  <div class="term"><strong>Prone positioning</strong>May improve dorsal recruitment, secretion drainage, and V/Q matching in selected moderate-to-severe PARDS.</div>
+  <div class="term"><strong>Neuromuscular blockade</strong>May be used briefly when severe dyssynchrony prevents lung-protective ventilation despite adequate sedation.</div>
+  <div class="term"><strong>High-frequency ventilation</strong>May be considered when conventional ventilation cannot provide gas exchange without injurious pressures or volumes.</div>
+  <div class="term"><strong>ECMO</strong>Considered for potentially reversible refractory cardiorespiratory failure despite optimized conventional and rescue therapy.</div>
+  <div class="term"><strong>Conservative fluid strategy</strong>After stabilization, avoid unnecessary positive fluid balance while maintaining organ perfusion.</div>
+  <div class="term"><strong>Reassessment</strong>Every rescue intervention needs a measurable response target and harm check.</div>
+ </div>
+ <div id="rescueMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkRescue()">Check rescue strategies</button></div><div id="rescueFb" class="feedback"></div>
+</section>
+
+<section id="s7" class="card locked">
+ <div class="station-head"><div class="num">7</div><div><span class="kicker">Independent synthesis</span><h2>Sudden Deterioration and Liberation Are Both Ventilator Decisions</h2></div></div>
+ <div class="patient"><span class="label">Emergency</span><h3>After repositioning</h3><p>The intubated child suddenly desaturates. Peak pressure rises, exhaled tidal volume falls, and breath sounds are absent on the left.</p></div>
+ <div class="goal"><strong>Patient first → airway → circuit → ventilator → disease.</strong> Sudden deterioration should trigger a structured airway-and-circuit check before blindly increasing pressure.</div>
+ <div class="patient"><span class="label">Two days later</span><h3>The child improves</h3><p>Underlying disease is resolving, gas exchange is stable on modest settings, spontaneous respiratory drive is consistent, cough and secretion handling are acceptable, and a postextubation support plan is ready.</p></div>
+ <div id="finalQs"></div>
+ <div class="controls"><button class="btn primary" onclick="checkFinal()">Check clinical synthesis</button></div><div id="finalFb" class="feedback"></div>
+</section>
+
+<section id="completeBox" class="complete"><h2>Scenario 2.4 complete ✓</h2><p>You selected modes intentionally, separated oxygenation from ventilation, adjusted timing for severe obstruction, applied lung-protective ventilation in PARDS, calculated oxygenation index, matched rescue therapies to refractory physiology, responded to sudden deterioration, and recognized liberation readiness.</p></section>
+</main>
+
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Neonatal & Pediatric Respiratory Care · Scenario 2.4</div><div>Progress and selected answers are saved in this browser.<br>You can leave and return without losing your work.</div></footer>
+</div>
+
+<script>
+const STORE='AHRC262_scenario_2_4_ventilated_child_v1';
+let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"matches":{},"inputs":{}}')}catch(e){state={done:[],answers:{},matches:{},inputs:{}}}
+state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.matches=state.matches||{};state.inputs=state.inputs||{};
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function progress(){const n=state.done.length;document.getElementById('progressText').textContent=`${n} of 7 sections complete`;document.getElementById('progressBar').style.width=(n/7*100)+'%';for(let i=2;i<=7;i++){const sec=document.getElementById('s'+i);if(sec&&state.done.includes(i-1))sec.classList.remove('locked')}document.getElementById('completeBox').classList.toggle('show',n===7);if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'2.4',scenario:'The Ventilated Child'}}));window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'2.4',completed:n,total:7,percent:n/7*100}}))}
+function all(ids){return ids.every(id=>state.answers[id]&&state.answers[id].correct)}
+
+const Q={
+ q3a:{q:'Which ventilator strategy is safest for severe status asthmaticus with incomplete exhalation?',a:'Lower the rate, shorten inspiratory time, allow longer expiration, and monitor for auto-PEEP',o:['Lower the rate, shorten inspiratory time, allow longer expiration, and monitor for auto-PEEP','Use the highest possible rate to normalize PaCO₂ quickly','Prolong inspiratory time so exhalation becomes shorter','Increase tidal volume until peak pressure rises further'],g:'Severe obstruction requires time to exhale; reducing breath stacking helps limit dynamic hyperinflation.',h:'The expiratory flow has not returned to baseline before the next breath.'},
+ q4a:{q:'What is the safest ventilator change for the child with PARDS receiving 10 mL/kg with rising plateau pressure?',a:'Reduce tidal volume and optimize PEEP using a lung-protective strategy',o:['Reduce tidal volume and optimize PEEP using a lung-protective strategy','Increase tidal volume to normalize PaCO₂','Set PEEP to zero','Increase pressure without reassessing delivered volume'],g:'Poor compliance and rising plateau pressure call for lung-protective tidal volume and PEEP optimization.',h:'The goal is to reduce excessive stretch while preserving recruitment.'}
+};
+function mount(ids,target){const root=document.getElementById(target);root.innerHTML='';ids.forEach(id=>{const d=document.createElement('div');d.id='wrap_'+id;root.appendChild(d);renderQ(id,d.id)})}
+function renderQ(id,target){const q=Q[id],saved=state.answers[id],opts=shuffle(q.o);document.getElementById(target).innerHTML=`<div class="q" id="${id}"><div class="q-title">${q.q}</div><div class="options">${opts.map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ '+q.g:'Not yet. '+q.h):''}</div></div>`;document.querySelectorAll(`#${id} .option`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} .option`).forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save();checkQ(id)})}
+function checkQ(id){const q=Q[id],el=document.getElementById(id),s=el.querySelector('.option.selected'),fb=el.querySelector('.feedback');if(!s)return false;const ok=s.dataset.choice===q.a;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};save();fb.className='feedback '+(ok?'ok':'bad');fb.textContent=(ok?'✓ ':'Not yet. ')+(ok?q.g:q.h);reconcile();return ok}
+mount(['q3a'],'q3');mount(['q4a'],'q4');
+
+function buildMatch(rootId,key,rows,options){const root=document.getElementById(rootId);root.innerHTML='';state.matches[key]=state.matches[key]||{};rows.forEach((r,i)=>{const d=document.createElement('div');d.className='match-row';d.innerHTML=`<label for="${key}${i}">${r[0]}</label><select id="${key}${i}"><option value="">Choose...</option>${shuffle(options).map(x=>`<option value="${esc(x[0])}">${x[1]}</option>`).join('')}</select>`;root.appendChild(d);const s=d.querySelector('select');if(state.matches[key][i])s.value=state.matches[key][i];s.onchange=()=>{state.matches[key][i]=s.value;state[key+'OK']=false;save()}})}
+function gradeMatch(key,rows,fbId,good){let n=0;rows.forEach((r,i)=>{const s=document.getElementById(key+i);state.matches[key][i]=s.value;if(s.value===r[1])n++});const ok=n===rows.length,fb=document.getElementById(fbId);fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ '+good:`${n} of ${rows.length} correct. Recheck what is controlled and what physiologic effect the setting produces.`;state[key+'OK']=ok;save();reconcile();return ok}
+
+const modeRows=[
+ ['Set pressure; tidal volume varies with mechanics','pc'],
+ ['Set tidal volume; pressure varies with mechanics','vc'],
+ ['Automatically adjusts pressure toward a tidal-volume target','prvc'],
+ ['Assists spontaneous breaths and cycles according to flow','ps']
+];
+buildMatch('modeMatch','mode',modeRows,[['pc','Pressure control'],['vc','Volume control'],['prvc','PRVC'],['ps','Pressure support']]);
+function checkModes(){return gradeMatch('mode',modeRows,'modeFb','You matched the modes by what is guaranteed and what is allowed to vary.')}
+
+const controlRows=[
+ ['Changes inspired oxygen concentration','fio2'],
+ ['Maintains end-expiratory recruitment','peep'],
+ ['Changes mandatory breath frequency and minute ventilation','rate'],
+ ['Changes delivered breath size','vt']
+];
+buildMatch('controlMatch','control',controlRows,[['fio2','FiO₂'],['peep','PEEP'],['rate','Rate'],['vt','Tidal volume']]);
+function checkControls(){return gradeMatch('control',controlRows,'controlFb','You separated the major oxygenation and ventilation controls.')}
+
+function checkOI(){
+ const e=document.getElementById('oi'),fb=document.getElementById('oiFb'),v=parseFloat(e.value),target=20;
+ const ok=Number.isFinite(v)&&Math.abs(v-target)<=0.5;
+ fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ OI = 20. (0.70 × 16 × 100) ÷ 56 = 20.':'Not yet. Multiply FiO₂ × MAP × 100, then divide by PaO₂.';
+ state.inputs.oi=e.value;state.inputs.oiOK=ok;save();reconcile()
+}
+if(state.inputs.oi!=null)document.getElementById('oi').value=state.inputs.oi;
+document.getElementById('oi').addEventListener('input',e=>{state.inputs.oi=e.target.value;state.inputs.oiOK=false;save()});
+
+const rescueRows=[
+ ['Improve dorsal recruitment and V/Q matching in selected moderate-to-severe PARDS','prone'],
+ ['Severe dyssynchrony prevents lung-protective ventilation despite adequate sedation','nmb'],
+ ['Conventional ventilation requires injurious pressure/volume for gas exchange','hfv'],
+ ['Potentially reversible refractory cardiorespiratory failure despite optimized rescue therapy','ecmo']
+];
+buildMatch('rescueMatch','rescue',rescueRows,[['prone','Prone positioning'],['nmb','Short-term neuromuscular blockade'],['hfv','High-frequency ventilation'],['ecmo','ECMO consideration']]);
+function checkRescue(){return gradeMatch('rescue',rescueRows,'rescueFb','You matched rescue therapy to the refractory physiologic problem.')}
+
+const F=[
+ {q:'What is the first priority when the intubated child suddenly desaturates with high peak pressure, low exhaled tidal volume, and absent left breath sounds after repositioning?',a:'Assess ETT position and patency immediately and evaluate for unilateral air leak while supporting ventilation',o:['Assess ETT position and patency immediately and evaluate for unilateral air leak while supporting ventilation','Increase inspiratory pressure without checking the airway','Wait for the next scheduled radiograph','Assume PARDS has progressed gradually'],h:'The sudden change after repositioning makes a mechanical airway or air-leak problem a priority.'},
+ {q:'Which finding most supports beginning ventilator liberation?',a:'Improving underlying disease with stable gas exchange on modest settings and consistent spontaneous respiratory drive',o:['Improving underlying disease with stable gas exchange on modest settings and consistent spontaneous respiratory drive','Frequent apnea with weak cough','Escalating oxygen need and worsening acidosis','Heavy sedation with absent spontaneous effort'],h:'Liberation requires disease improvement, adequate gas exchange, drive, strength, and a plan.'},
+ {q:'Which finding argues against extubation?',a:'Frequent apnea with weak cough and poor secretion handling',o:['Frequent apnea with weak cough and poor secretion handling','Stable blood gases on modest settings','A prepared HFNC or NIV plan','Consistent spontaneous breathing'],h:'Weak airway protection and unreliable ventilation raise reintubation risk.'},
+ {q:'What does a rising oxygenation index suggest?',a:'Worsening oxygenation failure requiring more FiO₂ and/or mean airway pressure for the achieved PaO₂',o:['Worsening oxygenation failure requiring more FiO₂ and/or mean airway pressure for the achieved PaO₂','Improved oxygenation efficiency','Lower airway resistance only','Automatic readiness for extubation'],h:'OI increases as support rises relative to the PaO₂ achieved.'},
+ {q:'What is the central principle of pediatric mechanical ventilation?',a:'Match mode, pressure, volume, timing, PEEP, and rescue strategies to the child’s mechanics and gas-exchange goals while limiting injury',o:['Match mode, pressure, volume, timing, PEEP, and rescue strategies to the child’s mechanics and gas-exchange goals while limiting injury','Normalize every blood gas value regardless of pressure cost','Use the same initial settings for every disease','Escalate oxygen before assessing recruitment or ventilation'],h:'Ventilator management is physiology-driven and requires ongoing reassessment.'}
+];
+function renderFinal(){const root=document.getElementById('finalQs');root.innerHTML='';F.forEach((q,i)=>{const id='f'+i,saved=state.answers[id],d=document.createElement('div');d.className='q';d.id=id;d.innerHTML=`<div class="q-title">${i+1}. ${q.q}</div><div class="options">${shuffle(q.o).map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ Correct.':'Not yet. '+q.h):''}</div>`;root.appendChild(d);d.querySelectorAll('.option').forEach(b=>b.onclick=()=>{d.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save()})})}
+renderFinal();
+function checkFinal(){let n=0;F.forEach((q,i)=>{const id='f'+i,d=document.getElementById(id),s=d.querySelector('.option.selected'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}const ok=s.dataset.choice===q.a;if(ok)n++;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();const ok=n===F.length;document.getElementById('finalFb').className='feedback '+(ok?'ok':'bad');document.getElementById('finalFb').textContent=ok?'5/5 correct. Scenario complete.':`${n}/5 correct. Revise the red selections using the targeted hints.`;reconcile()}
+
+function req(n){if(n===1)return state.modeOK===true;if(n===2)return state.controlOK===true;if(n===3)return all(['q3a']);if(n===4)return all(['q4a']);if(n===5)return state.inputs.oiOK===true;if(n===6)return state.rescueOK===true;if(n===7)return F.every((q,i)=>state.answers['f'+i]&&state.answers['f'+i].correct);return false}
+function reconcile(){const rebuilt=[];for(let n=1;n<=7;n++){if(req(n))rebuilt.push(n);else break}const old=state.done.length;state.done=rebuilt;save();progress();if(rebuilt.length>old&&rebuilt.length<7)setTimeout(()=>document.getElementById('s'+(rebuilt.length+1)).scrollIntoView({behavior:'smooth'}),160)}
+reconcile();if(state.done.length)document.getElementById('resumeMessage').textContent=`Progress restored: ${state.done.length} of 7 sections were already complete.`;
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.4',course:'Neonatal & Pediatric Respiratory Care',scenario:'The Ventilated Child',activity_version:'v1'});
+</script>
+</body>
+</html>

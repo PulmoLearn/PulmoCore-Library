@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scenario 1.3 | Minutes Matter</title>
+<style>
+:root{
+ --navy:#0B1F33;--navy2:#102A43;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;
+ --mist:#F4FAFC;--mint:#DDF7F2;--amber:#F4B860;--coral:#E85D5D;--white:#fff;
+ --slate:#415A77;--border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);--radius:22px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+button,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}
+button:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}
+.mark svg{width:40px;height:40px}.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}
+.tag{font-size:.8rem;opacity:.9;margin-top:4px}.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}
+.hero,.card,.complete{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}
+.hero p{max-width:1120px;font-size:1.12rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:40;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:.25s}
+.resume{font-size:.87rem;color:var(--slate);margin-top:5px;min-height:1.1em}
+.card{padding:24px;margin-bottom:20px}.locked{opacity:.48;pointer-events:none}.station-head{display:flex;gap:12px;align-items:flex-start}.num{width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:900;flex:none}
+h2,h3{line-height:1.15}h2{font-size:clamp(1.7rem,3vw,2.45rem);margin:0 0 8px}h3{font-size:1.25rem}.small{font-size:.92rem;color:var(--slate)}
+.goal,.clue,.warning,.danger,.patient{border-radius:14px;padding:14px 16px;margin:14px 0}
+.goal{background:var(--mint);border:1px solid #9FDCCF;border-left:6px solid var(--teal)}
+.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}
+.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}
+.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.patient{background:linear-gradient(145deg,#F8FDFF,#EEF8F9);border:1px solid #BFD9DF;border-left:7px solid var(--navy)}
+.patient .label{font-size:.76rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--teal)}
+.patient h3{margin:.25rem 0 .45rem}.patient p:last-child{margin-bottom:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.panel,.term{border:1px solid var(--border);border-radius:16px;padding:16px;background:#FAFDFF}.panel h3{margin:.1rem 0 .6rem}.term{background:#fff}.term strong{color:var(--teal);display:block;margin-bottom:4px}
+.chain{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:14px 0}.chain span{border:1px solid var(--border);border-radius:12px;background:#fff;padding:9px 11px;font-weight:800}.chain b{color:var(--teal);font-size:1.15rem}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q:first-child{border-top:0}.q-title{font-weight:800;margin-bottom:9px}.options{display:grid;gap:9px}
+.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:11px 13px;border-radius:12px;background:#fff;cursor:pointer;text-align:left;width:100%}.option:hover{background:#F2F8FE;border-color:var(--blue)}
+.option.selected{background:#F3FFFC;border:2px solid var(--teal);box-shadow:0 0 0 3px rgba(28,167,168,.12)}.option.correct{background:var(--mint);border:2px solid #70CBB9}.option.wrong{background:#FDE9E9;border:2px solid #E58C8C}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800}.primary{background:var(--teal);color:#fff}.primary:hover{background:var(--teal2)}.secondary{background:#fff;color:var(--navy);border:1px solid var(--border)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.sequence{display:grid;gap:10px}.sequence-row{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(180px,1.2fr);gap:10px;align-items:center;border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}
+.sequence-row strong{color:var(--navy)}.sequence-row select{width:100%;padding:10px;border:1px solid #B8CAD4;border-radius:10px;background:#fff}
+.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{border:1px solid var(--border);border-radius:14px;padding:13px;background:#fff;text-align:center}.metric strong{font-size:1.3rem;color:var(--teal);display:block}
+.complete{display:none;padding:24px;background:var(--mint);border-color:#86D9C8}.complete.show{display:block}
+footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:900px){.grid3,.metric-row{grid-template-columns:1fr 1fr}.sequence-row{grid-template-columns:1fr}}
+@media(max-width:700px){.grid,.grid3,.metric-row{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top">
+ <div class="brand"><div class="mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Neonatal & pediatric respiratory care learning for future RTs.</div></div></div>
+ <div class="course">Neonatal & Pediatric Respiratory Care · Scenario 1.3</div>
+</header>
+
+<main>
+<header class="hero">
+ <span class="eyebrow">Scenario 1.3 · Minutes Matter</span>
+ <h1>The Baby Is Here. What Happens Next?</h1>
+ <p>Follow one newborn from routine transition into escalating resuscitation. At each decision point, choose the next action, watch the infant’s response, and learn why effective ventilation—not rushing ahead—is the central priority in neonatal resuscitation.</p>
+</header>
+
+<div class="progress-wrap">
+ <div class="progress-row"><strong id="progressText">0 of 7 sections complete</strong><div class="progress"><div id="progressBar"></div></div></div>
+ <div id="resumeMessage" class="resume" aria-live="polite"></div>
+</div>
+
+<section id="s1" class="card">
+ <div class="station-head"><div class="num">1</div><div><span class="kicker">Guided</span><h2>First Question: Routine Transition or Resuscitation Pathway?</h2></div></div>
+ <div class="goal"><strong>Start with three observations:</strong> Is the newborn term? Is there good tone? Is the newborn breathing or crying?</div>
+ <div class="grid">
+  <div class="panel"><h3>Routine transition</h3><p>A term infant with good tone who is breathing or crying can usually remain skin-to-skin with warmth, observation, and routine assessment. Deferred cord clamping for at least 60 seconds is appropriate for most newborns who do not need immediate resuscitation.</p></div>
+  <div class="panel"><h3>Resuscitation pathway</h3><p>Move to the warmer when breathing is absent or ineffective, tone is poor, or immediate intervention is required.</p></div>
+ </div>
+ <div class="patient"><span class="label">Baby A</span><h3>39 weeks · strong cry · flexed tone · pink trunk</h3><p>The infant is vigorous immediately after birth.</p></div>
+ <div id="q1"></div>
+</section>
+
+<section id="s2" class="card locked">
+ <div class="station-head"><div class="num">2</div><div><span class="kicker">Supported</span><h2>Initial Steps: Support Transition Without Delaying Ventilation</h2></div></div>
+ <div class="patient"><span class="label">Baby B</span><h3>Term newborn · poor tone · not breathing</h3><p>The infant is moved to the warmer.</p></div>
+ <div class="grid">
+  <div class="term"><strong>Warm</strong>Prevent cold stress, increased oxygen consumption, hypoglycemia, and acidosis.</div>
+  <div class="term"><strong>Position</strong>Place the head neutral or slightly extended in a sniffing position.</div>
+  <div class="term"><strong>Clear only if needed</strong>Suction is not routine. Remove secretions only when they obstruct breathing or ventilation.</div>
+  <div class="term"><strong>Dry & stimulate</strong>Use gentle stimulation while limiting heat loss.</div>
+ </div>
+ <div class="warning"><strong>Do not delay ventilation for scoring.</strong> APGAR describes the infant’s condition; it does not determine when PPV begins.</div>
+ <div id="q2"></div>
+</section>
+
+<section id="s3" class="card locked">
+ <div class="station-head"><div class="num">3</div><div><span class="kicker">Supported</span><h2>Ventilation Is the Priority</h2></div></div>
+ <div class="patient"><span class="label">After initial steps</span><h3>Baby B remains apneic · heart rate 80/min</h3><p>The chest is still, and spontaneous respirations have not begun.</p></div>
+ <div class="goal">Begin positive-pressure ventilation when the newborn is <strong>apneic, gasping, or has a heart rate below 100/min after initial steps.</strong></div>
+ <div class="grid">
+  <div class="panel"><h3>PPV target</h3><p>The 2025 framework used in this lesson permits <strong>30–60 inflations/min</strong>. Adjust pressure to produce visible chest movement.</p></div>
+  <div class="panel"><h3>Best sign PPV is working</h3><p>A <strong>rising heart rate</strong> is the most important response. Visible chest movement helps confirm that the lungs are being inflated.</p></div>
+ </div>
+ <div id="q3"></div>
+</section>
+
+<section id="s4" class="card locked">
+ <div class="station-head"><div class="num">4</div><div><span class="kicker">Reduced support</span><h2>No Chest Movement: Fix Ventilation Before Escalating</h2></div></div>
+ <div class="patient"><span class="label">30 seconds later</span><h3>Heart rate 72/min · no visible chest movement during PPV</h3><p>The mask is in place, but ventilation does not appear effective.</p></div>
+ <div class="goal"><strong>MR SOPA</strong> organizes ventilation corrective steps. The goal is not to memorize letters alone—it is to establish lung inflation before moving to chest compressions.</div>
+ <div class="chain"><span>Mask adjustment</span><b>→</b><span>Reposition airway</span><b>→</b><span>Suction mouth/nose if needed</span><b>→</b><span>Open mouth</span><b>→</b><span>Pressure increase</span><b>→</b><span>Alternative airway</span></div>
+ <h3>Put the corrective sequence in order</h3>
+ <div id="mrsopa" class="sequence"></div>
+ <div class="controls"><button class="btn primary" onclick="checkMRSOPA()">Check sequence</button></div><div id="mrsopaFb" class="feedback"></div>
+</section>
+
+<section id="s5" class="card locked">
+ <div class="station-head"><div class="num">5</div><div><span class="kicker">Reduced support</span><h2>Monitor the Response and Decide When an Advanced Airway Is Needed</h2></div></div>
+ <div class="patient"><span class="label">After corrective steps</span><h3>Chest movement improves, but mask ventilation remains difficult</h3><p>The team prepares to secure a more reliable airway.</p></div>
+ <div class="grid">
+  <div class="panel"><h3>Preductal SpO₂</h3><p>Place the pulse-oximetry sensor on the <strong>right hand or wrist</strong>.</p></div>
+  <div class="panel"><h3>Heart rate</h3><p>ECG provides the fastest reliable heart-rate assessment during advanced resuscitation and is recommended before chest compressions.</p></div>
+  <div class="panel"><h3>Endotracheal tube</h3><p>Use when prolonged ventilation is expected, mask ventilation remains ineffective, suction below the cords is needed for suspected obstruction, or compressions are required.</p></div>
+  <div class="panel"><h3>Laryngeal mask</h3><p>An alternative when face-mask ventilation is unsuccessful and intubation is not feasible or unsuccessful in an appropriately sized infant.</p></div>
+ </div>
+ <div id="q5"></div>
+</section>
+
+<section id="s6" class="card locked">
+ <div class="station-head"><div class="num">6</div><div><span class="kicker">Reduced support</span><h2>Now the Heart Rate Is Below 60—But Only After Effective Ventilation</h2></div></div>
+ <div class="patient"><span class="label">After intubation</span><h3>Chest moves with each breath · HR 48/min after 30 seconds of effective ventilation</h3><p>The lungs are now being inflated reliably, but severe bradycardia persists.</p></div>
+ <div class="goal">Begin chest compressions when the heart rate remains <strong>below 60/min despite at least 30 seconds of ventilation that visibly inflates the lungs.</strong></div>
+ <div class="metric-row">
+  <div class="metric"><strong>3:1</strong>compression-to-ventilation ratio</div>
+  <div class="metric"><strong>100%</strong>oxygen during compressions</div>
+  <div class="metric"><strong>Advanced airway</strong>for coordinated ventilation</div>
+ </div>
+ <div class="clue">If the heart rate remains below 60/min, give epinephrine through an intravascular route, preferably an umbilical venous catheter during delivery-room resuscitation. Consider volume expansion when blood loss or shock is suspected.</div>
+ <div id="q6"></div>
+</section>
+
+<section id="s7" class="card locked">
+ <div class="station-head"><div class="num">7</div><div><span class="kicker">Independent synthesis</span><h2>Do Not Let Meconium Distract You From the Priority</h2></div></div>
+ <div class="patient"><span class="label">New delivery</span><h3>Meconium-stained fluid · infant apneic · HR 90/min</h3><p>The baby is nonvigorous after positioning and stimulation.</p></div>
+ <div class="goal"><strong>Meconium does not change the priority:</strong> establish ventilation. Routine endotracheal suctioning is not recommended solely because the infant is nonvigorous and meconium-stained. Intubation and tracheal suction may be considered when airway obstruction prevents effective ventilation.</div>
+ <div class="warning"><strong>Recovery is not the end of the resuscitation.</strong> Continue assessment of heart rate, breathing, oxygenation, temperature, perfusion, glucose/metabolic stability, and neurologic status, and communicate the course of resuscitation clearly during handoff.</div>
+ <div id="finalQs"></div>
+ <div class="controls"><button class="btn primary" onclick="checkFinal()">Check clinical synthesis</button></div><div id="finalFb" class="feedback"></div>
+</section>
+
+<section id="completeBox" class="complete">
+ <h2>Scenario 1.3 complete ✓</h2>
+ <p>You distinguished routine transition from resuscitation, prioritized initial stabilization, initiated PPV when indicated, corrected ineffective ventilation, used preductal monitoring, escalated to an advanced airway and chest compressions in sequence, and maintained ventilation as the priority in a meconium-stained delivery.</p>
+</section>
+</main>
+
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Neonatal & Pediatric Respiratory Care · Scenario 1.3</div><div>Progress and selected answers are saved in this browser.<br>You can leave and return without losing your work.</div></footer>
+</div>
+
+<script>
+const STORE='AHRC262_scenario_1_3_minutes_matter_v1';
+let state;
+try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"mrsopa":{}}')}catch(e){state={done:[],answers:{},mrsopa:{}}}
+state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.mrsopa=state.mrsopa||{};
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function progress(){
+ const n=state.done.length;document.getElementById('progressText').textContent=`${n} of 7 sections complete`;document.getElementById('progressBar').style.width=(n/7*100)+'%';
+ for(let i=2;i<=7;i++){const sec=document.getElementById('s'+i);if(sec&&state.done.includes(i-1))sec.classList.remove('locked')}
+ document.getElementById('completeBox').classList.toggle('show',n===7);
+ if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'1.3',scenario:'Minutes Matter'}}));
+ window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'1.3',completed:n,total:7,percent:n/7*100}}));
+}
+const Q={
+ q1a:{q:'What is the best next step for Baby A?',a:'Routine transition with skin-to-skin warmth and ongoing observation',o:['Routine transition with skin-to-skin warmth and ongoing observation','Immediate PPV because all newborns should receive assisted ventilation','Immediate chest compressions before assessing heart rate','Routine endotracheal suctioning before skin-to-skin care'],g:'A term, vigorous newborn with good tone and effective breathing usually needs supportive transition rather than resuscitation.',h:'Use the three opening observations: term, tone, breathing/crying.'},
+ q2a:{q:'Which action is appropriate during initial stabilization?',a:'Position the airway and suction only if secretions obstruct breathing or ventilation',o:['Position the airway and suction only if secretions obstruct breathing or ventilation','Perform routine deep suctioning on every nonvigorous infant','Delay warming until heart rate is known','Wait for the APGAR score before deciding whether ventilation is needed'],g:'Initial care supports temperature, airway position, and breathing; suction is used only when needed.',h:'Routine suction can delay the intervention that matters most.'},
+ q2b:{q:'After initial steps, which finding should trigger PPV?',a:'Apnea, gasping, or heart rate below 100/min',o:['Apnea, gasping, or heart rate below 100/min','Any acrocyanosis in the first minute','A heart rate above 120/min with a strong cry','A 5-minute APGAR score that has not yet been calculated'],g:'PPV is indicated for apnea, gasping, or HR below 100/min after initial steps.',h:'The immediate decision is driven by breathing and heart rate.'},
+ q3a:{q:'Baby B remains apneic with HR 80/min after initial steps. What should happen next?',a:'Begin positive-pressure ventilation',o:['Begin positive-pressure ventilation','Start chest compressions immediately','Wait another minute for spontaneous recovery','Intubate and suction before attempting ventilation'],g:'Apnea plus HR below 100/min after initial steps requires PPV.',h:'Ventilation is the priority in neonatal resuscitation.'},
+ q3b:{q:'What is the best indicator that PPV is effective?',a:'The heart rate rises',o:['The heart rate rises','The pulse-oximeter immediately reads 100%','The infant develops peripheral cyanosis','The mask pressure reaches a specific number without chest movement'],g:'A rising heart rate is the most important sign that ventilation is effective.',h:'Look for the physiologic response to lung inflation.'},
+ q5a:{q:'Where should the pulse-oximetry sensor be placed during neonatal resuscitation?',a:'Right hand or wrist',o:['Right hand or wrist','Left foot only','Either ankle only','Left hand because it is postductal'],g:'The right hand or wrist provides a preductal oxygen-saturation measurement.',h:'Think preductal.'},
+ q5b:{q:'When is an endotracheal tube especially appropriate?',a:'When mask ventilation remains ineffective or chest compressions are required',o:['When mask ventilation remains ineffective or chest compressions are required','For every newborn delivered by cesarean section','Before any attempt at face-mask ventilation','Only after the heart rate has normalized'],g:'An advanced airway improves ventilation reliability when mask ventilation fails and is used when compressions are required.',h:'Use it when reliable ventilation cannot otherwise be established or advanced resuscitation is needed.'},
+ q6a:{q:'What is the correct next step when HR remains 48/min after 30 seconds of effective ventilation with visible chest movement?',a:'Begin coordinated chest compressions with ventilation',o:['Begin coordinated chest compressions with ventilation','Stop ventilation and observe for another minute','Return to routine drying and stimulation only','Give epinephrine before beginning compressions'],g:'HR below 60/min after at least 30 seconds of effective ventilation is the threshold for compressions.',h:'Effective ventilation must come first; now the HR remains below 60.'},
+ q6b:{q:'What compression-to-ventilation ratio is used in neonatal resuscitation?',a:'3:1',o:['3:1','15:2','30:2','5:1'],g:'Neonatal resuscitation uses a 3:1 compression-to-ventilation ratio.',h:'Neonatal arrest is usually respiratory in origin, so ventilations remain frequent.'},
+ q6c:{q:'If HR remains below 60/min despite effective ventilation and coordinated compressions, what medication is indicated?',a:'Epinephrine via an intravascular route',o:['Epinephrine via an intravascular route','Routine naloxone before reassessment','Surfactant before any further heart-rate assessment','Furosemide as the first resuscitation medication'],g:'Persistent HR below 60/min despite ventilation and compressions indicates epinephrine, preferably through intravascular access.',h:'This medication follows effective ventilation and compressions, not before them.'}
+};
+function mount(ids,target){const root=document.getElementById(target);root.innerHTML='';ids.forEach(id=>{const d=document.createElement('div');d.id='wrap_'+id;root.appendChild(d);renderQ(id,d.id)})}
+function renderQ(id,target){
+ const q=Q[id],saved=state.answers[id],opts=shuffle(q.o);
+ document.getElementById(target).innerHTML=`<div class="q" id="${id}"><div class="q-title">${q.q}</div><div class="options">${opts.map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ '+q.g:'Not yet. '+q.h):''}</div></div>`;
+ document.querySelectorAll(`#${id} .option`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} .option`).forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save();checkQ(id)});
+}
+function checkQ(id){
+ const q=Q[id],el=document.getElementById(id),s=el.querySelector('.option.selected'),fb=el.querySelector('.feedback');if(!s)return false;
+ const ok=s.dataset.choice===q.a;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};save();fb.className='feedback '+(ok?'ok':'bad');fb.textContent=(ok?'✓ ':'Not yet. ')+(ok?q.g:q.h);reconcile();return ok
+}
+function all(ids){return ids.every(id=>state.answers[id]&&state.answers[id].correct)}
+mount(['q1a'],'q1');mount(['q2a','q2b'],'q2');mount(['q3a','q3b'],'q3');mount(['q5a','q5b'],'q5');mount(['q6a','q6b','q6c'],'q6');
+
+const mrSteps=[
+ ['M','Mask adjustment'],['R','Reposition airway'],['S','Suction mouth/nose if needed'],
+ ['O','Open mouth'],['P','Pressure increase'],['A','Alternative airway']
+];
+function buildMRSOPA(){
+ const root=document.getElementById('mrsopa');root.innerHTML='';
+ const labels=mrSteps.map(x=>x[1]);
+ mrSteps.forEach((row,i)=>{
+  const d=document.createElement('div');d.className='sequence-row';d.innerHTML=`<strong>Step ${i+1}</strong><select id="mr${i}"><option value="">Choose corrective step...</option>${shuffle(labels).map(x=>`<option value="${esc(x)}">${x}</option>`).join('')}</select>`;root.appendChild(d);
+  const s=d.querySelector('select');if(state.mrsopa[i])s.value=state.mrsopa[i];s.onchange=()=>{state.mrsopa[i]=s.value;state.mrsopaOK=false;save()}
+ });
+}
+function checkMRSOPA(){
+ let n=0;mrSteps.forEach((row,i)=>{const s=document.getElementById('mr'+i);state.mrsopa[i]=s.value;if(s.value===row[1])n++});
+ const ok=n===mrSteps.length,fb=document.getElementById('mrsopaFb');fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct. The sequence systematically fixes the most common reasons mask ventilation fails before escalation.':`${n} of ${mrSteps.length} positions correct. Keep the corrective sequence focused on achieving chest movement before moving to compressions.`;
+ state.mrsopaOK=ok;save();reconcile();return ok
+}
+buildMRSOPA();
+
+const F=[
+ {q:'A nonvigorous infant is born through meconium-stained fluid. The infant is apneic and HR is 90/min after initial steps. What is the priority?',a:'Begin PPV and establish effective ventilation',o:['Begin PPV and establish effective ventilation','Perform routine endotracheal suctioning before ventilation','Begin chest compressions immediately','Wait for spontaneous respirations because meconium is present'],h:'Meconium does not replace the standard priority of effective ventilation.'},
+ {q:'When might tracheal suctioning be considered in a meconium-stained delivery?',a:'When suspected airway obstruction prevents effective ventilation',o:['When suspected airway obstruction prevents effective ventilation','For every nonvigorous infant before PPV','Whenever the fluid is green even if ventilation is effective','Only after the infant has a normal heart rate'],h:'Routine tracheal suctioning is not recommended solely because meconium is present.'},
+ {q:'After successful resuscitation, which statement is most appropriate?',a:'Continue monitoring breathing, HR, oxygenation, temperature, perfusion, metabolic stability, and neurologic status',o:['Continue monitoring breathing, HR, oxygenation, temperature, perfusion, metabolic stability, and neurologic status','End monitoring once HR exceeds 100/min','Delay handoff documentation because the acute event is over','Remove all thermal support to prevent overheating'],h:'Postresuscitation care requires continued assessment and clear communication.'},
+ {q:'Which sequence best captures the major escalation principle in neonatal resuscitation?',a:'Initial steps → effective PPV → ventilation corrections/advanced airway → compressions → medication if still indicated',o:['Initial steps → effective PPV → ventilation corrections/advanced airway → compressions → medication if still indicated','Initial steps → compressions → PPV → airway corrections → medication','APGAR scoring → suction → medication → PPV → compressions','Oxygen saturation → medication → routine transition → airway positioning'],h:'Ventilation must be established and corrected before compressions and medication escalation.'}
+];
+function renderFinal(){
+ const root=document.getElementById('finalQs');root.innerHTML='';
+ F.forEach((q,i)=>{const id='f'+i,saved=state.answers[id],d=document.createElement('div');d.className='q';d.id=id;d.innerHTML=`<div class="q-title">${i+1}. ${q.q}</div><div class="options">${shuffle(q.o).map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ Correct.':'Not yet. '+q.h):''}</div>`;root.appendChild(d);
+  d.querySelectorAll('.option').forEach(b=>b.onclick=()=>{d.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save()})
+ })
+}
+renderFinal();
+function checkFinal(){
+ let n=0;F.forEach((q,i)=>{const id='f'+i,d=document.getElementById(id),s=d.querySelector('.option.selected'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}const ok=s.dataset.choice===q.a;if(ok)n++;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();
+ const allok=n===F.length;document.getElementById('finalFb').className='feedback '+(allok?'ok':'bad');document.getElementById('finalFb').textContent=allok?'4/4 correct. Scenario complete.':`${n}/4 correct. Revise the red selections using the targeted hints.`;reconcile()
+}
+function req(n){
+ if(n===1)return all(['q1a']);
+ if(n===2)return all(['q2a','q2b']);
+ if(n===3)return all(['q3a','q3b']);
+ if(n===4)return state.mrsopaOK===true;
+ if(n===5)return all(['q5a','q5b']);
+ if(n===6)return all(['q6a','q6b','q6c']);
+ if(n===7)return F.every((q,i)=>state.answers['f'+i]&&state.answers['f'+i].correct);
+ return false
+}
+function reconcile(){
+ const rebuilt=[];for(let n=1;n<=7;n++){if(req(n))rebuilt.push(n);else break}
+ const old=state.done.length;state.done=rebuilt;save();progress();
+ if(rebuilt.length>old&&rebuilt.length<7)setTimeout(()=>document.getElementById('s'+(rebuilt.length+1)).scrollIntoView({behavior:'smooth'}),160)
+}
+reconcile();
+if(state.done.length)document.getElementById('resumeMessage').textContent=`Progress restored: ${state.done.length} of 7 sections were already complete.`;
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'1.3',course:'Neonatal & Pediatric Respiratory Care',scenario:'Minutes Matter',activity_version:'v1'});
+</script>
+</body>
+</html>

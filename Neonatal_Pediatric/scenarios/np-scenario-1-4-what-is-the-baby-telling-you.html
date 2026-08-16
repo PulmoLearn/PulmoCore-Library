@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scenario 1.4 | What Is the Baby Telling You?</title>
+<style>
+:root{
+ --navy:#0B1F33;--navy2:#102A43;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;
+ --mist:#F4FAFC;--mint:#DDF7F2;--amber:#F4B860;--coral:#E85D5D;--white:#fff;
+ --slate:#415A77;--border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);--radius:22px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+button,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}
+button:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}
+.mark svg{width:40px;height:40px}.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}
+.tag{font-size:.8rem;opacity:.9;margin-top:4px}.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}
+.hero,.card,.complete{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}
+.hero p{max-width:1120px;font-size:1.12rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:40;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:.25s}
+.resume{font-size:.87rem;color:var(--slate);margin-top:5px;min-height:1.1em}
+.card{padding:24px;margin-bottom:20px}.locked{opacity:.48;pointer-events:none}.station-head{display:flex;gap:12px;align-items:flex-start}.num{width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:900;flex:none}
+h2,h3{line-height:1.15}h2{font-size:clamp(1.7rem,3vw,2.45rem);margin:0 0 8px}h3{font-size:1.25rem}.small{font-size:.92rem;color:var(--slate)}
+.goal,.clue,.warning,.danger,.patient{border-radius:14px;padding:14px 16px;margin:14px 0}
+.goal{background:var(--mint);border:1px solid #9FDCCF;border-left:6px solid var(--teal)}
+.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}
+.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}
+.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.patient{background:linear-gradient(145deg,#F8FDFF,#EEF8F9);border:1px solid #BFD9DF;border-left:7px solid var(--navy)}
+.patient .label{font-size:.76rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--teal)}
+.patient h3{margin:.25rem 0 .45rem}.patient p:last-child{margin-bottom:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.panel,.term{border:1px solid var(--border);border-radius:16px;padding:16px;background:#FAFDFF}.panel h3{margin:.1rem 0 .6rem}.term{background:#fff}.term strong{color:var(--teal);display:block;margin-bottom:4px}
+.table-wrap{overflow:auto}.compare{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:14px;overflow:hidden}.compare th,.compare td{padding:10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}.compare th{background:var(--navy);color:#fff}.compare tr:last-child td{border-bottom:0}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q:first-child{border-top:0}.q-title{font-weight:800;margin-bottom:9px}.options{display:grid;gap:9px}
+.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:11px 13px;border-radius:12px;background:#fff;cursor:pointer;text-align:left;width:100%}.option:hover{background:#F2F8FE;border-color:var(--blue)}
+.option.selected{background:#F3FFFC;border:2px solid var(--teal);box-shadow:0 0 0 3px rgba(28,167,168,.12)}.option.correct{background:var(--mint);border:2px solid #70CBB9}.option.wrong{background:#FDE9E9;border:2px solid #E58C8C}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800}.primary{background:var(--teal);color:#fff}.primary:hover{background:var(--teal2)}.secondary{background:#fff;color:var(--navy);border:1px solid var(--border)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.match-row{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}.match-row label{font-weight:800;display:block;margin-bottom:7px}.match-row select{width:100%;padding:9px;border:1px solid #B8CAD4;border-radius:10px;background:#fff}
+.image-card{margin:16px 0;border:1px solid var(--border);border-radius:18px;background:#fff;padding:14px}.image-card img{display:block;width:100%;height:auto;border-radius:14px}.image-card figcaption{text-align:center;color:var(--slate);font-size:.88rem;margin-top:8px}
+.flow{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:14px 0}.flow span{border:1px solid var(--border);background:#fff;border-radius:12px;padding:9px 11px;font-weight:800}.flow b{color:var(--teal)}
+.complete{display:none;padding:24px;background:var(--mint);border-color:#86D9C8}.complete.show{display:block}
+footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:900px){.grid3{grid-template-columns:1fr 1fr}.match-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.grid,.grid3{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top">
+ <div class="brand"><div class="mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Neonatal & pediatric respiratory care learning for future RTs.</div></div></div>
+ <div class="course">Neonatal & Pediatric Respiratory Care · Scenario 1.4</div>
+</header>
+
+<main>
+<header class="hero">
+ <span class="eyebrow">Scenario 1.4 · What Is the Baby Telling You?</span>
+ <h1>When the Numbers Change, Start With the Baby.</h1>
+ <p>A preterm infant in the NICU begins to deteriorate. Follow the clues from the bedside examination to continuous monitoring, blood-gas sampling, radiographic review, line and tube position, and a final integrated decision. Your job is to decide which data are real, which are limited, and what deserves immediate action.</p>
+</header>
+
+<div class="progress-wrap">
+ <div class="progress-row"><strong id="progressText">0 of 7 sections complete</strong><div class="progress"><div id="progressBar"></div></div></div>
+ <div id="resumeMessage" class="resume" aria-live="polite"></div>
+</div>
+
+<section id="s1" class="card">
+ <div class="station-head"><div class="num">1</div><div><span class="kicker">Guided</span><h2>Monitoring Supports the Examination—It Does Not Replace It</h2></div></div>
+ <div class="patient"><span class="label">NICU bedside</span><h3>Preterm infant on respiratory support</h3><p>You are called because the bedside monitor has changed. Before reacting to the screen, organize what you will assess at the bedside.</p></div>
+ <div class="goal"><strong>Use a consistent neonatal assessment:</strong> general appearance → breathing → gas exchange → circulation → neurologic/metabolic status → equipment.</div>
+ <div class="table-wrap"><table class="compare"><thead><tr><th>Domain</th><th>Examples</th></tr></thead><tbody>
+ <tr><td>General appearance</td><td>Gestational age, activity, posture, tone, consolability, response to handling.</td></tr>
+ <tr><td>Breathing</td><td>Rate, rhythm, apnea, chest movement, retractions, grunting, flaring, breath sounds, synchrony.</td></tr>
+ <tr><td>Gas exchange</td><td>Central color, SpO₂ trend, oxygen requirement, blood gases, preductal-postductal relationship.</td></tr>
+ <tr><td>Circulation</td><td>Heart rate, pulse quality, refill, blood pressure, skin temperature, urine output, lactate, NIRS trend.</td></tr>
+ <tr><td>Neurologic/metabolic</td><td>Alertness, tone, seizures, temperature, glucose, electrolytes, feeding tolerance.</td></tr>
+ <tr><td>Equipment</td><td>Airway position, interface fit, circuit patency, humidification, alarms, sensor placement, waveform quality.</td></tr>
+ </tbody></table></div>
+ <div id="assessmentMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkAssessment()">Check assessment priorities</button></div><div id="assessmentFb" class="feedback"></div>
+</section>
+
+<section id="s2" class="card locked">
+ <div class="station-head"><div class="num">2</div><div><span class="kicker">Supported</span><h2>The SpO₂ Falls—But Is the Infant Actually Worse?</h2></div></div>
+ <div class="patient"><span class="label">Alarm</span><h3>SpO₂ 94% → 72%</h3><p>The infant remains pink. Heart rate and chest movement are unchanged. The pleth waveform is weak and erratic while the foot is moving.</p></div>
+ <div class="grid">
+  <div class="panel"><h3>Pulse oximetry</h3><p>Estimates arterial oxyhemoglobin saturation. It does <strong>not</strong> directly measure PaO₂, PaCO₂, ventilation, oxygen content, or tissue perfusion.</p></div>
+  <div class="panel"><h3>Check signal quality</h3><p>Motion, low perfusion, edema, ambient light, poor probe contact, venous pulsation, and dyshemoglobins can mislead the reading.</p></div>
+ </div>
+ <div class="clue"><strong>Preductal:</strong> right hand or wrist. <strong>Postductal:</strong> either foot. A meaningful difference can suggest ductal shunting, but it must be interpreted with the rest of the clinical picture.</div>
+ <div id="q2"></div>
+</section>
+
+<section id="s3" class="card locked">
+ <div class="station-head"><div class="num">3</div><div><span class="kicker">Supported</span><h2>Choose the Monitor That Answers the Question</h2></div></div>
+ <div class="grid">
+  <div class="term"><strong>ETCO₂</strong>Confirms airway placement, trends exhaled CO₂, and helps detect disconnection, obstruction, apnea, and changes in ventilation or perfusion.</div>
+  <div class="term"><strong>Transcutaneous CO₂</strong>Provides a continuous CO₂ trend without repeated blood sampling; requires calibration, heated-site changes, and blood-gas correlation.</div>
+  <div class="term"><strong>Transcutaneous O₂</strong>Provides an oxygen trend when arterial access is limited; affected by skin, perfusion, temperature, edema, and sensor condition.</div>
+  <div class="term"><strong>NIRS</strong>Provides a regional cerebral or somatic tissue oxygenation trend; it is not a direct arterial saturation or cardiac-output measurement.</div>
+ </div>
+ <div id="monitorMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkMonitors()">Check monitor choices</button></div><div id="monitorFb" class="feedback"></div>
+</section>
+
+<section id="s4" class="card locked">
+ <div class="station-head"><div class="num">4</div><div><span class="kicker">Reduced support</span><h2>Now You Need a Blood Gas—Which Sample?</h2></div></div>
+ <div class="goal">Choose the <strong>least invasive sample that can answer the clinical question</strong>.</div>
+ <div class="table-wrap"><table class="compare"><thead><tr><th>Sample</th><th>Best use</th><th>Key limitation</th></tr></thead><tbody>
+ <tr><td>Arterial</td><td>Most direct pH, PaCO₂, PaO₂, and arterial oxygenation.</td><td>Invasive.</td></tr>
+ <tr><td>Capillary</td><td>Useful pH and PCO₂ trends in many stable infants.</td><td>PO₂ is not a reliable substitute for arterial oxygenation.</td></tr>
+ <tr><td>Venous</td><td>Useful systemic acid-base and metabolic information.</td><td>Venous PO₂ does not represent arterial oxygenation; PCO₂ is usually higher.</td></tr>
+ <tr><td>Umbilical arterial cord</td><td>Reflects fetal acid-base status at delivery.</td><td>Answers a delivery-status question rather than current arterial oxygenation later in the NICU course.</td></tr>
+ </tbody></table></div>
+ <div id="sampleMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkSamples()">Check samples</button></div><div id="sampleFb" class="feedback"></div>
+</section>
+
+<section id="s5" class="card locked">
+ <div class="station-head"><div class="num">5</div><div><span class="kicker">Reduced support</span><h2>Interpret the Gas in the Same Order Every Time</h2></div></div>
+ <div class="flow"><span>1. pH</span><b>→</b><span>2. PCO₂</span><b>→</b><span>3. HCO₃⁻ / base deficit</span><b>→</b><span>4. Oxygenation</span><b>→</b><span>5. Clinical trend</span></div>
+ <div class="patient"><span class="label">Arterial blood gas</span><h3>pH 7.24 · PaCO₂ 62 · HCO₃⁻ 26 · PaO₂ 58 on FiO₂ 0.35</h3><p>The infant is intubated.</p></div>
+ <div class="warning">Always interpret the gas in the context of gestational age, FiO₂, ventilation mode, temperature, perfusion, sampling site, and recent interventions.</div>
+ <div id="q5"></div>
+</section>
+
+<section id="s6" class="card locked">
+ <div class="station-head"><div class="num">6</div><div><span class="kicker">Reduced support</span><h2>Read the Entire Image Before Naming the Disease</h2></div></div>
+ <div class="grid">
+  <div class="panel"><h3>1. Image quality</h3><p>Identity, projection, rotation, exposure, inspiration, body position.</p></div>
+  <div class="panel"><h3>2. Airway & mediastinum</h3><p>Trachea, carina, cardiac silhouette, mediastinal shift, thymus.</p></div>
+  <div class="panel"><h3>3. Lungs & pleura</h3><p>Volume, symmetry, opacities, lucencies, air bronchograms, effusion, air leak.</p></div>
+  <div class="panel"><h3>4. Everything else</h3><p>Diaphragm, abdomen, bones, soft tissue, lines, tubes, devices.</p></div>
+ </div>
+ <div class="clue"><strong>Pattern examples:</strong> Low-volume diffuse granular lungs with air bronchograms suggest RDS. Hyperinflation with coarse patchy opacities may occur with meconium aspiration. Unilateral hyperlucency with absent markings and mediastinal shift suggests tension pneumothorax.</div>
+ <figure class="image-card"><img src="/Neonatal_Pediatric/np_1_4_correct_tube_line_positions.png" alt="Neonatal radiograph showing correct endotracheal tube, gastric tube, umbilical arterial catheter, and umbilical venous catheter positions."><figcaption>Confirm all lines and tubes on every image.</figcaption></figure>
+ <div class="table-wrap"><table class="compare"><thead><tr><th>Device</th><th>Desired position</th></tr></thead><tbody>
+  <tr><td>ETT</td><td>Mid-trachea with head neutral, safely above carina.</td></tr>
+  <tr><td>OG/NG tube</td><td>Tip and side holes below diaphragm in stomach.</td></tr>
+  <tr><td>UAC</td><td>High descending thoracic aorta or accepted low abdominal position per policy.</td></tr>
+  <tr><td>UVC</td><td>IVC–right atrial junction, outside the cardiac silhouette.</td></tr>
+ </tbody></table></div>
+ <div id="lineMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkLines()">Check line and tube positions</button></div><div id="lineFb" class="feedback"></div>
+</section>
+
+<section id="s7" class="card locked">
+ <div class="station-head"><div class="num">7</div><div><span class="kicker">Independent synthesis</span><h2>Now Put the Baby, Monitor, Ventilator, and Image Together</h2></div></div>
+ <div class="patient"><span class="label">Sudden deterioration</span><h3>Ventilated preterm infant</h3><p>SpO₂ falls and bradycardia develops. Chest movement becomes asymmetric. Breath sounds are markedly decreased on the left. ETCO₂ falls, but a waveform remains present. Exhaled tidal volume is lower.</p></div>
+ <div class="goal">The safest response is not to chase one monitor. Integrate the bedside examination with airway position, ventilation, and the possibility of unilateral air leak.</div>
+ <div id="finalQs"></div>
+ <div class="controls"><button class="btn primary" onclick="checkFinal()">Check clinical synthesis</button></div><div id="finalFb" class="feedback"></div>
+</section>
+
+<section id="completeBox" class="complete">
+ <h2>Scenario 1.4 complete ✓</h2>
+ <p>You organized the neonatal assessment, distinguished artifact from deterioration, matched monitors to clinical questions, chose appropriate blood-gas samples, interpreted a neonatal ABG, reviewed imaging systematically, confirmed line and tube positions, and integrated bedside findings with monitoring and ventilation during sudden deterioration.</p>
+</section>
+</main>
+
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Neonatal & Pediatric Respiratory Care · Scenario 1.4</div><div>Progress and selected answers are saved in this browser.<br>You can leave and return without losing your work.</div></footer>
+</div>
+
+<script>
+const STORE='AHRC262_scenario_1_4_what_is_the_baby_telling_you_v1';
+let state;
+try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"matches":{}}')}catch(e){state={done:[],answers:{},matches:{}}}
+state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.matches=state.matches||{};
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function progress(){
+ const n=state.done.length;document.getElementById('progressText').textContent=`${n} of 7 sections complete`;document.getElementById('progressBar').style.width=(n/7*100)+'%';
+ for(let i=2;i<=7;i++){const sec=document.getElementById('s'+i);if(sec&&state.done.includes(i-1))sec.classList.remove('locked')}
+ document.getElementById('completeBox').classList.toggle('show',n===7);
+ if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'1.4',scenario:'What Is the Baby Telling You?'}}));
+ window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'1.4',completed:n,total:7,percent:n/7*100}}));
+}
+const Q={
+ q2a:{q:'What is the safest first response to the sudden SpO₂ drop with a weak erratic pleth waveform and unchanged bedside appearance?',a:'Assess the infant and correct the probe signal before changing respiratory support',o:['Assess the infant and correct the probe signal before changing respiratory support','Immediately increase FiO₂ to 100%','Silence the alarm and take no further action','Obtain a chest radiograph before looking at the infant'],g:'The clinical examination and poor signal quality make artifact likely, so verify the patient and the probe before escalating oxygen.',h:'Interpret the signal before the number.'},
+ q2b:{q:'Where is a preductal SpO₂ measured?',a:'Right hand or wrist',o:['Right hand or wrist','Either foot','Left ankle only','Abdomen'],g:'The right upper extremity provides the preductal value.',h:'Preductal blood is sampled before potential ductal mixing.'},
+ q5a:{q:'How should this ABG be interpreted?',a:'Acute respiratory acidosis with hypoxemia',o:['Acute respiratory acidosis with hypoxemia','Primary metabolic acidosis with normal oxygenation','Normal neonatal blood gas','Respiratory alkalosis with hyperoxemia'],g:'The low pH with elevated PaCO₂ and near-normal bicarbonate indicates acute respiratory acidosis; PaO₂ is also low for FiO₂ 0.35.',h:'Read pH first, then PaCO₂, then HCO₃⁻, then oxygenation.'},
+ q5b:{q:'Which variable most directly identifies the ventilatory component of this gas?',a:'PaCO₂ 62 mmHg',o:['PaCO₂ 62 mmHg','PaO₂ 58 mmHg','FiO₂ 0.35','HCO₃⁻ 26 mEq/L'],g:'PaCO₂ reflects the ventilatory component of acid-base status.',h:'Ventilation is assessed with carbon dioxide.'}
+};
+function mount(ids,target){const root=document.getElementById(target);root.innerHTML='';ids.forEach(id=>{const d=document.createElement('div');d.id='wrap_'+id;root.appendChild(d);renderQ(id,d.id)})}
+function renderQ(id,target){
+ const q=Q[id],saved=state.answers[id],opts=shuffle(q.o);
+ document.getElementById(target).innerHTML=`<div class="q" id="${id}"><div class="q-title">${q.q}</div><div class="options">${opts.map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ '+q.g:'Not yet. '+q.h):''}</div></div>`;
+ document.querySelectorAll(`#${id} .option`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} .option`).forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save();checkQ(id)});
+}
+function checkQ(id){
+ const q=Q[id],el=document.getElementById(id),s=el.querySelector('.option.selected'),fb=el.querySelector('.feedback');if(!s)return false;
+ const ok=s.dataset.choice===q.a;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};save();fb.className='feedback '+(ok?'ok':'bad');fb.textContent=(ok?'✓ ':'Not yet. ')+(ok?q.g:q.h);reconcile();return ok
+}
+function all(ids){return ids.every(id=>state.answers[id]&&state.answers[id].correct)}
+mount(['q2a','q2b'],'q2');mount(['q5a','q5b'],'q5');
+
+function buildMatch(rootId,key,rows,options){
+ const root=document.getElementById(rootId);root.innerHTML='';state.matches[key]=state.matches[key]||{};
+ rows.forEach((r,i)=>{const d=document.createElement('div');d.className='match-row';d.innerHTML=`<label for="${key}${i}">${r[0]}</label><select id="${key}${i}"><option value="">Choose...</option>${shuffle(options).map(x=>`<option value="${esc(x[0])}">${x[1]}</option>`).join('')}</select>`;root.appendChild(d);const s=d.querySelector('select');if(state.matches[key][i])s.value=state.matches[key][i];s.onchange=()=>{state.matches[key][i]=s.value;state[key+'OK']=false;save()}})
+}
+function gradeMatch(key,rows,fbId,good){
+ let n=0;rows.forEach((r,i)=>{const s=document.getElementById(key+i);state.matches[key][i]=s.value;if(s.value===r[1])n++});
+ const ok=n===rows.length,fb=document.getElementById(fbId);fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ '+good:`${n} of ${rows.length} correct. Recheck the clinical purpose of each item.`;state[key+'OK']=ok;save();reconcile();return ok
+}
+
+const assessmentRows=[
+ ['Grunting, retractions, and asymmetric chest movement','breathing'],
+ ['Capillary refill, pulse quality, blood pressure, and urine output','circulation'],
+ ['Tone, posture, activity, and response to handling','appearance'],
+ ['Sensor placement, circuit water, airway depth, and waveform quality','equipment']
+];
+buildMatch('assessmentMatch','assessment',assessmentRows,[['appearance','General appearance'],['breathing','Breathing'],['circulation','Circulation'],['equipment','Equipment']]);
+function checkAssessment(){return gradeMatch('assessment',assessmentRows,'assessmentFb','You organized bedside findings by assessment domain.')}
+
+const monitorRows=[
+ ['Continuous estimate of arterial oxyhemoglobin saturation','spo2'],
+ ['Exhaled CO₂ waveform used to confirm ventilation and detect disconnection','etco2'],
+ ['Heated skin sensor that trends oxygen or carbon dioxide','tc'],
+ ['Regional cerebral or somatic tissue oxygenation trend','nirs']
+];
+buildMatch('monitorMatch','monitor',monitorRows,[['spo2','Pulse oximetry'],['etco2','End-tidal CO₂'],['tc','Transcutaneous monitoring'],['nirs','NIRS']]);
+function checkMonitors(){return gradeMatch('monitor',monitorRows,'monitorFb','Each monitor is matched to the question it can actually answer.')}
+
+const sampleRows=[
+ ['Need the most accurate PaO₂ to evaluate severe hypoxemia','arterial'],
+ ['Need a minimally invasive pH and PCO₂ trend in a stable infant','capillary'],
+ ['Need metabolic acid-base information without assessing arterial oxygenation','venous'],
+ ['Need evidence of fetal acid-base status at delivery','cord']
+];
+buildMatch('sampleMatch','sample',sampleRows,[['arterial','Arterial'],['capillary','Capillary'],['venous','Venous'],['cord','Umbilical arterial cord']]);
+function checkSamples(){return gradeMatch('sample',sampleRows,'sampleFb','You selected the least invasive sample that still answers the clinical question.')}
+
+const lineRows=[
+ ['Tip should remain in the mid-trachea above the carina','ett'],
+ ['Tip and side holes should be below the diaphragm in the stomach','og'],
+ ['Courses inferiorly before ascending in the aorta','uac'],
+ ['Tip should reach the IVC-right atrial junction without entering the heart','uvc']
+];
+buildMatch('lineMatch','line',lineRows,[['ett','Endotracheal tube'],['og','Gastric tube'],['uac','Umbilical arterial catheter'],['uvc','Umbilical venous catheter']]);
+function checkLines(){return gradeMatch('line',lineRows,'lineFb','All four device descriptions are matched to the correct line or tube.')}
+
+const F=[
+ {q:'What is the safest immediate response to the ventilated infant’s sudden asymmetric deterioration?',a:'Evaluate ETT position and patency immediately while assessing for unilateral air leak and obtaining urgent confirmation',o:['Evaluate ETT position and patency immediately while assessing for unilateral air leak and obtaining urgent confirmation','Replace only the pulse-oximeter probe','Increase inspiratory pressure without examining the infant','Assume the ETCO₂ monitor has failed because the number fell'],h:'Asymmetric chest movement and breath sounds require immediate airway and unilateral air-leak assessment.'},
+ {q:'Which two problems are especially consistent with markedly decreased left breath sounds and asymmetric chest movement?',a:'Right mainstem intubation or left pneumothorax',o:['Right mainstem intubation or left pneumothorax','Isolated hypoglycemia or anemia','Pulse-oximeter artifact or fever','Normal ventilator leak or routine transition'],h:'Both airway malposition and unilateral pneumothorax can create marked side-to-side differences.'},
+ {q:'Why should inspiratory pressure not simply be increased first?',a:'Malposition or pneumothorax could be worsened by increasing pressure before identifying the cause',o:['Malposition or pneumothorax could be worsened by increasing pressure before identifying the cause','Pressure changes are never allowed in neonates','A falling ETCO₂ always proves the ETT is correctly positioned','Exhaled tidal volume is unrelated to ventilation'],h:'The bedside pattern suggests a mechanical problem that must be identified before blindly escalating pressure.'},
+ {q:'What is the key reasoning principle from this scenario?',a:'Integrate bedside findings, signal quality, blood gas data, and imaging rather than treating any one value in isolation',o:['Integrate bedside findings, signal quality, blood gas data, and imaging rather than treating any one value in isolation','Use the monitor value with the lowest number as the primary diagnosis','Obtain imaging before every bedside assessment','Treat SpO₂ as a direct measurement of ventilation'],h:'The lesson is built around integration rather than chasing isolated measurements.'}
+];
+function renderFinal(){
+ const root=document.getElementById('finalQs');root.innerHTML='';
+ F.forEach((q,i)=>{const id='f'+i,saved=state.answers[id],d=document.createElement('div');d.className='q';d.id=id;d.innerHTML=`<div class="q-title">${i+1}. ${q.q}</div><div class="options">${shuffle(q.o).map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ Correct.':'Not yet. '+q.h):''}</div>`;root.appendChild(d);d.querySelectorAll('.option').forEach(b=>b.onclick=()=>{d.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save()})})
+}
+renderFinal();
+function checkFinal(){
+ let n=0;F.forEach((q,i)=>{const id='f'+i,d=document.getElementById(id),s=d.querySelector('.option.selected'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}const ok=s.dataset.choice===q.a;if(ok)n++;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();const ok=n===F.length;document.getElementById('finalFb').className='feedback '+(ok?'ok':'bad');document.getElementById('finalFb').textContent=ok?'4/4 correct. Scenario complete.':`${n}/4 correct. Revise the red selections using the targeted hints.`;reconcile()
+}
+function req(n){
+ if(n===1)return state.assessmentOK===true;
+ if(n===2)return all(['q2a','q2b']);
+ if(n===3)return state.monitorOK===true;
+ if(n===4)return state.sampleOK===true;
+ if(n===5)return all(['q5a','q5b']);
+ if(n===6)return state.lineOK===true;
+ if(n===7)return F.every((q,i)=>state.answers['f'+i]&&state.answers['f'+i].correct);
+ return false
+}
+function reconcile(){
+ const rebuilt=[];for(let n=1;n<=7;n++){if(req(n))rebuilt.push(n);else break}
+ const old=state.done.length;state.done=rebuilt;save();progress();
+ if(rebuilt.length>old&&rebuilt.length<7)setTimeout(()=>document.getElementById('s'+(rebuilt.length+1)).scrollIntoView({behavior:'smooth'}),160)
+}
+reconcile();
+if(state.done.length)document.getElementById('resumeMessage').textContent=`Progress restored: ${state.done.length} of 7 sections were already complete.`;
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'1.4',course:'Neonatal & Pediatric Respiratory Care',scenario:'What Is the Baby Telling You?',activity_version:'v1'});
+</script>
+</body>
+</html>

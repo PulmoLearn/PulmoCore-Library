@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scenario 2.6 | More Than a Lung Problem</title>
+<style>
+:root{
+ --navy:#0B1F33;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;--mist:#F4FAFC;--mint:#DDF7F2;
+ --amber:#F4B860;--coral:#E85D5D;--slate:#415A77;--border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);--radius:22px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+button,select{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}.mark svg{width:40px;height:40px}
+.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}.tag{font-size:.8rem;opacity:.9;margin-top:4px}
+.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}.hero,.card,.complete{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}.hero p{max-width:1120px;font-size:1.12rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:40;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:.25s}
+.resume{font-size:.87rem;color:var(--slate);margin-top:5px;min-height:1.1em}
+.card{padding:24px;margin-bottom:20px}.locked{opacity:.48;pointer-events:none}.station-head{display:flex;gap:12px;align-items:flex-start}.num{width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:900;flex:none}
+h2,h3{line-height:1.15}h2{font-size:clamp(1.7rem,3vw,2.45rem);margin:0 0 8px}h3{font-size:1.25rem}.small{font-size:.92rem;color:var(--slate)}
+.goal,.clue,.warning,.danger,.patient{border-radius:14px;padding:14px 16px;margin:14px 0}.goal{background:var(--mint);border:1px solid #9FDCCF;border-left:6px solid var(--teal)}.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.patient{background:linear-gradient(145deg,#F8FDFF,#EEF8F9);border:1px solid #BFD9DF;border-left:7px solid var(--navy)}.patient .label{font-size:.76rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--teal)}.patient h3{margin:.25rem 0 .45rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.panel,.term{border:1px solid var(--border);border-radius:16px;padding:16px;background:#FAFDFF}.term{background:#fff}.term strong{color:var(--teal);display:block;margin-bottom:4px}
+.table-wrap{overflow:auto}.compare{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:14px;overflow:hidden}.compare th,.compare td{padding:10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}.compare th{background:var(--navy);color:#fff}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q:first-child{border-top:0}.q-title{font-weight:800;margin-bottom:9px}.options{display:grid;gap:9px}.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:11px 13px;border-radius:12px;background:#fff;cursor:pointer;text-align:left;width:100%}.option:hover{background:#F2F8FE;border-color:var(--blue)}.option.selected{background:#F3FFFC;border:2px solid var(--teal);box-shadow:0 0 0 3px rgba(28,167,168,.12)}.option.correct{background:var(--mint);border:2px solid #70CBB9}.option.wrong{background:#FDE9E9;border:2px solid #E58C8C}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800}.primary{background:var(--teal);color:#fff}.primary:hover{background:var(--teal2)}.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.match-row{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}.match-row label{font-weight:800;display:block;margin-bottom:7px}.match-row select{width:100%;padding:9px;border:1px solid #B8CAD4;border-radius:10px;background:#fff}
+.complete{display:none;padding:24px;background:var(--mint);border-color:#86D9C8}.complete.show{display:block}
+footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:900px){.grid3{grid-template-columns:1fr 1fr}.match-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.grid,.grid3{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top">
+ <div class="brand"><div class="mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Neonatal & pediatric respiratory care learning for future RTs.</div></div></div>
+ <div class="course">Neonatal & Pediatric Respiratory Care · Scenario 2.6</div>
+</header>
+
+<main>
+<header class="hero">
+ <span class="eyebrow">Scenario 2.6 · More Than a Lung Problem</span>
+ <h1>Normal SpO₂ Does Not Mean the Child Is Safe.</h1>
+ <p>Follow critically ill pediatric patients whose respiratory problems begin in the heart, circulation, brain, respiratory muscles, or chest wall. Connect oxygenation to perfusion, detect silent ventilatory muscle failure, protect the brain and spine, recognize thoracic emergencies, and decide whether extracorporeal support must provide gas exchange, circulation, or both.</p>
+</header>
+
+<div class="progress-wrap">
+ <div class="progress-row"><strong id="progressText">0 of 7 sections complete</strong><div class="progress"><div id="progressBar"></div></div></div>
+ <div id="resumeMessage" class="resume" aria-live="polite"></div>
+</div>
+
+<section id="s1" class="card">
+ <div class="station-head"><div class="num">1</div><div><span class="kicker">Guided</span><h2>Respiratory Care Can Change Cardiac Physiology</h2></div></div>
+ <div class="goal"><strong>Before aggressively changing oxygen or pressure in congenital heart disease, ask what the circulation depends on:</strong> pulmonary blood flow, systemic blood flow, mixing, or balance between pulmonary and systemic flow.</div>
+ <div class="grid">
+  <div class="term"><strong>Excess pulmonary blood flow</strong>Tachypnea, retractions, pulmonary edema, hepatomegaly, poor growth. Excessive oxygen may further lower pulmonary vascular resistance.</div>
+  <div class="term"><strong>Reduced pulmonary blood flow</strong>Cyanosis from low pulmonary blood flow; oxygen may help only when pulmonary vasoconstriction contributes.</div>
+  <div class="term"><strong>Ductal-dependent systemic circulation</strong>Systemic perfusion can fall as the ductus closes even when SpO₂ looks acceptable.</div>
+  <div class="term"><strong>Mixing / single-ventricle physiology</strong>Systemic oxygenation depends on adequate mixing and careful balance of pulmonary and systemic blood flow.</div>
+ </div>
+ <div id="cardiacMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkCardiac()">Check cardiac patterns</button></div><div id="cardiacFb" class="feedback"></div>
+</section>
+
+<section id="s2" class="card locked">
+ <div class="station-head"><div class="num">2</div><div><span class="kicker">Supported</span><h2>Shock Is an Oxygen-Delivery Problem</h2></div></div>
+ <div class="goal">SpO₂ measures arterial saturation. It does <strong>not</strong> measure cardiac output, hemoglobin concentration, or tissue oxygen delivery.</div>
+ <div class="table-wrap"><table class="compare"><thead><tr><th>Shock type</th><th>Typical clues</th></tr></thead><tbody>
+ <tr><td>Hypovolemic</td><td>Tachycardia, cool extremities, narrow pulse pressure, delayed refill, low urine output, fluid loss or bleeding.</td></tr>
+ <tr><td>Distributive / septic</td><td>Warm or cool shock, fever or hypothermia, altered mental status, rising lactate.</td></tr>
+ <tr><td>Cardiogenic</td><td>Poor perfusion with hepatomegaly, pulmonary edema, gallop rhythm, rising venous pressure, or known heart disease.</td></tr>
+ <tr><td>Obstructive</td><td>Tension pneumothorax, tamponade, or massive pulmonary vascular obstruction limiting filling or output.</td></tr>
+ </tbody></table></div>
+ <div class="patient"><span class="label">Case A</span><h3>Child with congenital heart disease after a large fluid bolus</h3><p>Tachycardia, cool extremities, hepatomegaly, worsening crackles, delayed refill, and low urine output develop.</p></div>
+ <div id="q2"></div>
+</section>
+
+<section id="s3" class="card locked">
+ <div class="station-head"><div class="num">3</div><div><span class="kicker">Supported</span><h2>Neuromuscular Failure Can Hide Behind a Normal Saturation</h2></div></div>
+ <div class="goal">Follow <strong>strength and ventilation</strong>, not SpO₂ alone. A child may maintain oxygen saturation until respiratory reserve is dangerously low.</div>
+ <div class="grid3">
+  <div class="term"><strong>Vital capacity</strong>Global respiratory reserve and trend toward ventilatory failure.</div>
+  <div class="term"><strong>Maximal inspiratory pressure</strong>Inspiratory muscle strength.</div>
+  <div class="term"><strong>Peak cough flow</strong>Ability to generate expiratory flow for secretion clearance.</div>
+  <div class="term"><strong>ETCO₂ / blood gas</strong>Detects evolving hypoventilation.</div>
+  <div class="term"><strong>Bulbar assessment</strong>Identifies aspiration, secretion-retention, and airway-protection risk.</div>
+  <div class="term"><strong>Trend</strong>Rapid decline matters even before a single value becomes profoundly abnormal.</div>
+ </div>
+ <div id="nmMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkNM()">Check neuromuscular measures</button></div><div id="nmFb" class="feedback"></div>
+</section>
+
+<section id="s4" class="card locked">
+ <div class="station-head"><div class="num">4</div><div><span class="kicker">Reduced support</span><h2>The Brain and Spine Need Oxygenation, Ventilation, and Perfusion</h2></div></div>
+ <div class="patient"><span class="label">Case B</span><h3>Traumatic brain injury</h3><p>The child is intubated after severe head trauma. Blood pressure is marginal and oxygenation is being stabilized.</p></div>
+ <div class="goal">Avoid secondary injury from <strong>hypoxemia and hypotension</strong>. Maintain appropriate ventilation. Routine aggressive hyperventilation is avoided; brief controlled hyperventilation is reserved for specific acute herniation situations.</div>
+ <div class="clue"><strong>Cervical spine injury:</strong> maintain alignment, use jaw thrust when appropriate, and anticipate diaphragmatic weakness with high lesions. Neurogenic shock may present with hypotension, relative bradycardia, and warm skin.</div>
+ <div id="q4"></div>
+</section>
+
+<section id="s5" class="card locked">
+ <div class="station-head"><div class="num">5</div><div><span class="kicker">Reduced support</span><h2>Thoracic Trauma Demands Mechanism-Specific Action</h2></div></div>
+ <div class="grid3">
+  <div class="term"><strong>Pulmonary contusion</strong>Worsening hypoxemia and infiltrates after blunt trauma; support oxygenation and use lung-protective ventilation when needed.</div>
+  <div class="term"><strong>Tension pneumothorax</strong>Sudden unilateral decreased breath sounds with shock; decompress immediately.</div>
+  <div class="term"><strong>Hemothorax</strong>Decreased breath sounds, dullness, shock, and pleural blood; restore volume and drain the chest.</div>
+  <div class="term"><strong>Flail chest</strong>Paradoxical chest-wall motion with underlying contusion; analgesia, pulmonary hygiene, and ventilatory support as needed.</div>
+  <div class="term"><strong>Diaphragmatic injury</strong>Abdominal contents enter chest; avoid mask overdistention and prepare definitive care.</div>
+  <div class="term"><strong>Priority</strong>Airway, breathing, and circulation problems may coexist—treat immediately life-threatening physiology first.</div>
+ </div>
+ <div id="traumaMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkTrauma()">Check trauma patterns</button></div><div id="traumaFb" class="feedback"></div>
+</section>
+
+<section id="s6" class="card locked">
+ <div class="station-head"><div class="num">6</div><div><span class="kicker">Reduced support</span><h2>ECMO Must Match the Organ Failure</h2></div></div>
+ <div class="grid">
+  <div class="panel"><h3>VV ECMO</h3><p>Provides gas-exchange support while relying on the patient’s native cardiac output. Typical use: severe respiratory failure with adequate cardiac function.</p></div>
+  <div class="panel"><h3>VA ECMO</h3><p>Provides both cardiac and respiratory support. Typical use: cardiogenic shock, cardiac arrest, or combined cardiorespiratory failure.</p></div>
+ </div>
+ <div class="goal">ECMO does not eliminate respiratory care. Continue lung-protective ventilation, humidification, secretion management, airway security, infection prevention, and monitoring for bleeding, thrombosis, hemolysis, differential hypoxemia, and circuit failure.</div>
+ <div id="ecmoMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkECMO()">Check ECMO mode</button></div><div id="ecmoFb" class="feedback"></div>
+</section>
+
+<section id="s7" class="card locked">
+ <div class="station-head"><div class="num">7</div><div><span class="kicker">Independent synthesis</span><h2>Stabilization Has to Survive the Move</h2></div></div>
+ <div class="patient"><span class="label">Transport decision</span><h3>Critically ill child scheduled for transfer</h3><p>The airway is marginally secure, vasoactive support is still being adjusted, the chest tube is intermittently bubbling without a clear explanation, and portable oxygen reserve is barely enough for the expected trip.</p></div>
+ <div class="warning"><strong>Never transport an unresolved instability.</strong> Secure the airway, confirm ventilator and chest-drain function, verify gas and battery duration, stabilize perfusion, protect lines, control temperature, assign emergency roles, and communicate disease-specific risks before departure.</div>
+ <div id="finalQs"></div>
+ <div class="controls"><button class="btn primary" onclick="checkFinal()">Check clinical synthesis</button></div><div id="finalFb" class="feedback"></div>
+</section>
+
+<section id="completeBox" class="complete"><h2>Scenario 2.6 complete ✓</h2><p>You linked oxygenation to perfusion, differentiated pediatric shock, recognized silent neuromuscular ventilatory failure, protected cerebral and spinal perfusion, matched thoracic trauma to immediate priorities, selected VA versus VV ECMO by support need, and identified unresolved instability before transport.</p></section>
+</main>
+
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Neonatal & Pediatric Respiratory Care · Scenario 2.6</div><div>Progress and selected answers are saved in this browser.<br>You can leave and return without losing your work.</div></footer>
+</div>
+
+<script>
+const STORE='AHRC262_scenario_2_6_more_than_lung_v1';
+let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"matches":{}}')}catch(e){state={done:[],answers:{},matches:{}}}
+state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.matches=state.matches||{};
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function progress(){const n=state.done.length;document.getElementById('progressText').textContent=`${n} of 7 sections complete`;document.getElementById('progressBar').style.width=(n/7*100)+'%';for(let i=2;i<=7;i++){const sec=document.getElementById('s'+i);if(sec&&state.done.includes(i-1))sec.classList.remove('locked')}document.getElementById('completeBox').classList.toggle('show',n===7);if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'2.6',scenario:'More Than a Lung Problem'}}));window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'2.6',completed:n,total:7,percent:n/7*100}}))}
+function all(ids){return ids.every(id=>state.answers[id]&&state.answers[id].correct)}
+
+const Q={
+ q2a:{q:'What shock pattern best fits poor perfusion, hepatomegaly, worsening crackles, and low urine output after a large fluid bolus?',a:'Cardiogenic shock',o:['Cardiogenic shock','Uncomplicated hypovolemia','Isolated respiratory distress','Neurogenic shock'],g:'Poor perfusion plus hepatomegaly and pulmonary edema strongly suggests cardiogenic shock.',h:'The fluid bolus worsened pulmonary congestion rather than restoring perfusion.'},
+ q2b:{q:'Why can SpO₂ remain normal in a child who is still in shock?',a:'SpO₂ does not measure cardiac output, hemoglobin, or total tissue oxygen delivery',o:['SpO₂ does not measure cardiac output, hemoglobin, or total tissue oxygen delivery','Normal SpO₂ always rules out shock','SpO₂ directly measures lactate','SpO₂ measures systemic blood pressure'],g:'A normal arterial saturation can coexist with poor cardiac output and inadequate oxygen delivery.',h:'Oxygen delivery depends on more than saturation.'},
+ q4a:{q:'Which ventilatory strategy should be avoided routinely after traumatic brain injury?',a:'Aggressive hyperventilation',o:['Aggressive hyperventilation','Avoiding hypoxemia','Supporting blood pressure','Maintaining appropriate ventilation'],g:'Routine aggressive hyperventilation can reduce cerebral blood flow and is avoided outside specific acute herniation situations.',h:'The goal is adequate—not unnecessarily low—PaCO₂.'}
+};
+function mount(ids,target){const root=document.getElementById(target);root.innerHTML='';ids.forEach(id=>{const d=document.createElement('div');d.id='wrap_'+id;root.appendChild(d);renderQ(id,d.id)})}
+function renderQ(id,target){const q=Q[id],saved=state.answers[id],opts=shuffle(q.o);document.getElementById(target).innerHTML=`<div class="q" id="${id}"><div class="q-title">${q.q}</div><div class="options">${opts.map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ '+q.g:'Not yet. '+q.h):''}</div></div>`;document.querySelectorAll(`#${id} .option`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} .option`).forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save();checkQ(id)})}
+function checkQ(id){const q=Q[id],el=document.getElementById(id),s=el.querySelector('.option.selected'),fb=el.querySelector('.feedback');if(!s)return false;const ok=s.dataset.choice===q.a;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};save();fb.className='feedback '+(ok?'ok':'bad');fb.textContent=(ok?'✓ ':'Not yet. ')+(ok?q.g:q.h);reconcile();return ok}
+mount(['q2a','q2b'],'q2');mount(['q4a'],'q4');
+
+function buildMatch(rootId,key,rows,options){const root=document.getElementById(rootId);root.innerHTML='';state.matches[key]=state.matches[key]||{};rows.forEach((r,i)=>{const d=document.createElement('div');d.className='match-row';d.innerHTML=`<label for="${key}${i}">${r[0]}</label><select id="${key}${i}"><option value="">Choose...</option>${shuffle(options).map(x=>`<option value="${esc(x[0])}">${x[1]}</option>`).join('')}</select>`;root.appendChild(d);const s=d.querySelector('select');if(state.matches[key][i])s.value=state.matches[key][i];s.onchange=()=>{state.matches[key][i]=s.value;state[key+'OK']=false;save()}})}
+function gradeMatch(key,rows,fbId,good){let n=0;rows.forEach((r,i)=>{const s=document.getElementById(key+i);state.matches[key][i]=s.value;if(s.value===r[1])n++});const ok=n===rows.length,fb=document.getElementById(fbId);fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ '+good:`${n} of ${rows.length} correct. Recheck the physiologic pattern.`;state[key+'OK']=ok;save();reconcile();return ok}
+
+const cardiacRows=[
+ ['Pulmonary edema, tachypnea, overcirculation','highq'],
+ ['Cyanosis from limited pulmonary blood flow','lowq'],
+ ['Systemic perfusion may collapse as the ductus closes','duct'],
+ ['Systemic oxygenation depends on blood mixing between circuits','mix']
+];
+buildMatch('cardiacMatch','cardiac',cardiacRows,[['highq','Excess pulmonary blood flow'],['lowq','Reduced pulmonary blood flow'],['duct','Ductal-dependent systemic flow'],['mix','Mixing lesion']]);
+function checkCardiac(){return gradeMatch('cardiac',cardiacRows,'cardiacFb','You matched congenital heart patterns to their respiratory implications.')}
+
+const nmRows=[
+ ['Tracks global respiratory reserve','vc'],
+ ['Estimates inspiratory muscle strength','mip'],
+ ['Estimates ability to clear secretions with cough','pcf'],
+ ['Detects evolving hypoventilation','co2']
+];
+buildMatch('nmMatch','nm',nmRows,[['vc','Vital capacity'],['mip','Maximal inspiratory pressure'],['pcf','Peak cough flow'],['co2','ETCO₂ / blood gas CO₂ trend']]);
+function checkNM(){return gradeMatch('nm',nmRows,'nmFb','You matched the neuromuscular measures to what they tell you.')}
+
+const traumaRows=[
+ ['Delayed infiltrates and hypoxemia after blunt chest trauma','cont'],
+ ['Sudden unilateral absent breath sounds with shock','tension'],
+ ['Pleural blood loss with dullness and hypovolemia','hemo'],
+ ['Paradoxical movement of a chest-wall segment','flail']
+];
+buildMatch('traumaMatch','trauma',traumaRows,[['cont','Pulmonary contusion'],['tension','Tension pneumothorax'],['hemo','Hemothorax'],['flail','Flail chest']]);
+function checkTrauma(){return gradeMatch('trauma',traumaRows,'traumaFb','You matched each thoracic trauma pattern to the correct injury.')}
+
+const ecmoRows=[
+ ['Severe refractory respiratory failure with adequate native cardiac function','vv'],
+ ['Cardiogenic shock with combined cardiac and respiratory failure','va'],
+ ['Cardiac arrest requiring extracorporeal circulatory support','va'],
+ ['Severe PARDS with acceptable blood pressure and cardiac function','vv']
+];
+buildMatch('ecmoMatch','ecmo',ecmoRows,[['vv','VV ECMO'],['va','VA ECMO']]);
+function checkECMO(){return gradeMatch('ecmo',ecmoRows,'ecmoFb','You selected ECMO mode according to whether circulation also needs support.')}
+
+const F=[
+ {q:'A teenager with Guillain-Barré syndrome has falling vital capacity, weak cough, dysphagia, rising ETCO₂, and SpO₂ 97%. What is the safest response?',a:'Prepare airway and ventilatory support before decompensation',o:['Prepare airway and ventilatory support before decompensation','Reassure because SpO₂ is normal','Treat only with bronchodilator therapy','Wait until severe hypoxemia develops'],h:'Strength, bulbar function, and CO₂ show impending ventilatory failure before saturation necessarily falls.'},
+ {q:'What is the immediate treatment for tension pneumothorax with shock?',a:'Emergency pleural decompression',o:['Emergency pleural decompression','Wait for chest radiography','Increase ventilator pressure','Give oxygen only and reassess later'],h:'Tension pneumothorax is an obstructive shock emergency and is treated immediately.'},
+ {q:'Which ECMO mode provides gas exchange while relying on native cardiac output?',a:'VV ECMO',o:['VV ECMO','VA ECMO','CPAP','HFNC'],h:'VV supports gas exchange; VA supports both circulation and gas exchange.'},
+ {q:'Why should this transport be delayed?',a:'The airway, perfusion, chest-drain function, and oxygen reserve contain unresolved instability',o:['The airway, perfusion, chest-drain function, and oxygen reserve contain unresolved instability','Any child receiving vasoactive medication can never be transported','Transport is unsafe whenever a chest tube is present','The current SpO₂ is not provided'],h:'Known instability becomes harder to manage once access is limited during movement.'},
+ {q:'What is the central principle of multisystem respiratory care?',a:'Protect oxygen delivery and ventilation by treating the cardiac, circulatory, neurologic, muscular, or traumatic cause—not just the SpO₂ number',o:['Protect oxygen delivery and ventilation by treating the cardiac, circulatory, neurologic, muscular, or traumatic cause—not just the SpO₂ number','Treat every low perfusion state with more oxygen alone','Use positive pressure aggressively in all congenital heart disease','Assume normal saturation means tissue oxygen delivery is adequate'],h:'Respiratory care must be integrated with circulation, perfusion, airway protection, and the underlying mechanism.'}
+];
+function renderFinal(){const root=document.getElementById('finalQs');root.innerHTML='';F.forEach((q,i)=>{const id='f'+i,saved=state.answers[id],d=document.createElement('div');d.className='q';d.id=id;d.innerHTML=`<div class="q-title">${i+1}. ${q.q}</div><div class="options">${shuffle(q.o).map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ Correct.':'Not yet. '+q.h):''}</div>`;root.appendChild(d);d.querySelectorAll('.option').forEach(b=>b.onclick=()=>{d.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save()})})}
+renderFinal();
+function checkFinal(){let n=0;F.forEach((q,i)=>{const id='f'+i,d=document.getElementById(id),s=d.querySelector('.option.selected'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}const ok=s.dataset.choice===q.a;if(ok)n++;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();const ok=n===F.length;document.getElementById('finalFb').className='feedback '+(ok?'ok':'bad');document.getElementById('finalFb').textContent=ok?'5/5 correct. Scenario complete.':`${n}/5 correct. Revise the red selections using the targeted hints.`;reconcile()}
+
+function req(n){if(n===1)return state.cardiacOK===true;if(n===2)return all(['q2a','q2b']);if(n===3)return state.nmOK===true;if(n===4)return all(['q4a']);if(n===5)return state.traumaOK===true;if(n===6)return state.ecmoOK===true;if(n===7)return F.every((q,i)=>state.answers['f'+i]&&state.answers['f'+i].correct);return false}
+function reconcile(){const rebuilt=[];for(let n=1;n<=7;n++){if(req(n))rebuilt.push(n);else break}const old=state.done.length;state.done=rebuilt;save();progress();if(rebuilt.length>old&&rebuilt.length<7)setTimeout(()=>document.getElementById('s'+(rebuilt.length+1)).scrollIntoView({behavior:'smooth'}),160)}
+reconcile();if(state.done.length)document.getElementById('resumeMessage').textContent=`Progress restored: ${state.done.length} of 7 sections were already complete.`;
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.6',course:'Neonatal & Pediatric Respiratory Care',scenario:'More Than a Lung Problem',activity_version:'v1'});
+</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scenario 2.1 | Sick or Getting Sicker?</title>
+<style>
+:root{
+ --navy:#0B1F33;--navy2:#102A43;--teal:#1CA7A8;--teal2:#128486;--blue:#4BA3F2;
+ --mist:#F4FAFC;--mint:#DDF7F2;--amber:#F4B860;--coral:#E85D5D;--white:#fff;
+ --slate:#415A77;--border:#D7E6EF;--shadow:0 8px 20px rgba(11,31,51,.08);--radius:22px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--mist);color:var(--navy);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+button,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}
+button:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.page{max-width:1440px;margin:auto;background:linear-gradient(180deg,#fff,#f7fbfd);min-height:100vh}
+.top{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12)}
+.mark svg{width:40px;height:40px}.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.brand-name span{color:var(--teal)}
+.tag{font-size:.8rem;opacity:.9;margin-top:4px}.course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700}
+main{padding:30px clamp(18px,4vw,54px) 72px}
+.hero,.card,.complete{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:32px;border-top:10px solid var(--teal)}.hero h1{font-size:clamp(2.15rem,5vw,4rem);line-height:1.04;letter-spacing:-.05em;margin:8px 0 14px}
+.hero p{max-width:1120px;font-size:1.12rem;color:#243b55}
+.eyebrow,.kicker{display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;margin-bottom:6px}
+.progress-wrap{position:sticky;top:88px;z-index:40;background:rgba(255,255,255,.97);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 15px;margin:18px 0 24px}
+.progress-row{display:flex;gap:14px;align-items:center}.progress{height:12px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:.25s}
+.resume{font-size:.87rem;color:var(--slate);margin-top:5px;min-height:1.1em}
+.card{padding:24px;margin-bottom:20px}.locked{opacity:.48;pointer-events:none}.station-head{display:flex;gap:12px;align-items:flex-start}.num{width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:900;flex:none}
+h2,h3{line-height:1.15}h2{font-size:clamp(1.7rem,3vw,2.45rem);margin:0 0 8px}h3{font-size:1.25rem}.small{font-size:.92rem;color:var(--slate)}
+.goal,.clue,.warning,.danger,.patient{border-radius:14px;padding:14px 16px;margin:14px 0}
+.goal{background:var(--mint);border:1px solid #9FDCCF;border-left:6px solid var(--teal)}
+.clue{background:#E6F3FF;border:1px solid #B7D9F6;border-left:6px solid var(--blue)}
+.warning{background:#FFF4DF;border:1px solid #F8D9A5;border-left:6px solid var(--amber)}
+.danger{background:#FDE9E9;border:1px solid #F2B5B5;border-left:6px solid var(--coral)}
+.patient{background:linear-gradient(145deg,#F8FDFF,#EEF8F9);border:1px solid #BFD9DF;border-left:7px solid var(--navy)}
+.patient .label{font-size:.76rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--teal)}
+.patient h3{margin:.25rem 0 .45rem}.patient p:last-child{margin-bottom:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.panel,.term{border:1px solid var(--border);border-radius:16px;padding:16px;background:#FAFDFF}.panel h3{margin:.1rem 0 .6rem}.term{background:#fff}.term strong{color:var(--teal);display:block;margin-bottom:4px}
+.table-wrap{overflow:auto}.compare{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:14px;overflow:hidden}.compare th,.compare td{padding:10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}.compare th{background:var(--navy);color:#fff}.compare tr:last-child td{border-bottom:0}
+.q{border-top:1px solid var(--border);padding:18px 0 6px}.q:first-child{border-top:0}.q-title{font-weight:800;margin-bottom:9px}.options{display:grid;gap:9px}
+.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--border);padding:11px 13px;border-radius:12px;background:#fff;cursor:pointer;text-align:left;width:100%}.option:hover{background:#F2F8FE;border-color:var(--blue)}
+.option.selected{background:#F3FFFC;border:2px solid var(--teal);box-shadow:0 0 0 3px rgba(28,167,168,.12)}.option.correct{background:var(--mint);border:2px solid #70CBB9}.option.wrong{background:#FDE9E9;border:2px solid #E58C8C}
+.feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800}.primary{background:var(--teal);color:#fff}.primary:hover{background:var(--teal2)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.match-row{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}.match-row label{font-weight:800;display:block;margin-bottom:7px}.match-row select{width:100%;padding:9px;border:1px solid #B8CAD4;border-radius:10px;background:#fff}
+.complete{display:none;padding:24px;background:var(--mint);border-color:#86D9C8}.complete.show{display:block}
+footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem}footer strong span{color:var(--teal)}
+@media(max-width:900px){.grid3{grid-template-columns:1fr 1fr}.match-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.grid,.grid3{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top">
+ <div class="brand"><div class="mark" aria-hidden="true"><svg fill="none" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/><circle cx="32" cy="31" fill="#1CA7A8" r="4"/></svg></div><div><div class="brand-name">Pulmo<span>Learn</span></div><div class="tag">Neonatal & pediatric respiratory care learning for future RTs.</div></div></div>
+ <div class="course">Neonatal & Pediatric Respiratory Care · Scenario 2.1</div>
+</header>
+
+<main>
+<header class="hero">
+ <span class="eyebrow">Scenario 2.1 · Sick or Getting Sicker?</span>
+ <h1>Pediatric Assessment Starts Before You Touch the Child.</h1>
+ <p>Follow a young child from the first doorway impression through respiratory assessment, monitoring, diagnostics, and escalation. Your job is to recognize not only whether the child is sick, but whether the child is compensating—or beginning to fail.</p>
+</header>
+
+<div class="progress-wrap">
+ <div class="progress-row"><strong id="progressText">0 of 7 sections complete</strong><div class="progress"><div id="progressBar"></div></div></div>
+ <div id="resumeMessage" class="resume" aria-live="polite"></div>
+</div>
+
+<section id="s1" class="card">
+ <div class="station-head"><div class="num">1</div><div><span class="kicker">C1 · Guided</span><h2>The Pediatric First Look</h2></div></div>
+ <div class="patient"><span class="label">Emergency department</span><h3>18-month-old child with cough and increased work of breathing</h3><p>Before applying monitors, you pause at the doorway and observe the child.</p></div>
+ <div class="goal"><strong>Pediatric Assessment Triangle:</strong> Appearance → Work of Breathing → Circulation to Skin. It is a rapid visual impression, not a replacement for the primary assessment.</div>
+ <div class="grid3">
+  <div class="term"><strong>Appearance</strong>Tone, interactiveness, consolability, look/gaze, speech or cry.</div>
+  <div class="term"><strong>Work of breathing</strong>Abnormal sounds, position, retractions, flaring, head bobbing.</div>
+  <div class="term"><strong>Circulation to skin</strong>Pallor, mottling, cyanosis.</div>
+ </div>
+ <div id="patMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkPAT()">Check PAT findings</button></div><div id="patFb" class="feedback"></div>
+</section>
+
+<section id="s2" class="card locked">
+ <div class="station-head"><div class="num">2</div><div><span class="kicker">C1 + C2 · Supported</span><h2>Age Changes What “Normal” Looks Like</h2></div></div>
+ <div class="goal">Pediatric airway size, respiratory rate, chest-wall compliance, oxygen consumption, and respiratory reserve differ by age. A finding that is expected in one age group may be concerning in another.</div>
+ <div class="grid">
+  <div class="panel"><h3>Smaller airway, bigger consequences</h3><p>A small decrease in airway radius can cause a large increase in resistance. Children can deteriorate quickly with edema, secretions, or bronchospasm.</p></div>
+  <div class="panel"><h3>Higher metabolic demand</h3><p>Infants and young children have higher oxygen consumption and less reserve, so apnea or severe obstruction can produce hypoxemia rapidly.</p></div>
+ </div>
+ <div id="q2"></div>
+</section>
+
+<section id="s3" class="card locked">
+ <div class="station-head"><div class="num">3</div><div><span class="kicker">C2 · Supported</span><h2>Distress or Failure?</h2></div></div>
+ <div class="patient"><span class="label">Initial exam</span><h3>RR 48/min · nasal flaring · intercostal retractions · SpO₂ 91% · alert and anxious</h3><p>Breath sounds are coarse with scattered wheeze. The child is still interacting with the caregiver.</p></div>
+ <div class="grid">
+  <div class="panel"><h3>Respiratory distress</h3><p>Tachypnea, retractions, flaring, abnormal sounds, increased effort, anxiety, and compensatory tachycardia may be present while mental status and respiratory drive remain intact.</p></div>
+  <div class="panel"><h3>Respiratory failure</h3><p>Worsening fatigue, decreased effort, altered mental status, bradypnea/apnea, poor air movement, persistent hypoxemia, rising PaCO₂, or bradycardia indicate failing compensation.</p></div>
+ </div>
+ <div id="q3"></div>
+</section>
+
+<section id="s4" class="card locked">
+ <div class="station-head"><div class="num">4</div><div><span class="kicker">C3 · Reduced support</span><h2>The Monitor Is a Trend, Not the Whole Patient</h2></div></div>
+ <div class="patient"><span class="label">Twenty minutes later</span><h3>SpO₂ 93% on oxygen · HR 154/min · RR falls from 48 to 28/min</h3><p>The child is now sleepy, has weaker breath sounds, and retractions are less dramatic.</p></div>
+ <div class="warning"><strong>Less visible work can be worse.</strong> When a child tires, respiratory rate and retractions may decrease because the child is losing the ability to compensate.</div>
+ <div id="monitorMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkMonitor()">Check monitoring interpretation</button></div><div id="monitorFb" class="feedback"></div>
+</section>
+
+<section id="s5" class="card locked">
+ <div class="station-head"><div class="num">5</div><div><span class="kicker">C4 · Reduced support</span><h2>Choose the Diagnostic That Answers the Question</h2></div></div>
+ <div class="grid">
+  <div class="term"><strong>Blood gas</strong>Use when ventilation, acid-base status, or severity of gas-exchange failure must be clarified.</div>
+  <div class="term"><strong>Chest radiograph</strong>Use when focal disease, air leak, foreign body pattern, pneumonia, edema, or device position is suspected.</div>
+  <div class="term"><strong>Capnography</strong>Useful for airway/ventilation trending, intubation confirmation, and detecting disconnection or severe airflow change.</div>
+  <div class="term"><strong>Pulse oximetry</strong>Useful for oxygenation trend, but does not directly measure ventilation or PaCO₂.</div>
+ </div>
+ <div id="diagMatch" class="match-grid"></div>
+ <div class="controls"><button class="btn primary" onclick="checkDiag()">Check diagnostic choices</button></div><div id="diagFb" class="feedback"></div>
+</section>
+
+<section id="s6" class="card locked">
+ <div class="station-head"><div class="num">6</div><div><span class="kicker">C4 + C5 · Reduced support</span><h2>The Blood Gas Confirms What the Child Was Already Telling You</h2></div></div>
+ <div class="patient"><span class="label">Venous blood gas + clinical trend</span><h3>pH 7.27 · PCO₂ 58 mmHg</h3><p>The child is increasingly somnolent with reduced air movement despite ongoing oxygen therapy.</p></div>
+ <div class="goal">A blood gas should confirm and refine clinical reasoning. Do not allow a single laboratory value to overrule a clearly deteriorating bedside assessment.</div>
+ <div id="q6"></div>
+</section>
+
+<section id="s7" class="card locked">
+ <div class="station-head"><div class="num">7</div><div><span class="kicker">C1–C5 · Independent synthesis</span><h2>Recognize the Child Who Is About to Lose the Airway</h2></div></div>
+ <div class="patient"><span class="label">Independent case</span><h3>4-year-old with acute respiratory illness</h3><p>The child initially had tachypnea and retractions. Now the child is quiet, difficult to arouse, has shallow respirations, poor air entry, SpO₂ 89% despite oxygen, and a falling heart rate.</p></div>
+ <div class="danger"><strong>This is not improvement.</strong> The pattern indicates respiratory failure with impending cardiopulmonary arrest unless ventilation is restored.</div>
+ <div id="finalQs"></div>
+ <div class="controls"><button class="btn primary" onclick="checkFinal()">Check clinical synthesis</button></div><div id="finalFb" class="feedback"></div>
+</section>
+
+<section id="completeBox" class="complete">
+ <h2>Scenario 2.1 complete ✓</h2>
+ <p>You used the Pediatric Assessment Triangle, applied age-specific anatomy and physiology, distinguished respiratory distress from respiratory failure, interpreted monitoring trends, selected diagnostics based on clinical questions, and recognized when a child required immediate escalation of respiratory support.</p>
+</section>
+</main>
+
+<footer><div><strong>Pulmo<span>Learn</span></strong><br>Neonatal & Pediatric Respiratory Care · Scenario 2.1</div><div>Progress and selected answers are saved in this browser.<br>You can leave and return without losing your work.</div></footer>
+</div>
+
+<script>
+const STORE='AHRC262_scenario_2_1_sick_or_getting_sicker_v1';
+let state;
+try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"matches":{}}')}catch(e){state={done:[],answers:{},matches:{}}}
+state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.matches=state.matches||{};
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function progress(){
+ const n=state.done.length;document.getElementById('progressText').textContent=`${n} of 7 sections complete`;document.getElementById('progressBar').style.width=(n/7*100)+'%';
+ for(let i=2;i<=7;i++){const sec=document.getElementById('s'+i);if(sec&&state.done.includes(i-1))sec.classList.remove('locked')}
+ document.getElementById('completeBox').classList.toggle('show',n===7);
+ if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'2.1',scenario:'Sick or Getting Sicker?'}}));
+ window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'2.1',completed:n,total:7,percent:n/7*100}}));
+}
+function all(ids){return ids.every(id=>state.answers[id]&&state.answers[id].correct)}
+
+const Q={
+ q2a:{q:'Why can a small amount of airway edema cause a major problem in a young child?',a:'The smaller baseline airway radius means a small reduction greatly increases resistance',o:['The smaller baseline airway radius means a small reduction greatly increases resistance','Children have larger airways than adults','Pediatric airway resistance is independent of radius','Airway edema mainly changes hemoglobin concentration'],g:'Because the pediatric airway starts smaller, even modest narrowing can sharply increase resistance.',h:'Think about the effect of radius on resistance.'},
+ q2b:{q:'Why can infants become hypoxemic quickly during apnea or severe obstruction?',a:'They have higher oxygen consumption and less respiratory reserve',o:['They have higher oxygen consumption and less respiratory reserve','They have lower metabolic demand than adults','Their functional residual capacity always increases during apnea','Their oxygen saturation is unaffected by ventilation'],g:'Higher metabolic demand and less reserve make pediatric deterioration faster.',h:'Children consume oxygen quickly and have less reserve.'},
+ q3a:{q:'How should the 18-month-old be classified at this point?',a:'Respiratory distress with preserved compensation',o:['Respiratory distress with preserved compensation','Respiratory failure with impending arrest','Normal respiratory status','Cardiogenic shock without respiratory involvement'],g:'The child has increased work and hypoxemia but remains alert and interactive, indicating distress rather than failure.',h:'Look for whether respiratory drive and mental status are still preserved.'},
+ q6a:{q:'What does the pH 7.27 and PCO₂ 58 mmHg suggest in this increasingly somnolent child?',a:'Ventilatory failure with respiratory acidosis',o:['Ventilatory failure with respiratory acidosis','Primary metabolic alkalosis','Normal pediatric ventilation','Isolated oxygenation failure without hypoventilation'],g:'The elevated PCO₂ with acidemia supports worsening ventilatory failure.',h:'A rising CO₂ in a tiring child is a serious warning sign.'}
+};
+function mount(ids,target){const root=document.getElementById(target);root.innerHTML='';ids.forEach(id=>{const d=document.createElement('div');d.id='wrap_'+id;root.appendChild(d);renderQ(id,d.id)})}
+function renderQ(id,target){
+ const q=Q[id],saved=state.answers[id],opts=shuffle(q.o);
+ document.getElementById(target).innerHTML=`<div class="q" id="${id}"><div class="q-title">${q.q}</div><div class="options">${opts.map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ '+q.g:'Not yet. '+q.h):''}</div></div>`;
+ document.querySelectorAll(`#${id} .option`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} .option`).forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save();checkQ(id)});
+}
+function checkQ(id){
+ const q=Q[id],el=document.getElementById(id),s=el.querySelector('.option.selected'),fb=el.querySelector('.feedback');if(!s)return false;
+ const ok=s.dataset.choice===q.a;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};save();fb.className='feedback '+(ok?'ok':'bad');fb.textContent=(ok?'✓ ':'Not yet. ')+(ok?q.g:q.h);reconcile();return ok
+}
+mount(['q2a','q2b'],'q2');mount(['q3a'],'q3');mount(['q6a'],'q6');
+
+function buildMatch(rootId,key,rows,options){
+ const root=document.getElementById(rootId);root.innerHTML='';state.matches[key]=state.matches[key]||{};
+ rows.forEach((r,i)=>{const d=document.createElement('div');d.className='match-row';d.innerHTML=`<label for="${key}${i}">${r[0]}</label><select id="${key}${i}"><option value="">Choose...</option>${shuffle(options).map(x=>`<option value="${esc(x[0])}">${x[1]}</option>`).join('')}</select>`;root.appendChild(d);const s=d.querySelector('select');if(state.matches[key][i])s.value=state.matches[key][i];s.onchange=()=>{state.matches[key][i]=s.value;state[key+'OK']=false;save()}})
+}
+function gradeMatch(key,rows,fbId,good){
+ let n=0;rows.forEach((r,i)=>{const s=document.getElementById(key+i);state.matches[key][i]=s.value;if(s.value===r[1])n++});
+ const ok=n===rows.length,fb=document.getElementById(fbId);fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ '+good:`${n} of ${rows.length} correct. Recheck what each finding tells you.`;state[key+'OK']=ok;save();reconcile();return ok
+}
+
+const patRows=[
+ ['Limp posture and poor interaction','appearance'],
+ ['Suprasternal retractions and nasal flaring','wob'],
+ ['Mottled cool skin','circulation']
+];
+buildMatch('patMatch','pat',patRows,[['appearance','Appearance'],['wob','Work of breathing'],['circulation','Circulation to skin']]);
+function checkPAT(){return gradeMatch('pat',patRows,'patFb','You sorted the Pediatric Assessment Triangle findings correctly.')}
+
+const monitorRows=[
+ ['Falling respiratory rate with increasing somnolence','worse'],
+ ['SpO₂ 93% while oxygen is being administered','context'],
+ ['Weakening breath sounds and reduced air entry','worse'],
+ ['Less dramatic retractions in a visibly tiring child','worse']
+];
+buildMatch('monitorMatch','monitor',monitorRows,[['worse','Suggests worsening compensation / failure'],['context','Must be interpreted in context']]);
+function checkMonitor(){return gradeMatch('monitor',monitorRows,'monitorFb','You recognized that apparent reduction in work can signal fatigue rather than improvement.')}
+
+const diagRows=[
+ ['Need to confirm hypercapnia and acid-base status','gas'],
+ ['Suspected focal pneumonia or unilateral air trapping','cxr'],
+ ['Need continuous ventilation trend after intubation','capno'],
+ ['Need continuous oxygenation trend','spo2']
+];
+buildMatch('diagMatch','diag',diagRows,[['gas','Blood gas'],['cxr','Chest radiograph'],['capno','Capnography'],['spo2','Pulse oximetry']]);
+function checkDiag(){return gradeMatch('diag',diagRows,'diagFb','Each diagnostic tool is matched to the question it answers best.')}
+
+const F=[
+ {q:'What is the best interpretation of the 4-year-old who is now quiet, difficult to arouse, shallow breathing, and poorly aerating?',a:'Respiratory failure with impending cardiopulmonary arrest',o:['Respiratory failure with impending cardiopulmonary arrest','Improving respiratory distress','Normal fatigue after crying','Isolated mild hypoxemia'],h:'Decreased effort, poor air movement, altered mental status, hypoxemia, and falling heart rate are late signs of failure.'},
+ {q:'What should happen next?',a:'Escalate immediately to assisted ventilation and prepare advanced airway management',o:['Escalate immediately to assisted ventilation and prepare advanced airway management','Observe because the respiratory rate is lower','Delay intervention until a chest radiograph is obtained','Remove oxygen because the child is quiet'],h:'This child is failing to ventilate and is near arrest.'},
+ {q:'Why is a falling heart rate especially concerning in a child with severe respiratory failure?',a:'Pediatric bradycardia can be a prearrest sign caused by severe hypoxemia',o:['Pediatric bradycardia can be a prearrest sign caused by severe hypoxemia','It usually means the child is sleeping comfortably','It proves airway resistance has improved','It indicates normal compensation for tachypnea'],h:'In children, hypoxemia commonly precedes bradycardic arrest.'},
+ {q:'What is the most important assessment principle in this scenario?',a:'Trend appearance, work of breathing, air movement, oxygenation, and mental status together',o:['Trend appearance, work of breathing, air movement, oxygenation, and mental status together','Use SpO₂ alone to determine respiratory severity','Assume fewer retractions always mean improvement','Wait for laboratory confirmation before escalating care'],h:'Pediatric deterioration is often recognized by the changing pattern rather than one isolated value.'},
+ {q:'Which finding most strongly separates distress from failure?',a:'Loss of effective respiratory effort with altered mental status or inadequate ventilation',o:['Loss of effective respiratory effort with altered mental status or inadequate ventilation','Tachypnea alone','Mild nasal flaring','A single elevated heart rate'],h:'Failure means compensation is no longer adequate.'}
+];
+function renderFinal(){
+ const root=document.getElementById('finalQs');root.innerHTML='';
+ F.forEach((q,i)=>{const id='f'+i,saved=state.answers[id],d=document.createElement('div');d.className='q';d.id=id;d.innerHTML=`<div class="q-title">${i+1}. ${q.q}</div><div class="options">${shuffle(q.o).map(x=>`<button type="button" class="option ${saved&&saved.choice===x?'selected':''} ${saved&&saved.checked&&saved.choice===x?(saved.correct?'correct':'wrong'):''}" data-choice="${esc(x)}">${x}</button>`).join('')}</div><div class="feedback ${saved&&saved.checked?(saved.correct?'ok':'bad'):''}">${saved&&saved.checked?(saved.correct?'✓ Correct.':'Not yet. '+q.h):''}</div>`;root.appendChild(d);d.querySelectorAll('.option').forEach(b=>b.onclick=()=>{d.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','correct','wrong'));b.classList.add('selected');state.answers[id]={choice:b.dataset.choice,checked:false,correct:false};save()})})
+}
+renderFinal();
+function checkFinal(){
+ let n=0;F.forEach((q,i)=>{const id='f'+i,d=document.getElementById(id),s=d.querySelector('.option.selected'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}const ok=s.dataset.choice===q.a;if(ok)n++;s.classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.dataset.choice,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();const ok=n===F.length;document.getElementById('finalFb').className='feedback '+(ok?'ok':'bad');document.getElementById('finalFb').textContent=ok?'5/5 correct. Scenario complete.':`${n}/5 correct. Revise the red selections using the targeted hints.`;reconcile()
+}
+function req(n){
+ if(n===1)return state.patOK===true;
+ if(n===2)return all(['q2a','q2b']);
+ if(n===3)return all(['q3a']);
+ if(n===4)return state.monitorOK===true;
+ if(n===5)return state.diagOK===true;
+ if(n===6)return all(['q6a']);
+ if(n===7)return F.every((q,i)=>state.answers['f'+i]&&state.answers['f'+i].correct);
+ return false
+}
+function reconcile(){
+ const rebuilt=[];for(let n=1;n<=7;n++){if(req(n))rebuilt.push(n);else break}
+ const old=state.done.length;state.done=rebuilt;save();progress();
+ if(rebuilt.length>old&&rebuilt.length<7)setTimeout(()=>document.getElementById('s'+(rebuilt.length+1)).scrollIntoView({behavior:'smooth'}),160)
+}
+reconcile();
+if(state.done.length)document.getElementById('resumeMessage').textContent=`Progress restored: ${state.done.length} of 7 sections were already complete.`;
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.1',course:'Neonatal & Pediatric Respiratory Care',scenario:'Sick or Getting Sicker?',activity_version:'v1'});
+</script>
+</body>
+</html>
