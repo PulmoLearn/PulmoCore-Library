@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Respiratory Physiology Activity 1.2 | Basic Respiratory Anatomy</title>
+<style>
+:root{
+  --navy:#12355b;--blue:#245d92;--teal:#2f8f8f;--teal2:#eaf7f6;--coral:#d96d5f;
+  --green:#2f7d4a;--red:#b9473d;--ink:#22313f;--muted:#667784;--line:#d6e1e8;
+  --panel:#fff;--bg:#f5f8fa;--gold:#a97612;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+main{max-width:1120px;margin:auto;padding:22px}
+.hero{background:linear-gradient(135deg,#0f355d,#226b83);color:#fff;border-radius:18px;padding:28px;box-shadow:0 8px 28px rgba(17,53,91,.14)}
+.hero h1{margin:0 0 8px;font-size:clamp(1.65rem,3vw,2.5rem)}
+.hero p{margin:0;max-width:880px}
+.progress-wrap{position:sticky;top:0;z-index:20;background:rgba(245,248,250,.96);backdrop-filter:blur(6px);padding:10px 0 12px}
+.progressbar{height:10px;background:#dce6ec;border-radius:99px;overflow:hidden}
+.progressbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:.3s}
+.progress-text{font-size:.88rem;color:var(--muted);margin-top:6px}
+section.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin:22px 0;box-shadow:0 4px 18px rgba(20,46,68,.06)}
+section.locked{opacity:.52;filter:grayscale(.08);pointer-events:none}
+h2{color:var(--navy);margin:0 0 8px}
+h3{color:var(--navy)}
+.kicker{font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:.05em;font-size:.84rem}
+.takeaway{border-left:5px solid var(--teal);background:var(--teal2);padding:14px 16px;border-radius:10px;margin:15px 0}
+.warning{border-left:5px solid var(--coral);background:#fff2ef;padding:14px 16px;border-radius:10px;margin:15px 0}
+.asset{width:100%;height:auto;border:1px solid var(--line);border-radius:14px;background:white;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.panel{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fbfdfe}
+.zone{border:2px dashed #9fb4c0;border-radius:12px;min-height:170px;padding:12px;background:#fbfdfe}
+.zone h4{margin:0 0 8px;color:var(--navy)}
+.tokens{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.token{border:1px solid #b9c9d4;background:#fff;color:var(--navy);padding:10px 12px;border-radius:10px;font-weight:800;cursor:grab;min-height:44px}
+.token.selected{background:var(--teal);color:#fff;border-color:var(--teal)}
+.token.used{opacity:.5;text-decoration:line-through;cursor:not-allowed}
+.zone.drop-over{background:#eaf7f6;border-color:var(--teal)}
+.placed{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{background:#eef4f8;border:1px solid #cad9e2;border-radius:999px;padding:6px 10px;font-size:.9rem;font-weight:700}
+button,.btn{font:inherit}
+.btn{border:0;border-radius:10px;padding:11px 16px;min-height:44px;font-weight:800;cursor:pointer;background:var(--navy);color:#fff}
+.btn.secondary{background:#eef4f8;color:var(--navy);border:1px solid #c7d6df}
+.btn.teal{background:var(--teal)}
+.btn:focus-visible,.token:focus-visible,.zone:focus-visible,input:focus-visible,label:focus-within{outline:3px solid rgba(47,143,143,.35);outline-offset:3px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.feedback{display:none;margin-top:14px;padding:12px 14px;border-radius:10px}
+.feedback.show{display:block}
+.feedback.good{background:#e9f6ed;border-left:5px solid var(--green)}
+.feedback.bad{background:#fff0ee;border-left:5px solid var(--red)}
+.q{border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+.q legend{font-weight:800;color:var(--navy);padding:0 6px}
+.q label{display:block;border:1px solid #d7e1e7;border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff;cursor:pointer}
+.q input{margin-right:9px}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.calc-box{background:#f8fbfc;border:1px solid var(--line);border-radius:12px;padding:16px}
+.calc-box input{width:100%;padding:11px;border:1px solid #b9c9d4;border-radius:9px;font-size:1rem}
+.result{font-size:1.25rem;font-weight:900;color:var(--teal);margin-top:8px}
+.breathbar{display:flex;height:64px;border-radius:12px;overflow:hidden;border:1px solid #b9c9d4;margin:12px 0}
+.breathbar .dead{background:#238b8d;color:#fff;display:grid;place-items:center;text-align:center;padding:5px;font-weight:800;min-width:10%}
+.breathbar .exchange{background:#174f85;color:#fff;display:grid;place-items:center;text-align:center;padding:5px;font-weight:800}
+.alv-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff}
+.toggle-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:10px 0}
+.toggle{display:flex;gap:6px}
+.toggle button{border:1px solid #b9c9d4;background:#fff;border-radius:8px;padding:7px 10px;cursor:pointer}
+.toggle button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.classification{font-weight:900;color:var(--navy);margin-top:10px}
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.diff-control{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fbfdfe}
+.diff-control select{width:100%;padding:10px;border-radius:8px;border:1px solid #bdccd6}
+.metric{font-size:1.45rem;font-weight:900;color:var(--blue)}
+.final{display:none;background:linear-gradient(135deg,#eef8f7,#edf3fb);border:1px solid #c9dce6;border-radius:16px;padding:22px;margin:24px 0;text-align:center}
+.final.show{display:block}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.small{font-size:.9rem;color:var(--muted)}
+code.formula{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;padding:3px 7px;border-radius:6px;font-weight:800;color:var(--navy)}
+
+.sex-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 20px;
+  margin:8px 0 16px;
+}
+.sex-option{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:44px;
+  padding:8px 12px;
+  border:1px solid #c8d6df;
+  border-radius:10px;
+  background:#fff;
+  cursor:pointer;
+  font-weight:700;
+  color:var(--navy);
+}
+.sex-option input{
+  margin:0;
+  width:18px;
+  height:18px;
+  flex:0 0 auto;
+}
+.ibw-choice{
+  background:#fff !important;
+  color:var(--navy) !important;
+  border:2px solid #8da8b8 !important;
+  box-shadow:0 2px 6px rgba(18,53,91,.08);
+}
+.ibw-choice:hover{
+  border-color:var(--teal) !important;
+  background:#f3fbfa !important;
+}
+.ibw-choice.teal{
+  background:var(--teal) !important;
+  color:#fff !important;
+  border-color:var(--teal) !important;
+}
+.q label.answer-correct{
+  background:#eaf7ee;
+  border:2px solid #55a46a;
+  color:#1f5f32;
+}
+.q label.answer-incorrect{
+  background:#fff0ee;
+  border:2px solid #cf665a;
+  color:#7e2e27;
+}
+.q label.answer-neutral{
+  opacity:.78;
+}
+.answer-note{
+  margin-top:8px;
+  padding:10px 12px;
+  border-radius:9px;
+  font-size:.92rem;
+}
+.answer-note.good{
+  background:#eaf7ee;
+  border-left:4px solid #55a46a;
+}
+.answer-note.bad{
+  background:#fff4f1;
+  border-left:4px solid #cf665a;
+}
+
+@media(max-width:760px){
+  main{padding:12px}
+  .grid,.grid3,.calc,.diff-grid{grid-template-columns:1fr}
+  section.card{padding:18px}
+  .hero{padding:22px}
+}
+</style>
+
+<style id="pulmolearn-physiology-brand">
+:root{
+ --pl-navy:#0B1F33;--pl-navy2:#173A5E;--pl-teal:#1CA7A8;--pl-teal2:#128486;--pl-blue:#4BA3F2;
+ --pl-mist:#F4FAFC;--pl-mint:#DDF7F2;--pl-amber:#F4B860;--pl-coral:#E85D5D;--pl-border:#D7E6EF;
+ --pl-shadow:0 8px 20px rgba(11,31,51,.08);--pl-radius:22px;
+}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+body{background:var(--pl-mist)!important;color:var(--pl-navy)!important;font-family:Arial,Helvetica,sans-serif!important}
+button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{
+ outline:3px solid var(--pl-amber)!important;outline-offset:3px!important
+}
+.pl-top{
+ position:sticky;top:0;z-index:1000;background:var(--pl-navy);color:#fff;
+ display:flex;align-items:center;justify-content:space-between;gap:20px;
+ padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)
+}
+.pl-brand{display:flex;align-items:center;gap:14px}
+.pl-mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12);flex:none}
+.pl-mark svg{width:40px;height:40px}
+.pl-brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}
+.pl-brand-name span{color:var(--pl-teal)}
+.pl-tag{font-size:.8rem;opacity:.9;margin-top:4px}
+.pl-course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700;white-space:nowrap}
+.hero{
+ background:#fff!important;color:var(--pl-navy)!important;border:1px solid var(--pl-border)!important;
+ border-top:10px solid var(--pl-teal)!important;border-radius:var(--pl-radius)!important;
+ box-shadow:var(--pl-shadow)!important;padding:32px!important
+}
+.hero h1{color:var(--pl-navy)!important;font-size:clamp(2.05rem,5vw,3.7rem)!important;line-height:1.04!important;letter-spacing:-.045em!important}
+.hero p{color:#243b55!important;max-width:1120px!important;font-size:1.08rem!important}
+.hero .eyebrow,.hero .kicker{color:var(--pl-teal)!important;opacity:1!important;font-weight:800!important}
+.progress-wrap,.progress-shell{
+ position:sticky!important;top:90px!important;z-index:900!important;
+ background:rgba(255,255,255,.97)!important;border:1px solid var(--pl-border)!important;
+ border-radius:16px!important;box-shadow:var(--pl-shadow)!important;padding:11px 15px!important;
+ margin:18px 0 24px!important;color:var(--pl-navy)!important
+}
+.progress,.progressbar{background:#E5F0F6!important}
+.progress>span,.progressbar span{background:linear-gradient(90deg,var(--pl-teal),var(--pl-blue))!important}
+.progress-text{color:var(--pl-navy)!important}
+.section,section.card,.card{
+ border-color:var(--pl-border)!important;box-shadow:var(--pl-shadow)!important
+}
+.section{border-radius:var(--pl-radius)!important}
+section.card{border-radius:var(--pl-radius)!important}
+.num{background:var(--pl-navy)!important;border-radius:14px!important}
+.goal,.takeaway{border-left-color:var(--pl-teal)!important}
+.btn.teal,.btn.primary:not(.ghost){background:var(--pl-teal)!important;color:#fff!important}
+.btn.teal:hover,.btn.primary:not(.ghost):hover{background:var(--pl-teal2)!important}
+.kicker:not(.hero .kicker),.eyebrow:not(.hero .eyebrow){color:var(--pl-teal)!important}
+.pl-footer{
+ background:var(--pl-navy);color:#fff;padding:32px clamp(18px,4vw,54px);
+ display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem;margin-top:28px
+}
+.pl-footer strong span{color:var(--pl-teal)}
+.pl-save-note{opacity:.92}
+@media(max-width:760px){
+ .pl-top{padding:12px 14px}.pl-tag,.pl-course{display:none}
+ .hero{padding:20px!important}.progress-wrap,.progress-shell{top:72px!important}
+}
+</style>
+
+</head>
+<body>
+
+<header class="pl-top">
+  <div class="pl-brand">
+    <div class="pl-mark" aria-hidden="true">
+      <svg fill="none" viewBox="0 0 64 64">
+        <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <circle cx="32" cy="31" fill="#1CA7A8" r="4"/>
+      </svg>
+    </div>
+    <div><div class="pl-brand-name">Pulmo<span>Learn</span></div><div class="pl-tag">Respiratory physiology learning for future RTs.</div></div>
+  </div>
+  <div class="pl-course">Respiratory Physiology · Activity 1.2</div>
+</header>
+
+<main>
+<header class="hero">
+  <div class="kicker" style="color:#9ce2dd">Respiratory Physiology · Activity 1.2</div>
+  <h1>Basic Respiratory Anatomy: Where Does Gas Exchange Actually Occur?</h1>
+  <p>Follow one breath from the upper airway to the alveolar-capillary interface. Your goal is not just to name structures, but to decide whether gas is being <strong>transported</strong>, <strong>wasted</strong>, or <strong>exchanged</strong>—and explain why.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progressbar" aria-label="Activity progress"><span id="progressFill"></span></div>
+  <div class="progress-text" id="progressText">0 of 5 sections complete</div>
+</div>
+
+<section id="s1" class="card">
+  <div class="kicker">Section 1</div>
+  <h2>Follow the Breath: Conducting → Respiratory</h2>
+  <p>Gas must travel through many structures before it reaches a true gas-exchanging surface. The <strong>terminal bronchiole is the final conducting airway</strong>. The <strong>respiratory bronchiole begins the respiratory zone</strong> and is the transition point where alveoli first appear; gas exchange becomes increasingly important through the alveolar ducts and alveoli.</p>
+
+  <img class="asset" src="https://www.pulmolearn.com/physiology/activities/gas-pathway-zones.png" alt="Diagram tracing gas from the nose and mouth through the conducting zone, respiratory bronchioles, alveolar ducts, and alveoli.">
+  <div class="warning"><strong>Course boundary to use:</strong> terminal bronchiole = final <strong>conducting-zone</strong> airway; respiratory bronchiole = beginning of the <strong>respiratory zone</strong> and the transition point where alveoli first appear.</div>
+
+  <div class="takeaway"><strong>Core rule:</strong> The conducting zone moves gas but does not directly exchange gases. The respiratory zone contains alveoli and is where gas exchange becomes possible.</div>
+
+  <h3>Sort the structures by whether gas exchange can occur</h3>
+  <p class="small"><strong>Mouse:</strong> drag a structure into a region or click the structure then the region. <strong>Keyboard:</strong> Tab to a structure, press Enter/Space, then Tab to a region and press Enter/Space. <strong>Touch:</strong> tap a structure, then tap a region.</p>
+  <div id="zoneStatus" class="sr-only" aria-live="polite"></div>
+
+  <div id="zoneTokens" class="tokens"></div>
+  <div class="grid">
+    <button class="zone" data-zone="conducting" aria-label="Conducting zone drop target">
+      <h4>Conducting Zone</h4>
+      <div class="small">Moves gas; no alveoli are present. Ends at the terminal bronchiole.</div>
+      <div class="placed"></div>
+    </button>
+    <button class="zone" data-zone="respiratory" aria-label="Respiratory zone drop target">
+      <h4>Respiratory / Gas-Exchange Zone</h4>
+      <div class="small">Begins at the respiratory bronchiole, where alveoli first appear.</div>
+      <div class="placed"></div>
+    </button>
+  </div>
+  <div class="takeaway"><strong>Transition point:</strong> The respiratory bronchiole is the first airway in the respiratory zone. It still conducts gas, but because alveoli begin appearing along its walls, gas exchange also becomes possible here.</div>
+  <div class="controls">
+    <button class="btn teal" onclick="checkZones()">Check My Map</button>
+    <button class="btn secondary" onclick="resetZones()">Reset</button>
+  </div>
+  <div id="fb1" class="feedback"></div>
+</section>
+
+<section id="s2" class="card locked">
+  <div class="kicker">Section 2</div>
+  <h2>Anatomic Dead Space: Gas Moved, but No Exchange Yet</h2>
+  <p>Every tidal breath first fills the conducting airways. That portion of the breath is <strong>anatomic dead space</strong>: gas is present and moving, but there are no alveoli available for direct gas exchange.</p>
+
+  <img class="asset" src="https://www.pulmolearn.com/physiology/activities/conducting-vs-gas-exchange-zone.png" alt="Comparison of the conducting zone, which is anatomic dead space, and the respiratory zone where gas exchange occurs.">
+
+  <div class="takeaway">
+    <strong>Use ideal body weight (IBW), not actual body weight.</strong>
+    Conducting-airway size is related to predicted body size and height; excess body mass does not proportionally enlarge the conducting airways.
+  </div>
+
+  <div class="calc">
+    <div class="calc-box">
+      <h3>1. Find the patient's IBW</h3>
+
+      <fieldset style="border:0;padding:0;margin:0 0 12px">
+        <legend style="font-weight:800;color:var(--navy);margin-bottom:8px">Patient sex</legend>
+        <div class="sex-options">
+          <label class="sex-option"><input type="radio" name="ibwSex" value="male" checked> <span>Male</span></label>
+          <label class="sex-option"><input type="radio" name="ibwSex" value="female"> <span>Female</span></label>
+        </div>
+      </fieldset>
+
+      <label for="heightSlider"><strong>Height</strong></label>
+      <input id="heightSlider" type="range" min="58" max="80" step="1" value="66" style="width:100%">
+      <div class="result" id="heightDisplay">5′6″ (66 in)</div>
+
+      <div class="grid" style="margin-top:14px">
+        <div class="panel">
+          <div class="small">IBW in kilograms</div>
+          <div class="result" id="ibwKg">63.8 kg</div>
+        </div>
+        <div class="panel">
+          <div class="small">IBW in pounds</div>
+          <div class="result" id="ibwLb">143 lb</div>
+        </div>
+      </div>
+
+      <p class="small" id="ibwFormulaNote">Male formula: 50 kg + 2.3 kg × inches over 60; 110 lb + 5.5 lb × inches over 60.</p>
+    </div>
+
+    <div class="calc-box">
+      <h3>2. Estimate anatomic dead space</h3>
+      <p>Which displayed IBW value should you use with the course estimate <strong>1 mL dead space per 1 lb IBW</strong>?</p>
+
+      <div class="grid">
+        <button type="button" class="btn secondary ibw-choice" data-unit="kg">Use <span id="kgChoice">63.8 kg</span></button>
+        <button type="button" class="btn secondary ibw-choice" data-unit="lb">Use <span id="lbChoice">143 lb</span></button>
+      </div>
+
+      <div id="unitFeedback" class="feedback" aria-live="polite"></div>
+
+      <div id="deadSpaceReveal" style="display:none;margin-top:14px">
+        <div class="result" id="vdResult">Estimated anatomic VD ≈ 143 mL</div>
+
+        <label for="vt" style="display:block;margin-top:14px"><strong>Tidal volume (mL)</strong></label>
+        <input id="vt" type="number" min="100" max="1500" value="500" inputmode="decimal">
+
+        <div id="breathbar" class="breathbar" aria-label="Tidal breath partition bar">
+          <div class="dead" id="deadSeg">143 mL dead space</div>
+          <div class="exchange" id="exchangeSeg">357 mL toward gas exchange</div>
+        </div>
+        <p class="small" id="breathText">Before perfusion is considered, 357 mL of this 500 mL breath reaches beyond the conducting-zone dead space.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>Watch the units:</strong> the activity displays IBW in both kilograms and pounds because both are clinically useful. For this specific course estimate, however, <strong>1 mL/lb requires the pound value</strong>. Using the kilogram number would underestimate anatomic dead space.
+  </div>
+
+  <fieldset class="q" data-answer="b">
+    <legend>A patient has a tidal volume of 450 mL and estimated anatomic dead space of 150 mL. What does the remaining 300 mL represent at this point in the reasoning?</legend>
+    <label><input type="radio" name="q2a" value="a">Guaranteed effective alveolar ventilation</label>
+    <label><input type="radio" name="q2a" value="b">Gas that reaches beyond the conducting-zone dead space and may participate in exchange</label>
+    <label><input type="radio" name="q2a" value="c">Physiologic dead space created only by damaged alveoli</label>
+    <label><input type="radio" name="q2a" value="d">Gas trapped permanently within residual volume</label>
+  </fieldset>
+  <div class="controls"><button class="btn teal" onclick="checkSingle('s2','fb2')">Check Answer</button></div>
+  <div id="fb2" class="feedback"></div>
+</section>
+
+<section id="s3" class="card locked">
+  <div class="kicker">Section 3</div>
+  <h2>Three Alveoli: Air + Blood Must Meet</h2>
+  <p>This is where dead-space reasoning becomes physiologic. An alveolus may receive air and still accomplish little exchange if perfusion is absent. Likewise, a perfused alveolus cannot exchange normally if little or no fresh gas reaches it.</p>
+
+  <img class="asset" src="https://www.pulmolearn.com/physiology/activities/three-alveoli-gas-exchange.png" alt="Three alveoli comparison showing normal ventilation and perfusion, alveolar dead space, and a low V/Q or shunt-like unit.">
+
+  <h3>Build the physiology yourself</h3>
+  <div class="grid3">
+    <div class="alv-card" data-alv="1">
+      <strong>Alveolus A</strong>
+      <div class="toggle-row"><span>Ventilation</span><div class="toggle"><button data-kind="vent" data-val="1">Present</button><button data-kind="vent" data-val="0">Absent</button></div></div>
+      <div class="toggle-row"><span>Perfusion</span><div class="toggle"><button data-kind="perf" data-val="1">Present</button><button data-kind="perf" data-val="0">Absent</button></div></div>
+      <div class="classification">Set ventilation and perfusion.</div>
+    </div>
+    <div class="alv-card" data-alv="2">
+      <strong>Alveolus B</strong>
+      <div class="toggle-row"><span>Ventilation</span><div class="toggle"><button data-kind="vent" data-val="1">Present</button><button data-kind="vent" data-val="0">Absent</button></div></div>
+      <div class="toggle-row"><span>Perfusion</span><div class="toggle"><button data-kind="perf" data-val="1">Present</button><button data-kind="perf" data-val="0">Absent</button></div></div>
+      <div class="classification">Set ventilation and perfusion.</div>
+    </div>
+    <div class="alv-card" data-alv="3">
+      <strong>Alveolus C</strong>
+      <div class="toggle-row"><span>Ventilation</span><div class="toggle"><button data-kind="vent" data-val="1">Present</button><button data-kind="vent" data-val="0">Absent</button></div></div>
+      <div class="toggle-row"><span>Perfusion</span><div class="toggle"><button data-kind="perf" data-val="1">Present</button><button data-kind="perf" data-val="0">Absent</button></div></div>
+      <div class="classification">Set ventilation and perfusion.</div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <strong>Think in opposites:</strong><br>
+    Ventilation without adequate perfusion → <strong>alveolar dead-space physiology</strong>.<br>
+    Perfusion without adequate ventilation → <strong>low V/Q</strong>; if ventilation falls to zero, the unit becomes <strong>shunt-like</strong>.
+  </div>
+
+  <fieldset class="q" data-answer="c">
+    <legend>An alveolus receives fresh gas, but a local vascular obstruction eliminates most blood flow through its capillary. Which description best fits?</legend>
+    <label><input type="radio" name="q3a" value="a">Anatomic dead space because gas remains in a conducting airway</label>
+    <label><input type="radio" name="q3a" value="b">Shunt-like physiology because blood bypasses ventilation</label>
+    <label><input type="radio" name="q3a" value="c">Alveolar dead space because ventilation is present but perfusion is inadequate</label>
+    <label><input type="radio" name="q3a" value="d">Normal exchange because alveolar airflow is preserved</label>
+  </fieldset>
+  <div class="controls"><button class="btn teal" onclick="checkSingle('s3','fb3')">Check Answer</button></div>
+  <div id="fb3" class="feedback"></div>
+</section>
+
+<section id="s4" class="card locked">
+  <div class="kicker">Section 4</div>
+  <h2>Even Air + Blood Are Not Enough: The Diffusion Surface Must Work</h2>
+  <p>Normal exchange requires a large alveolar surface area, a very thin barrier, and a partial-pressure gradient that drives gas across the membrane. Type I pneumocytes create a thin exchange surface; type II pneumocytes produce surfactant to support alveolar stability.</p>
+
+  <img class="asset" src="https://www.pulmolearn.com/physiology/activities/alveolar-capillary-interface.png" alt="Alveolar-capillary interface showing type I and type II pneumocytes, surfactant, interstitium, capillary endothelium, red blood cell, and oxygen and carbon dioxide diffusion.">
+
+  <h3>Change the diffusion conditions</h3>
+  <div class="diff-grid">
+    <div class="diff-control">
+      <label><strong>Surface area</strong></label>
+      <select id="surface"><option value="1">Normal</option><option value=".55">Reduced</option></select>
+      <p class="small">Loss of alveolar walls reduces available exchange area.</p>
+    </div>
+    <div class="diff-control">
+      <label><strong>Membrane thickness</strong></label>
+      <select id="thick"><option value="1">Normal</option><option value="1.8">Increased</option></select>
+      <p class="small">Interstitial/alveolar fluid increases diffusion distance.</p>
+    </div>
+    <div class="diff-control">
+      <label><strong>Pressure gradient</strong></label>
+      <select id="grad"><option value="1">Normal</option><option value=".6">Reduced</option></select>
+      <p class="small">A smaller driving gradient reduces net transfer.</p>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:14px">
+    <div class="small">Relative diffusion potential</div>
+    <div class="metric" id="diffMetric">100%</div>
+    <div id="diffInterpret">Large area + thin membrane + adequate gradient support efficient diffusion.</div>
+  </div>
+
+  <fieldset class="q" data-answer="d">
+    <legend>Two patients have open airways and receive ventilation. Patient 1 has emphysema-like destruction of alveolar walls. Patient 2 has interstitial edema. How do their primary diffusion defects differ?</legend>
+    <label><input type="radio" name="q4a" value="a">Patient 1 has increased thickness; Patient 2 has reduced surface area</label>
+    <label><input type="radio" name="q4a" value="b">Both defects are primarily caused by absent perfusion</label>
+    <label><input type="radio" name="q4a" value="c">Both defects are primarily caused by anatomic dead space</label>
+    <label><input type="radio" name="q4a" value="d">Patient 1 has reduced surface area; Patient 2 has increased membrane thickness</label>
+  </fieldset>
+  <div class="controls"><button class="btn teal" onclick="checkSingle('s4','fb4')">Check Answer</button></div>
+  <div id="fb4" class="feedback"></div>
+</section>
+
+<section id="s5" class="card locked">
+  <div class="kicker">Section 5</div>
+  <h2>Assessment Readiness: Where Did the Breath Fail?</h2>
+  <p>For each case, identify the <strong>first failed physiologic step</strong>. Do not jump straight to a disease label.</p>
+
+  <fieldset class="q" data-answer="a">
+    <legend>1. A mucus plug blocks a segmental bronchus. The alveoli beyond it are initially intact and perfused. What fails first?</legend>
+    <label><input type="radio" name="f1" value="a">Gas delivery through a conducting airway</label>
+    <label><input type="radio" name="f1" value="b">Pulmonary capillary perfusion</label>
+    <label><input type="radio" name="f1" value="c">Alveolar membrane thickness</label>
+    <label><input type="radio" name="f1" value="d">Type II cell surfactant production</label>
+  </fieldset>
+  <div id="finalNote1" class="answer-note" style="display:none" aria-live="polite"></div>
+
+  <fieldset class="q" data-answer="b">
+    <legend>2. Gas reaches an alveolus, but its capillary is not receiving meaningful blood flow. Which mechanism is present?</legend>
+    <label><input type="radio" name="f2" value="a">Anatomic dead space</label>
+    <label><input type="radio" name="f2" value="b">Alveolar dead space</label>
+    <label><input type="radio" name="f2" value="c">True shunt</label>
+    <label><input type="radio" name="f2" value="d">Normal gas exchange</label>
+  </fieldset>
+  <div id="finalNote2" class="answer-note" style="display:none" aria-live="polite"></div>
+
+  <fieldset class="q" data-answer="c">
+    <legend>3. Blood continues to perfuse an alveolus after its ventilation falls to essentially zero. What does the unit become?</legend>
+    <label><input type="radio" name="f3" value="a">Pure anatomic dead space</label>
+    <label><input type="radio" name="f3" value="b">High V/Q dead-space unit</label>
+    <label><input type="radio" name="f3" value="c">Shunt-like unit</label>
+    <label><input type="radio" name="f3" value="d">Normal respiratory-zone unit</label>
+  </fieldset>
+  <div id="finalNote3" class="answer-note" style="display:none" aria-live="polite"></div>
+
+  <fieldset class="q" data-answer="d">
+    <legend>4. A patient has patent airways and normal perfusion but thickened interstitial tissue between alveolar gas and capillary blood. What is the primary problem?</legend>
+    <label><input type="radio" name="f4" value="a">Anatomic dead space</label>
+    <label><input type="radio" name="f4" value="b">Loss of conducting-airway filtration</label>
+    <label><input type="radio" name="f4" value="c">Absent respiratory drive</label>
+    <label><input type="radio" name="f4" value="d">Increased diffusion distance</label>
+  </fieldset>
+  <div id="finalNote4" class="answer-note" style="display:none" aria-live="polite"></div>
+
+  <fieldset class="q" data-answer="a">
+    <legend>5. Air enters the pleural space while the trachea and main bronchus remain open. Why can the affected lung still collapse?</legend>
+    <label><input type="radio" name="f5" value="a">Pleural coupling and transpulmonary distending pressure are lost</label>
+    <label><input type="radio" name="f5" value="b">The conducting zone suddenly becomes respiratory dead space</label>
+    <label><input type="radio" name="f5" value="c">Pulmonary capillary blood flow automatically falls to zero</label>
+    <label><input type="radio" name="f5" value="d">Type I pneumocytes stop moving gas through the trachea</label>
+  </fieldset>
+  <div id="finalNote5" class="answer-note" style="display:none" aria-live="polite"></div>
+
+  <fieldset class="q" data-answer="b">
+    <legend>6. A student's data claim that a terminal bronchiole is a major gas-exchanging structure conflicts with the anatomy diagram and lesson definition. What should the student do first?</legend>
+    <label><input type="radio" name="f6" value="a">Accept the claim because all small airways exchange gas</label>
+    <label><input type="radio" name="f6" value="b">Recheck the structure classification because terminal bronchioles belong to the conducting zone</label>
+    <label><input type="radio" name="f6" value="c">Assume perfusion must be absent in that region</label>
+    <label><input type="radio" name="f6" value="d">Convert the terminal bronchiole volume directly into alveolar dead space</label>
+  </fieldset>
+  <div id="finalNote6" class="answer-note" style="display:none" aria-live="polite"></div>
+
+  <div class="controls">
+    <button class="btn teal" onclick="checkFinal()">Check Assessment Readiness</button>
+    <button class="btn secondary" onclick="resetFinal()">Retry</button>
+  </div>
+  <div id="fb5" class="feedback"></div>
+</section>
+
+<div id="completeBox" class="final">
+  <h2>1.2 Practice Complete</h2>
+  <p>You traced gas from conducting airways to the alveolar-capillary interface and distinguished <strong>anatomic dead space, alveolar dead space, low V/Q/shunt-like physiology, and diffusion limitation</strong>.</p>
+  <p><strong>Next connection:</strong> in 1.4, these same concepts become calculations using VT, VD, VE, VA, and VD/VT.</p>
+</div>
+</main>
+
+<script>
+const KEY='AHRC155_1_2_complete';
+let completed=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'));
+
+function emitProgress(){
+  const n=completed.size;
+  document.getElementById('progressFill').style.width=(n/5*100)+'%';
+  document.getElementById('progressText').textContent=`${n} of 5 sections complete`;
+  window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'1.2',completed:n,total:5,percent:n/5*100}}));
+  for(let i=2;i<=5;i++){
+    if(completed.has(i-1)) document.getElementById('s'+i).classList.remove('locked');
+  }
+  if(n===5){
+    document.getElementById('completeBox').classList.add('show');
+    window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'1.2'}}));
+  }
+}
+function markComplete(n){
+  completed.add(n);
+  localStorage.setItem(KEY,JSON.stringify([...completed]));
+  emitProgress();
+  setTimeout(()=>document.getElementById('s'+Math.min(n+1,5)).scrollIntoView({behavior:'smooth',block:'start'}),250);
+}
+emitProgress();
+
+function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function shuffleQuestions(){
+  document.querySelectorAll('fieldset.q').forEach(fs=>{
+    const labels=[...fs.children].filter(x=>x.tagName==='LABEL');
+    shuffleArray(labels).forEach(l=>fs.appendChild(l));
+  });
+}
+shuffleQuestions();
+
+// Section 1 sorter
+const zoneItems=[
+  ['Trachea','conducting'],['Main bronchus','conducting'],['Terminal bronchiole','conducting'],
+  ['Respiratory bronchiole','respiratory'],['Alveolar duct','respiratory'],['Alveoli','respiratory']
+];
+let selectedToken=null;
+function zoneAnnounce(t){document.getElementById('zoneStatus').textContent=t}
+function buildZoneTokens(){
+  const c=document.getElementById('zoneTokens'); c.innerHTML='';
+  shuffleArray([...zoneItems]).forEach(([name,zone])=>{
+    const b=document.createElement('button'); b.className='token'; b.type='button'; b.textContent=name;
+    b.dataset.name=name;b.dataset.correct=zone;b.draggable=true;b.setAttribute('aria-pressed','false');
+    b.onclick=()=>selectZoneToken(b);
+    b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',name);selectZoneToken(b)});
+    c.appendChild(b);
+  });
+  document.querySelectorAll('.zone').forEach(z=>{
+    z.onclick=()=>placeZone(z,selectedToken);
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drop-over')});
+    z.addEventListener('dragleave',()=>z.classList.remove('drop-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drop-over');placeZone(z,e.dataTransfer.getData('text/plain'))});
+  });
+}
+function selectZoneToken(b){
+  if(b.classList.contains('used'))return;
+  document.querySelectorAll('.token').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});
+  b.classList.add('selected');b.setAttribute('aria-pressed','true');selectedToken=b.dataset.name;
+  zoneAnnounce(`${selectedToken} selected. Choose a functional region.`);
+}
+function placeZone(z,name){
+  if(!name)return;
+  const token=[...document.querySelectorAll('.token')].find(t=>t.dataset.name===name);
+  if(!token||token.classList.contains('used'))return;
+  const pill=document.createElement('span');pill.className='pill';pill.dataset.name=name;pill.textContent=name;
+  z.querySelector('.placed').appendChild(pill);
+  token.classList.add('used');token.classList.remove('selected');token.disabled=true;
+  selectedToken=null;zoneAnnounce(`${name} placed in ${z.dataset.zone}.`);
+}
+function resetZones(){
+  document.querySelectorAll('.placed').forEach(p=>p.innerHTML='');
+  document.querySelectorAll('.token').forEach(t=>{t.classList.remove('used','selected');t.disabled=false});
+  selectedToken=null;document.getElementById('fb1').className='feedback';
+}
+function checkZones(){
+  let ok=true,count=0;
+  document.querySelectorAll('.zone').forEach(z=>{
+    z.querySelectorAll('.pill').forEach(p=>{
+      count++;
+      const item=zoneItems.find(x=>x[0]===p.dataset.name);
+      if(!item||item[1]!==z.dataset.zone)ok=false;
+    });
+  });
+  const fb=document.getElementById('fb1');
+  if(count<zoneItems.length){fb.className='feedback show bad';fb.innerHTML='<strong>Keep going.</strong> Place every structure before checking.';return}
+  if(ok){fb.className='feedback show good';fb.innerHTML='<strong>Correct.</strong> The terminal bronchiole is the final conducting airway. The respiratory bronchiole begins the respiratory zone and serves as the transition point because alveoli first appear there; alveolar ducts and alveoli then provide progressively greater gas-exchange surface.';markComplete(1)}
+  else{fb.className='feedback show bad';fb.innerHTML='<strong>Not quite.</strong> Remember the boundary: the terminal bronchiole is the last conducting airway, and the respiratory bronchiole is the first part of the respiratory zone because alveoli begin appearing there.'}
+}
+buildZoneTokens();
+
+// Section 2 IBW + anatomic dead-space interaction
+let currentSex='male';
+let currentHeight=66;
+let currentIbwKg=0;
+let currentIbwLb=0;
+let selectedDeadSpaceLb=null;
+
+function heightFeetInches(inches){
+  const ft=Math.floor(inches/12);
+  const inch=inches%12;
+  return `${ft}′${inch}″ (${inches} in)`;
+}
+
+function calculateIbw(){
+  currentHeight=Number(document.getElementById('heightSlider').value);
+  const over60=currentHeight-60;
+
+  if(currentSex==='male'){
+    currentIbwKg=50 + 2.3*over60;
+    currentIbwLb=110 + 5.5*over60;
+    document.getElementById('ibwFormulaNote').textContent=
+      'Male formula: 50 kg + 2.3 kg × inches over 60; 110 lb + 5.5 lb × inches over 60.';
+  }else{
+    currentIbwKg=45.5 + 2.3*over60;
+    currentIbwLb=100 + 5.5*over60;
+    document.getElementById('ibwFormulaNote').textContent=
+      'Female formula: 45.5 kg + 2.3 kg × inches over 60; 100 lb + 5.5 lb × inches over 60.';
+  }
+
+  document.getElementById('heightDisplay').textContent=heightFeetInches(currentHeight);
+  document.getElementById('ibwKg').textContent=`${currentIbwKg.toFixed(1)} kg`;
+  document.getElementById('ibwLb').textContent=`${Math.round(currentIbwLb)} lb`;
+  document.getElementById('kgChoice').textContent=`${currentIbwKg.toFixed(1)} kg`;
+  document.getElementById('lbChoice').textContent=`${Math.round(currentIbwLb)} lb`;
+
+  selectedDeadSpaceLb=null;
+  document.getElementById('deadSpaceReveal').style.display='none';
+  document.getElementById('unitFeedback').className='feedback';
+  document.querySelectorAll('.ibw-choice').forEach(b=>b.classList.remove('teal'));
+}
+
+function updateDeadSpace(){
+  if(selectedDeadSpaceLb===null)return;
+  const vt=Math.max(1,Number(document.getElementById('vt').value)||1);
+  const vd=selectedDeadSpaceLb;
+  const toward=Math.max(0,vt-vd);
+
+  document.getElementById('vdResult').textContent=`Estimated anatomic VD ≈ ${Math.round(vd)} mL`;
+  const pct=Math.min(90,Math.max(10,vd/vt*100));
+  document.getElementById('deadSeg').style.width=pct+'%';
+  document.getElementById('exchangeSeg').style.width=(100-pct)+'%';
+  document.getElementById('deadSeg').textContent=`${Math.round(vd)} mL dead space`;
+  document.getElementById('exchangeSeg').textContent=`${Math.round(toward)} mL toward gas exchange`;
+  document.getElementById('breathText').textContent=
+    `Before perfusion is considered, ${Math.round(toward)} mL of this ${Math.round(vt)} mL breath reaches beyond the conducting-zone dead space.`;
+}
+
+document.querySelectorAll('input[name="ibwSex"]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    currentSex=r.value;
+    calculateIbw();
+  });
+});
+
+document.getElementById('heightSlider').addEventListener('input',calculateIbw);
+
+document.querySelectorAll('.ibw-choice').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const fb=document.getElementById('unitFeedback');
+    document.querySelectorAll('.ibw-choice').forEach(b=>b.classList.remove('teal'));
+
+    if(btn.dataset.unit==='kg'){
+      fb.className='feedback show bad';
+      fb.innerHTML='<strong>Check the units.</strong> The displayed kilogram IBW is useful clinically, but the course estimate here is <strong>1 mL per 1 lb IBW</strong>. Choose the pound value.';
+      document.getElementById('deadSpaceReveal').style.display='none';
+      selectedDeadSpaceLb=null;
+    }else{
+      btn.classList.add('teal');
+      selectedDeadSpaceLb=currentIbwLb;
+      fb.className='feedback show good';
+      fb.innerHTML=`<strong>Correct unit.</strong> ${Math.round(currentIbwLb)} lb IBW gives an estimated anatomic dead space of about <strong>${Math.round(currentIbwLb)} mL</strong>.`;
+      document.getElementById('deadSpaceReveal').style.display='block';
+      updateDeadSpace();
+    }
+  });
+});
+
+document.getElementById('vt').addEventListener('input',updateDeadSpace);
+calculateIbw();
+
+function checkSingle(sectionId,fbId){
+  const fs=document.querySelector('#'+sectionId+' fieldset.q');
+  const checked=fs.querySelector('input:checked');
+  const fb=document.getElementById(fbId);
+  if(!checked){fb.className='feedback show bad';fb.textContent='Choose an answer first.';return}
+  const n=Number(sectionId.replace('s',''));
+  if(checked.value===fs.dataset.answer){
+    let msgs={
+      2:'Correct. Subtracting anatomic dead space identifies the portion of the breath that reaches beyond the conducting zone, but effective exchange still depends on perfusion and membrane function.',
+      3:'Correct. Ventilation without adequate perfusion is alveolar dead-space physiology: gas reaches the alveolus but is wasted because little blood is available for exchange.',
+      4:'Correct. Emphysema-like destruction primarily reduces surface area, whereas edema primarily increases diffusion distance by thickening the barrier.'
+    };
+    fb.className='feedback show good';fb.innerHTML='<strong>Correct.</strong> '+msgs[n].replace(/^Correct\. /,'');markComplete(n);
+  }else{
+    fb.className='feedback show bad';
+    if(n===2)fb.innerHTML='<strong>Try again.</strong> Think only about what is known after subtracting the conducting-airway volume. Perfusion has not yet been evaluated.';
+    if(n===3)fb.innerHTML='<strong>Try again.</strong> Ask what is present and what is absent: air is present, but blood flow is not.';
+    if(n===4)fb.innerHTML='<strong>Try again.</strong> Identify the Fick variable changed by each structural abnormality: area versus thickness.';
+  }
+}
+
+// Section 3 toggles
+document.querySelectorAll('.alv-card .toggle button').forEach(b=>{
+  b.onclick=()=>{
+    const group=b.parentElement;
+    group.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const card=b.closest('.alv-card');card.dataset[b.dataset.kind]=b.dataset.val;classifyAlv(card);
+  };
+});
+function classifyAlv(card){
+  if(card.dataset.vent===undefined||card.dataset.perf===undefined)return;
+  const v=card.dataset.vent==='1',p=card.dataset.perf==='1';
+  let txt='';
+  if(v&&p)txt='Normal exchange potential: ventilated + perfused.';
+  else if(v&&!p)txt='Alveolar dead space: ventilated but not adequately perfused.';
+  else if(!v&&p)txt='Low V/Q → shunt-like if ventilation is zero.';
+  else txt='Neither ventilation nor perfusion: no meaningful regional exchange.';
+  card.querySelector('.classification').textContent=txt;
+}
+
+// Section 4 diffusion model
+function updateDiff(){
+  const a=Number(surface.value),t=Number(thick.value),g=Number(grad.value);
+  const rel=Math.round(100*a*g/t);
+  diffMetric.textContent=rel+'%';
+  let pieces=[];
+  if(a<1)pieces.push('reduced surface area lowers transfer');
+  if(t>1)pieces.push('increased thickness slows diffusion');
+  if(g<1)pieces.push('a smaller pressure gradient reduces net transfer');
+  diffInterpret.textContent=pieces.length?pieces.join('; ')+'.':'Large area + thin membrane + adequate gradient support efficient diffusion.';
+}
+surface.onchange=thick.onchange=grad.onchange=updateDiff;
+
+// Final
+const finalGuidance = {
+  1: {
+    hint: 'Start at the earliest failed step. The alveoli may be intact, but ask whether gas can reach them through the conducting airway.',
+    success: 'Correct. The first failure is gas delivery through the conducting airway. The downstream alveoli cannot be effectively ventilated even though their structure and perfusion may initially be normal.'
+  },
+  2: {
+    hint: 'Ask what is present and what is missing. Air reaches the alveolus, but meaningful blood flow does not.',
+    success: 'Correct. Ventilation without adequate perfusion is alveolar dead-space physiology: the breath reaches an alveolus but cannot exchange normally because little or no blood is available.'
+  },
+  3: {
+    hint: 'This is the opposite of dead space. Blood is still arriving, but fresh gas is not.',
+    success: 'Correct. Perfusion with essentially no ventilation creates a shunt-like unit because blood passes a region that is not receiving fresh alveolar gas.'
+  },
+  4: {
+    hint: 'The airway and perfusion are both intact. Focus on what has changed between alveolar gas and capillary blood.',
+    success: 'Correct. Thickened interstitial tissue increases diffusion distance, slowing transfer across the alveolar-capillary barrier.'
+  },
+  5: {
+    hint: 'The airway is open, so obstruction is not the first problem. Think about the pressure relationship that normally keeps lung and chest wall mechanically coupled.',
+    success: 'Correct. Air in the pleural space disrupts pleural coupling and reduces transpulmonary distending pressure, allowing the lung to recoil inward despite a patent airway.'
+  },
+  6: {
+    hint: 'Compare the statement with the course boundary between conducting and respiratory zones. Which structure is the final conducting airway?',
+    success: 'Correct. The terminal bronchiole belongs to the conducting zone. The respiratory bronchiole is where alveoli first appear and the respiratory zone begins.'
+  }
+};
+
+function clearFinalStyles(){
+  document.querySelectorAll('#s5 .q label').forEach(l=>{
+    l.classList.remove('answer-correct','answer-incorrect','answer-neutral');
+  });
+  for(let i=1;i<=6;i++){
+    const note=document.getElementById('finalNote'+i);
+    if(note){note.style.display='none';note.className='answer-note';note.innerHTML='';}
+  }
+}
+
+function checkFinal(){
+  clearFinalStyles();
+  const fs=[...document.querySelectorAll('#s5 fieldset.q')];
+  let score=0,answered=0;
+
+  fs.forEach((q,index)=>{
+    const num=index+1;
+    const checked=q.querySelector('input:checked');
+    const note=document.getElementById('finalNote'+num);
+
+    if(!checked){
+      if(note){
+        note.style.display='block';
+        note.className='answer-note bad';
+        note.innerHTML='<strong>Choose an answer.</strong> Then submit again.';
+      }
+      return;
+    }
+
+    answered++;
+    const selectedLabel=checked.closest('label');
+
+    if(checked.value===q.dataset.answer){
+      score++;
+      selectedLabel.classList.add('answer-correct');
+      q.querySelectorAll('label').forEach(l=>{
+        if(l!==selectedLabel)l.classList.add('answer-neutral');
+      });
+      if(note){
+        note.style.display='block';
+        note.className='answer-note good';
+        note.innerHTML='<strong>Correct.</strong> '+finalGuidance[num].success.replace(/^Correct\. /,'');
+      }
+    }else{
+      selectedLabel.classList.add('answer-incorrect');
+      q.querySelectorAll('label').forEach(l=>{
+        if(l!==selectedLabel)l.classList.add('answer-neutral');
+      });
+      if(note){
+        note.style.display='block';
+        note.className='answer-note bad';
+        note.innerHTML='<strong>Not yet.</strong> '+finalGuidance[num].hint;
+      }
+    }
+  });
+
+  const fb=document.getElementById('fb5');
+  if(answered<fs.length){
+    fb.className='feedback show bad';
+    fb.innerHTML=`You answered ${answered} of ${fs.length}. Complete the remaining items, then submit again.`;
+    return;
+  }
+
+  if(score===fs.length){
+    fb.className='feedback show good';
+    fb.innerHTML=`<strong>${score}/${fs.length} correct.</strong> You correctly localized each failure by asking where gas stopped, whether perfusion was present, and whether the diffusion barrier and pleural mechanics could function.`;
+    markComplete(5);
+  }else{
+    fb.className='feedback show bad';
+    fb.innerHTML=`<strong>${score}/${fs.length} correct.</strong> Review the red selections and use the hint beneath each item. Change only the answers you want to retry, then submit again.`;
+  }
+}
+
+function resetFinal(){
+  document.querySelectorAll('#s5 input[type=radio]').forEach(x=>x.checked=false);
+  clearFinalStyles();
+  document.getElementById('fb5').className='feedback';
+  shuffleQuestions();
+}
+</script>
+
+<footer class="pl-footer">
+  <div><strong>Pulmo<span>Learn</span></strong><br>Respiratory Physiology · Activity 1.2</div>
+  <div class="pl-save-note">Progress and selected answers are saved in this browser.<br>You can leave and return without losing your work.</div>
+</footer>
+
+
+<script id="pulmolearn-answer-persistence">
+(function(){
+  const SAVE_KEY="AHRC155_1_2_answers_brand_v1";
+  function read(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||'{}')}catch(e){return {}}}
+  function write(s){try{localStorage.setItem(SAVE_KEY,JSON.stringify(s))}catch(e){}}
+  function capture(){
+    const s=read(); s.inputs=s.inputs||{}; s.radios=s.radios||{}; s.checks=s.checks||{};
+    document.querySelectorAll('input,select,textarea').forEach(el=>{
+      if(el.type==='radio'){if(el.name&&el.checked)s.radios[el.name]=el.value;}
+      else if(el.type==='checkbox'){const k=el.id||el.name;if(k)s.checks[k]=el.checked;}
+      else if(el.type!=='button'&&el.type!=='submit'&&el.type!=='reset'&&el.type!=='file'){
+        const k=el.id||el.name;if(k)s.inputs[k]=el.value;
+      }
+    });
+    // Preserve map/label placements used by the physiology interactions.
+    s.placements={};
+    document.querySelectorAll('.drop,.target').forEach((el,i)=>{
+      if(el.dataset.placed)s.placements['p'+i]={value:el.dataset.placed,text:el.textContent};
+    });
+    // 1.2 zone-placement pills.
+    s.zones={};
+    document.querySelectorAll('.zone').forEach((z,i)=>{
+      s.zones['z'+i]=[...z.querySelectorAll('.placed [data-name],.placed .placed-item,.placed button,.placed span')]
+        .map(x=>x.dataset.name||x.textContent.trim()).filter(Boolean);
+    });
+    // 1.3 sequence slots.
+    s.sequence={};
+    document.querySelectorAll('.seq-slot').forEach((el,i)=>{if(el.dataset.item)s.sequence['s'+i]=el.dataset.item;});
+    write(s);
+  }
+  function restore(){
+    const s=read();
+    if(s.inputs)Object.entries(s.inputs).forEach(([k,v])=>{
+      const el=document.getElementById(k)||document.querySelector(`[name="${CSS.escape(k)}"]`);
+      if(el){el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));}
+    });
+    if(s.radios)Object.entries(s.radios).forEach(([name,v])=>{
+      const els=[...document.querySelectorAll(`input[type="radio"][name="${CSS.escape(name)}"]`)];
+      const el=els.find(x=>x.value===v);if(el){el.checked=true;el.dispatchEvent(new Event('change',{bubbles:true}));}
+    });
+    if(s.checks)Object.entries(s.checks).forEach(([k,v])=>{
+      const el=document.getElementById(k)||document.querySelector(`input[type="checkbox"][name="${CSS.escape(k)}"]`);
+      if(el){el.checked=!!v;el.dispatchEvent(new Event('change',{bubbles:true}));}
+    });
+    // Restore generic .drop/.target placements after original interaction builders have run.
+    if(s.placements){
+      const els=[...document.querySelectorAll('.drop,.target')];
+      Object.entries(s.placements).forEach(([k,o])=>{
+        const i=Number(k.slice(1)),el=els[i];if(!el||!o||!o.value)return;
+        try{
+          if(typeof placeDefense==='function'&&el.classList.contains('drop')) placeDefense(el,o.value);
+          else if(typeof placeLabel==='function'&&el.classList.contains('target')) placeLabel(el,o.value);
+          else{el.dataset.placed=o.value;el.textContent=o.text||o.value;}
+        }catch(e){}
+      });
+    }
+    // Restore 1.2 functional-zone placements.
+    if(s.zones && typeof placeZone==='function'){
+      const zones=[...document.querySelectorAll('.zone')];
+      Object.entries(s.zones).forEach(([k,vals])=>{
+        const z=zones[Number(k.slice(1))];if(!z||!Array.isArray(vals))return;
+        vals.forEach(name=>{try{placeZone(z,name)}catch(e){}});
+      });
+    }
+    // Restore 1.3 inspiration sequence.
+    if(s.sequence && typeof placeSeq==='function'){
+      const slots=[...document.querySelectorAll('.seq-slot')];
+      Object.entries(s.sequence).forEach(([k,item])=>{
+        const el=slots[Number(k.slice(1))];if(el&&item){try{placeSeq(el,item)}catch(e){}}
+      });
+    }
+  }
+  document.addEventListener('input',e=>{if(e.target.matches('input,select,textarea'))capture();},true);
+  document.addEventListener('change',e=>{if(e.target.matches('input,select,textarea'))capture();},true);
+  document.addEventListener('click',e=>{
+    if(e.target.closest('.token,.label-btn,.drop,.target,.zone,.seq-token,.seq-slot,.btn,button'))setTimeout(capture,40);
+  },true);
+  const mo=new MutationObserver(()=>{clearTimeout(window.__plSaveTimer);window.__plSaveTimer=setTimeout(capture,120);});
+  document.addEventListener('DOMContentLoaded',()=>{
+    setTimeout(restore,120);
+    setTimeout(()=>mo.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-placed','data-item','class']}),250);
+  });
+  window.addEventListener('beforeunload',capture);
+  window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:"1.2",course:'Respiratory Physiology'});
+})();
+</script>
+
+</body>
+</html>
