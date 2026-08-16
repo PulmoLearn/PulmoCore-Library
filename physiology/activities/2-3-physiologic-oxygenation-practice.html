@@ -57,28 +57,7 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 
 @media(max-width:1000px){.grid3,.grid4,.mech-grid,.path{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.grid,.grid3,.grid4,.mech-grid,.path,.sort-zones{grid-template-columns:1fr}.top{padding:12px 14px}.tag,.course{display:none}main{padding:18px 12px 54px}.hero,.card{padding:19px}.progress-wrap{top:72px}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="page">
@@ -127,6 +106,9 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
     <line id="p50vert" x1="175" y1="245" x2="175" y2="135" stroke="#F4B860" stroke-width="2" stroke-dasharray="5 4"/>
     <text id="p50text" x="135" y="264" fill="#0B1F33" font-weight="800">P50 ≈ 27</text>
    </svg>
+   <div class="clue" style="margin-top:12px">
+    <strong>Try it:</strong> click <strong>Left shift</strong>, <strong>Normal</strong>, and <strong>Right shift</strong> one at a time. Watch the curve move, the P50 marker change, and the explanation below. The dark button shows the curve you are currently viewing.
+   </div>
    <div class="shift-buttons"><button id="shiftLeft" class="btn2" onclick="setShift('left')">Left shift</button><button id="shiftNormal" class="btn2 active" onclick="setShift('normal')">Normal</button><button id="shiftRight" class="btn2" onclick="setShift('right')">Right shift</button></div>
    <p id="shiftMeaning" class="small"></p>
   </div>
@@ -331,11 +313,23 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 <script>
 const STORE='AHRC155_2_3_oxygenation_v3';
 let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"inputs":{},"shiftSort":{"left":[],"right":[]}}')}catch(e){state={done:[],answers:{},inputs:{},shiftSort:{left:[],right:[]}}}
-state.done=state.done||[];state.answers=state.answers||{};state.inputs=state.inputs||{};state.shiftSort=state.shiftSort||{left:[],right:[]};
+state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.inputs=state.inputs||{};
+state.shiftSort=state.shiftSort&&typeof state.shiftSort==='object'?state.shiftSort:{};
+state.shiftSort.left=Array.isArray(state.shiftSort.left)?state.shiftSort.left:[];
+state.shiftSort.right=Array.isArray(state.shiftSort.right)?state.shiftSort.right:[];
 const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function progress(){let n=state.done.length;progressText.textContent=`${n} of 7 sections complete`;progressBar.style.width=(n/7*100)+'%';for(let i=2;i<=7;i++)if(state.done.includes(i-1))document.getElementById('s'+i).classList.remove('locked');completeBox.classList.toggle('show',n===7);if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'2.3'}}));window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'2.3',completed:n,total:7,percent:n/7*100}}))}
+function progress(){
+ const pt=document.getElementById('progressText'),pb=document.getElementById('progressBar'),cb=document.getElementById('completeBox');
+ let n=state.done.length;
+ if(pt)pt.textContent=`${n} of 7 sections complete`;
+ if(pb)pb.style.width=(n/7*100)+'%';
+ for(let i=2;i<=7;i++){const sec=document.getElementById('s'+i);if(sec&&state.done.includes(i-1))sec.classList.remove('locked')}
+ if(cb)cb.classList.toggle('show',n===7);
+ if(n===7)window.dispatchEvent(new CustomEvent('pulmolearn:complete',{detail:{lesson:'2.3'}}));
+ window.dispatchEvent(new CustomEvent('pulmolearn:progress',{detail:{lesson:'2.3',completed:n,total:7,percent:n/7*100}}))
+}
 function finish(n){if(!state.done.includes(n)){state.done.push(n);state.done.sort((a,b)=>a-b);save();progress();if(n<7)setTimeout(()=>document.getElementById('s'+(n+1)).scrollIntoView({behavior:'smooth'}),250)}}
 const Q={
  q1a:{q:'Which oxygen variable represents the partial pressure of dissolved oxygen in arterial plasma?',a:'PaO₂',o:['PaO₂','PAO₂','CaO₂','DO₂'],g:'PaO₂ is the arterial dissolved-oxygen pressure measured on an ABG.',h:'Use the lowercase “a” for arterial blood; uppercase “A” refers to alveolar gas.'},
@@ -375,12 +369,15 @@ mount(['q1a','q1b'],'q1');mount(['q2a','q2b','q2c'],'q2');mount(['q2d','q2e','q2
 /* Curve */
 function hill(po2,p50){return Math.pow(po2,2.7)/(Math.pow(p50,2.7)+Math.pow(po2,2.7))}
 function setShift(type){
+ const path=document.getElementById('curvePath'),vert=document.getElementById('p50vert'),txt=document.getElementById('p50text'),meaning=document.getElementById('shiftMeaning');
  let p50=type==='right'?32:type==='left'?22:27, pts=[];
  for(let x=0;x<=100;x+=2){let sat=hill(Math.max(x,.1),p50),sx=55+x*4.2,sy=245-sat*205;pts.push(`${pts.length?'L':'M'}${sx.toFixed(1)} ${sy.toFixed(1)}`)}
- curvePath.setAttribute('d',pts.join(' '));
- let sx=55+p50*4.2;p50vert.setAttribute('x1',sx);p50vert.setAttribute('x2',sx);p50text.setAttribute('x',sx-35);p50text.textContent=`P50 ≈ ${p50}`;
- ['left','normal','right'].forEach(t=>document.getElementById('shift'+t[0].toUpperCase()+t.slice(1)).classList.toggle('active',t===type));
- shiftMeaning.textContent=type==='right'?'Right shift: lower affinity, higher P50, easier tissue unloading.':type==='left'?'Left shift: higher affinity, lower P50, oxygen is held more tightly.':'Normal reference curve: P50 is about 26–27 mm Hg.';
+ if(path)path.setAttribute('d',pts.join(' '));
+ let sx=55+p50*4.2;
+ if(vert){vert.setAttribute('x1',sx);vert.setAttribute('x2',sx)}
+ if(txt){txt.setAttribute('x',sx-35);txt.textContent=`P50 ≈ ${p50}`}
+ ['left','normal','right'].forEach(t=>{const b=document.getElementById('shift'+t[0].toUpperCase()+t.slice(1));if(b)b.classList.toggle('active',t===type)});
+ if(meaning)meaning.textContent=type==='right'?'Right shift: lower affinity, higher P50, easier tissue unloading.':type==='left'?'Left shift: higher affinity, lower P50, oxygen is held more tightly.':'Normal reference curve: P50 is about 26–27 mm Hg.';
  state.inputs.shift=type;save()
 }
 setShift(state.inputs.shift||'normal');
@@ -392,21 +389,74 @@ const shiftItems=[
 ];
 let selectedShift=null;
 function buildShiftSort(){
- shiftBank.innerHTML='';
- shuffle(shiftItems).forEach(o=>{let b=document.createElement('button');b.type='button';b.className='sort-token';b.textContent=o.n;b.draggable=true;b.onclick=()=>selectShiftToken(b);b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',o.n);selectShiftToken(b)});shiftBank.appendChild(b)});
- ['left','right'].forEach(z=>{let zone=document.getElementById(z+'Zone');zone.onclick=()=>placeShift(z,selectedShift);zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');placeShift(z,e.dataTransfer.getData('text/plain'))})});
- restoreShiftSort()
+ const bank=document.getElementById('shiftBank');
+ if(!bank)return;
+ bank.innerHTML='';
+ shuffle(shiftItems).forEach(o=>{
+   const b=document.createElement('button');
+   b.type='button'; b.className='sort-token'; b.textContent=o.n; b.draggable=true; b.setAttribute('aria-pressed','false');
+   b.addEventListener('click',()=>selectShiftToken(b));
+   b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',o.n);e.dataTransfer.effectAllowed='move';selectShiftToken(b)});
+   bank.appendChild(b);
+ });
+ ['left','right'].forEach(z=>{
+   const zone=document.getElementById(z+'Zone');
+   if(!zone)return;
+   zone.addEventListener('click',()=>placeShift(z,selectedShift));
+   zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
+   zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+   zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');placeShift(z,e.dataTransfer.getData('text/plain'))});
+ });
+ restoreShiftSort();
 }
-function selectShiftToken(b){document.querySelectorAll('.sort-token').forEach(x=>x.classList.remove('active'));selectedShift=b.textContent;b.classList.add('active')}
-function placeShift(z,name){if(!name)return;['left','right'].forEach(k=>state.shiftSort[k]=state.shiftSort[k].filter(x=>x!==name));state.shiftSort[z].push(name);selectedShift=null;save();restoreShiftSort()}
-function restoreShiftSort(){['left','right'].forEach(z=>{let p=document.querySelector('#'+z+'Zone .placed');p.innerHTML=state.shiftSort[z].map(x=>`<span>${x}</span>`).join('')});document.querySelectorAll('.sort-token').forEach(b=>{let used=state.shiftSort.left.includes(b.textContent)||state.shiftSort.right.includes(b.textContent);b.classList.toggle('used',used);b.classList.toggle('active',selectedShift===b.textContent)})}
-function resetShiftSort(){state.shiftSort={left:[],right:[]};save();buildShiftSort();shiftSortFb.className='feedback'}
-function checkShiftSort(){let ok=shiftItems.every(o=>state.shiftSort[o.z].includes(o.n));shiftSortFb.className='feedback '+(ok?'ok':'bad');shiftSortFb.textContent=ok?'✓ Correct. You sorted higher-affinity versus lower-affinity conditions.':'Not yet. Revisit the CADET face Right box above: CO₂, Acid, 2,3-DPG, Exercise, and Temperature move the curve right; opposite conditions move it left.';state.inputs.shiftSortOK=ok;save();autoFinish();return ok}
+function selectShiftToken(b){
+ document.querySelectorAll('#shiftBank .sort-token').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false')});
+ selectedShift=b.textContent;b.classList.add('active');b.setAttribute('aria-pressed','true');
+}
+function placeShift(z,name){
+ if(!name)return;
+ ['left','right'].forEach(k=>state.shiftSort[k]=state.shiftSort[k].filter(x=>x!==name));
+ state.shiftSort[z].push(name);selectedShift=null;save();restoreShiftSort();
+}
+function restoreShiftSort(){
+ ['left','right'].forEach(z=>{
+   const p=document.querySelector('#'+z+'Zone .placed');
+   if(p)p.innerHTML=state.shiftSort[z].map(x=>`<span>${x}</span>`).join('');
+ });
+ document.querySelectorAll('#shiftBank .sort-token').forEach(b=>{
+   const used=state.shiftSort.left.includes(b.textContent)||state.shiftSort.right.includes(b.textContent);
+   b.classList.toggle('used',used);
+   b.classList.toggle('active',selectedShift===b.textContent);
+   b.setAttribute('aria-pressed',selectedShift===b.textContent?'true':'false');
+ });
+}
+function resetShiftSort(){
+ state.shiftSort={left:[],right:[]};state.inputs.shiftSortOK=false;selectedShift=null;save();buildShiftSort();
+ const fb=document.getElementById('shiftSortFb');if(fb){fb.className='feedback';fb.textContent=''}
+}
+function checkShiftSort(){
+ const ok=shiftItems.every(o=>state.shiftSort[o.z].includes(o.n)) &&
+          shiftItems.every(o=>!state.shiftSort[o.z==='left'?'right':'left'].includes(o.n));
+ const fb=document.getElementById('shiftSortFb');
+ if(fb){
+   fb.className='feedback '+(ok?'ok':'bad');
+   fb.textContent=ok?'✓ Correct. You sorted higher-affinity versus lower-affinity conditions.':'Not yet. Revisit the CADET face Right box above: CO₂, Acid, 2,3-DPG, Exercise, and Temperature move the curve right; opposite conditions move it left.';
+ }
+ state.inputs.shiftSortOK=ok;save();reconcileCompletion();return ok;
+}
 buildShiftSort();
 
 /* Altitude */
-function updateAlt(){let ft=+altSlider.value,pb=Math.max(500,760-24*(ft/1000));altVal.textContent=ft.toLocaleString();pbVal.textContent=Math.round(pb)+' mm Hg';altMsg.textContent=ft===0?'At sea level, atmospheric pressure provides the highest inspired oxygen pressure in this demonstration.':'As barometric pressure falls, inspired oxygen partial pressure falls even though FiO₂ is still 21%.';state.inputs.alt=ft;save()}
-if(state.inputs.alt!=null)altSlider.value=state.inputs.alt;altSlider.oninput=updateAlt;updateAlt();
+function updateAlt(){
+ const slider=document.getElementById('altSlider'),v=document.getElementById('altVal'),pbOut=document.getElementById('pbVal'),msg=document.getElementById('altMsg');
+ if(!slider)return;
+ let ft=+slider.value,pb=Math.max(500,760-24*(ft/1000));
+ if(v)v.textContent=ft.toLocaleString();
+ if(pbOut)pbOut.textContent=Math.round(pb)+' mm Hg';
+ if(msg)msg.textContent=ft===0?'At sea level, atmospheric pressure provides the highest inspired oxygen pressure in this demonstration.':'As barometric pressure falls, inspired oxygen partial pressure falls even though FiO₂ is still 21%.';
+ state.inputs.alt=ft;save()
+}
+{const slider=document.getElementById('altSlider');if(slider){if(state.inputs.alt!=null)slider.value=state.inputs.alt;slider.oninput=updateAlt;updateAlt()}}
 
 /* calculations */
 function calcCheck(input,fb,target,tol,good,hint,key){let el=document.getElementById(input),f=document.getElementById(fb),ok=Math.abs(+el.value-target)<=tol;el.style.borderColor=ok?'#70CBB9':'#E58C8C';f.className='feedback '+(ok?'ok':'bad');f.textContent=ok?'✓ '+good:'Not yet. '+hint;state.inputs[key]=el.value;state.inputs[key+'OK']=ok;save();autoFinish();return ok}
@@ -417,15 +467,28 @@ function checkDO2(){return calcCheck('do2Calc','do2Fb',562.5,5,'DO₂ ≈ 563 mL
 function checkPF(){return calcCheck('pfCalc','pfFb',200,2,'P/F = 200.','Divide PaO₂ 80 by FiO₂ 0.40.','pf')}
 [['pao2Calc','pao2'],['aaCalc','aa'],['cao2Calc','cao2'],['do2Calc','do2'],['pfCalc','pf']].forEach(([id,k])=>{let e=document.getElementById(id);if(state.inputs[k]!=null)e.value=state.inputs[k];e.addEventListener('input',()=>{state.inputs[k]=e.value;save()})});
 
-/* auto finish */
-function autoFinish(){
- if(all(['q1a','q1b'])&&!state.done.includes(1)){fb1.className='feedback ok';fb1.textContent='Section complete. Continue below.';finish(1)}
- if(state.inputs.shiftSortOK&&all(['q2a','q2b','q2c','q2d','q2e','q2f'])&&!state.done.includes(2)){fb2.className='feedback ok';fb2.textContent='Section complete. Continue below.';finish(2)}
- if(state.inputs.pao2OK&&all(['q3a','q3b'])&&!state.done.includes(3)){fb3.className='feedback ok';fb3.textContent='Section complete. Continue below.';finish(3)}
- if(state.inputs.aaOK&&all(['q4a','q4b'])&&!state.done.includes(4)){fb4.className='feedback ok';fb4.textContent='Section complete. Continue below.';finish(4)}
- if(all(['q5a','q5b','q5c'])&&!state.done.includes(5)){fb5.className='feedback ok';fb5.textContent='Section complete. Continue below.';finish(5)}
- if(state.inputs.cao2OK&&state.inputs.do2OK&&state.inputs.pfOK&&all(['q6a','q6b','q6c','q6d','q6e','q6f','q6g','q6h','q6i','q6j','q6k'])&&!state.done.includes(6)){fb6.className='feedback ok';fb6.textContent='Section complete. Continue below.';finish(6)}
+/* resume + automatic completion */
+function sectionRequirementsMet(n){
+ if(n===1)return state.inputs.ahiOK===true && all(['q1a','q1b']);
+ if(n===2)return state.inputs.shiftSortOK===true && all(['q2a','q2b','q2c','q2d','q2e','q2f']);
+ if(n===3)return state.inputs.pao2OK===true && all(['q3a','q3b']);
+ if(n===4)return state.inputs.aaOK===true && all(['q4a','q4b']);
+ if(n===5)return all(['q5a','q5b','q5c']);
+ if(n===6)return state.inputs.cao2OK===true && state.inputs.do2OK===true && state.inputs.pfOK===true &&
+               all(['q6a','q6b','q6c','q6d','q6e','q6f','q6g','q6h','q6i','q6j','q6k']);
+ if(n===7)return typeof F!=='undefined' && F.every((q,i)=>state.answers['f'+i]&&state.answers['f'+i].correct===true);
+ return false;
 }
+function reconcileCompletion(){
+ const rebuilt=[];
+ for(let n=1;n<=7;n++){if(sectionRequirementsMet(n))rebuilt.push(n);else break}
+ state.done=rebuilt;save();progress();
+ for(let n=1;n<=6;n++){
+   const fb=document.getElementById('fb'+n);
+   if(fb&&state.done.includes(n)){fb.className='feedback ok';fb.textContent='Section complete. Continue below.'}
+ }
+}
+function autoFinish(){reconcileCompletion()}
 
 /* final */
 const F=[
@@ -444,78 +507,8 @@ function renderFinal(){
 }
 renderFinal();
 function checkFinal(){let n=0;F.forEach((q,i)=>{let id='f'+i,d=document.getElementById(id),s=d.querySelector('input:checked'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}let ok=s.value===q.a;if(ok)n++;d.querySelectorAll('.option').forEach(l=>l.classList.remove('correct','wrong'));s.closest('.option').classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.value,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();if(n===F.length){fb7.className='feedback ok';fb7.textContent='8/8 correct. Activity complete.';finish(7)}else{fb7.className='feedback bad';fb7.textContent=`${n}/${F.length} correct. Revise the red selections using the targeted hints.`}}
-progress();autoFinish();
-window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.3',course:'Respiratory Physiology'});
+reconcileCompletion();
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.3',course:'Respiratory Physiology',activity_version:'v4'});
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
