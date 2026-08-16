@@ -352,8 +352,9 @@
 
         <p>
           Copy the complete Canvas-ready competency guide HTML, then paste it
-          into the Canvas HTML Editor. Table captions and accessible column
-          and row header attributes are added automatically when needed.
+          into the Canvas HTML Editor. The guide header is standardized as a
+          Competency Guide, and table captions, accessible column/row headers,
+          scope attributes, and known contrast fixes are applied automatically.
         </p>
 
         <button
@@ -434,7 +435,268 @@
       document.getElementById("guideStatus");
 
 
+
     let courses = [];
+
+
+    /*
+      ============================================================
+      ASSIGNMENT BUILDER SUPPLEMENTAL ACTIVITIES
+      ============================================================
+
+      These assignments are intentionally added here so the Canvas
+      assignment builder can expose them even when they are separate from
+      the main eText lesson catalog.
+
+      Keep the lesson URLs aligned with the files uploaded to the matching
+      PulmoLearn course folders.
+    */
+
+    const supplementalAssignmentCourses = [
+
+      {
+        key:"neonatal-pediatric-scenarios",
+        label:"Neonatal & Pediatric Clinical Scenarios",
+        folder:"Neonatal_Pediatric",
+        lessons:[
+          {
+            id:"scenario-1.1",
+            displayTitle:"Scenario 1.1: Before the First Breath",
+            title:"Before the First Breath",
+            description:"Apply fetal lung development, surfactant physiology, fetal circulation, and transition concepts to a high-risk premature delivery.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-1-1-before-the-first-breath.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 1"
+          },
+          {
+            id:"scenario-1.2",
+            displayTitle:"Scenario 1.2: Delivery Room Ready",
+            title:"Delivery Room Ready",
+            description:"Use maternal risk factors, fetal monitoring, gestational assessment, delivery-room preparation, APGAR interpretation, and early respiratory findings to anticipate neonatal needs.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-1-2-delivery-room-ready.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 1"
+          },
+          {
+            id:"scenario-1.3",
+            displayTitle:"Scenario 1.3: Minutes Matter",
+            title:"Minutes Matter",
+            description:"Progress through neonatal stabilization and resuscitation decisions from initial steps and PPV through advanced airway management, compressions, medications, and recovery.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-1-3-minutes-matter.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 1"
+          },
+          {
+            id:"scenario-1.4",
+            displayTitle:"Scenario 1.4: What Is the Baby Telling You?",
+            title:"What Is the Baby Telling You?",
+            description:"Integrate neonatal bedside assessment, monitoring, blood-gas sampling and interpretation, imaging, line and tube position, and signs of sudden deterioration.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-1-4-what-is-the-baby-telling-you.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 1"
+          },
+          {
+            id:"scenario-1.5",
+            displayTitle:"Scenario 1.5: Why Is This Newborn Struggling?",
+            title:"Why Is This Newborn Struggling?",
+            description:"Differentiate major neonatal pulmonary disorders using gestational age, timing, history, examination, oxygenation, blood gases, imaging, and response to respiratory support.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-1-5-why-is-this-newborn-struggling.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 1"
+          },
+          {
+            id:"scenario-1.6",
+            displayTitle:"Scenario 1.6: Climbing the Support Ladder",
+            title:"Climbing the Support Ladder",
+            description:"Escalate and wean neonatal respiratory support from oxygen through CPAP, NIPPV, and invasive ventilation while separating oxygenation from ventilation problems.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-1-6-climbing-the-support-ladder.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 1"
+          },
+          {
+            id:"scenario-1.7",
+            displayTitle:"Scenario 1.7: When Conventional Support Is Not Enough",
+            title:"When Conventional Support Is Not Enough",
+            description:"Manage severe neonatal respiratory failure using high-frequency ventilation, oxygenation index, air-leak strategies, extubation readiness, transport safety, and chronic BPD care.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-1-7-when-conventional-support-is-not-enough.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 1"
+          },
+          {
+            id:"scenario-2.1",
+            displayTitle:"Scenario 2.1: Sick or Getting Sicker?",
+            title:"Sick or Getting Sicker?",
+            description:"Use pediatric first-look assessment, age-specific anatomy and physiology, monitoring trends, diagnostics, and clinical deterioration to distinguish respiratory distress from respiratory failure.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-2-1-sick-or-getting-sicker.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 2"
+          },
+          {
+            id:"scenario-2.2",
+            displayTitle:"Scenario 2.2: Choose the Right Respiratory Tool",
+            title:"Choose the Right Respiratory Tool",
+            description:"Choose oxygen, HFNC, aerosol delivery, airway clearance, cough augmentation, suction, heliox, or inhaled pulmonary vasodilators based on the pediatric patient’s physiologic problem.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-2-2-choose-the-right-respiratory-tool.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 2"
+          },
+          {
+            id:"scenario-2.3",
+            displayTitle:"Scenario 2.3: Protect the Airway",
+            title:"Protect the Airway",
+            description:"Progress from pediatric airway positioning and bag-mask ventilation through airway adjuncts, NIV, intubation, tube verification, and post-intubation troubleshooting.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-2-3-protect-the-airway.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 2"
+          },
+          {
+            id:"scenario-2.4",
+            displayTitle:"Scenario 2.4: The Ventilated Child",
+            title:"The Ventilated Child",
+            description:"Manage pediatric mechanical ventilation through mode selection, obstructive mechanics, PARDS lung protection, oxygenation index, rescue therapies, troubleshooting, and liberation readiness.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-2-4-the-ventilated-child.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 2"
+          },
+          {
+            id:"scenario-2.5",
+            displayTitle:"Scenario 2.5: Follow the Respiratory Clues",
+            title:"Follow the Respiratory Clues",
+            description:"Differentiate pediatric obstructive, infectious, chronic, aspiration-related, sleep-related, and hematologic pulmonary disease using clinical patterns and treatment response.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-2-5-follow-the-respiratory-clues.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 2"
+          },
+          {
+            id:"scenario-2.6",
+            displayTitle:"Scenario 2.6: More Than a Lung Problem",
+            title:"More Than a Lung Problem",
+            description:"Integrate congenital heart disease, shock, neurologic and neuromuscular respiratory failure, trauma, ECMO, perfusion, and transport into pediatric respiratory decision-making.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-2-6-more-than-a-lung-problem.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 2"
+          },
+          {
+            id:"scenario-2.7",
+            displayTitle:"Scenario 2.7: Beyond the Hospital",
+            title:"Beyond the Hospital",
+            description:"Plan safe transport, home oxygen and ventilation, tracheostomy emergencies, caregiver competency, discharge readiness, and goal-concordant end-of-life respiratory care.",
+            url:"/Neonatal_Pediatric/scenarios/np-scenario-2-7-beyond-the-hospital.html",
+            time:"Interactive Clinical Scenario",
+            level:"Unit 2"
+          }
+        ]
+      },
+
+      {
+        key:"physiology-activities",
+        label:"Respiratory Physiology Practice Activities",
+        folder:"physiology",
+        lessons:[
+          {
+            id:"2.1-acid-base-physiology",
+            displayTitle:"Activity 2.1: Acid-Base Physiology",
+            title:"Acid-Base Physiology",
+            description:"Practice applying acid-base physiology and interpretation through an interactive Respiratory Physiology activity.",
+            url:"/physiology/2-1-acid-base-physiology.html",
+            time:"Interactive Practice Activity",
+            level:"Unit 2"
+          },
+          {
+            id:"2.2-neural-control-vq-physiology",
+            displayTitle:"Activity 2.2: Neural Control & V/Q Physiology",
+            title:"Neural Control & V/Q Physiology",
+            description:"Practice neural control of breathing and ventilation-perfusion physiology through interactive application.",
+            url:"/physiology/2-2-neural-control-vq-physiology-practice.html",
+            time:"Interactive Practice Activity",
+            level:"Unit 2"
+          },
+          {
+            id:"2.3-physiologic-oxygenation",
+            displayTitle:"Activity 2.3: Physiologic Oxygenation",
+            title:"Physiologic Oxygenation",
+            description:"Practice oxygenation physiology, oxygen content and delivery, oxyhemoglobin affinity, hypoxemia mechanisms, and related calculations.",
+            url:"/physiology/2-3-physiologic-oxygenation-practice.html",
+            time:"Interactive Practice Activity",
+            level:"Unit 2"
+          },
+          {
+            id:"2.4-sleep-disordered-breathing",
+            displayTitle:"Activity 2.4: Sleep-Disordered Breathing",
+            title:"Sleep-Disordered Breathing",
+            description:"Practice applying sleep physiology and sleep-disordered breathing concepts through an interactive Respiratory Physiology activity.",
+            url:"/physiology/2-4-sleep-disordered-breathing-practice.html",
+            time:"Interactive Practice Activity",
+            level:"Unit 2"
+          }
+        ]
+      }
+
+    ];
+
+
+    function mergeSupplementalAssignmentCourses(catalogCourses) {
+
+      const merged =
+        Array.isArray(catalogCourses)
+          ? catalogCourses.map(
+              course => ({
+                ...course,
+                lessons:Array.isArray(course.lessons)
+                  ? [...course.lessons]
+                  : []
+              })
+            )
+          : [];
+
+
+      supplementalAssignmentCourses.forEach(
+        supplementalCourse => {
+
+          const existingCourse =
+            merged.find(
+              course =>
+                course.key ===
+                supplementalCourse.key
+            );
+
+
+          if (!existingCourse) {
+
+            merged.push({
+              ...supplementalCourse,
+              lessons:[...supplementalCourse.lessons]
+            });
+
+            return;
+
+          }
+
+
+          const existingLessonIds =
+            new Set(
+              (existingCourse.lessons || [])
+                .map(lesson => lesson.id)
+            );
+
+
+          supplementalCourse.lessons.forEach(
+            lesson => {
+
+              if (!existingLessonIds.has(lesson.id)) {
+                existingCourse.lessons.push(lesson);
+              }
+
+            }
+          );
+
+        }
+      );
+
+
+      return merged;
+
+    }
 
 
     /*
@@ -518,6 +780,8 @@
       "neonatal-pediatric":"Neonatal_Pediatric",
       "neonatal_pediatric":"Neonatal_Pediatric",
       "neonatalpediatric":"Neonatal_Pediatric",
+      "neonatal-pediatric-care":"Neonatal_Pediatric",
+      "neonatal_pediatric_care":"Neonatal_Pediatric",
 
       "foundations":"Foundations",
       "respiratory-foundations":"Foundations",
@@ -857,6 +1121,94 @@
         ) ||
         course?.lessons[0]
       );
+
+    }
+
+
+    /*
+      ============================================================
+      COMPETENCY GUIDE HEADER + CONTRAST NORMALIZATION
+      ============================================================
+
+      Keeps copied Canvas competency guides consistent even if an older
+      guide file is still cached on the site.
+    */
+
+    function normalizeCompetencyGuideContent(html, lesson) {
+
+      const parser =
+        new DOMParser();
+
+      const doc =
+        parser.parseFromString(
+          html,
+          "text/html"
+        );
+
+      const lessonNumber =
+        lessonNumberForGuide(lesson)
+          .replace("_", ".");
+
+      const header =
+        doc.querySelector("header");
+
+      if (header && lessonNumber) {
+
+        const candidates =
+          Array.from(
+            header.querySelectorAll("div")
+          );
+
+        const kicker =
+          candidates.find(
+            element =>
+              /Neonatal\s*&\s*Pediatric\s+Respiratory\s+Care/i.test(
+                element.textContent || ""
+              ) &&
+              /Lesson\s*\d+\.\d+/i.test(
+                element.textContent || ""
+              )
+          );
+
+        if (kicker) {
+          kicker.textContent =
+            `Neonatal & Pediatric Respiratory Care • Lesson ${lessonNumber} Competency Guide`;
+        }
+
+      }
+
+      /*
+        Lesson 1.1 timeline dates previously used a teal that was too light
+        against the pale card background. Darken only that text, preserving
+        the PulmoLearn accent elsewhere.
+      */
+
+      if (lessonNumber === "1.1") {
+
+        Array.from(
+          doc.querySelectorAll(".timeline .stage span")
+        ).forEach(
+          span => {
+
+            const style =
+              span.getAttribute("style") || "";
+
+            if (/color\s*:\s*#1CA7A8/i.test(style)) {
+              span.setAttribute(
+                "style",
+                style.replace(
+                  /color\s*:\s*#1CA7A8/ig,
+                  "color:#0F6B70"
+                )
+              );
+            }
+
+          }
+        );
+
+      }
+
+      return doc.body.innerHTML;
 
     }
 
@@ -1362,6 +1714,49 @@
 
 
       /*
+        Neonatal & Pediatric clinical scenarios.
+      */
+
+      if (
+        course?.key ===
+        "neonatal-pediatric-scenarios"
+      ) {
+
+        return `<div style="max-width: 900px; margin: 0 auto 24px auto; font-family: Arial, Helvetica, sans-serif; color: #0b1f33;">
+    <div style="background: #0B1F33; border-radius: 18px; padding: 28px 30px; color: #ffffff; margin-bottom: 18px;"><br />
+        <div style="font-size: 13px; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; color: #8fe0d5; margin-bottom: 8px;">PulmoLearn Clinical Scenario</div>
+        <h2 style="margin: 0 0 10px 0; font-size: 26px; line-height: 1.25; color: #ffffff;">${title}</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #e8f3f6;">${description}</p>
+    </div>
+
+    <div style="background: #F4FAFC; border: 1px solid #D7E6EF; border-left: 5px solid #1CA7A8; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;"><br />
+        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">Purpose of this scenario</h3>
+        <p style="margin: 0 0 10px 0; line-height: 1.6; color: #415a77;">This clinical scenario gives you an opportunity to apply the concepts from this week’s Neonatal &amp; Pediatric Respiratory Care lesson to changing patient findings and respiratory-care decisions.</p>
+        <p style="margin: 0; line-height: 1.6; color: #415a77;"><strong>Work through the scenario in order. Use the immediate feedback to correct your reasoning before moving to the next stage of care.</strong></p>
+    </div>
+
+    <div style="background: #DDF7F2; border: 1px solid #B9E5DC; border-radius: 14px; padding: 20px 22px; margin-bottom: 18px;"><br />
+        <h3 style="margin: 0 0 10px 0; color: #0b1f33; font-size: 18px;">How to complete it</h3>
+        <ol style="margin: 0; padding-left: 22px; color: #334e68; line-height: 1.7;">
+            <li>Select <strong>“Load ${title} in a new window”</strong> at the bottom of this page.</li>
+            <li>Complete each required clinical decision and interaction.</li>
+            <li>Use the feedback to revise incorrect decisions before continuing.</li>
+            <li>Your progress and selected answers are saved so you can leave and return if needed.</li>
+            <li>When finished, return to Canvas and check your completion status below.</li>
+        </ol>
+    </div>
+
+    <div style="background: #FFF7E8; border: 1px solid #F4B860; border-radius: 12px; padding: 18px 20px; text-align: center;"><br />
+        <p style="margin: 0 0 14px 0; color: #0b1f33; line-height: 1.55; font-size: 15px;"><strong>Finished the clinical scenario?</strong><br />Your completion is sent automatically to Canvas.</p>
+        <a href="" style="display: inline-block; background: #1CA7A8; color: #0B1F33; text-decoration: none; border-radius: 10px; padding: 12px 22px; font-weight: bold; font-size: 15px;" target="_self">✓ Check My Completion</a>
+        <p style="margin: 10px 0 0 0; color: #415a77; font-size: 13px; line-height: 1.45;">Use this button after finishing the scenario to refresh the assignment and display your updated submission status.</p>
+    </div>
+</div>`;
+
+      }
+
+
+      /*
         Respiratory Physiology practice activities.
       */
 
@@ -1690,9 +2085,16 @@
             caption + column headers + row headers + scopes.
           */
 
+          const normalizedGuideHtml =
+            normalizeCompetencyGuideContent(
+              guideHtml,
+              currentLesson()
+            );
+
+
           const accessibleGuideHtml =
             improveCanvasTableAccessibility(
-              guideHtml
+              normalizedGuideHtml
             );
 
 
@@ -1706,7 +2108,7 @@
 
 
           guideStatus.textContent =
-            "Competency guide copied with accessible table captions, column headers, row headers, and scope attributes.";
+            "Competency guide copied with the standardized Competency Guide header, accessible table captions/headers/scopes, and contrast fixes.";
 
 
           window.setTimeout(
@@ -1798,7 +2200,9 @@
         data => {
 
           courses =
-            data.courses || [];
+            mergeSupplementalAssignmentCourses(
+              data.courses || []
+            );
 
 
           fillCourses();
