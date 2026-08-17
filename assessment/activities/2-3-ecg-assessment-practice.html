@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pulmonary Assessment Activity 2.3 | ECG Assessment Practice</title>
+<style>
+:root{
+ --pl-navy:#0B1F33;--pl-navy2:#173A5E;--pl-teal:#1CA7A8;--pl-teal2:#128486;--pl-blue:#4BA3F2;
+ --pl-mist:#F4FAFC;--pl-mint:#DDF7F2;--pl-amber:#F4B860;--pl-coral:#E85D5D;--pl-border:#D7E6EF;
+ --pl-shadow:0 8px 20px rgba(11,31,51,.08);--pl-radius:22px;--muted:#647483;
+ --good:#eaf8f1;--goodb:#8bc9a6;--bad:#fff0ef;--badb:#e2a7a0;--warn:#fff8ea;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;width:100%;max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--pl-mist);color:var(--pl-navy);font-family:Arial,Helvetica,sans-serif;line-height:1.5;width:100%;max-width:100%;overflow-x:hidden}
+button,input,select{font:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--pl-amber);outline-offset:3px}
+.pl-top{position:sticky;top:0;z-index:1000;background:var(--pl-navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)}
+.pl-brand{display:flex;align-items:center;gap:14px}.pl-mark{width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;display:grid;place-items:center;background:rgba(28,167,168,.12);flex:none}.pl-mark svg{width:40px;height:40px}.pl-brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}.pl-brand-name span{color:var(--pl-teal)}.pl-tag{font-size:.8rem;opacity:.9;margin-top:4px}.pl-course{border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);padding:9px 14px;font-weight:700;white-space:nowrap}
+.wrap{max-width:1180px;margin:auto;padding:24px 18px 60px}
+.hero{background:#fff;border:1px solid var(--pl-border);border-top:10px solid var(--pl-teal);border-radius:var(--pl-radius);box-shadow:var(--pl-shadow);padding:32px}
+.hero h1{font-size:clamp(2.05rem,5vw,3.7rem);line-height:1.04;letter-spacing:-.045em;margin:.35rem 0 .7rem}.hero p{color:#243b55;max-width:1050px;font-size:1.08rem;margin:0}.eyebrow{color:var(--pl-teal);font-size:.83rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.progress-shell{position:sticky;top:90px;z-index:900;background:rgba(255,255,255,.97);border:1px solid var(--pl-border);border-radius:16px;box-shadow:var(--pl-shadow);padding:11px 15px;margin:18px 0 24px;display:flex;align-items:center;gap:12px}.progress{height:10px;background:#E5F0F6;border-radius:999px;overflow:hidden;flex:1}.progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pl-teal),var(--pl-blue));transition:width .3s}.progress-text{font-weight:800;white-space:nowrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}.tabs button{border:1px solid #bfd4db;background:#fff;border-radius:999px;padding:9px 14px;font-weight:800;color:var(--pl-navy);cursor:pointer}.tabs button.active{background:var(--pl-teal);color:#fff;border-color:var(--pl-teal)}
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--pl-border);border-radius:var(--pl-radius);box-shadow:var(--pl-shadow);padding:21px;margin-bottom:16px}.card h2,.card h3{margin-top:0}
+.goal{background:#eaf6f8;border-left:5px solid var(--pl-teal);padding:12px 14px;border-radius:10px;margin-bottom:18px}.tip{background:var(--pl-mint);border-left:5px solid var(--pl-teal);padding:12px 14px;border-radius:10px;margin:12px 0}.warn{background:var(--warn);border-left:5px solid var(--pl-amber);padding:12px 14px;border-radius:10px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.choice{display:flex;align-items:center;width:100%;min-height:68px;text-align:left;border:1px solid var(--pl-border);background:#fff;border-radius:12px;padding:11px 13px;margin:8px 0;cursor:pointer}.choice:hover{background:#f7fbfc}.choice.correct{background:var(--good);border-color:var(--goodb)}.choice.incorrect{background:var(--bad);border-color:var(--badb)}
+.feedback{margin-top:12px;min-height:48px;border-radius:12px;padding:11px 13px;background:#f7fafc;border:1px solid var(--pl-border)}.feedback.ok{background:var(--good);border-color:var(--goodb)}.feedback.bad{background:var(--bad);border-color:var(--badb)}
+.btn{border:0;border-radius:10px;padding:10px 15px;font-weight:800;cursor:pointer}.btn.primary{background:var(--pl-teal);color:#fff}.btn.primary:hover{background:var(--pl-teal2)}.btn.secondary{background:#e9eef2;color:var(--pl-navy)}
+.case{border:1px solid var(--pl-border);border-radius:15px;padding:16px;background:#fbfdfe;margin:12px 0}.case h3{margin-bottom:8px}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.token{border:1px solid #b8c7d1;background:#fff;border-radius:10px;padding:9px 11px;font-weight:800;color:var(--pl-navy);cursor:grab}.token.used{opacity:.42;text-decoration:line-through}.token:disabled{cursor:not-allowed}
+.dropgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.drop{min-height:135px;border:2px dashed #91a7b6;border-radius:12px;padding:11px;background:#fbfdfe}.drop h4{margin:0 0 4px}.drop.active{border-color:var(--pl-teal);background:#eef9f8}.placed{border-top:1px solid var(--pl-border);padding:7px 2px;font-size:.92rem}.placed.correct{background:var(--good)}
+.lead-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.lead-target{min-height:105px;border:2px dashed #91a7b6;border-radius:14px;padding:12px;background:#fbfdfe}.lead-target strong{display:block;margin-bottom:4px}.lead-target.active{border-color:var(--pl-teal);background:#eef9f8}
+.ecg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.ecg-fact{border:1px solid var(--pl-border);border-radius:14px;padding:14px;background:#fbfdfe;text-align:center}.ecg-fact strong{display:block;color:var(--pl-teal2);font-size:1.2rem}
+.analysis-chain{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.step{border:1px solid var(--pl-border);border-radius:12px;padding:12px;background:#fbfdfe;text-align:center;font-size:.92rem}.step b{display:block;color:var(--pl-teal2);margin-bottom:4px}
+.rhythm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.rhythm{border:1px solid var(--pl-border);border-radius:14px;padding:15px;background:#fbfdfe}
+.monitor{border-radius:16px;background:#071820;color:#b8ffb5;padding:18px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;box-shadow:inset 0 0 0 1px #24434b;margin:12px 0}.monitor .rate{font-size:2rem;font-weight:900}.monitor small{color:#b9d6d7}
+.complete{background:var(--good);border:1px solid var(--goodb);border-radius:12px;padding:12px}
+.pl-footer{background:var(--pl-navy);color:#fff;padding:32px clamp(18px,4vw,54px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:.92rem;margin-top:28px}.pl-footer strong span{color:var(--pl-teal)}.pl-save-note{opacity:.92}
+@media(max-width:950px){.grid2,.grid3,.dropgrid,.lead-grid,.rhythm-grid,.ecg-grid,.analysis-chain{grid-template-columns:1fr 1fr}.progress-shell{top:72px}.pl-tag,.pl-course{display:none}}
+@media(max-width:560px){.wrap{padding:12px 10px 40px}.hero{padding:20px}.grid2,.grid3,.dropgrid,.lead-grid,.rhythm-grid,.ecg-grid,.analysis-chain{grid-template-columns:1fr}.tabs{display:grid;grid-template-columns:1fr 1fr}.progress-shell{align-items:flex-start;flex-direction:column}.progress{width:100%}.progress-text{white-space:normal}}
+</style>
+</head>
+<body>
+<header class="pl-top">
+  <div class="pl-brand">
+    <div class="pl-mark" aria-hidden="true"><svg fill="none" role="img" viewBox="0 0 64 64"><path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path><path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path><path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-linecap="round" stroke-width="3"></path><circle cx="32" cy="31" fill="#1CA7A8" r="4"></circle></svg></div>
+    <div><div class="pl-brand-name">Pulmo<span>Learn</span></div><div class="pl-tag">Pulmonary assessment learning for future RTs.</div></div>
+  </div>
+  <div class="pl-course">Pulmonary Assessment · Activity 2.3</div>
+</header>
+
+<main class="wrap">
+<header class="hero">
+  <div class="eyebrow">Pulmonary Assessment · Activity 2.3</div>
+  <h1>ECG Detective: Acquire, Validate, Interpret & Correlate</h1>
+  <p>Choose the ECG system that answers the clinical question, build a reliable tracing, place the chest leads from landmarks, analyze rhythm features systematically, and decide when the monitor is showing a true emergency versus artifact or lead error.</p>
+</header>
+
+<div class="progress-shell"><div class="progress"><span id="progressBar"></span></div><div class="progress-text" id="progressText">0 of 7 sections complete</div></div>
+
+<nav class="tabs" aria-label="Activity sections">
+<button class="active" data-target="sec1">1. Choose the System</button>
+<button data-target="sec2">2. Build a Clean ECG</button>
+<button data-target="sec3">3. Place V1–V6</button>
+<button data-target="sec4">4. Read the Grid</button>
+<button data-target="sec5">5. Rhythm Detective</button>
+<button data-target="sec6">6. Artifact & Chest Pain</button>
+<button data-target="sec7">7. Final Challenge</button>
+</nav>
+
+<section id="sec1" class="panel active">
+<div class="card">
+<h2>Different ECG systems answer different questions</h2>
+<div class="goal"><strong>Competency focus:</strong> Select bedside monitoring, telemetry, or a diagnostic 12-lead according to symptoms, mobility, setting, and diagnostic need.</div>
+<div class="grid3">
+  <div class="case"><h3>Bedside monitor</h3><p>Continuous rhythm/rate and alarm surveillance for a patient in a fixed high-acuity location.</p></div>
+  <div class="case"><h3>Telemetry</h3><p>Continuous wireless rhythm surveillance for a stable patient who needs to ambulate.</p></div>
+  <div class="case"><h3>Diagnostic 12-lead</h3><p>A diagnostic snapshot from multiple electrical perspectives when ischemia, injury, conduction, or a new concerning rhythm must be evaluated.</p></div>
+</div>
+<div class="tip"><strong>Important:</strong> Sinus rhythm on telemetry does not rule out myocardial ischemia. Continuous rhythm surveillance and a diagnostic 12-lead are complementary, not interchangeable.</div>
+</div>
+<div class="card">
+<h3>Match the clinical question to the system</h3>
+<div id="systemCases"></div>
+<div id="systemFeedback" class="feedback">Complete all three cases.</div>
+</div>
+</section>
+
+<section id="sec2" class="panel">
+<div class="card">
+<h2>Build a technically trustworthy ECG</h2>
+<div class="goal"><strong>Competency focus:</strong> Prepare the patient and skin, secure electrodes and wires, and verify acquisition settings before interpreting.</div>
+<p>Sort each action into the stage where it belongs. Correct placements stay locked; incorrect placements return to the bank.</p>
+<div class="bank" id="prepBank"></div>
+<div class="dropgrid">
+ <div class="drop" data-prep="patient"><h4>Prepare the patient</h4><small>Identity, explanation, position, privacy, relaxation.</small></div>
+ <div class="drop" data-prep="skin"><h4>Prepare the signal path</h4><small>Skin contact, electrode condition, wire security.</small></div>
+ <div class="drop" data-prep="settings"><h4>Verify acquisition settings</h4><small>Paper speed, gain, and documented modifications.</small></div>
+</div>
+<div id="prepFeedback" class="feedback">Sort the acquisition actions.</div>
+<button class="btn primary" id="prepCheck">Check acquisition setup</button>
+</div>
+<div class="card">
+<div class="warn"><strong>Common trap:</strong> Increasing monitor gain does not fix sweat, tremor, loose electrodes, or poor contact. It can simply make the artifact larger.</div>
+</div>
+</section>
+
+<section id="sec3" class="panel">
+<div class="card">
+<h2>Place V1–V6 using landmarks—not estimation</h2>
+<div class="goal"><strong>Competency focus:</strong> Use reproducible anatomic landmarks. Recommended placement sequence for practice: <strong>V1 → V2 → V4 → V3 → V5 → V6</strong>.</div>
+<div class="tip">Locate the sternal angle, identify the second rib, and count intercostal spaces. The nipple line is not a reliable landmark.</div>
+<div class="bank" id="leadBank"></div>
+<div class="lead-grid">
+ <div class="lead-target" data-lead="v1"><strong>4th intercostal space</strong>Right sternal border</div>
+ <div class="lead-target" data-lead="v2"><strong>4th intercostal space</strong>Left sternal border</div>
+ <div class="lead-target" data-lead="v4"><strong>5th intercostal space</strong>Midclavicular line</div>
+ <div class="lead-target" data-lead="v3"><strong>Midway between</strong>V2 and V4</div>
+ <div class="lead-target" data-lead="v5"><strong>Same horizontal level as V4</strong>Anterior axillary line</div>
+ <div class="lead-target" data-lead="v6"><strong>Same horizontal level as V4</strong>Midaxillary line</div>
+</div>
+<div id="leadFeedback" class="feedback">Place all six precordial electrodes.</div>
+<button class="btn primary" id="leadCheck">Check lead placement</button>
+</div>
+</section>
+
+<section id="sec4" class="panel">
+<div class="card">
+<h2>Read the grid before naming the rhythm</h2>
+<div class="goal"><strong>Competency focus:</strong> Interpret standard timing and voltage, identify the electrical events represented by major waves and intervals, and apply the same analysis sequence every time.</div>
+<div class="ecg-grid">
+ <div class="ecg-fact"><span>Small horizontal box</span><strong>0.04 sec</strong><small>at 25 mm/sec</small></div>
+ <div class="ecg-fact"><span>Large horizontal box</span><strong>0.20 sec</strong><small>5 small boxes</small></div>
+ <div class="ecg-fact"><span>Standard speed</span><strong>25 mm/sec</strong><small>verify before measuring</small></div>
+ <div class="ecg-fact"><span>Standard gain</span><strong>10 mm/mV</strong><small>verify before voltage interpretation</small></div>
+</div>
+</div>
+<div class="card">
+<h3>What electrical event does each feature represent?</h3>
+<div id="waveCases"></div>
+<div id="waveFeedback" class="feedback">Complete all waveform checks.</div>
+</div>
+<div class="card">
+<h3>Use a fixed rhythm-analysis sequence</h3>
+<div class="analysis-chain">
+ <div class="step"><b>1</b>Patient & tracing quality</div>
+ <div class="step"><b>2</b>Regularity</div>
+ <div class="step"><b>3</b>Rate</div>
+ <div class="step"><b>4</b>P waves & P:QRS relationship</div>
+ <div class="step"><b>5</b>PR interval</div>
+ <div class="step"><b>6</b>QRS width, then ST-T</div>
+</div>
+<div class="tip"><strong>Electrical ≠ mechanical.</strong> A QRS represents ventricular depolarization, not proof of an effective pulse. Always correlate alarming rhythms with pulse and perfusion.</div>
+</div>
+</section>
+
+<section id="sec5" class="panel">
+<div class="card">
+<h2>Rhythm detective: describe the pattern before naming it</h2>
+<div class="goal"><strong>Competency focus:</strong> Recognize normal sinus rhythm and common arrhythmia patterns using objective features rather than visual memorization alone.</div>
+<div id="rhythmCases" class="rhythm-grid"></div>
+<div id="rhythmFeedback" class="feedback">Complete all rhythm cases.</div>
+</div>
+</section>
+
+<section id="sec6" class="panel">
+<div class="card">
+<h2>Treat the patient—not the monitor</h2>
+<div class="goal"><strong>Competency focus:</strong> Correlate the tracing with pulse, blood pressure, symptoms, mental status, and perfusion before deciding whether a rhythm is stable, unstable, pulseless, or artifactual.</div>
+<div class="monitor">
+ <div>MONITOR</div>
+ <div class="rate">190/min WIDE COMPLEX</div>
+ <small>Patient is alert and talking. Palpable radial pulse is strong and regular at 88/min. Hand tremor is visible during nebulizer treatment.</small>
+</div>
+<div id="artifactChoices"></div>
+<div id="artifactFeedback" class="feedback">What is the safest first response?</div>
+</div>
+
+<div class="card">
+<h3>Chest pain despite reassuring telemetry</h3>
+<div class="case"><strong>Patient:</strong> crushing substernal pressure, diaphoresis, nausea. Telemetry shows sinus rhythm at 84/min.</div>
+<div id="chestChoices"></div>
+<div id="chestFeedback" class="feedback">What important diagnostic question remains unanswered?</div>
+</div>
+
+<div class="card">
+<h3>Lead-reversal clue</h3>
+<div class="case">A new 12-lead shows a globally negative Lead I with unexpectedly positive aVR. The patient has no symptom change, pulse and blood pressure are unchanged, and the prior ECG did not have this pattern.</div>
+<div id="reversalChoices"></div>
+<div id="reversalFeedback" class="feedback">Choose the best next action.</div>
+</div>
+</section>
+
+<section id="sec7" class="panel">
+<div class="card">
+<h2>Final competency challenge</h2>
+<div class="goal"><strong>Use the sequence:</strong> clinical question → correct ECG system → accurate acquisition → structured interpretation → patient correlation → technical validation → communication or escalation.</div>
+<div id="finalCases"></div>
+<div id="finalFeedback" class="feedback">Complete all four final decisions.</div>
+</div>
+<div class="card">
+<div class="complete"><strong>ECG assessment rule:</strong> a dramatic tracing without patient correlation can cause harm, and a reassuring monitor strip cannot answer a diagnostic question it was never designed to answer.</div>
+</div>
+</section>
+</main>
+
+<footer class="pl-footer">
+<div><strong>Pulmo<span>Learn</span></strong><br>Pulmonary Assessment · Activity 2.3</div>
+<div class="pl-save-note">Validate the tracing, correlate it with the patient, then communicate or escalate.</div>
+</footer>
+
+<script>
+const TOTAL=7, complete=new Set();
+const panels=[...document.querySelectorAll('.panel')],tabs=[...document.querySelectorAll('.tabs button')];
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function show(id){panels.forEach(p=>p.classList.toggle('active',p.id===id));tabs.forEach(b=>b.classList.toggle('active',b.dataset.target===id));window.scrollTo({top:0,behavior:'smooth'})}
+tabs.forEach(b=>b.addEventListener('click',()=>show(b.dataset.target)));
+function finish(n){complete.add(n);document.getElementById('progressBar').style.width=(complete.size/TOTAL*100)+'%';document.getElementById('progressText').textContent=`${complete.size} of ${TOTAL} sections complete`;try{localStorage.setItem('PA_2_3_complete',JSON.stringify([...complete]))}catch(e){}}
+function renderChoiceSet(containerId,feedbackId,opts,onCorrect){
+ const box=document.getElementById(containerId);
+ shuffle(opts).forEach(([text,ok,good,bad])=>{
+  const b=document.createElement('button');b.type='button';b.className='choice';b.textContent=text;
+  b.addEventListener('click',()=>{
+   box.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','incorrect'));
+   b.classList.add(ok?'correct':'incorrect');
+   const f=document.getElementById(feedbackId);f.className='feedback '+(ok?'ok':'bad');
+   f.innerHTML=ok?`<strong>Correct.</strong> ${good||''}`:`<strong>Not quite.</strong> ${bad||'Recheck the clinical question, tracing quality, and patient findings.'}`;
+   if(ok&&onCorrect)onCorrect();
+  });box.appendChild(b)
+ })
+}
+function setupSort(items,bankId,selector,dataKey,map){
+ const bank=document.getElementById(bankId);let selected=null;
+ shuffle(items).forEach(it=>{
+  const b=document.createElement('button');b.type='button';b.className='token';b.draggable=true;b.dataset.id=it.id;b.textContent=it.t;
+  b.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',it.id));
+  b.addEventListener('click',()=>{selected=it.id;bank.querySelectorAll('.token').forEach(x=>x.style.outline='');b.style.outline='3px solid #1CA7A8'});
+  bank.appendChild(b)
+ });
+ document.querySelectorAll(selector).forEach(d=>{
+  d.addEventListener('dragover',e=>{e.preventDefault();d.classList.add('active')});
+  d.addEventListener('dragleave',()=>d.classList.remove('active'));
+  d.addEventListener('drop',e=>{e.preventDefault();d.classList.remove('active');place(e.dataTransfer.getData('text/plain'),d)});
+  d.addEventListener('click',()=>{if(selected)place(selected,d)});
+  function place(id,target){
+   const it=items.find(x=>x.id===id);if(!it)return;
+   document.querySelectorAll(selector).forEach(x=>{const old=x.querySelector(`[data-place="${id}"]`);if(old)old.remove()});
+   map[id]=target.dataset[dataKey];
+   const row=document.createElement('div');row.className='placed';row.dataset.place=id;row.textContent=it.t;target.appendChild(row);
+   const chip=bank.querySelector(`[data-id="${id}"]`);if(chip)chip.classList.add('used');
+   selected=null;bank.querySelectorAll('.token').forEach(x=>x.style.outline='')
+  }
+ });
+ return bank;
+}
+function checkSort(items,map,bank,selector,feedbackId,onComplete){
+ let right=0,returned=0;
+ items.forEach(it=>{
+  const chip=bank.querySelector(`[data-id="${it.id}"]`);
+  const row=[...document.querySelectorAll(selector)].map(d=>d.querySelector(`[data-place="${it.id}"]`)).find(Boolean);
+  if(map[it.id]===it.a){right++;if(chip){chip.disabled=true;chip.classList.add('used')}if(row)row.classList.add('correct')}
+  else if(map[it.id]){returned++;delete map[it.id];if(row)row.remove();if(chip){chip.disabled=false;chip.classList.remove('used')}}
+ });
+ const f=document.getElementById(feedbackId);
+ if(right===items.length){f.className='feedback ok';f.innerHTML='<strong>Complete.</strong> Everything is correctly placed.';onComplete&&onComplete()}
+ else{f.className='feedback bad';f.innerHTML=`<strong>${right} of ${items.length} correct and locked.</strong> ${returned?returned+' incorrect item(s) returned for another attempt.':''}`}
+}
+
+// 1 system selection
+const systemCases=[
+ {q:'A stable patient on a step-down unit needs continuous rhythm surveillance while walking in the hallway.',opts:[['Cardiac telemetry',1],['Diagnostic 12-lead ECG',0],['One-time bedside rhythm strip only',0]]},
+ {q:'A patient reports crushing substernal pressure, diaphoresis, and nausea. Telemetry shows sinus rhythm.',opts:[['Diagnostic 12-lead ECG while continuing monitoring and patient assessment',1],['Continue telemetry only because the rhythm is sinus',0],['Wait for troponin before acquiring an ECG',0]]},
+ {q:'An intubated ICU patient requires continuous rhythm, rate, alarms, and multi-parameter surveillance at the bedside.',opts:[['Bedside cardiac monitor',1],['Ambulatory telemetry only',0],['Single diagnostic 12-lead as the only monitoring method',0]]}
+];
+systemCases.forEach((c,i)=>{
+ const box=document.createElement('div');box.className='case';box.innerHTML=`<h3>Case ${i+1}</h3><p>${c.q}</p>`;
+ shuffle(c.opts).forEach(([t,ok])=>{const b=document.createElement('button');b.className='choice';b.textContent=t;b.addEventListener('click',()=>{box.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','incorrect'));b.classList.add(ok?'correct':'incorrect');box.dataset.ok=ok?'1':'0';const n=[...document.querySelectorAll('#systemCases .case')].filter(x=>x.dataset.ok==='1').length;const f=document.getElementById('systemFeedback');f.textContent=`${n} of 3 cases correct.`;if(n===3){f.className='feedback ok';f.innerHTML='<strong>Complete.</strong> You matched the ECG system to the clinical question.';finish(1);setTimeout(()=>show('sec2'),600)}});box.appendChild(b)});
+ document.getElementById('systemCases').appendChild(box)
+});
+
+// 2 acquisition sort
+const prep=[
+{id:'p1',t:'Confirm patient identity and explain that the ECG records electrical activity',a:'patient'},
+{id:'p2',t:'Position the torso comfortably and encourage relaxed muscles',a:'patient'},
+{id:'p3',t:'Dry diaphoresis and remove oil or lotion',a:'skin'},
+{id:'p4',t:'Replace dry electrodes and secure loose lead wires',a:'skin'},
+{id:'p5',t:'Clip excessive hair when needed for electrode contact',a:'skin'},
+{id:'p6',t:'Confirm 25 mm/sec when standard diagnostic speed is intended',a:'settings'},
+{id:'p7',t:'Confirm 10 mm/mV when standard diagnostic gain is intended',a:'settings'},
+{id:'p8',t:'Label/document any intentionally nonstandard speed or gain',a:'settings'}
+],pm={};
+const pbank=setupSort(prep,'prepBank','.drop[data-prep]','prep',pm);
+document.getElementById('prepCheck').addEventListener('click',()=>checkSort(prep,pm,pbank,'.drop[data-prep]','prepFeedback',()=>{finish(2);setTimeout(()=>show('sec3'),650)}));
+
+// 3 lead placement
+const leads=[
+{id:'l1',t:'V1',a:'v1'},{id:'l2',t:'V2',a:'v2'},{id:'l3',t:'V3',a:'v3'},
+{id:'l4',t:'V4',a:'v4'},{id:'l5',t:'V5',a:'v5'},{id:'l6',t:'V6',a:'v6'}
+],lm={};
+const lbank=setupSort(leads,'leadBank','.lead-target[data-lead]','lead',lm);
+document.getElementById('leadCheck').addEventListener('click',()=>checkSort(leads,lm,lbank,'.lead-target[data-lead]','leadFeedback',()=>{finish(3);setTimeout(()=>show('sec4'),650)}));
+
+// 4 wave checks
+const waves=[
+ {q:'One small horizontal box at 25 mm/sec equals:',opts:[['0.04 second',1],['0.20 second',0],['0.10 second',0]]},
+ {q:'The P wave represents:',opts:[['Atrial depolarization',1],['Ventricular depolarization',0],['Ventricular repolarization',0]]},
+ {q:'The QRS complex represents:',opts:[['Ventricular depolarization',1],['Mechanical ventricular contraction itself',0],['Atrial repolarization as the primary visible event',0]]},
+ {q:'The T wave represents:',opts:[['Ventricular repolarization',1],['Atrial depolarization',0],['AV nodal conduction time',0]]}
+];
+waves.forEach((c,i)=>{
+ const box=document.createElement('div');box.className='case';box.innerHTML=`<h3>${c.q}</h3>`;
+ shuffle(c.opts).forEach(([t,ok])=>{const b=document.createElement('button');b.className='choice';b.textContent=t;b.addEventListener('click',()=>{box.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','incorrect'));b.classList.add(ok?'correct':'incorrect');box.dataset.ok=ok?'1':'0';const n=[...document.querySelectorAll('#waveCases .case')].filter(x=>x.dataset.ok==='1').length;const f=document.getElementById('waveFeedback');f.textContent=`${n} of 4 checks correct.`;if(n===4){f.className='feedback ok';f.innerHTML='<strong>Complete.</strong> You identified the grid timing and major electrical events.';finish(4);setTimeout(()=>show('sec5'),650)}});box.appendChild(b)});
+ document.getElementById('waveCases').appendChild(box)
+});
+
+// 5 rhythm recognition
+const rhythms=[
+ {title:'Pattern A',desc:'Regular rhythm, rate 78/min, one consistent P before every QRS, stable PR interval, narrow QRS.',opts:[['Normal sinus rhythm',1],['Atrial fibrillation',0],['Ventricular fibrillation',0]]},
+ {title:'Pattern B',desc:'Irregularly irregular ventricular rhythm with no consistent organized P waves.',opts:[['Atrial fibrillation',1],['Normal sinus rhythm',0],['Ventricular tachycardia',0]]},
+ {title:'Pattern C',desc:'Rapid organized wide-complex rhythm with identifiable repeating QRS complexes.',opts:[['Ventricular tachycardia',1],['Ventricular fibrillation',0],['Atrial fibrillation',0]]},
+ {title:'Pattern D',desc:'Chaotic electrical activity without identifiable organized QRS complexes.',opts:[['Ventricular fibrillation',1],['Ventricular tachycardia',0],['Sinus tachycardia',0]]}
+];
+rhythms.forEach((c,i)=>{
+ const box=document.createElement('div');box.className='rhythm';box.innerHTML=`<h3>${c.title}</h3><p>${c.desc}</p>`;
+ shuffle(c.opts).forEach(([t,ok])=>{const b=document.createElement('button');b.className='choice';b.textContent=t;b.addEventListener('click',()=>{box.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','incorrect'));b.classList.add(ok?'correct':'incorrect');box.dataset.ok=ok?'1':'0';const n=[...document.querySelectorAll('#rhythmCases .rhythm')].filter(x=>x.dataset.ok==='1').length;const f=document.getElementById('rhythmFeedback');f.textContent=`${n} of 4 rhythm patterns correct.`;if(n===4){f.className='feedback ok';f.innerHTML='<strong>Complete.</strong> You used objective rhythm features rather than appearance alone.';finish(5);setTimeout(()=>show('sec6'),650)}});box.appendChild(b)});
+ document.getElementById('rhythmCases').appendChild(box)
+});
+
+// 6 artifact, chest pain, reversal
+let sec6hits=new Set();
+function hit6(k){sec6hits.add(k);if(sec6hits.size===3){finish(6);setTimeout(()=>show('sec7'),700)}}
+renderChoiceSet('artifactChoices','artifactFeedback',[
+ ['Assess the patient and pulse, correct tremor/electrode artifact, and reacquire the tracing before diagnosing ventricular tachycardia.',1,'The monitor rate and palpable pulse do not match, and the visible tremor provides a plausible artifact source.','A frightening monitor pattern must be correlated with the patient before emergency treatment.'],
+ ['Defibrillate immediately because any wide-complex monitor rate near 190/min should be presumed to be ventricular tachycardia.',0,'','The patient is alert with a strong regular pulse at 88/min, making artifact a critical possibility.'],
+ ['Ignore the monitor because the patient appears comfortable and no intervention is required.',0,'','Artifact should be corrected and reliable data reacquired; it should not simply be ignored.']
+],()=>hit6('a'));
+renderChoiceSet('chestChoices','chestFeedback',[
+ ['Obtain a diagnostic 12-lead promptly, continue monitoring, assess hemodynamics/perfusion, and communicate suspected acute coronary syndrome.',1,'Telemetry is rhythm surveillance and cannot exclude ischemia or injury in other electrical territories.','Sinus rhythm does not answer the ischemia question.'],
+ ['Continue telemetry and repeat vital signs while waiting for a rhythm or biomarker change, because a sinus rhythm makes immediate diagnostic 12-lead acquisition less urgent.',0,'','Acute coronary syndrome can occur without a telemetry rhythm alarm.'],
+ ['Wait for troponin before obtaining the 12-lead so the diagnostic ECG is only performed if myocardial injury is confirmed.',0,'','Biomarkers and diagnostic ECG acquisition occur in parallel; the ECG should not be delayed.']
+],()=>hit6('c'));
+renderChoiceSet('reversalChoices','reversalFeedback',[
+ ['Verify right-arm and left-arm limb-electrode placement, correct any reversal, and reacquire the ECG before interpretation or reporting.',1,'Negative Lead I with positive aVR and no clinical change is a classic technical clue to RA/LA reversal.','The tracing must be validated before assigning a new cardiac diagnosis.'],
+ ['Diagnose acute infarction because a new global polarity change should be interpreted as ischemic injury until proven otherwise.',0,'','A technical polarity pattern without clinical change should trigger lead verification first.'],
+ ['Average the tracing with the previous ECG because combining both studies reduces the effect of any single lead-placement error.',0,'','Invalid data cannot be repaired by averaging it with valid data.']
+],()=>hit6('r'));
+
+// 7 final
+const finals=[
+ {q:'During a nebulizer treatment, the monitor displays a wide-complex rate of 190/min. The patient is alert; palpable pulse is regular at 88/min; the hands are trembling. Best next action?',opts:[['Correlate with the patient, correct motion/electrode artifact, and reacquire before labeling VT.',1],['Treat as VT immediately because monitor morphology takes priority over the pulse.',0],['Dismiss the monitor alarm without correcting or reacquiring because the patient is alert.',0]]},
+ {q:'A patient has crushing substernal pain, diaphoresis, and nausea. Telemetry remains sinus at 84/min. Best next action?',opts:[['Obtain a diagnostic 12-lead promptly while continuing assessment, monitoring, and ACS communication.',1],['Wait for telemetry to show ST changes before acquiring a diagnostic ECG.',0],['Wait for troponin results before deciding whether a 12-lead is necessary.',0]]},
+ {q:'A new ECG has globally negative Lead I and unexpectedly positive aVR with no symptom or hemodynamic change. Best next action?',opts:[['Check for RA/LA lead reversal, correct placement, and reacquire before interpretation.',1],['Report a new infarction pattern because the polarity changed from baseline.',0],['Use the automated interpretation because the tracing is visually clean.',0]]},
+ {q:'A clean rhythm strip has organized QRS complexes, but the patient is unresponsive and no pulse is palpable. What principle matters most?',opts:[['Electrical activity does not prove effective mechanical circulation; activate the emergency response based on the patient.',1],['Organized QRS complexes confirm a pulse even when one cannot be palpated.',0],['Repeat electrode placement before assessing perfusion because technical quality takes priority over patient status.',0]]}
+];
+finals.forEach((c,i)=>{
+ const box=document.createElement('div');box.className='case';box.innerHTML=`<h3>Case ${i+1}</h3><p>${c.q}</p>`;
+ shuffle(c.opts).forEach(([t,ok])=>{const b=document.createElement('button');b.className='choice';b.textContent=t;b.addEventListener('click',()=>{box.querySelectorAll('.choice').forEach(x=>x.classList.remove('correct','incorrect'));b.classList.add(ok?'correct':'incorrect');box.dataset.ok=ok?'1':'0';const n=[...document.querySelectorAll('#finalCases .case')].filter(x=>x.dataset.ok==='1').length;const f=document.getElementById('finalFeedback');f.textContent=`${n} of 4 final cases correct.`;if(n===4){f.className='feedback ok';f.innerHTML='<strong>Activity complete.</strong> You selected the right ECG tool, validated technical quality, correlated the tracing with the patient, and chose the safe next action.';finish(7)}});box.appendChild(b)});
+ document.getElementById('finalCases').appendChild(box)
+});
+
+try{
+ const saved=JSON.parse(localStorage.getItem('PA_2_3_complete')||'[]');
+ saved.forEach(n=>complete.add(n));
+ document.getElementById('progressBar').style.width=(complete.size/TOTAL*100)+'%';
+ document.getElementById('progressText').textContent=`${complete.size} of ${TOTAL} sections complete`;
+}catch(e){}
+</script>
+
+<script id="pulmolearn-answer-progress-persistence-v3">
+(function(){
+  const KEY = "PL_PA_ANSWERS_V3_2-3-ecg-assessment-practice";
+
+  function safeRead(){
+    try { return JSON.parse(localStorage.getItem(KEY) || "{}"); }
+    catch(e){ return {}; }
+  }
+  function safeWrite(v){
+    try { localStorage.setItem(KEY, JSON.stringify(v)); } catch(e){}
+  }
+  function norm(s){ return String(s || "").replace(/\s+/g," ").trim(); }
+
+  function sectionKey(el){
+    const p = el.closest(".panel,.activity-step,section");
+    if(!p) return "";
+    if(p.id) return "id:"+p.id;
+    if(p.dataset && p.dataset.section !== undefined) return "section:"+p.dataset.section;
+    return "";
+  }
+
+  function allTargets(){
+    return [...document.querySelectorAll(".drop,.lead-target")];
+  }
+
+  function capture(){
+    const s = safeRead();
+
+    s.inputs = [];
+    document.querySelectorAll("input,select,textarea").forEach((el,i)=>{
+      if(el.type==="file" || el.type==="button" || el.type==="submit" || el.type==="reset") return;
+      s.inputs.push({
+        id: el.id || "",
+        name: el.name || "",
+        type: el.type || el.tagName.toLowerCase(),
+        value: el.value,
+        checked: !!el.checked,
+        index: i
+      });
+    });
+
+    s.choices = [...document.querySelectorAll(".choice.correct,.choice.incorrect,.choice-row button.correct,.choice-row button.incorrect")]
+      .map(b=>({
+        section: sectionKey(b),
+        text: norm(b.textContent),
+        result: b.classList.contains("correct") ? "correct" : "incorrect"
+      }));
+
+    s.caseStates = [...document.querySelectorAll(".case[data-ok],.rhythm[data-ok]")]
+      .map((el,i)=>({section:sectionKey(el),index:i,ok:el.dataset.ok||""}));
+
+    const targets = allTargets();
+    s.placements = [];
+    targets.forEach((target,ti)=>{
+      [...target.querySelectorAll("[data-place]")].forEach(row=>{
+        if(row.closest(".drop,.lead-target") !== target) return;
+        s.placements.push({
+          targetIndex: ti,
+          itemId: row.dataset.place || "",
+          text: norm(row.textContent)
+        });
+      });
+    });
+
+    const activePanel = document.querySelector(".panel.active");
+    if(activePanel && activePanel.id) s.activePanel = activePanel.id;
+
+    try {
+      if(typeof complete !== "undefined" && complete && typeof complete.forEach === "function"){
+        s.completeSet = [...complete];
+      }
+    } catch(e){}
+    try {
+      if(typeof done !== "undefined" && done && typeof done.forEach === "function"){
+        s.doneSet = [...done];
+      }
+    } catch(e){}
+
+    safeWrite(s);
+  }
+
+  function restoreInputs(s){
+    (s.inputs||[]).forEach(rec=>{
+      let el = null;
+      if(rec.id) el = document.getElementById(rec.id);
+      if(!el && rec.name){
+        const candidates = [...document.querySelectorAll("[name]")].filter(x=>x.name===rec.name);
+        if(rec.type==="radio" || rec.type==="checkbox"){
+          el = candidates.find(x=>x.value===rec.value) || candidates[0];
+        } else el = candidates[0];
+      }
+      if(!el) return;
+      if(rec.type==="radio" || rec.type==="checkbox") el.checked = !!rec.checked;
+      else el.value = rec.value;
+    });
+  }
+
+  function restorePlacements(s){
+    const targets = allTargets();
+    (s.placements||[]).forEach(rec=>{
+      const target = targets[rec.targetIndex];
+      if(!target || !rec.itemId) return;
+      let token = [...document.querySelectorAll("[data-id]")].find(x=>x.dataset.id===rec.itemId && !x.closest(".placed"));
+      if(!token) return;
+      try {
+        token.click();
+        target.click();
+      } catch(e){}
+    });
+  }
+
+  function restoreChoiceStates(s){
+    (s.choices||[]).forEach(rec=>{
+      let pool = [...document.querySelectorAll(".choice,.choice-row button")];
+      if(rec.section){
+        const section = rec.section.startsWith("id:")
+          ? document.getElementById(rec.section.slice(3))
+          : document.querySelector(`[data-section="${rec.section.slice(8)}"]`);
+        if(section) pool = [...section.querySelectorAll(".choice,.choice-row button")];
+      }
+      const b = pool.find(x=>norm(x.textContent)===rec.text);
+      if(!b) return;
+      b.classList.remove("correct","incorrect");
+      b.classList.add(rec.result);
+      const parent = b.closest(".case,.rhythm");
+      if(parent) parent.dataset.ok = rec.result==="correct" ? "1" : "0";
+    });
+
+    (s.caseStates||[]).forEach(rec=>{
+      const candidates = [...document.querySelectorAll(".case,.rhythm")];
+      const el = candidates[rec.index];
+      if(el) el.dataset.ok = rec.ok;
+    });
+  }
+
+  function restoreProgressSets(s){
+    try {
+      if(typeof complete !== "undefined" && complete && s.completeSet){
+        s.completeSet.forEach(x=>complete.add(x));
+      }
+    } catch(e){}
+    try {
+      if(typeof done !== "undefined" && done && s.doneSet){
+        s.doneSet.forEach(x=>done.add(x));
+      }
+    } catch(e){}
+    try { if(typeof updateProgress === "function") updateProgress(); } catch(e){}
+    try { if(typeof update === "function") update(); } catch(e){}
+  }
+
+  function restoreActivePanel(s){
+    if(!s.activePanel) return;
+    const p = document.getElementById(s.activePanel);
+    if(!p) return;
+    document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x===p));
+    document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.target===s.activePanel));
+  }
+
+  function restore(){
+    const s = safeRead();
+    restoreInputs(s);
+    restorePlacements(s);
+    restoreChoiceStates(s);
+    restoreProgressSets(s);
+    restoreActivePanel(s);
+  }
+
+  document.addEventListener("input", e=>{
+    if(e.target.matches("input,select,textarea")) setTimeout(capture,20);
+  }, true);
+  document.addEventListener("change", e=>{
+    if(e.target.matches("input,select,textarea")) setTimeout(capture,20);
+  }, true);
+  document.addEventListener("click", ()=>{
+    setTimeout(capture,100);
+  }, true);
+
+  const mo = new MutationObserver(()=>{
+    clearTimeout(window.__plPersistTimer);
+    window.__plPersistTimer = setTimeout(capture,160);
+  });
+
+  setTimeout(()=>{
+    restore();
+    try {
+      mo.observe(document.body,{
+        subtree:true, childList:true, attributes:true,
+        attributeFilter:["class","data-place","data-ok","data-placed","data-item"]
+      });
+    } catch(e){}
+  },180);
+
+  window.addEventListener("beforeunload",capture);
+})();
+</script>
+
+</body>
+</html>

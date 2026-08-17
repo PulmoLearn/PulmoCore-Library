@@ -66,28 +66,7 @@ button{font:inherit}
 .step-item.locked-correct{background:var(--good);border-color:var(--goodb)}
 .step-item.locked-correct .step-num{background:#2f6f53}
 
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 
 <style id="pulmolearn-assessment-brand">
 :root{
@@ -560,74 +539,201 @@ finals.forEach((c,idx)=>{const box=document.createElement('div');box.className='
 </footer>
 
 
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
+<script id="pulmolearn-answer-progress-persistence-v3">
+(function(){
+  const KEY = "PL_PA_ANSWERS_V3_1-4-techniques-for-proper-breathing-practice";
 
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
+  function safeRead(){
+    try { return JSON.parse(localStorage.getItem(KEY) || "{}"); }
+    catch(e){ return {}; }
+  }
+  function safeWrite(v){
+    try { localStorage.setItem(KEY, JSON.stringify(v)); } catch(e){}
+  }
+  function norm(s){ return String(s || "").replace(/\s+/g," ").trim(); }
 
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
+  function sectionKey(el){
+    const p = el.closest(".panel,.activity-step,section");
+    if(!p) return "";
+    if(p.id) return "id:"+p.id;
+    if(p.dataset && p.dataset.section !== undefined) return "section:"+p.dataset.section;
+    return "";
+  }
 
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
+  function allTargets(){
+    return [...document.querySelectorAll(".drop,.lead-target")];
+  }
 
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
+  function capture(){
+    const s = safeRead();
+
+    s.inputs = [];
+    document.querySelectorAll("input,select,textarea").forEach((el,i)=>{
+      if(el.type==="file" || el.type==="button" || el.type==="submit" || el.type==="reset") return;
+      s.inputs.push({
+        id: el.id || "",
+        name: el.name || "",
+        type: el.type || el.tagName.toLowerCase(),
+        value: el.value,
+        checked: !!el.checked,
+        index: i
       });
-    }
+    });
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
+    s.choices = [...document.querySelectorAll(".choice.correct,.choice.incorrect,.choice-row button.correct,.choice-row button.incorrect")]
+      .map(b=>({
+        section: sectionKey(b),
+        text: norm(b.textContent),
+        result: b.classList.contains("correct") ? "correct" : "incorrect"
+      }));
+
+    s.caseStates = [...document.querySelectorAll(".case[data-ok],.rhythm[data-ok]")]
+      .map((el,i)=>({section:sectionKey(el),index:i,ok:el.dataset.ok||""}));
+
+    const targets = allTargets();
+    s.placements = [];
+    targets.forEach((target,ti)=>{
+      [...target.querySelectorAll("[data-place]")].forEach(row=>{
+        if(row.closest(".drop,.lead-target") !== target) return;
+        s.placements.push({
+          targetIndex: ti,
+          itemId: row.dataset.place || "",
+          text: norm(row.textContent)
+        });
+      });
+    });
+
+    const activePanel = document.querySelector(".panel.active");
+    if(activePanel && activePanel.id) s.activePanel = activePanel.id;
+
+    try {
+      if(typeof complete !== "undefined" && complete && typeof complete.forEach === "function"){
+        s.completeSet = [...complete];
+      }
+    } catch(e){}
+    try {
+      if(typeof done !== "undefined" && done && typeof done.forEach === "function"){
+        s.doneSet = [...done];
+      }
+    } catch(e){}
+
+    safeWrite(s);
+  }
+
+  function restoreInputs(s){
+    (s.inputs||[]).forEach(rec=>{
+      let el = null;
+      if(rec.id) el = document.getElementById(rec.id);
+      if(!el && rec.name){
+        const candidates = [...document.querySelectorAll("[name]")].filter(x=>x.name===rec.name);
+        if(rec.type==="radio" || rec.type==="checkbox"){
+          el = candidates.find(x=>x.value===rec.value) || candidates[0];
+        } else el = candidates[0];
+      }
+      if(!el) return;
+      if(rec.type==="radio" || rec.type==="checkbox") el.checked = !!rec.checked;
+      else el.value = rec.value;
+    });
+  }
+
+  function restorePlacements(s){
+    const targets = allTargets();
+    (s.placements||[]).forEach(rec=>{
+      const target = targets[rec.targetIndex];
+      if(!target || !rec.itemId) return;
+      let token = [...document.querySelectorAll("[data-id]")].find(x=>x.dataset.id===rec.itemId && !x.closest(".placed"));
+      if(!token) return;
+      try {
+        token.click();
+        target.click();
+      } catch(e){}
+    });
+  }
+
+  function restoreChoiceStates(s){
+    (s.choices||[]).forEach(rec=>{
+      let pool = [...document.querySelectorAll(".choice,.choice-row button")];
+      if(rec.section){
+        const section = rec.section.startsWith("id:")
+          ? document.getElementById(rec.section.slice(3))
+          : document.querySelector(`[data-section="${rec.section.slice(8)}"]`);
+        if(section) pool = [...section.querySelectorAll(".choice,.choice-row button")];
+      }
+      const b = pool.find(x=>norm(x.textContent)===rec.text);
+      if(!b) return;
+      b.classList.remove("correct","incorrect");
+      b.classList.add(rec.result);
+      const parent = b.closest(".case,.rhythm");
+      if(parent) parent.dataset.ok = rec.result==="correct" ? "1" : "0";
+    });
+
+    (s.caseStates||[]).forEach(rec=>{
+      const candidates = [...document.querySelectorAll(".case,.rhythm")];
+      const el = candidates[rec.index];
+      if(el) el.dataset.ok = rec.ok;
+    });
+  }
+
+  function restoreProgressSets(s){
+    try {
+      if(typeof complete !== "undefined" && complete && s.completeSet){
+        s.completeSet.forEach(x=>complete.add(x));
+      }
+    } catch(e){}
+    try {
+      if(typeof done !== "undefined" && done && s.doneSet){
+        s.doneSet.forEach(x=>done.add(x));
+      }
+    } catch(e){}
+    try { if(typeof updateProgress === "function") updateProgress(); } catch(e){}
+    try { if(typeof update === "function") update(); } catch(e){}
+  }
+
+  function restoreActivePanel(s){
+    if(!s.activePanel) return;
+    const p = document.getElementById(s.activePanel);
+    if(!p) return;
+    document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x===p));
+    document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.target===s.activePanel));
+  }
+
+  function restore(){
+    const s = safeRead();
+    restoreInputs(s);
+    restorePlacements(s);
+    restoreChoiceStates(s);
+    restoreProgressSets(s);
+    restoreActivePanel(s);
+  }
+
+  document.addEventListener("input", e=>{
+    if(e.target.matches("input,select,textarea")) setTimeout(capture,20);
+  }, true);
+  document.addEventListener("change", e=>{
+    if(e.target.matches("input,select,textarea")) setTimeout(capture,20);
+  }, true);
+  document.addEventListener("click", ()=>{
+    setTimeout(capture,100);
+  }, true);
+
+  const mo = new MutationObserver(()=>{
+    clearTimeout(window.__plPersistTimer);
+    window.__plPersistTimer = setTimeout(capture,160);
+  });
+
+  setTimeout(()=>{
+    restore();
+    try {
+      mo.observe(document.body,{
+        subtree:true, childList:true, attributes:true,
+        attributeFilter:["class","data-place","data-ok","data-placed","data-item"]
+      });
+    } catch(e){}
+  },180);
+
+  window.addEventListener("beforeunload",capture);
+})();
+</script>
 
 </body>
 </html>
