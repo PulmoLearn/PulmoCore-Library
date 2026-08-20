@@ -1,7 +1,7 @@
 (() => {
   "use strict";
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-  const STORAGE_KEY="pulmolearn.oxygenTanks.v2";
+  const STORAGE_KEY="pulmolearn.oxygenTanks.v3";
   const labels=["Teach","Prepare","Move & Secure","Connect","Check & Calculate","Deliver Gas","Shutdown","Complete"];
   const state={section:0,unlockedThrough:0,scenarioIndex:0,completedScenarios:[],equipment:[],cylinderVerification:null,moveMatches:{},selectedMoveImage:null,connectOrder:[],leakChoice:null,duration:null,supplyDecision:null,flow:null,shutdownOrder:[],doc:null};
   const scenarios=[
@@ -21,14 +21,14 @@
     ["syringe","ABG syringe","assets/syringe.png",false],
     ["spirometer","Spirometer","assets/spirometer.png",false]
   ];
-  const moveExpected=["Release the storage safety strap or chain when ready to move the cylinder","Move the cylinder onto the portable carrier or cart safely","Secure the cylinder to the portable carrier or cart","Move the cart to the desired location","Secure the cylinder at the new location if it is removed from the cart","Perform hand hygiene and appropriate isolation precautions if necessary"];
+  const moveExpected=["Release the storage safety strap or chain when ready to move the cylinder","Move the cylinder onto the portable carrier or cart safely","Secure the cylinder to the portable carrier or cart","Move the cart to the desired location","Perform hand hygiene and appropriate isolation precautions if necessary","Secure the cylinder at the new location if it is removed from the cart"];
   const moveScenes=[
     {id:"release",step:moveExpected[0],src:"assets/transport-release-storage-restraint.png",alt:"Male respiratory therapist releasing the storage restraint from an oxygen cylinder in the hospital cylinder storage area"},
     {id:"load",step:moveExpected[1],src:"assets/transport-load-cylinder-cart.png",alt:"Male respiratory therapist moving an oxygen cylinder onto a portable oxygen cylinder cart"},
     {id:"secure-cart",step:moveExpected[2],src:"assets/transport-secure-cylinder-cart.png",alt:"Male respiratory therapist securing an oxygen cylinder to the portable cart"},
     {id:"hallway",step:moveExpected[3],src:"assets/transport-wheel-cart-hallway.png",alt:"Male respiratory therapist transporting a secured oxygen cylinder cart through a hospital hallway"},
-    {id:"secure-room",step:moveExpected[4],src:"assets/transport-secure-cylinder-patient-room-ppe.png",alt:"Male respiratory therapist wearing appropriate PPE while securing an oxygen cylinder at the patient care location"},
-    {id:"hygiene",step:moveExpected[5],src:"assets/transport-hand-hygiene-isolation.png",alt:"Male respiratory therapist performing hand hygiene beside an isolation supply cart outside a patient room"}
+    {id:"hygiene",step:moveExpected[4],src:"assets/transport-hand-hygiene-isolation.png",alt:"Male respiratory therapist performing hand hygiene and preparing for isolation precautions outside a patient room"},
+    {id:"secure-room",step:moveExpected[5],src:"assets/transport-secure-cylinder-patient-room-ppe.png",alt:"Male respiratory therapist wearing appropriate PPE while securing an oxygen cylinder at the patient care location"}
   ];
   const connectExpected=["Remove the protective cap or wrap","Inspect the cylinder opening for debris or dirt","Turn the valve away from bystanders and warn that a loud noise may occur","Crack the cylinder by briefly opening and closing the valve with the wrench","Confirm the regulator/reducing valve is compatible and the sealing washer is in place","Make sure the regulator/flow control is off, then tighten the regulator securely","Open the cylinder valve until the pressure-gauge needle stops rising","Turn the valve stem back one-half turn as listed in the competency"];
   const shutdownExpected=["Close the cylinder valve stem using the appropriate wrench","Turn the flowmeter on until gas evacuates the regulator","Turn the flowmeter off","Remove the regulator/reducing valve","Replace the safety cap and label the cylinder appropriately","Return the cylinder to the appropriate storage location","Discard supplies, remove PPE as applicable, and perform hand hygiene"];
