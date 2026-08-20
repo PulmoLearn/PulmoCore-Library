@@ -12,14 +12,14 @@
   ];
   const p=()=>scenarios[state.scenarioIndex];
   const equipment=[
-    ["oxygen","Medical oxygen cylinder","assets/oxygen-cylinder.png",true],
-    ["regulator","Compatible regulator","assets/regulator.png",true],
-    ["cart","Portable cylinder cart","assets/cart.png",true],
-    ["wrench","Cylinder wrench","assets/wrench.png",true],
-    ["washer","Sealing washer","assets/washer.png",true],
-    ["neb","Nebulizer kit","assets/nebulizer.png",false],
-    ["syringe","ABG syringe","assets/syringe.png",false],
-    ["spirometer","Spirometer","assets/spirometer.png",false]
+    ["oxygen","Medical oxygen cylinder","assets/oxygen-cylinder.svg",true],
+    ["regulator","Compatible regulator","assets/regulator.svg",true],
+    ["cart","Portable cylinder cart","assets/cart.svg",true],
+    ["wrench","Cylinder wrench","assets/wrench.svg",true],
+    ["washer","Sealing washer","assets/washer.svg",true],
+    ["neb","Nebulizer kit","assets/nebulizer.svg",false],
+    ["syringe","ABG syringe","assets/syringe.svg",false],
+    ["spirometer","Spirometer","assets/spirometer.svg",false]
   ];
   const moveExpected=["Release the storage safety strap or chain when ready to move the cylinder","Move the cylinder onto the portable carrier or cart safely","Secure the cylinder to the portable carrier or cart","Move the cart to the desired location","Secure the cylinder at the new location if it is removed from the cart","Perform hand hygiene and appropriate isolation precautions if necessary"];
   const connectExpected=["Remove the protective cap or wrap","Inspect the cylinder opening for debris or dirt","Turn the valve away from bystanders and warn that a loud noise may occur","Crack the cylinder by briefly opening and closing the valve with the wrench","Confirm the regulator/reducing valve is compatible and the sealing washer is in place","Make sure the regulator/flow control is off, then tighten the regulator securely","Open the cylinder valve until the pressure-gauge needle stops rising","Turn the valve stem back one-half turn as listed in the competency"];
