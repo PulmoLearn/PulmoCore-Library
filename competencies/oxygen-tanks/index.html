@@ -70,11 +70,18 @@
     <div class="patient-progress-row"><span class="patient-badge">Scenario 1 of 4</span><span class="step-badge">Move &amp; Secure</span><span class="support-badge">Guided</span></div>
     <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Match the Scene to Each Transport Step</h2><p class="section-intro">The competency steps are already in order. Match each hospital scene to the step it illustrates. Drag an image into a drop box, or select an image and then select its destination.</p></div></div>
     <div class="guided-note" id="moveCue"></div>
-    <h3 class="subhead">Hospital Scene Images</h3>
-    <p class="hint">Images are shuffled each time a new scenario begins. Once placed, the competency text remains visible at the bottom of the drop box.</p>
-    <div id="moveImageTray" class="move-image-tray" aria-label="Hospital scene images to match"></div>
-    <h3 class="subhead move-match-heading">Competency Steps</h3>
-    <div id="moveSequence" class="move-match-grid" aria-label="Cylinder transport steps and image drop boxes"></div>
+    <div class="move-columns">
+      <div class="move-column move-column-left">
+        <h3 class="subhead">Hospital Scene Images</h3>
+        <p class="hint">Images are shuffled each time a new scenario begins. Drag or select an image from the left column.</p>
+        <div id="moveImageTray" class="move-image-tray" aria-label="Hospital scene images to match"></div>
+      </div>
+      <div class="move-column move-column-right">
+        <h3 class="subhead move-match-heading">Competency Steps</h3>
+        <p class="hint">The steps stay in order on the right. Drop the matching image into each step box. The step text remains visible after placement.</p>
+        <div id="moveSequence" class="move-match-grid" aria-label="Cylinder transport steps and image drop boxes"></div>
+      </div>
+    </div>
     <div class="actions"><button id="checkMove" type="button" class="primary">Check Image Matches</button><button id="resetMove" type="button" class="secondary">Reset Images</button></div>
     <div id="moveFeedback" class="feedback" aria-live="polite"></div>
     <div class="actions end"><button id="toConnect" type="button" class="secondary" disabled>Continue to Connect</button></div>
@@ -149,75 +156,5 @@
   </section>
 </main>
 <script src="practice-engine.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
