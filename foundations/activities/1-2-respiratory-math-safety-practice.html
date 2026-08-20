@@ -365,6 +365,32 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,su
 }
 </style>
 
+
+<!-- PulmoLearn login protection: mirrors current lesson behavior -->
+<style>
+  html.pl-auth-checking body {
+    visibility: hidden;
+  }
+</style>
+<script>
+  document.documentElement.classList.add('pl-auth-checking');
+</script>
+<script type="module">
+  import { supabase } from '/assets/auth.js';
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const isLtiLaunch = urlParams.get('lti') === '1';
+
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session && !isLtiLaunch) {
+    window.location.href = '/login.html';
+    throw new Error('Not authenticated');
+  }
+
+  document.documentElement.classList.remove('pl-auth-checking');
+</script>
+
 </head>
 <body>
 <div class="page-shell">
