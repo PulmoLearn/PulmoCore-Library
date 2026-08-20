@@ -216,140 +216,204 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,su
 <section id="done" class="complete"><h2>Assignment complete ✓</h2><p>You practiced a systematic chest-radiograph interpretation process rather than relying on pattern guessing. Continue using the same sequence in later patient-care cases.</p></section>
 </main></div>
 
+<script>window.PL_ACTIVITY_KEY="2.4";</script>
 <script id="pulmolearn-feedback-coaching">
-function plFeedbackQuestionText(q){
-  return ((q&&q.q)||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
+function plT(q){
+  return ((q&&q.q)||'').replace(/<[^>]*>/g,' ')
+    .replace(/₀/g,'0').replace(/₁/g,'1').replace(/₂/g,'2').replace(/₃/g,'3')
+    .replace(/₄/g,'4').replace(/₅/g,'5').replace(/₆/g,'6').replace(/₇/g,'7')
+    .replace(/₈/g,'8').replace(/₉/g,'9').replace(/–|—/g,'-')
+    .replace(/\s+/g,' ').trim().toLowerCase();
 }
 function plFeedbackHint(q){
-  const t=plFeedbackQuestionText(q);
-  if(/lb|pound|kg|kilogram/.test(t)){
-    return 'Start with the relationship <strong>1 kg ≈ 2.2 lb</strong>. Set up the conversion so <em>lb</em> cancels and <em>kg</em> remains. Then do a reasonableness check: the kilogram number should be a little less than half the pound number.';
+  const t=plT(q), a=window.PL_ACTIVITY_KEY||'';
+
+  if(a==='1.2'){
+    if(/minute ventilation|tidal volume|\bvt\b|\bve\b/.test(t)){
+      if(/minute ventilation is|ve is|what is vt|calculate vt|vt in ml/.test(t))
+        return '<strong>Formula:</strong> VT = VE ÷ RR. <strong>Steps:</strong> convert VE to mL/min if needed, divide by breaths/min, and make sure the final unit is mL/breath.';
+      if(/mL\/kg|predicted body weight|ideal\/predicted/.test(t))
+        return '<strong>Formula:</strong> VT = prescribed mL/kg × predicted body weight (kg). <strong>Steps:</strong> multiply kg by mL/kg, cancel kg, and confirm the answer is in mL.';
+      return '<strong>Formula:</strong> VE = VT × RR. <strong>Steps:</strong> multiply mL/breath by breaths/min, then divide by 1,000 if L/min is requested.';
+    }
+    if(/lb|pound/.test(t) && /kg|kilogram/.test(t)){
+      if(/kg.*lb|65 kg|72 kg/.test(t)) return '<strong>Formula:</strong> lb ≈ kg × 2.2. Multiply by 2.2, keep lb as the final unit, and check that pounds are a little more than twice kilograms.';
+      return '<strong>Formula:</strong> kg ≈ lb ÷ 2.2. Divide by 2.2, keep kg as the final unit, and check that kilograms are a little less than half the pound value.';
+    }
+    if(/liter|\bl\b|ml/.test(t) && /convert|volume|402 ml|0\.75 l/.test(t)){
+      if(/ml.*\bl\b|to l/.test(t)) return '<strong>Relationship:</strong> 1 L = 1,000 mL. For mL → L, divide by 1,000. The number should become smaller.';
+      return '<strong>Relationship:</strong> 1 L = 1,000 mL. For L → mL, multiply by 1,000. The number should become larger.';
+    }
+    if(/mcg|microgram/.test(t) && /mg|milligram/.test(t)){
+      if(/mcg.*mg|to mg/.test(t)) return '<strong>Relationship:</strong> 1 mg = 1,000 mcg. For mcg → mg, divide by 1,000 and verify the number becomes smaller.';
+      return '<strong>Relationship:</strong> 1 mg = 1,000 mcg. For mg → mcg, multiply by 1,000 and verify the number becomes larger.';
+    }
+    if(/ft|feet|inch| in\b|cm/.test(t) && /height|convert|how many inches|cm/.test(t)){
+      return '<strong>Steps:</strong> convert feet to inches with 12 in = 1 ft, add remaining inches, then multiply total inches by 2.54 only if centimeters are requested.';
+    }
+    if(/temperature|°f|°c|fahrenheit|celsius|kelvin/.test(t)){
+      if(/kelvin/.test(t)) return '<strong>Steps:</strong> if starting in °F, first use °C = (°F - 32) × 5/9; then K = °C + 273. If starting in °C, add 273.';
+      if(/°f|fahrenheit/.test(t) && /to °c|to celsius|convert 100|convert 98|convert 101|convert 104/.test(t))
+        return '<strong>Formula:</strong> °C = (°F - 32) × 5/9. Subtract 32 first, multiply by 5, divide by 9, then round.';
+      return '<strong>Formula:</strong> °F = (°C × 9/5) + 32. Multiply by 9/5 first, then add 32.';
+    }
+    if(/medication|albuterol|mucomyst|solution|order|vial|ampule|concentration|mg\/ml/.test(t)){
+      if(/concentration/.test(t)) return '<strong>Formula:</strong> concentration = drug amount ÷ volume. Divide mg by mL and report mg/mL.';
+      if(/how many ml|ml should|ml are needed/.test(t)) return '<strong>Formula:</strong> volume = ordered dose ÷ concentration. Write concentration as mg/mL, divide ordered mg by mg/mL, and confirm mL remains.';
+      return '<strong>Formula:</strong> dose = concentration × volume. Keep units visible so mL cancels correctly and mg remains.';
+    }
+    if(/dimensional|units/.test(t)) return '<strong>Dimensional-analysis check:</strong> arrange conversion factors so every unwanted unit cancels. A correct number with the wrong remaining unit is not a usable answer.';
+    return '<strong>Use STOP → SET UP → SOLVE → CHECK.</strong> Identify the requested unit, arrange conversions so units cancel, solve, then verify direction and magnitude.';
   }
-  if(/mcg|microgram|\bmg\b|milligram|\bgram\b|\bg\b/.test(t) && /convert|dose|amount|concentration|available|ordered|vial|medication/.test(t)){
-    return 'Write the ordered amount and the available amount with their units. Convert both to the <strong>same unit first</strong>, then orient the conversion factor so unwanted units cancel. Before checking again, ask whether the result is in the unit the question requested.';
+
+  if(a==='1.3'){
+    if(/pio2/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> PiO₂ = FiO₂ × (PB - PH₂O). <strong>Steps:</strong> subtract PH₂O from PB, multiply by FiO₂ as a decimal, and round at the end. At sea level on room air, expect about 150 mmHg.';
+      return '<strong>Think inspired gas.</strong> PiO₂ changes with FiO₂, barometric pressure, and humidification—not with hemoglobin or tissue extraction.';
+    }
+    if(/\bpao2\b/.test(t) && !/measured pao2|arterial|a-a|gradient|p\/f/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> PAO₂ = PiO₂ - (PaCO₂ ÷ RQ). Divide PaCO₂ by RQ first, subtract from PiO₂, and keep mmHg throughout.';
+      return '<strong>Think alveolar oxygen.</strong> Ask whether inspired oxygen changed or whether increased PaCO₂ from hypoventilation is lowering PAO₂.';
+    }
+    if(/a-a|gradient/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> A-a = PAO₂ - PaO₂. Subtract arterial oxygen from alveolar oxygen; a wider difference points toward impaired transfer from alveolus to blood.';
+      return '<strong>Use the alveolus-to-arterial comparison.</strong> A widened A-a gradient suggests V/Q mismatch, shunt, or diffusion limitation.';
+    }
+    if(/p\/f|pf ratio/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> P/F = PaO₂ ÷ FiO₂. Use FiO₂ as a decimal, divide, and round at the end.';
+      return '<strong>Relate PaO₂ to the FiO₂ being supplied.</strong> A PaO₂ that looks acceptable may still reflect poor transfer when the patient requires a high FiO₂.';
+    }
+    if(/cao2|oxygen content/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> CaO₂ = (1.34 × Hb × SaO₂) + (0.003 × PaO₂). Use SaO₂ as a decimal, calculate the Hb-bound term, then add the small dissolved term.';
+      return '<strong>Think oxygen carried in blood.</strong> Most CaO₂ comes from hemoglobin-bound oxygen, so compare Hb and saturation before focusing on PaO₂ alone.';
+    }
+    if(/cardiac output|\bco\b/.test(t) && !/paco2/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> CO = HR × SV ÷ 1,000. Multiply beats/min by mL/beat, then convert mL/min to L/min.';
+      return '<strong>Think blood flow.</strong> If content is adequate but delivery is low, cardiac output may be the limiting step.';
+    }
+    if(/do2|oxygen delivery/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> DO₂ = CO × CaO₂ × 10. Multiply content by flow, then ×10 for the dL-to-L conversion.';
+      return '<strong>Think content × flow.</strong> Determine whether low delivery comes from low CaO₂, low cardiac output, or both.';
+    }
+    if(/cvo2/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> CvO₂ = (1.34 × Hb × SvO₂) + (0.003 × PvO₂). Use SvO₂ as a decimal and add the dissolved term last.';
+      return '<strong>Think venous oxygen remaining after tissue extraction.</strong>';
+    }
+    if(/c\(a-v\)o2|a-v/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> C(a-v)O₂ = CaO₂ - CvO₂. Subtract venous content from arterial content.';
+      return '<strong>Think how much oxygen was removed from each dL of blood.</strong>';
+    }
+    if(/\bvo2\b|oxygen consumption/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> VO₂ = CO × C(a-v)O₂ × 10. Multiply flow by the arterial-venous content difference, then ×10.';
+      return '<strong>Think tissue oxygen use.</strong>';
+    }
+    if(/o2er|extraction ratio/.test(t)){
+      if(/calculate/.test(t)) return '<strong>Formula:</strong> O₂ER = VO₂ ÷ DO₂ × 100. Divide consumption by delivery and convert to a percent.';
+      return '<strong>Think demand relative to supply.</strong> Extraction rises when demand increases or delivery falls.';
+    }
+    return '<strong>Locate the oxygen-pathway step first:</strong> inspired gas → alveoli → transfer → blood content → flow/delivery → venous return/extraction. Then use the formula or interpretation for that step.';
   }
-  if(/concentration|mg\/ml|dose volume|how many ml|volume.*dose/.test(t)){
-    return 'Separate <strong>amount</strong> from <strong>concentration</strong>. Write concentration as amount per mL, then multiply the ordered dose by a factor arranged so the dose unit cancels and <em>mL</em> remains.';
+
+  if(a==='1.4'){
+    if(/quality|acceptable|repeatable|leak|cough|hesitat|early termination|wrong height|demographic|quality control/.test(t))
+      return '<strong>Quality first.</strong> Check full inspiration, rapid start, sustained exhalation, no cough/leak, repeatability, and correct demographics before interpreting disease.';
+    if(/fev1\/fvc|ratio/.test(t)) return '<strong>Start with FEV₁/FVC.</strong> In this course algorithm, compare with 0.70 first; a low ratio supports obstruction, while a preserved ratio sends you to FVC and then TLC if FVC is low.';
+    if(/fvc|tlc|restriction|mixed|rv|air trapping/.test(t)) return '<strong>Use lung volumes to confirm the pattern.</strong> Low FVC alone can only suggest restriction; TLC confirms reduced lung volume, while RV/TLC helps identify air trapping.';
+    if(/dlco|emphysema|interstitial|vascular|scoliosis/.test(t)) return '<strong>Refine with DLCO after the mechanical pattern is known.</strong> Ask whether gas-transfer capacity is low or preserved and whether that fits parenchymal, vascular, or extrapulmonary disease.';
+    if(/bronchodilator|reversib/.test(t)) return '<strong>Match the next test to the question.</strong> When obstruction is present and reversibility is being evaluated, compare pre- and post-bronchodilator spirometry.';
+    return '<strong>PFT sequence:</strong> quality → ratio → FVC → TLC/RV → loop/DLCO → clinical context → next step.';
   }
-  if(/temperature|fahrenheit|celsius|°c|°f/.test(t)){
-    return 'Choose the conversion formula for the direction you are going, substitute the known temperature, and estimate the answer first. A normal body temperature is about <strong>37°C ≈ 98.6°F</strong>, which gives you a quick reasonableness check.';
+
+  if(a==='2.1'){
+    if(/cohb|carbon monoxide|co-ox|oxyhemoglobin/.test(t)) return '<strong>Use co-oximetry for hemoglobin species.</strong> Standard SpO₂ cannot reliably distinguish oxyhemoglobin from carboxyhemoglobin.';
+    if(/spo2|pulse ox|pleth|probe|perfusion|motion|ambient light|nail|cold/.test(t)) return '<strong>Verify the SpO₂ signal first.</strong> Compare the patient with the number, check pleth/pulse agreement, perfusion, motion, probe placement, light/coverings, and dyshemoglobinemia.';
+    if(/etco2|capnog|waveform|shark|rebreath|baseline|disconnection|airway placement/.test(t)) return '<strong>Read both the ETCO₂ value and waveform.</strong> Decide whether the change reflects ventilation, airway obstruction, rebreathing, perfusion, or equipment/sampling.';
+    return '<strong>Separate oxygenation from ventilation.</strong> SpO₂ answers oxygenation; capnography answers ventilation/perfusion. Start with the patient, verify the signal, then interpret the trend.';
   }
-  if(/minute ventilation|\bve\b|tidal volume|\bvt\b/.test(t)){
-    return 'Write the respiratory formula first and keep units visible. For minute ventilation, multiply tidal volume by respiratory rate, then convert mL to L only if the final unit requires it. Check whether the result is physiologically reasonable for the patient.';
+
+  if(a==='2.2'){
+    if(/respiratory rate|work of breathing|accessory|mental|arouse|speech|fatigue|distress/.test(t)) return '<strong>Trend the whole bedside pattern.</strong> Compare RR with depth, work of breathing, speech, mental status, oxygenation, and direction of change.';
+    if(/breath sound|wheeze|crackle|stridor|diminished|absent|percussion|hyperreson|dullness/.test(t)) return '<strong>Localize and compare sides.</strong> Pair the sound with percussion and the rest of the exam before deciding whether the pattern is upper airway, lower airway, pleural air/fluid, or parenchymal.';
+    if(/hemoglobin|hematocrit|rbc|wbc|neutroph|eosinoph|platelet|cbc|coag/.test(t)) return '<strong>Interpret the CBC by function.</strong> Hb/Hct/RBC affect oxygen content; WBC/differential support inflammatory patterns; platelets/coagulation affect bleeding risk.';
+    if(/sodium|potassium|chloride|creatinine|bun|magnesium|phosph|glucose|calcium/.test(t)) return '<strong>Connect the chemistry value to physiology.</strong> Consider fluid balance, neuromuscular function, rhythm, renal handling, and acid-base status.';
+    return '<strong>Use VERIFY → COMPARE → EXPLAIN → CORRELATE → PRIORITIZE → REASSESS.</strong> One clue should support a pattern, not become the diagnosis by itself.';
   }
-  if(/pio2|inspired oxygen|barometric|humidif/.test(t)){
-    return 'Identify where you are in the oxygen pathway. For inspired oxygen pressure, start with <strong>FiO₂ × (PB − PH₂O)</strong>. Subtract water-vapor pressure before multiplying, and keep pressure units visible.';
+
+  if(a==='2.3'){
+    if(/compensation|acute|chronic|acute-on-chronic/.test(t)) return '<strong>Check expected compensation after naming the primary disorder.</strong> Compare the other component with the acute/chronic rule shown in the activity; a value outside the expected response suggests a mixed process.';
+    if(/primary disorder|acidemia|alkalemia|ph /.test(t)) return '<strong>Use pH first.</strong> Decide acidemia/alkalemia/normal, then ask whether PaCO₂ or HCO₃ explains that pH. Evaluate compensation only after the primary process is identified.';
+    if(/oxygen|pao2|hypox/.test(t)) return '<strong>Keep oxygenation separate.</strong> Finish pH/PaCO₂/HCO₃ interpretation first, then assess PaO₂/SpO₂ with FiO₂ and the patient.';
+    if(/etco2|alveolar ventilation|hypovent|hypervent/.test(t)) return '<strong>Connect PaCO₂ inversely to effective alveolar ventilation.</strong> Then correlate with RR, tidal volume, mental status, and ETCO₂.';
+    return '<strong>ABG sequence:</strong> verify → pH → primary process → compensation → chronicity/mixed disorder → oxygenation → patient action.';
   }
-  if(/pao2|alveolar gas|alveolar oxygen/.test(t)){
-    return 'Build the alveolar-gas calculation in order: find inspired oxygen pressure first, then subtract the PaCO₂/RQ term. Ask whether each value belongs to inspired gas, alveolar gas, or arterial blood before calculating.';
+
+  if(a==='2.4'){
+    if(/exposure|penetrat|rotation|inspiration|ribs|ap portable|quality|clavicle/.test(t)) return '<strong>Judge image quality before disease.</strong> Check rotation, inspiration, penetration/exposure, and positioning, then ask how a technical limitation could mimic the finding.';
+    if(/radiolucent|radiopaque|dark|bright|air|bone|metal|density/.test(t)) return '<strong>Use x-ray density:</strong> air is darkest, soft tissue/fluid are gray, bone is lighter, and metal is brightest.';
+    if(/shift|deviation|mediastin|trachea|tension|atelectasis|effusion/.test(t)) return '<strong>Ask whether the process adds pressure or removes volume.</strong> Mass effect tends to push away; volume loss tends to pull toward the affected side.';
+    return '<strong>Use the image sequence:</strong> verify → quality → airway → bones/soft tissue → cardiac/mediastinum → diaphragm/pleura → fields → devices → correlate with patient.';
   }
-  if(/a.?a gradient|gradient/.test(t)){
-    return 'Calculate the alveolar value first, then use <strong>PAO₂ − PaO₂</strong>. A gradient is a difference, so make sure you subtract arterial oxygen from alveolar oxygen—not the reverse.';
+
+  if(a==='3.1'){
+    if(/mallampati|difficult airway|neck|osa|intubation/.test(t)) return '<strong>Prepare rescue resources before sedation.</strong> Identify difficult-airway clues and ensure oxygenation, ventilation, suction, airway equipment, and escalation support are ready.';
+    if(/platelet|anticoag|bleed|biopsy|coag/.test(t)) return '<strong>Match bleeding risk to the procedure.</strong> Review platelets/coagulation/anticoagulants before biopsy and escalate unsafe findings.';
+    if(/sedat|etco2|somnol|ventilation|spo2/.test(t)) return '<strong>Monitor ventilation separately from oxygenation.</strong> Oxygen can preserve SpO₂ while hypoventilation worsens, so trend ETCO₂/waveform, RR, mental status, hemodynamics, and SpO₂.';
+    if(/washing|brushing|bal|lavage|biopsy|specimen|culture|cells|tissue/.test(t)) return '<strong>Match the sampling method to the target.</strong> Decide whether you need central secretions, surface cells, tissue architecture, or distal alveolar material.';
+    if(/mucus plug|stenosis|stent|foreign body|cryo|thermal|ablation|therapeutic/.test(t)) return '<strong>Match treatment to mechanism.</strong> Remove an obstruction, enlarge a stenosis, maintain patency, retrieve a foreign body, or treat tissue—and consider oxygen/fire risk for thermal methods.';
+    return '<strong>Bronchoscopy chain:</strong> indication → preparation → monitoring → correct technique → complication response → recovery/reassessment.';
   }
-  if(/p\/?f|p:f|pf ratio/.test(t)){
-    return 'Put PaO₂ over FiO₂ and express FiO₂ as a decimal. Then ask whether the result shows efficient oxygen transfer relative to the amount of oxygen being supplied.';
+
+  if(a==='3.2'){
+    if(/large boxes between/.test(t)) return '<strong>Formula:</strong> rate ≈ 300 ÷ large boxes between R waves. Count the boxes first, divide 300, then verify the rate matches the tracing.';
+    if(/small boxes between/.test(t)) return '<strong>Formula:</strong> rate ≈ 1,500 ÷ small boxes between R waves. Count carefully and estimate before dividing.';
+    if(/6-second|6 second|qrs complexes/.test(t)) return '<strong>Irregular rhythm method:</strong> count QRS complexes in 6 seconds and multiply by 10.';
+    if(/small box|large box|how much time|interval/.test(t)) return '<strong>Paper timing at 25 mm/sec:</strong> small box = 0.04 sec; large box = 0.20 sec. Count boxes only after identifying the correct interval boundaries.';
+    if(/sinus|atrial fibrillation|afib|flutter|svt|ventricular|vf|asystole|pea|rhythm/.test(t)) return '<strong>Use the rhythm sequence:</strong> verify → rate → regularity → P waves → PR → QRS → rhythm name → pulse/perfusion/stability.';
+    return '<strong>Connect ECG to the patient.</strong> Verify the signal, analyze systematically, then check pulse and perfusion before deciding urgency.';
   }
-  if(/cao2|oxygen content|content/.test(t)){
-    return 'Use the oxygen-content formula in two parts: hemoglobin-bound oxygen first, then the much smaller dissolved-oxygen term. Keep saturation as a decimal and add the two components at the end.';
+
+  if(a==='3.3'){
+    if(/calculate ag|anion gap|arithmetic setup/.test(t)) return '<strong>Formula:</strong> AG = Na - (Cl + HCO₃). Add chloride and bicarbonate first, subtract from sodium, then compare with the course reference.';
+    if(/bicarbonate gap|delta/.test(t)) return '<strong>Only after AGMA is established:</strong> compare how much the AG rose above normal with how much HCO₃ fell below normal to look for a second metabolic process.';
+    if(/winter|expected paco2|respiratory compensation/.test(t)) return '<strong>Winter’s formula:</strong> expected PaCO₂ = 1.5(HCO₃) + 8 ± 2. Calculate the center, create the range, then compare the measured PaCO₂.';
+    if(/agma|nagma|hyperchloremic|chloride/.test(t)) return '<strong>Confirm metabolic acidosis, then calculate the gap.</strong> AGMA suggests unmeasured acid accumulation; NAGMA usually reflects bicarbonate loss with compensating chloride increase.';
+    if(/lactate|base excess/.test(t)) return '<strong>Use these as supporting clues.</strong> Base excess describes metabolic base deficit/excess; lactate must be interpreted with perfusion, medications, work of breathing, clearance, and trend.';
+    return '<strong>Sequence:</strong> confirm metabolic acidosis → AG → AGMA/NAGMA → mechanism → bicarbonate gap if AGMA → compensation → correlate/reassess.';
   }
-  if(/do2|oxygen delivery|cardiac output/.test(t)){
-    return 'First make sure arterial oxygen content and cardiac output are in the expected units. Then use <strong>DO₂ = CO × CaO₂ × 10</strong>. The ×10 converts dL to L so the units match.';
+
+  if(a==='3.4'){
+    if(/sodium|chf|coronary|diet|meal|nutrition|protein|carbohydrate|weight loss|cachect|edema|dysphagia|feeding|copd/.test(t)) return '<strong>Match nutrition advice to the mechanism.</strong> Decide whether the issue is fluid retention, cardiovascular risk, dyspnea/early satiety, inadequate calories/protein, or swallowing safety.';
+    if(/autonomy|beneficence|nonmaleficence|justice|refus|capacity|advance directive|consent|ethical/.test(t)) return '<strong>Confirm capacity and informed understanding first.</strong> Respect a competent patient’s choice, identify the ethical principle, and escalate conflicts or uncertainty appropriately.';
+    if(/emr|ehr|phi|privacy|chart|documentation|copy-forward|verification|wrong patient|identifier/.test(t)) return '<strong>Use the safety sequence:</strong> verify patient → access only needed information → document objectively in the correct record → correct errors transparently → protect PHI.';
+    return '<strong>Week 3.4 routine:</strong> assess → connect mechanism → respect choices/privacy → verify → act within scope → document/reassess.';
   }
-  if(/anion gap|\bag\b/.test(t)){
-    return 'Write the formula before inserting numbers: <strong>AG = Na − (Cl + HCO₃)</strong>. Add chloride and bicarbonate first, subtract that total from sodium, then compare the result with the reference used in this activity.';
-  }
-  if(/bicarbonate gap|delta gap|delta.*hco/.test(t)){
-    return 'First determine how much the anion gap rose above normal, then determine how much bicarbonate fell below normal. Compare those two changes to decide whether another metabolic process may be present.';
-  }
-  if(/winter|expected paco2|compensation/.test(t) && /hco|metabolic acidosis/.test(t)){
-    return 'For metabolic acidosis, calculate the expected PaCO₂ with <strong>1.5 × HCO₃ + 8 ± 2</strong>. Only after finding the expected range should you compare the measured PaCO₂ for an additional respiratory disorder.';
-  }
-  if(/heart rate|300 method|1500|6.second|large boxes|small boxes/.test(t)){
-    return 'Choose the rate method that matches the rhythm. For a regular rhythm, count boxes between R waves and use the appropriate box method; for an irregular rhythm, use a timed strip. Estimate first so you can catch an impossible rate.';
-  }
-  if(/fev1\/fvc|fev₁\/fvc|ratio|spirom/.test(t)){
-    return 'Return to the PFT sequence: <strong>quality first → FEV₁/FVC ratio → FVC/TLC → refine with the loop, DLCO, bronchodilator response, and clinical context.</strong> Do not name the pattern before confirming test quality.';
-  }
-  if(/ph|paco2|hco|abg|acidosis|alkalosis/.test(t)){
-    return 'Work the ABG in the same order every time: <strong>pH → primary process → expected compensation → chronicity/mixed disorder → oxygenation → patient.</strong> Stop at the first step where your reasoning no longer fits the values.';
-  }
-  if(/spo2|pulse ox|oxim/.test(t)){
-    return 'Start with the patient and signal quality. Decide whether the question is about <strong>oxygenation</strong>, then check whether motion, perfusion, probe placement, or dyshemoglobinemia could make the displayed SpO₂ unreliable.';
-  }
-  if(/etco2|capnog|waveform/.test(t)){
-    return 'Decide whether the clue comes from the ETCO₂ number, the waveform shape, or both. Then move through the monitor routine: <strong>patient → signal → ventilation/perfusion → trend → cause → action → recheck.</strong>';
-  }
-  if(/x.?ray|radiograph|radiolucent|radiopaque|film/.test(t)){
-    return 'Use the image sequence rather than jumping to a diagnosis: <strong>verify patient/view → assess image quality → scan systematically → correlate with the patient.</strong> Ask which finding is actually visible before choosing what it means.';
-  }
-  if(/bronchoscop|bal|biopsy|sedation|mallampati/.test(t)){
-    return 'Return to the bronchoscopy safety chain: <strong>indication → preparation/risk → monitoring → procedure assistance → recovery/reassessment.</strong> Identify which step contains the safety issue in this question.';
-  }
-  if(/ecg|rhythm|qrs|atrial|ventric|asystole|pea|fibrillation|flutter/.test(t)){
-    return 'Use the same rhythm sequence: <strong>verify the patient/signal → rate → regularity → P waves/PR → QRS → name the rhythm → check pulse and perfusion.</strong> Do not choose treatment from the monitor alone.';
-  }
-  if(/nutrition|meal|sodium|copd|chf|diet|ehr|emr|privacy|consent|refusal|identifier/.test(t)){
-    return 'Identify the dominant problem first, then ask what action is within respiratory-care scope. Use the Week 3.4 sequence: <strong>assess → connect the mechanism → respect choices/privacy → verify → act → reassess/document.</strong>';
-  }
-  return 'Go back to the teaching block and identify <strong>what the question is asking you to determine</strong>. Work through the activity’s sequence one step at a time, rule out choices that conflict with the patient data, and then try again.';
+  return '<strong>Identify the task, use the activity’s sequence, and work one step at a time.</strong>';
 }
 function plFeedbackImportance(q){
-  const t=plFeedbackQuestionText(q);
-  if(/lb|pound|kg|kilogram/.test(t)){
-    return 'The kilogram value should always be a little less than half the pound value. Respiratory care frequently uses kilograms for weight-based medication doses, tidal-volume targets, and other clinical calculations, so a conversion error can become a patient-safety error.';
-  }
-  if(/mcg|microgram|\bmg\b|milligram|dose|concentration|medication/.test(t)){
-    return 'Medication math is a safety skill. Keeping units visible and comparing the final dose with the order helps prevent decimal, concentration, and thousand-fold unit errors.';
-  }
-  if(/temperature|fahrenheit|celsius|°c|°f/.test(t)){
-    return 'Temperature values influence clinical assessment and must be communicated in the correct scale. A quick magnitude check can catch a conversion error before it enters the record or affects a decision.';
-  }
-  if(/minute ventilation|tidal volume|\bve\b|\bvt\b/.test(t)){
-    return 'These values connect directly to effective ventilation and ventilatory support. A unit or decimal error can make a normal value look dangerously abnormal—or the reverse.';
-  }
-  if(/pio2|pao2|a.?a gradient|p\/?f|p:f|cao2|do2|oxygen content|oxygen delivery/.test(t)){
-    return 'Each oxygen value identifies a different step in the pathway from inspired gas to tissue delivery. Correctly locating the abnormal step prevents you from treating every oxygen problem as if more FiO₂ were the only answer.';
-  }
-  if(/anion gap|bicarbonate gap|winter|acid-base|acidosis|alkalosis/.test(t)){
-    return 'The result helps distinguish the primary metabolic problem from compensation or a second hidden disorder. That matters because mixed acid-base disease can signal greater physiologic instability than one disorder alone.';
-  }
-  if(/abg|ph|paco2|hco/.test(t)){
-    return 'ABG interpretation separates acid-base status, ventilation, and oxygenation. Correct classification helps you recognize deterioration and choose what needs to be supported or investigated next.';
-  }
-  if(/heart rate|ecg|rhythm|qrs|atrial|ventric|fibrillation|flutter|asystole|pea/.test(t)){
-    return 'Rhythm interpretation matters only when it is connected to the patient’s pulse and perfusion. The same monitor rate can require very different action depending on rhythm and clinical stability.';
-  }
-  if(/fev1|fvc|spirom|pft|dlco|tlc/.test(t)){
-    return 'A consistent PFT sequence prevents technical error from being mislabeled as disease and helps determine when obstruction, possible restriction, or another test should be considered.';
-  }
-  if(/spo2|oxim/.test(t)){
-    return 'SpO₂ is an oxygenation estimate, not a complete respiratory assessment. Knowing its limits prevents false reassurance and unnecessary treatment caused by artifact.';
-  }
-  if(/etco2|capnog|waveform/.test(t)){
-    return 'Capnography can reveal ventilation, airway, and perfusion changes before oxygen saturation falls. Interpreting both the number and waveform supports earlier recognition of deterioration.';
-  }
-  if(/x.?ray|radiograph|radiolucent|radiopaque|film/.test(t)){
-    return 'A systematic image review reduces missed findings and keeps a technically limited film from being overinterpreted. The radiograph should support—not replace—the bedside assessment.';
-  }
-  if(/bronchoscop|bal|biopsy|sedation|mallampati/.test(t)){
-    return 'Bronchoscopy safety depends on anticipating airway, oxygenation, ventilation, bleeding, and sedation risks before they become emergencies and continuing reassessment after the scope is removed.';
-  }
-  if(/nutrition|meal|sodium|copd|chf|diet/.test(t)){
-    return 'Nutrition affects work of breathing, energy balance, fluid status, and recovery. Respiratory therapists reinforce safe strategies while recognizing when another discipline should be involved.';
-  }
-  if(/ehr|emr|privacy|consent|refusal|identifier|documentation/.test(t)){
-    return 'Accurate identification, documentation, privacy, and respect for patient choices are patient-safety responsibilities, not paperwork details.';
-  }
-  return 'This result matters because the goal is not just to identify the right answer—it is to connect the finding to physiology, patient safety, the next clinical decision, and what should be reassessed.';
+  const a=window.PL_ACTIVITY_KEY||'';
+  const t=plT(q);
+  if(a==='1.2' && /lb|pound|kg|kilogram/.test(t)) return 'Kilograms are used for weight-based medication dosing, tidal-volume targets, and other respiratory-care calculations. A kg value should be a little less than half the pound value, giving you a fast safety check.';
+  const m={
+   '1.2':'Unit direction and magnitude checks help prevent medication, ventilation, and documentation errors.',
+   '1.3':'Following oxygen step by step identifies whether the limitation is inspired oxygen, alveolar ventilation, gas transfer, hemoglobin content, circulation, or tissue extraction.',
+   '1.4':'A consistent PFT sequence prevents poor-quality testing or incomplete spirometry from being mislabeled as disease.',
+   '2.1':'Correct monitor interpretation prevents false reassurance by separating oxygenation, ventilation, perfusion, signal quality, and airway problems.',
+   '2.2':'Respiratory deterioration is recognized from clusters and trends rather than one isolated clue.',
+   '2.3':'ABG interpretation separates acid-base status, ventilation, and oxygenation so the physiologic problem can be treated appropriately.',
+   '2.4':'Systematic image review reduces missed findings and keeps technical limitations from overriding the bedside assessment.',
+   '3.1':'Bronchoscopy safety depends on anticipating airway, ventilation, oxygenation, bleeding, sedation, and specimen risks.',
+   '3.2':'Rhythm interpretation becomes clinically meaningful only when linked to pulse, perfusion, and patient stability.',
+   '3.3':'Gap and compensation calculations can uncover mixed disorders and the mechanism behind metabolic acidosis.',
+   '3.4':'Nutrition, ethics, privacy, identification, and documentation directly affect patient safety and respiratory outcomes.'
+  };
+  return m[a]||'The result should connect to physiology, patient safety, and the next clinical decision.';
 }
 function plCorrectFeedback(q){
   const base=(q&&(q.why||q.w||q.clue))||'Your reasoning matches the expected interpretation.';
-  const significance=(q&&q.clue&&q.clue!==base)?q.clue:plFeedbackImportance(q);
-  return '<strong>Correct.</strong> '+base+'<br><strong>Why it matters:</strong> '+significance;
+  const importance=(q&&q.clue&&q.clue!==base)?q.clue:plFeedbackImportance(q);
+  return '<strong>Correct.</strong> '+base+'<br><strong>Why it matters:</strong> '+importance;
 }
-function plIncorrectFeedback(q){
-  return '<strong>Not yet.</strong> '+plFeedbackHint(q);
-}
+function plIncorrectFeedback(q){return '<strong>Not yet.</strong> '+plFeedbackHint(q);}
 </script>
 
 <script>
