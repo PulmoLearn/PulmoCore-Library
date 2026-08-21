@@ -180,14 +180,55 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
  <h3>Sort the conditions by curve direction</h3>
  <p class="small">Drag a card into a zone, or click a card and then click the zone.</p>
  <div id="shiftBank" class="sort-bank" aria-label="Oxyhemoglobin curve shift conditions">
-   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false">Fever / increased temperature</button>
-   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false">Increased CO₂ and H⁺</button>
-   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false">Increased 2,3-DPG</button>
-   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false">Alkalemia / decreased H⁺</button>
-   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false">Fetal hemoglobin</button>
-   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false">Decreased temperature</button>
+   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false"
+     onclick="selectShiftToken(this)"
+     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
+     Fever / increased temperature
+   </button>
+   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false"
+     onclick="selectShiftToken(this)"
+     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
+     Increased CO₂ and H⁺
+   </button>
+   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false"
+     onclick="selectShiftToken(this)"
+     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
+     Increased 2,3-DPG
+   </button>
+   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false"
+     onclick="selectShiftToken(this)"
+     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
+     Alkalemia / decreased H⁺
+   </button>
+   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false"
+     onclick="selectShiftToken(this)"
+     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
+     Fetal hemoglobin
+   </button>
+   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false"
+     onclick="selectShiftToken(this)"
+     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
+     Decreased temperature
+   </button>
  </div>
- <div class="sort-zones"><button type="button" class="sort-zone" id="leftZone" data-zone="left" aria-label="Place selected condition in left shift higher affinity"><strong>Left shift / higher affinity</strong><div class="placed"></div></button><button type="button" class="sort-zone" id="rightZone" data-zone="right" aria-label="Place selected condition in right shift lower affinity"><strong>Right shift / lower affinity</strong><div class="placed"></div></button></div>
+ <div class="sort-zones">
+  <button type="button" class="sort-zone" id="leftZone" data-zone="left"
+    aria-label="Place selected condition in left shift higher affinity"
+    onclick="placeShift('left',selectedShift)"
+    ondragover="event.preventDefault();this.classList.add('dragover')"
+    ondragleave="this.classList.remove('dragover')"
+    ondrop="event.preventDefault();this.classList.remove('dragover');placeShift('left',event.dataTransfer.getData('text/plain'))">
+    <strong>Left shift / higher affinity</strong><div class="placed"></div>
+  </button>
+  <button type="button" class="sort-zone" id="rightZone" data-zone="right"
+    aria-label="Place selected condition in right shift lower affinity"
+    onclick="placeShift('right',selectedShift)"
+    ondragover="event.preventDefault();this.classList.add('dragover')"
+    ondragleave="this.classList.remove('dragover')"
+    ondrop="event.preventDefault();this.classList.remove('dragover');placeShift('right',event.dataTransfer.getData('text/plain'))">
+    <strong>Right shift / lower affinity</strong><div class="placed"></div>
+  </button>
+ </div>
  <div class="controls"><button class="btn primary" onclick="checkShiftSort()">Check sorting</button><button class="btn2" onclick="resetShiftSort()">Reset</button></div><div id="shiftSortFb" class="feedback"></div>
  <div id="q2"></div><div id="fb2" class="feedback"></div>
 </section>
@@ -344,7 +385,7 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 </div>
 
 <script>
-const STORE='AHRC155_2_3_oxygenation_v6';
+const STORE='AHRC155_2_3_oxygenation_v7';
 let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"inputs":{},"shiftSort":{"left":[],"right":[]}}')}catch(e){state={done:[],answers:{},inputs:{},shiftSort:{left:[],right:[]}}}
 state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.inputs=state.inputs||{};
 state.shiftSort=state.shiftSort&&typeof state.shiftSort==='object'?state.shiftSort:{};
@@ -424,32 +465,8 @@ let selectedShift=null;
 function buildShiftSort(){
  const bank=document.getElementById('shiftBank');
  if(!bank)return;
-
- // The cards live in the HTML as a visible fallback. JS only shuffles and binds them.
  const cards=Array.from(bank.querySelectorAll('.sort-token'));
  shuffle(cards).forEach(b=>bank.appendChild(b));
-
- cards.forEach(b=>{
-   b.onclick=()=>selectShiftToken(b);
-   b.ondragstart=e=>{
-     e.dataTransfer.setData('text/plain',b.textContent.trim());
-     e.dataTransfer.effectAllowed='move';
-     selectShiftToken(b);
-   };
- });
-
- ['left','right'].forEach(z=>{
-   const zone=document.getElementById(z+'Zone');
-   if(!zone)return;
-   zone.onclick=()=>placeShift(z,selectedShift);
-   zone.ondragover=e=>{e.preventDefault();zone.classList.add('dragover')};
-   zone.ondragleave=()=>zone.classList.remove('dragover');
-   zone.ondrop=e=>{
-     e.preventDefault();
-     zone.classList.remove('dragover');
-     placeShift(z,e.dataTransfer.getData('text/plain'));
-   };
- });
  restoreShiftSort();
 }
 function selectShiftToken(b){
@@ -551,7 +568,7 @@ function renderFinal(){
 renderFinal();
 function checkFinal(){let n=0;F.forEach((q,i)=>{let id='f'+i,d=document.getElementById(id),s=d.querySelector('input:checked'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}let ok=s.value===q.a;if(ok)n++;d.querySelectorAll('.option').forEach(l=>l.classList.remove('correct','wrong'));s.closest('.option').classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.value,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();if(n===F.length){fb7.className='feedback ok';fb7.textContent='8/8 correct. Activity complete.';finish(7)}else{fb7.className='feedback bad';fb7.textContent=`${n}/${F.length} correct. Revise the red selections using the targeted hints.`}}
 reconcileCompletion();
-window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.3',course:'Respiratory Physiology',activity_version:'v6'});
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.3',course:'Respiratory Physiology',activity_version:'v7'});
 </script>
 
   <script>
