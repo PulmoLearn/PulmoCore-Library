@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/competencies/oxygen-tanks/" />
+  <title>Oxygen Tanks | Competency Practice</title>
+  <link rel="stylesheet" href="practice-engine.css" />
+</head>
+<body>
+<main class="lesson-shell">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Competency Practice · L-5</p>
+      <h1>Oxygen Tanks</h1>
+      <p class="lede">Practice safe cylinder transport, regulator setup, leak response, duration-of-flow calculations, oxygen delivery, shutdown, and documentation.</p>
+    </div>
+    <div class="progress-card" aria-label="Lesson progress">
+      <span id="progressText">Teach</span>
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+    </div>
+  </header>
+
+  <nav class="lesson-nav" aria-label="Lesson sections">
+    <button type="button" data-section="0" class="nav-step active">Teach</button>
+    <button type="button" data-section="1" class="nav-step">Prepare</button>
+    <button type="button" data-section="2" class="nav-step">Move &amp; Secure</button>
+    <button type="button" data-section="3" class="nav-step">Connect</button>
+    <button type="button" data-section="4" class="nav-step">Check &amp; Calculate</button>
+    <button type="button" data-section="5" class="nav-step">Deliver Gas</button>
+    <button type="button" data-section="6" class="nav-step">Shutdown</button>
+    <button type="button" data-section="7" class="nav-step">Complete</button>
+  </nav>
+
+  <section class="lesson-section active" data-section-panel="0">
+    <div class="section-heading"><div><p class="section-kicker">Teach</p><h2>Build a Safe Cylinder Routine</h2><p class="section-intro">The competency is a sequence. Secure the cylinder first, inspect and prepare the outlet, connect compatible equipment, check for leaks, confirm enough gas is available, then deliver and shut down safely.</p></div></div>
+    <div class="teach-grid">
+      <article class="teach-card teach-teal"><div class="teach-icon">1</div><div><p class="teach-label">IDENTIFY</p><h3>Correct Gas + Correct Regulator</h3><p>Verify cylinder contents by its label and select a compatible regulator or reducing valve before moving forward.</p></div></article>
+      <article class="teach-card teach-blue"><div class="teach-icon">2</div><div><p class="teach-label">MOVE</p><h3>Secure Before Transport</h3><p>Release the storage restraint only when ready to move the cylinder. Place it on a portable carrier or cart, secure it, transport it, and secure it again if removed from the cart.</p></div></article>
+      <article class="teach-card teach-amber teach-full-width"><div class="teach-icon">3</div><div><p class="teach-label">CONNECT</p><h3>Prepare the Outlet and Regulator</h3><div class="decision-path oxygen-path"><span>Remove cap/wrap</span><span>Inspect outlet</span><span>Point away + warn</span><span>Crack cylinder</span><span>Attach compatible regulator</span></div><div class="mini-example"><strong>Safety anchor:</strong> Make sure the sealing washer is in place and the regulator/flow control is off before tightening and opening the cylinder.</div></div></article>
+      <article class="teach-card teach-purple"><div class="teach-icon">4</div><div><p class="teach-label">VERIFY</p><h3>Open, Check, Calculate</h3><p>Open the valve until the pressure gauge stops rising, turn the valve stem back one-half turn as listed in the competency, listen for leaks, then calculate duration of flow from the pressure gauge and the provided tank conversion factor.</p></div></article>
+      <article class="teach-card teach-coral"><div class="teach-icon">5</div><div><p class="teach-label">FINISH</p><h3>Shut Down Completely</h3><p>Close the valve, bleed pressure from the regulator, turn the flowmeter off, remove the regulator, replace the safety cap, label and return the cylinder appropriately, discard supplies, remove PPE, perform hand hygiene, and document.</p></div></article>
+    </div>
+    <div class="callout"><strong>Practice note:</strong> The competency requires using a tank conversion factor but does not specify its numeric value. Each scenario therefore supplies a lab reference card with the factor needed for that calculation.</div>
+    <div class="actions end"><button id="startPractice" type="button" class="primary">Start Guided Scenario</button></div>
+  </section>
+
+  <section class="lesson-section" data-section-panel="1">
+    <div class="patient-progress-row"><span class="patient-badge">Scenario 1 of 4</span><span class="step-badge">Prepare</span><span class="support-badge">Guided</span></div>
+    <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Identify the Cylinder and Equipment</h2></div></div>
+    <div class="patient-layout">
+      <div class="scenario-card"><span class="scenario-label">Transport task</span><p class="patient-name" id="scenarioName"></p><p class="patient-case" id="scenarioCase"></p></div>
+      <figure class="patient-figure oxygen-figure"><img src="assets/oxygen-cylinder.png" alt="Medical oxygen cylinder secured upright" /></figure>
+    </div>
+    <div class="guided-note" id="prepareCue"></div>
+    <div class="reference-strip"><strong>Lab reference card</strong><span id="referenceCard"></span></div>
+    <h3 class="subhead">Equipment Selection</h3><p class="hint">Select the cylinder and equipment needed to perform the competency safely.</p>
+    <div id="equipmentTray" class="equipment-grid oxygen-equipment-grid"></div>
+    <div class="technique-panel competency-check-panel">
+      <h3>Verify the Medical Gas Cylinder</h3>
+      <p>Before using the cylinder, verify its contents according to the cylinder <strong>label and color</strong> as required by the L-5 competency.</p>
+      <div id="cylinderVerificationChoices" class="choice-stack"></div>
+    </div>
+    <div class="actions"><button id="checkPrepare" type="button" class="primary">Check Preparation</button><button id="resetPrepare" type="button" class="secondary">Reset</button></div>
+    <div id="prepareFeedback" class="feedback" aria-live="polite"></div>
+    <div class="actions end"><button id="toMove" type="button" class="secondary" disabled>Continue to Move &amp; Secure</button></div>
+  </section>
+
+  <section class="lesson-section" data-section-panel="2">
+    <div class="patient-progress-row"><span class="patient-badge">Scenario 1 of 4</span><span class="step-badge">Move &amp; Secure</span><span class="support-badge">Guided</span></div>
+    <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Match the Scene to Each Transport Step</h2><p class="section-intro">The competency steps are already in order. Match each hospital scene to the step it illustrates. Drag an image into a drop box, or select an image and then select its destination.</p></div></div>
+    <div class="guided-note" id="moveCue"></div>
+    <div class="move-columns">
+      <div class="move-column move-column-left">
+        <h3 class="subhead">Hospital Scene Images</h3>
+        <p class="hint">Images are shuffled each time a new scenario begins. Drag or select an image from the left column.</p>
+        <div id="moveImageTray" class="move-image-tray" aria-label="Hospital scene images to match"></div>
+      </div>
+      <div class="move-column move-column-right">
+        <h3 class="subhead move-match-heading">Competency Steps</h3>
+        <p class="hint">The steps stay in order on the right. Drop the matching image into each step box. The step text remains visible after placement.</p>
+        <div id="moveSequence" class="move-match-grid" aria-label="Cylinder transport steps and image drop boxes"></div>
+      </div>
+    </div>
+    <div class="actions"><button id="checkMove" type="button" class="primary">Check Image Matches</button><button id="resetMove" type="button" class="secondary">Reset Images</button></div>
+    <div id="moveFeedback" class="feedback" aria-live="polite"></div>
+    <div class="actions end"><button id="toConnect" type="button" class="secondary" disabled>Continue to Connect</button></div>
+  </section>
+
+  <section class="lesson-section" data-section-panel="3">
+    <div class="patient-progress-row"><span class="patient-badge">Scenario 1 of 4</span><span class="step-badge">Connect</span><span class="support-badge">Guided</span></div>
+    <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Prepare and Connect the Regulator</h2><p class="section-intro">Work through three short setup stages. At each stage, choose what you would do next. Correct actions build the procedure visually instead of requiring one long sortable list.</p></div></div>
+    <div class="guided-note" id="connectCue"></div>
+    <div id="connectWorkflow" class="connect-workflow" aria-label="Three-stage oxygen cylinder setup workflow"></div>
+    <div class="actions"><button id="checkConnect" type="button" class="primary">Check Three-Stage Setup</button></div>
+    <div id="connectFeedback" class="feedback" aria-live="polite"></div>
+    <div class="actions end"><button id="toCheck" type="button" class="secondary" disabled>Continue to Check &amp; Calculate</button></div>
+  </section>
+
+  <section class="lesson-section" data-section-panel="4">
+    <div class="patient-progress-row"><span class="patient-badge">Scenario 1 of 4</span><span class="step-badge">Check &amp; Calculate</span><span class="support-badge">Guided</span></div>
+    <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Check the System and Confirm the Supply</h2></div></div>
+    <div class="guided-note" id="checkCue"></div>
+    <div class="gauge-calc-grid">
+      <article class="gauge-card"><h3>Pressure Gauge</h3><div class="gauge-face"><div class="gauge-needle" id="gaugeNeedle"></div><div class="gauge-center"></div><span class="gauge-label" id="gaugePressure"></span></div><p id="leakObservation" class="observation-pill"></p></article>
+      <article class="calc-card"><h3>Duration of Flow</h3><p>Use the values on the lab reference card.</p><div class="formula-box">Duration (min) = cylinder pressure × tank factor ÷ flow</div><label for="durationAnswer">Calculated duration in minutes</label><input id="durationAnswer" type="number" inputmode="decimal" step="1" />
+      <div id="supplyDecision" class="choice-stack supply-decisions"></div></article>
+    </div>
+    <div id="leakPanel" class="technique-panel" hidden><h3>Audible leak detected</h3><p>Choose the best response sequence before continuing.</p><div id="leakChoices" class="choice-stack"></div></div>
+    <div class="actions"><button id="checkSystem" type="button" class="primary">Check System &amp; Calculation</button></div>
+    <div id="systemFeedback" class="feedback" aria-live="polite"></div>
+    <div class="actions end"><button id="toDeliver" type="button" class="secondary" disabled>Continue to Deliver Gas</button></div>
+  </section>
+
+  <section class="lesson-section" data-section-panel="5">
+    <div class="patient-progress-row"><span class="patient-badge">Scenario 1 of 4</span><span class="step-badge">Deliver Gas</span><span class="support-badge">Guided</span></div>
+    <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Set the Ordered Flow</h2></div></div>
+    <div class="flow-workspace">
+      <figure class="large-asset"><img src="assets/flowmeter.png" alt="Oxygen flowmeter attached to a regulator" /></figure>
+      <article class="flow-control-card"><div class="guided-note" id="flowCue"></div><label for="flowSlider"><strong>Flow rate</strong></label><input id="flowSlider" type="range" min="0" max="15" step="0.5" value="0"/><div class="flow-readout"><span id="flowValue">0</span> L/min</div><button id="setFlow" type="button" class="primary">Set Flow</button><div id="flowFeedback" class="feedback" aria-live="polite"></div></article>
+    </div>
+    <div class="actions end"><button id="toShutdown" type="button" class="secondary" disabled>Continue to Shutdown</button></div>
+  </section>
+
+  <section class="lesson-section" data-section-panel="6">
+    <div class="patient-progress-row"><span class="patient-badge">Scenario 1 of 4</span><span class="step-badge">Shutdown</span><span class="support-badge">Guided</span></div>
+    <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Shut Down and Return the Cylinder</h2></div></div>
+    <div class="guided-note" id="shutdownCue"></div>
+    <div id="shutdownSequence" class="sortable-list" aria-label="Cylinder shutdown sequence"></div>
+    <div class="shutdown-decision-grid">
+      <article class="technique-panel competency-check-panel">
+        <h3>Identify Unexpected Outcomes</h3>
+        <p>Which unexpected outcome occurred during this scenario?</p>
+        <div id="unexpectedOutcomeChoices" class="choice-stack"></div>
+      </article>
+      <article class="technique-panel competency-check-panel">
+        <h3>Label the Cylinder Correctly</h3>
+        <p>Choose the labeling action that matches the L-5 competency after use.</p>
+        <div id="labelDecisionChoices" class="choice-stack"></div>
+      </article>
+    </div>
+    <div class="actions"><button id="checkShutdown" type="button" class="primary">Check Shutdown &amp; Evaluation</button></div>
+    <div id="shutdownFeedback" class="feedback" aria-live="polite"></div>
+    <div class="documentation-layout oxygen-doc-layout"><figure class="large-asset"><img src="assets/documentation.png" alt="Clinical documentation form with oxygen cylinder information"/></figure><div><h3>Documentation</h3><p>Select the best documentation statement.</p><div id="documentationChoices" class="choice-stack"></div></div></div>
+    <div class="actions end"><button id="finishScenario" type="button" class="primary" disabled>Complete Scenario</button></div>
+  </section>
+
+  <section class="lesson-section" data-section-panel="7">
+    <div id="completionReviewTabs" class="completion-review-tabs" aria-label="Review completed scenarios"></div>
+    <div class="section-heading"><div><p class="section-kicker">Scenario complete</p><h2 id="completionHeading">Safe Cylinder Routine Established</h2></div></div>
+    <div class="challenge-grid"><article class="info-card"><h3>Competency Routine</h3><ul class="check-list"><li>Verify cylinder contents by label and color and select a compatible regulator</li><li>Transport and secure the cylinder safely</li><li>Inspect, crack, connect, and tighten the regulator correctly</li><li>Open, check for leaks, calculate duration, and identify unexpected outcomes</li><li>Set the prescribed flow</li><li>Close, bleed, remove, cap, choose “empty” or “in use,” return, and document</li></ul></article><article class="info-card"><h3>Clinical Judgment</h3><p id="completionClinical"></p><p><strong>Next level:</strong> <span id="completionNext"></span></p></article></div>
+    <div class="callout success"><strong>Scenario complete.</strong> The equipment sequence stays consistent while the pressure, flow, leak status, and required clinical decision change.</div>
+    <div class="actions"><button id="nextScenario" type="button" class="primary">Start Scenario 2</button><button id="restartLesson" type="button" class="secondary">Restart from Scenario 1</button></div>
+  </section>
+</main>
+<script src="practice-engine.js"></script>
+</body>
+</html>
