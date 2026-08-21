@@ -40,6 +40,7 @@ input[type=number],select{padding:10px;border:1px solid #B8CAD4;border-radius:10
 .path{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.path div{border:1px solid var(--border);background:#FAFDFF;border-radius:14px;padding:13px;text-align:center}.path strong{display:block;color:var(--teal);font-size:1.1rem}
 .curvewrap{background:#fff;border:1px solid var(--border);border-radius:16px;padding:12px}.curvewrap svg{width:100%;height:300px;display:block}.curve-label{font-weight:800;fill:var(--navy)}
 .shift-buttons{display:flex;gap:8px;flex-wrap:wrap}.shift-buttons button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.shift-classify{display:grid;gap:10px;margin:12px 0}.shift-row{margin:0}.shift-row label.correct{background:var(--mint);border:2px solid #70CBB9}.shift-row label.wrong{background:#FDE9E9;border:2px solid #E58C8C}
 .sort-bank{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.sort-token{border:2px solid var(--border);border-radius:12px;padding:9px 11px;background:#fff;font-weight:800;cursor:grab}.sort-token.active{background:var(--teal);border-color:var(--teal2);color:#fff;box-shadow:0 0 0 4px rgba(28,167,168,.16)}.sort-token.used{opacity:.42}
 .sort-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sort-zone{min-height:120px;border:2px dashed #9CB0BD;border-radius:15px;padding:12px;background:#FBFDFE}.sort-zone.dragover{border-color:var(--teal);background:#F3FFFC}.placed{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.placed span{background:#fff;border:1px solid var(--border);border-radius:9px;padding:7px 9px}
 .mech-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.mech{border:1px solid var(--border);border-radius:15px;padding:14px;background:#fff}.mech strong{color:var(--teal);display:block}.pill{display:inline-block;border-radius:999px;padding:5px 9px;font-weight:800;font-size:.84rem;margin-top:5px}.normalgrad{background:#E6F3FF}.highgrad{background:#FFF0E7}.respond{background:var(--mint)}.poor{background:#FDE9E9}
@@ -177,59 +178,52 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 
  <div id="p50Practice"></div>
 
- <h3>Sort the conditions by curve direction</h3>
- <p class="small">Drag a card into a zone, or click a card and then click the zone.</p>
- <div id="shiftBank" class="sort-bank" aria-label="Oxyhemoglobin curve shift conditions">
-   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false"
-     onclick="selectShiftToken(this)"
-     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
-     Fever / increased temperature
-   </button>
-   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false"
-     onclick="selectShiftToken(this)"
-     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
-     Increased CO₂ and H⁺
-   </button>
-   <button type="button" class="sort-token" data-shift-zone="right" draggable="true" aria-pressed="false"
-     onclick="selectShiftToken(this)"
-     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
-     Increased 2,3-DPG
-   </button>
-   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false"
-     onclick="selectShiftToken(this)"
-     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
-     Alkalemia / decreased H⁺
-   </button>
-   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false"
-     onclick="selectShiftToken(this)"
-     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
-     Fetal hemoglobin
-   </button>
-   <button type="button" class="sort-token" data-shift-zone="left" draggable="true" aria-pressed="false"
-     onclick="selectShiftToken(this)"
-     ondragstart="event.dataTransfer.setData('text/plain',this.textContent.trim()); event.dataTransfer.effectAllowed='move'; selectShiftToken(this);">
-     Decreased temperature
-   </button>
+ <h3>Classify each condition by curve direction</h3>
+ <p class="small">For each condition, choose whether it shifts the oxyhemoglobin dissociation curve to the left or to the right.</p>
+
+ <div id="shiftClassify" class="shift-classify">
+   <fieldset class="q shift-row" data-correct="right">
+     <legend>Fever / increased temperature</legend>
+     <label><input type="radio" name="shift1" value="left"> Left shift / higher affinity</label>
+     <label><input type="radio" name="shift1" value="right"> Right shift / lower affinity</label>
+   </fieldset>
+
+   <fieldset class="q shift-row" data-correct="right">
+     <legend>Increased CO₂ and H⁺</legend>
+     <label><input type="radio" name="shift2" value="left"> Left shift / higher affinity</label>
+     <label><input type="radio" name="shift2" value="right"> Right shift / lower affinity</label>
+   </fieldset>
+
+   <fieldset class="q shift-row" data-correct="right">
+     <legend>Increased 2,3-DPG</legend>
+     <label><input type="radio" name="shift3" value="left"> Left shift / higher affinity</label>
+     <label><input type="radio" name="shift3" value="right"> Right shift / lower affinity</label>
+   </fieldset>
+
+   <fieldset class="q shift-row" data-correct="left">
+     <legend>Alkalemia / decreased H⁺</legend>
+     <label><input type="radio" name="shift4" value="left"> Left shift / higher affinity</label>
+     <label><input type="radio" name="shift4" value="right"> Right shift / lower affinity</label>
+   </fieldset>
+
+   <fieldset class="q shift-row" data-correct="left">
+     <legend>Fetal hemoglobin</legend>
+     <label><input type="radio" name="shift5" value="left"> Left shift / higher affinity</label>
+     <label><input type="radio" name="shift5" value="right"> Right shift / lower affinity</label>
+   </fieldset>
+
+   <fieldset class="q shift-row" data-correct="left">
+     <legend>Decreased temperature</legend>
+     <label><input type="radio" name="shift6" value="left"> Left shift / higher affinity</label>
+     <label><input type="radio" name="shift6" value="right"> Right shift / lower affinity</label>
+   </fieldset>
  </div>
- <div class="sort-zones">
-  <button type="button" class="sort-zone" id="leftZone" data-zone="left"
-    aria-label="Place selected condition in left shift higher affinity"
-    onclick="placeShift('left',selectedShift)"
-    ondragover="event.preventDefault();this.classList.add('dragover')"
-    ondragleave="this.classList.remove('dragover')"
-    ondrop="event.preventDefault();this.classList.remove('dragover');placeShift('left',event.dataTransfer.getData('text/plain'))">
-    <strong>Left shift / higher affinity</strong><div class="placed"></div>
-  </button>
-  <button type="button" class="sort-zone" id="rightZone" data-zone="right"
-    aria-label="Place selected condition in right shift lower affinity"
-    onclick="placeShift('right',selectedShift)"
-    ondragover="event.preventDefault();this.classList.add('dragover')"
-    ondragleave="this.classList.remove('dragover')"
-    ondrop="event.preventDefault();this.classList.remove('dragover');placeShift('right',event.dataTransfer.getData('text/plain'))">
-    <strong>Right shift / lower affinity</strong><div class="placed"></div>
-  </button>
+
+ <div class="controls">
+   <button type="button" class="btn primary" onclick="checkShiftClassify()">Check sorting</button>
+   <button type="button" class="btn2" onclick="resetShiftClassify()">Reset</button>
  </div>
- <div class="controls"><button class="btn primary" onclick="checkShiftSort()">Check sorting</button><button class="btn2" onclick="resetShiftSort()">Reset</button></div><div id="shiftSortFb" class="feedback"></div>
+ <div id="shiftSortFb" class="feedback" aria-live="polite"></div>
  <div id="q2"></div><div id="fb2" class="feedback"></div>
 </section>
 
@@ -385,7 +379,7 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 </div>
 
 <script>
-const STORE='AHRC155_2_3_oxygenation_v7';
+const STORE='AHRC155_2_3_oxygenation_v9';
 let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"inputs":{},"shiftSort":{"left":[],"right":[]}}')}catch(e){state={done:[],answers:{},inputs:{},shiftSort:{left:[],right:[]}}}
 state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.inputs=state.inputs||{};
 state.shiftSort=state.shiftSort&&typeof state.shiftSort==='object'?state.shiftSort:{};
@@ -456,55 +450,85 @@ function setShift(type){
 }
 setShift(state.inputs.shift||'normal');
 
-/* shift sort */
-const shiftItems=[
- {n:'Fever / increased temperature',z:'right'},{n:'Increased CO₂ and H⁺',z:'right'},{n:'Increased 2,3-DPG',z:'right'},
- {n:'Alkalemia / decreased H⁺',z:'left'},{n:'Fetal hemoglobin',z:'left'},{n:'Decreased temperature',z:'left'}
-];
-let selectedShift=null;
-function buildShiftSort(){
- const bank=document.getElementById('shiftBank');
- if(!bank)return;
- const cards=Array.from(bank.querySelectorAll('.sort-token'));
- shuffle(cards).forEach(b=>bank.appendChild(b));
- restoreShiftSort();
-}
-function selectShiftToken(b){
- document.querySelectorAll('#shiftBank .sort-token').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false')});
- selectedShift=b.textContent;b.classList.add('active');b.setAttribute('aria-pressed','true');
-}
-function placeShift(z,name){
- if(!name)return;
- ['left','right'].forEach(k=>state.shiftSort[k]=state.shiftSort[k].filter(x=>x!==name));
- state.shiftSort[z].push(name);selectedShift=null;save();restoreShiftSort();
-}
-function restoreShiftSort(){
- ['left','right'].forEach(z=>{
-   const p=document.querySelector('#'+z+'Zone .placed');
-   if(p)p.innerHTML=state.shiftSort[z].map(x=>`<span>${x}</span>`).join('');
- });
- document.querySelectorAll('#shiftBank .sort-token').forEach(b=>{
-   const used=state.shiftSort.left.includes(b.textContent)||state.shiftSort.right.includes(b.textContent);
-   b.classList.toggle('used',used);
-   b.classList.toggle('active',selectedShift===b.textContent);
-   b.setAttribute('aria-pressed',selectedShift===b.textContent?'true':'false');
+/* curve-shift classification */
+function restoreShiftClassify(){
+ const saved=state.inputs.shiftClassify || {};
+ document.querySelectorAll('#shiftClassify .shift-row').forEach((row,i)=>{
+   const name='shift'+(i+1);
+   const value=saved[name];
+   if(value){
+     const input=row.querySelector(`input[value="${value}"]`);
+     if(input)input.checked=true;
+   }
  });
 }
-function resetShiftSort(){
- state.shiftSort={left:[],right:[]};state.inputs.shiftSortOK=false;selectedShift=null;save();buildShiftSort();
- const fb=document.getElementById('shiftSortFb');if(fb){fb.className='feedback';fb.textContent=''}
+
+function saveShiftClassify(){
+ const saved={};
+ document.querySelectorAll('#shiftClassify .shift-row').forEach((row,i)=>{
+   const name='shift'+(i+1);
+   const checked=row.querySelector(`input[name="${name}"]:checked`);
+   if(checked)saved[name]=checked.value;
+ });
+ state.inputs.shiftClassify=saved;
+ save();
 }
-function checkShiftSort(){
- const ok=shiftItems.every(o=>state.shiftSort[o.z].includes(o.n)) &&
-          shiftItems.every(o=>!state.shiftSort[o.z==='left'?'right':'left'].includes(o.n));
+
+document.querySelectorAll('#shiftClassify input[type="radio"]').forEach(input=>{
+ input.addEventListener('change',saveShiftClassify);
+});
+
+function checkShiftClassify(){
+ let correct=0;
+ let answered=0;
+ const rows=Array.from(document.querySelectorAll('#shiftClassify .shift-row'));
+
+ rows.forEach((row,i)=>{
+   row.querySelectorAll('label').forEach(label=>label.classList.remove('correct','wrong'));
+   const name='shift'+(i+1);
+   const checked=row.querySelector(`input[name="${name}"]:checked`);
+   if(!checked)return;
+
+   answered++;
+   const ok=checked.value===row.dataset.correct;
+   if(ok)correct++;
+   checked.closest('label').classList.add(ok?'correct':'wrong');
+ });
+
+ saveShiftClassify();
+
  const fb=document.getElementById('shiftSortFb');
- if(fb){
-   fb.className='feedback '+(ok?'ok':'bad');
-   fb.textContent=ok?'✓ Correct. You sorted higher-affinity versus lower-affinity conditions.':'Not yet. Revisit the CADET face Right box above: CO₂, Acid, 2,3-DPG, Exercise, and Temperature move the curve right; opposite conditions move it left.';
+ if(answered<rows.length){
+   fb.className='feedback bad';
+   fb.textContent=`Choose a direction for all six conditions. ${answered} of ${rows.length} are answered.`;
+   state.inputs.shiftSortOK=false;
+   save();
+   return false;
  }
- state.inputs.shiftSortOK=ok;save();reconcileCompletion();return ok;
+
+ const ok=correct===rows.length;
+ fb.className='feedback '+(ok?'ok':'bad');
+ fb.textContent=ok
+   ?'✓ Correct. Increased CO₂, H⁺, temperature, and 2,3-DPG shift the curve right; decreased H⁺ and temperature and fetal hemoglobin shift it left.'
+   :`${correct} of ${rows.length} are correct. Remember: CADET face Right — CO₂, Acid, 2,3-DPG, Exercise, and Temperature move the curve right; opposite conditions move it left.`;
+
+ state.inputs.shiftSortOK=ok;
+ save();
+ reconcileCompletion();
+ return ok;
 }
-buildShiftSort();
+
+function resetShiftClassify(){
+ document.querySelectorAll('#shiftClassify input[type="radio"]').forEach(input=>input.checked=false);
+ document.querySelectorAll('#shiftClassify label').forEach(label=>label.classList.remove('correct','wrong'));
+ state.inputs.shiftClassify={};
+ state.inputs.shiftSortOK=false;
+ save();
+ const fb=document.getElementById('shiftSortFb');
+ if(fb){fb.className='feedback';fb.textContent=''}
+}
+
+restoreShiftClassify();
 
 /* Altitude */
 function updateAlt(){
@@ -568,7 +592,7 @@ function renderFinal(){
 renderFinal();
 function checkFinal(){let n=0;F.forEach((q,i)=>{let id='f'+i,d=document.getElementById(id),s=d.querySelector('input:checked'),fb=d.querySelector('.feedback');if(!s){fb.className='feedback bad';fb.textContent='Choose an answer.';return}let ok=s.value===q.a;if(ok)n++;d.querySelectorAll('.option').forEach(l=>l.classList.remove('correct','wrong'));s.closest('.option').classList.add(ok?'correct':'wrong');state.answers[id]={choice:s.value,checked:true,correct:ok};fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. '+q.h});save();if(n===F.length){fb7.className='feedback ok';fb7.textContent='8/8 correct. Activity complete.';finish(7)}else{fb7.className='feedback bad';fb7.textContent=`${n}/${F.length} correct. Revise the red selections using the targeted hints.`}}
 reconcileCompletion();
-window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.3',course:'Respiratory Physiology',activity_version:'v7'});
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'2.3',course:'Respiratory Physiology',activity_version:'v9'});
 </script>
 
   <script>
