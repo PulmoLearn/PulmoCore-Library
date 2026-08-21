@@ -137,13 +137,12 @@ section.card{border-radius:var(--pl-radius)!important}
 
 <header class="pl-top">
   <div class="pl-brand">
-    <div class="pl-mark" aria-hidden="true">
-      <svg fill="none" viewBox="0 0 64 64">
-        <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
-        <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
-        <circle cx="32" cy="31" fill="#1CA7A8" r="4"/>
-      </svg>
-    </div>
+    <div class="pl-mark" aria-hidden="true"><svg fill="none" role="img" viewBox="0 0 64 64">
+<path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="32" cy="31" fill="#1CA7A8" r="4"></circle>
+</svg></div>
     <div><div class="pl-brand-name">Pulmo<span>Learn</span></div><div class="pl-tag">Respiratory physiology learning for future RTs.</div></div>
   </div>
   <div class="pl-course">Respiratory Physiology · Activity 2.1</div>
@@ -237,11 +236,16 @@ section.card{border-radius:var(--pl-radius)!important}
 
   <div class="calc">
     <h3>Required proportional reasoning</h3>
-    <p>A patient’s PaCO₂ rises from <strong>36 to 54 mm Hg</strong> while CO₂ production remains unchanged. What fraction of the original alveolar ventilation remains?</p>
+    <p>A patient’s PaCO₂ rises from <strong>36 to 54 mm Hg</strong> while CO₂ production remains unchanged. Before the change, alveolar ventilation was <strong>6.0 L/min</strong>. Estimate the patient’s new alveolar ventilation.</p>
     <div class="formula">VA₂ / VA₁ = PaCO₂₁ / PaCO₂₂</div>
-    <ol class="steps"><li>Put the original PaCO₂ in the numerator.</li><li>36 ÷ 54 = 0.67.</li><li>Interpret 0.67 as about two-thirds of the original alveolar ventilation.</li></ol>
-    <div class="inputline"><label for="vaCalc">Fraction remaining</label><input id="vaCalc" type="number" step="0.01"></div>
-    <div id="vaCalcR" class="small"></div>
+    <ol class="steps">
+      <li>Because PaCO₂ and alveolar ventilation are inversely related, place the <strong>original PaCO₂</strong> over the <strong>new PaCO₂</strong>.</li>
+      <li>Use that ratio to determine what fraction of the original ventilation remains.</li>
+      <li>Multiply that fraction by the original alveolar ventilation of <strong>6.0 L/min</strong>.</li>
+    </ol>
+    <div class="inputline"><label for="vaCalc">New alveolar ventilation</label><input id="vaCalc" type="number" step="0.1" min="0" inputmode="decimal" aria-describedby="vaCalcHelp vaCalcR"> <span>L/min</span></div>
+    <div id="vaCalcHelp" class="small">Enter the calculated ventilation in L/min. The worked answer will appear only after you check your response.</div>
+    <div id="vaCalcR" class="small" role="status" aria-live="polite"></div>
   </div>
 
   <fieldset class="q" data-answer="d"><legend>If alveolar ventilation increases while CO₂ production stays stable, what initially happens?</legend>
@@ -459,9 +463,17 @@ function updateVA(){
 }
 vaSlider.oninput=updateVA;updateVA();
 function checkS2(){
- const calc=close(vaCalc.value,.67,.02);vaCalc.style.borderColor=calc?'#55a36b':'#cc665c';vaCalcR.style.color=calc?'#2f7c4a':'#b74e45';vaCalcR.textContent=calc?'Correct. 36/54 = 0.67, so about two-thirds of the original alveolar ventilation remains.':'Use the inverse ratio VA₂/VA₁ = PaCO₂₁/PaCO₂₂. Divide 36 by 54.';
+ const calcInput=document.getElementById('vaCalc');
+ const calcResult=document.getElementById('vaCalcR');
+ const entered=Number.parseFloat(calcInput.value);
+ const calc=Number.isFinite(entered)&&Math.abs(entered-4.0)<=0.1;
+ calcInput.style.borderColor=calc?'#55a36b':'#cc665c';
+ calcResult.style.color=calc?'#2f7c4a':'#b74e45';
+ calcResult.textContent=calc
+   ?'Correct. 36/54 = 0.67, and 6.0 × 0.67 ≈ 4.0 L/min. About two-thirds of the original alveolar ventilation remains.'
+   :'Not yet. First find the remaining fraction using 36/54, then multiply that fraction by the original 6.0 L/min.';
  const mc=guide('q2','d','n2','When ventilation increases, CO₂ clearance increases, PaCO₂ falls, and the pH tends to rise.','Follow the reaction: what happens to retained CO₂ when ventilation increases?');
- if(calc&&mc){show('fb2','good','<strong>Section complete.</strong> You used both direction-of-change and proportional reasoning for PaCO₂ and alveolar ventilation.');finish(2)}else show('fb2','bad','Complete the required proportional calculation and use the hint under the ventilation question.');
+ if(calc&&mc){show('fb2','good','<strong>Section complete.</strong> You used both direction-of-change and proportional reasoning for PaCO₂ and alveolar ventilation.');finish(2)}else show('fb2','bad','Complete the required proportional calculation and use the targeted feedback to revise anything that is still incorrect.');
 }
 
 /* S3 */
