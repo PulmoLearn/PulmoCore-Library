@@ -38,10 +38,10 @@
       <article class="teach-card teach-teal"><div class="teach-icon">1</div><div><p class="teach-label">IDENTIFY</p><h3>Correct Gas + Correct Regulator</h3><p>Verify cylinder contents by its label and select a compatible regulator or reducing valve before moving forward.</p></div></article>
       <article class="teach-card teach-blue"><div class="teach-icon">2</div><div><p class="teach-label">MOVE</p><h3>Secure Before Transport</h3><p>Release the storage restraint only when ready to move the cylinder. Place it on a portable carrier or cart, secure it, transport it, and secure it again if removed from the cart.</p></div></article>
       <article class="teach-card teach-amber teach-full-width"><div class="teach-icon">3</div><div><p class="teach-label">CONNECT</p><h3>Prepare the Outlet and Regulator</h3><div class="decision-path oxygen-path"><span>Remove cap/wrap</span><span>Inspect outlet</span><span>Point away + warn</span><span>Crack cylinder</span><span>Attach compatible regulator</span></div><div class="mini-example"><strong>Safety anchor:</strong> Make sure the sealing washer is in place and the regulator/flow control is off before tightening and opening the cylinder.</div></div></article>
-      <article class="teach-card teach-purple"><div class="teach-icon">4</div><div><p class="teach-label">VERIFY</p><h3>Open, Check, Calculate</h3><p>Open the valve until the pressure gauge stops rising, turn the valve stem back one-half turn as listed in the competency, listen for leaks, then calculate duration of flow from the pressure gauge and the provided tank conversion factor.</p></div></article>
+      <article class="teach-card teach-purple"><div class="teach-icon">4</div><div><p class="teach-label">VERIFY</p><h3>Open, Check, Calculate</h3><p>Open the valve until the pressure gauge stops rising, turn the valve stem back one-half turn, listen for leaks, then calculate duration of flow from the pressure gauge and the correct tank conversion factor.</p></div></article>
       <article class="teach-card teach-coral"><div class="teach-icon">5</div><div><p class="teach-label">FINISH</p><h3>Shut Down Completely</h3><p>Close the valve, bleed pressure from the regulator, turn the flowmeter off, remove the regulator, replace the safety cap, label and return the cylinder appropriately, discard supplies, remove PPE, perform hand hygiene, and document.</p></div></article>
     </div>
-    <div class="callout"><strong>Practice note:</strong> The competency requires using a tank conversion factor but does not specify its numeric value. Each scenario therefore supplies a lab reference card with the factor needed for that calculation.</div>
+    <div class="callout"><strong>Practice note:</strong> Each scenario supplies the cylinder size, pressure, ordered flow, and planned use time. Use the tank-factor chart in the Check & Calculate section to choose the correct factor before calculating duration.</div>
     <div class="actions end"><button id="startPractice" type="button" class="primary">Start Guided Scenario</button></div>
   </section>
 
@@ -102,8 +102,31 @@
     <div class="section-heading"><div><p class="section-kicker">Practice</p><h2>Check the System and Confirm the Supply</h2></div></div>
     <div class="guided-note" id="checkCue"></div>
     <div class="gauge-calc-grid">
-      <article class="gauge-card"><h3>Pressure Gauge</h3><div class="gauge-face"><div class="gauge-needle" id="gaugeNeedle"></div><div class="gauge-center"></div><span class="gauge-label" id="gaugePressure"></span></div><p id="leakObservation" class="observation-pill"></p></article>
-      <article class="calc-card"><h3>Duration of Flow</h3><p>Use the values on the lab reference card.</p><div class="formula-box">Duration (min) = cylinder pressure × tank factor ÷ flow</div><label for="durationAnswer">Calculated duration in minutes</label><input id="durationAnswer" type="number" inputmode="decimal" step="1" />
+      <article class="gauge-card">
+        <h3>Regulator Pressure Gauge</h3>
+        <figure class="regulator-visual"><img id="systemRegulatorImage" src="assets/regulator-gauge-1800.png" alt="Photorealistic oxygen regulator with a visible pressure gauge reading." /></figure>
+        <div class="pressure-tag-row">
+          <div class="pressure-tag"><span class="tag-label">Gauge reading</span><strong id="gaugePressure">1800 psi</strong></div>
+          <div class="pressure-tag"><span class="tag-label">Cylinder size</span><strong id="cylinderSizeLabel">E-cylinder</strong></div>
+        </div>
+        <p id="leakObservation" class="observation-pill"></p>
+      </article>
+      <article class="calc-card"><h3>Duration of Flow</h3><p>Use the regulator image, cylinder size, and tank-size/factor chart to determine how long the oxygen supply will last.</p>
+        <div class="factor-reference">
+          <h4>Quick tank-size and factor chart</h4>
+          <table class="factor-table">
+            <thead><tr><th scope="col">Cylinder size</th><th scope="col">Tank factor</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">D</th><td>0.16</td></tr>
+              <tr><th scope="row">E</th><td>0.28</td></tr>
+              <tr><th scope="row">M</th><td>1.56</td></tr>
+              <tr><th scope="row">H/K</th><td>3.14</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <label class="factor-choice-label">Choose the correct tank factor for the displayed cylinder size</label>
+        <div id="factorChoices" class="choice-stack factor-choices"></div>
+        <div class="formula-box">Duration (min) = cylinder pressure × tank factor ÷ flow</div><label for="durationAnswer">Calculated duration in minutes</label><input id="durationAnswer" type="number" inputmode="decimal" step="1" />
       <div id="supplyDecision" class="choice-stack supply-decisions"></div></article>
     </div>
     <div id="leakPanel" class="technique-panel" hidden><h3>Audible leak detected</h3><p>Choose the best response sequence before continuing.</p><div id="leakChoices" class="choice-stack"></div></div>
@@ -154,75 +177,5 @@
   </section>
 </main>
 <script src="practice-engine.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
