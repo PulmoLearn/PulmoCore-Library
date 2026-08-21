@@ -1,7 +1,7 @@
 (() => {
   "use strict";
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-  const STORAGE_KEY="pulmolearn.oxygenTanks.v4";
+  const STORAGE_KEY="pulmolearn.oxygenTanks.v5";
   const labels=["Teach","Prepare","Move & Secure","Connect","Check & Calculate","Deliver Gas","Shutdown","Complete"];
   const state={section:0,unlockedThrough:0,scenarioIndex:0,completedScenarios:[],equipment:[],cylinderVerification:null,moveMatches:{},selectedMoveImage:null,connectOrder:[],leakChoice:null,duration:null,supplyDecision:null,flow:null,shutdownOrder:[],doc:null};
   const scenarios=[
