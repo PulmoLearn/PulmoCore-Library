@@ -82,11 +82,31 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 <div class="station-head"><div class="num">2</div><div><span class="kicker">C2 + C3</span><h2>Why Fetal PVR Is High—and What the First Breath Changes</h2></div></div>
 <div class="grid">
 <div class="panel"><h3>Before birth</h3><div class="chain"><span>Fluid-filled/unexpanded lung</span><b>+</b><span>Low alveolar O₂</span><b>→</b><span>Pulmonary vasoconstriction + vessel compression</span><b>→</b><span>PVR high</span><b>→</b><span>Pulmonary blood flow low</span></div></div>
-<div class="panel"><h3>After an effective first breath</h3><div class="chain"><span>Lung aeration</span><b>→</b><span>Alveolar O₂ rises</span><b>→</b><span>Pulmonary vasodilation</span><b>→</b><span>PVR falls</span><b>→</b><span>Pulmonary flow rises</span></div></div>
+<div class="panel"><h3>After an effective first breath</h3><div class="chain"><span>Lung aeration</span><b>→</b><span>Alveolar O₂ rises</span><b>→</b><span>Pulmonary vasodilation</span><b>→</b><span>PVR falls</span><b>→</b><span>Pulmonary flow rises</span><b>→</b><span>Pulmonary venous return to the left atrium rises</span><b>→</b><span>Left-atrial pressure rises</span></div></div>
 </div>
 <div class="warning"><strong>The first breath costs more pressure than later breaths.</strong> The newborn must move liquid, recruit previously unexpanded units, and create an air–liquid interface. Once FRC begins to form, later breaths require less opening pressure.</div>
 <div class="clue"><strong>FRC is not the first inspired volume.</strong> Functional residual capacity is the air remaining in the lungs after passive expiration, helping maintain gas exchange and alveolar stability between breaths.</div>
+
+<div class="normal">
+  <strong>Connect the lung change to the atria.</strong>
+  As PVR falls, more right-ventricular output travels through the lungs. That increases pulmonary venous return to the <strong>left atrium</strong>, so left-atrial filling and pressure rise.
+  At the same time, <strong>cord clamping removes placental venous return to the right atrium</strong>, so right-atrial filling falls.
+  The combined effect changes the atrial pressure relationship from the fetal pattern toward <strong>LA pressure &gt; RA pressure</strong>, which promotes functional closure of the foramen ovale.
+</div>
+
+<div class="grid">
+  <div class="panel">
+    <h3>Lung aeration mainly affects the left atrium</h3>
+    <div class="chain"><span>PVR falls</span><b>→</b><span>Pulmonary blood flow rises</span><b>→</b><span>Pulmonary venous return rises</span><b>→</b><span>LA filling and pressure rise</span></div>
+  </div>
+  <div class="panel">
+    <h3>Cord clamping mainly affects right-atrial filling</h3>
+    <div class="chain"><span>Placental circuit removed</span><b>→</b><span>Umbilical venous return stops</span><b>→</b><span>RA filling falls</span><b>→</b><span>LA pressure can exceed RA pressure</span></div>
+  </div>
+</div>
+
 <h3>Build the first-breath cascade</h3>
+<p class="small">Use the sequence you just traced: begin with lung aeration and follow the vascular change through pulmonary blood flow to left-atrial filling and pressure. The separate effect of cord clamping on right-atrial filling is shown above and will be used in the next section.</p>
 <div id="breathBank" class="sequence-bank"></div><div id="breathSlots" class="slots"></div><div class="controls"><button class="btn primary" onclick="checkSeq('breath')">Check cascade</button><button class="btn2" onclick="resetSeq('breath')">Reset</button></div><div id="breathSeqFb" class="feedback"></div>
 <div id="q2"></div><div id="fb2" class="feedback"></div>
 </section>
@@ -159,8 +179,13 @@ footer{background:var(--navy);color:#fff;padding:32px clamp(18px,4vw,54px);displ
 
 <script>
 const STORE='AHRC155_3_4_newborn_v1';
-let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"inputs":{},"seq":{"fetal":[],"breath":[]},"seqOK":{}}')}catch(e){state={done:[],answers:{},inputs:{},seq:{fetal:[],breath:[]},seqOK:{}}}
-state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};state.inputs=state.inputs||{};state.seq=state.seq||{};state.seq.fetal=state.seq.fetal||[];state.seq.breath=state.seq.breath||[];state.seqOK=state.seqOK||{};
+let state;try{state=JSON.parse(localStorage.getItem(STORE)||'{"done":[],"answers":{},"inputs":{},"seq":{"fetal":[],"breath":[]},"seqOK":{}}')}catch(e){state={done:[],answers:{},inputs:{},seq:{fetal:[],breath:[]},seqOK:{},seqLocked:{fetal:[],breath:[]}}}
+state.done=Array.isArray(state.done)?state.done:[];state.answers=state.answers||{};
+state.seq=state.seq||{fetal:[],breath:[]};
+state.seqOK=state.seqOK||{};
+state.seqLocked=state.seqLocked||{fetal:[],breath:[]};
+state.seqLocked.fetal=Array.isArray(state.seqLocked.fetal)?state.seqLocked.fetal:[];
+state.seqLocked.breath=Array.isArray(state.seqLocked.breath)?state.seqLocked.breath:[];state.inputs=state.inputs||{};state.seq=state.seq||{};state.seq.fetal=state.seq.fetal||[];state.seq.breath=state.seq.breath||[];state.seqOK=state.seqOK||{};
 const save=()=>localStorage.setItem(STORE,JSON.stringify(state));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -199,10 +224,86 @@ breath:['First effective inspiration aerates lung units','Alveolar oxygen tensio
 let active={fetal:null,breath:null};
 function buildSeq(key){let bank=document.getElementById(key+'Bank'),slots=document.getElementById(key+'Slots');bank.innerHTML='';slots.innerHTML='';shuffle(seqSets[key]).forEach(item=>{let b=document.createElement('button');b.type='button';b.className='token';b.textContent=item;b.draggable=true;b.onclick=()=>selectToken(key,b);b.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',item);selectToken(key,b)});bank.appendChild(b)});seqSets[key].forEach((_,i)=>{let s=document.createElement('button');s.type='button';s.className='slot';s.dataset.i=i;s.onclick=()=>placeToken(key,s,active[key]);s.addEventListener('dragover',e=>{e.preventDefault();s.classList.add('dragover')});s.addEventListener('dragleave',()=>s.classList.remove('dragover'));s.addEventListener('drop',e=>{e.preventDefault();s.classList.remove('dragover');placeToken(key,s,e.dataTransfer.getData('text/plain'))});slots.appendChild(s)});restoreSeq(key)}
 function selectToken(key,b){let arr=state.seq[key];if(b.classList.contains('used')){let i=arr.indexOf(b.textContent);if(i>=0)arr[i]=null}active[key]=b.textContent;save();restoreSeq(key)}
-function placeToken(key,s,item){if(!item)return;let arr=state.seq[key],old=arr.indexOf(item);if(old>=0)arr[old]=null;arr[+s.dataset.i]=item;active[key]=null;save();restoreSeq(key)}
-function restoreSeq(key){let arr=state.seq[key];document.querySelectorAll('#'+key+'Slots .slot').forEach((s,i)=>{s.className='slot';let v=arr[i];s.textContent=v||`Step ${i+1}`;if(v)s.classList.add('filled')});document.querySelectorAll('#'+key+'Bank .token').forEach(b=>{b.classList.toggle('used',arr.includes(b.textContent));b.classList.toggle('active',active[key]===b.textContent)})}
-function resetSeq(key){state.seq[key]=[];state.seqOK[key]=false;active[key]=null;save();buildSeq(key);let fb=document.getElementById(key+'SeqFb');fb.className='feedback';fb.textContent='';reconcile()}
-function checkSeq(key){let arr=state.seq[key],n=0;document.querySelectorAll('#'+key+'Slots .slot').forEach((s,i)=>{s.classList.remove('correct','wrong');if(arr[i]===seqSets[key][i]){s.classList.add('correct');n++}else s.classList.add('wrong')});let ok=n===seqSets[key].length,fb=document.getElementById(key+'SeqFb');fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct.':'Not yet. Follow the physiologic direction from the initiating event to the downstream consequence.';state.seqOK[key]=ok;save();reconcile()}
+function placeToken(key,s,item){
+ if(!item)return;
+ let i=+s.dataset.i;
+ if(state.seqLocked[key]&&state.seqLocked[key].includes(i))return;
+ let arr=state.seq[key],old=arr.indexOf(item);
+ if(old>=0)arr[old]=null;
+ arr[i]=item;
+ active[key]=null;
+ save();
+ restoreSeq(key)
+}
+function restoreSeq(key){
+ let arr=state.seq[key],locked=state.seqLocked[key]||[];
+ document.querySelectorAll('#'+key+'Slots .slot').forEach((s,i)=>{
+   s.className='slot';
+   let v=arr[i];
+   s.textContent=v||`Step ${i+1}`;
+   if(v)s.classList.add('filled');
+   if(locked.includes(i)){
+     s.classList.add('correct');
+     s.disabled=true;
+     s.setAttribute('aria-label',`Step ${i+1}, correct: ${v}`);
+   }else{
+     s.disabled=false;
+     s.removeAttribute('aria-label');
+   }
+ });
+ document.querySelectorAll('#'+key+'Bank .token').forEach(b=>{
+   b.classList.toggle('used',arr.includes(b.textContent));
+   b.classList.toggle('active',active[key]===b.textContent)
+ })
+}
+function resetSeq(key){
+ state.seq[key]=[];
+ state.seqOK[key]=false;
+ state.seqLocked[key]=[];
+ active[key]=null;
+ save();
+ buildSeq(key);
+ let fb=document.getElementById(key+'SeqFb');
+ fb.className='feedback';
+ fb.textContent='';
+ reconcile()
+}
+function checkSeq(key){
+ let arr=state.seq[key],locked=state.seqLocked[key]||[],n=0,returned=0;
+
+ // Keep correct steps in place. Incorrect steps are cleared so their cards
+ // return to the starting bank for another attempt.
+ for(let i=0;i<seqSets[key].length;i++){
+   if(arr[i]===seqSets[key][i]){
+     if(!locked.includes(i))locked.push(i);
+     n++;
+   }else{
+     if(arr[i])returned++;
+     arr[i]=null;
+     locked=locked.filter(x=>x!==i);
+   }
+ }
+
+ state.seq[key]=arr;
+ state.seqLocked[key]=locked;
+ state.seqOK[key]=n===seqSets[key].length;
+ active[key]=null;
+ save();
+ restoreSeq(key);
+
+ let fb=document.getElementById(key+'SeqFb');
+ let remaining=seqSets[key].length-n;
+ fb.className='feedback '+(state.seqOK[key]?'ok':'bad');
+
+ if(state.seqOK[key]){
+   fb.textContent='✓ Correct. All steps are in the correct physiologic sequence.';
+ }else{
+   fb.textContent=`${n} of ${seqSets[key].length} steps are correct and remain in place. ${returned} incorrect ${returned===1?'card has':'cards have'} returned to the starting bank. Retry the ${remaining} remaining ${remaining===1?'step':'steps'}.`;
+ }
+
+ save();
+ reconcile()
+}
 ['fetal','breath'].forEach(buildSeq);
 
 function checkAPGAR(which){
