@@ -22,7 +22,7 @@ h2{font-size:clamp(1.7rem,3vw,2.4rem);margin:0 0 8px;line-height:1.15}.small{fon
 .btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800}.btn.primary{background:var(--teal);color:#fff}.btn2{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-weight:800}.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .feedback{display:none;margin-top:10px;padding:12px 14px;border-radius:12px}.feedback.ok{display:block;background:var(--mint);border:1px solid #86D9C8}.feedback.bad{display:block;background:#FDE9E9;color:#7F1F1F;border:1px solid #F2B5B5}
 .q{border-top:1px solid var(--border);padding:18px 0 6px}.q-title{font-weight:800;margin-bottom:9px}.options{display:grid;gap:9px}.option{display:flex;gap:9px;border:1px solid var(--border);padding:11px 13px;border-radius:12px;background:#fff;cursor:pointer}.option.selected{background:#F3FFFC;border:2px solid var(--teal);box-shadow:0 0 0 3px rgba(28,167,168,.12)}.option.correct{background:var(--mint);border:2px solid #70CBB9}.option.wrong{background:#FDE9E9;border:2px solid #E58C8C}
-.sort-bank{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.sort-token{border:2px solid var(--border);border-radius:12px;padding:9px 11px;background:#fff;font-weight:800;cursor:grab}.sort-token.active{background:var(--teal);border-color:var(--teal2);color:#fff;box-shadow:0 0 0 4px rgba(28,167,168,.16)}.sort-token.used{opacity:.42}
+.sort-bank{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.sort-token{border:2px solid var(--border);border-radius:12px;padding:9px 11px;background:#fff;font-weight:800;cursor:grab}.sort-token.active{background:var(--teal);border-color:var(--teal2);color:#fff;box-shadow:0 0 0 4px rgba(28,167,168,.16)}.sort-token.used{opacity:.32;cursor:default}.placed span{background:#fff;border:1px solid var(--border);border-radius:9px;padding:7px 9px}.sort-zone .placed span{box-shadow:0 0 0 1px rgba(28,167,168,.08)}
 .sort-zones{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.sort-zone{min-height:145px;border:2px dashed #9CB0BD;border-radius:15px;padding:12px;background:#FBFDFE;text-align:left}.sort-zone.dragover{border-color:var(--teal);background:#F3FFFC}.placed{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.placed span{background:#fff;border:1px solid var(--border);border-radius:9px;padding:7px 9px}
 .force-map{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.force{border:1px solid var(--border);border-radius:15px;padding:15px;background:#fff}.force .arrow{font-size:2rem;font-weight:900;color:var(--teal)}
 .calc{border:2px solid #BFD0DA;border-radius:16px;padding:17px;background:#fff;margin:14px 0}.calcrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}input[type=number]{padding:10px;border:1px solid #B8CAD4;border-radius:10px;max-width:160px}
@@ -194,7 +194,42 @@ function selectToken(b){document.querySelectorAll('.sort-token').forEach(x=>x.cl
 function place(z,name){if(!name)return;['hydro','oncotic','perm','lymph'].forEach(k=>state.sort[k]=state.sort[k].filter(x=>x!==name));state.sort[z].push(name);selected=null;save();restoreSort()}
 function restoreSort(){['hydro','oncotic','perm','lymph'].forEach(z=>{let p=document.querySelector('#'+z+'Zone .placed');p.innerHTML=state.sort[z].map(x=>`<span>${x}</span>`).join('')});document.querySelectorAll('.sort-token').forEach(b=>{let used=['hydro','oncotic','perm','lymph'].some(k=>state.sort[k].includes(b.textContent));b.classList.toggle('used',used);b.classList.toggle('active',selected===b.textContent)})}
 function resetEdemaSort(){state.sort={hydro:[],oncotic:[],perm:[],lymph:[]};state.inputs.sortOK=false;selected=null;save();buildSort();let fb=document.getElementById('edemaSortFb');fb.className='feedback';fb.textContent='';reconcile()}
-function checkEdemaSort(){let ok=edemaItems.every(o=>state.sort[o.z].includes(o.n));let fb=document.getElementById('edemaSortFb');fb.className='feedback '+(ok?'ok':'bad');fb.textContent=ok?'✓ Correct. You identified the dominant force or failed pathway for each pattern.':'Not yet. Use the four-part framework: pressure, protein, barrier, or drainage.';state.inputs.sortOK=ok;save();reconcile()}
+function checkEdemaSort(){
+ const zones=['hydro','oncotic','perm','lymph'];
+ let correctCount=0;
+ let returnedCount=0;
+
+ // Keep correctly placed items. Remove incorrectly placed items so they return
+ // to the starting bank for another attempt.
+ edemaItems.forEach(item=>{
+   const placedZone=zones.find(z=>state.sort[z].includes(item.n));
+   if(placedZone===item.z){
+     correctCount++;
+   }else if(placedZone){
+     state.sort[placedZone]=state.sort[placedZone].filter(x=>x!==item.n);
+     returnedCount++;
+   }
+ });
+
+ const ok=correctCount===edemaItems.length;
+ state.inputs.sortOK=ok;
+ selected=null;
+ save();
+ restoreSort();
+
+ const fb=document.getElementById('edemaSortFb');
+ fb.className='feedback '+(ok?'ok':'bad');
+
+ if(ok){
+   fb.textContent='✓ Correct. All eight findings are matched to the dominant edema mechanism.';
+ }else{
+   const remaining=edemaItems.length-correctCount;
+   fb.textContent=`${correctCount} of ${edemaItems.length} are correct and remain in place. ${returnedCount} incorrect ${returnedCount===1?'item has':'items have'} returned to the starting bank. Retry the ${remaining} remaining ${remaining===1?'item':'items'} using the pressure, protein, barrier, or drainage framework.`;
+ }
+
+ save();
+ reconcile();
+}
 buildSort();
 
 /* calculations */
