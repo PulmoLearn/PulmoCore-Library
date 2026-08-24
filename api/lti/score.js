@@ -1,23 +1,28 @@
 import {
-  SignJWT,
-  importPKCS8
+  jwtVerify,
+  importSPKI,
+  importPKCS8,
+  SignJWT
 } from "jose";
-
-import {
-  createClient
-} from "@supabase/supabase-js";
-
+import { createClient } from "@supabase/supabase-js";
 import crypto from "crypto";
+
+const SITE = "https://www.pulmolearn.com";
 
 const CLIENT_ID =
   process.env.CANVAS_CLIENT_ID;
 
 const LTI_PRIVATE_KEY =
-  process.env.LTI_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  process.env.LTI_PRIVATE_KEY;
+
+const LTI_PUBLIC_KEY =
+  process.env.LTI_PUBLIC_KEY;
 
 const LTI_KEY_ID =
-  process.env.LTI_KEY_ID ||
-  "pulmolearn-lti-key-1";
+  process.env.LTI_KEY_ID;
+
+const SCORE_SCOPE =
+  "https://purl.imsglobal.org/spec/lti-ags/scope/score";
 
 const admin =
   createClient(
@@ -31,85 +36,67 @@ const authClient =
     process.env.SUPABASE_SERVICE_ROLE
   );
 
-const SCORE_SCOPE =
-  "https://purl.imsglobal.org/spec/lti-ags/scope/score";
+async function verifyLtiContext(token) {
+  const key =
+    await importSPKI(
+      LTI_PUBLIC_KEY,
+      "RS256"
+    );
 
-function getCanvasTokenUrl(lineItemUrl) {
-  const url =
-    new URL(lineItemUrl);
+  const { payload } =
+    await jwtVerify(
+      token,
+      key,
+      {
+        issuer: SITE,
+        audience: "pulmolearn-lti-score"
+      }
+    );
 
-  return `${url.origin}/login/oauth2/token`;
+  return payload;
 }
 
-function getScoreUrl(lineItemUrl) {
-  return `${lineItemUrl.replace(/\/$/, "")}/scores`;
-}
+async function getCanvasAgsToken(lineitem) {
+  const origin =
+    new URL(lineitem).origin;
 
-async function getCanvasAccessToken(tokenUrl) {
-  if (!CLIENT_ID) {
-    throw new Error("Missing CANVAS_CLIENT_ID");
-  }
+  const tokenUrl =
+    `${origin}/login/oauth2/token`;
 
-  if (!LTI_PRIVATE_KEY) {
-    throw new Error("Missing LTI_PRIVATE_KEY");
-  }
-
-  const privateKey =
+  const key =
     await importPKCS8(
       LTI_PRIVATE_KEY,
       "RS256"
     );
 
-  const now =
-    Math.floor(
-      Date.now() / 1000
-    );
-
   const assertion =
-    await new SignJWT({
-      iss:
-        "https://www.pulmolearn.com",
-
-      sub:
-        CLIENT_ID,
-
-      aud:
-        tokenUrl,
-
-      jti:
-        crypto.randomUUID()
-    })
+    await new SignJWT({})
       .setProtectedHeader({
         alg: "RS256",
         kid: LTI_KEY_ID,
         typ: "JWT"
       })
-      .setIssuedAt(now)
-      .setExpirationTime(now + 300)
-      .sign(privateKey);
+      .setIssuer(SITE)
+      .setSubject(CLIENT_ID)
+      .setAudience(tokenUrl)
+      .setIssuedAt()
+      .setJti(
+        crypto.randomUUID()
+      )
+      .setExpirationTime("5m")
+      .sign(key);
 
-  const body =
-    new URLSearchParams();
-
-  body.set(
-    "grant_type",
-    "client_credentials"
-  );
-
-  body.set(
-    "client_assertion_type",
-    "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
-  );
-
-  body.set(
-    "client_assertion",
-    assertion
-  );
-
-  body.set(
-    "scope",
-    SCORE_SCOPE
-  );
+  const form =
+    new URLSearchParams({
+      grant_type:
+        "client_credentials",
+      client_assertion_type:
+        "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+      client_assertion:
+        assertion,
+      scope:
+        SCORE_SCOPE
+    });
 
   const response =
     await fetch(
@@ -121,206 +108,229 @@ async function getCanvasAccessToken(tokenUrl) {
             "application/x-www-form-urlencoded"
         },
         body:
-          body.toString()
+          form.toString()
       }
     );
 
-  const text =
-    await response.text();
+  const result =
+    await response
+      .json()
+      .catch(
+        () => ({})
+      );
 
-  let result;
+  if (
+    !response.ok ||
+    !result?.access_token
+  ) {
 
-  try {
-    result =
-      JSON.parse(text);
-  } catch {
-    result = { raw: text };
-  }
-
-  if (!response.ok) {
     throw new Error(
-      `Canvas token request failed (${response.status}): ${JSON.stringify(result)}`
+      `Canvas AGS token request failed (${response.status}): ` +
+      `${result?.error_description || result?.error || "No access token returned"}`
     );
-  }
 
-  if (!result.access_token) {
-    throw new Error(
-      "Canvas token response did not include access_token"
-    );
   }
 
   return result.access_token;
 }
 
 export default async function handler(req, res) {
+
   if (req.method !== "POST") {
     return res
       .status(405)
       .json({
-        error: "Method not allowed"
+        ok: false,
+        error:
+          "Method not allowed"
       });
   }
 
   try {
+
     const body =
       typeof req.body === "string"
         ? JSON.parse(req.body)
         : req.body;
 
-    const accessToken =
-      body?.access_token;
-
     const lessonId =
-      body?.lesson_id;
+      String(
+        body?.lesson_id || ""
+      );
 
     const completed =
       body?.completed === true;
 
-    if (!accessToken || !lessonId) {
+    const ltiContextToken =
+      body?.lti_context || "";
+
+    const accessToken =
+      body?.access_token || "";
+
+    if (
+      !lessonId ||
+      !completed ||
+      !ltiContextToken
+    ) {
+
       return res
         .status(400)
         .json({
-          error: "Missing access_token or lesson_id"
+          ok: false,
+          passed_back: false,
+          error:
+            "Missing lesson_id, completed=true, or lti_context"
         });
+
     }
 
-    if (!completed) {
-      return res
-        .status(200)
-        .json({
-          ok: true,
-          skipped: true,
-          reason: "Lesson is not complete"
-        });
-    }
-
-    const {
-      data: userData,
-      error: userError
-    } =
-      await authClient.auth.getUser(
-        accessToken
+    const ctx =
+      await verifyLtiContext(
+        ltiContextToken
       );
 
     if (
-      userError ||
-      !userData?.user
+      String(ctx.lessonId || "") !==
+      lessonId
     ) {
+
       return res
-        .status(401)
+        .status(400)
         .json({
-          error: "Invalid PulmoLearn session",
-          details: userError?.message
+          ok: false,
+          passed_back: false,
+          error:
+            "LTI context lesson does not match the completed lesson"
         });
+
     }
 
-    const userId =
-      userData.user.id;
+    const lineitem =
+      String(
+        ctx.lineitem || ""
+      );
 
-    const {
-      data: context,
-      error: contextError
-    } =
-      await admin
-        .from("lti_launch_context")
-        .select(
-          "lti_sub, line_item_url, scopes"
-        )
-        .eq("user_id", userId)
-        .eq("lesson_id", lessonId)
-        .maybeSingle();
+    if (!lineitem) {
 
-    if (contextError) {
       return res
-        .status(500)
+        .status(409)
         .json({
-          error: "Canvas launch context lookup failed",
-          details: contextError.message
+          ok: false,
+          passed_back: false,
+          error:
+            "Canvas launch did not include an AGS lineitem. Confirm the Canvas LTI developer key has the AGS score scope and that the assignment is linked as a graded External Tool."
         });
-    }
 
-    if (!context) {
-      return res
-        .status(404)
-        .json({
-          error: "No Canvas launch context found for this lesson"
-        });
     }
 
     const scopes =
-      Array.isArray(context.scopes)
-        ? context.scopes
+      Array.isArray(ctx.scopes)
+        ? ctx.scopes
         : [];
 
-    if (!scopes.includes(SCORE_SCOPE)) {
+    if (
+      !scopes.includes(
+        SCORE_SCOPE
+      )
+    ) {
+
       return res
         .status(403)
         .json({
+          ok: false,
+          passed_back: false,
           error:
-            "Canvas did not grant the AGS score scope for this launch"
+            "Canvas launch did not grant the LTI AGS score scope."
         });
+
     }
 
-    const lineItemUrl =
-      context.line_item_url;
+    // Optional extra identity validation when a PulmoLearn session is available.
+    if (accessToken) {
 
-    const canvasUserId =
-      context.lti_sub;
+      const {
+        data: userData,
+        error: userErr
+      } =
+        await authClient
+          .auth
+          .getUser(
+            accessToken
+          );
 
-    if (!lineItemUrl || !canvasUserId) {
-      return res
-        .status(500)
-        .json({
-          error:
-            "Stored Canvas launch context is incomplete"
-        });
+      if (
+        userErr ||
+        !userData?.user
+      ) {
+
+        return res
+          .status(401)
+          .json({
+            ok: false,
+            passed_back: false,
+            error:
+              "Invalid PulmoLearn session"
+          });
+
+      }
+
+      const {
+        data: link,
+        error: linkErr
+      } =
+        await admin
+          .from("lti_users")
+          .select("lti_sub")
+          .eq(
+            "user_id",
+            userData.user.id
+          )
+          .eq(
+            "lti_sub",
+            ctx.sub
+          )
+          .maybeSingle();
+
+      if (
+        linkErr ||
+        !link
+      ) {
+
+        return res
+          .status(403)
+          .json({
+            ok: false,
+            passed_back: false,
+            error:
+              "PulmoLearn account does not match this Canvas launch."
+          });
+
+      }
+
     }
 
-    const tokenUrl =
-      getCanvasTokenUrl(
-        lineItemUrl
-      );
-
-    const canvasAccessToken =
-      await getCanvasAccessToken(
-        tokenUrl
+    const canvasToken =
+      await getCanvasAgsToken(
+        lineitem
       );
 
     const scoreUrl =
-      getScoreUrl(
-        lineItemUrl
-      );
+      `${lineitem.replace(/\/+$/, "")}/scores`;
 
-    const scorePayload =
-      {
-        userId:
-          canvasUserId,
-
-        scoreGiven:
-          100,
-
-        scoreMaximum:
-          100,
-
-        activityProgress:
-          "Completed",
-
-        gradingProgress:
-          "FullyGraded",
-
-        timestamp:
-          new Date().toISOString()
-      };
-
-    console.log(
-      "PulmoLearn: Sending Canvas AGS score:",
-      {
-        userId,
-        lessonId,
-        canvasUserId,
-        scoreUrl
-      }
-    );
+    const scoreBody = {
+      timestamp:
+        new Date().toISOString(),
+      scoreGiven:
+        1,
+      scoreMaximum:
+        1,
+      activityProgress:
+        "Completed",
+      gradingProgress:
+        "FullyGraded",
+      userId:
+        String(ctx.sub)
+    };
 
     const scoreResponse =
       await fetch(
@@ -329,65 +339,65 @@ export default async function handler(req, res) {
           method: "POST",
           headers: {
             "Authorization":
-              `Bearer ${canvasAccessToken}`,
-
+              `Bearer ${canvasToken}`,
             "Content-Type":
               "application/vnd.ims.lis.v1.score+json"
           },
           body:
-            JSON.stringify(scorePayload)
+            JSON.stringify(
+              scoreBody
+            )
         }
       );
 
-    const scoreText =
+    const responseText =
       await scoreResponse.text();
 
     if (!scoreResponse.ok) {
+
       return res
-        .status(scoreResponse.status)
+        .status(502)
         .json({
+          ok: false,
+          passed_back: false,
           error:
-            "Canvas score passback failed",
-
-          canvas_status:
-            scoreResponse.status,
-
-          canvas_response:
-            scoreText
+            `Canvas rejected the score (${scoreResponse.status}).`,
+          details:
+            responseText.slice(0, 1200)
         });
-    }
 
-    console.log(
-      "PulmoLearn: Canvas AGS score accepted:",
-      {
-        userId,
-        lessonId,
-        canvasUserId
-      }
-    );
+    }
 
     return res
       .status(200)
       .json({
         ok: true,
         passed_back: true,
-        lesson_id: lessonId,
-        score: 100
+        lesson_id:
+          lessonId,
+        activityProgress:
+          "Completed",
+        gradingProgress:
+          "FullyGraded"
       });
 
   } catch (error) {
+
     console.error(
-      "PulmoLearn score endpoint error:",
+      "PulmoLearn LTI score error:",
       error
     );
 
     return res
       .status(500)
       .json({
+        ok: false,
+        passed_back: false,
         error:
-          "Canvas score endpoint failed",
+          "LTI score passback failed",
         details:
           error.message
       });
+
   }
 }
