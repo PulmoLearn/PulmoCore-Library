@@ -1,28 +1,33 @@
 /**
- * PulmoLearn Activity Progress Tracker v3.0
+ * PulmoLearn Activity Progress Tracker v3.1
+ * 2026-08-24
  *
- * Shared server/LTI bridge for standalone PulmoLearn activities.
- * The activity itself owns persistence and emits progress/completion.
+ * HOTFIX:
+ * v3.0 used a MutationObserver that watched attributes the tracker itself wrote.
+ * That could create a self-triggering mutation loop and freeze complex activities.
  *
- * Supported activity events:
- *   pulmolearn:progress
- *   pulmolearn:complete
- *   pulmolearn:activity-progress-report
- *
- * Canvas AGS:
- *   Receives signed lti_ctx from /api/lti/launch.
- *   Sends it to /api/lti/score on completion.
+ * v3.1:
+ * - NO MutationObserver.
+ * - Primary progress source = explicit activity events:
+ *     pulmolearn:progress
+ *     pulmolearn:complete
+ *     pulmolearn:activity-progress-report
+ * - Fallback = lightweight 2-second visible-progress poll.
+ * - Keeps PulmoLearn lesson_progress + activity analytics behavior.
+ * - Keeps signed Canvas AGS lti_ctx passback behavior.
+ * - Tracking failures never block the learning activity.
  */
 
 import { supabase } from '/assets/auth.js'
 import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
 
-console.log('PulmoLearn: activity-progress-tracker.js v3.0 loaded')
+console.log('PulmoLearn: activity-progress-tracker.js v3.1 loaded')
 
 const params = new URLSearchParams(window.location.search)
 const isLtiLaunch = params.get('lti') === '1'
 
 const meta = window.PULMO_LESSON || {}
+
 const lessonId =
   window.PULMO_LESSON_ID ||
   window.LESSON_ID ||
@@ -83,6 +88,7 @@ let passbackInFlight = false
 let lastSavedSignature = ''
 let sessionStart = Date.now()
 let lastElapsedSaved = 0
+let analyticsCompletionEventSent = false
 
 const passbackKey = lessonId
   ? `pulmolearn-lti-passback:v3:${lessonId}`
@@ -95,74 +101,121 @@ function clampPercent(value) {
 }
 
 function parseVisiblePercent() {
-  const selectors = [
-    '#overallProgress',
-    '#ltiProgressText',
-    '#progressText',
-    '[data-progress-percent]',
-    '[role="progressbar"][aria-valuenow]',
-    '#overallProgressBar',
-    '#ltiProgressBar',
-    '#progressBar',
-    '.progress-bar'
-  ]
-
   const values = []
 
-  selectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(el => {
-      const data = clampPercent(
-        el.dataset?.progressPercent ?? el.dataset?.percent
-      )
-      if (data !== null) values.push(data)
+  const add = value => {
+    const v = clampPercent(value)
+    if (v !== null) values.push(v)
+  }
 
-      const aria = clampPercent(el.getAttribute?.('aria-valuenow'))
-      if (aria !== null) values.push(aria)
+  const percentTextIds = [
+    'overallProgress',
+    'progressText'
+  ]
 
-      const text = String(el.textContent || '')
-      const pct = text.match(/(\d+(?:\.\d+)?)\s*%/)
-      if (pct) {
-        const v = clampPercent(pct[1])
-        if (v !== null) values.push(v)
-      }
+  percentTextIds.forEach(id => {
+    const el = document.getElementById(id)
+    if (!el) return
 
-      const fraction = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i)
-      if (fraction) {
-        const done = Number(fraction[1])
-        const total = Number(fraction[2])
-        if (Number.isFinite(done) && Number.isFinite(total) && total > 0) {
-          values.push(clampPercent(done / total * 100))
-        }
-      }
-
-      const width = String(el.style?.width || '').match(/(\d+(?:\.\d+)?)\s*%/)
-      if (width) {
-        const v = clampPercent(width[1])
-        if (v !== null) values.push(v)
-      }
-    })
+    const text = String(el.textContent || '')
+    const match = text.match(/(\d+(?:\.\d+)?)\s*%/)
+    if (match) add(match[1])
   })
 
-  const filtered = values.filter(v => v !== null)
-  return filtered.length ? Math.max(...filtered) : 0
+  // Scenario format: "6 of 10 activities complete"
+  const ltiText = document.getElementById('ltiProgressText')
+  if (ltiText) {
+    const text = String(ltiText.textContent || '')
+    const fraction = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i)
+
+    if (fraction) {
+      const done = Number(fraction[1])
+      const total = Number(fraction[2])
+
+      if (
+        Number.isFinite(done) &&
+        Number.isFinite(total) &&
+        total > 0
+      ) {
+        add((done / total) * 100)
+      }
+    }
+  }
+
+  // Accessible progressbars.
+  document
+    .querySelectorAll('[role="progressbar"][aria-valuenow]')
+    .forEach(el => add(el.getAttribute('aria-valuenow')))
+
+  // Known progress fills. Reading only; tracker does not write these.
+  const barIds = [
+    'overallProgressBar',
+    'ltiProgressBar',
+    'progressBar'
+  ]
+
+  barIds.forEach(id => {
+    const el = document.getElementById(id)
+    if (!el) return
+
+    const width =
+      String(el.style?.width || '')
+        .match(/(\d+(?:\.\d+)?)\s*%/)
+
+    if (width) add(width[1])
+  })
+
+  return values.length ? Math.max(...values) : 0
 }
 
 function ensureAnalyticsRoot() {
-  const root =
-    document.querySelector(`[data-activity-id="${CSS.escape(String(activityId || ''))}"]`) ||
+  let root = null
+
+  try {
+    if (activityId) {
+      root =
+        document.querySelector(
+          `[data-activity-id="${CSS.escape(String(activityId))}"]`
+        )
+    }
+  } catch (e) {}
+
+  root =
+    root ||
     document.querySelector('[data-pulmolearn-standalone-activity]') ||
     document.querySelector('main') ||
     document.body
 
   if (!root) return null
 
-  root.dataset.pulmolearnStandaloneActivity = 'true'
-  if (activityId) root.dataset.activityId = activityId
-  root.dataset.activityName = activityName
-  root.dataset.activityType = activityType
-  root.dataset.courseId = courseId
-  if (lessonId) root.dataset.lessonId = lessonId
-  root.dataset.required = 'true'
+  // Set static metadata once.
+  if (root.dataset.pulmolearnStandaloneActivity !== 'true') {
+    root.dataset.pulmolearnStandaloneActivity = 'true'
+  }
+
+  if (activityId && root.dataset.activityId !== String(activityId)) {
+    root.dataset.activityId = String(activityId)
+  }
+
+  if (root.dataset.activityName !== String(activityName)) {
+    root.dataset.activityName = String(activityName)
+  }
+
+  if (root.dataset.activityType !== String(activityType)) {
+    root.dataset.activityType = String(activityType)
+  }
+
+  if (root.dataset.courseId !== String(courseId)) {
+    root.dataset.courseId = String(courseId)
+  }
+
+  if (lessonId && root.dataset.lessonId !== String(lessonId)) {
+    root.dataset.lessonId = String(lessonId)
+  }
+
+  if (root.dataset.required !== 'true') {
+    root.dataset.required = 'true'
+  }
 
   return root
 }
@@ -170,20 +223,32 @@ function ensureAnalyticsRoot() {
 const analyticsRoot = ensureAnalyticsRoot()
 
 function getElapsedDelta() {
-  const elapsed = Math.max(0, Math.floor((Date.now() - sessionStart) / 1000))
-  const delta = Math.max(0, elapsed - lastElapsedSaved)
+  const elapsed =
+    Math.max(
+      0,
+      Math.floor(
+        (Date.now() - sessionStart) / 1000
+      )
+    )
+
+  const delta =
+    Math.max(
+      0,
+      elapsed - lastElapsedSaved
+    )
+
   lastElapsedSaved = elapsed
   return delta
 }
 
 function getState() {
   const visible = parseVisiblePercent()
-  lastPercent = Math.max(lastPercent, visible || 0)
 
-  if (
-    analyticsRoot?.dataset?.complete === 'true' ||
-    lastPercent >= 100
-  ) {
+  if (visible > lastPercent) {
+    lastPercent = visible
+  }
+
+  if (lastPercent >= 100) {
     completedEver = true
     lastPercent = 100
   }
@@ -203,25 +268,47 @@ function getState() {
 function markAnalyticsState(percent, completed) {
   if (!analyticsRoot) return
 
-  analyticsRoot.dataset.progressPercent = String(percent)
-  analyticsRoot.dataset.complete = completed ? 'true' : 'false'
+  const percentString = String(percent)
+  const completeString =
+    completed ? 'true' : 'false'
+
+  // Critical v3.1 guard: only write when the value changed.
+  if (
+    analyticsRoot.dataset.progressPercent !==
+    percentString
+  ) {
+    analyticsRoot.dataset.progressPercent =
+      percentString
+  }
+
+  if (
+    analyticsRoot.dataset.complete !==
+    completeString
+  ) {
+    analyticsRoot.dataset.complete =
+      completeString
+  }
 
   if (
     completed &&
-    analyticsRoot.dataset.completionEventSent !== 'true'
+    !analyticsCompletionEventSent
   ) {
-    analyticsRoot.dataset.completionEventSent = 'true'
+    analyticsCompletionEventSent = true
+
     analyticsRoot.dispatchEvent(
-      new CustomEvent('activityComplete', {
-        bubbles: true,
-        detail: {
-          activityId,
-          lessonId,
-          courseId,
-          activityName,
-          activityType
+      new CustomEvent(
+        'activityComplete',
+        {
+          bubbles: true,
+          detail: {
+            activityId,
+            lessonId,
+            courseId,
+            activityName,
+            activityType
+          }
         }
-      })
+      )
     )
   }
 }
@@ -233,47 +320,86 @@ async function sendLtiCompletionPassback() {
     !lessonId ||
     !ltiContext ||
     passbackInFlight
-  ) return
+  ) {
+    return
+  }
 
   try {
-    if (sessionStorage.getItem(passbackKey) === 'sent') return
+    if (
+      sessionStorage.getItem(passbackKey) ===
+      'sent'
+    ) {
+      return
+    }
   } catch (e) {}
 
   passbackInFlight = true
 
   try {
-    const response = await fetch('/api/lti/score', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        access_token: session?.access_token || null,
-        lesson_id: lessonId,
-        completed: true,
-        lti_context: ltiContext
-      })
-    })
+    const response =
+      await fetch(
+        '/api/lti/score',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+          body:
+            JSON.stringify({
+              access_token:
+                session?.access_token || null,
+              lesson_id:
+                lessonId,
+              completed:
+                true,
+              lti_context:
+                ltiContext
+            })
+        }
+      )
 
-    const result = await response.json().catch(() => ({}))
+    const result =
+      await response
+        .json()
+        .catch(
+          () => ({})
+        )
 
-    if (!response.ok || !result?.ok || !result?.passed_back) {
+    if (
+      !response.ok ||
+      !result?.ok ||
+      !result?.passed_back
+    ) {
       console.error(
         'PulmoLearn: Canvas completion passback failed:',
-        result?.error || `HTTP ${response.status}`,
+        result?.error ||
+          `HTTP ${response.status}`,
         result
       )
+
       window.dispatchEvent(
-        new CustomEvent('pulmolearn:lti-passback-status', {
-          detail: {
-            ok: false,
-            error: result?.error || `HTTP ${response.status}`
+        new CustomEvent(
+          'pulmolearn:lti-passback-status',
+          {
+            detail: {
+              ok: false,
+              error:
+                result?.error ||
+                `HTTP ${response.status}`
+            }
           }
-        })
+        )
       )
+
       return
     }
 
     try {
-      sessionStorage.setItem(passbackKey, 'sent')
+      sessionStorage.setItem(
+        passbackKey,
+        'sent'
+      )
     } catch (e) {}
 
     console.log(
@@ -281,12 +407,21 @@ async function sendLtiCompletionPassback() {
     )
 
     window.dispatchEvent(
-      new CustomEvent('pulmolearn:lti-passback-status', {
-        detail: { ok: true, passedBack: true }
-      })
+      new CustomEvent(
+        'pulmolearn:lti-passback-status',
+        {
+          detail: {
+            ok: true,
+            passedBack: true
+          }
+        }
+      )
     )
   } catch (error) {
-    console.error('PulmoLearn: Canvas passback error:', error)
+    console.error(
+      'PulmoLearn: Canvas passback error:',
+      error
+    )
   } finally {
     passbackInFlight = false
   }
@@ -296,21 +431,39 @@ async function readCurrentLessonProgress() {
   if (!userId || !lessonId) return null
 
   try {
-    const { data, error } = await supabase
-      .from('lesson_progress')
-      .select('percent_complete, completed, total_seconds, completed_at')
-      .eq('user_id', userId)
-      .eq('lesson_id', lessonId)
-      .maybeSingle()
+    const {
+      data,
+      error
+    } =
+      await supabase
+        .from('lesson_progress')
+        .select(
+          'percent_complete, completed, total_seconds, completed_at'
+        )
+        .eq(
+          'user_id',
+          userId
+        )
+        .eq(
+          'lesson_id',
+          lessonId
+        )
+        .maybeSingle()
 
     if (error) {
-      console.warn('PulmoLearn: lesson_progress read failed:', error.message)
+      console.warn(
+        'PulmoLearn: lesson_progress read failed:',
+        error.message
+      )
       return null
     }
 
     return data || null
   } catch (error) {
-    console.warn('PulmoLearn: lesson_progress read failed safely:', error)
+    console.warn(
+      'PulmoLearn: lesson_progress read failed safely:',
+      error
+    )
     return null
   }
 }
@@ -318,71 +471,136 @@ async function readCurrentLessonProgress() {
 async function saveServerProgress(reason = 'change') {
   const state = getState()
 
-  // Canvas passback is independent of the PulmoLearn browser session in v3.
+  // Canvas passback is independent of PulmoLearn DB progress.
   if (state.completed) {
     await sendLtiCompletionPassback()
   }
 
-  if (!userId || !session || !lessonId) return
+  if (
+    !userId ||
+    !session ||
+    !lessonId
+  ) {
+    return
+  }
 
-  const signature = `${state.percent}|${state.completed ? 1 : 0}`
-  if (reason !== 'heartbeat' && signature === lastSavedSignature) return
+  const signature =
+    `${state.percent}|${state.completed ? 1 : 0}`
+
+  if (
+    reason !== 'heartbeat' &&
+    signature === lastSavedSignature
+  ) {
+    return
+  }
+
   lastSavedSignature = signature
 
   try {
-    const now = new Date().toISOString()
-    const prior = await readCurrentLessonProgress()
-    const completed = Boolean(prior?.completed) || state.completed
-    const percent = completed
-      ? 100
-      : Math.max(
-          Number(prior?.percent_complete || 0),
-          Number(state.percent || 0)
-        )
+    const now =
+      new Date().toISOString()
 
-    const deltaSeconds = getElapsedDelta()
+    const prior =
+      await readCurrentLessonProgress()
+
+    const completed =
+      Boolean(prior?.completed) ||
+      state.completed
+
+    const percent =
+      completed
+        ? 100
+        : Math.max(
+            Number(
+              prior?.percent_complete || 0
+            ),
+            Number(
+              state.percent || 0
+            )
+          )
+
+    const deltaSeconds =
+      getElapsedDelta()
+
     const totalSeconds =
-      Number(prior?.total_seconds || 0) + deltaSeconds
+      Number(
+        prior?.total_seconds || 0
+      ) +
+      deltaSeconds
 
     const legacyPayload = {
-      user_id: userId,
-      lesson_id: lessonId,
+      user_id:
+        userId,
+      lesson_id:
+        lessonId,
       percent,
       completed,
-      updated_at: now
+      updated_at:
+        now
     }
 
     if (completed) {
-      legacyPayload.completed_at = prior?.completed_at || now
+      legacyPayload.completed_at =
+        prior?.completed_at || now
     }
 
-    const { error: legacyError } = await supabase
-      .from('progress')
-      .upsert(legacyPayload, { onConflict: 'user_id,lesson_id' })
+    const {
+      error: legacyError
+    } =
+      await supabase
+        .from('progress')
+        .upsert(
+          legacyPayload,
+          {
+            onConflict:
+              'user_id,lesson_id'
+          }
+        )
 
     if (legacyError) {
-      console.warn('PulmoLearn: progress save failed:', legacyError.message)
+      console.warn(
+        'PulmoLearn: progress save failed:',
+        legacyError.message
+      )
     }
 
     const lessonPayload = {
-      user_id: userId,
-      lesson_id: lessonId,
-      course_id: courseId,
-      lesson_title: lessonTitle,
-      percent_complete: percent,
+      user_id:
+        userId,
+      lesson_id:
+        lessonId,
+      course_id:
+        courseId,
+      lesson_title:
+        lessonTitle,
+      percent_complete:
+        percent,
       completed,
-      total_seconds: totalSeconds,
-      last_visited_at: now,
-      updated_at: now
+      total_seconds:
+        totalSeconds,
+      last_visited_at:
+        now,
+      updated_at:
+        now
     }
 
     if (completed) {
-      lessonPayload.completed_at = prior?.completed_at || now
+      lessonPayload.completed_at =
+        prior?.completed_at || now
     }
 
-    const { error: lessonError } = await supabase
-      .from('lesson_progress')
-      .upsert(lessonPayload, { onConflict: 'user_id,lesson_id' })
+    const {
+      error: lessonError
+    } =
+      await supabase
+        .from('lesson_progress')
+        .upsert(
+          lessonPayload,
+          {
+            onConflict:
+              'user_id,lesson_id'
+          }
+        )
 
     if (lessonError) {
       console.warn(
@@ -391,93 +609,162 @@ async function saveServerProgress(reason = 'change') {
       )
     }
   } catch (error) {
-    console.warn('PulmoLearn: server sync failed safely:', error)
+    console.warn(
+      'PulmoLearn: server sync failed safely:',
+      error
+    )
   }
 }
 
 function report(detail = {}) {
-  const p = clampPercent(
-    detail.percent ??
-    (
-      Number.isFinite(Number(detail.completed)) &&
-      Number.isFinite(Number(detail.total)) &&
-      Number(detail.total) > 0
-        ? Number(detail.completed) / Number(detail.total) * 100
-        : null
+  let incomingPercent =
+    clampPercent(
+      detail.percent
     )
-  )
 
-  if (p !== null) lastPercent = Math.max(lastPercent, p)
+  // Support scenario event shape:
+  // { completed: 7, total: 10, percent: 70 }
+  if (
+    incomingPercent === null &&
+    Number.isFinite(
+      Number(detail.completed)
+    ) &&
+    Number.isFinite(
+      Number(detail.total)
+    ) &&
+    Number(detail.total) > 0
+  ) {
+    incomingPercent =
+      clampPercent(
+        Number(detail.completed) /
+        Number(detail.total) *
+        100
+      )
+  }
 
   if (
+    incomingPercent !== null &&
+    incomingPercent > lastPercent
+  ) {
+    lastPercent =
+      incomingPercent
+  }
+
+  const booleanCompleted =
     detail.completed === true ||
-    detail.complete === true ||
+    detail.complete === true
+
+  if (
+    booleanCompleted ||
     lastPercent >= 100
   ) {
     completedEver = true
     lastPercent = 100
   }
 
-  markAnalyticsState(lastPercent, completedEver)
+  markAnalyticsState(
+    lastPercent,
+    completedEver
+  )
 
   clearTimeout(saveTimer)
-  saveTimer = setTimeout(
-    () => saveServerProgress('explicit-report'),
-    250
-  )
+
+  saveTimer =
+    setTimeout(
+      () =>
+        saveServerProgress(
+          'explicit-report'
+        ),
+      250
+    )
 
   return getState()
 }
 
 window.PulmoActivityProgress = {
   report,
-  sync: () => saveServerProgress('manual-sync'),
+  sync:
+    () =>
+      saveServerProgress(
+        'manual-sync'
+      ),
   getState
 }
 
+// PA / standalone activity format.
 window.addEventListener(
   'pulmolearn:activity-progress-report',
-  event => report(event.detail || {})
+  event =>
+    report(
+      event.detail || {}
+    )
 )
 
+// Neonatal scenario format.
 window.addEventListener(
   'pulmolearn:progress',
-  event => report(event.detail || {})
+  event =>
+    report(
+      event.detail || {}
+    )
 )
 
 window.addEventListener(
   'pulmolearn:complete',
-  event => report({
-    ...(event.detail || {}),
-    percent: 100,
-    completed: true
-  })
+  event =>
+    report({
+      ...(event.detail || {}),
+      percent: 100,
+      completed: true
+    })
 )
 
 async function initialize() {
   try {
     const {
-      data: { session: currentSession },
+      data: {
+        session: currentSession
+      },
       error
-    } = await supabase.auth.getSession()
+    } =
+      await supabase
+        .auth
+        .getSession()
 
     if (error) {
-      console.warn('PulmoLearn: auth lookup failed:', error.message)
+      console.warn(
+        'PulmoLearn: auth lookup failed:',
+        error.message
+      )
     }
 
-    session = currentSession || null
-    userId = session?.user?.id || null
+    session =
+      currentSession || null
 
-    console.log('PulmoLearn activity tracker context:', {
-      lessonId,
-      courseId,
-      activityId,
-      isLtiLaunch,
-      hasLtiContext: Boolean(ltiContext),
-      sessionPresent: Boolean(session)
-    })
+    userId =
+      session?.user?.id || null
 
-    if (session && userId && lessonId && analyticsRoot) {
+    console.log(
+      'PulmoLearn activity tracker context:',
+      {
+        version: '3.1',
+        lessonId,
+        courseId,
+        activityId,
+        isLtiLaunch,
+        hasLtiContext:
+          Boolean(ltiContext),
+        sessionPresent:
+          Boolean(session)
+      }
+    )
+
+    if (
+      session &&
+      userId &&
+      lessonId &&
+      analyticsRoot
+    ) {
       try {
         initializeActivityAnalytics({
           userId,
@@ -492,62 +779,109 @@ async function initialize() {
       }
     }
 
-    const prior = await readCurrentLessonProgress()
+    const prior =
+      await readCurrentLessonProgress()
+
     if (prior) {
-      lastPercent = Math.max(
-        lastPercent,
-        Number(prior.percent_complete || 0)
-      )
+      lastPercent =
+        Math.max(
+          lastPercent,
+          Number(
+            prior.percent_complete || 0
+          )
+        )
+
       if (prior.completed) {
         completedEver = true
         lastPercent = 100
       }
     }
   } catch (error) {
-    console.warn('PulmoLearn: tracker initialization failed safely:', error)
+    console.warn(
+      'PulmoLearn: tracker initialization failed safely:',
+      error
+    )
   }
 
-  const initial = getState()
-  markAnalyticsState(initial.percent, initial.completed)
-  await saveServerProgress('initial')
+  // Give the activity time to restore its local persistence first.
+  await new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        450
+      )
+  )
 
-  const observer = new MutationObserver(() => {
-    const visible = parseVisiblePercent()
-    if (visible > lastPercent || visible >= 100) {
-      report({
-        percent: visible,
-        completed: visible >= 100
-      })
-    }
-  })
+  const visible =
+    parseVisiblePercent()
 
-  observer.observe(document.documentElement, {
-    subtree: true,
-    childList: true,
-    characterData: true,
-    attributes: true,
-    attributeFilter: [
-      'style',
-      'class',
-      'aria-valuenow',
-      'data-progress-percent',
-      'data-complete'
-    ]
-  })
+  if (visible > lastPercent) {
+    lastPercent = visible
+  }
 
-  setInterval(() => {
-    const p = parseVisiblePercent()
-    if (p > lastPercent) {
-      report({ percent: p, completed: p >= 100 })
-    } else {
-      saveServerProgress('heartbeat')
-    }
-  }, 30000)
+  if (lastPercent >= 100) {
+    completedEver = true
+    lastPercent = 100
+  }
+
+  markAnalyticsState(
+    lastPercent,
+    completedEver
+  )
+
+  await saveServerProgress(
+    'initial'
+  )
+
+  /*
+   * SAFE FALLBACK POLL
+   * No DOM observer. Every 2 seconds we READ the existing progress UI.
+   * We only report when the percentage actually increases.
+   */
+  setInterval(
+    () => {
+      try {
+        const visibleNow =
+          parseVisiblePercent()
+
+        if (
+          visibleNow >
+          lastPercent
+        ) {
+          report({
+            percent:
+              visibleNow,
+            completed:
+              visibleNow >= 100
+          })
+        }
+      } catch (error) {
+        console.warn(
+          'PulmoLearn: fallback progress check failed safely:',
+          error
+        )
+      }
+    },
+    2000
+  )
+
+  // Time/visit heartbeat only; no DOM writes or scans beyond state.
+  setInterval(
+    () => {
+      saveServerProgress(
+        'heartbeat'
+      )
+    },
+    30000
+  )
 }
 
-initialize().catch(error => {
-  console.warn(
-    'PulmoLearn: activity tracker disabled after safe initialization failure:',
-    error
+initialize()
+  .catch(
+    error => {
+      console.warn(
+        'PulmoLearn: activity tracker disabled after safe initialization failure:',
+        error
+      )
+    }
   )
-})
