@@ -873,7 +873,7 @@ renderLabels();renderCases();shuffleStaticChoices();restore();
     setTimeout(()=>mo.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-placed','data-item','class']}),250);
   });
   window.addEventListener('beforeunload',capture);
-  window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:"1.4",course:'Respiratory Physiology'});
+  window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:"1.4",course:'Respiratory Physiology',ltiResourceId:'rp_activity_1_4'});
 })();
 </script>
 
@@ -947,5 +947,229 @@ renderLabels();renderCases();shuffleStaticChoices();restore();
   })();
   </script>
 
+
+<script type="module" id="pulmolearn-canvas-passback-rp-activity-1-4">
+/*
+ * Respiratory Physiology Activity 1.4 — Canvas completion bridge
+ * Validated architecture:
+ * - preserves the activity's existing local progress/answer identity
+ * - reports Canvas completion with the catalog LTI id: rp_activity_1_4
+ * - uses the existing working /api/lti/score endpoint
+ * - does not modify normal lesson tracking or LTI backend files
+ */
+import { supabase } from '/assets/auth.js';
+
+const params = new URLSearchParams(window.location.search);
+const isLtiLaunch = params.get('lti') === '1';
+const ltiResourceId =
+  window.PULMO_LESSON?.ltiResourceId ||
+  "rp_activity_1_4";
+
+let passbackInFlight = false;
+let passbackAttemptedThisLoad = false;
+let passbackConfirmed = false;
+
+function clampPercent(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return null;
+  return Math.max(0, Math.min(100, n));
+}
+
+function visibleProgressPercent() {
+  const values = [];
+
+  const add = value => {
+    const n = clampPercent(value);
+    if (n !== null) values.push(n);
+  };
+
+  [
+    'overallProgress',
+    'ltiProgressText',
+    'progressText',
+    'progText'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const text = String(el.textContent || '');
+
+    const pct = text.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (pct) add(pct[1]);
+
+    const fraction = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i);
+    if (fraction) {
+      const done = Number(fraction[1]);
+      const total = Number(fraction[2]);
+      if (Number.isFinite(done) && Number.isFinite(total) && total > 0) {
+        add((done / total) * 100);
+      }
+    }
+  });
+
+  [
+    'overallProgressBar',
+    'ltiProgressBar',
+    'progressBar',
+    'progressFill',
+    'prog'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const aria = el.getAttribute('aria-valuenow');
+    if (aria !== null) add(aria);
+
+    const width = String(el.style?.width || '').match(/(\d+(?:\.\d+)?)\s*%/);
+    if (width) add(width[1]);
+  });
+
+  document
+    .querySelectorAll('[role="progressbar"][aria-valuenow]')
+    .forEach(el => add(el.getAttribute('aria-valuenow')));
+
+  return values.length ? Math.max(...values) : 0;
+}
+
+function visibleActivityComplete() {
+  return visibleProgressPercent() >= 99.5;
+}
+
+async function sendCanvasCompletion(reason = 'activity-complete') {
+  if (!isLtiLaunch || passbackInFlight || passbackConfirmed) return;
+
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error(
+      'PulmoLearn RP 1.4: session lookup failed:',
+      sessionError.message
+    );
+    return;
+  }
+
+  if (!session?.access_token) {
+    console.warn(
+      'PulmoLearn RP 1.4: completion detected, but Canvas passback requires a linked signed-in PulmoLearn student session.'
+    );
+    return;
+  }
+
+  const passbackKey =
+    `pulmolearn-lti-passback:${session.user.id}:${ltiResourceId}`;
+
+  try {
+    if (sessionStorage.getItem(passbackKey) === 'sent') {
+      passbackConfirmed = true;
+      console.log(
+        `PulmoLearn RP 1.4: Canvas completion already sent — ${ltiResourceId}`
+      );
+      return;
+    }
+  } catch (e) {}
+
+  passbackInFlight = true;
+  passbackAttemptedThisLoad = true;
+
+  try {
+    console.log(
+      `PulmoLearn RP 1.4: sending Canvas completion — ${ltiResourceId} (${reason})`
+    );
+
+    const response = await fetch('/api/lti/score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        lesson_id: ltiResourceId,
+        completed: true
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result?.ok || !result?.passed_back) {
+      console.error(
+        `PulmoLearn RP 1.4: Canvas completion passback failed — ${ltiResourceId}`,
+        result?.error || `HTTP ${response.status}`,
+        result
+      );
+      return;
+    }
+
+    try {
+      sessionStorage.setItem(passbackKey, 'sent');
+    } catch (e) {}
+
+    passbackConfirmed = true;
+
+    console.log(
+      `PulmoLearn RP 1.4: Canvas completion passback confirmed — ${ltiResourceId}`
+    );
+  } catch (error) {
+    console.error(
+      'PulmoLearn RP 1.4: Canvas completion passback error:',
+      error
+    );
+  } finally {
+    passbackInFlight = false;
+  }
+}
+
+function completionEventHandler(event) {
+  const detail = event?.detail || {};
+
+  const explicitComplete =
+    detail.completed === true ||
+    detail.complete === true ||
+    Number(detail.percent) >= 100;
+
+  if (explicitComplete || visibleActivityComplete()) {
+    sendCanvasCompletion(event?.type || 'completion-event');
+  }
+}
+
+[
+  'pulmolearn:complete',
+  'pulmolearn:activity-progress-report',
+  'pulmolearn:activity-complete',
+  'pulmolearn:progress',
+  'pulmolearn:activity-progress'
+].forEach(eventName => {
+  window.addEventListener(eventName, completionEventHandler);
+});
+
+/*
+ * Some Physiology activities restore their saved completion before this
+ * module loads. Check all historical/current progress element IDs so an
+ * already-completed activity can still report on a fresh Canvas launch.
+ */
+setTimeout(() => {
+  if (visibleActivityComplete() && !passbackAttemptedThisLoad) {
+    sendCanvasCompletion('restored-completion');
+  }
+}, 900);
+
+/*
+ * A few activity generations do not emit the same progress event names.
+ * Lightweight polling is read-only and exists only to catch completion.
+ */
+const completionPoll = window.setInterval(() => {
+  if (passbackConfirmed) {
+    window.clearInterval(completionPoll);
+    return;
+  }
+  if (visibleActivityComplete()) {
+    sendCanvasCompletion('visible-progress-poll');
+  }
+}, 1800);
+</script>
+
+<script type="module" src="/assets/activity-progress-tracker.js"></script>
 </body>
 </html>
