@@ -297,19 +297,88 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         <article><h3>Can you now…</h3><ul><li>Choose open versus focused questions?</li><li>Let patient answers determine follow-up?</li><li>Verify charted respiratory history?</li><li>Clarify home respiratory medications?</li><li>Gather smoking/vaping and exposure history?</li><li>Compare current symptoms with baseline function?</li><li>Separate patient-reported from measured data?</li><li>Recognize missing or contradictory information?</li></ul></article>
         <article><h3>Core interview rule</h3><blockquote>Ask with a purpose. Do not collect details until you have established that the topic is relevant. When an answer changes the respiratory story, follow it.</blockquote><div id="finalStats" class="stats"></div></article>
       </div>
-      <button id="restart" class="secondary">Restart activity</button>
+      <button id="restart" class="secondary">Start over and clear saved work</button>
     </div>
   </section>
 </main>
 <script>
 (()=>{
 const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const state={step:0,typeDone:false,guided:{asked:new Set(),data:{},reviewed:false,complete:false},complex:{asked:new Set(),data:{},reviewed:false,complete:false},challenge:{asked:new Set(),data:{},reviewed:false,complete:false},lockedAttempts:0,challengeMisses:0};
+
+const STORE="PL_PA_1_1_INTERVIEW_LTI_V4";
+function readSaved(){
+  try{return JSON.parse(localStorage.getItem(STORE)||"{}")}
+  catch(e){return {}}
+}
+function writeSaved(value){
+  try{localStorage.setItem(STORE,JSON.stringify(value))}catch(e){}
+}
+const savedState=readSaved();
+function restoreBranch(src){
+  return {
+    asked:new Set(Array.isArray(src?.asked)?src.asked:[]),
+    data:(src?.data&&typeof src.data==="object")?{...src.data}:{},
+    reviewed:!!src?.reviewed,
+    complete:!!src?.complete
+  };
+}
+const state={
+  step:Number.isInteger(savedState.step)?savedState.step:0,
+  typeDone:!!savedState.typeDone,
+  guided:restoreBranch(savedState.guided),
+  complex:restoreBranch(savedState.complex),
+  challenge:restoreBranch(savedState.challenge),
+  lockedAttempts:Number(savedState.lockedAttempts)||0,
+  challengeMisses:Number(savedState.challengeMisses)||0
+};
+function packBranch(branch){
+  return {
+    asked:[...branch.asked],
+    data:{...branch.data},
+    reviewed:!!branch.reviewed,
+    complete:!!branch.complete
+  };
+}
+function saveState(){
+  writeSaved({
+    schemaVersion:4,
+    savedAt:new Date().toISOString(),
+    step:state.step,
+    typeDone:!!state.typeDone,
+    guided:packBranch(state.guided),
+    complex:packBranch(state.complex),
+    challenge:{
+      ...packBranch(state.challenge),
+      sequence:Number(state.challenge.sequence)||0,
+      attempt:Number(state.challenge.attempt)||1
+    },
+    lockedAttempts:Number(state.lockedAttempts)||0,
+    challengeMisses:Number(state.challengeMisses)||0
+  });
+}
 const steps=$$('.activity-step'), nav=$$('.step-btn');
 function showStep(n){state.step=n;steps.forEach((s,i)=>s.classList.toggle('active',i===n));nav.forEach((b,i)=>b.classList.toggle('active',i===n));window.scrollTo({top:0,behavior:'smooth'});updateProgress();}
 nav.forEach((b,i)=>b.onclick=()=>{if(i===0||i<=maxUnlocked())showStep(i);else alert('Complete the current section before moving ahead.');});
 function maxUnlocked(){if(state.challenge.complete)return 4;if(state.complex.complete)return 3;if(state.guided.complete)return 2;if(state.typeDone)return 1;return 0;}
-function updateProgress(){let p=0;if(state.typeDone)p+=15;if(state.guided.complete)p+=25;if(state.complex.complete)p+=35;if(state.challenge.complete)p+=25;if(state.step===4&&state.challenge.complete)p=100;$('#overallProgress').textContent=p+'%';$('#overallProgressBar').style.width=p+'%';}
+function updateProgress(){
+  let p=0;
+  if(state.typeDone)p+=15;
+  if(state.guided.complete)p+=25;
+  if(state.complex.complete)p+=35;
+  if(state.challenge.complete)p+=25;
+  if(state.step===4&&state.challenge.complete)p=100;
+  $('#overallProgress').textContent=p+'%';
+  $('#overallProgressBar').style.width=p+'%';
+  saveState();
+  const completed=p===100;
+  window.dispatchEvent(new CustomEvent("pulmolearn:progress",{detail:{
+    lesson:"1.1",course:"Pulmonary Assessment",percent:p,completed
+  }}));
+  window.dispatchEvent(new CustomEvent("pulmolearn:activity-progress-report",{detail:{
+    percent:p,completed
+  }}));
+  try{window.PulmoActivityProgress?.report({percent:p,completed});}catch(e){}
+}
 
 $$('#typeCheck button').forEach(btn=>btn.onclick=()=>{const ok=btn.dataset.answer==='focused';$$('#typeCheck button').forEach(b=>b.classList.remove('correct','incorrect'));btn.classList.add(ok?'correct':'incorrect');const f=$('#typeFeedback');f.className='feedback '+(ok?'good':'warn');f.innerHTML=ok?'<strong>Correct.</strong> A focused follow-up clarifies onset, change, triggers, severity, or functional effect without assuming the cause.':'<strong>Try again.</strong> The patient has given a vague respiratory complaint. Your next question should clarify the complaint before moving to unrelated details or documentation.';if(ok){state.typeDone=true;$('#startGuided').disabled=false;updateProgress();}});
 $('#startGuided').onclick=()=>showStep(1);
@@ -417,9 +486,12 @@ const challengeStartingData={
   spo2:'96% on room air.',
   bs:'Mild bilateral expiratory wheeze.'
 };
-state.challenge.data={...challengeStartingData};
-state.challenge.sequence=0;
-state.challenge.attempt=1;
+state.challenge.data={
+  ...challengeStartingData,
+  ...(savedState.challenge?.data&&typeof savedState.challenge.data==="object"?savedState.challenge.data:{})
+};
+state.challenge.sequence=Number.isInteger(savedState.challenge?.sequence)?savedState.challenge.sequence:0;
+state.challenge.attempt=Math.max(1,Number(savedState.challenge?.attempt)||1);
 state.challenge.selected=null;
 
 const challengeSequence=[
@@ -475,9 +547,12 @@ function renderChallengeChart(){
 function shuffle(items){const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function renderChallengeQuestions(){
  const c=$('#challengeQuestions');c.innerHTML='';const wrap=document.createElement('section');wrap.className='question-group';wrap.innerHTML='<h4>Shuffled question bank</h4><div class="question-list"></div>';const list=$('.question-list',wrap);
- shuffle(challengeQuestions).forEach(q=>{const b=document.createElement('button');b.type='button';b.className='question-btn';b.dataset.id=q.id;b.draggable=true;b.textContent=q.text;
-   b.addEventListener('dragstart',e=>{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',q.id);});
-   b.addEventListener('click',()=>{document.querySelectorAll('#challengeQuestions .question-btn').forEach(x=>x.classList.remove('selected'));state.challenge.selected=q.id;b.classList.add('selected');$('#challengeFeedback').className='feedback info sticky-feedback';$('#challengeFeedback').innerHTML='<strong>Question selected.</strong> Now click the small “Drop question here” target beside the active chart space, or drag the question directly onto that target.';});
+ const usedIds=new Set(challengeSequence.slice(0,state.challenge.sequence).map(x=>x.questionId));
+ shuffle(challengeQuestions).forEach(q=>{const b=document.createElement('button');b.type='button';b.className='question-btn';b.dataset.id=q.id;b.draggable=!state.challenge.complete;b.textContent=q.text;
+   if(usedIds.has(q.id)){b.classList.add('used');b.setAttribute('aria-label',q.text+' — already used correctly');}
+   if(state.challenge.complete)b.disabled=true;
+   b.addEventListener('dragstart',e=>{if(state.challenge.complete)return;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',q.id);});
+   b.addEventListener('click',()=>{if(state.challenge.complete)return;document.querySelectorAll('#challengeQuestions .question-btn').forEach(x=>x.classList.remove('selected'));state.challenge.selected=q.id;b.classList.add('selected');$('#challengeFeedback').className='feedback info sticky-feedback';$('#challengeFeedback').innerHTML='<strong>Question selected.</strong> Now click the small “Drop question here” target beside the active chart space, or drag the question directly onto that target.';});
    list.appendChild(b);});c.appendChild(wrap);
 }
 function placeChallengeQuestion(questionId,index){
@@ -522,260 +597,90 @@ function chartSections(which){if(which==='guided')return [
 function renderChart(which){const out=$(`#${which}Chart`),data=state[which].data;out.innerHTML='';chartSections(which).forEach(([title,rows])=>{const s=document.createElement('section');s.className='chart-section';s.innerHTML=`<h4>${title}</h4>`;rows.forEach(([key,label])=>{const val=data[key];const r=document.createElement('div');r.className='chart-row';r.innerHTML=`<div class="chart-label">${label}</div><div class="chart-value ${val?'complete':'missing'}">${val||'Not yet documented'}</div>`;s.appendChild(r);});out.appendChild(s);});}
 function review(which,required){const st=state[which],missing=required.filter(k=>!st.data[k]);const fb=$(`#${which}Review`);st.reviewed=true;if(missing.length===0){fb.className='feedback good';fb.innerHTML='<strong>Complete respiratory interview.</strong> You gathered the required history and current assessment data without forcing irrelevant branches.';st.complete=true;if(which==='guided')$('#startComplex').disabled=false;else $('#finishComplex').disabled=false;}else{fb.className='feedback warn';const labels=[];chartSections(which).forEach(([t,rows])=>rows.forEach(([k,l])=>{if(missing.includes(k))labels.push(l);}));fb.innerHTML=`<strong>Assessment incomplete.</strong> Return to the patient and clarify: <ul class="checklist">${labels.map(x=>`<li class="missing-item">${x}</li>`).join('')}</ul>`;}updateProgress();}
 $('#guidedCheck').onclick=()=>review('guided',guidedRequired);$('#complexCheck').onclick=()=>review('complex',complexRequired);
-$('#startComplex').onclick=()=>showStep(2);$('#finishComplex').onclick=()=>{showStep(3);renderChallengeQuestions();renderChallengeChart();updateProgress();};$('#finishChallenge').onclick=()=>{showStep(4);$('#finalStats').innerHTML=`<strong>Interview branches completed:</strong> guided + complex + final challenge<br><strong>Locked follow-up attempts:</strong> ${state.lockedAttempts}<br><strong>Final-challenge resets:</strong> ${state.challengeMisses}<br><strong>Key idea:</strong> begin broadly, then let each patient answer determine the next focused question.`;updateProgress();};
-$('#restart').onclick=()=>location.reload();
+$('#startComplex').onclick=()=>showStep(2);
+$('#finishComplex').onclick=()=>{showStep(3);renderChallengeQuestions();renderChallengeChart();updateProgress();};
+function renderFinalStats(){
+  $('#finalStats').innerHTML=`<strong>Interview branches completed:</strong> guided + complex + final challenge<br><strong>Locked follow-up attempts:</strong> ${state.lockedAttempts}<br><strong>Final-challenge resets:</strong> ${state.challengeMisses}<br><strong>Key idea:</strong> begin broadly, then let each patient answer determine the next focused question.`;
+}
+$('#finishChallenge').onclick=()=>{showStep(4);renderFinalStats();updateProgress();};
+$('#restart').onclick=()=>{
+  const ok=window.confirm('Start this practice activity over from the beginning? This clears the saved answers on this browser. Your previously recorded course completion will not be reduced.');
+  if(!ok)return;
+  try{localStorage.removeItem(STORE)}catch(e){}
+  location.reload();
+};
 
-renderQuestions('#guidedQuestions',guidedQuestions,'guided');renderQuestions('#complexQuestions',complexQuestions,'complex');renderChart('guided');renderChart('complex');renderChallengeChart();showStep(0);
+function restoreSavedUi(){
+  renderQuestions('#guidedQuestions',guidedQuestions,'guided');
+  renderQuestions('#complexQuestions',complexQuestions,'complex');
+  renderChart('guided');
+  renderChart('complex');
+  renderChallengeQuestions();
+  renderChallengeChart();
+
+  if(state.typeDone){
+    const btn=$('#typeCheck [data-answer="focused"]');
+    if(btn)btn.classList.add('correct');
+    const f=$('#typeFeedback');
+    f.className='feedback good';
+    f.innerHTML='<strong>Correct.</strong> A focused follow-up clarifies onset, change, triggers, severity, or functional effect without assuming the cause.';
+  }
+  $('#startGuided').disabled=!state.typeDone;
+  $('#startComplex').disabled=!state.guided.complete;
+  $('#finishComplex').disabled=!state.complex.complete;
+  $('#finishChallenge').disabled=!state.challenge.complete;
+
+  if(state.guided.reviewed){
+    const f=$('#guidedReview');
+    if(state.guided.complete){
+      f.className='feedback good';
+      f.innerHTML='<strong>Complete respiratory interview.</strong> You gathered the required history and current assessment data without forcing irrelevant branches.';
+    }
+  }
+  if(state.complex.reviewed){
+    const f=$('#complexReview');
+    if(state.complex.complete){
+      f.className='feedback good';
+      f.innerHTML='<strong>Complete respiratory interview.</strong> You gathered the required history and current assessment data without forcing irrelevant branches.';
+    }
+  }
+  if(state.challenge.complete){
+    state.challenge.sequence=challengeSequence.length;
+    $('#challengeReview').className='feedback good';
+    $('#challengeReview').innerHTML='<strong>Sequence complete.</strong> You moved from a broad respiratory concern to focused clarification, functional impact, baseline comparison, and change in home therapy use.';
+    renderChallengeQuestions();
+    renderChallengeChart();
+  }
+
+  const allowed=Math.min(Number(state.step)||0,maxUnlocked());
+  showStep(allowed);
+  if(allowed===4||state.challenge.complete)renderFinalStats();
+
+  const resumed=state.typeDone||state.guided.asked.size||state.complex.asked.size||state.challenge.sequence>0;
+  if(resumed){
+    const note=document.createElement('div');
+    note.className='feedback info';
+    note.style.margin='0 auto 16px';
+    note.innerHTML='<strong>Progress restored.</strong> Your previous interview work and completed sections are available for review.';
+    const main=$('#main');
+    if(main)main.insertBefore(note,main.firstChild);
+  }
+}
+restoreSavedUi();
 })();
 
 </script>
 
 <footer class="pl-footer">
   <div><strong>Pulmo<span>Learn</span></strong><br>Pulmonary Assessment · Activity 1.1</div>
-  <div class="pl-save-note">Practice skills, interpret findings, and build clinical reasoning for respiratory assessment.</div>
+  <div class="pl-save-note">Progress and selected answers are saved in this browser. You can leave and return without losing your work.</div>
 </footer>
 
 
-<script id="pulmolearn-answer-progress-persistence-v3">
-(function(){
-  const KEY = "PL_PA_ANSWERS_V3_1-1-respiratory-interview-practice";
-
-  function safeRead(){
-    try { return JSON.parse(localStorage.getItem(KEY) || "{}"); }
-    catch(e){ return {}; }
-  }
-  function safeWrite(v){
-    try { localStorage.setItem(KEY, JSON.stringify(v)); } catch(e){}
-  }
-  function norm(s){ return String(s || "").replace(/\s+/g," ").trim(); }
-
-  function sectionKey(el){
-    const p = el.closest(".panel,.activity-step,section");
-    if(!p) return "";
-    if(p.id) return "id:"+p.id;
-    if(p.dataset && p.dataset.section !== undefined) return "section:"+p.dataset.section;
-    return "";
-  }
-
-  function allTargets(){
-    return [...document.querySelectorAll(".drop,.lead-target")];
-  }
-
-  function capture(){
-    const s = safeRead();
-
-    s.inputs = [];
-    document.querySelectorAll("input,select,textarea").forEach((el,i)=>{
-      if(el.type==="file" || el.type==="button" || el.type==="submit" || el.type==="reset") return;
-      s.inputs.push({
-        id: el.id || "",
-        name: el.name || "",
-        type: el.type || el.tagName.toLowerCase(),
-        value: el.value,
-        checked: !!el.checked,
-        index: i
-      });
-    });
-
-    s.choices = [...document.querySelectorAll(".choice.correct,.choice.incorrect,.choice-row button.correct,.choice-row button.incorrect")]
-      .map(b=>({
-        section: sectionKey(b),
-        text: norm(b.textContent),
-        result: b.classList.contains("correct") ? "correct" : "incorrect"
-      }));
-
-    s.caseStates = [...document.querySelectorAll(".case[data-ok],.rhythm[data-ok]")]
-      .map((el,i)=>({section:sectionKey(el),index:i,ok:el.dataset.ok||""}));
-
-    const targets = allTargets();
-    s.placements = [];
-    targets.forEach((target,ti)=>{
-      [...target.querySelectorAll("[data-place]")].forEach(row=>{
-        if(row.closest(".drop,.lead-target") !== target) return;
-        s.placements.push({
-          targetIndex: ti,
-          itemId: row.dataset.place || "",
-          text: norm(row.textContent)
-        });
-      });
-    });
-
-    const activePanel = document.querySelector(".panel.active");
-    if(activePanel && activePanel.id) s.activePanel = activePanel.id;
-
-    try {
-      if(typeof complete !== "undefined" && complete && typeof complete.forEach === "function"){
-        s.completeSet = [...complete];
-      }
-    } catch(e){}
-    try {
-      if(typeof done !== "undefined" && done && typeof done.forEach === "function"){
-        s.doneSet = [...done];
-      }
-    } catch(e){}
-
-    safeWrite(s);
-  }
-
-  function restoreInputs(s){
-    (s.inputs||[]).forEach(rec=>{
-      let el = null;
-      if(rec.id) el = document.getElementById(rec.id);
-      if(!el && rec.name){
-        const candidates = [...document.querySelectorAll("[name]")].filter(x=>x.name===rec.name);
-        if(rec.type==="radio" || rec.type==="checkbox"){
-          el = candidates.find(x=>x.value===rec.value) || candidates[0];
-        } else el = candidates[0];
-      }
-      if(!el) return;
-      if(rec.type==="radio" || rec.type==="checkbox") el.checked = !!rec.checked;
-      else el.value = rec.value;
-    });
-  }
-
-  function restorePlacements(s){
-    const targets = allTargets();
-    (s.placements||[]).forEach(rec=>{
-      const target = targets[rec.targetIndex];
-      if(!target || !rec.itemId) return;
-      let token = [...document.querySelectorAll("[data-id]")].find(x=>x.dataset.id===rec.itemId && !x.closest(".placed"));
-      if(!token) return;
-      try {
-        token.click();
-        target.click();
-      } catch(e){}
-    });
-  }
-
-  function restoreChoiceStates(s){
-    (s.choices||[]).forEach(rec=>{
-      let pool = [...document.querySelectorAll(".choice,.choice-row button")];
-      if(rec.section){
-        const section = rec.section.startsWith("id:")
-          ? document.getElementById(rec.section.slice(3))
-          : document.querySelector(`[data-section="${rec.section.slice(8)}"]`);
-        if(section) pool = [...section.querySelectorAll(".choice,.choice-row button")];
-      }
-      const b = pool.find(x=>norm(x.textContent)===rec.text);
-      if(!b) return;
-      b.classList.remove("correct","incorrect");
-      b.classList.add(rec.result);
-      const parent = b.closest(".case,.rhythm");
-      if(parent) parent.dataset.ok = rec.result==="correct" ? "1" : "0";
-    });
-
-    (s.caseStates||[]).forEach(rec=>{
-      const candidates = [...document.querySelectorAll(".case,.rhythm")];
-      const el = candidates[rec.index];
-      if(el) el.dataset.ok = rec.ok;
-    });
-  }
-
-  function restoreProgressSets(s){
-    try {
-      if(typeof complete !== "undefined" && complete && s.completeSet){
-        s.completeSet.forEach(x=>complete.add(x));
-      }
-    } catch(e){}
-    try {
-      if(typeof done !== "undefined" && done && s.doneSet){
-        s.doneSet.forEach(x=>done.add(x));
-      }
-    } catch(e){}
-    try { if(typeof updateProgress === "function") updateProgress(); } catch(e){}
-    try { if(typeof update === "function") update(); } catch(e){}
-  }
-
-  function restoreActivePanel(s){
-    if(!s.activePanel) return;
-    const p = document.getElementById(s.activePanel);
-    if(!p) return;
-    document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x===p));
-    document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.target===s.activePanel));
-  }
-
-  function restore(){
-    const s = safeRead();
-    restoreInputs(s);
-    restorePlacements(s);
-    restoreChoiceStates(s);
-    restoreProgressSets(s);
-    restoreActivePanel(s);
-  }
-
-  document.addEventListener("input", e=>{
-    if(e.target.matches("input,select,textarea")) setTimeout(capture,20);
-  }, true);
-  document.addEventListener("change", e=>{
-    if(e.target.matches("input,select,textarea")) setTimeout(capture,20);
-  }, true);
-  document.addEventListener("click", ()=>{
-    setTimeout(capture,100);
-  }, true);
-
-  const mo = new MutationObserver(()=>{
-    clearTimeout(window.__plPersistTimer);
-    window.__plPersistTimer = setTimeout(capture,160);
-  });
-
-  setTimeout(()=>{
-    restore();
-    try {
-      mo.observe(document.body,{
-        subtree:true, childList:true, attributes:true,
-        attributeFilter:["class","data-place","data-ok","data-placed","data-item"]
-      });
-    } catch(e){}
-  },180);
-
-  window.addEventListener("beforeunload",capture);
-})();
-</script>
 
 
-<script id="pulmolearn-1-1-state-persistence-v3">
-(function(){
-  const KEY="PL_PA_1_1_BRANCH_STATE_V3";
-  function read(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return {}}}
-  function write(v){try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}
-  function packBranch(b){return {asked:[...b.asked],data:b.data,reviewed:!!b.reviewed,complete:!!b.complete}}
-  function capture(){
-    try{
-      write({
-        step:state.step,typeDone:state.typeDone,
-        guided:packBranch(state.guided),complex:packBranch(state.complex),challenge:packBranch(state.challenge),
-        lockedAttempts:state.lockedAttempts,challengeMisses:state.challengeMisses
-      });
-    }catch(e){}
-  }
-  function unpackBranch(dst,src){
-    if(!src)return;
-    dst.asked.clear();(src.asked||[]).forEach(x=>dst.asked.add(x));
-    dst.data=src.data||{};dst.reviewed=!!src.reviewed;dst.complete=!!src.complete;
-  }
-  function restore(){
-    const s=read();if(!s||Object.keys(s).length===0)return;
-    try{
-      state.step=Number.isFinite(s.step)?s.step:0;state.typeDone=!!s.typeDone;
-      unpackBranch(state.guided,s.guided);unpackBranch(state.complex,s.complex);unpackBranch(state.challenge,s.challenge);
-      state.lockedAttempts=s.lockedAttempts||0;state.challengeMisses=s.challengeMisses||0;
-      renderQuestions("#guidedQuestions",guidedQuestions,"guided");
-      renderQuestions("#complexQuestions",complexQuestions,"complex");
-      renderChart("guided");renderChart("complex");
-      renderChallengeQuestions();renderChallengeChart();
-      document.getElementById("startGuided").disabled=!state.typeDone;
-      document.getElementById("startComplex").disabled=!state.guided.complete;
-      document.getElementById("finishComplex").disabled=!state.complex.complete;
-      document.getElementById("finishChallenge").disabled=!state.challenge.complete;
-      showStep(Math.min(state.step,maxUnlocked()));
-      updateProgress();
-    }catch(e){}
-  }
-  document.addEventListener("click",()=>setTimeout(capture,100),true);
-  window.addEventListener("beforeunload",capture);
-  setTimeout(restore,160);
-})();
-</script>
+
+
 
 
   <script>
