@@ -63,6 +63,24 @@ button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-v
       border: 0;
     }
   </style>
+
+<script id="pulmolearn-pa-activity-metadata-3-1">
+window.PULMO_LESSON = Object.assign({}, window.PULMO_LESSON || {}, {
+  courseId: "pulmonary-assessment",
+  courseTitle: "Pulmonary Assessment",
+  courseName: "Pulmonary Assessment",
+  lessonId: "pa-3-1-diagnostic-tests-infection-prevention-practice",
+  lessonNumber: "PA 3.1 Activity",
+  lessonTitle: "Diagnostic Tests & Infection Prevention Practice",
+  activityId: "pa-3-1-diagnostic-tests-infection-prevention-practice",
+  activityName: "Diagnostic Tests & Infection Prevention Practice",
+  activityType: "standalone-practice",
+  ltiResourceId: "pa_activity_3_1"
+});
+window.PULMO_LESSON_ID = window.PULMO_LESSON.lessonId;
+window.LESSON_ID = window.PULMO_LESSON.lessonId;
+</script>
+
 </head>
 <body>
 <header class="pl-top">
@@ -551,7 +569,16 @@ try{const saved=JSON.parse(localStorage.getItem('PA_3_1_complete')||'[]');saved.
     const p = document.getElementById(s.activePanel);
     if(!p) return;
     document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x===p));
-    document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.target===s.activePanel));
+    try {
+      if(typeof show === "function"){
+        show(s.activePanel);
+        return;
+      }
+    } catch(e){}
+    document.querySelectorAll(".tabs button").forEach(b=>{
+      const target = b.dataset.target || b.dataset.tab || "";
+      b.classList.toggle("active",target===s.activePanel);
+    });
   }
 
   function restore(){
@@ -662,5 +689,212 @@ try{const saved=JSON.parse(localStorage.getItem('PA_3_1_complete')||'[]');saved.
   })();
   </script>
 
+
+<script type="module" id="pulmolearn-pa-canvas-passback-pa-activity-3-1">
+/*
+ * Pulmonary Assessment 3.1 Canvas completion bridge.
+ *
+ * This is intentionally isolated from the normal PulmoLearn lesson LTI path.
+ * Local/PulmoLearn progress uses: pa-3-1-diagnostic-tests-infection-prevention-practice
+ * Canvas assignment identity uses: pa_activity_3_1
+ */
+import { supabase } from '/assets/auth.js';
+
+const params = new URLSearchParams(window.location.search);
+const isLtiLaunch = params.get('lti') === '1';
+const ltiResourceId =
+  window.PULMO_LESSON?.ltiResourceId ||
+  "pa_activity_3_1";
+
+let passbackInFlight = false;
+let passbackConfirmed = false;
+let lastNoSessionNotice = 0;
+
+function clamp(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return null;
+  return Math.max(0, Math.min(100, n));
+}
+
+function visibleProgressPercent() {
+  const values = [];
+  const add = value => {
+    const n = clamp(value);
+    if (n !== null) values.push(n);
+  };
+
+  ['overallProgress', 'progressText', 'ltiProgressText'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const text = String(el.textContent || '');
+
+    const percent = text.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (percent) add(percent[1]);
+
+    const fraction = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i);
+    if (fraction) {
+      const done = Number(fraction[1]);
+      const total = Number(fraction[2]);
+      if (Number.isFinite(done) && Number.isFinite(total) && total > 0) {
+        add((done / total) * 100);
+      }
+    }
+  });
+
+  ['overallProgressBar', 'progressBar', 'ltiProgressBar'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const aria = el.getAttribute('aria-valuenow');
+    if (aria !== null) add(aria);
+
+    const width = String(el.style?.width || '').match(/(\d+(?:\.\d+)?)\s*%/);
+    if (width) add(width[1]);
+  });
+
+  document.querySelectorAll('[role="progressbar"][aria-valuenow]').forEach(el => {
+    add(el.getAttribute('aria-valuenow'));
+  });
+
+  return values.length ? Math.max(...values) : 0;
+}
+
+function visibleActivityComplete() {
+  return visibleProgressPercent() >= 99.5;
+}
+
+async function sendCanvasCompletion(reason = 'completion-detected') {
+  if (!isLtiLaunch || passbackInFlight || passbackConfirmed) return;
+
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error(
+      'PulmoLearn PA 3.1: session lookup failed:',
+      sessionError.message
+    );
+    return;
+  }
+
+  if (!session?.access_token) {
+    const now = Date.now();
+    if (now - lastNoSessionNotice > 30000) {
+      lastNoSessionNotice = now;
+      console.warn(
+        'PulmoLearn PA 3.1: Canvas completion requires a linked signed-in PulmoLearn student session.'
+      );
+    }
+    return;
+  }
+
+  const passbackKey =
+    `pulmolearn-lti-passback:${session.user.id}:${ltiResourceId}`;
+
+  try {
+    if (sessionStorage.getItem(passbackKey) === 'sent') {
+      passbackConfirmed = true;
+      return;
+    }
+  } catch (e) {}
+
+  passbackInFlight = true;
+
+  try {
+    console.log(
+      `PulmoLearn PA 3.1: Sending Canvas completion — ${ltiResourceId} (${reason})`
+    );
+
+    const response = await fetch('/api/lti/score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        lesson_id: ltiResourceId,
+        completed: true
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result?.ok || !result?.passed_back) {
+      console.error(
+        `PulmoLearn PA 3.1: Canvas completion passback failed — ${ltiResourceId}`,
+        result?.error || `HTTP ${response.status}`,
+        result
+      );
+      return;
+    }
+
+    try {
+      sessionStorage.setItem(passbackKey, 'sent');
+    } catch (e) {}
+
+    passbackConfirmed = true;
+
+    console.log(
+      `PulmoLearn PA 3.1: Canvas completion passback confirmed — ${ltiResourceId}`
+    );
+
+    window.dispatchEvent(
+      new CustomEvent('pulmolearn:lti-passback-status', {
+        detail: {
+          ok: true,
+          passedBack: true,
+          ltiResourceId
+        }
+      })
+    );
+  } catch (error) {
+    console.error(
+      'PulmoLearn PA 3.1: Canvas completion passback error:',
+      error
+    );
+  } finally {
+    passbackInFlight = false;
+  }
+}
+
+function evaluateCompletion(reason) {
+  if (visibleActivityComplete()) {
+    sendCanvasCompletion(reason);
+  }
+}
+
+[
+  'pulmolearn:complete',
+  'pulmolearn:activity-complete',
+  'pulmolearn:activity-progress-report',
+  'pulmolearn:activity-progress',
+  'pulmolearn:progress'
+].forEach(eventName => {
+  window.addEventListener(eventName, () => evaluateCompletion(eventName));
+});
+
+/*
+ * Most legacy PA activities do not emit a standardized completion event.
+ * Polling the activity's own visible progress keeps the bridge independent
+ * of each activity's internal question/interaction implementation.
+ */
+const completionPoll = window.setInterval(() => {
+  if (passbackConfirmed) {
+    window.clearInterval(completionPoll);
+    return;
+  }
+  evaluateCompletion('visible-progress-poll');
+}, 1500);
+
+window.setTimeout(
+  () => evaluateCompletion('restored-progress'),
+  900
+);
+</script>
+
+<script type="module" src="/assets/activity-progress-tracker.js"></script>
 </body>
 </html>
