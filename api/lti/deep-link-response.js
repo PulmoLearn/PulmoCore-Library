@@ -1,7 +1,9 @@
 export default async function handler(req, res) {
   try {
     if (req.method !== "POST") {
-      return res.status(405).send("Method not allowed");
+      return res
+        .status(405)
+        .send("Method not allowed");
     }
 
     const {
@@ -16,9 +18,10 @@ export default async function handler(req, res) {
       lessonId,
       returnUrl,
       canvasIssuer,
-      deploymentId
+      deploymentId,
+      deepLinkData
     } =
-      req.body;
+      req.body || {};
 
     const clientId =
       process.env.CANVAS_CLIENT_ID;
@@ -37,30 +40,24 @@ export default async function handler(req, res) {
       !returnUrl ||
       !deploymentId
     ) {
-
       return res
         .status(400)
         .json({
           error:
-            "Missing required deep link fields",
-          received:
-            req.body
+            "Missing required deep link fields"
         });
-
     }
 
     if (
       !privateKeyPem ||
       !clientId
     ) {
-
       return res
         .status(500)
         .json({
           error:
             "Missing LTI_PRIVATE_KEY or CANVAS_CLIENT_ID"
         });
-
     }
 
     const privateKey =
@@ -69,66 +66,50 @@ export default async function handler(req, res) {
         "RS256"
       );
 
-    const contentItem = {
-      type:
-        "ltiResourceLink",
-      title:
-        title,
-      url:
-        "https://www.pulmolearn.com/api/lti/launch",
-      custom: {
-        lesson_id:
-          lessonId || "",
-        lesson_url:
-          lessonUrl
-      },
+    const claims = {
+      iss: clientId,
+      aud:
+        canvasIssuer ||
+        "https://canvas.instructure.com",
 
-      // Tell Canvas this deep-linked resource is grade/completion capable.
-      lineItem: {
-        label:
-          title,
-        scoreMaximum:
-          1,
-        resourceId:
-          lessonId || title,
-        tag:
-          "pulmolearn-completion",
-        gradesReleased:
-          true
-      }
+      "https://purl.imsglobal.org/spec/lti/claim/message_type":
+        "LtiDeepLinkingResponse",
+
+      "https://purl.imsglobal.org/spec/lti/claim/version":
+        "1.3.0",
+
+      "https://purl.imsglobal.org/spec/lti/claim/deployment_id":
+        deploymentId,
+
+      "https://purl.imsglobal.org/spec/lti-dl/claim/content_items":
+        [
+          {
+            type: "ltiResourceLink",
+            title,
+            url:
+              "https://www.pulmolearn.com/api/lti/launch",
+            custom:
+              {
+                lesson_id:
+                  lessonId || "",
+                lesson_url:
+                  lessonUrl
+              }
+          }
+        ]
     };
 
+    if (deepLinkData) {
+      claims[
+        "https://purl.imsglobal.org/spec/lti-dl/claim/data"
+      ] = deepLinkData;
+    }
+
     const jwt =
-      await new SignJWT({
-        iss:
-          clientId,
-        aud:
-          canvasIssuer ||
-          "https://canvas.instructure.com",
-        nonce:
-          Math.random()
-            .toString(36)
-            .substring(2),
-
-        "https://purl.imsglobal.org/spec/lti/claim/message_type":
-          "LtiDeepLinkingResponse",
-
-        "https://purl.imsglobal.org/spec/lti/claim/version":
-          "1.3.0",
-
-        "https://purl.imsglobal.org/spec/lti/claim/deployment_id":
-          deploymentId,
-
-        "https://purl.imsglobal.org/spec/lti-dl/claim/content_items":
-          [
-            contentItem
-          ]
-      })
+      await new SignJWT(claims)
         .setProtectedHeader({
-          alg:
-            "RS256",
-          kid:
-            keyId
+          alg: "RS256",
+          kid: keyId
         })
         .setIssuedAt()
         .setExpirationTime("5m")
@@ -136,43 +117,38 @@ export default async function handler(req, res) {
 
     res.setHeader(
       "Content-Type",
-      "text/html"
+      "text/html; charset=utf-8"
     );
 
     return res
       .status(200)
       .send(`
 <!DOCTYPE html>
-<html>
-  <body>
-    <form
-      id="deepLinkForm"
-      method="POST"
-      action="${returnUrl}"
-    >
-      <input
-        type="hidden"
-        name="JWT"
-        value="${jwt}"
-      >
-      <input
-        type="hidden"
-        name="jwt"
-        value="${jwt}"
-      >
-    </form>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Returning to Canvas</title>
+</head>
+<body>
+  <form
+    id="deepLinkForm"
+    method="POST"
+    action="${returnUrl}"
+  >
+    <input type="hidden" name="JWT" value="${jwt}">
+    <input type="hidden" name="jwt" value="${jwt}">
+  </form>
 
-    <script>
-      document
-        .getElementById("deepLinkForm")
-        .submit();
-    </script>
-  </body>
+  <script>
+    document
+      .getElementById("deepLinkForm")
+      .submit();
+  </script>
+</body>
 </html>
       `);
 
   } catch (error) {
-
     return res
       .status(500)
       .json({
@@ -181,6 +157,5 @@ export default async function handler(req, res) {
         details:
           error.message
       });
-
   }
 }
