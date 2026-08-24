@@ -133,6 +133,23 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,su
 }
 </style>
 
+
+<script id="pulmolearn-foundations-metadata-2-4">
+window.PULMO_LESSON = Object.assign({}, window.PULMO_LESSON || {}, {
+  courseId: "foundations",
+  courseTitle: "Foundations of Respiratory Care",
+  courseName: "Foundations of Respiratory Care",
+  lessonId: "foundations-2-4-chest-xray-interpretation-practice",
+  lesson_id: "2.4",
+  lessonNumber: "Respiratory Care Assignment 2.4",
+  activityId: "foundations-2-4-chest-xray-interpretation-practice",
+  activityType: "standalone-practice",
+  ltiResourceId: "foundations_activity_2_4"
+});
+window.PULMO_LESSON_ID = window.PULMO_LESSON.lessonId;
+window.LESSON_ID = window.PULMO_LESSON.lessonId;
+</script>
+
 </head>
 <body><div class="page">
 <header class="top"><div class="brand"><div class="mark"><svg fill="none" role="img" viewBox="0 0 64 64" aria-label="PulmoLearn lung logo">
@@ -603,4 +620,266 @@ update();
   })();
   </script>
 
+
+<script type="module" id="pulmolearn-foundations-canvas-passback-foundations-activity-2-4">
+/*
+ * AHRC 152 / Foundations Activity 2.4
+ * PulmoLearn progress relay + Canvas completion bridge.
+ *
+ * Existing browser progress remains owned by the activity itself.
+ * Canvas identity: foundations_activity_2_4
+ */
+import { supabase } from '/assets/auth.js';
+
+const params = new URLSearchParams(window.location.search);
+const isLtiLaunch = params.get('lti') === '1';
+const ltiResourceId =
+  window.PULMO_LESSON?.ltiResourceId ||
+  "foundations_activity_2_4";
+
+const localLessonId =
+  window.PULMO_LESSON_ID ||
+  window.LESSON_ID ||
+  "foundations-2.4";
+
+let lastReportedPercent = -1;
+let passbackInFlight = false;
+let passbackConfirmed = false;
+let lastNoSessionNotice = 0;
+
+function clampPercent(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return null;
+  return Math.max(0, Math.min(100, n));
+}
+
+function visibleProgressPercent() {
+  const values = [];
+
+  const add = value => {
+    const n = clampPercent(value);
+    if (n !== null) values.push(n);
+  };
+
+  [
+    'overallProgress',
+    'ltiProgressText',
+    'progressText',
+    'progText'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const text = String(el.textContent || '');
+
+    const pct = text.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (pct) add(pct[1]);
+
+    const fraction = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i);
+    if (fraction) {
+      const done = Number(fraction[1]);
+      const total = Number(fraction[2]);
+      if (Number.isFinite(done) && Number.isFinite(total) && total > 0) {
+        add((done / total) * 100);
+      }
+    }
+  });
+
+  [
+    'overallProgressBar',
+    'ltiProgressBar',
+    'progressBar',
+    'progressFill',
+    'prog'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const aria = el.getAttribute('aria-valuenow');
+    if (aria !== null) add(aria);
+
+    const width = String(el.style?.width || '')
+      .match(/(\d+(?:\.\d+)?)\s*%/);
+    if (width) add(width[1]);
+  });
+
+  document
+    .querySelectorAll('[role="progressbar"][aria-valuenow]')
+    .forEach(el => add(el.getAttribute('aria-valuenow')));
+
+  return values.length ? Math.max(...values) : 0;
+}
+
+function reportPulmoLearnProgress(reason = 'progress-check') {
+  const percent = Math.round(visibleProgressPercent());
+  const completed = percent >= 100;
+
+  if (percent === lastReportedPercent) return;
+  lastReportedPercent = percent;
+
+  const detail = {
+    lesson: "2.4",
+    lessonId: localLessonId,
+    course: "Foundations of Respiratory Care",
+    percent,
+    completed,
+    reason
+  };
+
+  window.dispatchEvent(
+    new CustomEvent('pulmolearn:activity-progress-report', { detail })
+  );
+
+  try {
+    window.PulmoActivityProgress?.report({
+      percent,
+      completed
+    });
+  } catch (e) {}
+
+  if (completed) {
+    window.dispatchEvent(
+      new CustomEvent('pulmolearn:complete', {
+        detail: {
+          lessonId: localLessonId,
+          course: "Foundations of Respiratory Care",
+          percent: 100,
+          completed: true
+        }
+      })
+    );
+  }
+}
+
+async function sendCanvasCompletion(reason = 'activity-complete') {
+  if (!isLtiLaunch || passbackInFlight || passbackConfirmed) return;
+  if (visibleProgressPercent() < 99.5) return;
+
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error(
+      'PulmoLearn AHRC 152 2.4: session lookup failed:',
+      sessionError.message
+    );
+    return;
+  }
+
+  if (!session?.access_token) {
+    const now = Date.now();
+    if (now - lastNoSessionNotice > 30000) {
+      lastNoSessionNotice = now;
+      console.warn(
+        'PulmoLearn AHRC 152 2.4: completion detected, but Canvas passback requires a linked signed-in PulmoLearn student session.'
+      );
+    }
+    return;
+  }
+
+  const passbackKey =
+    `pulmolearn-lti-passback:${session.user.id}:${ltiResourceId}`;
+
+  try {
+    if (sessionStorage.getItem(passbackKey) === 'sent') {
+      passbackConfirmed = true;
+      return;
+    }
+  } catch (e) {}
+
+  passbackInFlight = true;
+
+  try {
+    console.log(
+      `PulmoLearn AHRC 152 2.4: sending Canvas completion — ${ltiResourceId} (${reason})`
+    );
+
+    const response = await fetch('/api/lti/score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        lesson_id: ltiResourceId,
+        completed: true
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result?.ok || !result?.passed_back) {
+      console.error(
+        `PulmoLearn AHRC 152 2.4: Canvas completion passback failed — ${ltiResourceId}`,
+        result?.error || `HTTP ${response.status}`,
+        result
+      );
+      return;
+    }
+
+    try {
+      sessionStorage.setItem(passbackKey, 'sent');
+    } catch (e) {}
+
+    passbackConfirmed = true;
+
+    console.log(
+      `PulmoLearn AHRC 152 2.4: Canvas completion passback confirmed — ${ltiResourceId}`
+    );
+  } catch (error) {
+    console.error(
+      'PulmoLearn AHRC 152 2.4: Canvas completion passback error:',
+      error
+    );
+  } finally {
+    passbackInFlight = false;
+  }
+}
+
+function completionEventHandler(event) {
+  const detail = event?.detail || {};
+  if (
+    detail.completed === true ||
+    detail.complete === true ||
+    Number(detail.percent) >= 100 ||
+    visibleProgressPercent() >= 99.5
+  ) {
+    sendCanvasCompletion(event?.type || 'completion-event');
+  }
+}
+
+[
+  'pulmolearn:complete',
+  'pulmolearn:activity-progress-report',
+  'pulmolearn:activity-complete',
+  'pulmolearn:progress',
+  'pulmolearn:activity-progress'
+].forEach(eventName => {
+  window.addEventListener(eventName, completionEventHandler);
+});
+
+window.setTimeout(() => {
+  reportPulmoLearnProgress('restored-progress');
+  if (visibleProgressPercent() >= 99.5) {
+    sendCanvasCompletion('restored-completion');
+  }
+}, 900);
+
+const progressPoll = window.setInterval(() => {
+  reportPulmoLearnProgress('visible-progress-poll');
+
+  if (visibleProgressPercent() >= 99.5) {
+    sendCanvasCompletion('visible-progress-poll');
+  }
+
+  if (passbackConfirmed) {
+    // Keep reporting available to the account tracker, but Canvas no longer
+    // needs repeated passback attempts in this page session.
+  }
+}, 1500);
+</script>
+
+<script type="module" src="/assets/activity-progress-tracker.js"></script>
 </body></html>
