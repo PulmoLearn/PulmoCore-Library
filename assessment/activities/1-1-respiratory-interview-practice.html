@@ -12,6 +12,7 @@ window.PULMO_LESSON = {
   moduleId:"assessment-foundations",
   moduleTitle:"Assessment Foundations",
   lessonId:"pa-1-1-interview-practice",
+  ltiResourceId:"pa_activity_1_1",
   lessonNumber:"PA 1.1 Activity",
   lessonTitle:"Respiratory Interview & Charting Practice",
   estimatedMinutes:35,
@@ -816,6 +817,105 @@ restoreSavedUi();
     }
   })();
   </script>
+
+<script type="module" id="pulmolearn-pa11-canvas-passback-v1">
+import { supabase } from '/assets/auth.js';
+
+const params = new URLSearchParams(window.location.search);
+const isLtiLaunch = params.get('lti') === '1';
+const ltiResourceId = window.PULMO_LESSON?.ltiResourceId || 'pa_activity_1_1';
+
+let passbackInFlight = false;
+let passbackAttemptedThisLoad = false;
+
+function visibleActivityComplete() {
+  const text = String(document.getElementById('overallProgress')?.textContent || '');
+  const match = text.match(/(\d+(?:\.\d+)?)\s*%/);
+  return match ? Number(match[1]) >= 100 : false;
+}
+
+async function sendCanvasCompletion(reason = 'activity-complete-event') {
+  if (!isLtiLaunch || passbackInFlight) return;
+
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error('PulmoLearn PA 1.1: session lookup failed:', sessionError.message);
+    return;
+  }
+
+  if (!session?.access_token) {
+    console.warn('PulmoLearn PA 1.1: Canvas passback requires a linked signed-in PulmoLearn student session.');
+    return;
+  }
+
+  const passbackKey = `pulmolearn-lti-passback:${session.user.id}:${ltiResourceId}`;
+
+  try {
+    if (sessionStorage.getItem(passbackKey) === 'sent') {
+      console.log(`PulmoLearn PA 1.1: Canvas completion already sent — ${ltiResourceId}`);
+      return;
+    }
+  } catch (e) {}
+
+  passbackInFlight = true;
+  passbackAttemptedThisLoad = true;
+
+  try {
+    console.log(`PulmoLearn PA 1.1: Sending Canvas completion — ${ltiResourceId} (${reason})`);
+
+    const response = await fetch('/api/lti/score', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        lesson_id: ltiResourceId,
+        completed: true
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result?.ok || !result?.passed_back) {
+      console.error(
+        `PulmoLearn PA 1.1: Canvas completion passback failed — ${ltiResourceId}`,
+        result?.error || `HTTP ${response.status}`,
+        result
+      );
+      return;
+    }
+
+    try { sessionStorage.setItem(passbackKey, 'sent'); } catch (e) {}
+
+    console.log(`PulmoLearn PA 1.1: Canvas completion passback confirmed — ${ltiResourceId}`);
+  } catch (error) {
+    console.error('PulmoLearn PA 1.1: Canvas completion passback error:', error);
+  } finally {
+    passbackInFlight = false;
+  }
+}
+
+window.addEventListener('pulmolearn:complete', event => {
+  const detail = event.detail || {};
+  if (detail.completed === true || Number(detail.percent) >= 100) {
+    sendCanvasCompletion('pulmolearn:complete');
+  }
+});
+
+window.addEventListener('pulmolearn:activity-progress-report', event => {
+  const detail = event.detail || {};
+  if (detail.completed === true || Number(detail.percent) >= 100) {
+    sendCanvasCompletion('activity-progress-report');
+  }
+});
+
+setTimeout(() => {
+  if (visibleActivityComplete() && !passbackAttemptedThisLoad) {
+    sendCanvasCompletion('restored-100-percent');
+  }
+}, 800);
+</script>
+
   <script type="module" src="/assets/activity-progress-tracker.js"></script>
 
 </body>
