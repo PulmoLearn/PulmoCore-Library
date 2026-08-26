@@ -276,7 +276,9 @@ function reconcile(){
 }
 reconcile();
 if(state.done.length)document.getElementById('resumeMessage').textContent=`Progress restored: ${state.done.length} of 7 sections were already complete.`;
-window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'1.5',course:'Neonatal & Pediatric Respiratory Care',scenario:'Why Is This Newborn Struggling?',activity_version:'v1'});
+window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'1.5',course:'Neonatal & Pediatric Respiratory Care',scenario:'Why Is This Newborn Struggling?',activity_version:'v1',lessonId:'np_1_5',ltiResourceId:'scenario-1.5'});
+window.PULMO_LESSON_ID=window.PULMO_LESSON.lessonId;
+window.LESSON_ID=window.PULMO_LESSON.lessonId;
 </script>
 
   <script>
@@ -348,5 +350,203 @@ window.PULMO_LESSON=Object.assign({},window.PULMO_LESSON||{},{lesson_id:'1.5',co
   })();
   </script>
 
+
+<script type="module" id="pulmolearn-np-canvas-passback-scenario-1-5">
+/*
+ * Neonatal/Pediatric Scenario 1.5 — Canvas completion bridge
+ *
+ * Local scenario progress remains owned by the scenario's existing
+ * localStorage state. Canvas completion uses the catalog resource id:
+ * scenario-1.5
+ */
+import { supabase } from '/assets/auth.js';
+
+const params = new URLSearchParams(window.location.search);
+const isLtiLaunch = params.get('lti') === '1';
+const ltiResourceId =
+  window.PULMO_LESSON?.ltiResourceId ||
+  "scenario-1.5";
+
+let passbackInFlight = false;
+let passbackConfirmed = false;
+let passbackAttemptedThisLoad = false;
+
+function visibleActivityComplete() {
+  const candidates = [
+    document.getElementById('overallProgress'),
+    document.getElementById('ltiProgressText'),
+    document.getElementById('progressText')
+  ].filter(Boolean);
+
+  for (const el of candidates) {
+    const text = String(el.textContent || '');
+
+    const pct = text.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (pct && Number(pct[1]) >= 100) return true;
+
+    const fraction = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i);
+    if (fraction) {
+      const done = Number(fraction[1]);
+      const total = Number(fraction[2]);
+      if (total > 0 && done >= total) return true;
+    }
+  }
+
+  const bars = [
+    document.getElementById('overallProgressBar'),
+    document.getElementById('progressBar'),
+    document.getElementById('ltiProgressBar')
+  ].filter(Boolean);
+
+  for (const el of bars) {
+    const aria = Number(el.getAttribute('aria-valuenow'));
+    if (Number.isFinite(aria) && aria >= 100) return true;
+
+    const width = String(el.style?.width || '').match(/(\d+(?:\.\d+)?)\s*%/);
+    if (width && Number(width[1]) >= 100) return true;
+  }
+
+  return false;
+}
+
+async function sendCanvasCompletion(reason = 'activity-complete') {
+  if (!isLtiLaunch || passbackInFlight || passbackConfirmed) return;
+
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error(
+      'PulmoLearn Scenario 1.5: session lookup failed:',
+      sessionError.message
+    );
+    return;
+  }
+
+  if (!session?.access_token) {
+    console.warn(
+      'PulmoLearn Scenario 1.5: completion detected, but Canvas passback requires a linked signed-in PulmoLearn student session.'
+    );
+    return;
+  }
+
+  const passbackKey =
+    `pulmolearn-lti-passback:${session.user.id}:${ltiResourceId}`;
+
+  try {
+    if (sessionStorage.getItem(passbackKey) === 'sent') {
+      passbackConfirmed = true;
+      console.log(
+        `PulmoLearn Scenario 1.5: Canvas completion already sent — ${ltiResourceId}`
+      );
+      return;
+    }
+  } catch (e) {}
+
+  passbackInFlight = true;
+  passbackAttemptedThisLoad = true;
+
+  try {
+    console.log(
+      `PulmoLearn Scenario 1.5: sending Canvas completion — ${ltiResourceId} (${reason})`
+    );
+
+    const response = await fetch('/api/lti/score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: session.access_token,
+        lesson_id: ltiResourceId,
+        completed: true
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result?.ok || !result?.passed_back) {
+      console.error(
+        `PulmoLearn Scenario 1.5: Canvas completion passback failed — ${ltiResourceId}`,
+        result?.error || `HTTP ${response.status}`,
+        result
+      );
+      return;
+    }
+
+    try {
+      sessionStorage.setItem(passbackKey, 'sent');
+    } catch (e) {}
+
+    passbackConfirmed = true;
+
+    console.log(
+      `PulmoLearn Scenario 1.5: Canvas completion passback confirmed — ${ltiResourceId}`
+    );
+  } catch (error) {
+    console.error(
+      'PulmoLearn Scenario 1.5: Canvas completion passback error:',
+      error
+    );
+  } finally {
+    passbackInFlight = false;
+  }
+}
+
+function completionEventHandler(event) {
+  const detail = event?.detail || {};
+
+  const explicitComplete =
+    detail.completed === true ||
+    detail.complete === true ||
+    Number(detail.percent) >= 100 ||
+    (
+      Number.isFinite(Number(detail.completed)) &&
+      Number.isFinite(Number(detail.total)) &&
+      Number(detail.total) > 0 &&
+      Number(detail.completed) >= Number(detail.total)
+    );
+
+  if (explicitComplete || visibleActivityComplete()) {
+    sendCanvasCompletion(event?.type || 'completion-event');
+  }
+}
+
+[
+  'pulmolearn:complete',
+  'pulmolearn:activity-progress-report',
+  'pulmolearn:activity-complete',
+  'pulmolearn:progress',
+  'pulmolearn:activity-progress'
+].forEach(eventName => {
+  window.addEventListener(eventName, completionEventHandler);
+});
+
+/*
+ * The scenario restores localStorage state before this module executes.
+ * Recheck visible progress so a learner reopening a completed scenario
+ * can still report completion to Canvas.
+ */
+setTimeout(() => {
+  if (visibleActivityComplete() && !passbackAttemptedThisLoad) {
+    sendCanvasCompletion('restored-completion');
+  }
+}, 900);
+
+const completionPoll = window.setInterval(() => {
+  if (passbackConfirmed) {
+    window.clearInterval(completionPoll);
+    return;
+  }
+
+  if (visibleActivityComplete()) {
+    sendCanvasCompletion('visible-progress-poll');
+  }
+}, 1800);
+</script>
+
+<script type="module" src="/assets/activity-progress-tracker.js"></script>
 </body>
 </html>
