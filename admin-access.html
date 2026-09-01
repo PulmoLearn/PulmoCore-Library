@@ -27,7 +27,8 @@ h2,h3{margin-top:0}
 input,select,button{padding:10px 12px;border-radius:10px;border:1px solid var(--border);font:inherit}
 input,select{background:#fff;color:var(--navy);width:100%}
 button{background:var(--teal);color:#fff;font-weight:800;cursor:pointer;border:none;width:auto}
-button:hover{background:var(--teal-dark)}
+button:hover:not(:disabled){background:var(--teal-dark)}
+button:disabled{opacity:.55;cursor:not-allowed}
 button.secondary{background:#E5F0F6;color:var(--navy)}
 button.danger{background:#A23B3B}
 label{display:block;font-weight:700;font-size:.85rem;margin:10px 0 6px}
@@ -49,6 +50,7 @@ th{background:#E5F0F6}
 code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
 .org-card{border-left:5px solid var(--teal)}
 .member-list{margin-top:12px}
+.package-panel{background:#F4FAFC;border:1px solid var(--border);border-left:5px solid var(--teal);border-radius:12px;padding:14px;margin-top:14px}
 
 .modal-backdrop{position:fixed;inset:0;background:rgba(11,31,51,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
 .modal-backdrop.open{display:flex}
@@ -59,34 +61,13 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
 
 @media(max-width:900px){.two,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
 :focus-visible{outline:3px solid var(--amber);outline-offset:3px}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <header>
   <div>
     <h1>PulmoLearn Access Management</h1>
-    <div style="opacity:.75">Enrollment roster, organizations, vouchers, roles, and cohort assignments</div>
+    <div style="opacity:.75">Enrollment roster, organizations, vouchers, roles, cohort assignments, and LTI package access</div>
   </div>
   <nav class="nav" aria-label="Admin navigation">
     <a href="/admin-dashboard.html">Analytics Dashboard</a>
@@ -105,6 +86,7 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
       </div>
       <button id="refreshRoster">Refresh</button>
     </div>
+
     <div class="controls">
       <input id="rosterSearch" type="search" placeholder="Search name, email, voucher, organization, cohort..." style="min-width:300px;flex:1" />
       <select id="roleFilter" style="max-width:230px">
@@ -114,6 +96,7 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
         <option value="student">Student</option>
       </select>
     </div>
+
     <div class="table-wrap">
       <table>
         <thead><tr>
@@ -128,7 +111,7 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
   <section class="grid two section">
     <div class="card org-card">
       <h2>Organization Management</h2>
-      <div class="sub">Create a school/program, then assign Program Directors / Instructors and students to it. Organization UUIDs stay behind the scenes.</div>
+      <div class="sub">Create a school/program, assign members, and control whether the organization has the paid LTI activity package.</div>
 
       <h3 class="section">Create Organization</h3>
       <div class="form-grid">
@@ -149,6 +132,20 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
       <h3 class="section">View Organization</h3>
       <label for="manageOrg">Organization</label>
       <select id="manageOrg"></select>
+
+      <div class="package-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div>
+            <strong>LTI Package Access</strong>
+            <div class="sub" style="margin-top:4px">Students assigned to an enabled organization can receive Program Practice Activities on their PulmoLearn dashboard.</div>
+          </div>
+          <span id="orgPackageStatus" class="badge warn">Not enabled</span>
+        </div>
+        <div class="controls" style="margin-bottom:0">
+          <button id="toggleOrgPackageBtn">Enable LTI Package Access</button>
+        </div>
+      </div>
+
       <div class="controls">
         <button id="loadOrgMembersBtn" class="secondary">Show Members</button>
       </div>
@@ -185,12 +182,10 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
   </section>
 </main>
 
-
 <div class="modal-backdrop" id="editModalBackdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
     <h2 id="editModalTitle">Edit User Enrollment</h2>
     <div class="sub" id="editUserIdentity"></div>
-
     <div class="form-grid section">
       <div>
         <label for="editRole">Role</label>
@@ -216,12 +211,10 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
         <input id="editCohort" placeholder="e.g. 2028" />
       </div>
     </div>
-
     <div class="notice">
       <strong>Program Director / Instructor</strong> grants the organization-level role used for the Program Dashboard.
       <strong>Administrator</strong> grants system-wide admin access. Organization and cohort are not required for administrators.
     </div>
-
     <div class="modal-actions">
       <button id="cancelEditBtn" class="secondary">Cancel</button>
       <button id="saveEditBtn">Save Changes</button>
@@ -233,7 +226,6 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="removeModalTitle">
     <h2 id="removeModalTitle">Remove Enrollment</h2>
     <div class="sub" id="removeUserIdentity"></div>
-
     <div class="section">
       <label style="display:flex;gap:8px;align-items:flex-start;font-weight:700">
         <input type="radio" name="removeMode" value="access_only" checked style="width:auto;margin-top:3px">
@@ -244,11 +236,7 @@ code{background:#F3F7F9;padding:2px 5px;border-radius:5px}
         <span>Remove access + organization assignment<br><span class="sub">Removes both PulmoLearn enrollment and organization/cohort membership.</span></span>
       </label>
     </div>
-
-    <div class="notice">
-      The Supabase Auth account, profile, lesson progress, and activity history are retained.
-    </div>
-
+    <div class="notice">The Supabase Auth account, profile, lesson progress, and activity history are retained.</div>
     <div class="modal-actions">
       <button id="cancelRemoveBtn" class="secondary">Cancel</button>
       <button id="confirmRemoveBtn" class="danger">Confirm Removal</button>
@@ -261,6 +249,8 @@ import { supabase } from "/assets/auth.js";
 
 let roster = [];
 let organizations = [];
+let activeEditUserId = null;
+let activeRemoveUserId = null;
 const statusEl = document.getElementById("status");
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
@@ -276,13 +266,45 @@ async function verifyAdmin(){
   return true;
 }
 
-async function loadOrganizations(){
-  const {data,error}=await supabase.rpc("admin_list_organizations");
+function renderOrgPackageStatus(){
+  const orgId=document.getElementById("manageOrg").value;
+  const org=organizations.find(o=>o.id===orgId);
+  const status=document.getElementById("orgPackageStatus");
+  const btn=document.getElementById("toggleOrgPackageBtn");
+
+  if(!org){
+    status.textContent="No organization selected";
+    status.className="badge warn";
+    btn.textContent="Enable LTI Package Access";
+    btn.disabled=true;
+    return;
+  }
+
+  const enabled=org.lti_package_access===true;
+  status.textContent=enabled?"Enabled":"Not enabled";
+  status.className=`badge ${enabled?"good":"warn"}`;
+  btn.textContent=enabled?"Disable LTI Package Access":"Enable LTI Package Access";
+  btn.disabled=false;
+}
+
+async function loadOrganizations(selectedOrgId=null){
+  const {data,error}=await supabase.rpc("admin_list_organizations_v2");
   if(error){showStatus("Could not load organizations: "+error.message);return}
   organizations=data||[];
-  const opts = `<option value="">No organization</option>` + organizations.map(o=>`<option value="${esc(o.id)}">${esc(o.name)}${o.type?` (${esc(o.type)})`:""}</option>`).join("");
-  ["assignOrg","voucherOrg"].forEach(id=>document.getElementById(id).innerHTML=opts);
-  document.getElementById("manageOrg").innerHTML = organizations.map(o=>`<option value="${esc(o.id)}">${esc(o.name)}</option>`).join("") || `<option value="">No organizations</option>`;
+
+  const opts=`<option value="">No organization</option>`+
+    organizations.map(o=>`<option value="${esc(o.id)}">${esc(o.name)}${o.type?` (${esc(o.type)})`:""}</option>`).join("");
+
+  ["editOrg","voucherOrg"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML=opts;
+  });
+
+  const manage=document.getElementById("manageOrg");
+  manage.innerHTML=organizations.map(o=>`<option value="${esc(o.id)}">${esc(o.name)}</option>`).join("")||`<option value="">No organizations</option>`;
+
+  if(selectedOrgId&&organizations.some(o=>o.id===selectedOrgId)) manage.value=selectedOrgId;
+  renderOrgPackageStatus();
 }
 
 async function loadRoster(){
@@ -293,17 +315,62 @@ async function loadRoster(){
   renderRoster();
 }
 
+function roleForRow(r){
+  return r.is_admin?"admin":(r.organization_role||r.profile_role||"student");
+}
+
+function rosterSortGroup(r){
+  const role=roleForRow(r);
+  const org=(r.organization_name||"").trim().toLowerCase();
+  const cohort=String(r.cohort||"").trim();
+
+  if(org==="gfcmsu respiratory therapy" && role==="student"){
+    if(cohort==="2028") return 0;
+    if(cohort==="2027") return 1;
+    if(cohort==="2026") return 2;
+    return 3;
+  }
+
+  if(role==="program_director") return 4;
+  if(org==="looky-loos") return 5;
+  return 6;
+}
+
+function compareRoster(a,b){
+  const groupDiff=rosterSortGroup(a)-rosterSortGroup(b);
+  if(groupDiff!==0) return groupDiff;
+
+  const cohortA=String(a.cohort||"");
+  const cohortB=String(b.cohort||"");
+  if(rosterSortGroup(a)===3 && cohortA!==cohortB){
+    return cohortB.localeCompare(cohortA,undefined,{numeric:true});
+  }
+
+  return String(a.full_name||a.email||"").localeCompare(
+    String(b.full_name||b.email||""),
+    undefined,
+    {sensitivity:"base"}
+  );
+}
+
 function renderRoster(){
   const q=document.getElementById("rosterSearch").value.toLowerCase().trim();
   const rf=document.getElementById("roleFilter").value;
-  const rows=roster.filter(r=>{
-    const role=r.is_admin?"admin":(r.organization_role||r.profile_role||"student");
-    const hay=[r.full_name,r.email,r.voucher_code,r.organization_name,r.cohort,role].join(" ").toLowerCase();
-    return (!q||hay.includes(q))&&(!rf||role===rf);
-  });
+
+  const rows=roster
+    .filter(r=>{
+      const role=roleForRow(r);
+      const hay=[r.full_name,r.email,r.voucher_code,r.organization_name,r.cohort,role].join(" ").toLowerCase();
+      return (!q||hay.includes(q))&&(!rf||role===rf);
+    })
+    .sort(compareRoster);
+
   document.getElementById("rosterBody").innerHTML=rows.map(r=>{
-    const role=r.is_admin?"admin":(r.organization_role||r.profile_role||"student");
-    const membership=r.organization_id ? (r.organization_role?'<span class="badge good">Assigned</span>':'<span class="badge bad">Missing</span>') : '<span class="badge warn">None</span>';
+    const role=roleForRow(r);
+    const membership=r.organization_id
+      ? (r.organization_role?'<span class="badge good">Assigned</span>':'<span class="badge bad">Missing</span>')
+      : '<span class="badge warn">None</span>';
+
     return `<tr>
       <td><strong>${esc(r.full_name||"Unknown User")}</strong></td>
       <td>${esc(r.email||"")}</td>
@@ -321,9 +388,13 @@ function renderRoster(){
         </div>
       </td>
     </tr>`;
-  }).join("") || `<tr><td colspan="10">No enrolled users found.</td></tr>`;
+  }).join("")||`<tr><td colspan="10">No enrolled users found.</td></tr>`;
 }
 
+function orgOptions(selectedId){
+  return `<option value="">No organization</option>`+
+    organizations.map(o=>`<option value="${esc(o.id)}" ${o.id===selectedId?"selected":""}>${esc(o.name)}</option>`).join("");
+}
 
 document.getElementById("refreshRoster").onclick=loadRoster;
 document.getElementById("rosterSearch").oninput=renderRoster;
@@ -334,54 +405,65 @@ document.getElementById("createOrgBtn").onclick=async()=>{
   const name=document.getElementById("newOrgName").value.trim();
   const type=document.getElementById("newOrgType").value;
   if(!name){showStatus("Enter an organization name.");return}
+
   const {data,error}=await supabase.rpc("admin_create_organization",{p_name:name,p_type:type});
   if(error){showStatus("Organization creation failed: "+error.message);return}
   if(data?.ok===false){showStatus(data.message||"Organization creation failed.");return}
+
   showStatus(`Organization created: ${name}`,true);
   document.getElementById("newOrgName").value="";
   await loadOrganizations();
+};
+
+document.getElementById("manageOrg").onchange=()=>{
+  renderOrgPackageStatus();
+  document.getElementById("orgMembers").innerHTML="";
+};
+
+document.getElementById("toggleOrgPackageBtn").onclick=async()=>{
+  clearStatus();
+  const orgId=document.getElementById("manageOrg").value;
+  const org=organizations.find(o=>o.id===orgId);
+  if(!org){showStatus("Choose an organization first.");return}
+
+  const newValue=!(org.lti_package_access===true);
+  const {data,error}=await supabase.rpc("admin_set_lti_package_access",{
+    p_organization_id:orgId,
+    p_enabled:newValue
+  });
+
+  if(error){showStatus("Could not update LTI package access: "+error.message);return}
+  if(data?.ok===false){showStatus(data.message||"Could not update LTI package access.");return}
+
+  showStatus(`${org.name}: LTI Package Access ${newValue?"enabled":"disabled"}.`,true);
+  await loadOrganizations(orgId);
 };
 
 document.getElementById("loadOrgMembersBtn").onclick=async()=>{
   clearStatus();
   const orgId=document.getElementById("manageOrg").value;
   if(!orgId){document.getElementById("orgMembers").textContent="Choose an organization.";return}
+
   const {data,error}=await supabase.rpc("admin_list_organization_members",{p_organization_id:orgId});
   if(error){showStatus("Could not load organization members: "+error.message);return}
+
   const members=data||[];
   document.getElementById("orgMembers").innerHTML=members.length
     ? `<div class="table-wrap"><table style="min-width:650px"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Cohort</th></tr></thead><tbody>${members.map(m=>`<tr><td>${esc(m.full_name||"Unknown User")}</td><td>${esc(m.email||"")}</td><td>${esc(m.role||"")}</td><td>${esc(m.cohort||"—")}</td></tr>`).join("")}</tbody></table></div>`
     : "No members are assigned to this organization yet.";
 };
 
-
-
-let activeEditUserId = null;
-let activeRemoveUserId = null;
-
-function orgOptions(selectedId){
-  return `<option value="">No organization</option>` +
-    organizations.map(o =>
-      `<option value="${esc(o.id)}" ${o.id===selectedId ? "selected" : ""}>${esc(o.name)}</option>`
-    ).join("");
-}
-
-function roleForRow(r){
-  return r.is_admin ? "admin" : (r.organization_role || r.profile_role || "student");
-}
-
-document.getElementById("rosterBody").addEventListener("click", event=>{
+document.getElementById("rosterBody").addEventListener("click",event=>{
   const editBtn=event.target.closest(".edit-user-btn");
   const removeBtn=event.target.closest(".remove-user-btn");
 
   if(editBtn){
     const r=roster.find(x=>x.user_id===editBtn.dataset.userId);
-    if(!r) return;
+    if(!r)return;
     activeEditUserId=r.user_id;
-    document.getElementById("editUserIdentity").innerHTML=
-      `<strong>${esc(r.full_name||"Unknown User")}</strong><br>${esc(r.email||"")}`;
+    document.getElementById("editUserIdentity").innerHTML=`<strong>${esc(r.full_name||"Unknown User")}</strong><br>${esc(r.email||"")}`;
     document.getElementById("editRole").value=roleForRow(r);
-    document.getElementById("editAccess").value=(r.access_type==="paid" ? "paid" : "voucher");
+    document.getElementById("editAccess").value=(r.access_type==="paid"?"paid":"voucher");
     document.getElementById("editOrg").innerHTML=orgOptions(r.organization_id||"");
     document.getElementById("editCohort").value=r.cohort||"";
     document.getElementById("editModalBackdrop").classList.add("open");
@@ -389,10 +471,9 @@ document.getElementById("rosterBody").addEventListener("click", event=>{
 
   if(removeBtn){
     const r=roster.find(x=>x.user_id===removeBtn.dataset.userId);
-    if(!r) return;
+    if(!r)return;
     activeRemoveUserId=r.user_id;
-    document.getElementById("removeUserIdentity").innerHTML=
-      `<strong>${esc(r.full_name||"Unknown User")}</strong><br>${esc(r.email||"")}`;
+    document.getElementById("removeUserIdentity").innerHTML=`<strong>${esc(r.full_name||"Unknown User")}</strong><br>${esc(r.email||"")}`;
     document.querySelector('input[name="removeMode"][value="access_only"]').checked=true;
     document.getElementById("removeModalBackdrop").classList.add("open");
   }
@@ -405,7 +486,7 @@ document.getElementById("cancelEditBtn").onclick=()=>{
 
 document.getElementById("saveEditBtn").onclick=async()=>{
   clearStatus();
-  if(!activeEditUserId) return;
+  if(!activeEditUserId)return;
 
   const role=document.getElementById("editRole").value;
   const access=document.getElementById("editAccess").value;
@@ -436,9 +517,9 @@ document.getElementById("cancelRemoveBtn").onclick=()=>{
 
 document.getElementById("confirmRemoveBtn").onclick=async()=>{
   clearStatus();
-  if(!activeRemoveUserId) return;
+  if(!activeRemoveUserId)return;
 
-  const mode=document.querySelector('input[name="removeMode"]:checked')?.value || "access_only";
+  const mode=document.querySelector('input[name="removeMode"]:checked')?.value||"access_only";
   const removeOrg=mode==="access_and_org";
 
   const {data,error}=await supabase.rpc("admin_remove_enrollment",{
@@ -468,10 +549,22 @@ document.getElementById("createVoucherBtn").onclick=async()=>{
   const expRaw=document.getElementById("voucherExpires").value;
   const expires=expRaw?new Date(expRaw).toISOString():null;
 
-  const {data,error}=await supabase.rpc("admin_create_vouchers",{p_prefix:prefix,p_quantity:quantity,p_voucher_type:type,p_multi_use:multi,p_organization_id:org,p_school_id:cohort,p_school_name:school,p_expires_at:expires});
+  const {data,error}=await supabase.rpc("admin_create_vouchers",{
+    p_prefix:prefix,
+    p_quantity:quantity,
+    p_voucher_type:type,
+    p_multi_use:multi,
+    p_organization_id:org,
+    p_school_id:cohort,
+    p_school_name:school,
+    p_expires_at:expires
+  });
+
   if(error){showStatus("Voucher creation failed: "+error.message);return}
   const codes=(data||[]).map(r=>r.code);
-  document.getElementById("createdCodes").innerHTML=codes.length?`<strong>Created:</strong><br><code>${codes.map(esc).join("</code><br><code>")}</code>`:"No codes returned.";
+  document.getElementById("createdCodes").innerHTML=codes.length
+    ? `<strong>Created:</strong><br><code>${codes.map(esc).join("</code><br><code>")}</code>`
+    : "No codes returned.";
   showStatus(`${codes.length} voucher${codes.length===1?"":"s"} created.`,true);
 };
 
@@ -480,6 +573,7 @@ document.getElementById("lookupVoucherBtn").onclick=async()=>{
   const code=document.getElementById("lookupVoucher").value.trim().toUpperCase();
   const {data,error}=await supabase.rpc("admin_lookup_voucher",{p_code:code});
   if(error){showStatus("Voucher lookup failed: "+error.message);return}
+
   const v=data?.[0];
   document.getElementById("voucherLookupResult").innerHTML=v
     ? `<strong>${esc(v.code)}</strong><br>Active: ${esc(v.active)} · Reusable: ${esc(v.multi_use)} · Type: ${esc(v.access_type||"")}<br>Redeemed by: ${esc(v.redeemed_by||"—")}<br>Redeemed at: ${dt(v.redeemed_at)}<br>Expires: ${dt(v.expires_at)}`
@@ -491,75 +585,5 @@ if(await verifyAdmin()){
   await loadRoster();
 }
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
