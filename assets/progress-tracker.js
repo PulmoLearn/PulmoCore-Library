@@ -571,6 +571,10 @@ async function getCurrentTotalSeconds() {
   return Number(data.total_seconds || 0)
 }
 
+if (data.completed && isLtiLaunch) {
+  await sendLtiCompletionPassback()
+}
+
 async function saveProgress() {
   if (!lessonId || !userId) return
 
