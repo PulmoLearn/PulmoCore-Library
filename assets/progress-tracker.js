@@ -571,10 +571,6 @@ async function getCurrentTotalSeconds() {
   return Number(data.total_seconds || 0)
 }
 
-if (data.completed && isLtiLaunch) {
-  await sendLtiCompletionPassback()
-}
-
 async function saveProgress() {
   if (!lessonId || !userId) return
 
@@ -658,6 +654,10 @@ async function restoreProgress() {
     console.log('PulmoLearn: No meaningful progress to restore — starting fresh')
     return
   }
+
+  if (data.completed && isLtiLaunch) {
+  await sendLtiCompletionPassback()
+}
 
   const allSections = getAllSections()
   const total = allSections.length
