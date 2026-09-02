@@ -325,6 +325,7 @@ const activityMap = {
 };
 
 const lessonLinkById = {
+  foundations_1_1: "Foundations_1_1_Professional_Communication_Conflict_Resolution.html",
   foundations_1_2: "Foundations_1_2_Medical_Math_Units_Dosage_Calculations.html",
   foundations_1_3: "Foundations_1_3_Oxygenation_Gas_Exchange_Calculations.html",
   foundations_1_4: "Foundations_1_4_Introduction_to_Pulmonary_Function_Testing.html",
