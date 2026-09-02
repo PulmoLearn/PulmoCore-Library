@@ -20,6 +20,7 @@
 
 import { supabase } from '/assets/auth.js'
 import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
+import '/assets/activity-dashboard-sync.js'
 
 console.log('PulmoLearn: activity-progress-tracker.js v3.1 loaded')
 
