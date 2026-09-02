@@ -505,6 +505,7 @@ function addActivitiesToVisibleSections() {
           }
         }
       });
+  });
 }
 
 async function userHasPackageAccess() {
