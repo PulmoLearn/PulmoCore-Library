@@ -548,7 +548,7 @@ function addQ(q,host,key,required=false,fin=false){
 function renderSet(id){let host=document.getElementById(id);sets[id].forEach((q,i)=>addQ(q,host,id+'-'+i,true,false))}
 Object.keys(sets).forEach(renderSet);
 finalQs.forEach((q,i)=>addQ(q,document.getElementById('final'),'f'+i,false,true));
-function update(){let rt=Object.values(sets).reduce((n,a)=>n+a.length,0),rd=Object.keys(state.r).length,fd=Object.keys(state.f).length,total=rt+finalQs.length,done=Math.min(rd,rt)+Math.min(fd,finalQs.length),p=Math.round(done/total*100);document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';if(rd>=rt){document.getElementById('final').classList.remove('lock');document.getElementById('finalLock').style.display='none'}if(done>=total)document.getElementById('done').classList.add('show')}
+function update(){let rt=Object.values(sets).reduce((n,a)=>n+a.length,0),rd=Object.keys(state.r).length,fd=Object.keys(state.f).length,total=rt+finalQs.length,done=Math.min(rd,rt)+Math.min(fd,finalQs.length),p=Math.round(done/total*100);document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';window.PulmoActivityProgress?.report({ percent: parseInt(document.getElementById('progressText')?.textContent, 10) || 0, completed: (parseInt(document.getElementById('progressText')?.textContent, 10) || 0) >= 100 }); if(rd>=rt){document.getElementById('final').classList.remove('lock');document.getElementById('finalLock').style.display='none'}if(done>=total)document.getElementById('done').classList.add('show')}
 update();
 </script>
   <script>
