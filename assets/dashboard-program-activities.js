@@ -88,7 +88,7 @@ const activityMap = {
     {
       lessonId: "foundations_2_4",
       title: "Chest X-Ray Interpretation Practice",
-      href: "/foundations/activities/2-4-chest-x-ray-interpretation-practice.html",
+      href: "/foundations/activities/2-4-chest-xray-interpretation-practice.html",
       kind: "Practice Activity"
     },
     {
