@@ -9,6 +9,37 @@ const isLocalPreview =
   ["localhost", "127.0.0.1"].includes(window.location.hostname) ||
   !window.location.hostname.includes("pulmolearn.com");
 
+let activityProgressMap = {};
+
+function getActivityKey(href) {
+  try {
+    return decodeURIComponent(
+      new URL(href, window.location.origin)
+        .pathname
+        .split('/')
+        .pop() || ''
+    )
+      .replace(/\.html$/i, '')
+      .trim()
+      .toLowerCase();
+  } catch {
+    return String(href || '')
+      .split('/')
+      .pop()
+      .replace(/\.html$/i, '')
+      .trim()
+      .toLowerCase();
+  }
+}
+
+function getActivityProgress(activity) {
+  const key = getActivityKey(activity.href);
+  return activityProgressMap[key] || {
+    percent_complete: 0,
+    completed: false
+  };
+}
+
 const activityMap = {
   foundations: [
     {
@@ -414,6 +445,37 @@ function injectStyles() {
       margin: 0;
     }
 
+    .program-activity-card .activity-progress-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .program-activity-card .activity-progress-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--slate, #415A77);
+      font-weight: 800;
+      font-size: .92rem;
+    }
+
+    .program-activity-card .activity-progress-bar {
+      height: 13px;
+      border-radius: 999px;
+      background: #E5F0F6;
+      overflow: hidden;
+    }
+
+    .program-activity-card .activity-progress-fill {
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        var(--pulmo-teal, #1CA7A8),
+        var(--oxygen-blue, #4BA3F2)
+      );
+      transition: width .25s ease;
+    }
+
     .program-activity-card .btn-program-practice {
       background: var(--core-navy, #0B1F33);
       color: #fff;
@@ -435,11 +497,11 @@ function injectStyles() {
 
 function makeActivityCard(activity) {
   const article = document.createElement("article");
-  article.className = "disease-card program-activity-card";
   article.dataset.programActivity = "true";
   article.dataset.alignedLessonId = activity.lessonId;
 
   if (activity.placeholder) {
+    article.className = "disease-card program-activity-card";
     article.innerHTML = `
       <div class="program-activity-label">${activity.kind}</div>
       <div class="disease-header">
@@ -462,23 +524,60 @@ function makeActivityCard(activity) {
     return article;
   }
 
+  const saved = getActivityProgress(activity);
+  const percent = Math.max(
+    0,
+    Math.min(100, Number(saved.percent_complete || 0))
+  );
+  const completed = Boolean(saved.completed) || percent >= 100;
+  const badgeClass = completed
+    ? "complete"
+    : percent > 0
+      ? "progress"
+      : "not-started";
+  const statusText = completed
+    ? "✓ Complete"
+    : percent > 0
+      ? "In Progress"
+      : "Not Started";
+  const buttonText = completed
+    ? `Review ${activity.kind}`
+    : percent > 0
+      ? `Continue ${activity.kind}`
+      : `Start ${activity.kind}`;
+
+  article.className =
+    `disease-card program-activity-card${completed ? " is-complete" : ""}`;
+
   article.innerHTML = `
-    <div class="program-activity-label">${activity.kind}</div>
     <div class="disease-header">
-      <div class="disease-title-group">
-        <h3>${activity.title}</h3>
-        <div class="disease-category">Aligned practice provided by your respiratory therapy program</div>
+      <div>
+        <div class="program-activity-label">${activity.kind}</div>
+        <div class="disease-title-group" style="margin-top:12px">
+          <h3>${activity.title}</h3>
+          <div class="disease-category">Aligned practice provided by your respiratory therapy program</div>
+        </div>
       </div>
+      <span class="badge ${badgeClass}">${statusText}</span>
     </div>
     <p class="program-activity-note">
-      Apply the concepts from the lesson immediately above through interactive practice and clinical reasoning.
+      Apply the concepts from the aligned lesson through interactive practice and clinical reasoning.
     </p>
+    <div class="activity-progress-row" aria-label="${activity.title} progress">
+      <div class="activity-progress-label">
+        <span>Progress</span>
+        <span>${percent}%</span>
+      </div>
+      <div class="activity-progress-bar">
+        <div class="activity-progress-fill" style="width:${percent}%"></div>
+      </div>
+    </div>
     <div class="disease-meta">
       <span class="pill">Program Practice</span>
       <span class="pill">Included with LTI Package</span>
     </div>
     <div class="card-actions">
-      <a class="btn btn-program-practice" href="${activity.href}">Open ${activity.kind}</a>
+      <a class="btn btn-program-practice" href="${activity.href}">${buttonText}</a>
     </div>
   `;
 
@@ -539,6 +638,51 @@ function addActivitiesToVisibleSections() {
   });
 }
 
+async function loadActivityDashboardProgress() {
+  if (isLocalPreview) {
+    activityProgressMap = {};
+    return;
+  }
+
+  try {
+    const auth = await import(AUTH_MODULE_URL);
+    const supabase = auth.supabase;
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session?.user?.id) {
+      activityProgressMap = {};
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("activity_dashboard_progress")
+      .select("activity_key, percent_complete, completed")
+      .eq("user_id", session.user.id);
+
+    if (error) {
+      console.warn(
+        "PulmoLearn: Could not load activity dashboard progress:",
+        error.message
+      );
+      activityProgressMap = {};
+      return;
+    }
+
+    activityProgressMap = {};
+    (data || []).forEach(row => {
+      activityProgressMap[
+        String(row.activity_key || "").trim().toLowerCase()
+      ] = row;
+    });
+  } catch (error) {
+    console.warn(
+      "PulmoLearn: Activity dashboard progress load failed safely:",
+      error
+    );
+    activityProgressMap = {};
+  }
+}
+
 async function userHasPackageAccess() {
   if (isLocalPreview) return true;
 
@@ -566,6 +710,7 @@ async function initProgramActivities() {
   const entitled = await userHasPackageAccess();
   if (!entitled) return;
 
+  await loadActivityDashboardProgress();
   addActivitiesToVisibleSections();
 
   const target = document.getElementById("courseSections");
