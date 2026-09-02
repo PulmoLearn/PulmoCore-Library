@@ -12,6 +12,13 @@ const isLocalPreview =
 const activityMap = {
   foundations: [
     {
+      lessonId: "foundations_1_1",
+      title: "Professional Email Assignment",
+      href: "#",
+      kind: "Canvas Assignment",
+      placeholder: true
+    },
+    {
       lessonId: "foundations_1_2",
       title: "Respiratory Math & Safety Practice",
       href: "/foundations/activities/1-2-respiratory-math-safety-practice.html",
@@ -430,6 +437,29 @@ function makeActivityCard(activity) {
   article.className = "disease-card program-activity-card";
   article.dataset.programActivity = "true";
   article.dataset.alignedLessonId = activity.lessonId;
+
+  if (activity.placeholder) {
+    article.innerHTML = `
+      <div class="program-activity-label">${activity.kind}</div>
+      <div class="disease-header">
+        <div class="disease-title-group">
+          <h3>${activity.title}</h3>
+          <div class="disease-category">Complete this aligned assignment in Canvas</div>
+        </div>
+      </div>
+      <p class="program-activity-note">
+        This lesson's applied assignment is completed and submitted through your Canvas course rather than in PulmoLearn.
+      </p>
+      <div class="disease-meta">
+        <span class="pill">Assignment 1.1</span>
+        <span class="pill">Complete in Canvas</span>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-secondary" aria-disabled="true">Open from Canvas</span>
+      </div>
+    `;
+    return article;
+  }
 
   article.innerHTML = `
     <div class="program-activity-label">${activity.kind}</div>
