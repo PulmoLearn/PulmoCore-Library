@@ -490,7 +490,7 @@ function render(){
 function totalReq(){return S.reduce((n,s)=>n+s.q.length,0)}
 function update(){
  const rt=totalReq(),rd=Object.keys(state.required).filter(k=>state.required[k]).length,fd=Object.keys(state.final).filter(k=>state.final[k]).length,total=rt+F.length,done=Math.min(rd,rt)+Math.min(fd,F.length),p=Math.round(done/total*100);
- document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';
+ document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%'; window.PulmoActivityProgress?.report({ percent: parseInt(document.getElementById('progressText')?.textContent, 10) || 0, completed: (parseInt(document.getElementById('progressText')?.textContent, 10) || 0) >= 100 });
  if(rd>=rt){document.getElementById('final').classList.remove('lock');document.getElementById('finalLock').style.display='none'}else{document.getElementById('final').classList.add('lock');document.getElementById('finalLock').style.display='block'}
  if(done>=total)document.getElementById('done').classList.add('show')
 }
