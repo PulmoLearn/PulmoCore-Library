@@ -629,7 +629,7 @@ function finDone(){return Object.keys(state.final).filter(k=>state.final[k]).len
 function renderFinal(){const h=document.getElementById('finalQuestions');F.forEach((q,i)=>addQ(q,h,`final-${i}`,false,true))}
 function update(){
  const total=reqTotal()+F.length,done=Math.min(reqDone(),reqTotal())+Math.min(finDone(),F.length),p=Math.round(done/total*100);
- document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%';
+ document.getElementById('progressText').textContent=p+'% complete';document.getElementById('progressBar').style.width=p+'%'; window.PulmoActivityProgress?.report({ percent: parseInt(document.getElementById('progressText')?.textContent, 10) || 0, completed: (parseInt(document.getElementById('progressText')?.textContent, 10) || 0) >= 100 });
  const unlocked=reqDone()>=reqTotal(),fq=document.getElementById('finalQuestions'),lock=document.getElementById('finalLock');
  if(unlocked){fq.classList.remove('lock');fq.setAttribute('aria-disabled','false');lock.style.display='none'}else{fq.classList.add('lock');fq.setAttribute('aria-disabled','true');lock.style.display='block'}
  if(done===total)document.getElementById('completeBox').classList.add('show')
