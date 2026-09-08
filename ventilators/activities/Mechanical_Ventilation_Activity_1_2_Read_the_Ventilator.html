@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mechanical Ventilation | Activity 1.2 Read the Ventilator</title>
+
+<style>
+:root{
+  --navy:#0B1F33;
+  --navy2:#102A43;
+  --teal:#1CA7A8;
+  --teal2:#128486;
+  --blue:#4BA3F2;
+  --mist:#F4FAFC;
+  --mint:#DDF7F2;
+  --amber:#F4B860;
+  --amber-soft:#FFF6E5;
+  --coral:#E85D5D;
+  --coral-soft:#FDE9E9;
+  --white:#FFFFFF;
+  --ink:#24313D;
+  --slate:#415A77;
+  --muted:#647483;
+  --border:#D7E6EF;
+  --shadow:0 8px 20px rgba(11,31,51,.08);
+  --shadow-lg:0 14px 34px rgba(11,31,51,.11);
+  --radius:22px;
+  --radius-md:16px;
+  --radius-sm:11px;
+  --font:Arial,Helvetica,sans-serif;
+  --mono:"IBM Plex Mono","Roboto Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f4f7f9;color:var(--ink);font-family:var(--font);line-height:1.55}
+button,input{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
+  outline:3px solid var(--amber);outline-offset:3px
+}
+.page-shell{max-width:1440px;margin:0 auto;min-height:100vh;background:linear-gradient(#fff,#f7fbfd)}
+.top-nav{
+  position:sticky;top:0;z-index:1000;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:15px clamp(16px,4vw,50px);box-shadow:0 6px 18px rgba(11,31,51,.18)
+}
+.brand{display:flex;align-items:center;gap:13px}
+.brand-mark{
+  width:54px;height:54px;border:2px solid rgba(255,255,255,.55);border-radius:18px;
+  display:grid;place-items:center;background:rgba(28,167,168,.12);flex:none
+}
+.brand-mark svg{width:40px;height:40px}
+.brand-name{font-size:clamp(1.35rem,2vw,2rem);font-weight:800;line-height:1;letter-spacing:-.04em}
+.brand-name span{color:var(--teal)}
+.brand-tagline{font-size:.8rem;opacity:.9;margin-top:4px}
+.nav-course{
+  border:1px solid rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.08);
+  padding:9px 14px;font-weight:700;color:#fff;white-space:nowrap
+}
+.main-content{width:min(1180px,calc(100% - 24px));margin:0 auto;padding:24px 0 64px}
+.hero{
+  background:#fff;color:var(--navy);border:1px solid var(--border);border-top:10px solid var(--teal);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:30px
+}
+.eyebrow,.kicker{
+  display:inline-block;color:var(--teal);font-weight:800;letter-spacing:.05em;
+  text-transform:uppercase;font-size:.8rem;margin-bottom:5px
+}
+.hero h1,h2,h3,h4{color:var(--navy);letter-spacing:-.035em;line-height:1.14}
+.hero h1{font-size:clamp(2.1rem,5vw,3.85rem);margin:.3rem 0 .7rem}
+.hero p{font-size:1.08rem;color:#31485E;max-width:980px}
+.meta-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}
+.meta-grid>div{background:#F7FBFD;border:1px solid var(--border);border-radius:12px;padding:11px}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+.tag{background:#E9F4F4;border:1px solid #B8DCDC;color:#0B5E61;border-radius:999px;padding:5px 9px;font-weight:800;font-size:.76rem}
+.competency-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.competency{border:1px solid var(--border);border-radius:13px;padding:12px;background:rgba(255,255,255,.85)}
+.competency b{display:block;color:var(--navy);margin-bottom:3px}
+
+.progress-shell{
+  position:sticky;top:88px;z-index:900;background:rgba(255,255,255,.98);
+  border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:11px 14px;margin:17px 0
+}
+.progress-row{display:flex;align-items:center;gap:12px}
+.progress{height:11px;flex:1;background:#E5F0F6;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .2s ease}
+.progress-sub{font-size:.82rem;color:var(--muted);margin-top:5px}
+
+.card,.station,.final-card{
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:23px;margin-bottom:16px
+}
+.intro-card{border-left:8px solid var(--teal)}
+.safety{background:var(--amber-soft);border:1px solid #F5D7A4;border-left:7px solid var(--amber);border-radius:15px;padding:15px;margin:14px 0}
+.safety strong{color:#694200}
+.reference summary{cursor:pointer;font-weight:800;color:var(--navy)}
+.reference summary::after{content:"+";float:right;color:var(--teal);font-size:1.3rem}
+.reference[open] summary::after{content:"–"}
+.reference-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.reference-item{border:1px solid var(--border);border-radius:12px;padding:11px;background:#FBFDFE}
+.reference-item b{display:block;color:var(--navy);margin-bottom:3px}
+.formula{font-family:var(--mono);background:#F7FAFC;border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin:8px 0;color:#17364E}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:14px}
+.flow>div{border:1px solid var(--border);border-radius:13px;padding:11px;background:#FBFDFE}
+.flow b{display:block;color:var(--navy)}
+
+.mastery-map{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:16px 0
+}
+.mastery-chip{
+  border:1px solid var(--border);border-radius:13px;background:#fff;color:var(--navy);
+  padding:9px 10px;font-size:.82rem;font-weight:800;text-align:center
+}
+.mastery-chip.done{background:var(--mint);border-color:#9EDCCD}
+.mastery-chip.current{background:#EAF5FE;border-color:#B6D8F2}
+.mastery-chip.locked{opacity:.45}
+
+.station.locked{opacity:.5;position:relative}
+.station.locked::after{
+  content:"Complete the previous station to unlock.";
+  position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.88);
+  border-radius:var(--radius);font-weight:800;color:var(--slate);padding:20px;text-align:center
+}
+.station-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.station-title{display:flex;gap:12px;align-items:flex-start}
+.station-number{
+  width:44px;height:44px;border-radius:14px;background:var(--navy);color:#fff;
+  display:grid;place-items:center;font-weight:800;flex:none
+}
+.level-pill{
+  display:inline-block;border-radius:999px;background:#E9F4F4;color:#0B5E61;
+  padding:4px 8px;font-size:.72rem;font-weight:800;margin-top:4px
+}
+.station-status{
+  border:1px solid var(--border);border-radius:999px;padding:5px 9px;font-size:.78rem;
+  font-weight:800;color:var(--slate);white-space:nowrap
+}
+.station-status.complete{background:var(--mint);border-color:#9EDCCD;color:#16563F}
+.station-summary{color:#405A72;margin:.5rem 0 1rem}
+
+.q-card{
+  border:1px solid var(--border);border-radius:16px;background:#fff;padding:16px;margin:12px 0
+}
+.q-card.correct-card{border-color:#93D8C7;background:#FBFFFE}
+.q-number{font-size:.72rem;color:var(--teal2);font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.q-title{font-weight:800;color:var(--navy);font-size:1.02rem;margin:5px 0 10px}
+.patient-data{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0
+}
+.patient-data>div{border:1px solid var(--border);border-radius:10px;padding:8px;background:#F9FCFD;font-size:.88rem}
+.patient-data b{display:block;color:var(--navy);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+.options{display:grid;gap:8px}
+.option{
+  border:1px solid var(--border);border-radius:12px;background:#fff;color:var(--ink);
+  padding:11px 12px;text-align:left;line-height:1.4
+}
+.option:hover:not(:disabled){border-color:var(--blue);background:#F3F9FE}
+.option.correct-choice{background:var(--mint);border-color:#86D9C8;color:#164F40}
+.option.incorrect-choice{background:var(--coral-soft);border-color:#F0B4B4;color:#7A2727}
+.option:disabled{cursor:default}
+.feedback{display:none;margin-top:9px;border-radius:11px;padding:11px 12px;font-size:.92rem}
+.feedback.show{display:block}
+.feedback.ok{background:var(--mint);border:1px solid #9EDCCD;color:#16563F}
+.feedback.bad{background:var(--coral-soft);border:1px solid #E8BABA;color:#7A2727}
+.feedback.coach{background:#EAF5FE;border:1px solid #BDD9EF;color:#234A64}
+
+.more-wrap{margin-top:14px;border-top:2px dashed var(--border);padding-top:12px}
+.more-btn{
+  border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--navy);
+  padding:9px 12px;font-weight:800
+}
+.more-btn:hover{background:var(--mint)}
+.more-practice{display:none;margin-top:10px}
+.more-practice.open{display:block}
+.optional-label{font-size:.78rem;font-weight:800;color:var(--teal2);text-transform:uppercase;letter-spacing:.04em}
+
+.pressure-stack{display:grid;gap:8px;margin:10px 0}
+.pressure-row{display:grid;grid-template-columns:95px 1fr;align-items:center;gap:10px}
+.pressure-row b{font-size:.85rem;color:var(--navy)}
+.pressure-bar{height:32px;border-radius:9px;display:flex;align-items:center;padding:0 10px;font-family:var(--mono);font-weight:800;color:var(--navy)}
+.pressure-bar.peep{width:32%;background:#E8F6F4}
+.pressure-bar.pplat{width:68%;background:#CFE9FF}
+.pressure-bar.pip{width:92%;background:#B8D7F3}
+
+.breath-strip{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--border);
+  border-radius:13px;overflow:hidden;margin:10px 0
+}
+.breath-strip>div{padding:10px;border-left:1px solid var(--border);background:#FBFDFE}
+.breath-strip>div:first-child{border-left:0}
+.breath-strip b{display:block;color:var(--navy);margin-bottom:3px}
+
+.compare-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.compare-mini>div{border:1px solid var(--border);border-radius:12px;padding:11px;background:#F9FCFD}
+.compare-mini strong{display:block;color:var(--navy);margin-bottom:4px}
+
+.wave{background:#F9FCFD;border:1px solid var(--border);border-radius:14px;padding:10px;margin:10px 0}
+.wave svg{width:100%;height:125px;display:block}
+.axis{stroke:#A9BCC9;stroke-width:1}.wave-line{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.wave-line.teal{stroke:var(--teal)}.wave-line.coral{stroke:var(--coral)}.zero{stroke:#8095A5;stroke-width:1;stroke-dasharray:5 5}.wave text{font-family:var(--font);font-size:12px;fill:#50697D}
+
+.final-card{border-top:8px solid var(--navy)}
+.final-lock{
+  border:1px solid #F2D29B;background:var(--amber-soft);border-radius:14px;padding:13px;color:#684200
+}
+.final-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+.final-tab{
+  border:2px solid var(--border);background:#fff;color:var(--navy);border-radius:13px;padding:11px;text-align:left;font-weight:800
+}
+.final-tab.active{border-color:var(--teal);background:#F1FBFA}
+.final-panel{display:none}.final-panel.active{display:block}
+.final-case-stage{border:1px solid var(--border);border-radius:14px;padding:14px;margin:10px 0;background:#fff}
+.final-case-stage.locked-stage{opacity:.48;pointer-events:none}
+.capstone-coach{font-size:.85rem;color:var(--muted);margin:5px 0 0}
+.final-advance-note{border:1px solid #B9D9EE;background:#EDF7FE;border-left:7px solid var(--blue);border-radius:13px;padding:12px 14px;margin:10px 0 14px;color:#244A64}.final-advance-note strong{color:var(--navy)}
+
+.complete-box{
+  display:none;background:var(--mint);border:1px solid #86D9C8;border-radius:var(--radius);padding:23px;box-shadow:var(--shadow)
+}
+.complete-box.show{display:block}
+.footer{
+  background:var(--navy);color:#fff;padding:30px clamp(20px,4vw,56px);
+  display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;font-size:.9rem
+}
+.footer strong span{color:var(--teal)}
+
+@media(max-width:980px){
+  .meta-grid,.mastery-map{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:1fr 1fr}.flow>div:last-child{grid-column:1/-1}
+  .reference-grid{grid-template-columns:1fr 1fr}
+  .patient-data{grid-template-columns:1fr 1fr}
+}
+@media(max-width:720px){
+  .top-nav{padding:12px 14px}.brand-tagline,.nav-course{display:none}
+  .brand-mark{width:48px;height:48px;border-radius:14px}
+  .main-content{width:min(100% - 20px,1180px);padding-top:16px}
+  .hero,.card,.station,.final-card{padding:18px;border-radius:18px}
+  .hero h1{font-size:2.15rem}
+  .meta-grid,.competency-grid,.mastery-map,.reference-grid,.patient-data,.breath-strip,.compare-mini,.final-tabs{grid-template-columns:1fr}
+  .breath-strip>div{border-left:0;border-top:1px solid var(--border)}.breath-strip>div:first-child{border-top:0}
+  .flow{grid-template-columns:1fr}.flow>div:last-child{grid-column:auto}
+  .progress-shell{top:72px}
+  .station-head{display:block}.station-status{display:inline-block;margin-top:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+</style>
+
+<script>
+window.PULMO_LESSON = {
+  schemaVersion:"1.0",
+  courseId:"mechanical-ventilation",
+  courseTitle:"Mechanical Ventilation",
+  courseName:"Mechanical Ventilation",
+  moduleId:"unit-1",
+  moduleTitle:"Initiating Ventilatory Support",
+  lessonId:"mv-activity-1-2-read-the-ventilator",
+  lesson_id:"1.2",
+  lessonNumber:"Mechanical Ventilation Activity 1.2",
+  title:"Read the Ventilator",
+  activityId:"mv-activity-1-2-read-the-ventilator",
+  activityType:"standalone-practice",
+  ltiResourceId:"mechanical_ventilation_activity_1_2",
+  estimatedCompletionTime:"55–70 minutes",
+  difficulty:"Progressive Practice",
+  version:"1.0",
+  date:"2026-09-08",
+  competencies:[
+    {id:"C3",title:"Predict ventilator behavior from mechanics",description:"Apply compliance, resistance, pressure, volume, flow, and timing relationships to predict what changes when respiratory mechanics change."},
+    {id:"C4",title:"Read basic patient–ventilator interaction",description:"Use ventilator graphics and patient findings to identify triggering, flow, timing, air trapping, and basic synchrony problems."}
+  ],
+  topics:[
+    "volume control",
+    "pressure control",
+    "peak inspiratory pressure",
+    "plateau pressure",
+    "PEEP",
+    "static compliance",
+    "airway resistance",
+    "time constants",
+    "auto-PEEP",
+    "trigger sensitivity",
+    "pressure trigger",
+    "flow trigger",
+    "ineffective triggering",
+    "auto-triggering",
+    "time cycling",
+    "flow cycling",
+    "ventilator graphics",
+    "patient ventilator synchrony"
+  ],
+  nbrc:{
+    examVersion:"Respiratory Therapy Examination Detailed Content Outline - January 2027",
+    examEffectiveDate:"2027-01",
+    alignmentScope:"Pulmonary mechanics, ventilator graphics, patient–ventilator interaction, auto-PEEP, and support of oxygenation and ventilation.",
+    alignmentTags:[
+      "I. Patient Data · Pulmonary Mechanics",
+      "III.C Support Oxygenation and Ventilation",
+      "Ventilator Graphics",
+      "Patient–Ventilator Dyssynchrony",
+      "Clinical Judgment · Information Gathering",
+      "Clinical Judgment · Decision Making"
+    ],
+    domains:["I. Patient Data","II. Management of Devices and Patient Safety","III. Initiation and Modification of Interventions"],
+    breadthOfKnowledge:[
+      {section:"Patient Data",tasks:[
+        "Interpret pulmonary compliance, airway resistance, plateau pressure, and auto-PEEP.",
+        "Use ventilator graphics and patient data to understand respiratory mechanics."
+      ]},
+      {section:"Support Oxygenation and Ventilation",tasks:[
+        "Recognize basic patient–ventilator dyssynchrony and identify the first appropriate assessment direction."
+      ]}
+    ],
+    depthOfClinicalJudgment:[
+      "Choose the most useful ventilator or patient data to assess next.",
+      "Interpret mechanics and graphics before selecting a first correction."
+    ],
+    patientAge:["Adult"]
+  },
+  reporting:{
+    completionModel:"required-mastery-plus-capstone",
+    optionalPracticeAffectsCompletion:false
+  }
+};
+window.PULMO_LESSON_ID = window.PULMO_LESSON.lessonId;
+window.LESSON_ID = window.PULMO_LESSON.lessonId;
+</script>
+</head>
+
+<body>
+<div class="page-shell">
+<header class="top-nav" aria-label="Mechanical Ventilation navigation">
+  <div class="brand" aria-label="PulmoLearn brand">
+    <div class="brand-mark" aria-hidden="true">
+      <svg fill="none" viewBox="0 0 64 64">
+        <path d="M31 8v19c-6-10-18-14-22-6-5 10-2 27 8 32 7 4 13-3 14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <path d="M33 8v19c6-10 18-14 22-6 5 10 2 27-8 32-7 4-13-3-14-13V8Z" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <path d="M32 30c-4 2-8 6-10 13M32 30c4 2 8 6 10 13" stroke="#1CA7A8" stroke-linecap="round" stroke-width="3"/>
+        <circle cx="32" cy="31" fill="#1CA7A8" r="4"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">Pulmo<span>Learn</span></div>
+      <div class="brand-tagline">Respiratory care learning for future RTs.</div>
+    </div>
+  </div>
+  <div class="nav-course">Mechanical Ventilation · Activity 1.2</div>
+</header>
+
+<div class="main-content">
+<header class="hero">
+  <span class="eyebrow">Mechanical Ventilation · Activity 1.2</span>
+  <h1>Read the Ventilator</h1>
+  <p>Build fluency with ventilator mechanics one relationship at a time. You will identify what the ventilator controls, interpret pressure patterns, calculate mechanics when useful, predict what changes, recognize timing and triggering problems, and finish by reading integrated patient–ventilator cases.</p>
+
+  <div class="meta-grid" aria-label="Activity details">
+    <div><strong>Estimated time</strong><br>55–70 minutes</div>
+    <div><strong>Practice style</strong><br>Progressive mastery</div>
+    <div><strong>Required stations</strong><br>7 + final workbench</div>
+    <div><strong>Optional practice</strong><br>Does not affect completion</div>
+  </div>
+
+  <div class="tags" aria-label="2027 RTE alignment">
+    <span class="tag">2027 RTE · Pulmonary Mechanics</span>
+    <span class="tag">Ventilator Graphics</span>
+    <span class="tag">Patient–Ventilator Interaction</span>
+    <span class="tag">Information Gathering</span>
+    <span class="tag">Decision Making</span>
+  </div>
+
+  <div class="competency-grid">
+    <div class="competency"><b>C3 · Predict ventilator behavior from mechanics</b>Use pressure, volume, flow, compliance, resistance, and timing relationships to predict what should change when the patient changes.</div>
+    <div class="competency"><b>C4 · Read patient–ventilator interaction</b>Recognize triggering, flow, timing, air trapping, and basic synchrony patterns before moving into deeper troubleshooting.</div>
+  </div>
+</header>
+
+<div class="progress-shell" aria-label="Activity progress">
+  <div class="progress-row">
+    <strong id="progressText">0% complete</strong>
+    <div class="progress" aria-hidden="true"><div class="progress-fill" id="progressBar"></div></div>
+  </div>
+  <div class="progress-sub" id="progressSub">Complete the required mastery questions. Optional “More Practice” does not affect completion.</div>
+</div>
+
+<main>
+<section class="card intro-card">
+  <span class="kicker">Your ventilator-reading routine</span>
+  <h2>PATIENT → TRIGGER → CONTROL → MECHANICS → TIMING → GRAPHICS</h2>
+  <div class="flow">
+    <div><b>PATIENT</b>What is the patient doing at the bedside?</div>
+    <div><b>TRIGGER</b>Did the patient or machine start the breath?</div>
+    <div><b>CONTROL</b>Is volume/flow or pressure the primary inspiratory target?</div>
+    <div><b>MECHANICS</b>Did compliance or resistance change the cost of the breath?</div>
+    <div><b>TIMING + GRAPHICS</b>Did inspiration and expiration happen when they should, and do the waveforms match the patient?</div>
+  </div>
+  <div class="safety"><strong>Patient first.</strong> A waveform is evidence, not the patient. Use ventilator data to explain what you see at the bedside rather than treating the screen as the diagnosis.</div>
+</section>
+
+<details class="card reference">
+  <summary>Quick Reference &amp; Formula Refresher — open anytime</summary>
+  <div class="reference-grid">
+    <div class="reference-item"><b>PIP</b>Peak inspiratory pressure. Reflects pressure needed to overcome resistive and elastic loads during a flow-delivered breath.</div>
+    <div class="reference-item"><b>Pplat</b>Plateau pressure. Measured during an inspiratory hold with flow stopped; approximates static respiratory-system pressure in a passive patient.</div>
+    <div class="reference-item"><b>PEEP</b>Positive end-expiratory pressure. Baseline pressure at the end of expiration.</div>
+    <div class="reference-item"><b>Static compliance</b><span class="formula">Cstat = exhaled VT ÷ (Pplat − PEEP)</span>Lower compliance means a stiffer respiratory system.</div>
+    <div class="reference-item"><b>Airway resistance</b><span class="formula">Raw ≈ (PIP − Pplat) ÷ flow in L/s</span>A larger PIP-to-Pplat difference suggests greater resistive pressure when flow is comparable.</div>
+    <div class="reference-item"><b>Time constant</b><span class="formula">τ = resistance × compliance</span>Describes how quickly a lung unit fills and empties.</div>
+    <div class="reference-item"><b>Total cycle time</b><span class="formula">TCT = 60 ÷ respiratory rate</span>Inspiratory time and expiratory time must fit within each breath cycle.</div>
+    <div class="reference-item"><b>Trigger</b>What starts inspiration: patient effort or machine timing.</div>
+    <div class="reference-item"><b>Cycle</b>What ends inspiration and allows expiration to begin.</div>
+  </div>
+</details>
+
+<section class="card">
+  <span class="kicker">Mastery path</span>
+  <h2>Start with the pieces, then interpret the whole ventilator.</h2>
+  <div class="mastery-map" id="masteryMap" aria-label="Activity mastery path"></div>
+</section>
+
+<div id="stations"></div>
+
+<section class="final-card locked" id="finalCard">
+  <span class="kicker">Final ventilator workbench</span>
+  <h2>Now read the ventilator with less scaffolding.</h2>
+  <p>Complete all seven mastery stations first. Then work through three integrated cases: obstructive resistance/air trapping, worsening compliance, and patient–ventilator synchrony.</p>
+  <div class="final-lock" id="finalLock">Complete all seven required mastery stations to unlock the final workbench.</div>
+  <div id="finalArea" hidden></div>
+</section>
+
+<section class="complete-box" id="completeBox">
+  <h2>Activity complete ✓</h2>
+  <p>You completed the required mastery stations and all final ventilator workbench cases.</p>
+  <p><strong>Carry this routine forward:</strong> look at the patient → identify trigger and control → interpret pressures/volume → check mechanics and timing → use graphics to decide what to assess next.</p>
+</section>
+</main>
+</div>
+
+<footer class="footer">
+  <div><strong>Pulmo<span>Learn</span></strong><br>Mechanical Ventilation · Activity 1.2</div>
+  <div>Optional “More Practice” does not affect completion.<br>Progress and mastered answers are saved in this browser.</div>
+</footer>
+</div>
+
+<script>
+const STORAGE_KEY = "pulmolearn:mv-activity-1-2:v1";
+const state = {
+  correct:new Set(),
+  activeFinalCase:"obstruction",
+  optionalOpen:new Set()
+};
+let finalAdvanceMessage="";
+
+const S = (id,title,level,summary,required,optional=[]) => ({id,title,level,summary,required,optional});
+
+const stations = [
+S("breath","Describe the Breath","Remember → Understand",
+  "Reinforce trigger, control/limit, cycle, baseline, and the difference between patient-triggered and machine-triggered breaths.",
+[
+ {id:"b1",q:"The patient makes an inspiratory effort and the ventilator begins a supported breath. Which breath variable describes what started inspiration?",a:["Trigger","Cycle","Baseline","Limit"],c:0,why:"Trigger is the event that starts inspiration."},
+ {id:"b2",q:"A mandatory breath begins because the set time interval has elapsed and the patient did not trigger first. How was the breath triggered?",a:["Machine/time-triggered","Patient pressure-triggered","Patient flow-triggered","Flow-cycled"],c:0,why:"The ventilator started inspiration because time reached the scheduled breath interval."},
+ {id:"b3",q:"In a pressure-controlled mandatory breath, pressure is maintained at the selected inspiratory target while inspiration continues. Which concept best describes the controlled inspiratory variable?",a:["Pressure is the controlled/limited variable","Tidal volume is guaranteed","PEEP is the cycle variable","Flow is the baseline"],c:0,why:"Pressure control targets inspiratory pressure; delivered flow and volume depend on mechanics and timing."},
+ {id:"b4",q:"A pressure-supported breath ends when inspiratory flow falls to the ventilator's cycling threshold. Which breath variable describes the event that ended inspiration?",a:["Cycle","Trigger","Baseline","Control"],c:0,why:"Cycle is the event that ends inspiration and allows expiration to begin."},
+ {id:"b5",q:"Positive end-expiratory pressure is maintained after expiration and before the next breath. Which breath variable does PEEP represent?",a:["Baseline","Trigger","Cycle","Inspiratory limit"],c:0,why:"Baseline is the variable controlled during expiration."},
+ {id:"b6",q:"A patient triggers a breath while receiving assist-control volume ventilation. Which statement is most accurate?",a:["The patient starts the breath but can still receive the full preset assist-control breath target","A patient-triggered breath receives no ventilator assistance","The breath becomes a pressure-support breath automatically","The ventilator ignores the preset breath target once the patient triggers"],c:0,why:"Patient-triggered describes how the breath starts, not necessarily the type or amount of support that follows."}
+],[
+ {id:"bo1",q:"Which sequence correctly follows one ventilator breath?",a:["Trigger → controlled inspiratory phase → cycle → baseline","Cycle → trigger → baseline → inspiratory phase","Baseline → cycle → trigger → volume guarantee","Control → baseline → trigger → cycle"],c:0,why:"Inspiration begins with a trigger, proceeds through the controlled inspiratory phase, ends by cycling, and returns to baseline during expiration."},
+ {id:"bo2",q:"Why is 'patient-triggered' not the same as 'spontaneous breath'?",a:["Trigger describes how inspiration begins, while the ventilator may still deliver a mandatory preset target afterward","Patient-triggered breaths are always machine-cycled","Spontaneous breaths cannot occur on a ventilator","Patient triggering refers only to expiration"],c:0,why:"A patient can initiate a breath that still receives mandatory assist-control support."}
+]),
+
+S("control","Protect the Target","Understand → Apply",
+  "Practice the core volume-control versus pressure-control relationship before adding mechanics.",
+[
+ {id:"v1",q:"In volume control, which variable is allowed to change when respiratory mechanics worsen?",a:["Airway pressure","The selected tidal-volume target","The patient's height","The set PEEP automatically"],c:0,why:"Volume control targets the selected volume delivery, so the pressure required to deliver it can change."},
+ {id:"v2",q:"In pressure control, which variable can change when respiratory mechanics worsen while pressure and inspiratory time remain unchanged?",a:["Delivered tidal volume","The selected pressure target","The set PEEP automatically","The patient's respiratory drive"],c:0,why:"Pressure control targets pressure; delivered flow and volume become dependent on patient mechanics and timing."},
+ {id:"v3",q:"Volume control delivers VT 450 mL. Compliance suddenly decreases. Which change should you predict?",a:["More pressure may be required to deliver the selected VT","The pressure target remains fixed and VT must fall","PIP must fall because the lungs are stiffer","Volume control automatically switches to pressure control"],c:0,why:"A stiffer respiratory system requires more elastic pressure to deliver the same targeted volume."},
+ {id:"v4",q:"Pressure control uses the same inspiratory pressure and inspiratory time. Compliance suddenly decreases. Which change should you predict?",a:["Delivered VT may fall","The ventilator must raise pressure until VT is unchanged","VT is guaranteed by pressure control","PIP must exceed the set pressure by the same amount as volume control"],c:0,why:"With the same applied pressure, a stiffer respiratory system expands less and may receive less volume."},
+ {id:"v5",q:"Which statement is the safest way to compare volume and pressure control?",a:["Either can be used safely if pressures, volume, patient response, and lung-protective goals are monitored","Pressure control is always safer because pressure is limited","Volume control is always safer because VT is guaranteed","One strategy should be chosen solely from the diagnosis"],c:0,why:"Safety depends on appropriate settings and monitoring rather than assuming one control strategy is universally superior."}
+],[
+ {id:"vo1",q:"Pressure control delivers VT 500 mL. Airway resistance suddenly increases while the pressure target stays unchanged. Which response is possible?",a:["Inspiratory flow and VT can decrease","VT must remain 500 mL","Pressure must automatically rise above the set target","Resistance cannot affect pressure-controlled ventilation"],c:0,why:"More of the fixed pressure is spent overcoming resistance, so inspiratory flow and volume may fall."},
+ {id:"vo2",q:"Volume control delivers the same VT after bronchospasm develops. What can the ventilator 'give up' instead of volume?",a:["Lower pressure stability because PIP may rise","The set respiratory rate automatically","PEEP automatically falls","The patient can no longer trigger"],c:0,why:"Pressure is the dependent variable in volume control and may rise when resistance increases."}
+]),
+
+S("pressure","Read the Pressure Pattern","Understand → Apply",
+  "Use PIP, plateau pressure, and PEEP to separate resistive load from elastic load.",
+[
+ {id:"p1",q:"PIP rises from 28 to 40 cm H₂O while plateau pressure remains 22 cm H₂O. What mechanical change should you suspect first?",a:["Increased airway resistance","Reduced compliance","Improved compliance","A lower PEEP baseline"],c:0,why:"A widening PIP-to-Pplat difference indicates more resistive pressure when measurement conditions are comparable."},
+ {id:"p2",q:"PIP rises from 28 to 38 cm H₂O and plateau pressure rises from 22 to 32 cm H₂O. What mechanical change is most concerning?",a:["Reduced respiratory-system compliance","Isolated increased airway resistance","Improved compliance","A major circuit leak"],c:0,why:"When PIP and Pplat rise together, more pressure is required to stretch the respiratory system."},
+ {id:"p3",q:"Why is an inspiratory hold used to measure plateau pressure?",a:["Flow briefly stops so resistive pressure falls out of the measurement","Flow increases so resistance is exaggerated","PEEP is removed from the circuit","The ventilator guarantees a larger tidal volume"],c:0,why:"With flow stopped, the pressure drop caused by moving gas through resistance is minimized, allowing a more static pressure estimate."},
+ {id:"p4",q:"PIP is 36 cm H₂O and plateau pressure is 24 cm H₂O. What is the approximate resistive pressure difference?",a:["12 cm H₂O","60 cm H₂O","24 cm H₂O","1.5 cm H₂O"],c:0,why:"PIP − Pplat = 36 − 24 = 12 cm H₂O."},
+ {id:"p5",q:"Plateau pressure is 25 cm H₂O and PEEP is 8 cm H₂O. What is the approximate elastic driving pressure?",a:["17 cm H₂O","33 cm H₂O","8 cm H₂O","3.1 cm H₂O"],c:0,why:"Pplat − PEEP = 25 − 8 = 17 cm H₂O."}
+],[
+ {id:"po1",q:"Which pressure includes both resistive and elastic load during a flow-delivered breath?",a:["Peak inspiratory pressure","Plateau pressure only","PEEP only","Expiratory pressure only"],c:0,why:"PIP is measured while flow is occurring and therefore includes both resistive and elastic pressure components."},
+ {id:"po2",q:"Which pressure is most useful for trending the static elastic pressure of the respiratory system in a passive patient?",a:["Plateau pressure","Peak inspiratory pressure","Trigger pressure","Circuit pressure during exhalation only"],c:0,why:"Plateau pressure is obtained with flow stopped and more closely reflects the static elastic pressure."}
+]),
+
+S("mechanics","Calculate the Mechanics","Apply",
+  "Use calculations when they help explain the patient rather than as isolated arithmetic drills.",
+[
+ {id:"m1",q:"Exhaled VT is 450 mL, plateau pressure is 20 cm H₂O, and PEEP is 5 cm H₂O. What is the static compliance?",a:["30 mL/cm H₂O","22.5 mL/cm H₂O","90 mL/cm H₂O","15 mL/cm H₂O"],c:0,why:"Cstat = 450 ÷ (20 − 5) = 450 ÷ 15 = 30 mL/cm H₂O."},
+ {id:"m2",q:"Exhaled VT is 420 mL, plateau pressure is 26 cm H₂O, and PEEP is 8 cm H₂O. What is the static compliance, rounded to the nearest whole number?",a:["23 mL/cm H₂O","52 mL/cm H₂O","16 mL/cm H₂O","34 mL/cm H₂O"],c:0,why:"Cstat = 420 ÷ (26 − 8) = 420 ÷ 18 = 23.3, which rounds to 23 mL/cm H₂O."},
+ {id:"m3",q:"PIP is 32 cm H₂O, plateau pressure is 20 cm H₂O, and inspiratory flow is 60 L/min. What is the approximate airway resistance? Convert flow to L/s before calculating.",a:["12 cm H₂O/L/s","0.2 cm H₂O/L/s","52 cm H₂O/L/s","20 cm H₂O/L/s"],c:0,why:"60 L/min = 1 L/s. Raw ≈ (32 − 20) ÷ 1 = 12 cm H₂O/L/s."},
+ {id:"m4",q:"PIP is 36 cm H₂O, plateau pressure is 24 cm H₂O, and inspiratory flow is 40 L/min. What is the approximate airway resistance?",a:["18 cm H₂O/L/s","12 cm H₂O/L/s","8 cm H₂O/L/s","30 cm H₂O/L/s"],c:0,why:"40 L/min ÷ 60 = 0.667 L/s. Raw ≈ (36 − 24) ÷ 0.667 ≈ 18 cm H₂O/L/s."},
+ {id:"m5",q:"Static compliance falls from 45 to 26 mL/cm H₂O while tidal volume and PEEP are similar. What does that trend mean?",a:["The respiratory system has become stiffer","The airways have become less resistive","The lungs have become easier to inflate","The patient's trigger sensitivity improved"],c:0,why:"Lower compliance means more pressure is required to produce each unit of volume."}
+],[
+ {id:"mo1",q:"Two patients have the same VT and PEEP, but Patient B has the higher plateau pressure. Which patient has the lower static compliance?",a:["Patient B","Patient A","They must have the same compliance","Compliance cannot be compared from these data"],c:0,why:"With the same VT and PEEP, a higher plateau pressure means a larger pressure change was required, indicating lower compliance."},
+ {id:"mo2",q:"The PIP-to-Pplat difference doubles while flow remains the same. What happens to the calculated airway resistance?",a:["It doubles","It is cut in half","It is unchanged","It becomes zero"],c:0,why:"Raw = pressure difference ÷ flow. If flow is unchanged and the pressure difference doubles, Raw doubles."}
+]),
+
+S("timing","Will the Lung Empty?","Apply → Analyze",
+  "Use time constants, total cycle time, and the flow-time waveform to recognize incomplete exhalation and auto-PEEP risk.",
+[
+ {id:"t1",q:"A patient with severe COPD has high airway resistance. What happens to the time constant if compliance is otherwise unchanged?",a:["The time constant becomes longer","The time constant becomes shorter","The time constant becomes zero","Resistance does not affect the time constant"],c:0,why:"Time constant = resistance × compliance. Higher resistance increases the time constant."},
+ {id:"t2",q:"A long time constant means the lung unit generally does what more slowly?",a:["Fills and empties","Triggers the ventilator only","Changes plateau pressure only","Generates PEEP automatically"],c:0,why:"Longer time constants mean gas moves into and out of the lung unit more slowly."},
+ {id:"t3",q:"The respiratory rate is 20/min. What is the total cycle time for each breath?",a:["3 seconds","2 seconds","4 seconds","12 seconds"],c:0,why:"TCT = 60 ÷ 20 = 3 seconds per breath cycle."},
+ {id:"t4",q:"Expiratory flow remains below zero when the next inspiration begins. What should you recognize first?",a:["Exhalation is incomplete and air trapping should be assessed","Exhalation is complete","Plateau pressure is being measured","The trigger is too sensitive"],c:0,why:"Expiratory flow should return to zero before the next breath when exhalation is complete."},
+ {id:"t5",q:"A patient is air trapping. Which general timing direction would help create more time for exhalation while the cause is assessed?",a:["Increase available expiratory time","Shorten expiratory time","Increase respiratory rate automatically","Lengthen every inspiratory time"],c:0,why:"More expiratory time allows more trapped gas to leave before the next breath begins."}
+],[
+ {id:"to1",q:"Which patient is most likely to need extra attention to expiratory time because of a long time constant?",a:["A patient with severe airflow obstruction","A patient with very low resistance and normal compliance","A patient with no spontaneous breathing effort","A patient with isolated mild hypoxemia"],c:0,why:"Severe obstruction increases resistance and can prolong emptying."},
+ {id:"to2",q:"If respiratory rate increases while inspiratory time remains unchanged, what generally happens to the time available for expiration?",a:["It decreases","It increases","It is unchanged","It becomes equal to inspiratory time automatically"],c:0,why:"A higher rate shortens total cycle time, leaving less time available for expiration if inspiratory time does not change."}
+]),
+
+S("trigger","Tune the Trigger","Apply → Analyze",
+  "Distinguish normal patient triggering, ineffective triggering, and auto-triggering before reaching for a setting change.",
+[
+ {id:"tr1",q:"The patient repeatedly makes visible inspiratory efforts, but no ventilator breath follows. What is the most likely interaction problem?",a:["Ineffective or missed triggering","Auto-triggering","Normal synchrony","Flow cycling"],c:0,why:"Patient effort without ventilator response is ineffective triggering."},
+ {id:"tr2",q:"The ventilator delivers breaths even though no true patient effort is visible. Which interaction problem should be considered?",a:["Auto-triggering","Ineffective triggering","Normal patient triggering","Reduced compliance only"],c:0,why:"Breaths without true patient effort suggest auto-triggering."},
+ {id:"tr3",q:"A pressure trigger threshold is changed from −3 to −1 cm H₂O relative to baseline. What happens to the pressure effort required to trigger?",a:["Less effort is required","More effort is required","Effort is unchanged","The breath becomes time-triggered"],c:0,why:"The patient needs a smaller pressure drop to reach −1 than −3 cm H₂O."},
+ {id:"tr4",q:"Which factor can make patient triggering harder even when trigger sensitivity has not changed?",a:["Intrinsic PEEP","A larger exhaled VT by itself","A normal PEEP baseline","A lower FiO₂"],c:0,why:"Intrinsic PEEP creates an inspiratory threshold load the patient may need to overcome before triggering the ventilator."},
+ {id:"tr5",q:"Which bedside/circuit issue can contribute to auto-triggering?",a:["A circuit leak or water movement","A trigger threshold that is too difficult","Weak inspiratory muscles only","Reduced compliance without circuit motion"],c:0,why:"Leaks, water movement, cardiac oscillation, and overly sensitive thresholds can create false trigger signals."}
+],[
+ {id:"tro1",q:"Why should ineffective triggering increase concern about work of breathing?",a:["The patient is spending effort that does not receive ventilator assistance","The ventilator is giving too much assistance without effort","Every missed trigger automatically increases PEEP","The patient is guaranteed to have normal gas exchange"],c:0,why:"Unrewarded inspiratory efforts increase patient work and can worsen dyssynchrony."},
+ {id:"tro2",q:"What should be assessed before simply making the trigger more sensitive?",a:["Patient strength, intrinsic PEEP, circuit factors, and the current trigger setting","Only the oxygen saturation","Only plateau pressure","Only the set tidal volume"],c:0,why:"Ineffective triggering can have multiple causes, so the patient and ventilator should be assessed before changing one setting reflexively."}
+]),
+
+S("graphics","Read the Basic Graphic","Analyze",
+  "Use simple pressure-time and flow-time patterns to identify the most likely interaction and the next assessment direction.",
+[
+ {id:"g1",q:"A small pressure drop appears immediately before a ventilator-assisted inspiration. What does it most likely represent?",a:["Patient inspiratory effort triggering the ventilator","Plateau pressure","Set PEEP","Auto-PEEP measurement"],c:0,why:"A brief negative pressure deflection before the supported breath can represent patient-trigger effort."},
+ {id:"g2",q:"Expiratory flow returns to the zero-flow baseline before the next inspiration. What does this support?",a:["Exhalation was completed before the next breath","Auto-PEEP is definitely severe","The trigger is too sensitive","The patient is flow starved"],c:0,why:"Return to zero before the next breath supports complete exhalation."},
+ {id:"g3",q:"Expiratory flow is still below zero when the next inspiration begins. What should be assessed?",a:["Air trapping, obstruction, and available expiratory time","Only inspiratory pressure","Only the patient's oxygen target","Whether PEEP should be removed completely"],c:0,why:"The waveform shows incomplete exhalation and raises concern for dynamic hyperinflation/auto-PEEP."},
+ {id:"g4",q:"During volume control, the inspiratory pressure waveform becomes concave while the patient shows strong inspiratory effort. Which mismatch should be considered?",a:["Delivered inspiratory flow may not meet patient demand","Auto-triggering without patient effort","Excessive expiratory time","Improved compliance"],c:0,why:"A concave pressure contour during active inspiratory demand can suggest inadequate flow delivery for the patient's demand."},
+ {id:"g5",q:"Repeated patient-effort deflections appear before several breaths, but some efforts do not trigger a supported breath. What should you identify?",a:["Ineffective triggering","Normal synchrony","Flow cycling only","Improved trigger response"],c:0,why:"Visible effort without ventilator assistance is a missed-trigger pattern."}
+],[
+ {id:"go1",q:"Why should a waveform pattern be confirmed with bedside assessment before changing settings?",a:["The waveform is one piece of evidence and can be influenced by patient effort, mode, settings, and circuit factors","Waveforms never provide useful information","Bedside assessment replaces ventilator data completely","Every waveform abnormality has one guaranteed cause"],c:0,why:"Graphics must be interpreted in clinical context rather than treated as a diagnosis by themselves."},
+ {id:"go2",q:"A high PIP is displayed. What additional pressure measurement helps distinguish resistance from compliance?",a:["Plateau pressure","Set FiO₂","Trigger threshold","Respiratory rate only"],c:0,why:"Comparing PIP with Pplat helps determine whether the rise is predominantly resistive or elastic."}
+])
+];
+
+const finalCases = {
+ obstruction:{
+  title:"Obstruction + Air Trapping",
+  subtitle:"Separate resistance from compliance, then follow expiratory flow.",
+  stages:[
+   {id:"fo1",q:"A volume-control patient develops wheezing. PIP rises from 27 to 41 cm H₂O while plateau pressure remains 21 cm H₂O. What is the best mechanical interpretation?",a:["Airway resistance has increased","Compliance has decreased substantially","Static compliance has improved","The circuit has a large leak"],c:0,why:"The widening PIP-to-Pplat difference with stable Pplat is a classic resistive pattern."},
+   {id:"fo2",q:"The flow-time waveform now shows expiratory flow still below zero when the next breath begins. What additional problem is present?",a:["Incomplete exhalation with air trapping","Complete exhalation","A plateau-pressure measurement problem","Auto-triggering from a leak"],c:0,why:"Expiratory flow has not returned to baseline before the next inspiration, indicating incomplete emptying."},
+   {id:"fo3",q:"Which first direction best fits the combined pattern while the underlying obstruction is treated?",a:["Assess the patient/airway and create adequate expiratory time","Increase respiratory rate to clear CO₂ faster without checking timing","Shorten expiration to prevent low minute ventilation","Assume compliance is the primary problem and ignore the airway"],c:0,why:"The pattern shows increased resistance plus incomplete exhalation. Address the patient/airway and preserve enough expiratory time."}
+  ]
+ },
+ compliance:{
+  title:"Worsening Compliance",
+  subtitle:"Recognize the pressure-volume relationship in both volume and pressure control.",
+  stages:[
+   {id:"fc1",q:"A volume-control patient develops new bilateral crackles. PIP rises from 29 to 39 cm H₂O and plateau pressure rises from 23 to 33 cm H₂O. What is the best interpretation?",a:["The respiratory system has become less compliant","Only airway resistance has increased","Compliance has improved","The patient is auto-triggering"],c:0,why:"PIP and plateau pressure rising together suggest a larger elastic pressure requirement and reduced compliance."},
+   {id:"fc2",q:"The same patient is later placed in pressure control. Inspiratory pressure and inspiratory time remain unchanged, but exhaled VT falls from 460 to 300 mL. Which relationship explains the change?",a:["With fixed pressure, lower compliance can reduce delivered volume","Pressure control guarantees the same tidal volume","Lower compliance automatically increases tidal volume","A lower tidal volume proves airway resistance is the only problem"],c:0,why:"A stiffer respiratory system expands less for the same pressure target."},
+   {id:"fc3",q:"Which information would be most useful next to confirm and trend the mechanical change?",a:["Plateau pressure, exhaled VT, PEEP, and calculated/static compliance trend","Only SpO₂","Only the trigger threshold","Only the set respiratory rate"],c:0,why:"These data directly characterize the pressure-volume relationship and help trend compliance."}
+  ]
+ },
+ synchrony:{
+  title:"Synchrony Workbench",
+  subtitle:"Recognize whether the patient is asking for a breath, more flow, or more time to exhale.",
+  stages:[
+   {id:"fs1",q:"The patient makes repeated inspiratory efforts that do not trigger ventilator breaths. Which problem should you identify first?",a:["Ineffective triggering","Auto-triggering","Complete exhalation","Reduced compliance only"],c:0,why:"Patient effort without machine response is ineffective triggering."},
+   {id:"fs2",q:"After trigger responsiveness improves, the patient still looks uncomfortable. In volume control, the pressure-time waveform is concave during inspiration while the patient pulls strongly. What mismatch should you consider?",a:["Inspiratory flow may be insufficient for patient demand","The trigger is now too insensitive","The patient has definitely developed auto-PEEP","The pressure waveform proves the patient needs sedation"],c:0,why:"A concave inspiratory pressure pattern during active demand can indicate inadequate delivered flow."},
+   {id:"fs3",q:"A different patient receives extra ventilator breaths with no visible patient effort. What should you investigate first?",a:["Auto-triggering from sensitivity, leak, water, movement, or circuit factors","Ineffective triggering from a threshold that is too difficult","Reduced compliance only","A low plateau pressure"],c:0,why:"Breaths occurring without true patient effort are consistent with auto-triggering and should prompt assessment for false trigger signals."}
+  ]
+ }
+};
+
+function loadState(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}");
+    (saved.correct||[]).forEach(id=>state.correct.add(id));
+    if(saved.activeFinalCase) state.activeFinalCase=saved.activeFinalCase;
+    (saved.optionalOpen||[]).forEach(id=>state.optionalOpen.add(id));
+  }catch(e){}
+}
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({
+      correct:[...state.correct],
+      activeFinalCase:state.activeFinalCase,
+      optionalOpen:[...state.optionalOpen]
+    }));
+  }catch(e){}
+}
+function shuffle(arr){
+  const copy=[...arr];
+  for(let i=copy.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]]=[copy[j],copy[i]];
+  }
+  return copy;
+}
+function totalRequired(){
+  return stations.reduce((n,s)=>n+s.required.length,0)+Object.values(finalCases).reduce((n,c)=>n+c.stages.length,0);
+}
+function requiredIds(){
+  return [
+    ...stations.flatMap(s=>s.required.map(q=>q.id)),
+    ...Object.values(finalCases).flatMap(c=>c.stages.map(q=>q.id))
+  ];
+}
+function progressPercent(){
+  const ids=requiredIds();
+  const correct=ids.filter(id=>state.correct.has(id)).length;
+  return Math.round(correct/ids.length*100);
+}
+let lastReported=-1;
+function reportProgress(){
+  const pct=progressPercent();
+  document.getElementById("progressText").textContent=`${pct}% complete`;
+  document.getElementById("progressBar").style.width=`${pct}%`;
+  const count=requiredIds().filter(id=>state.correct.has(id)).length;
+  document.getElementById("progressSub").textContent=`${count} of ${totalRequired()} required decisions mastered. Optional “More Practice” does not affect completion.`;
+  if(pct!==lastReported){
+    lastReported=pct;
+    try{
+      window.PulmoActivityProgress?.report({percent:pct,completed:pct>=100});
+    }catch(e){}
+    window.dispatchEvent(new CustomEvent("pulmolearn:activity-progress-report",{detail:{percent:pct,completed:pct>=100}}));
+  }
+  if(pct>=100){
+    document.getElementById("completeBox").classList.add("show");
+    window.dispatchEvent(new CustomEvent("pulmolearn:complete",{detail:{percent:100,completed:true}}));
+  }
+}
+function stationComplete(station){
+  return station.required.every(q=>state.correct.has(q.id));
+}
+function allStationsComplete(){
+  return stations.every(stationComplete);
+}
+function stationVisual(id){
+  if(id==="breath"){
+    return `<div class="breath-strip"><div><b>Trigger</b>Starts inspiration</div><div><b>Control / Limit</b>What is targeted during inspiration</div><div><b>Cycle</b>Ends inspiration</div><div><b>Baseline</b>PEEP during expiration</div></div>`;
+  }
+  if(id==="control"){
+    return `<div class="compare-mini"><div><strong>Volume control</strong>Volume target is protected; pressure varies with mechanics.</div><div><strong>Pressure control</strong>Pressure target is protected; delivered volume varies with mechanics.</div></div>`;
+  }
+  if(id==="pressure"){
+    return `<div class="pressure-stack"><div class="pressure-row"><b>PEEP</b><div class="pressure-bar peep">baseline</div></div><div class="pressure-row"><b>Pplat</b><div class="pressure-bar pplat">elastic/static</div></div><div class="pressure-row"><b>PIP</b><div class="pressure-bar pip">elastic + resistive</div></div></div>`;
+  }
+  if(id==="timing"){
+    return `<div class="compare-mini"><div><strong>Complete exhalation</strong>Expiratory flow reaches zero before the next breath.</div><div><strong>Air-trapping clue</strong>The next breath begins while expiratory flow remains below zero.</div></div>`;
+  }
+  if(id==="graphics"){
+    return `<div class="wave"><svg viewBox="0 0 420 125" role="img" aria-label="Conceptual flow-time waveform showing expiratory flow that does not reach zero before the next breath"><line class="axis" x1="25" y1="62" x2="400" y2="62"/><line class="axis" x1="25" y1="12" x2="25" y2="112"/><path class="wave-line coral" d="M35 62 L35 22 L105 22 L105 62 Q145 114 220 90 Q255 80 285 74 L285 22 L355 22"/><text x="220" y="116">next breath begins before zero</text></svg></div>`;
+  }
+  return "";
+}
+function questionHTML(q,index,optional=false,final=false){
+  const solved=state.correct.has(q.id);
+  const options=shuffle(q.a.map((text,originalIndex)=>({text,originalIndex})));
+  return `
+  <div class="q-card ${solved?"correct-card":""}" data-qid="${q.id}">
+    <div class="q-number">${optional?"Optional practice":final?"Final workbench":"Required"} · ${index+1}</div>
+    <div class="q-title">${q.q}</div>
+    ${q.data?`<div class="patient-data">${q.data.map(x=>`<div><b>${x[0]}</b>${x[1]}</div>`).join("")}</div>`:""}
+    <div class="options">
+      ${options.map(o=>`<button class="option ${solved&&o.originalIndex===q.c?"correct-choice":""}" type="button" data-qid="${q.id}" data-index="${o.originalIndex}" ${solved?"disabled":""}>${o.text}</button>`).join("")}
+    </div>
+    <div class="feedback ${solved?"show ok":""}" role="status">${solved?`<strong>Mastered.</strong> ${q.why}`:""}</div>
+  </div>`;
+}
+function renderMastery(){
+  const map=document.getElementById("masteryMap");
+  const firstIncomplete=stations.findIndex(s=>!stationComplete(s));
+  map.innerHTML=stations.map((s,i)=>{
+    const done=stationComplete(s);
+    const locked=i>0&&!stations.slice(0,i).every(stationComplete);
+    const current=!done&&!locked&&(firstIncomplete===i);
+    return `<div class="mastery-chip ${done?"done":current?"current":locked?"locked":""}">${done?"✓ ":locked?"🔒 ":""}${i+1} · ${s.title}</div>`;
+  }).join("")+`<div class="mastery-chip ${allStationsComplete()?"current":"locked"}">${allStationsComplete()?"Final workbench":"🔒 Final workbench"}</div>`;
+}
+function renderStations(){
+  const wrap=document.getElementById("stations");
+  wrap.innerHTML=stations.map((s,i)=>{
+    const locked=i>0&&!stations.slice(0,i).every(stationComplete);
+    const done=stationComplete(s);
+    const optionalOpen=state.optionalOpen.has(s.id);
+    return `
+    <section class="station ${locked?"locked":""}" id="station-${s.id}" data-station="${s.id}">
+      <div class="station-head">
+        <div class="station-title">
+          <div class="station-number">${i+1}</div>
+          <div>
+            <span class="kicker">Mastery Station ${i+1}</span>
+            <h2 style="margin:.1rem 0 .15rem">${s.title}</h2>
+            <span class="level-pill">${s.level}</span>
+          </div>
+        </div>
+        <div class="station-status ${done?"complete":""}">${done?"Mastered ✓":`${s.required.filter(q=>state.correct.has(q.id)).length} / ${s.required.length} mastered`}</div>
+      </div>
+      <p class="station-summary">${s.summary}</p>
+      ${stationVisual(s.id)}
+      <div class="required-questions">${s.required.map((q,qi)=>questionHTML(q,qi,false,false)).join("")}</div>
+      <div class="more-wrap">
+        <button class="more-btn" type="button" data-more="${s.id}">${optionalOpen?"Hide Optional Practice":`More Practice +${s.optional.length}`}</button>
+        <div class="more-practice ${optionalOpen?"open":""}" data-more-area="${s.id}">
+          <div class="optional-label">Optional · does not affect completion</div>
+          ${s.optional.map((q,qi)=>questionHTML(q,qi,true,false)).join("")}
+        </div>
+      </div>
+    </section>`;
+  }).join("");
+}
+function renderFinal(){
+  const card=document.getElementById("finalCard");
+  const area=document.getElementById("finalArea");
+  const lock=document.getElementById("finalLock");
+  if(!allStationsComplete()){
+    card.classList.add("locked");
+    area.hidden=true;lock.hidden=false;
+    return;
+  }
+  card.classList.remove("locked");
+  area.hidden=false;lock.hidden=true;
+  const cases=Object.entries(finalCases);
+  if(!finalCases[state.activeFinalCase]) state.activeFinalCase="obstruction";
+  area.innerHTML=`
+    ${finalAdvanceMessage?`<div class="final-advance-note" role="status"><strong>${finalAdvanceMessage}</strong></div>`:""}
+    <div class="final-tabs" role="tablist" aria-label="Final ventilator cases">
+      ${cases.map(([key,c])=>`<button class="final-tab ${state.activeFinalCase===key?"active":""}" type="button" data-final-tab="${key}" role="tab" aria-selected="${state.activeFinalCase===key}">${c.title}</button>`).join("")}
+    </div>
+    ${cases.map(([key,c])=>`
+      <section class="final-panel ${state.activeFinalCase===key?"active":""}" data-final-panel="${key}">
+        <span class="eyebrow">${c.title}</span>
+        <h3>${c.subtitle}</h3>
+        <p class="capstone-coach">Complete the stages in order. Later stages unlock after the prior decision is mastered.</p>
+        ${c.stages.map((q,idx)=>{
+          const priorDone=idx===0||c.stages.slice(0,idx).every(x=>state.correct.has(x.id));
+          return `<div class="final-case-stage ${priorDone?"":"locked-stage"}" data-final-stage="${q.id}">
+            ${questionHTML(q,idx,false,true)}
+          </div>`;
+        }).join("")}
+      </section>`).join("")}`;
+}
+function updateUI(){
+  renderMastery();
+  renderStations();
+  renderFinal();
+  reportProgress();
+}
+function handleAnswer(btn){
+  const qid=btn.dataset.qid;
+  const selected=Number(btn.dataset.index);
+  const allQuestions=[
+    ...stations.flatMap(s=>[...s.required,...s.optional]),
+    ...Object.values(finalCases).flatMap(c=>c.stages)
+  ];
+  const q=allQuestions.find(x=>x.id===qid);
+  if(!q||state.correct.has(qid)) return;
+
+  const card=btn.closest(".q-card");
+  const feedback=card.querySelector(".feedback");
+
+  if(selected===q.c){
+    state.correct.add(qid);
+    finalAdvanceMessage="";
+
+    let shouldScrollToFinal=false;
+    const caseEntries=Object.entries(finalCases);
+    const caseIndex=caseEntries.findIndex(([,c])=>c.stages.some(stage=>stage.id===qid));
+
+    if(caseIndex>=0){
+      const [currentKey,currentCase]=caseEntries[caseIndex];
+      const lastStageId=currentCase.stages[currentCase.stages.length-1].id;
+      const caseNowComplete=currentCase.stages.every(stage=>state.correct.has(stage.id));
+
+      if(qid===lastStageId && caseNowComplete){
+        const orderedNext=[
+          ...caseEntries.slice(caseIndex+1),
+          ...caseEntries.slice(0,caseIndex)
+        ].find(([,c])=>!c.stages.every(stage=>state.correct.has(stage.id)));
+
+        if(orderedNext){
+          state.activeFinalCase=orderedNext[0];
+          finalAdvanceMessage=`${currentCase.title} complete. Moving you to ${orderedNext[1].title}.`;
+          shouldScrollToFinal=true;
+        }else{
+          finalAdvanceMessage=`${currentCase.title} complete. You have finished all final ventilator workbench cases.`;
+          shouldScrollToFinal=true;
+        }
+      }
+    }
+
+    saveState();
+    card.classList.add("correct-card");
+    card.querySelectorAll(".option").forEach(b=>{
+      b.disabled=true;
+      if(Number(b.dataset.index)===q.c) b.classList.add("correct-choice");
+    });
+    feedback.className="feedback show ok";
+    feedback.innerHTML=`<strong>Correct.</strong> ${q.why}`;
+
+    setTimeout(()=>{
+      updateUI();
+      if(shouldScrollToFinal){
+        setTimeout(()=>{
+          const target=document.querySelector(".final-tabs")||document.getElementById("finalCard");
+          target?.scrollIntoView({behavior:"smooth",block:"start"});
+          document.querySelector(".final-tab.active")?.focus({preventScroll:true});
+        },80);
+      }
+    },250);
+  }else{
+    btn.classList.add("incorrect-choice");
+    feedback.className="feedback show bad";
+    feedback.innerHTML=`<strong>Not yet.</strong> ${q.why} <strong>Use the relationship being tested and try again.</strong>`;
+  }
+}
+document.addEventListener("click",event=>{
+  const option=event.target.closest(".option");
+  if(option){handleAnswer(option);return;}
+  const more=event.target.closest("[data-more]");
+  if(more){
+    const id=more.dataset.more;
+    if(state.optionalOpen.has(id)) state.optionalOpen.delete(id); else state.optionalOpen.add(id);
+    saveState();updateUI();return;
+  }
+  const tab=event.target.closest("[data-final-tab]");
+  if(tab){
+    state.activeFinalCase=tab.dataset.finalTab;
+    finalAdvanceMessage="";
+    saveState();renderFinal();return;
+  }
+});
+loadState();
+updateUI();
+</script>
+
+<!-- Production PulmoLearn tracker -->
+<script type="module" src="/assets/activity-progress-tracker.js"></script>
+
+<!-- Canvas/LTI completion bridge -->
+<script type="module">
+import { supabase } from '/assets/auth.js';
+
+const params = new URLSearchParams(window.location.search);
+const isLtiLaunch = params.get('lti') === '1';
+const ltiResourceId =
+  window.PULMO_LESSON?.ltiResourceId ||
+  window.PULMO_LESSON?.activityId ||
+  window.PULMO_LESSON_ID;
+
+let passbackInFlight = false;
+let passbackConfirmed = false;
+
+async function sendCanvasCompletion(reason='activity-complete'){
+  if(!isLtiLaunch || passbackConfirmed || passbackInFlight || !ltiResourceId) return;
+
+  const { data:{ session }, error } = await supabase.auth.getSession();
+  if(error || !session?.access_token) return;
+
+  const passbackKey = `pulmolearn-lti-passback:${session.user.id}:${ltiResourceId}`;
+  try{
+    if(sessionStorage.getItem(passbackKey)==='sent'){
+      passbackConfirmed=true;
+      return;
+    }
+  }catch(e){}
+
+  passbackInFlight=true;
+  try{
+    const response = await fetch('/api/lti/score',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        access_token:session.access_token,
+        lesson_id:ltiResourceId,
+        completed:true
+      })
+    });
+    const result=await response.json().catch(()=>({}));
+    if(response.ok && result?.ok && result?.passed_back){
+      try{sessionStorage.setItem(passbackKey,'sent')}catch(e){}
+      passbackConfirmed=true;
+      console.log(`PulmoLearn MV 1.2: Canvas completion confirmed — ${ltiResourceId} (${reason})`);
+    }else{
+      console.error('PulmoLearn MV 1.2: Canvas completion passback failed',result);
+    }
+  }catch(error){
+    console.error('PulmoLearn MV 1.2: Canvas completion passback error',error);
+  }finally{
+    passbackInFlight=false;
+  }
+}
+function completionHandler(event){
+  const d=event?.detail||{};
+  if(d.completed===true || Number(d.percent)>=100) sendCanvasCompletion(event.type);
+}
+[
+  'pulmolearn:complete',
+  'pulmolearn:activity-progress-report',
+  'pulmolearn:activity-complete',
+  'pulmolearn:progress',
+  'pulmolearn:activity-progress'
+].forEach(name=>window.addEventListener(name,completionHandler));
+
+setTimeout(()=>{
+  const text=document.getElementById('progressText')?.textContent||'';
+  if(parseFloat(text)>=100) sendCanvasCompletion('restored-completion');
+},900);
+</script>
+</body>
+</html>
