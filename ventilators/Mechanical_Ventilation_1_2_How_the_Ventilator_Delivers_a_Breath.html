@@ -22,8 +22,8 @@ window.PULMO_LESSON = {
   lessonTitle: "How the Ventilator Delivers a Breath",
   title: "How the Ventilator Delivers a Breath",
   displayTitle: "Mechanical Ventilation 1.2 · How the Ventilator Delivers a Breath",
-  estimatedMinutes: 75,
-  estimatedCompletionTime: "65–75 minutes",
+  estimatedMinutes: 90,
+  estimatedCompletionTime: "80–90 minutes",
   difficulty: "First Exposure · Mechanics to Clinical Interpretation",
   version: "2026.09.08",
   lastUpdated: "2026-09-08",
@@ -98,11 +98,14 @@ window.PULMO_LESSON = {
     accreditationUse:["Mechanical ventilation","Pulmonary mechanics","Ventilator graphics","Patient safety"]
   },
   interactions: [
+    {id:"mv_1_2_breath_check",type:"knowledge-check",title:"Describe the Breath",required:true,estimatedMinutes:4},
     {id:"mv_1_2_control_explorer",type:"explorer",title:"What Is the Ventilator Controlling?",required:true,estimatedMinutes:5},
-    {id:"mv_1_2_pressure_check",type:"knowledge-check",title:"Read the Pressure Landmarks",required:true,estimatedMinutes:5},
+    {id:"mv_1_2_pressure_check",type:"knowledge-check",title:"Read the Pressure Landmarks",required:true,estimatedMinutes:6},
+    {id:"mv_1_2_calculation_lab",type:"calculation-practice",title:"Calculate the Mechanics",required:true,estimatedMinutes:8},
     {id:"mv_1_2_mechanics_check",type:"prediction",title:"Predict What Changes",required:true,estimatedMinutes:7},
     {id:"mv_1_2_time_check",type:"prediction",title:"Will the Lung Empty in Time?",required:true,estimatedMinutes:5},
     {id:"mv_1_2_trigger_check",type:"clinical-decision",title:"Tune the Trigger",required:true,estimatedMinutes:6},
+    {id:"mv_1_2_timing_math_check",type:"calculation-practice",title:"Build the Breath Cycle",required:true,estimatedMinutes:5},
     {id:"mv_1_2_waveform_check",type:"graphics-interpretation",title:"Read the Basic Waveform",required:true,estimatedMinutes:7},
     {id:"mv_1_2_integrated_cases",type:"clinical-decision",title:"Read the Ventilator",required:true,estimatedMinutes:8}
   ]
@@ -169,28 +172,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
 @media(max-width:850px){.content-layout{grid-template-columns:1fr}.side-nav{display:none}.lesson-stack-top,.lesson-stack{grid-column:1;grid-row:auto}.hero-meta,.competency-grid,.question-grid,.compare-grid,.mechanics-grid,.trigger-grid,.waveform-grid,.pressure-grid,.timing-grid{grid-template-columns:1fr}.tile-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.decision-flow{grid-template-columns:1fr}.decision-step:last-child{grid-column:auto}}
 @media(max-width:560px){.top-nav{padding:12px 14px}.brand-tagline,.course-menu-button{display:none}.main-content{padding:20px 10px 52px}.hero,.info-card,.case-card,.summary-card{border-radius:17px}.hero h1{font-size:2.2rem}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 
 <body>
@@ -217,7 +199,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
   <h1>How the Ventilator Delivers a Breath</h1>
   <p>Last lesson, you decided <em>whether</em> a patient needs support. Now you will learn to read what the ventilator is doing: what starts the breath, what the ventilator controls, what ends inspiration, and how patient mechanics change pressure, flow, and volume.</p>
   <div class="hero-meta">
-    <div><strong>Estimated time</strong><br/>65–75 minutes</div>
+    <div><strong>Estimated time</strong><br/>80–90 minutes</div>
     <div><strong>Primary level</strong><br/>Understand → Apply → Analyze</div>
     <div><strong>Clinical question</strong><br/>What is the ventilator controlling, what is the patient doing, and what changes when mechanics change?</div>
   </div>
@@ -265,6 +247,39 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
     <div class="compare-card"><span class="mini-label">4 · Expiration</span><h3>What is the baseline?</h3><p>Positive end-expiratory pressure (PEEP) is the pressure maintained at the end of expiration before the next breath.</p></div>
   </div>
   <div class="pearl"><strong>Important:</strong> A patient-triggered breath is not automatically a “spontaneous breath.” In assist-control ventilation, a patient can trigger the breath and still receive the full preset mandatory breath target.</div>
+
+  <article class="activity-card require-complete" data-activity-id="mv_1_2_breath_check" data-activity-name="Describe the Breath" data-activity-type="knowledge-check" data-required="true">
+    <span class="eyebrow">Guided Practice · Remember → Understand</span>
+    <h3>Describe the Breath Before Moving On</h3>
+    <p>Use the four breath-delivery words you just learned. This is the vocabulary the activity will expect you to apply later.</p>
+    <div class="question-grid">
+      <div class="knowledge-question" data-question-id="bq1">
+        <p>The patient makes an inspiratory effort and the ventilator responds by beginning inspiration. Which variable describes what started the breath?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="bq1" data-correct="true" data-feedback="Trigger is the event that starts inspiration. In this case, patient effort triggered the breath.">Trigger</button>
+          <button class="knowledge-option" data-question="bq1" data-correct="false" data-feedback="Cycle describes what ends inspiration, not what starts it.">Cycle</button>
+          <button class="knowledge-option" data-question="bq1" data-correct="false" data-feedback="Baseline describes the variable maintained during expiration.">Baseline</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="bq2">
+        <p>A mandatory breath begins because the scheduled time interval is reached before the patient initiates a breath. How was inspiration triggered?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="bq2" data-correct="true" data-feedback="Correct. Time started the breath, so the ventilator or machine triggered inspiration.">Machine/time-triggered</button>
+          <button class="knowledge-option" data-question="bq2" data-correct="false" data-feedback="A patient-triggered breath begins because patient effort is detected, which did not occur here.">Patient-triggered</button>
+          <button class="knowledge-option" data-question="bq2" data-correct="false" data-feedback="Flow cycling describes how some breaths end, not how this mandatory breath started.">Flow-cycled</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="bq3">
+        <p>A patient triggers an assist-control volume breath. Which statement is most accurate?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="bq3" data-correct="true" data-feedback="Correct. Trigger describes how the breath starts. In assist-control, a patient-triggered breath can still receive the full preset mandatory breath target.">The patient starts the breath and the ventilator still delivers the preset assist-control target</button>
+          <button class="knowledge-option" data-question="bq3" data-correct="false" data-feedback="Patient-triggered does not mean unsupported. The ventilator can still deliver the preset mandatory assist-control breath.">The patient receives no ventilator assistance after triggering</button>
+          <button class="knowledge-option" data-question="bq3" data-correct="false" data-feedback="A patient-triggered assist-control breath does not automatically become a pressure-support breath.">The breath automatically changes to pressure support</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+    </div>
+    <div class="activity-status" id="breathStatus">0 / 3 questions answered correctly.</div>
+  </article>
 </section>
 </div>
 
@@ -386,7 +401,24 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
         </div><div class="quiz-feedback" role="status"></div>
       </div>
     </div>
-    <div class="activity-status" id="pressureStatus">0 / 3 questions answered correctly.</div>
+
+      <div class="knowledge-question" data-question-id="p4">
+        <p>PIP is 36 cm H₂O and plateau pressure is 24 cm H₂O. What is the approximate resistive pressure?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="p4" data-correct="true" data-feedback="Correct. Resistive pressure ≈ PIP − Pplat = 36 − 24 = 12 cm H₂O.">12 cm H₂O</button>
+          <button class="knowledge-option" data-question="p4" data-correct="false" data-feedback="24 cm H₂O is the plateau pressure itself. Resistive pressure is the difference between PIP and Pplat.">24 cm H₂O</button>
+          <button class="knowledge-option" data-question="p4" data-correct="false" data-feedback="Adding the two pressures does not isolate the resistive component. Subtract Pplat from PIP.">60 cm H₂O</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="p5">
+        <p>Plateau pressure is 25 cm H₂O and PEEP is 8 cm H₂O. What is the approximate elastic driving pressure?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="p5" data-correct="true" data-feedback="Correct. Elastic driving pressure ≈ Pplat − PEEP = 25 − 8 = 17 cm H₂O.">17 cm H₂O</button>
+          <button class="knowledge-option" data-question="p5" data-correct="false" data-feedback="33 cm H₂O comes from adding the pressures. Driving pressure is the pressure above the PEEP baseline, so subtract PEEP from Pplat.">33 cm H₂O</button>
+          <button class="knowledge-option" data-question="p5" data-correct="false" data-feedback="8 cm H₂O is the PEEP baseline, not the pressure difference above baseline.">8 cm H₂O</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+    <div class="activity-status" id="pressureStatus">0 / 5 questions answered correctly.</div>
   </article>
 </section>
 
@@ -415,6 +447,53 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
     <div class="formula-box">Cstat = 450 ÷ (20 − 5) = 30 mL/cm H₂O</div>
     The calculation matters because it turns the pressure-volume relationship into a value you can trend—not because calculation itself is the endpoint.
   </div>
+
+  <div class="support-note">
+    <strong>Before calculating airway resistance:</strong> convert inspiratory flow from liters per minute (L/min) to liters per second (L/s).
+    <div class="formula-box">Flow in L/s = flow in L/min ÷ 60</div>
+    Example: 60 L/min ÷ 60 = 1 L/s.
+  </div>
+
+  <article class="activity-card require-complete" data-activity-id="mv_1_2_calculation_lab" data-activity-name="Calculate the Mechanics" data-activity-type="calculation-practice" data-required="true">
+    <span class="eyebrow">Guided Calculation Lab · Apply</span>
+    <h3>Calculate It Once, Then Interpret What It Means</h3>
+    <p>These are the same calculation types used in the standalone activity. Work the relationship here before you are expected to use it independently.</p>
+    <div class="question-grid">
+      <div class="knowledge-question" data-question-id="calc1">
+        <p>Exhaled VT is 420 mL, plateau pressure is 26 cm H₂O, and PEEP is 8 cm H₂O. What is the static compliance, rounded to the nearest whole number?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="calc1" data-correct="true" data-feedback="Correct. Cstat = 420 ÷ (26 − 8) = 420 ÷ 18 = 23.3, or about 23 mL/cm H₂O.">23 mL/cm H₂O</button>
+          <button class="knowledge-option" data-question="calc1" data-correct="false" data-feedback="52 mL/cm H₂O does not follow the compliance formula. First subtract PEEP from Pplat, then divide VT by that pressure difference.">52 mL/cm H₂O</button>
+          <button class="knowledge-option" data-question="calc1" data-correct="false" data-feedback="18 cm H₂O is the pressure difference, not the compliance. Divide 420 mL by 18 cm H₂O.">18 mL/cm H₂O</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="calc2">
+        <p>PIP is 32 cm H₂O, plateau pressure is 20 cm H₂O, and inspiratory flow is 60 L/min. What is the approximate airway resistance?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="calc2" data-correct="true" data-feedback="Correct. First convert 60 L/min to 1 L/s. Then Raw ≈ (32 − 20) ÷ 1 = 12 cm H₂O/L/s.">12 cm H₂O/L/s</button>
+          <button class="knowledge-option" data-question="calc2" data-correct="false" data-feedback="20 cm H₂O is the plateau pressure. Airway resistance uses the PIP-to-Pplat difference divided by flow in L/s.">20 cm H₂O/L/s</button>
+          <button class="knowledge-option" data-question="calc2" data-correct="false" data-feedback="0.2 results from dividing by the flow in L/min without converting to L/s. Convert 60 L/min to 1 L/s first.">0.2 cm H₂O/L/s</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="calc3">
+        <p>PIP is 36 cm H₂O, plateau pressure is 24 cm H₂O, and inspiratory flow is 40 L/min. What is the approximate airway resistance?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="calc3" data-correct="true" data-feedback="Correct. 40 L/min ÷ 60 = 0.667 L/s. Raw ≈ (36 − 24) ÷ 0.667 ≈ 18 cm H₂O/L/s.">18 cm H₂O/L/s</button>
+          <button class="knowledge-option" data-question="calc3" data-correct="false" data-feedback="12 cm H₂O is the PIP-to-Pplat difference before accounting for flow. Divide that difference by 0.667 L/s.">12 cm H₂O/L/s</button>
+          <button class="knowledge-option" data-question="calc3" data-correct="false" data-feedback="30 cm H₂O/L/s does not follow the resistance formula. Convert flow to L/s and divide the pressure difference by that flow.">30 cm H₂O/L/s</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="calc4">
+        <p>Static compliance falls from 45 to 26 mL/cm H₂O while VT and PEEP are similar. What should that calculation mean clinically?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="calc4" data-correct="true" data-feedback="Correct. Lower compliance means the respiratory system is stiffer and requires more pressure for a similar volume.">The respiratory system has become stiffer</button>
+          <button class="knowledge-option" data-question="calc4" data-correct="false" data-feedback="Airway resistance and compliance are different relationships. A fall in static compliance specifically indicates a stiffer pressure-volume relationship.">Airway resistance has definitely improved</button>
+          <button class="knowledge-option" data-question="calc4" data-correct="false" data-feedback="Lower compliance means the system is harder, not easier, to inflate.">The lungs have become easier to inflate</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+    </div>
+    <div class="activity-status" id="calculationStatus">0 / 4 calculations completed.</div>
+  </article>
 </section>
 
 <section class="info-card blue" id="predict">
@@ -563,6 +642,47 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
     <article class="timing-card"><span class="mini-label">I:E relationship</span><h3>Timing changes can create or relieve air trapping</h3><p>In obstructive disease, preserving enough expiratory time is especially important. Later lessons will cover specific setting adjustments in more detail.</p></article>
   </div>
   <div class="pearl"><strong>Do not over-memorize labels:</strong> Modern ventilators can implement control and cycling in different ways. Learn the physiologic question: what starts inspiration, what is controlled during it, and what makes inspiration stop?</div>
+
+  <article class="activity-card require-complete" data-activity-id="mv_1_2_timing_math_check" data-activity-name="Build the Breath Cycle" data-activity-type="calculation-practice" data-required="true">
+    <span class="eyebrow">Guided Timing Practice · Apply</span>
+    <h3>Build the Breath Cycle</h3>
+    <p>Use total cycle time to see how respiratory rate and inspiratory time determine the time left for exhalation.</p>
+    <div class="question-grid">
+      <div class="knowledge-question" data-question-id="tm1">
+        <p>The respiratory rate is 20/min. What is the total cycle time?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="tm1" data-correct="true" data-feedback="Correct. Total cycle time = 60 ÷ 20 = 3 seconds.">3 seconds</button>
+          <button class="knowledge-option" data-question="tm1" data-correct="false" data-feedback="2 seconds would correspond to a rate of 30/min. Use 60 ÷ respiratory rate.">2 seconds</button>
+          <button class="knowledge-option" data-question="tm1" data-correct="false" data-feedback="4 seconds would correspond to a rate of 15/min. Use 60 ÷ respiratory rate.">4 seconds</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="tm2">
+        <p>Total cycle time is 3 seconds and inspiratory time is 1 second. How much time remains for expiration?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="tm2" data-correct="true" data-feedback="Correct. Expiratory time = total cycle time − inspiratory time = 3 − 1 = 2 seconds.">2 seconds</button>
+          <button class="knowledge-option" data-question="tm2" data-correct="false" data-feedback="3 seconds is the entire breath cycle. One second is already being used for inspiration.">3 seconds</button>
+          <button class="knowledge-option" data-question="tm2" data-correct="false" data-feedback="1 second is the inspiratory time. Subtract it from the 3-second total cycle time.">1 second</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="tm3">
+        <p>A patient has a total cycle time of 3 seconds with 1 second of inspiration and 2 seconds of expiration. What is the I:E ratio?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="tm3" data-correct="true" data-feedback="Correct. One second of inspiration to two seconds of expiration gives an I:E ratio of 1:2.">1:2</button>
+          <button class="knowledge-option" data-question="tm3" data-correct="false" data-feedback="2:1 would mean inspiration lasts twice as long as expiration, which is the opposite of the given timing.">2:1</button>
+          <button class="knowledge-option" data-question="tm3" data-correct="false" data-feedback="1:1 would require equal inspiratory and expiratory times. Here expiration is twice as long.">1:1</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+      <div class="knowledge-question" data-question-id="tm4">
+        <p>The rate increases from 20/min to 30/min while inspiratory time remains 1 second. What happens to expiratory time?</p>
+        <div class="quiz-options">
+          <button class="knowledge-option" data-question="tm4" data-correct="true" data-feedback="Correct. At 30/min, total cycle time is 2 seconds. With 1 second used for inspiration, only 1 second remains for expiration, down from 2 seconds at 20/min.">It decreases from 2 seconds to 1 second</button>
+          <button class="knowledge-option" data-question="tm4" data-correct="false" data-feedback="A higher respiratory rate shortens total cycle time. With inspiratory time unchanged, expiratory time decreases rather than increases.">It increases from 2 seconds to 3 seconds</button>
+          <button class="knowledge-option" data-question="tm4" data-correct="false" data-feedback="Expiratory time changes because total cycle time becomes shorter at the higher respiratory rate.">It remains 2 seconds</button>
+        </div><div class="quiz-feedback" role="status"></div>
+      </div>
+    </div>
+    <div class="activity-status" id="timingMathStatus">0 / 4 timing problems completed.</div>
+  </article>
 </section>
 
 <section class="info-card" id="graphics">
@@ -923,86 +1043,19 @@ function initializeCourseMenu(){
 }
 document.addEventListener("DOMContentLoaded",()=>{
   initializeProgressiveSections();
+  initializeKnowledgeActivity("mv_1_2_breath_check","breathStatus");
   initializeExplorer("control");
   initializeKnowledgeActivity("mv_1_2_pressure_check","pressureStatus");
+  initializeKnowledgeActivity("mv_1_2_calculation_lab","calculationStatus");
   initializeKnowledgeActivity("mv_1_2_mechanics_check","mechanicsStatus");
   initializeKnowledgeActivity("mv_1_2_time_check","timeStatus");
   initializeKnowledgeActivity("mv_1_2_trigger_check","triggerStatus");
+  initializeKnowledgeActivity("mv_1_2_timing_math_check","timingMathStatus");
   initializeKnowledgeActivity("mv_1_2_waveform_check","waveformStatus");
   initializeKnowledgeActivity("mv_1_2_integrated_cases","casesStatus");
   initializeCourseMenu();
 });
 </script>
 <script type="module" src="/assets/progress-tracker.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
