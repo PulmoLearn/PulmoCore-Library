@@ -207,7 +207,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .final-panel{display:none}.final-panel.active{display:block}
 .final-case-stage{border:1px solid var(--border);border-radius:14px;padding:14px;margin:10px 0;background:#fff}
 .final-case-stage.locked-stage{opacity:.48;pointer-events:none}
-.capstone-coach{font-size:.85rem;color:var(--muted);margin:5px 0 0}
+.capstone-coach{font-size:.85rem;color:var(--muted);margin:5px 0 0}.final-advance-note{border:1px solid #B9D9EE;background:#EDF7FE;border-left:7px solid var(--blue);border-radius:13px;padding:12px 14px;margin:10px 0 14px;color:#244A64}.final-advance-note strong{color:var(--navy)}
 
 .complete-box{
   display:none;background:var(--mint);border:1px solid #86D9C8;border-radius:var(--radius);padding:23px;box-shadow:var(--shadow)
@@ -243,28 +243,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
 }
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 
 <script>
 window.PULMO_LESSON = {
@@ -466,6 +445,7 @@ const state = {
   activeFinalCase:"copd",
   optionalOpen:new Set()
 };
+let finalAdvanceMessage = "";
 
 const S = (id,title,level,summary,required,optional=[]) => ({id,title,level,summary,required,optional});
 
@@ -476,9 +456,9 @@ S("failure","Know What Is Failing","Remember → Understand",
  {id:"f1",q:"The partial pressure of arterial oxygen (PaO₂) is 52 mm Hg and the partial pressure of arterial carbon dioxide (PaCO₂) is 40 mm Hg. What is the main gas-exchange problem?",a:["Oxygenation failure","Ventilation failure","Airway-protection failure"],c:0,why:"PaO₂ is low while PaCO₂ is not elevated. The dominant problem is oxygenation."},
  {id:"f2",q:"The patient has shallow respirations and PaCO₂ is 72 mm Hg. What is the main problem?",a:["Oxygenation failure","Ventilation failure","Diffusion failure only"],c:1,why:"A high PaCO₂ with shallow breathing points to inadequate effective ventilation."},
  {id:"f3",q:"PaO₂ is 48 mm Hg and PaCO₂ is 70 mm Hg. How should you classify the problem?",a:["Oxygenation only","Ventilation only","Both oxygenation and ventilation are impaired"],c:2,why:"The patient has both low arterial oxygen and inadequate carbon dioxide removal."},
- {id:"f4",q:"A patient with myasthenia gravis has a progressively weaker cough, falling vital capacity (VC), and weaker maximal inspiratory pressure (MIP). What is failing?",a:["The respiratory pump","Only oxygen transfer","Only airway humidification"],c:0,why:"Neuromuscular weakness can prevent the respiratory muscles from generating an effective breath and cough."},
- {id:"f5",q:"A deeply obtunded patient is vomiting and cannot manage oral secretions. What respiratory problem changes the support decision immediately?",a:["Airway-protection failure","A mild oxygenation problem","A normal PaCO₂"],c:0,why:"An unsafe airway can require invasive airway management even before blood gases become extreme."},
- {id:"f6",q:"Oxygen saturation is 97% while the patient receives supplemental oxygen. PaCO₂ is 76 mm Hg and the patient is increasingly somnolent. What is the most concerning problem?",a:["Ventilation is failing despite acceptable oxygen saturation","The patient is over-oxygenated but ventilating normally","No major respiratory problem is present"],c:0,why:"Supplemental oxygen can keep saturation acceptable while carbon dioxide continues to rise."}
+ {id:"f4",q:"A patient with myasthenia gravis has a progressively weaker cough, falling vital capacity (VC), and weaker maximal inspiratory pressure (MIP). What is failing?",a:["The respiratory pump","Primary oxygenation failure","Isolated upper-airway obstruction"],c:0,why:"Neuromuscular weakness can prevent the respiratory muscles from generating an effective breath and cough."},
+ {id:"f5",q:"A deeply obtunded patient is vomiting and cannot manage oral secretions. What respiratory problem changes the support decision immediately?",a:["Airway-protection failure","Ventilatory failure that could be managed with bilevel NIV","Oxygenation failure that could be managed with high-flow oxygen"],c:0,why:"An unsafe airway can require invasive airway management even before blood gases become extreme."},
+ {id:"f6",q:"Oxygen saturation is 97% while the patient receives supplemental oxygen. PaCO₂ is 76 mm Hg and the patient is increasingly somnolent. What is the most concerning problem?",a:["Ventilation is failing despite acceptable oxygen saturation","Primary oxygenation failure despite adequate ventilation","An isolated increase in airway resistance"],c:0,why:"Supplemental oxygen can keep saturation acceptable while carbon dioxide continues to rise."}
 ],[
  {id:"fo1",q:"A patient with severe pneumonia has PaO₂ 55 mm Hg on a high fraction of inspired oxygen (FiO₂), while PaCO₂ is normal. What is the dominant problem?",a:["Oxygenation failure","Ventilation failure","Respiratory-drive failure"],c:0,why:"The major abnormality is poor oxygenation despite substantial inspired oxygen."},
  {id:"fo2",q:"A patient's respiratory rate falls from 38/min to 16/min, but breaths become shallow and mental status worsens. What should you think?",a:["The patient is improving","Possible respiratory fatigue and failure","The lower rate proves ventilation is adequate"],c:1,why:"A lower rate after prolonged distress can signal fatigue when depth and mental status worsen."},
@@ -491,10 +471,10 @@ S("trend","Read the Trend","Understand → Apply",
  {id:"t1",q:"08:00: respiratory rate 30/min, alert, strong cough. 09:00: rate 38/min, accessory-muscle use. 10:00: rate 18/min, shallow breaths, difficult to arouse. Which interpretation is best?",a:["The patient improved because the respiratory rate decreased","The patient may be tiring and failing","The patient has only an oxygenation problem"],c:1,why:"The combination of shallow breathing and declining mental status makes the lower respiratory rate concerning."},
  {id:"t2",q:"A neuromuscular patient's VC changes from 31 → 25 → 19 mL/kg, MIP changes from −58 → −42 → −28 cm H₂O, and cough becomes weaker. What does the trend show?",a:["Respiratory muscle function is worsening","Inspiratory muscle strength is improving","The trend is reassuring because MIP is less negative"],c:0,why:"A VC that falls and MIP that moves closer to zero indicate worsening respiratory muscle strength."},
  {id:"t3",q:"A patient with chronic obstructive pulmonary disease (COPD) has PaCO₂ 61 → 68 → 76 mm Hg, pH 7.34 → 7.29 → 7.23, and increasing work of breathing. What is happening?",a:["Worsening acute ventilatory failure","Improving chronic compensation","Isolated oxygenation failure"],c:0,why:"Rising PaCO₂ with falling pH and increasing work of breathing shows worsening acute hypercapnic respiratory failure."},
- {id:"t4",q:"FiO₂ rises from 0.40 to 0.70, but PaO₂ improves only from 52 to 58 mm Hg. A calculated alveolar–arterial oxygen gradient (A–a gradient) is very wide. What does this suggest?",a:["Impaired oxygen transfer remains significant","Ventilation must be normal because FiO₂ is higher","The patient no longer has hypoxemia"],c:0,why:"A large A–a gradient and poor PaO₂ response to more oxygen point toward significant impairment in oxygen transfer."},
+ {id:"t4",q:"FiO₂ rises from 0.40 to 0.70, but PaO₂ improves only from 52 to 58 mm Hg. A calculated alveolar–arterial oxygen gradient (A–a gradient) is very wide. What does this suggest?",a:["Impaired oxygen transfer remains significant","The hypoxemia is mainly explained by low inspired oxygen","Oxygen transfer appears adequate for the amount of FiO₂ being delivered"],c:0,why:"A large A–a gradient and poor PaO₂ response to more oxygen point toward significant impairment in oxygen transfer."},
  {id:"t5",q:"After bilevel noninvasive ventilation (NIV), respiratory rate falls from 32 to 23/min, pH rises from 7.27 to 7.32, PaCO₂ falls from 72 to 61 mm Hg, and work of breathing improves. What is the best interpretation?",a:["The current support is working","The patient is failing NIV","The PaCO₂ must be forced immediately to 40 mm Hg"],c:0,why:"Clinical effort and the blood gas are both improving. Continue and reassess rather than chasing a normal PaCO₂."}
 ],[
- {id:"to1",q:"After continuous positive airway pressure (CPAP), oxygen saturation improves, respiratory rate falls, mental status remains normal, and blood pressure is stable. What does the trend suggest?",a:["The strategy is helping","Immediate intubation is required","CPAP is causing ventilatory failure"],c:0,why:"Improving oxygenation and work of breathing with stable hemodynamics support continuing the current strategy."},
+ {id:"to1",q:"After continuous positive airway pressure (CPAP), oxygen saturation improves, respiratory rate falls, mental status remains normal, and blood pressure is stable. What does the trend suggest?",a:["The strategy is helping","Switch to bilevel NIV even though ventilation is adequate","Increase CPAP immediately even though the patient is improving"],c:0,why:"Improving oxygenation and work of breathing with stable hemodynamics support continuing the current strategy."},
  {id:"to2",q:"While on NIV, the patient becomes more somnolent, pH falls, PaCO₂ rises, and secretions increase. What does the trend suggest?",a:["Improvement","NIV failure and increasing airway risk","Only a need for more FiO₂"],c:1,why:"Worsening gas exchange, mental status, and secretion handling are major escalation signals."}
 ]),
 
@@ -518,16 +498,16 @@ S("support","Match the Support","Apply",
   "Choose conventional oxygen, heated high-flow nasal cannula, CPAP, bilevel NIV, or invasive ventilation based on physiology and safety—not the diagnosis alone.",
 [
  {id:"s1",q:"A patient has mild hypoxemia, is alert, has adequate ventilation, and has only mildly increased work of breathing. Which support is the best fit?",a:["Conventional supplemental oxygen","Bilevel NIV","Invasive mechanical ventilation"],c:0,why:"The patient needs oxygenation support but does not yet need inspiratory assistance or an artificial airway."},
- {id:"s2",q:"A patient with pneumonia has significant hypoxemia and increased oxygen need but remains awake with adequate spontaneous ventilation. Which modality may provide stronger oxygenation support while preserving spontaneous breathing?",a:["Heated high-flow nasal cannula","Bilevel NIV only because every hypoxemic patient needs pressure support","Immediate intubation solely because pneumonia is present"],c:0,why:"High-flow support can provide high, stable oxygen flow and reduce work of breathing in selected spontaneously breathing hypoxemic patients."},
- {id:"s3",q:"A patient with cardiogenic pulmonary edema is awake, severely hypoxemic, breathing spontaneously, and PaCO₂ is normal. What pressure strategy directly targets recruitment and oxygenation?",a:["Continuous positive airway pressure (CPAP)","Spontaneous/Timed bilevel only","No positive pressure should be used"],c:0,why:"CPAP can improve recruitment and oxygenation when separate inspiratory assistance is not the main need."},
+ {id:"s2",q:"A patient with pneumonia has significant hypoxemia and increased oxygen need but remains awake with adequate spontaneous ventilation. Which modality may provide stronger oxygenation support while preserving spontaneous breathing?",a:["Heated high-flow nasal cannula","CPAP because positive pressure is always preferred to high-flow in pneumonia","Bilevel NIV because severe hypoxemia always requires inspiratory pressure support"],c:0,why:"High-flow support can provide high, stable oxygen flow and reduce work of breathing in selected spontaneously breathing hypoxemic patients."},
+ {id:"s3",q:"A patient with cardiogenic pulmonary edema is awake, severely hypoxemic, breathing spontaneously, and PaCO₂ is normal. What pressure strategy directly targets recruitment and oxygenation?",a:["Continuous positive airway pressure (CPAP)","Heated high-flow nasal cannula","Bilevel NIV with inspiratory pressure support"],c:0,why:"CPAP can improve recruitment and oxygenation when separate inspiratory assistance is not the main need."},
  {id:"s4",q:"A patient with COPD has marked work of breathing, pH 7.28, PaCO₂ 68 mm Hg, is awake, cooperative, and protecting the airway. Which support best matches the problem?",a:["Bilevel NIV","CPAP only","Increase oxygen only"],c:0,why:"The patient needs inspiratory ventilatory assistance for acute hypercapnic respiratory acidosis and is currently a reasonable NIV candidate."},
- {id:"s5",q:"A patient with COPD has PaCO₂ 55 mm Hg, pH 7.38, mild hypoxemia, and no significant respiratory distress. Which statement is best?",a:["Elevated PaCO₂ alone does not automatically require NIV","Every PaCO₂ above normal requires bilevel NIV","The patient must be intubated"],c:0,why:"Some patients chronically retain carbon dioxide. Acute acidosis, work of breathing, mental status, and trajectory matter."},
+ {id:"s5",q:"A patient with COPD has PaCO₂ 55 mm Hg, pH 7.38, mild hypoxemia, and no significant respiratory distress. Which statement is best?",a:["Elevated PaCO₂ alone does not automatically require NIV","Start bilevel NIV because any PaCO₂ above normal represents acute ventilatory failure","Increase oxygen until saturation is above 96% before deciding about ventilatory support"],c:0,why:"Some patients chronically retain carbon dioxide. Acute acidosis, work of breathing, mental status, and trajectory matter."},
  {id:"s6",q:"A neuromuscular patient has shallow breaths and worsening respiratory muscle weakness but remains awake, cooperative, and able to manage secretions. Which support can provide inspiratory assistance without an artificial airway?",a:["Bilevel NIV","CPAP only","Oxygen only"],c:0,why:"Bilevel NIV can assist inspiration while airway protection and secretion handling remain adequate."},
  {id:"s7",q:"A patient is deeply obtunded, has vomited, and cannot manage secretions. Which support direction is safest?",a:["Invasive airway management and mechanical ventilation","Bilevel NIV with a higher backup rate","CPAP"],c:0,why:"The immediate problem is airway protection. Noninvasive pressure cannot protect against aspiration."},
- {id:"s8",q:"A severe pneumonia patient is on high-flow support but becomes progressively exhausted, confused, and unable to maintain oxygenation. What is the safest next direction?",a:["Escalate toward invasive ventilation","Keep the same support indefinitely","Switch to low-flow oxygen"],c:0,why:"Progressive exhaustion, mental-status change, and failure of current support are major escalation signs."}
+ {id:"s8",q:"A severe pneumonia patient is on high-flow support but becomes progressively exhausted, confused, and unable to maintain oxygenation. What is the safest next direction?",a:["Escalate toward invasive ventilation","Trial bilevel NIV despite progressive confusion and exhaustion","Continue high-flow and increase FiO₂ while delaying escalation"],c:0,why:"Progressive exhaustion, mental-status change, and failure of current support are major escalation signs."}
 ],[
  {id:"so1",q:"A pulmonary-edema patient is hypoxemic and now also hypercapnic and tiring. Which noninvasive modality may offer an advantage over CPAP?",a:["Bilevel NIV","Conventional oxygen only","No positive pressure"],c:0,why:"Bilevel NIV can maintain expiratory pressure for recruitment while adding inspiratory pressure support."},
- {id:"so2",q:"Which statement about respiratory-support modalities is safest?",a:["Patients can skip less-invasive modalities when the clinical situation is immediately unsafe","Every patient must try oxygen, then high-flow, then CPAP, then bilevel before intubation","The diagnosis alone determines the device"],c:0,why:"Support is matched to the patient's current physiology and safety. It is not a mandatory ladder."}
+ {id:"so2",q:"Which statement about respiratory-support modalities is safest?",a:["Patients can skip less-invasive modalities when the clinical situation is immediately unsafe","Use the least-invasive device first even when the airway is becoming unsafe","Escalate one modality at a time unless the oxygen saturation is below 80%"],c:0,why:"Support is matched to the patient's current physiology and safety. It is not a mandatory ladder."}
 ]),
 
 S("niv","Choose the NIV Strategy","Apply → Analyze",
@@ -536,9 +516,9 @@ S("niv","Choose the NIV Strategy","Apply → Analyze",
  {id:"n1",q:"A patient on bilevel NIV has IPAP 12 cm H₂O and EPAP 5 cm H₂O. What is the pressure-support difference?",a:["7 cm H₂O","17 cm H₂O","2.4 cm H₂O"],c:0,why:"Pressure support = IPAP − EPAP = 12 − 5 = 7 cm H₂O."},
  {id:"n2",q:"IPAP increases while EPAP stays the same. What usually happens to the pressure-support difference?",a:["It increases","It decreases","It stays the same"],c:0,why:"Increasing IPAP alone increases the pressure difference and generally provides more inspiratory assistance."},
  {id:"n3",q:"EPAP increases while IPAP stays the same. What happens to the pressure-support difference?",a:["It becomes smaller","It becomes larger","It is unchanged"],c:0,why:"Raising EPAP alone reduces IPAP − EPAP, even though the higher baseline pressure may help recruitment."},
- {id:"n4",q:"The patient has a strong, reliable spontaneous respiratory drive and can trigger supported breaths. Which statement is reasonable?",a:["A spontaneous bilevel mode can provide pressure-supported breaths","A backup rate is always required before any NIV can work","The patient must be machine-triggered"],c:0,why:"When triggering is reliable, spontaneous supported breaths can work. Device and patient needs still guide the final mode choice."},
+ {id:"n4",q:"The patient has a strong, reliable spontaneous respiratory drive and can trigger supported breaths. Which statement is reasonable?",a:["A spontaneous bilevel mode can provide pressure-supported breaths","Spontaneous/Timed mode is preferred for all acute patients even when triggering is reliable","Timed breaths should replace patient-triggered breaths whenever PaCO₂ is elevated"],c:0,why:"When triggering is reliable, spontaneous supported breaths can work. Device and patient needs still guide the final mode choice."},
  {id:"n5",q:"The patient can protect the airway but has periods of inadequate spontaneous triggering. Which bilevel feature becomes especially useful?",a:["Spontaneous/Timed (S/T) mode with a backup rate","CPAP with no inspiratory support","Higher oxygen concentration only"],c:0,why:"S/T mode allows patient-triggered support but adds timed backup breaths when spontaneous triggering is inadequate."},
- {id:"n6",q:"A mouth-breathing acute-care patient has a large leak with a nasal-only interface. What should you consider?",a:["A better-fitting oronasal/full-face interface","Increasing pressure indefinitely without addressing the leak","Stopping all support because masks never leak"],c:0,why:"Interface fit and mouth leak can determine whether NIV is effective and tolerable."}
+ {id:"n6",q:"A mouth-breathing acute-care patient has a large leak with a nasal-only interface. What should you consider?",a:["A better-fitting oronasal/full-face interface","Increase IPAP to overcome the leak without changing the interface","Switch to a smaller nasal interface because smaller masks always seal better"],c:0,why:"Interface fit and mouth leak can determine whether NIV is effective and tolerable."}
 ],[
  {id:"no1",q:"A patient is vomiting and losing airway protection. Would adding a backup rate make NIV safe?",a:["No","Yes","Only if EPAP is increased"],c:0,why:"Backup breaths can support frequency but cannot protect the airway from aspiration."},
  {id:"no2",q:"IPAP and EPAP both increase by 3 cm H₂O. What happens to the pressure-support difference?",a:["It stays the same","It increases by 6","It decreases by 3"],c:0,why:"When both pressures rise equally, IPAP − EPAP is unchanged."},
@@ -548,28 +528,28 @@ S("niv","Choose the NIV Strategy","Apply → Analyze",
 S("gather","What Information Do You Need?","Apply → Analyze · RTE Information Gathering",
   "Choose the assessment or calculation that most directly helps answer the clinical question before you act.",
 [
- {id:"g1",q:"A patient with myasthenia gravis has increasing weakness and difficulty swallowing. Oxygen saturation is 95%. Which additional data are most useful for evaluating impending ventilatory failure?",a:["Serial vital capacity and inspiratory muscle strength","Serum sodium only","Body temperature only"],c:0,why:"Respiratory mechanics and the clinical trend can warn of neuromuscular ventilatory failure before oxygen saturation or the arterial blood gas becomes dramatic."},
- {id:"g2",q:"A patient with COPD receiving oxygen becomes increasingly sleepy. Which value most directly helps evaluate carbon dioxide removal?",a:["PaCO₂ from an arterial blood gas","Serum potassium","White blood cell count"],c:0,why:"PaCO₂ directly reflects the effectiveness of ventilation."},
- {id:"g3",q:"A pneumonia patient remains hypoxemic despite increasing FiO₂. Which calculation can help determine whether oxygen transfer from alveoli to arterial blood is impaired?",a:["Alveolar–arterial oxygen gradient (A–a gradient)","Body mass index","Heart-rate reserve"],c:0,why:"A widened A–a gradient identifies a larger-than-expected difference between alveolar and arterial oxygen."},
- {id:"g4",q:"A patient with acute respiratory acidosis may be a candidate for NIV. Which additional finding most strongly affects whether NIV is safe?",a:["Ability to protect the airway and manage secretions","Hair color","Serum cholesterol"],c:0,why:"Noninvasive support requires a patient who can safely use the interface and protect the airway."},
- {id:"g5",q:"A patient with pulmonary edema is starting positive airway pressure. Which additional assessment is especially important before and after support?",a:["Blood pressure and perfusion","Visual acuity","Bowel sounds only"],c:0,why:"Positive pressure can affect venous return and blood pressure, so hemodynamic response matters."}
+ {id:"g1",q:"A patient with myasthenia gravis has increasing weakness and difficulty swallowing. Oxygen saturation is 95%. Which additional data are most useful for evaluating impending ventilatory failure?",a:["Serial vital capacity and inspiratory muscle strength","Repeat oxygen saturation after supplemental oxygen","Chest radiograph findings"],c:0,why:"Respiratory mechanics and the clinical trend can warn of neuromuscular ventilatory failure before oxygen saturation or the arterial blood gas becomes dramatic."},
+ {id:"g2",q:"A patient with COPD receiving oxygen becomes increasingly sleepy. Which value most directly helps evaluate carbon dioxide removal?",a:["PaCO₂ from an arterial blood gas","PaO₂ from the arterial blood gas","PaO₂/FiO₂ ratio"],c:0,why:"PaCO₂ directly reflects the effectiveness of ventilation."},
+ {id:"g3",q:"A pneumonia patient remains hypoxemic despite increasing FiO₂. Which calculation can help determine whether oxygen transfer from alveoli to arterial blood is impaired?",a:["Alveolar–arterial oxygen gradient (A–a gradient)","PaO₂/FiO₂ ratio","Physiologic dead-space fraction (VD/VT)"],c:0,why:"A widened A–a gradient identifies a larger-than-expected difference between alveolar and arterial oxygen."},
+ {id:"g4",q:"A patient with acute respiratory acidosis may be a candidate for NIV. Which additional finding most strongly affects whether NIV is safe?",a:["Ability to protect the airway and manage secretions","Severity of hypercapnia","Current oxygen saturation"],c:0,why:"Noninvasive support requires a patient who can safely use the interface and protect the airway."},
+ {id:"g5",q:"A patient with pulmonary edema is starting positive airway pressure. Which additional assessment is especially important before and after support?",a:["Blood pressure and perfusion","A–a gradient","Inspiratory muscle strength"],c:0,why:"Positive pressure can affect venous return and blood pressure, so hemodynamic response matters."}
 ],[
- {id:"go1",q:"A patient on NIV says the mask feels worse and delivered tidal volume has fallen. Which bedside information is useful next?",a:["Interface leak and patient-device synchrony","Serum calcium only","Urine color"],c:0,why:"Leak and synchrony can directly change effective NIV support."},
- {id:"go2",q:"A neuromuscular patient has a weak cough. Which additional assessment helps judge airway-clearance ability?",a:["Secretion burden and expiratory/cough strength","PaO₂ alone","FiO₂ alone"],c:0,why:"Airway safety depends on more than inspiratory muscle strength."}
+ {id:"go1",q:"A patient on NIV says the mask feels worse and delivered tidal volume has fallen. Which bedside information is useful next?",a:["Interface leak and patient-device synchrony","PaO₂/FiO₂ ratio","Vital capacity and maximal inspiratory pressure"],c:0,why:"Leak and synchrony can directly change effective NIV support."},
+ {id:"go2",q:"A neuromuscular patient has a weak cough. Which additional assessment helps judge airway-clearance ability?",a:["Secretion burden and expiratory/cough strength","A–a gradient","Plateau pressure"],c:0,why:"Airway safety depends on more than inspiratory muscle strength."}
 ]),
 
 S("reassess","Reassess and Act","Analyze → Decision Making",
   "Use before-and-after data to decide whether to continue, modify, change modality, or escalate.",
 [
  {id:"r1",q:"COPD before bilevel NIV: RR 32/min, pH 7.27, PaCO₂ 72 mm Hg, marked work of breathing. After support: RR 22/min, pH 7.31, PaCO₂ 62 mm Hg, work of breathing improved. What next?",a:["Continue the current strategy and reassess","Escalate immediately to invasive ventilation","Stop all support"],c:0,why:"The patient is improving clinically and on the blood gas."},
- {id:"r2",q:"A COPD patient on NIV becomes more somnolent, pH falls to 7.18, PaCO₂ continues to rise, and secretions are difficult to manage. What next?",a:["Escalate toward invasive airway management","Continue the same NIV indefinitely","Increase FiO₂ only"],c:0,why:"Worsening acidosis, mental status, and secretion handling indicate NIV failure and an increasingly unsafe airway."},
- {id:"r3",q:"A pulmonary-edema patient on CPAP has improving oxygenation, lower respiratory rate, less distress, and stable blood pressure. What next?",a:["Continue CPAP and reassess","Intubate because CPAP was used","Change to bilevel only because PaCO₂ is normal"],c:0,why:"The current support is addressing the problem and the patient is improving."},
+ {id:"r2",q:"A COPD patient on NIV becomes more somnolent, pH falls to 7.18, PaCO₂ continues to rise, and secretions are difficult to manage. What next?",a:["Escalate toward invasive airway management","Increase the backup rate and continue NIV despite worsening airway protection","Increase IPAP and wait for another blood gas before considering escalation"],c:0,why:"Worsening acidosis, mental status, and secretion handling indicate NIV failure and an increasingly unsafe airway."},
+ {id:"r3",q:"A pulmonary-edema patient on CPAP has improving oxygenation, lower respiratory rate, less distress, and stable blood pressure. What next?",a:["Continue CPAP and reassess","Switch to bilevel NIV to add inspiratory support even though ventilation is adequate","Increase CPAP immediately because oxygen saturation is not yet 100%"],c:0,why:"The current support is addressing the problem and the patient is improving."},
  {id:"r4",q:"A pulmonary-edema patient on CPAP is now tiring. PaCO₂ rises and pH begins to fall, but the patient remains awake and can protect the airway. What is a reasonable next noninvasive step?",a:["Change to bilevel NIV to add inspiratory assistance","Lower all positive pressure to zero","Increase FiO₂ only"],c:0,why:"Bilevel can continue expiratory pressure for recruitment while adding inspiratory pressure support for ventilation."},
  {id:"r5",q:"A neuromuscular patient on spontaneous bilevel NIV still protects the airway, but triggering becomes unreliable. What change best matches the new problem?",a:["Use Spontaneous/Timed (S/T) support with a backup rate","Change to CPAP only","Increase oxygen only"],c:0,why:"A backup rate is useful when spontaneous triggering becomes inadequate."},
  {id:"r6",q:"The neuromuscular patient develops worsening bulbar weakness, repeated aspiration risk, and cannot clear secretions. What is the key escalation?",a:["Move toward invasive airway management","Increase the NIV backup rate only","Wait for severe hypercapnia before acting"],c:0,why:"Airway-protection failure and secretion problems can make NIV unsafe even before the arterial blood gas becomes extreme."}
 ],[
- {id:"ro1",q:"After high-flow support for pneumonia, oxygenation remains poor but the patient is still alert, stable, and working less hard. What is the best general approach?",a:["Continue close reassessment and decide from the whole trend","Intubate solely because FiO₂ is high","Ignore PaO₂ because SpO₂ is available"],c:0,why:"Support decisions depend on oxygenation, work of breathing, mental status, hemodynamics, and trajectory."},
- {id:"ro2",q:"A patient on positive pressure becomes hypotensive and poorly perfused. What should you do first?",a:["Reassess the patient and hemodynamic effect of the support","Assume the pressure cannot be involved","Increase pressure automatically"],c:0,why:"Positive pressure can affect venous return and blood pressure. Reassess before reflexively increasing support."}
+ {id:"ro1",q:"After high-flow support for pneumonia, oxygenation remains poor but the patient is still alert, stable, and working less hard. What is the best general approach?",a:["Continue close reassessment and decide from the whole trend","Move to CPAP solely because PaO₂ remains low","Escalate to invasive ventilation based only on the FiO₂ level"],c:0,why:"Support decisions depend on oxygenation, work of breathing, mental status, hemodynamics, and trajectory."},
+ {id:"ro2",q:"A patient on positive pressure becomes hypotensive and poorly perfused. What should you do first?",a:["Reassess the patient and hemodynamic effect of the support","Increase positive pressure to improve oxygenation before reassessing blood pressure","Switch from CPAP to bilevel NIV to add inspiratory support before reassessing hemodynamics"],c:0,why:"Positive pressure can affect venous return and blood pressure. Reassess before reflexively increasing support."}
 ])
 ];
 
@@ -578,7 +558,7 @@ const finalCases = {
   title:"COPD Exacerbation",
   subtitle:"Choose support, judge response, then recognize failure.",
   stages:[
-   {id:"fc1",q:"The patient is alert with SpO₂ 84%, RR 26/min, pH 7.36, PaCO₂ 52 mm Hg, and only mildly increased work of breathing. What is the best initial respiratory support?",a:["Controlled supplemental oxygen with reassessment","Bilevel NIV only because PaCO₂ is elevated","Immediate invasive ventilation"],c:0,why:"The patient is hypoxemic but does not yet show acute respiratory acidosis or severe ventilatory failure."},
+   {id:"fc1",q:"The patient is alert with SpO₂ 84%, RR 26/min, pH 7.36, PaCO₂ 52 mm Hg, and only mildly increased work of breathing. What is the best initial respiratory support?",a:["Controlled supplemental oxygen with reassessment","Start bilevel NIV now because any elevated PaCO₂ means acute ventilatory failure","Increase oxygen to a saturation above 96% before deciding whether ventilatory support is needed"],c:0,why:"The patient is hypoxemic but does not yet show acute respiratory acidosis or severe ventilatory failure."},
    {id:"fc2",q:"Two hours later: RR 32/min, marked accessory-muscle use, pH 7.28, PaCO₂ 68 mm Hg. The patient is awake, cooperative, and managing secretions. What now?",a:["Bilevel NIV","CPAP only","Increase oxygen only"],c:0,why:"The patient now has acute hypercapnic respiratory acidosis and needs inspiratory ventilatory assistance."},
    {id:"fc3",q:"After NIV, the patient becomes progressively somnolent, cannot clear secretions, pH falls to 7.18, and PaCO₂ continues to rise. What is the safest next direction?",a:["Escalate toward invasive airway management and mechanical ventilation","Keep the same NIV settings and wait","Increase FiO₂ only"],c:0,why:"The current support is failing and airway safety is deteriorating."}
   ]
@@ -587,7 +567,7 @@ const finalCases = {
   title:"Cardiogenic Pulmonary Edema",
   subtitle:"Use recruitment first when appropriate, then add ventilatory assistance if the problem changes.",
   stages:[
-   {id:"fe1",q:"The patient is severely hypoxemic with crackles, RR 34/min, awake, blood pressure adequate, and PaCO₂ normal. Which pressure strategy best targets the main problem?",a:["CPAP","Bilevel is required in every pulmonary-edema patient","Immediate invasive ventilation"],c:0,why:"The main need is recruitment and oxygenation while spontaneous ventilation remains adequate."},
+   {id:"fe1",q:"The patient is severely hypoxemic with crackles, RR 34/min, awake, blood pressure adequate, and PaCO₂ normal. Which pressure strategy best targets the main problem?",a:["CPAP","Bilevel NIV to add inspiratory assistance even though PaCO₂ is normal","Heated high-flow nasal cannula to avoid positive pressure despite marked pulmonary edema"],c:0,why:"The main need is recruitment and oxygenation while spontaneous ventilation remains adequate."},
    {id:"fe2",q:"The patient remains awake but is tiring. PaCO₂ rises, pH begins to fall, and tidal volumes are getting smaller. Which noninvasive change may now help?",a:["Bilevel NIV with inspiratory pressure support","Continue CPAP only because the diagnosis is pulmonary edema","Increase oxygen concentration only"],c:0,why:"The problem now includes ventilatory failure, so inspiratory assistance becomes useful."},
    {id:"fe3",q:"The patient becomes obtunded, vomits, cannot manage secretions, and develops worsening hypotension. What next?",a:["Escalate toward invasive airway management","Keep NIV because oxygenation needs positive pressure","Increase EPAP only"],c:0,why:"Airway protection and hemodynamic stability are now major safety problems."}
   ]
@@ -745,6 +725,7 @@ function renderFinal(){
   const cases=Object.entries(finalCases);
   if(!finalCases[state.activeFinalCase]) state.activeFinalCase="copd";
   area.innerHTML=`
+    ${finalAdvanceMessage?`<div class="final-advance-note" role="status"><strong>${finalAdvanceMessage}</strong></div>`:""}
     <div class="final-tabs" role="tablist" aria-label="Final patient cases">
       ${cases.map(([key,c])=>`<button class="final-tab ${state.activeFinalCase===key?"active":""}" type="button" data-final-tab="${key}" role="tab" aria-selected="${state.activeFinalCase===key}">${c.title}</button>`).join("")}
     </div>
@@ -776,10 +757,40 @@ function handleAnswer(btn){
   ];
   const q=allQuestions.find(x=>x.id===qid);
   if(!q||state.correct.has(qid)) return;
+
   const card=btn.closest(".q-card");
   const feedback=card.querySelector(".feedback");
+
   if(selected===q.c){
     state.correct.add(qid);
+    finalAdvanceMessage="";
+
+    let shouldScrollToFinal=false;
+    const caseEntries=Object.entries(finalCases);
+    const caseIndex=caseEntries.findIndex(([,c])=>c.stages.some(stage=>stage.id===qid));
+
+    if(caseIndex>=0){
+      const [currentKey,currentCase]=caseEntries[caseIndex];
+      const lastStageId=currentCase.stages[currentCase.stages.length-1].id;
+      const caseNowComplete=currentCase.stages.every(stage=>state.correct.has(stage.id));
+
+      if(qid===lastStageId && caseNowComplete){
+        const orderedNext=[
+          ...caseEntries.slice(caseIndex+1),
+          ...caseEntries.slice(0,caseIndex)
+        ].find(([,c])=>!c.stages.every(stage=>state.correct.has(stage.id)));
+
+        if(orderedNext){
+          state.activeFinalCase=orderedNext[0];
+          finalAdvanceMessage=`${currentCase.title} complete. Moving you to ${orderedNext[1].title}.`;
+          shouldScrollToFinal=true;
+        }else{
+          finalAdvanceMessage=`${currentCase.title} complete. You have finished all final patient cases.`;
+          shouldScrollToFinal=true;
+        }
+      }
+    }
+
     saveState();
     card.classList.add("correct-card");
     card.querySelectorAll(".option").forEach(b=>{
@@ -788,11 +799,22 @@ function handleAnswer(btn){
     });
     feedback.className="feedback show ok";
     feedback.innerHTML=`<strong>Correct.</strong> ${q.why}`;
-    setTimeout(updateUI,250);
+
+    setTimeout(()=>{
+      updateUI();
+      if(shouldScrollToFinal){
+        setTimeout(()=>{
+          const target=document.querySelector(".final-tabs")||document.getElementById("finalCard");
+          target?.scrollIntoView({behavior:"smooth",block:"start"});
+          const activeTab=document.querySelector(".final-tab.active");
+          activeTab?.focus({preventScroll:true});
+        },80);
+      }
+    },250);
   }else{
     btn.classList.add("incorrect-choice");
     feedback.className="feedback show bad";
-    feedback.innerHTML=`<strong>Not yet.</strong> ${q.why.replace(/^.*?\./,"Reconsider the relationship being tested.")} <strong>Try again.</strong>`;
+    feedback.innerHTML=`<strong>Not yet.</strong> Reconsider the physiology, airway safety, and the purpose of each support option. <strong>Try again.</strong>`;
   }
 }
 document.addEventListener("click",event=>{
@@ -806,7 +828,9 @@ document.addEventListener("click",event=>{
   }
   const tab=event.target.closest("[data-final-tab]");
   if(tab){
-    state.activeFinalCase=tab.dataset.finalTab;saveState();renderFinal();return;
+    state.activeFinalCase=tab.dataset.finalTab;
+    finalAdvanceMessage="";
+    saveState();renderFinal();return;
   }
 });
 loadState();
@@ -886,75 +910,5 @@ setTimeout(()=>{
   if(parseFloat(text)>=100) sendCanvasCompletion('restored-completion');
 },900);
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
