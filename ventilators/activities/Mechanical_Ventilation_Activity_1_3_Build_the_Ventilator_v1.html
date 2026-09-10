@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PulmoLearn | Activity 1.3 Build the Ventilator</title>
+<script>
+window.PULMO_LESSON={
+  schemaVersion:"2026.09",
+  courseId:"mechanical-ventilation",
+  courseTitle:"Mechanical Ventilation",
+  moduleId:"mv-unit-1-initiate-support",
+  moduleTitle:"Unit 1 · Initiate Ventilatory Support",
+  lessonId:"mv_activity_1_3",
+  lessonTitle:"Build the Ventilator",
+  title:"Activity 1.3 · Build the Ventilator",
+  estimatedMinutes:65,
+  ltiResourceId:"mechanical_ventilation_activity_1_3",
+  competencies:[
+    "C5: Establish safe initial invasive ventilator settings and alarms.",
+    "C6: Adapt initial invasive or noninvasive settings to the disease process and clinical presentation."
+  ],
+  nbrc:{examVersion:"Respiratory Therapy Examination Detailed Content Outline - January 2027",
+        alignmentTags:["Invasive Mechanical Ventilation","Noninvasive Ventilation","Ventilator Alarms","Information Gathering","Decision Making"]}
+};
+window.PULMO_LESSON_ID=window.PULMO_LESSON.lessonId;
+window.LESSON_ID=window.PULMO_LESSON.lessonId;
+</script>
+<style>
+:root{--navy:#0B1F33;--teal:#1CA7A8;--teal2:#128486;--mist:#F4FAFC;--mint:#DDF7F2;--blue:#4BA3F2;--amber:#F4B860;--coral:#E85D5D;--ink:#24313D;--slate:#415A77;--border:#D7E6EF;--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--mist);color:var(--ink);font-family:Arial,sans-serif;line-height:1.5}
+button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;margin:auto;padding:22px}.hero{background:#fff;border:1px solid var(--border);border-top:8px solid var(--teal);border-radius:20px;padding:26px}.hero h1,.panel h2,.panel h3{color:var(--navy);margin-top:0}.hero h1{font-size:clamp(2rem,5vw,3.2rem);margin-bottom:8px}.eyebrow{font-weight:800;color:var(--teal2);text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.tag{background:#E9F7F5;border:1px solid #C8E9E6;border-radius:999px;padding:6px 10px;font-size:.82rem;font-weight:700}
+.progress{position:sticky;top:0;z-index:5;background:rgba(244,250,252,.96);padding:10px 0}.bar{height:10px;border-radius:99px;background:#DFEAF0;overflow:hidden}.fill{height:100%;background:var(--teal);width:0}.ptext{font-size:.85rem;color:var(--slate);font-weight:700;margin-top:4px}
+.panel{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;margin-top:18px}.hidden{display:none!important}.callout{border-left:5px solid var(--blue);background:#F4F9FF;padding:12px 14px;border-radius:10px;margin:12px 0}.tip{background:#FFF6E5;border:1px solid #F0D39B;border-radius:12px;padding:12px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.case{border:1px solid var(--border);border-radius:14px;padding:15px;background:#FBFDFE}.case strong{color:var(--navy)}.choices{display:grid;gap:10px;margin-top:12px}.choice{border:1px solid #C8D9E4;background:#fff;border-radius:12px;padding:12px;text-align:left}.choice:hover{border-color:var(--teal)}.choice.ok{background:#E8F8F1;border-color:#9DD7BF}.choice.bad{background:#FFF0F0;border-color:#E7AAAA}.choice:disabled{cursor:default}.feedback{display:none;margin-top:10px;border-radius:10px;padding:10px}.feedback.show{display:block}.feedback.ok{background:#E8F8F1}.feedback.bad{background:#FFF0F0}.next{margin-top:12px;background:var(--navy);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:800}
+.patient{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.patient-card{background:#F7FBFD;border:1px solid var(--border);border-radius:14px;padding:16px}.patient-card h3{margin-bottom:8px}.data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.datum{background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px}.datum b{display:block;color:var(--teal2);font-size:.75rem;text-transform:uppercase}.sim{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}.control{border:1px solid var(--border);border-radius:14px;padding:12px;background:#FBFDFE;text-align:center;min-width:0}.control label{display:block;font-weight:800;color:var(--navy);margin-bottom:7px}.readout{font-family:monospace;font-weight:800;font-size:1.05rem;color:var(--navy);min-height:25px}.knob{--rot:-130deg;width:78px;height:78px;border-radius:50%;margin:8px auto;background:conic-gradient(from 220deg,#D9E5EB 0 260deg,#F4F8FA 260deg);border:8px solid #EDF3F6;position:relative;box-shadow:inset 0 0 0 1px #BACDD8}.knob:after{content:"";position:absolute;width:4px;height:27px;background:var(--teal2);border-radius:4px;left:50%;top:9px;transform-origin:50% 30px;transform:translateX(-50%) rotate(var(--rot))}.adjust{display:flex;justify-content:center;gap:6px}.adjust button{width:42px;height:42px;border:1px solid var(--border);border-radius:10px;background:#fff;font-weight:800}.adjust button:hover{border-color:var(--teal)}.mode-control{grid-column:span 2}.mode-control select{width:100%;min-height:44px;border:1px solid #BACDD8;border-radius:10px;padding:8px;background:#fff}.submit-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.primary{background:var(--navy);color:#fff;border:0;border-radius:11px;padding:11px 16px;font-weight:800}.secondary{background:#fff;color:var(--navy);border:1px solid var(--border);border-radius:11px;padding:11px 16px;font-weight:800}.results{display:none;margin-top:16px}.results.show{display:block}.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.result{border-radius:10px;padding:10px;border:1px solid var(--border)}.result.good{background:#E8F8F1}.result.warn{background:#FFF6E5}.result.bad{background:#FFF0F0}.score{font-size:1.2rem;font-weight:800;color:var(--navy)}.unlock{background:var(--navy);color:white;border-radius:16px;padding:18px;margin-top:18px}.unlock h3{color:white}.formula{font-family:monospace;background:#F4F8FA;padding:9px 11px;border-radius:9px;display:inline-block}
+@media(max-width:900px){.sim{grid-template-columns:repeat(2,1fr)}.patient{grid-template-columns:1fr}.data-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.wrap{padding:10px}.grid,.sim,.result-grid{grid-template-columns:1fr}.mode-control{grid-column:auto}.data-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Mechanical Ventilation · Activity 1.3</div>
+  <h1>Build the Ventilator</h1>
+  <p>First choose the best <strong>complete setting strategy</strong> for each patient. Then unlock the ventilator simulator and set the machine yourself from the patient's height, sex, history, and physiology.</p>
+  <div class="meta"><span class="tag">C5 · Initial settings + alarms</span><span class="tag">C6 · Disease-specific setup</span><span class="tag">2027 RTE clinical judgment</span></div>
+</header>
+
+<div class="progress"><div class="bar"><div class="fill" id="progressFill"></div></div><div class="ptext" id="progressText">Part 1 · 0 of 6 scenarios mastered</div></div>
+
+<section class="panel" id="part1">
+  <div class="eyebrow">Part 1 · Direct practice</div>
+  <h2>Choose the Best Complete Setup</h2>
+  <p>Each case focuses on the setting differences that matter most. Choose the <em>best overall starting strategy</em>, not just one correct number.</p>
+  <div class="tip"><strong>Use the same reasoning every time:</strong> PBW → VT + minute ventilation → disease-specific rate/timing → FiO₂ + PEEP → flow/trigger → alarms → reassess.</div>
+  <div id="scenarioHost"></div>
+</section>
+
+<section class="panel hidden" id="simPanel">
+  <div class="eyebrow">Part 2 · Ventilator simulator</div>
+  <h2>Turn the Knobs</h2>
+  <p>You are given only the patient data. Set every control into a clinically appropriate starting range. The simulator grades the <strong>pattern</strong> of settings, not one magic number.</p>
+  <div class="patient">
+    <div class="patient-card" id="patientCard"></div>
+    <div class="patient-card">
+      <h3>Your scratch rules</h3>
+      <div class="formula">PBW ♂ = 50 + 2.3(in − 60)</div><br><br>
+      <div class="formula">PBW ♀ = 45.5 + 2.3(in − 60)</div><br><br>
+      <div class="formula">V̇E ≈ 10% PBW (L/min)</div>
+      <p style="margin-bottom:0"><strong>RTE ceiling:</strong> eliminate VT &gt;10 mL/kg PBW.</p>
+    </div>
+  </div>
+
+  <div class="sim" id="controls">
+    <div class="control mode-control"><label for="mode">Mode / strategy</label><select id="mode"></select></div>
+  </div>
+  <div class="submit-row">
+    <button class="primary" id="checkSim" type="button">Check my setup</button>
+    <button class="secondary" id="resetSim" type="button">Reset controls</button>
+  </div>
+  <div class="results" id="simResults" aria-live="polite"></div>
+  <div class="submit-row hidden" id="simNextWrap"><button class="primary" id="nextSim" type="button">Next patient →</button></div>
+</section>
+
+<section class="unlock hidden" id="completeBox">
+  <h3>Activity 1.3 complete</h3>
+  <p>You have practiced selecting complete starting strategies and independently setting a simulated ventilator for the major disease patterns.</p>
+</section>
+</div>
+
+<script>
+(function(){
+const root=document.querySelector(".wrap");
+const scenarios=[
+ {name:"Normal lungs · elective surgery",stem:"A 66-kg PBW adult with normal lungs is intubated for a short procedure. Pre-op SpO₂ was 98% on room air.",correct:"normal",
+  opts:[
+   ["PBW-based VT, conventional rate/timing, modest PEEP, FiO₂ based on actual need","normal","Correct. There is no oxygenation or obstructive problem to treat aggressively."],
+   ["PBW-based VT, RR 10, very long expiration, high inspiratory flow, FiO₂ based on need","copd","That is an obstructive strategy. Nothing in this case suggests air trapping."],
+   ["PBW-based VT, conventional timing, high PEEP, FiO₂ 1.0","ards","This adds unnecessary oxygenation support to a patient with normal lungs."]
+  ]},
+ {name:"Neuromuscular respiratory failure",stem:"A 5'6\" female has progressive neuromuscular weakness, clear lungs, SpO₂ 97% on room air, weak cough, and inadequate spontaneous VT.",correct:"neuro",
+  opts:[
+   ["PBW-based VT and rate to replace failing ventilation; modest PEEP; FiO₂ may remain 0.21","neuro","Correct. Treat the pump failure without inventing an oxygenation problem."],
+   ["Low VT, high rate, high PEEP, high FiO₂ because respiratory failure is present","ards","This treats the patient as if lung compliance and oxygenation were the main problems."],
+   ["Large VT based on actual weight with low rate and FiO₂ 1.0","unsafe","VT is based on PBW, and high oxygen is not automatically needed."]
+  ]},
+ {name:"COPD · high resistance",stem:"A 5'10\" male with severe COPD has acute hypercapnic acidosis and significant air-trapping risk.",correct:"copd",
+  opts:[
+   ["PBW-based VT below 10 mL/kg, f about 10–12/min, shorter Ti, long Te, FiO₂ titrated to target","copd","Correct. This supports ventilation while protecting expiratory time."],
+   ["Small VT, f 24/min, Ti 1.2 sec, high FiO₂ regardless of saturation","fast","The high rate and longer Ti reduce expiratory time and can worsen dynamic hyperinflation."],
+   ["VT above 10 mL/kg to normalize PaCO₂ quickly, low rate, long Ti","unsafe","Do not use an unsafe VT to force PaCO₂ toward normal."]
+  ]},
+ {name:"Severe asthma · dynamic hyperinflation risk",stem:"A 6'0\" male with status asthmaticus has very high airway resistance and incomplete exhalation.",correct:"asthma",
+  opts:[
+   ["PBW-based VT, low-to-moderate rate, high enough inspiratory flow to shorten Ti, long Te, reassess PIP/Pplat and expiratory flow","asthma","Correct. Severe asthma requires deliberate protection of expiratory time."],
+   ["PBW-based VT, high rate, low inspiratory flow, short Te to increase minute ventilation","fast","This combination promotes breath stacking and dynamic hyperinflation."],
+   ["Very large VT with normal rate so PaCO₂ stays normal","unsafe","Avoid using excessive VT simply to normalize PaCO₂."]
+  ]},
+ {name:"ARDS · low compliance",stem:"A 5'4\" female has ARDS, severe hypoxemia, and low respiratory-system compliance.",correct:"ards",
+  opts:[
+   ["Lower VT near 6 mL/kg PBW, rate adjusted for V̇E, FiO₂ + PEEP for oxygenation, monitor pressure/hemodynamics","ards","Correct. Lung protection and oxygenation support drive this setup."],
+   ["Increase VT until the 10%-PBW minute-ventilation estimate is reached, then use minimal PEEP","unsafe","The minute-ventilation shortcut does not override lung-protective VT."],
+   ["Use a COPD pattern with f 10/min and very long Te because all respiratory failure needs more expiratory time","copd","ARDS is a low-compliance problem, not primarily an expiratory-flow obstruction problem."]
+  ]},
+ {name:"Post-arrest · immediate stabilization",stem:"A 5'8\" male has ROSC after cardiac arrest. He was bagged with 100% oxygen and reliable SpO₂ is not yet available.",correct:"post",
+  opts:[
+   ["PBW-based lung-protective ventilation, FiO₂ 1.0 initially, then titrate once oxygenation is reliable","post","Correct. Stabilize first, then titrate oxygen promptly when reliable data are available."],
+   ["Immediately reduce FiO₂ to 0.21 because the airway is secured","lowo2","Reliable oxygenation data are not yet available after ROSC."],
+   ["Keep FiO₂ 1.0 indefinitely and use large VT to prevent hypercapnia","unsafe","Both prolonged unnecessary hyperoxia and excessive VT should be avoided."]
+  ]}
+];
+
+const simCases=[
+ {name:"Elective surgical patient",sex:"Female",height:65,history:"Normal lungs. Intubated for general anesthesia. SpO₂ 99% on room air. Hemodynamically stable.",
+  mode:["VC-AC","PC-AC"],ranges:{vt:[360,520],rr:[12,18],fio2:[21,40],peep:[4,6],ti:[0.8,1.2],flow:[45,70],hp:[28,40],lp:[10,24],lowvt:[330,470]}},
+ {name:"Neuromuscular weakness",sex:"Male",height:70,history:"Clear lungs. Progressive muscle weakness and poor cough. SpO₂ 97% on room air. Ventilation/pump failure is the indication.",
+  mode:["VC-AC","PC-AC"],ranges:{vt:[440,650],rr:[12,18],fio2:[21,35],peep:[4,6],ti:[0.8,1.2],flow:[45,70],hp:[28,42],lp:[10,26],lowvt:[400,590]}},
+ {name:"COPD with air trapping",sex:"Male",height:70,history:"Severe COPD, acute hypercapnic respiratory acidosis, high resistance, air-trapping risk. SpO₂ target 88–92%.",
+  mode:["VC-AC","PC-AC"],ranges:{vt:[500,700],rr:[8,12],fio2:[25,50],peep:[3,6],ti:[0.6,1.0],flow:[60,100],hp:[35,50],lp:[12,30],lowvt:[450,630]}},
+ {name:"Severe asthma",sex:"Female",height:67,history:"Status asthmaticus with marked obstruction and incomplete exhalation. Oxygenation moderately impaired.",
+  mode:["VC-AC","PC-AC"],ranges:{vt:[400,620],rr:[8,12],fio2:[30,60],peep:[3,6],ti:[0.6,1.0],flow:[60,100],hp:[38,55],lp:[12,32],lowvt:[360,560]}},
+ {name:"ARDS",sex:"Female",height:64,history:"Severe hypoxemia, bilateral infiltrates, low compliance. Lung protection is a priority.",
+  mode:["VC-AC","PC-AC"],ranges:{vt:[300,380],rr:[16,28],fio2:[50,100],peep:[8,16],ti:[0.7,1.2],flow:[45,75],hp:[30,45],lp:[10,26],lowvt:[270,345]}},
+ {name:"Post-cardiac arrest",sex:"Male",height:68,history:"ROSC moments ago. Reliable SpO₂/PaO₂ not yet available. Stabilize, then titrate oxygen when reliable.",
+  mode:["VC-AC","PC-AC"],ranges:{vt:[410,550],rr:[12,18],fio2:[100,100],peep:[5,8],ti:[0.8,1.2],flow:[45,75],hp:[30,44],lp:[10,28],lowvt:[370,500]}}
+];
+
+const controls=[
+ {key:"vt",label:"Tidal volume",min:250,max:900,step:10,unit:"mL",start:450},
+ {key:"rr",label:"Respiratory rate",min:6,max:30,step:1,unit:"/min",start:14},
+ {key:"fio2",label:"FiO₂",min:21,max:100,step:1,unit:"%",start:40},
+ {key:"peep",label:"PEEP",min:0,max:20,step:1,unit:"cm H₂O",start:5},
+ {key:"ti",label:"Inspiratory time",min:0.5,max:1.5,step:0.1,unit:"sec",start:1.0},
+ {key:"flow",label:"Inspiratory flow",min:30,max:100,step:5,unit:"L/min",start:60},
+ {key:"hp",label:"High pressure alarm",min:20,max:60,step:1,unit:"cm H₂O",start:40},
+ {key:"lp",label:"Low pressure alarm",min:5,max:35,step:1,unit:"cm H₂O",start:15},
+ {key:"lowvt",label:"Low exhaled VT alarm",min:200,max:800,step:10,unit:"mL",start:400}
+];
+
+let directIndex=0,directDone=0,simIndex=0,simMastered=0;
+const scenarioHost=document.getElementById("scenarioHost"),simPanel=document.getElementById("simPanel");
+const progressFill=document.getElementById("progressFill"),progressText=document.getElementById("progressText");
+const patientCard=document.getElementById("patientCard"),controlsHost=document.getElementById("controls"),mode=document.getElementById("mode");
+const results=document.getElementById("simResults"),nextWrap=document.getElementById("simNextWrap"),completeBox=document.getElementById("completeBox");
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function updateProgress(){
+ const total=12,done=directDone+simMastered,pct=Math.round(done/total*100);
+ progressFill.style.width=pct+"%";
+ progressText.textContent=directDone<6?`Part 1 · ${directDone} of 6 scenarios mastered`:`Part 2 · ${simMastered} of 6 simulator patients mastered`;
+ if(done===total){
+   completeBox.classList.remove("hidden");
+   window.PulmoActivityProgress?.report({percent:100,completed:true});
+   document.dispatchEvent(new CustomEvent("activityComplete",{detail:{activityId:"mechanical_ventilation_activity_1_3"}}));
+ } else window.PulmoActivityProgress?.report({percent:pct,completed:false});
+}
+function renderDirect(){
+ const s=scenarios[directIndex];
+ scenarioHost.innerHTML=`<div class="case"><div class="eyebrow">Scenario ${directIndex+1} of ${scenarios.length}</div><h3>${s.name}</h3><p>${s.stem}</p><div class="choices"></div><div class="feedback" aria-live="polite"></div></div>`;
+ const box=scenarioHost.querySelector(".choices"),fb=scenarioHost.querySelector(".feedback");
+ shuffle(s.opts).forEach(o=>{
+   const b=document.createElement("button");b.type="button";b.className="choice";b.textContent=o[0];
+   b.addEventListener("click",()=>{
+     if(scenarioHost.dataset.locked==="true")return;
+     if(o[1]===s.correct){
+       scenarioHost.dataset.locked="true";b.classList.add("ok");[...box.children].forEach(x=>x.disabled=true);
+       fb.className="feedback show ok";fb.innerHTML=o[2];
+       const n=document.createElement("button");n.type="button";n.className="next";n.textContent=directIndex===5?"Unlock simulator →":"Next scenario →";
+       n.addEventListener("click",()=>{directDone++;updateProgress();scenarioHost.dataset.locked="false";if(directIndex<5){directIndex++;renderDirect();window.scrollTo({top:scenarioHost.offsetTop-80,behavior:"smooth"});}else{simPanel.classList.remove("hidden");renderSim();simPanel.scrollIntoView({behavior:"smooth"});}});
+       fb.appendChild(document.createElement("br"));fb.appendChild(n);
+     } else {
+       b.classList.add("bad");fb.className="feedback show bad";fb.textContent=o[2]+" Try another complete setting set.";
+     }
+   });box.appendChild(b);
+ });
+}
+function pbw(c){return c.sex==="Male"?50+2.3*(c.height-60):45.5+2.3*(c.height-60);}
+function makeControls(){
+ controls.forEach(c=>{
+   const d=document.createElement("div");d.className="control";d.dataset.key=c.key;d.dataset.value=c.start;
+   d.innerHTML=`<label>${c.label}</label><div class="knob" aria-hidden="true"></div><div class="readout"></div><div class="adjust"><button type="button" data-dir="-1" aria-label="Decrease ${c.label}">−</button><button type="button" data-dir="1" aria-label="Increase ${c.label}">+</button></div>`;
+   controlsHost.appendChild(d);
+   d.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>setValue(d,c,Number(b.dataset.dir))));
+   paint(d,c);
+ });
+}
+function setValue(d,c,dir){
+ let v=Number(d.dataset.value)+dir*c.step;v=Math.max(c.min,Math.min(c.max,Math.round(v*10)/10));d.dataset.value=v;paint(d,c);
+}
+function paint(d,c){
+ const v=Number(d.dataset.value),frac=(v-c.min)/(c.max-c.min),rot=-130+260*frac;
+ d.querySelector(".knob").style.setProperty("--rot",rot+"deg");
+ d.querySelector(".readout").textContent=(c.key==="ti"?v.toFixed(1):v)+" "+c.unit;
+}
+function resetControls(){
+ controls.forEach(c=>{const d=controlsHost.querySelector(`[data-key="${c.key}"]`);d.dataset.value=c.start;paint(d,c);});
+ results.classList.remove("show");results.innerHTML="";nextWrap.classList.add("hidden");
+}
+function renderSim(){
+ const c=simCases[simIndex],p=Math.round(pbw(c)*10)/10;
+ patientCard.innerHTML=`<div class="eyebrow">Simulator patient ${simIndex+1} of 6</div><h3>${c.name}</h3><p>${c.history}</p><div class="data-grid"><div class="datum"><b>Sex</b>${c.sex}</div><div class="datum"><b>Height</b>${Math.floor(c.height/12)}'${c.height%12}"</div><div class="datum"><b>PBW</b>Calculate it yourself</div></div>`;
+ mode.innerHTML="";
+ ["VC-AC","PC-AC","SIMV","Pressure Support","CPAP"].forEach(m=>{const o=document.createElement("option");o.textContent=m;o.value=m;mode.appendChild(o);});
+ resetControls();
+}
+function gradeSim(){
+ const c=simCases[simIndex],p=Math.round(pbw(c)*10)/10,rows=[];let correct=0,total=controls.length+1;
+ const modeGood=c.mode.includes(mode.value);if(modeGood)correct++;
+ rows.push([modeGood?"good":"bad","Mode",mode.value,modeGood?"Appropriate full-support starting strategy.":"Choose an initial strategy that provides reliable support for this patient."]);
+ controls.forEach(def=>{
+   const v=Number(controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.value),r=c.ranges[def.key],good=v>=r[0]&&v<=r[1];if(good)correct++;
+   let note=good?"Within an appropriate learning range for this scenario.":`Target learning range: ${r[0]}–${r[1]} ${def.unit}.`;
+   if(def.key==="vt"){const mlkg=Math.round(v/p*10)/10;note+=` Your VT = ${mlkg} mL/kg PBW (PBW ≈ ${p} kg).`;}
+   rows.push([good?"good":"bad",def.label,v+" "+def.unit,note]);
+ });
+ const pct=Math.round(correct/total*100),mastery=pct>=80;
+ results.className="results show";
+ results.innerHTML=`<div class="score">${pct}% · ${mastery?"Scenario mastered":"Revise the setup"}</div><p>${mastery?"Your overall setting pattern is clinically defensible for this patient. Review any highlighted controls before moving on.":"Use the feedback below to adjust the controls. You need at least 80% to master this patient."}</p><div class="result-grid">${rows.map(r=>`<div class="result ${r[0]}"><strong>${r[1]}:</strong> ${r[2]}<br><small>${r[3]}</small></div>`).join("")}</div>`;
+ if(mastery){nextWrap.classList.remove("hidden");document.getElementById("checkSim").disabled=true;}else nextWrap.classList.add("hidden");
+}
+document.getElementById("checkSim").addEventListener("click",gradeSim);
+document.getElementById("resetSim").addEventListener("click",()=>{document.getElementById("checkSim").disabled=false;resetControls();});
+document.getElementById("nextSim").addEventListener("click",()=>{
+ simMastered++;updateProgress();document.getElementById("checkSim").disabled=false;nextWrap.classList.add("hidden");
+ if(simIndex<5){simIndex++;renderSim();simPanel.scrollIntoView({behavior:"smooth"});}else{completeBox.classList.remove("hidden");completeBox.scrollIntoView({behavior:"smooth"});}
+});
+makeControls();renderDirect();updateProgress();
+})();
+</script>
+<script src="/assets/activity-progress-tracker.js"></script>
+<script type="module">
+(async()=>{
+  try{
+    const params=new URLSearchParams(location.search);
+    if(params.get("lti")!=="1")return;
+    const {supabase}=await import("/assets/auth.js");
+    const {data:{session}}=await supabase.auth.getSession();
+    if(!session)return;
+    const key="lti-score:mechanical_ventilation_activity_1_3";
+    document.addEventListener("activityComplete",async()=>{
+      if(sessionStorage.getItem(key))return;
+      const res=await fetch("/api/lti/score",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token},body:JSON.stringify({resourceId:"mechanical_ventilation_activity_1_3",score:1,maxScore:1})});
+      if(res.ok)sessionStorage.setItem(key,"1");
+    },{once:true});
+  }catch(e){console.warn("LTI score passback unavailable",e);}
+})();
+</script>
+</body>
+</html>
