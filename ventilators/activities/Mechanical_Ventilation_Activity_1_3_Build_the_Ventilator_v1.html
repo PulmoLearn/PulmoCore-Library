@@ -35,7 +35,28 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
 .patient{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.patient-card{background:#F7FBFD;border:1px solid var(--border);border-radius:14px;padding:16px}.patient-card h3{margin-bottom:8px}.data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.datum{background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px}.datum b{display:block;color:var(--teal2);font-size:.75rem;text-transform:uppercase}.sim{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}.control{border:1px solid var(--border);border-radius:14px;padding:12px;background:#FBFDFE;text-align:center;min-width:0}.control label{display:block;font-weight:800;color:var(--navy);margin-bottom:7px}.readout{font-family:monospace;font-weight:800;font-size:1.05rem;color:var(--navy);min-height:25px}.knob{--rot:-130deg;width:78px;height:78px;border-radius:50%;margin:8px auto;background:conic-gradient(from 220deg,#D9E5EB 0 260deg,#F4F8FA 260deg);border:8px solid #EDF3F6;position:relative;box-shadow:inset 0 0 0 1px #BACDD8}.knob:after{content:"";position:absolute;width:4px;height:27px;background:var(--teal2);border-radius:4px;left:50%;top:9px;transform-origin:50% 30px;transform:translateX(-50%) rotate(var(--rot))}.adjust{display:flex;justify-content:center;gap:6px}.adjust button{width:42px;height:42px;border:1px solid var(--border);border-radius:10px;background:#fff;font-weight:800}.adjust button:hover{border-color:var(--teal)}.mode-control{grid-column:span 2}.mode-control select{width:100%;min-height:44px;border:1px solid #BACDD8;border-radius:10px;padding:8px;background:#fff}.submit-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.primary{background:var(--navy);color:#fff;border:0;border-radius:11px;padding:11px 16px;font-weight:800}.secondary{background:#fff;color:var(--navy);border:1px solid var(--border);border-radius:11px;padding:11px 16px;font-weight:800}.results{display:none;margin-top:16px}.results.show{display:block}.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.result{border-radius:10px;padding:10px;border:1px solid var(--border)}.result.good{background:#E8F8F1}.result.warn{background:#FFF6E5}.result.bad{background:#FFF0F0}.score{font-size:1.2rem;font-weight:800;color:var(--navy)}.unlock{background:var(--navy);color:white;border-radius:16px;padding:18px;margin-top:18px}.unlock h3{color:white}.formula{font-family:monospace;background:#F4F8FA;padding:9px 11px;border-radius:9px;display:inline-block}
 @media(max-width:900px){.sim{grid-template-columns:repeat(2,1fr)}.patient{grid-template-columns:1fr}.data-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.wrap{padding:10px}.grid,.sim,.result-grid{grid-template-columns:1fr}.mode-control{grid-column:auto}.data-grid{grid-template-columns:1fr}}
-</style>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 <body>
 <div class="wrap">
@@ -265,5 +286,75 @@ makeControls();renderDirect();updateProgress();
   }catch(e){console.warn("LTI score passback unavailable",e);}
 })();
 </script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body>
 </html>
