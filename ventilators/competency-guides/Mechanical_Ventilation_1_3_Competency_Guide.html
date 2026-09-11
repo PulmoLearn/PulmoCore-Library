@@ -4,7 +4,28 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif;line-height:1.5}main{max-width:1000px;margin:auto;padding:24px}
 .hero,.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:16px}.hero{border-top:8px solid var(--teal)}h1,h2,h3{color:var(--navy)}h1{margin:.2rem 0}.eyebrow{color:var(--teal);font-weight:800;text-transform:uppercase;letter-spacing:.05em}.tag{display:inline-block;background:#EAF7F6;border-radius:999px;padding:5px 9px;margin:4px;font-weight:700;font-size:.82rem}.point{padding:10px 0;border-bottom:1px solid #edf2f5}.point:last-child{border-bottom:0}.align{color:#47647A;font-weight:700;font-size:.86rem}table{width:100%;border-collapse:collapse}th,td{border:1px solid var(--border);padding:9px;vertical-align:top}th{background:#EAF7F6;text-align:left}.callout{background:#FFF3D6;border-radius:12px;padding:12px}
 @media(max-width:600px){main{padding:10px}}
-</style></head><body><main>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style></head><body><main>
 <section class="hero"><div class="eyebrow">PulmoLearn · Mechanical Ventilation 1.3</div><h1>Competency Guide</h1><p><strong>Set Up the Patient: Initial Ventilator & NIPPV Settings</strong></p><span class="tag">C5 · Initial invasive settings + alarms</span><span class="tag">C6 · Disease-specific invasive/NIPPV setup</span></section>
 <section class="card"><h2>How to use this guide</h2><p>This guide identifies the knowledge and decisions students should be able to make after Lesson 1.3. Quiz alignments are shown as Q#. No Unit Competency Exam E# is assigned here because a current Unit 1 exam was not used to create this package.</p><div class="callout"><strong>Clinical sequence:</strong> Know the patient → calculate PBW → choose VT and rate → protect timing → select FiO₂ + PEEP → choose flow/Ti/trigger → apply settings → read PIP/VTE/total rate/V̇E → set alarms → reassess.</div></section>
 <section class="card"><h2>C5 · Establish Safe Initial Invasive Settings and Alarms</h2>
@@ -37,4 +58,74 @@
 <tr><td>ARDS / stiff lungs</td><td>Near 6 mL/kg PBW initially</td><td>Rate may carry more V̇E</td><td>FiO₂ + PEEP often increased</td><td>Lung protection + oxygenation</td></tr>
 <tr><td>Post-arrest</td><td>PBW-based lung protection</td><td>Conventional initial rate</td><td>FiO₂ 1.0 until reliable measurement</td><td>Stabilize, then titrate</td></tr>
 </tbody></table></section>
-</main></body></html>
+</main>
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
+</body></html>
