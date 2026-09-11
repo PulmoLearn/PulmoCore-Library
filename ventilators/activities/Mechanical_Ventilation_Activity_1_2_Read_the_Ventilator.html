@@ -246,28 +246,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
 }
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 
 <script>
 window.PULMO_LESSON = {
@@ -379,7 +358,7 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
   <div class="meta-grid" aria-label="Activity details">
     <div><strong>Estimated time</strong><br>55–70 minutes</div>
     <div><strong>Practice style</strong><br>Progressive mastery</div>
-    <div><strong>Required stations</strong><br>7 + final workbench</div>
+    <div><strong>Required stations</strong><br>8 + final workbench</div>
     <div><strong>Optional practice</strong><br>Does not affect completion</div>
   </div>
 
@@ -445,8 +424,8 @@ window.LESSON_ID = window.PULMO_LESSON.lessonId;
 <section class="final-card locked" id="finalCard">
   <span class="kicker">Final ventilator workbench</span>
   <h2>Now read the ventilator with less scaffolding.</h2>
-  <p>Complete all seven mastery stations first. Then work through three integrated cases: obstructive resistance/air trapping, worsening compliance, and patient–ventilator synchrony.</p>
-  <div class="final-lock" id="finalLock">Complete all seven required mastery stations to unlock the final workbench.</div>
+  <p>Complete all eight mastery stations first. Then work through three integrated cases: obstructive resistance/air trapping, worsening compliance, and patient–ventilator synchrony.</p>
+  <div class="final-lock" id="finalLock">Complete all eight required mastery stations to unlock the final workbench.</div>
   <div id="finalArea" hidden></div>
 </section>
 
@@ -476,6 +455,17 @@ let finalAdvanceMessage="";
 const S = (id,title,level,summary,required,optional=[]) => ({id,title,level,summary,required,optional});
 
 const stations = [
+S("hardware","Follow the Machine","Remember → Understand",
+  "Connect the breath-delivery concepts to the basic ventilator hardware: sensors, inspiratory gas delivery, circuit, expiratory valve, PEEP, and alarms.",
+[
+ {id:"h1",q:"Which part of the ventilator detects pressure or flow changes that can be used to recognize a patient trigger?",a:["Pressure/flow sensors","Humidifier","Gas cylinder label","PEEP dial only"],c:0,why:"Pressure and flow sensors provide the measurements used for triggering, monitoring, graphics, and alarms."},
+ {id:"h2",q:"What is the main job of the inspiratory gas-delivery system during inspiration?",a:["Regulate gas flow and pressure toward the patient according to the selected breath target","Measure patient height","Create the patient's spontaneous effort","Maintain the expiratory baseline after the breath ends"],c:0,why:"The inspiratory system generates and regulates gas delivery according to the selected volume, pressure, flow, and timing strategy."},
+ {id:"h3",q:"Which component allows exhaled gas to leave while helping maintain PEEP at baseline?",a:["Expiratory valve","Inspiratory valve","Humidifier reservoir","Oxygen analyzer only"],c:0,why:"The expiratory valve controls the expiratory pathway and helps maintain the selected baseline pressure."},
+ {id:"h4",q:"A circuit disconnect causes expected pressure and exhaled volume to fall. What makes that problem visible to the ventilator?",a:["Sensors compare measured circuit behavior with expected pressure, flow, and volume","The ventilator recalculates PBW","The ventilator recognizes the disease name","The humidifier closes the circuit"],c:0,why:"Circuit pressure, flow, and returned volume change when the circuit is open, allowing the monitoring and alarm system to detect the problem."}
+],[
+ {id:"ho1",q:"Why does an intubated patient need an appropriate humidification strategy?",a:["The artificial airway bypasses normal upper-airway warming and humidification","Humidification determines PBW","Humidification replaces PEEP","It prevents all ventilator alarms"],c:0,why:"An artificial airway bypasses the upper airway, so inspired gas requires appropriate humidification."}
+]),
+
 S("breath","Describe the Breath","Remember → Understand",
   "Reinforce trigger, control/limit, cycle, baseline, and the difference between patient-triggered and machine-triggered breaths.",
 [
@@ -664,6 +654,9 @@ function allStationsComplete(){
   return stations.every(stationComplete);
 }
 function stationVisual(id){
+  if(id==="hardware"){
+    return `<div class="breath-strip"><div><b>Sensors</b>Detect pressure/flow and patient effort</div><div><b>Inspiratory system</b>Delivers gas to the selected target</div><div><b>Expiratory valve</b>Allows exhalation and maintains PEEP</div><div><b>Alarms</b>Compare measured behavior with expected limits</div></div>`;
+  }
   if(id==="breath"){
     return `<div class="breath-strip"><div><b>Trigger</b>Starts inspiration</div><div><b>Control / Limit</b>What is targeted during inspiration</div><div><b>Cycle</b>Ends inspiration</div><div><b>Baseline</b>PEEP during expiration</div></div>`;
   }
@@ -935,75 +928,5 @@ setTimeout(()=>{
   if(parseFloat(text)>=100) sendCanvasCompletion('restored-completion');
 },900);
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
