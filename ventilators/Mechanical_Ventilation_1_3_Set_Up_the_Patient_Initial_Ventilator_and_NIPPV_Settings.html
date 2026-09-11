@@ -22,10 +22,10 @@ window.PULMO_LESSON = {
   lessonTitle: "Set Up the Patient: Initial Ventilator & NIPPV Settings",
   title: "Set Up the Patient: Initial Ventilator & NIPPV Settings",
   displayTitle: "Mechanical Ventilation 1.3 · Set Up the Patient: Initial Ventilator & NIPPV Settings",
-  estimatedMinutes: 115,
-  estimatedCompletionTime: "100–120 minutes",
+  estimatedMinutes: 125,
+  estimatedCompletionTime: "110–130 minutes",
   difficulty: "First Exposure · Initial Setup to Clinical Application",
-  version: "2026.09.10-v2",
+  version: "2026.09.10-v3-foundation",
   lastUpdated: "2026-09-10",
   author: "PulmoLearn",
   competencies: [
@@ -80,6 +80,7 @@ window.PULMO_LESSON = {
   },
   interactions: [
     {id:"mv_1_3_problem_check",type:"clinical-orientation",title:"Name the Ventilator Problem",required:true,estimatedMinutes:5},
+    {id:"mv_1_3_mode_check",type:"knowledge-check",title:"Decode the Invasive Mode",required:true,estimatedMinutes:7},
     {id:"mv_1_3_pbw_lab",type:"calculation-practice",title:"Calculate PBW and VT Boundaries",required:true,estimatedMinutes:10},
     {id:"mv_1_3_ve_lab",type:"calculation-practice",title:"Build Minute Ventilation",required:true,estimatedMinutes:10},
     {id:"mv_1_3_disease_explorer",type:"explorer",title:"Same Ventilator, Different Patient",required:true,estimatedMinutes:8},
@@ -150,28 +151,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
 @media(max-width:850px){.content-layout{grid-template-columns:1fr}.side-nav{display:none}.lesson-stack-top,.lesson-stack{grid-column:1}.hero-meta,.competency-grid,.question-grid,.compare-grid,.mechanics-grid,.scenario-grid,.alarm-grid,.detail-grid{grid-template-columns:1fr}.tile-grid{grid-template-columns:1fr}.equation-row{grid-template-columns:1fr}.equation-op{text-align:center}.setting-strip{grid-template-columns:repeat(2,1fr)}.decision-flow{grid-template-columns:1fr}.decision-step:last-child{grid-column:auto}}
 @media(max-width:560px){.top-nav{padding:12px 14px}.brand-tagline,.course-menu-button{display:none}.main-content{padding:20px 10px 52px}.hero,.info-card,.case-card,.summary-card{border-radius:17px}.hero h1{font-size:2.1rem}.setting-strip{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 
 <body>
@@ -198,7 +178,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
   <h1>Set Up the Patient: Initial Ventilator &amp; NIPPV Settings</h1>
   <p>You already know why a patient needs support and how the ventilator delivers a breath. Now you will build the first safe plan: choose the tidal volume, rate, timing, oxygen, PEEP, trigger, and alarms that fit <em>this</em> patient—not a memorized row of “normal settings.”</p>
   <div class="hero-meta">
-    <div><strong>Estimated time</strong><br/>100–120 minutes</div>
+    <div><strong>Estimated time</strong><br/>110–130 minutes</div>
     <div><strong>Primary level</strong><br/>Understand → Apply → Analyze</div>
     <div><strong>Clinical question</strong><br/>What should I set first, why does it fit this patient, and what could make it unsafe?</div>
   </div>
@@ -221,6 +201,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
 <aside class="side-nav" aria-label="Lesson quick navigation">
   <h3>Lesson 1.3</h3>
   <a href="#patient">Start With the Patient</a>
+  <a href="#modes">Decode the Invasive Mode</a>
   <a href="#pbw">PBW &amp; VT Boundaries</a>
   <a href="#minute">Minute Ventilation</a>
   <a href="#disease">Disease Changes the Plan</a>
@@ -273,6 +254,75 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
       <button class="knowledge-option" data-correct="false" data-feedback="Large tidal volumes increase lung stress and are not the protective strategy for ARDS.">Use the largest tolerable tidal volume</button>
     </div><div class="quiz-feedback" role="status"></div></div>
     <div class="activity-status" id="problemStatus">0 / 3 answered correctly.</div>
+  </article>
+</section>
+
+
+<section class="info-card" id="modes">
+  <div class="section-kicker"><span class="step">1B</span><span class="text">Mode foundation for initial invasive setup</span></div>
+  <h2>Decode the Invasive Mode Before You Set the Numbers</h2>
+  <p class="lead">For a newly intubated, sedated patient, the immediate goal is reliable ventilatory support. You do not need to memorize dozens of manufacturer-specific mode names. Start by decoding two parts of the mode: <strong>how mandatory breaths are organized</strong> and <strong>whether volume or pressure is controlled.</strong></p>
+
+  <div class="clinical-rule"><strong>Think in two questions:</strong><br>
+  <strong>1. AC or SIMV?</strong> How are mandatory breaths delivered?<br>
+  <strong>2. VC or PC?</strong> Is the mandatory breath volume-controlled or pressure-controlled?</div>
+
+  <div class="table-wrap">
+    <table class="clinical-table">
+      <thead><tr><th>Mode</th><th>What mandatory breaths do</th><th>If the patient triggers</th><th>What varies</th></tr></thead>
+      <tbody>
+        <tr><td>AC-VC</td><td>Every mandatory breath targets the selected VT/flow strategy.</td><td>A patient-triggered breath still receives the full preset volume-controlled assist-control breath.</td><td>Pressure changes when mechanics change.</td></tr>
+        <tr><td>AC-PC</td><td>Every mandatory breath targets the selected inspiratory pressure and inspiratory time.</td><td>A patient-triggered breath still receives the full preset pressure-controlled assist-control breath.</td><td>Delivered VT changes when mechanics, effort, or timing change.</td></tr>
+        <tr><td>SIMV-VC</td><td>A set number of synchronized mandatory breaths are volume-controlled.</td><td>The ventilator synchronizes mandatory breaths with patient effort when possible; additional breaths between mandatory breaths are spontaneous.</td><td>Mandatory-breath pressure varies with mechanics.</td></tr>
+        <tr><td>SIMV-PC</td><td>A set number of synchronized mandatory breaths are pressure-controlled.</td><td>The ventilator synchronizes mandatory breaths with patient effort when possible; additional breaths between mandatory breaths are spontaneous.</td><td>Mandatory-breath VT varies with mechanics and timing.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card"><span class="mini-label">Assist-control (AC)</span><h3>Every detected breath can receive the full preset mandatory target</h3><p>If a patient triggers above the set backup rate, those additional triggered breaths can still receive the full AC target. Patient-triggered does not mean unsupported.</p></div>
+    <div class="compare-card"><span class="mini-label">SIMV</span><h3>Mandatory breaths are scheduled and synchronized</h3><p>The ventilator guarantees the selected number of mandatory breaths. Additional patient breaths between those mandatory breaths are spontaneous and may receive separate support if pressure support is later added.</p></div>
+  </div>
+
+  <h3 style="margin-top:18px">Three breath ideas worth recognizing</h3>
+  <div class="three-grid">
+    <div class="micro-card"><strong>Machine-triggered mandatory breath</strong><br/>The ventilator starts the breath because the scheduled time is reached.</div>
+    <div class="micro-card"><strong>Patient-triggered assisted mandatory breath</strong><br/>The patient starts the breath, but the ventilator still delivers the preset mandatory target.</div>
+    <div class="micro-card"><strong>Spontaneous breath</strong><br/>The patient initiates the breath and the breath is not a scheduled mandatory breath. This becomes more important later during spontaneous support and liberation.</div>
+  </div>
+
+  <div class="pearl"><strong>For Unit 1:</strong> AC-VC, AC-PC, SIMV-VC, and SIMV-PC are the invasive mode families you need to safely build an initial setup. Pressure support is mentioned only so you can recognize it; it becomes clinically important when the patient is awake and breathing spontaneously, especially during liberation.</div>
+
+  <div class="warning"><strong>Pressure-control notation:</strong> In this course, a pressure-control setting written as <strong>ΔP 18 cm H₂O above PEEP</strong> means the inspiratory pressure target is 18 cm H₂O above the PEEP baseline. The resulting VT must be measured and reassessed because pressure control does not guarantee a fixed VT.</div>
+
+  <article class="activity-card require-complete" data-activity-id="mv_1_3_mode_check" data-activity-name="Decode the Invasive Mode" data-activity-type="knowledge-check" data-required="true">
+    <span class="eyebrow">Guided Practice · Mode decoding</span>
+    <h3>Decode the Invasive Mode</h3>
+    <div class="knowledge-question" data-question-id="m1"><p>A patient triggers an AC-VC breath. What happens?</p><div class="quiz-options">
+      <button class="knowledge-option" data-correct="true" data-feedback="In assist-control volume control, a patient-triggered breath still receives the preset full volume-controlled mandatory target.">The patient starts inspiration and still receives the preset AC-VC target</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="Patient-triggered does not mean spontaneous or unsupported in assist-control.">The ventilator provides no mandatory support</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="The breath does not automatically switch to pressure support.">The breath automatically becomes pressure support</button>
+    </div><div class="quiz-feedback" role="status"></div></div>
+
+    <div class="knowledge-question" data-question-id="m2"><p>Which statement correctly compares AC-PC with AC-VC?</p><div class="quiz-options">
+      <button class="knowledge-option" data-correct="true" data-feedback="AC describes how breaths are organized. PC versus VC describes the controlled inspiratory variable.">Both are assist-control; AC-PC targets pressure while AC-VC targets volume</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="Pressure control does not guarantee VT, and volume control does not guarantee a fixed pressure.">AC-PC guarantees VT while AC-VC guarantees pressure</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="Both are invasive full-support mode families and either can be used with appropriate settings and monitoring.">Only AC-VC can provide full support</button>
+    </div><div class="quiz-feedback" role="status"></div></div>
+
+    <div class="knowledge-question" data-question-id="m3"><p>What makes SIMV different from assist-control?</p><div class="quiz-options">
+      <button class="knowledge-option" data-correct="true" data-feedback="SIMV guarantees a selected number of synchronized mandatory breaths while allowing spontaneous breaths between them.">SIMV organizes a set number of synchronized mandatory breaths and permits spontaneous breaths between them</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="SIMV can use either volume control or pressure control for its mandatory breaths.">SIMV means all breaths must be pressure controlled</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="SIMV still provides mandatory breaths at the selected rate.">SIMV provides no mandatory breaths</button>
+    </div><div class="quiz-feedback" role="status"></div></div>
+
+    <div class="knowledge-question" data-question-id="m4"><p>In AC-PC, the selected inspiratory pressure and Ti remain unchanged but compliance worsens. What should you expect?</p><div class="quiz-options">
+      <button class="knowledge-option" data-correct="true" data-feedback="Pressure control holds the pressure target; when the respiratory system becomes stiffer, delivered VT may fall.">Delivered VT may decrease</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="The ventilator does not automatically guarantee the same VT in pressure control.">Delivered VT must remain unchanged</button>
+      <button class="knowledge-option" data-correct="false" data-feedback="The selected pressure target remains the target unless the clinician changes it.">The ventilator must increase the selected pressure automatically</button>
+    </div><div class="quiz-feedback" role="status"></div></div>
+
+    <div class="activity-status" id="modeStatus">0 / 4 answered correctly.</div>
   </article>
 </section>
 
@@ -941,6 +991,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   initializeProgressiveSections();
   const knowledge=[
     ["mv_1_3_problem_check","problemStatus"],
+    ["mv_1_3_mode_check","modeStatus"],
     ["mv_1_3_pbw_lab","pbwStatus"],
     ["mv_1_3_ve_lab","veStatus"],
     ["mv_1_3_timing_lab","timingStatus"],
@@ -961,75 +1012,5 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 </script>
 <script type="module" src="/assets/progress-tracker.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
