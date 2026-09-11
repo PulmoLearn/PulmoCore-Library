@@ -47,6 +47,21 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
 .ve-box{border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;background:#fff}.ve-box b{display:block;color:var(--teal2);font-size:.78rem;text-transform:uppercase}.ve-box span{font-family:monospace;font-weight:800;font-size:1.15rem;color:var(--navy)}
 .ve-box.on-target{background:#E8F8F1;border-color:#9DD7BF}.ve-box.off-target{background:#FFF6E5;border-color:#F0D39B}
 .advanced-q{border:1px solid var(--border);border-radius:14px;padding:16px;background:#FBFDFE;margin-top:12px}
+.review-shell{background:#fff;border:1px solid var(--border);border-radius:18px;padding:20px;margin-top:18px}
+.review-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
+.review-tab{border:1px solid var(--border);background:#fff;border-radius:999px;padding:9px 13px;font-weight:800;color:var(--navy)}
+.review-tab[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.review-panel{display:none}.review-panel.active{display:block}
+.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.quick-card{border:1px solid var(--border);border-radius:13px;padding:13px;background:#FBFDFE}
+.quick-card h4{margin:0 0 6px;color:var(--navy)}
+.range-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.92rem}
+.range-table th,.range-table td{border:1px solid var(--border);padding:9px;vertical-align:top;text-align:left}
+.range-table th{background:#EEF6F8;color:var(--navy)}
+.range-table td:first-child{font-weight:800;color:var(--navy)}
+.review-note{background:#FFF6E5;border:1px solid #F0D39B;border-radius:12px;padding:11px 13px;margin-top:12px}
+@media(max-width:900px){.quick-grid{grid-template-columns:1fr}.range-table{font-size:.84rem}}
+
 .param-panel{display:none;margin-top:16px;border:2px solid var(--navy);border-radius:16px;background:#F7FBFD;padding:16px}
 .param-panel.show{display:block}.param-panel h3{margin-bottom:6px}
 .param-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
@@ -64,37 +79,88 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
 
 @media(max-width:900px){.sim{grid-template-columns:repeat(2,1fr)}.patient{grid-template-columns:1fr}.data-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.wrap{padding:10px}.grid,.sim,.result-grid{grid-template-columns:1fr}.mode-control{grid-column:auto}.data-grid{grid-template-columns:1fr}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="wrap">
 <header class="hero">
   <div class="eyebrow">Mechanical Ventilation · Activity 1.3</div>
   <h1>Build the Ventilator</h1>
-  <p>First choose the best <strong>complete set of sample settings</strong> for each patient. Then calculate the patient-specific targets, set the simulated ventilator yourself, and finish with five close-call cases where several choices are plausible but one is best.</p>
+  <p>Use the reference tabs whenever needed, then choose the best <strong>complete set of sample settings</strong> for each patient. Then calculate the patient-specific targets, set the simulated ventilator yourself, and finish with five close-call cases where several choices are plausible but one is best.</p>
   <div class="meta"><span class="tag">C5 · Initial settings + alarms</span><span class="tag">C6 · Disease-specific setup</span><span class="tag">2027 RTE clinical judgment</span></div>
 </header>
+
+<section class="review-shell" id="reviewGuide">
+  <div class="eyebrow">Reference guide · use throughout the activity</div>
+  <h2 style="margin-bottom:6px;color:var(--navy)">Initial Ventilator Setup Quick Review</h2>
+  <p style="margin-top:0">Use these tabs whenever you need a reminder. These are <strong>starting ranges and classroom decision rules</strong>, not rigid prescriptions. The patient, monitored response, ventilator, and local policy always matter.</p>
+
+  <div class="review-tabs" role="tablist" aria-label="Initial ventilator setup review">
+    <button class="review-tab" type="button" role="tab" aria-selected="true" aria-controls="tab-base" id="tabbtn-base">Base setup</button>
+    <button class="review-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-disease" id="tabbtn-disease">Disease differences</button>
+    <button class="review-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-oxygen" id="tabbtn-oxygen">FiO₂ + PEEP</button>
+    <button class="review-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-alarms" id="tabbtn-alarms">Monitored values + alarms</button>
+    <button class="review-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-modes" id="tabbtn-modes">Modes</button>
+  </div>
+
+  <div class="review-panel active" id="tab-base" role="tabpanel" aria-labelledby="tabbtn-base">
+    <div class="quick-grid">
+      <div class="quick-card"><h4>1 · Calculate PBW first</h4><div class="formula">Male: 50 + 2.3(in − 60)</div><br><br><div class="formula">Female: 45.5 + 2.3(in − 60)</div><p>Use PBW, not actual body weight, to choose VT.</p></div>
+      <div class="quick-card"><h4>2 · Estimate ventilation need</h4><div class="formula">Ideal V̇E ≈ 10% of PBW in L/min</div><p>Then choose a disease-appropriate VT and solve for a reasonable rate. In this activity, selected V̇E should be within ±0.5 L/min of the estimated ideal.</p></div>
+      <div class="quick-card"><h4>3 · Choose VT</h4><p><strong>Usual starting range:</strong> about 6–8 mL/kg PBW.</p><p><strong>ARDS:</strong> start near 6 mL/kg PBW.</p><p><strong>Board-style ceiling:</strong> avoid choosing VT above 10 mL/kg PBW.</p></div>
+      <div class="quick-card"><h4>4 · Start with a reasonable rate</h4><p><strong>Typical adult:</strong> about 12–18/min.</p><p><strong>Obstructive disease:</strong> often about 8–12/min to protect expiratory time.</p><p><strong>ARDS:</strong> rate may need to be higher because VT is smaller.</p></div>
+      <div class="quick-card"><h4>5 · Flow + inspiratory time</h4><p><strong>Common initial VC flow:</strong> about 50–60 L/min.</p><p><strong>Obstructive disease:</strong> often 60–100 L/min so inspiration finishes sooner and expiration is longer.</p><p><strong>Typical Ti:</strong> about 0.8–1.0 sec; obstructive patients may benefit from roughly 0.6–1.0 sec.</p></div>
+      <div class="quick-card"><h4>6 · Trigger + reassess</h4><p>Set triggering sensitive enough to detect effort without auto-triggering. After setup, verify delivered VT, total rate, pressure, oxygenation, synchrony, and alarms.</p></div>
+    </div>
+    <div class="review-note"><strong>Core sequence:</strong> PBW → VT → V̇E → rate → timing/flow → FiO₂ + PEEP → apply settings → read monitored parameters → set alarms.</div>
+  </div>
+
+  <div class="review-panel" id="tab-disease" role="tabpanel" aria-labelledby="tabbtn-disease">
+    <table class="range-table">
+      <thead><tr><th>Patient pattern</th><th>VT</th><th>Rate</th><th>Ti / flow</th><th>PEEP</th><th>Key priority</th></tr></thead>
+      <tbody>
+        <tr><td>Normal lungs / surgical</td><td>6–8 mL/kg PBW</td><td>12–18/min</td><td>Ti ~0.8–1.0 sec; flow ~50–60 L/min</td><td>Usually ~5 cm H₂O</td><td>Do not over-treat a normal lung.</td></tr>
+        <tr><td>Neuromuscular weakness</td><td>6–8 mL/kg PBW</td><td>Enough to replace failing ventilation, often 12–18/min</td><td>Conventional timing</td><td>Usually modest</td><td>Treat pump failure; oxygen may be normal.</td></tr>
+        <tr><td>COPD</td><td>Usually 6–8 mL/kg; may use the higher end if needed to avoid excessive rate</td><td>Often 8–12/min</td><td>Shorter Ti; flow commonly 60–100 L/min</td><td>Modest and individualized</td><td>Protect expiratory time; avoid air trapping.</td></tr>
+        <tr><td>Severe asthma</td><td>Usually 6–8 mL/kg PBW</td><td>Often 8–12/min</td><td>Short Ti / higher flow</td><td>Usually modest initially</td><td>Maximize expiratory time; do not chase a normal PaCO₂ with unsafe settings.</td></tr>
+        <tr><td>ARDS / stiff lungs</td><td>Near 6 mL/kg PBW initially</td><td>May be higher to maintain V̇E</td><td>Conventional to moderately short Ti</td><td>Often increased with oxygen need</td><td>Lung protection + oxygenation.</td></tr>
+        <tr><td>Post-arrest</td><td>PBW-based lung-protective VT</td><td>Usually conventional starting rate</td><td>Conventional timing</td><td>Usually modest</td><td>FiO₂ 1.0 until oxygenation can be measured reliably, then titrate.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="review-panel" id="tab-oxygen" role="tabpanel" aria-labelledby="tabbtn-oxygen">
+    <div class="quick-grid">
+      <div class="quick-card"><h4>FiO₂ follows the oxygen problem</h4><p>Do not automatically choose 100% just because a patient is intubated. Stable patients with normal oxygenation may need little or no supplemental oxygen.</p></div>
+      <div class="quick-card"><h4>PEEP + FiO₂ work together</h4><p>PEEP supports recruitment and baseline alveolar pressure. Increase oxygenation support when the disease requires it rather than treating every patient the same.</p></div>
+      <div class="quick-card"><h4>Special cases</h4><p><strong>COPD:</strong> use the lowest FiO₂ that reaches the target, commonly 88–92% in hypercapnic-risk patients.</p><p><strong>ARDS/pulmonary edema:</strong> higher FiO₂ and PEEP may be needed.</p><p><strong>Post-arrest:</strong> FiO₂ 1.0 until reliable oxygenation data are available.</p></div>
+    </div>
+  </div>
+
+  <div class="review-panel" id="tab-alarms" role="tabpanel" aria-labelledby="tabbtn-alarms">
+    <div class="quick-grid">
+      <div class="quick-card"><h4>High pressure</h4><p>Use the measured PIP, then set the high-pressure alarm roughly <strong>10 cm H₂O above PIP</strong>.</p></div>
+      <div class="quick-card"><h4>Low pressure</h4><p>Use the measured PIP, then set low pressure about <strong>5–10 cm H₂O below PIP</strong>.</p></div>
+      <div class="quick-card"><h4>Low exhaled VT</h4><p>Use measured VTE, then set the low VT alarm about <strong>10% below expected/measured VTE</strong>.</p></div>
+      <div class="quick-card"><h4>Minute ventilation</h4><p>Low/high V̇E alarms are commonly placed near the expected baseline and individualized to the patient. In this activity, the selected V̇E itself must also match the calculated target.</p></div>
+      <div class="quick-card"><h4>Read before you alarm</h4><p>Do not set pressure or volume alarms from memory alone. Apply the settings, observe PIP and VTE, then place alarms around what the ventilator is actually measuring.</p></div>
+      <div class="quick-card"><h4>Alarm numbers are starting rules</h4><p>These are practical classroom conventions. Real alarm settings depend on the patient, mode, ventilator, institution, and clinical risk.</p></div>
+    </div>
+  </div>
+
+  <div class="review-panel" id="tab-modes" role="tabpanel" aria-labelledby="tabbtn-modes">
+    <table class="range-table">
+      <thead><tr><th>Mode</th><th>What you set</th><th>What varies</th><th>Unit 1 takeaway</th></tr></thead>
+      <tbody>
+        <tr><td>AC-VC</td><td>VT, rate, flow/timing, PEEP, FiO₂</td><td>Pressure varies with mechanics</td><td>Every assisted mandatory breath receives the selected VC target.</td></tr>
+        <tr><td>AC-PC</td><td>ΔP above PEEP, rate, Ti, PEEP, FiO₂</td><td>Delivered VT varies</td><td>Pressure is selected; VT is the result and must be checked.</td></tr>
+        <tr><td>SIMV-VC</td><td>Mandatory VT + rate plus timing/PEEP/FiO₂</td><td>Mandatory-breath pressure varies</td><td>Mandatory breaths are synchronized; extra breaths may be spontaneous.</td></tr>
+        <tr><td>SIMV-PC</td><td>Mandatory ΔP + rate + Ti plus PEEP/FiO₂</td><td>Mandatory-breath VT varies</td><td>Pressure-controlled mandatory breaths with spontaneous breaths possible between them.</td></tr>
+      </tbody>
+    </table>
+    <div class="review-note"><strong>For this activity:</strong> AC versus SIMV usually is not the deciding factor. Focus on whether the VT/resulting VT, rate, timing, oxygenation settings, and alarms fit the patient. CPAP/NIV matters when the type of support itself is the clinical decision.</div>
+  </div>
+</section>
 
 <div class="progress"><div class="bar"><div class="fill" id="progressFill"></div></div><div class="ptext" id="progressText">Part 1 · 0 of 6 scenarios mastered</div></div>
 
@@ -360,7 +426,11 @@ function makeControls(){
 function setValue(d,c,dir){
  let current=Number(d.dataset.value),v;
  if(current===0){
-   v=dir>0?c.min:0;
+   if(dir>0){
+     v=c.min>0?c.min:c.step;
+   }else{
+     v=0;
+   }
  }else{
    v=current+dir*c.step;
    if(v<c.min)v=0;
@@ -609,6 +679,18 @@ function renderAdvanced(){
    box.appendChild(b);
  });
 }
+
+function initReviewTabs(){
+ const tabs=[...document.querySelectorAll(".review-tab")];
+ const panels=[...document.querySelectorAll(".review-panel")];
+ tabs.forEach(tab=>tab.addEventListener("click",()=>{
+   tabs.forEach(t=>t.setAttribute("aria-selected","false"));
+   panels.forEach(p=>p.classList.remove("active"));
+   tab.setAttribute("aria-selected","true");
+   document.getElementById(tab.getAttribute("aria-controls")).classList.add("active");
+ }));
+}
+initReviewTabs();
 makeControls();renderDirect();updateProgress();updateMinuteVentilation();
 })();
 </script>
@@ -630,75 +712,5 @@ makeControls();renderDirect();updateProgress();updateMinuteVentilation();
   }catch(e){console.warn("LTI score passback unavailable",e);}
 })();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
