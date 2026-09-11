@@ -22,10 +22,10 @@ window.PULMO_LESSON = {
   lessonTitle: "Set Up the Patient: Initial Ventilator & NIPPV Settings",
   title: "Set Up the Patient: Initial Ventilator & NIPPV Settings",
   displayTitle: "Mechanical Ventilation 1.3 · Set Up the Patient: Initial Ventilator & NIPPV Settings",
-  estimatedMinutes: 125,
-  estimatedCompletionTime: "110–130 minutes",
+  estimatedMinutes: 130,
+  estimatedCompletionTime: "115–135 minutes",
   difficulty: "First Exposure · Initial Setup to Clinical Application",
-  version: "2026.09.10-v3-foundation",
+  version: "2026.09.10-v4-activity-aligned",
   lastUpdated: "2026-09-10",
   author: "PulmoLearn",
   competencies: [
@@ -151,28 +151,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
 @media(max-width:850px){.content-layout{grid-template-columns:1fr}.side-nav{display:none}.lesson-stack-top,.lesson-stack{grid-column:1}.hero-meta,.competency-grid,.question-grid,.compare-grid,.mechanics-grid,.scenario-grid,.alarm-grid,.detail-grid{grid-template-columns:1fr}.tile-grid{grid-template-columns:1fr}.equation-row{grid-template-columns:1fr}.equation-op{text-align:center}.setting-strip{grid-template-columns:repeat(2,1fr)}.decision-flow{grid-template-columns:1fr}.decision-step:last-child{grid-column:auto}}
 @media(max-width:560px){.top-nav{padding:12px 14px}.brand-tagline,.course-menu-button{display:none}.main-content{padding:20px 10px 52px}.hero,.info-card,.case-card,.summary-card{border-radius:17px}.hero h1{font-size:2.1rem}.setting-strip{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 
 <body>
@@ -199,7 +178,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
   <h1>Set Up the Patient: Initial Ventilator &amp; NIPPV Settings</h1>
   <p>You already know why a patient needs support and how the ventilator delivers a breath. Now you will build the first safe plan: choose the tidal volume, rate, timing, oxygen, PEEP, trigger, and alarms that fit <em>this</em> patient—not a memorized row of “normal settings.”</p>
   <div class="hero-meta">
-    <div><strong>Estimated time</strong><br/>110–130 minutes</div>
+    <div><strong>Estimated time</strong><br/>115–135 minutes</div>
     <div><strong>Primary level</strong><br/>Understand → Apply → Analyze</div>
     <div><strong>Clinical question</strong><br/>What should I set first, why does it fit this patient, and what could make it unsafe?</div>
   </div>
@@ -230,6 +209,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
   <a href="#fio2">Choose FiO₂</a>
   <a href="#peep">FiO₂ + PEEP</a>
   <a href="#flow">Flow, Ti &amp; Trigger</a>
+  <a href="#observe">Read Monitored Parameters</a>
   <a href="#alarms">Set Alarms</a>
   <a href="#invasive">Build the Ventilator</a>
   <a href="#niv">Build NIPPV</a>
@@ -561,11 +541,37 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
     </div><div class="quiz-feedback" role="status"></div></div>
     <div class="activity-status" id="flowTriggerStatus">0 / 2 answered correctly.</div>
   </article>
+
+<div class="pearl"><strong>VC versus PC flow:</strong> In volume control, inspiratory flow is commonly a setting you select. In pressure control, you select inspiratory pressure and inspiratory time; the ventilator generates a variable flow pattern to achieve the pressure target, so you monitor the resulting VT rather than setting a fixed inspiratory flow.</div>
+</section>
+
+
+<section class="info-card blue" id="observe">
+  <div class="section-kicker"><span class="step">8B</span><span class="text">Set → observe → alarm</span></div>
+  <h2>Apply the Settings, Then Read What the Ventilator Actually Delivers</h2>
+  <p class="lead">Initial settings are only the starting prescription. Before you can place meaningful alarms, you need to see what the patient–ventilator system is actually producing.</p>
+
+  <div class="four-grid">
+    <div class="micro-card"><strong>Set VT</strong><br/>What you prescribe in volume control.</div>
+    <div class="micro-card"><strong>Exhaled VT (VTE)</strong><br/>What the ventilator actually measures coming back from the patient.</div>
+    <div class="micro-card"><strong>Set rate</strong><br/>The minimum mandatory rate you prescribe.</div>
+    <div class="micro-card"><strong>Total rate</strong><br/>The actual number of breaths delivered when patient-triggered breaths are included.</div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card"><span class="mini-label">Pressure</span><h3>Selected pressure is not the same as measured PIP</h3><p>In pressure control you choose the pressure target above PEEP, but the ventilator still reports measured peak inspiratory pressure (PIP). In volume control, PIP varies with resistance, compliance, flow, and the selected VT.</p></div>
+    <div class="compare-card"><span class="mini-label">Minute ventilation</span><h3>Calculated V̇E and measured V̇E should make physiologic sense</h3><p>You can estimate the intended V̇E from VT × rate, but the ventilator also reports measured V̇E using actual exhaled VT and total rate. Compare the two and investigate unexpected differences.</p></div>
+  </div>
+
+  <div class="clinical-rule"><strong>Operational sequence:</strong> Set the ventilator → allow the breath pattern to stabilize → read PIP, VTE, total rate, and measured V̇E → then place alarms around the actual monitored values.</div>
+
+  <div class="pearl"><strong>Why this matters:</strong> In pressure control, VT is an outcome. In assisted ventilation, total rate may exceed the set rate. Alarm limits should be based on what the ventilator is actually measuring, not on a number memorized before the patient is connected.</div>
 </section>
 
 <section class="info-card" id="alarms">
   <div class="section-kicker"><span class="step">9</span><span class="text">Patient safety</span></div>
   <h2>Alarms Are Part of the Prescription</h2>
+  <div class="warning"><strong>Set alarms after you observe the monitored breath.</strong> Do not decide the high- or low-pressure alarms before you know the patient's actual PIP. Do not decide the low-VT alarm before you know the expected or measured VTE.</div>
   <p class="lead">Do not think of alarms as factory settings. The respiratory therapist sets limits that should detect a meaningful change in this patient's ventilation or circuit.</p>
   <div class="alarm-grid">
     <div class="alarm-card"><strong>High pressure</strong><small><b>Practical starting point:</b> about <b>10 cm H₂O above the observed PIP</b> in volume ventilation. This should detect a meaningful rise without alarming on every normal breath-to-breath change.</small></div>
@@ -617,6 +623,17 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,t
     </div><div class="quiz-feedback" role="status"></div></div>
     <div class="activity-status" id="alarmStatus">0 / 5 answered correctly.</div>
   </article>
+
+  <div class="worked-example">
+    <span class="eyebrow">Worked Example · Build alarms from monitored values</span>
+    <h3>Measured PIP 24 cm H₂O and VTE 500 mL</h3>
+    <div class="three-grid">
+      <div class="micro-card"><strong>High pressure</strong><br/>About 10 cm H₂O above PIP → <strong>~34 cm H₂O</strong></div>
+      <div class="micro-card"><strong>Low pressure</strong><br/>About 5–10 cm H₂O below PIP → <strong>~14–19 cm H₂O</strong></div>
+      <div class="micro-card"><strong>Low VTE</strong><br/>About 10% below 500 mL → <strong>~450 mL</strong></div>
+    </div>
+    <p style="margin-bottom:0">These are practical starting conventions for this course. Final alarm limits should be individualized to the patient, ventilator, clinical risk, and institutional policy.</p>
+  </div>
 </section>
 
 <section class="info-card" id="invasive">
@@ -1033,75 +1050,5 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 </script>
 <script type="module" src="/assets/progress-tracker.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
