@@ -1197,6 +1197,25 @@ section[id]{scroll-margin-top:118px;}
         button.disabled = true;
         button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); });
       });
+
+      // Rebuild guided-case navigation after progress-tracker.js restores saved
+      // correct answers. Without this, a restored correct stage can remain
+      // locked with its Continue Case button still disabled.
+      function syncGuidedCaseAfterRestore() {
+        caseStages.forEach((stage, index) => {
+          if (stage.dataset.correctAnswered !== "true") return;
+
+          const nextStage = caseStages[index + 1];
+          if (nextStage) nextStage.classList.remove("lesson-hidden");
+
+          // A restored correct stage has already been completed; mirror the
+          // normal post-Continue state instead of leaving a dead button behind.
+          const caseContinue = stage.querySelector(".case-next");
+          if (caseContinue) caseContinue.remove();
+        });
+      }
+
+      document.addEventListener("progressRestored", syncGuidedCaseAfterRestore);
     }
 
     function initializeProgressiveSections() {
@@ -1213,6 +1232,9 @@ section[id]{scroll-margin-top:118px;}
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
       navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
+      // progress-tracker.js restores saved completion after lesson initialization.
+      // Refresh Continue-button gating after that restoration completes.
+      document.addEventListener("progressRestored", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
     }
@@ -1229,7 +1251,7 @@ section[id]{scroll-margin-top:118px;}
     function initializeManifestationsSort() {
       const guardTarget = document.querySelector("[data-activity-id=\"respiratory_diseases_pulmonary_embolism_signs_sort\"]");
       if (guardTarget && guardTarget.dataset.signsSortReady === "true") return;
-      if (guardTarget) guardTarget.dataset.signsSortReady = "true"; const activity = document.querySelector("#manifestations .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
+      if (guardTarget) guardTarget.dataset.signsSortReady = "true"; const activity = document.querySelector("#diagnostics .activity-card.require-complete"); const button = document.getElementById("checkManifestationsSort"); const status = document.getElementById("manifestationsSortStatus"); if (!activity || !button) return; button.addEventListener("click", () => { const rows = Array.from(activity.querySelectorAll(".sort-row")); let correctCount = 0; rows.forEach(row => { const select = row.querySelector("select"); const correct = select.value === row.dataset.answer; row.classList.toggle("correct", correct); row.classList.toggle("incorrect", select.value !== "" && !correct); if (correct) correctCount++; }); status.textContent = `${correctCount} / ${rows.length} correct`; if (correctCount === rows.length) { status.textContent = "Sorting activity complete."; status.classList.add("complete"); markActivityComplete(activity); } }); }
 
     function initializeSequenceSort() {
       const guardTarget = document.querySelector('[data-activity-id="respiratory_diseases_pulmonary_embolism_management_sequence"]');
