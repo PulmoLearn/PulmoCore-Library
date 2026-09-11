@@ -1097,6 +1097,25 @@ section[id]{scroll-margin-top:118px;}
         button.disabled = true;
         button.addEventListener("click", () => { const currentStage = button.closest(".case-stage"); const currentIndex = caseStages.indexOf(currentStage); const nextStage = caseStages[currentIndex + 1]; if (!nextStage) return; nextStage.classList.remove("lesson-hidden"); if (currentIndex + 1 === caseStages.length - 1) markActivityComplete(document.getElementById("case-study")); const caseContinue = button.closest(".case-next"); if (caseContinue) caseContinue.remove(); });
       });
+
+      // progress-tracker.js restores correct case answers after this initializer runs.
+      // Rebuild the visible case stage state after restoration so a learner cannot
+      // return to a correct, locked answer with a disabled Continue Case button.
+      function syncGuidedCaseAfterRestore() {
+        caseStages.forEach((stage, index) => {
+          if (stage.dataset.correctAnswered !== "true") return;
+
+          const nextStage = caseStages[index + 1];
+          if (nextStage) nextStage.classList.remove("lesson-hidden");
+
+          // A restored correct stage has already been successfully completed.
+          // Mirror the normal post-Continue state instead of leaving a dead button.
+          const caseContinue = stage.querySelector(".case-next");
+          if (caseContinue) caseContinue.remove();
+        });
+      }
+
+      document.addEventListener("progressRestored", syncGuidedCaseAfterRestore);
     }
 
     function initializeProgressiveSections() {
@@ -1113,6 +1132,9 @@ section[id]{scroll-margin-top:118px;}
       sections.forEach((section, index) => { if (index >= sections.length - 1) return; const nextSection = sections[index + 1]; const nextTitle = getSectionTitle(nextSection); const wrapper = document.createElement("div"); wrapper.className = "section-continue"; wrapper.innerHTML = `<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`; wrapper.querySelector("button").addEventListener("click", () => { const button = wrapper.querySelector("button"); if (button.disabled) return; revealThrough(index + 1); wrapper.remove(); }); section.appendChild(wrapper); });
       navLinks.forEach(link => { link.addEventListener("click", event => { const target = document.querySelector(link.getAttribute("href")); if (!target || target.dataset.sectionIndex === undefined) return; event.preventDefault(); if (target.classList.contains("lesson-hidden")) { const currentVisible = sections.reduce((highest, section, index) => !section.classList.contains("lesson-hidden") ? index : highest, 0); updateNavState(currentVisible); return; } revealThrough(Number(target.dataset.sectionIndex)); }); });
       document.addEventListener("activityComplete", () => updateAllContinueStates());
+      // When progress-tracker.js restores a previously completed activity,
+      // refresh the progressive Continue button state as well.
+      document.addEventListener("progressRestored", () => updateAllContinueStates());
       const firstSection = sections[0]; if (firstSection) { const note = document.createElement("span"); note.className = "section-progress-note"; note.textContent = "Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing."; firstSection.appendChild(note); }
       updateNavState(0); updateAllContinueStates();
     }
