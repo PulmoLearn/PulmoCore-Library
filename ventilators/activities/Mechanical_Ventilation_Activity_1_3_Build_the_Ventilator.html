@@ -47,34 +47,24 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
 .ve-box{border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;background:#fff}.ve-box b{display:block;color:var(--teal2);font-size:.78rem;text-transform:uppercase}.ve-box span{font-family:monospace;font-weight:800;font-size:1.15rem;color:var(--navy)}
 .ve-box.on-target{background:#E8F8F1;border-color:#9DD7BF}.ve-box.off-target{background:#FFF6E5;border-color:#F0D39B}
 .advanced-q{border:1px solid var(--border);border-radius:14px;padding:16px;background:#FBFDFE;margin-top:12px}
+.param-panel{display:none;margin-top:16px;border:2px solid var(--navy);border-radius:16px;background:#F7FBFD;padding:16px}
+.param-panel.show{display:block}.param-panel h3{margin-bottom:6px}
+.param-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.param{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.param b{display:block;color:var(--teal2);font-size:.76rem;text-transform:uppercase;letter-spacing:.04em}
+.param span{display:block;font-family:monospace;font-weight:800;font-size:1.25rem;color:var(--navy);margin-top:4px}
+.alarm-stage{display:none;margin-top:16px}.alarm-stage.show{display:block}
+.stage-banner{background:#EAF7F6;border:1px solid #BFE4DF;border-radius:12px;padding:11px 13px;margin-top:14px}
+@media(max-width:900px){.param-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.param-grid{grid-template-columns:1fr}}
+
 .advanced-q .choices{margin-top:10px}
 @media(max-width:900px){.calc-grid{grid-template-columns:repeat(2,1fr)}.ve-display{grid-template-columns:1fr}}
 @media(max-width:560px){.calc-grid{grid-template-columns:1fr}}
 
 @media(max-width:900px){.sim{grid-template-columns:repeat(2,1fr)}.patient{grid-template-columns:1fr}.data-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.wrap{padding:10px}.grid,.sim,.result-grid{grid-template-columns:1fr}.mode-control{grid-column:auto}.data-grid{grid-template-columns:1fr}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -99,7 +89,7 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
 <section class="panel hidden" id="simPanel">
   <div class="eyebrow">Part 2 · Ventilator simulator</div>
   <h2>Turn the Knobs</h2>
-  <p>You are given only the patient data. Set every control into a clinically appropriate starting range. You must <strong>actively adjust every control</strong> before the simulator will grade the case. It grades the setting pattern, not one magic number.</p>
+  <p>You are given only the patient data. First set the core ventilator controls. Then <strong>apply the settings</strong> to reveal the monitored PIP, exhaled VT, total rate, and measured minute ventilation. Use those actual parameters to set the alarms before the simulator grades the complete setup.</p>
   <div class="patient">
     <div class="patient-card" id="patientCard"></div>
     <div class="patient-card">
@@ -136,8 +126,30 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
     <div class="ve-box" id="veRangeBox"><b>Target window</b><span id="veRangeDisplay">—</span></div>
   </div>
   <div class="submit-row">
-    <button class="primary" id="checkSim" type="button" disabled>Check my setup</button>
+    <button class="primary" id="runSettings" type="button" disabled>Apply settings &amp; view monitored parameters</button>
     <button class="secondary" id="resetSim" type="button">Reset controls</button>
+  </div>
+
+  <div class="param-panel" id="parameterPanel" aria-live="polite">
+    <div class="eyebrow">Monitored parameters</div>
+    <h3>Now read the patient–ventilator response</h3>
+    <p>Use these measured values to set your alarms. These are monitored results from the settings you selected—not additional settings.</p>
+    <div class="param-grid">
+      <div class="param"><b>PIP</b><span id="pipParam">—</span></div>
+      <div class="param"><b>Exhaled VT (VTE)</b><span id="vteParam">—</span></div>
+      <div class="param"><b>Total rate</b><span id="totalRateParam">—</span></div>
+      <div class="param"><b>Measured V̇E</b><span id="measuredVeParam">—</span></div>
+    </div>
+    <div class="stage-banner"><strong>Next:</strong> set the high-pressure, low-pressure, and low-exhaled-VT alarms from the monitored values above.</div>
+  </div>
+
+  <div class="alarm-stage" id="alarmStage">
+    <div class="eyebrow">Alarm setup</div>
+    <h3>Set alarms from what the ventilator is actually measuring</h3>
+    <div class="sim" id="alarmControls"></div>
+    <div class="submit-row">
+      <button class="primary" id="checkSim" type="button">Check complete setup</button>
+    </div>
   </div>
   <div class="results" id="simResults" aria-live="polite"></div>
   <div class="submit-row hidden" id="simNextWrap"><button class="primary" id="nextSim" type="button">Next patient →</button></div>
@@ -253,17 +265,20 @@ const simCases=[
   mode:["VC-AC","PC-AC"],ranges:{vt:[410,550],rr:[12,18],fio2:[100,100],peep:[5,8],ti:[0.8,1.2],flow:[45,75],hp:[30,44],lp:[10,28],lowvt:[370,500]}}
 ];
 
-const controls=[
+const coreControls=[
  {key:"vt",label:"Tidal volume",min:250,max:900,step:10,unit:"mL",start:700},
  {key:"rr",label:"Respiratory rate",min:6,max:30,step:1,unit:"/min",start:20},
  {key:"fio2",label:"FiO₂",min:21,max:100,step:1,unit:"%",start:40},
  {key:"peep",label:"PEEP",min:0,max:20,step:1,unit:"cm H₂O",start:10},
  {key:"ti",label:"Inspiratory time",min:0.5,max:1.5,step:0.1,unit:"sec",start:1.3},
- {key:"flow",label:"Inspiratory flow",min:30,max:100,step:5,unit:"L/min",start:40},
+ {key:"flow",label:"Inspiratory flow",min:30,max:100,step:5,unit:"L/min",start:40}
+];
+const alarmControlsDef=[
  {key:"hp",label:"High pressure alarm",min:20,max:60,step:1,unit:"cm H₂O",start:55},
  {key:"lp",label:"Low pressure alarm",min:5,max:35,step:1,unit:"cm H₂O",start:8},
- {key:"lowvt",label:"Low exhaled VT alarm",min:200,max:800,step:10,unit:"mL",start:250}
+ {key:"lowvt",label:"Low exhaled VT alarm",min:150,max:800,step:10,unit:"mL",start:250}
 ];
+const controls=[...coreControls,...alarmControlsDef];
 
 let directIndex=0,directDone=0,simIndex=0,simMastered=0,advancedIndex=0,advancedDone=0,calcUnlocked=false;
 const scenarioHost=document.getElementById("scenarioHost"),simPanel=document.getElementById("simPanel");
@@ -272,6 +287,8 @@ const patientCard=document.getElementById("patientCard"),controlsHost=document.g
 const results=document.getElementById("simResults"),nextWrap=document.getElementById("simNextWrap"),completeBox=document.getElementById("completeBox");
 const calcLab=document.getElementById("calcLab"),calcMsg=document.getElementById("calcMsg"),simLockNote=document.getElementById("simLockNote");
 const idealVeDisplay=document.getElementById("idealVeDisplay"),selectedVeDisplay=document.getElementById("selectedVeDisplay"),veRangeDisplay=document.getElementById("veRangeDisplay"),veRangeBox=document.getElementById("veRangeBox");
+const parameterPanel=document.getElementById("parameterPanel"),alarmStage=document.getElementById("alarmStage"),alarmControlsHost=document.getElementById("alarmControls");
+const pipParam=document.getElementById("pipParam"),vteParam=document.getElementById("vteParam"),totalRateParam=document.getElementById("totalRateParam"),measuredVeParam=document.getElementById("measuredVeParam");
 const part3=document.getElementById("part3"),advancedHost=document.getElementById("advancedHost");
 
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -308,14 +325,16 @@ function renderDirect(){
  });
 }
 function pbw(c){return c.sex==="Male"?50+2.3*(c.height-60):45.5+2.3*(c.height-60);}
+function buildControl(def,host){
+ const d=document.createElement("div");d.className="control";d.dataset.key=def.key;d.dataset.value=def.start;d.dataset.touched="false";
+ d.innerHTML=`<label>${def.label}</label><div class="knob" aria-hidden="true"></div><div class="readout"></div><div class="adjust"><button type="button" data-dir="-1" aria-label="Decrease ${def.label}">−</button><button type="button" data-dir="1" aria-label="Increase ${def.label}">+</button></div><div class="touch-note" style="font-size:.75rem;color:var(--slate);margin-top:5px">Adjust this control</div>`;
+ host.appendChild(d);
+ d.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>setValue(d,def,Number(b.dataset.dir))));
+ paint(d,def);
+}
 function makeControls(){
- controls.forEach(c=>{
-   const d=document.createElement("div");d.className="control";d.dataset.key=c.key;d.dataset.value=c.start;d.dataset.touched="false";
-   d.innerHTML=`<label>${c.label}</label><div class="knob" aria-hidden="true"></div><div class="readout"></div><div class="adjust"><button type="button" data-dir="-1" aria-label="Decrease ${c.label}">−</button><button type="button" data-dir="1" aria-label="Increase ${c.label}">+</button></div><div class="touch-note" style="font-size:.75rem;color:var(--slate);margin-top:5px">Adjust this control</div>`;
-   controlsHost.appendChild(d);
-   d.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>setValue(d,c,Number(b.dataset.dir))));
-   paint(d,c);
- });
+ coreControls.forEach(c=>buildControl(c,controlsHost));
+ alarmControlsDef.forEach(c=>buildControl(c,alarmControlsHost));
 }
 function setValue(d,c,dir){
  let v=Number(d.dataset.value)+dir*c.step;v=Math.max(c.min,Math.min(c.max,Math.round(v*10)/10));d.dataset.value=v;d.dataset.touched="true";
@@ -328,7 +347,14 @@ function paint(d,c){
  d.querySelector(".readout").textContent=(c.key==="ti"?v.toFixed(1):v)+" "+c.unit;
 }
 function resetControls(){
- controls.forEach(c=>{const d=controlsHost.querySelector(`[data-key="${c.key}"]`);d.dataset.value=c.start;d.dataset.touched="false";const note=d.querySelector(".touch-note");if(note){note.textContent="Adjust this control";note.style.color="var(--slate)";}paint(d,c);});
+ controls.forEach(c=>{
+   const host=(alarmControlsDef.some(a=>a.key===c.key)?alarmControlsHost:controlsHost);
+   const d=host.querySelector(`[data-key="${c.key}"]`);
+   d.dataset.value=c.start;d.dataset.touched="false";
+   const note=d.querySelector(".touch-note");if(note){note.textContent="Adjust this control";note.style.color="var(--slate)";}
+   paint(d,c);
+ });
+ parameterPanel.classList.remove("show");alarmStage.classList.remove("show");
  results.classList.remove("show");results.innerHTML="";nextWrap.classList.add("hidden");updateMinuteVentilation();
 }
 
@@ -340,7 +366,7 @@ function setSimulatorLocked(locked){
  calcUnlocked=!locked;
  controlsHost.classList.toggle("sim-lock",locked);
  simLockNote.classList.toggle("hidden",!locked);
- document.getElementById("checkSim").disabled=locked;
+ document.getElementById("runSettings").disabled=locked;
  mode.disabled=locked;
  controlsHost.querySelectorAll("button").forEach(b=>b.disabled=locked);
 }
@@ -354,6 +380,7 @@ function resetCalcLab(){
  setSimulatorLocked(true);
  idealVeDisplay.textContent="—";selectedVeDisplay.textContent="—";veRangeDisplay.textContent="—";
  veRangeBox.classList.remove("on-target","off-target");
+ parameterPanel.classList.remove("show");alarmStage.classList.remove("show");
 }
 function checkCalculations(){
  const c=simCases[simIndex],x=expectedCalcValues(c);
@@ -399,38 +426,101 @@ function renderSim(){
  ["AC-VC","SIMV-VC","AC-PC","SIMV-PC"].forEach(m=>{const o=document.createElement("option");o.textContent=m;o.value=m;mode.appendChild(o);});
  resetControls();resetCalcLab();
 }
-function gradeSim(){
- const c=simCases[simIndex],p=Math.round(pbw(c)*10)/10;
- const untouched=controls.filter(def=>controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.touched!=="true");
+
+function currentValue(key){
+ const host=alarmControlsDef.some(a=>a.key===key)?alarmControlsHost:controlsHost;
+ return Number(host.querySelector(`[data-key="${key}"]`).dataset.value);
+}
+function simulateParameters(){
+ const c=simCases[simIndex];
+ const vt=currentValue("vt"),rr=currentValue("rr"),peep=currentValue("peep"),flow=currentValue("flow"),ti=currentValue("ti");
+ let pip;
+ if(c.name.includes("COPD")) pip=peep+22+Math.max(0,(flow-60)*0.08);
+ else if(c.name.includes("asthma")) pip=peep+27+Math.max(0,(flow-60)*0.08);
+ else if(c.name.includes("ARDS")) pip=peep+24+Math.max(0,(vt-330)*0.025);
+ else if(c.name.includes("Post")) pip=peep+18+Math.max(0,(vt-450)*0.02);
+ else if(c.name.includes("Neuromuscular")) pip=peep+15+Math.max(0,(vt-500)*0.015);
+ else pip=peep+14+Math.max(0,(vt-450)*0.015);
+ pip=Math.round(pip);
+ let vte=Math.round(vt*(c.name.includes("Post")?0.96:0.98)/10)*10;
+ let totalRate=rr;
+ let measuredVE=Math.round((vte*totalRate/1000)*10)/10;
+ return {pip,vte,totalRate,measuredVE};
+}
+function revealParameters(){
+ const untouched=coreControls.filter(def=>controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.touched!=="true");
  if(untouched.length){
    results.className="results show";
-   results.innerHTML=`<div class="score">Set the ventilator first</div><p>You still need to actively adjust <strong>${untouched.length}</strong> control${untouched.length===1?"":"s"}: ${untouched.map(x=>x.label).join(", ")}.</p>`;
+   results.innerHTML=`<div class="score">Finish setting the ventilator</div><p>Adjust all core ventilator controls before applying the settings. Still untouched: ${untouched.map(x=>x.label).join(", ")}.</p>`;
+   return;
+ }
+ const m=simulateParameters();
+ pipParam.textContent=m.pip+" cm H₂O";
+ vteParam.textContent=m.vte+" mL";
+ totalRateParam.textContent=m.totalRate+" /min";
+ measuredVeParam.textContent=m.measuredVE.toFixed(1)+" L/min";
+ parameterPanel.classList.add("show");alarmStage.classList.add("show");
+ results.classList.remove("show");results.innerHTML="";
+ alarmControlsDef.forEach(def=>{
+   const d=alarmControlsHost.querySelector(`[data-key="${def.key}"]`);
+   d.dataset.touched="false";
+   const note=d.querySelector(".touch-note");if(note){note.textContent="Set from monitored values";note.style.color="var(--slate)";}
+ });
+ parameterPanel.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function gradeSim(){
+ const c=simCases[simIndex],p=Math.round(pbw(c)*10)/10;
+ const untouchedCore=coreControls.filter(def=>controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.touched!=="true");
+ const untouchedAlarms=alarmControlsDef.filter(def=>alarmControlsHost.querySelector(`[data-key="${def.key}"]`).dataset.touched!=="true");
+ if(untouchedCore.length||untouchedAlarms.length){
+   const missing=[...untouchedCore,...untouchedAlarms];
+   results.className="results show";
+   results.innerHTML=`<div class="score">Complete the whole setup first</div><p>You still need to actively adjust: ${missing.map(x=>x.label).join(", ")}.</p>`;
    nextWrap.classList.add("hidden");return;
  }
- const rows=[];let correct=0,total=controls.length+1;
+ const rows=[];let correct=0,total=coreControls.length+alarmControlsDef.length+1;
  const criticalKeys=["vt","rr","fio2","peep","ti"]; let criticalMisses=0;
- const selectedVE=(Number(controlsHost.querySelector('[data-key="vt"]').dataset.value)*Number(controlsHost.querySelector('[data-key="rr"]').dataset.value))/1000;
+ const selectedVE=(currentValue("vt")*currentValue("rr"))/1000;
  const idealVE=expectedCalcValues(c).ve;
  const veGood=Math.abs(selectedVE-idealVE)<=0.5;
  if(veGood)correct++; else criticalMisses++;
  rows.push([veGood?"good":"bad","Selected minute ventilation",selectedVE.toFixed(1)+" L/min",veGood?`Within ±0.5 L/min of the calculated ideal V̇E (${idealVE.toFixed(1)} L/min).`:`Calculated ideal V̇E is ${idealVE.toFixed(1)} L/min; adjust VT and/or rate until selected V̇E is within ±0.5 L/min.`]);
+
  const invasiveModes=["AC-VC","SIMV-VC","AC-PC","SIMV-PC"],modeGood=invasiveModes.includes(mode.value);
- rows.push([modeGood?"good":"warn","Mode",mode.value,modeGood?"Acceptable invasive mode. Mode is reviewed but not scored; the setting pattern is the target.":"Choose one of the four invasive setup modes taught in Lesson 1.3."]);
- controls.forEach(def=>{
-   const v=Number(controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.value),r=c.ranges[def.key],good=v>=r[0]&&v<=r[1];if(good)correct++;else if(criticalKeys.includes(def.key))criticalMisses++;
+ rows.push([modeGood?"good":"warn","Mode",mode.value,modeGood?"Acceptable invasive mode. AC versus SIMV is reviewed but not scored here; the setting pattern is the target.":"Choose one of the four invasive setup modes taught in Lesson 1.3."]);
+
+ coreControls.forEach(def=>{
+   const v=currentValue(def.key),r=c.ranges[def.key],good=v>=r[0]&&v<=r[1];if(good)correct++;else if(criticalKeys.includes(def.key))criticalMisses++;
    let note=good?"Within an appropriate learning range for this scenario.":`Target learning range: ${r[0]}–${r[1]} ${def.unit}.`;
    if(def.key==="vt"){const mlkg=Math.round(v/p*10)/10;note+=` Your VT = ${mlkg} mL/kg PBW (PBW ≈ ${p} kg).`;}
    rows.push([good?"good":"bad",def.label,v+" "+def.unit,note]);
  });
+
+ const m=simulateParameters();
+ const alarmTargets={
+   hp:[m.pip+8,m.pip+12],
+   lp:[Math.max(5,m.pip-10),Math.max(5,m.pip-5)],
+   lowvt:[Math.round((m.vte*0.88)/10)*10,Math.round((m.vte*0.92)/10)*10]
+ };
+ alarmControlsDef.forEach(def=>{
+   const v=currentValue(def.key),r=alarmTargets[def.key],good=v>=r[0]&&v<=r[1];if(good)correct++;
+   let note="";
+   if(def.key==="hp") note=good?`Appropriately set about 10 cm H₂O above measured PIP (${m.pip}).`:`Using PIP ${m.pip}, aim roughly ${r[0]}–${r[1]} cm H₂O.`;
+   if(def.key==="lp") note=good?`Appropriately set about 5–10 cm H₂O below measured PIP (${m.pip}).`:`Using PIP ${m.pip}, aim roughly ${r[0]}–${r[1]} cm H₂O.`;
+   if(def.key==="lowvt") note=good?`Appropriately set near 10% below measured VTE (${m.vte} mL).`:`Using VTE ${m.vte} mL, aim near ${r[0]}–${r[1]} mL.`;
+   rows.push([good?"good":"bad",def.label,v+" "+def.unit,note]);
+ });
+
  const pct=Math.round(correct/total*100),mastery=pct>=85 && criticalMisses===0;
  results.className="results show";
- results.innerHTML=`<div class="score">${pct}% · ${mastery?"Scenario mastered":"Revise the setup"}</div><p>${mastery?"Your setting pattern is clinically defensible. Mode was reviewed but not scored.":"Adjust the highlighted controls. You need at least 85% overall, and VT, rate, FiO₂, PEEP, and Ti must all be in range, and selected V̇E must be within ±0.5 L/min of the calculated ideal."}</p><div class="result-grid">${rows.map(r=>`<div class="result ${r[0]}"><strong>${r[1]}:</strong> ${r[2]}<br><small>${r[3]}</small></div>`).join("")}</div>`;
+ results.innerHTML=`<div class="score">${pct}% · ${mastery?"Scenario mastered":"Revise the setup"}</div><p>${mastery?"Your ventilator settings, selected V̇E, and alarms are clinically defensible for this patient.":"Adjust the highlighted controls. You need at least 85% overall; VT, rate, FiO₂, PEEP, Ti, and selected V̇E must all be appropriate."}</p><div class="result-grid">${rows.map(r=>`<div class="result ${r[0]}"><strong>${r[1]}:</strong> ${r[2]}<br><small>${r[3]}</small></div>`).join("")}</div>`;
  if(mastery){nextWrap.classList.remove("hidden");document.getElementById("checkSim").disabled=true;}else nextWrap.classList.add("hidden");
 }
 document.getElementById("checkCalc").addEventListener("click",checkCalculations);
+document.getElementById("runSettings").addEventListener("click",revealParameters);
 document.getElementById("clearCalc").addEventListener("click",resetCalcLab);
 document.getElementById("checkSim").addEventListener("click",gradeSim);
-document.getElementById("resetSim").addEventListener("click",()=>{document.getElementById("checkSim").disabled=false;resetControls();});
+document.getElementById("resetSim").addEventListener("click",()=>{document.getElementById("checkSim").disabled=false;resetControls();resetCalcLab();});
 document.getElementById("nextSim").addEventListener("click",()=>{
  simMastered++;updateProgress();document.getElementById("checkSim").disabled=false;nextWrap.classList.add("hidden");
  if(simIndex<5){simIndex++;renderSim();simPanel.scrollIntoView({behavior:"smooth"});}else{
@@ -466,93 +556,7 @@ function renderAdvanced(){
 makeControls();renderDirect();updateProgress();updateMinuteVentilation();
 })();
 </script>
-<script src="/assets/activity-progress-tracker.js"></script>
-<script type="module">
-(async()=>{
-  try{
-    const params=new URLSearchParams(location.search);
-    if(params.get("lti")!=="1")return;
-    const {supabase}=await import("/assets/auth.js");
-    const {data:{session}}=await supabase.auth.getSession();
-    if(!session)return;
-    const key="lti-score:mechanical_ventilation_activity_1_3";
-    document.addEventListener("activityComplete",async()=>{
-      if(sessionStorage.getItem(key))return;
-      const res=await fetch("/api/lti/score",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token},body:JSON.stringify({resourceId:"mechanical_ventilation_activity_1_3",score:1,maxScore:1})});
-      if(res.ok)sessionStorage.setItem(key,"1");
-    },{once:true});
-  }catch(e){console.warn("LTI score passback unavailable",e);}
-})();
-</script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
+<!-- local preview: activity tracker omitted -->
+<!-- local preview: LTI bridge omitted -->
 </body>
 </html>
