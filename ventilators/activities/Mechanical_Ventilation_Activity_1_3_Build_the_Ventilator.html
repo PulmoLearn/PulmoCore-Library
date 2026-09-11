@@ -35,35 +35,14 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
 .patient{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.patient-card{background:#F7FBFD;border:1px solid var(--border);border-radius:14px;padding:16px}.patient-card h3{margin-bottom:8px}.data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.datum{background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px}.datum b{display:block;color:var(--teal2);font-size:.75rem;text-transform:uppercase}.sim{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}.control{border:1px solid var(--border);border-radius:14px;padding:12px;background:#FBFDFE;text-align:center;min-width:0}.control label{display:block;font-weight:800;color:var(--navy);margin-bottom:7px}.readout{font-family:monospace;font-weight:800;font-size:1.05rem;color:var(--navy);min-height:25px}.knob{--rot:-130deg;width:78px;height:78px;border-radius:50%;margin:8px auto;background:conic-gradient(from 220deg,#D9E5EB 0 260deg,#F4F8FA 260deg);border:8px solid #EDF3F6;position:relative;box-shadow:inset 0 0 0 1px #BACDD8}.knob:after{content:"";position:absolute;width:4px;height:27px;background:var(--teal2);border-radius:4px;left:50%;top:9px;transform-origin:50% 30px;transform:translateX(-50%) rotate(var(--rot))}.adjust{display:flex;justify-content:center;gap:6px}.adjust button{width:42px;height:42px;border:1px solid var(--border);border-radius:10px;background:#fff;font-weight:800}.adjust button:hover{border-color:var(--teal)}.mode-control{grid-column:span 2}.mode-control select{width:100%;min-height:44px;border:1px solid #BACDD8;border-radius:10px;padding:8px;background:#fff}.submit-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.primary{background:var(--navy);color:#fff;border:0;border-radius:11px;padding:11px 16px;font-weight:800}.secondary{background:#fff;color:var(--navy);border:1px solid var(--border);border-radius:11px;padding:11px 16px;font-weight:800}.results{display:none;margin-top:16px}.results.show{display:block}.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.result{border-radius:10px;padding:10px;border:1px solid var(--border)}.result.good{background:#E8F8F1}.result.warn{background:#FFF6E5}.result.bad{background:#FFF0F0}.score{font-size:1.2rem;font-weight:800;color:var(--navy)}.unlock{background:var(--navy);color:white;border-radius:16px;padding:18px;margin-top:18px}.unlock h3{color:white}.formula{font-family:monospace;background:#F4F8FA;padding:9px 11px;border-radius:9px;display:inline-block}
 @media(max-width:900px){.sim{grid-template-columns:repeat(2,1fr)}.patient{grid-template-columns:1fr}.data-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.wrap{padding:10px}.grid,.sim,.result-grid{grid-template-columns:1fr}.mode-control{grid-column:auto}.data-grid{grid-template-columns:1fr}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <div class="wrap">
 <header class="hero">
   <div class="eyebrow">Mechanical Ventilation · Activity 1.3</div>
   <h1>Build the Ventilator</h1>
-  <p>First choose the best <strong>complete setting strategy</strong> for each patient. Then unlock the ventilator simulator and set the machine yourself from the patient's height, sex, history, and physiology.</p>
+  <p>First choose the best <strong>complete set of sample settings</strong> for each patient. Then unlock the ventilator simulator and set the machine yourself from the patient's height, sex, history, and physiology.</p>
   <div class="meta"><span class="tag">C5 · Initial settings + alarms</span><span class="tag">C6 · Disease-specific setup</span><span class="tag">2027 RTE clinical judgment</span></div>
 </header>
 
@@ -72,15 +51,16 @@ button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1220px;ma
 <section class="panel" id="part1">
   <div class="eyebrow">Part 1 · Direct practice</div>
   <h2>Choose the Best Complete Setup</h2>
-  <p>Each case focuses on the setting differences that matter most. Choose the <em>best overall starting strategy</em>, not just one correct number.</p>
+  <p>Each case gives you complete sample ventilator settings. Choose the <em>best overall starting set</em>. For invasive cases, do not choose an answer just because it says AC or SIMV; compare the resulting VT, rate, timing, PEEP, and FiO₂. Mode should become the deciding factor only when the patient actually needs a different support type, such as CPAP versus invasive ventilation.</p>
   <div class="tip"><strong>Use the same reasoning every time:</strong> PBW → VT + minute ventilation → disease-specific rate/timing → FiO₂ + PEEP → flow/trigger → alarms → reassess.</div>
+  <div class="callout"><strong>Mode reminder:</strong> AC and SIMV tell you how mandatory breaths are organized. VC and PC tell you what controls the mandatory breath. In pressure-control options, <strong>ΔP is written above PEEP and the resulting VT is shown in parentheses.</strong> Newly intubated, sedated simulator patients use invasive full-support modes; pressure support is saved for later spontaneous-breathing/liberation work.</div>
   <div id="scenarioHost"></div>
 </section>
 
 <section class="panel hidden" id="simPanel">
   <div class="eyebrow">Part 2 · Ventilator simulator</div>
   <h2>Turn the Knobs</h2>
-  <p>You are given only the patient data. Set every control into a clinically appropriate starting range. The simulator grades the <strong>pattern</strong> of settings, not one magic number.</p>
+  <p>You are given only the patient data. Set every control into a clinically appropriate starting range. You must <strong>actively adjust every control</strong> before the simulator will grade the case. It grades the setting pattern, not one magic number.</p>
   <div class="patient">
     <div class="patient-card" id="patientCard"></div>
     <div class="patient-card">
@@ -115,39 +95,45 @@ const root=document.querySelector(".wrap");
 const scenarios=[
  {name:"Normal lungs · elective surgery",stem:"A 66-kg PBW adult with normal lungs is intubated for a short procedure. Pre-op SpO₂ was 98% on room air.",correct:"normal",
   opts:[
-   ["PBW-based VT, conventional rate/timing, modest PEEP, FiO₂ based on actual need","normal","Correct. There is no oxygenation or obstructive problem to treat aggressively."],
-   ["PBW-based VT, RR 10, very long expiration, high inspiratory flow, FiO₂ based on need","copd","That is an obstructive strategy. Nothing in this case suggests air trapping."],
-   ["PBW-based VT, conventional timing, high PEEP, FiO₂ 1.0","ards","This adds unnecessary oxygenation support to a patient with normal lungs."]
+   ["AC-PC ΔP 16 cm H₂O above PEEP (VT ≈ 450 mL), f 14/min, Ti 1.0 sec, PEEP 5 cm H₂O, FiO₂ 21%","normal","Correct. The patient has normal mechanics and no oxygenation failure. This is a modest PBW-based pattern without unnecessary oxygen or PEEP."],
+   ["SIMV-VC, VT 350 mL, f 20/min, Ti 1.2 sec, PEEP 8 cm H₂O, FiO₂ 40%","too_much","This adds a faster rate, more PEEP, and supplemental oxygen without a demonstrated need."],
+   ["AC-PC ΔP 24 cm H₂O above PEEP (VT ≈ 650 mL), f 10/min, Ti 0.7 sec, PEEP 5 cm H₂O, FiO₂ 60%","wrong","The resulting VT and FiO₂ are unnecessarily high for this stable patient."]
   ]},
  {name:"Neuromuscular respiratory failure",stem:"A 5'6\" female has progressive neuromuscular weakness, clear lungs, SpO₂ 97% on room air, weak cough, and inadequate spontaneous VT.",correct:"neuro",
   opts:[
-   ["PBW-based VT and rate to replace failing ventilation; modest PEEP; FiO₂ may remain 0.21","neuro","Correct. Treat the pump failure without inventing an oxygenation problem."],
-   ["Low VT, high rate, high PEEP, high FiO₂ because respiratory failure is present","ards","This treats the patient as if lung compliance and oxygenation were the main problems."],
-   ["Large VT based on actual weight with low rate and FiO₂ 1.0","unsafe","VT is based on PBW, and high oxygen is not automatically needed."]
+   ["AC-VC, VT 400 mL, f 15/min, Ti 1.0 sec, PEEP 5 cm H₂O, FiO₂ 21%","neuro","Correct. The main problem is failing ventilatory pump function, so the settings replace ventilation without inventing an oxygenation problem."],
+   ["SIMV-VC, VT 300 mL, f 22/min, Ti 1.0 sec, PEEP 10 cm H₂O, FiO₂ 50%","ards_like","This looks more like a low-compliance hypoxemic strategy than a normal-lung pump-failure strategy."],
+   ["AC-PC ΔP 26 cm H₂O above PEEP (VT ≈ 700 mL), f 10/min, Ti 1.2 sec, PEEP 8 cm H₂O, FiO₂ 100%","unsafe","The resulting VT is excessive for this patient's PBW and the oxygen/PEEP are not justified."]
   ]},
- {name:"COPD · high resistance",stem:"A 5'10\" male with severe COPD has acute hypercapnic acidosis and significant air-trapping risk.",correct:"copd",
+ {name:"COPD · high resistance",stem:"A 5'10\" male with severe COPD has acute hypercapnic acidosis, marked obstruction, and significant air-trapping risk.",correct:"copd",
   opts:[
-   ["PBW-based VT below 10 mL/kg, f about 10–12/min, shorter Ti, long Te, FiO₂ titrated to target","copd","Correct. This supports ventilation while protecting expiratory time."],
-   ["Small VT, f 24/min, Ti 1.2 sec, high FiO₂ regardless of saturation","fast","The high rate and longer Ti reduce expiratory time and can worsen dynamic hyperinflation."],
-   ["VT above 10 mL/kg to normalize PaCO₂ quickly, low rate, long Ti","unsafe","Do not use an unsafe VT to force PaCO₂ toward normal."]
+   ["AC-VC, VT 600 mL, f 11/min, Ti 0.8 sec, PEEP 5 cm H₂O, FiO₂ 35%","copd","Correct. The VT remains below 10 mL/kg PBW, the lower rate and shorter Ti protect expiratory time, and FiO₂ is modest."],
+   ["AC-PC ΔP 14 cm H₂O above PEEP (VT ≈ 380 mL), f 22/min, Ti 1.2 sec, PEEP 8 cm H₂O, FiO₂ 60%","fast","The high rate and longer Ti reduce expiratory time and can worsen dynamic hyperinflation."],
+   ["SIMV-VC, VT 800 mL, f 8/min, Ti 1.4 sec, PEEP 3 cm H₂O, FiO₂ 28%","unsafe","The VT exceeds the 10 mL/kg PBW ceiling and the long Ti also reduces expiratory time."]
   ]},
  {name:"Severe asthma · dynamic hyperinflation risk",stem:"A 6'0\" male with status asthmaticus has very high airway resistance and incomplete exhalation.",correct:"asthma",
   opts:[
-   ["PBW-based VT, low-to-moderate rate, high enough inspiratory flow to shorten Ti, long Te, reassess PIP/Pplat and expiratory flow","asthma","Correct. Severe asthma requires deliberate protection of expiratory time."],
-   ["PBW-based VT, high rate, low inspiratory flow, short Te to increase minute ventilation","fast","This combination promotes breath stacking and dynamic hyperinflation."],
-   ["Very large VT with normal rate so PaCO₂ stays normal","unsafe","Avoid using excessive VT simply to normalize PaCO₂."]
+   ["SIMV-PC ΔP 20 cm H₂O above PEEP (VT ≈ 500 mL), f 10/min, Ti 0.75 sec, PEEP 5 cm H₂O, FiO₂ 40%","asthma","Correct. The lower rate and short Ti create a long expiratory phase while the resulting VT stays in a reasonable PBW-based range."],
+   ["AC-VC, VT 450 mL, f 24/min, Ti 1.1 sec, PEEP 8 cm H₂O, FiO₂ 40%","fast","The rate is too high and Ti too long for a patient already showing incomplete exhalation."],
+   ["AC-PC ΔP 30 cm H₂O above PEEP (VT ≈ 850 mL), f 8/min, Ti 1.0 sec, PEEP 5 cm H₂O, FiO₂ 30%","unsafe","The resulting VT is excessive even though the rate is low."]
   ]},
  {name:"ARDS · low compliance",stem:"A 5'4\" female has ARDS, severe hypoxemia, and low respiratory-system compliance.",correct:"ards",
   opts:[
-   ["Lower VT near 6 mL/kg PBW, rate adjusted for V̇E, FiO₂ + PEEP for oxygenation, monitor pressure/hemodynamics","ards","Correct. Lung protection and oxygenation support drive this setup."],
-   ["Increase VT until the 10%-PBW minute-ventilation estimate is reached, then use minimal PEEP","unsafe","The minute-ventilation shortcut does not override lung-protective VT."],
-   ["Use a COPD pattern with f 10/min and very long Te because all respiratory failure needs more expiratory time","copd","ARDS is a low-compliance problem, not primarily an expiratory-flow obstruction problem."]
+   ["AC-VC, VT 330 mL, f 22/min, Ti 0.9 sec, PEEP 12 cm H₂O, FiO₂ 70%","ards","Correct. The VT is near 6 mL/kg PBW, rate carries more of the ventilation need, and FiO₂ plus PEEP address severe hypoxemia."],
+   ["SIMV-VC, VT 550 mL, f 14/min, Ti 1.0 sec, PEEP 5 cm H₂O, FiO₂ 40%","too_big","The VT is too large for this low-compliance ARDS pattern and oxygenation support is modest for severe hypoxemia."],
+   ["AC-PC ΔP 10 cm H₂O above PEEP (VT ≈ 250 mL), f 10/min, Ti 0.7 sec, PEEP 3 cm H₂O, FiO₂ 30%","under","This provides too little ventilation and too little oxygenation support for severe ARDS."]
   ]},
  {name:"Post-arrest · immediate stabilization",stem:"A 5'8\" male has ROSC after cardiac arrest. He was bagged with 100% oxygen and reliable SpO₂ is not yet available.",correct:"post",
   opts:[
-   ["PBW-based lung-protective ventilation, FiO₂ 1.0 initially, then titrate once oxygenation is reliable","post","Correct. Stabilize first, then titrate oxygen promptly when reliable data are available."],
-   ["Immediately reduce FiO₂ to 0.21 because the airway is secured","lowo2","Reliable oxygenation data are not yet available after ROSC."],
-   ["Keep FiO₂ 1.0 indefinitely and use large VT to prevent hypercapnia","unsafe","Both prolonged unnecessary hyperoxia and excessive VT should be avoided."]
+   ["AC-PC ΔP 18 cm H₂O above PEEP (VT ≈ 450 mL), f 15/min, Ti 1.0 sec, PEEP 6 cm H₂O, FiO₂ 100%","post","Correct. This gives a PBW-based lung-protective pattern and keeps FiO₂ at 100% until oxygenation can be measured reliably, then it should be titrated."],
+   ["SIMV-VC, VT 350 mL, f 20/min, Ti 1.2 sec, PEEP 8 cm H₂O, FiO₂ 40%","low_o2","Dropping FiO₂ to 40% before reliable post-ROSC oxygenation data are available is not the best initial choice."],
+   ["AC-VC, VT 700 mL, f 10/min, Ti 1.0 sec, PEEP 5 cm H₂O, FiO₂ 100%","big_vt","The initial FiO₂ is appropriate, but the VT is unnecessarily large for this patient's PBW."]
+  ]} ,
+ {name:"Cardiogenic pulmonary edema · NIV decision",stem:"An awake patient with acute cardiogenic pulmonary edema has severe hypoxemia and increased work of breathing but adequate ventilation, intact airway protection, and no vomiting.",correct:"cpap",
+  opts:[
+   ["CPAP 10 cm H₂O, FiO₂ 40%, reassess oxygenation, work of breathing, and blood pressure","cpap","Correct. Recruitment and oxygenation are the dominant needs, so CPAP is a reasonable initial noninvasive strategy when ventilation and airway protection are adequate."],
+   ["AC-VC, VT 500 mL, f 18/min, PEEP 10 cm H₂O, FiO₂ 40%","intubate","The patient may ultimately need invasive ventilation if NIV fails, but the scenario supports a noninvasive trial first."],
+   ["Bilevel NIV: IPAP 12 / EPAP 5 cm H₂O, FiO₂ 40%, backup f 16/min","bilevel","Bilevel can be appropriate when inspiratory ventilatory assistance is needed, but this case specifies adequate ventilation and makes recruitment/oxygenation the dominant need."]
   ]}
 ];
 
@@ -167,15 +153,15 @@ const simCases=[
 ];
 
 const controls=[
- {key:"vt",label:"Tidal volume",min:250,max:900,step:10,unit:"mL",start:450},
- {key:"rr",label:"Respiratory rate",min:6,max:30,step:1,unit:"/min",start:14},
+ {key:"vt",label:"Tidal volume",min:250,max:900,step:10,unit:"mL",start:700},
+ {key:"rr",label:"Respiratory rate",min:6,max:30,step:1,unit:"/min",start:20},
  {key:"fio2",label:"FiO₂",min:21,max:100,step:1,unit:"%",start:40},
- {key:"peep",label:"PEEP",min:0,max:20,step:1,unit:"cm H₂O",start:5},
- {key:"ti",label:"Inspiratory time",min:0.5,max:1.5,step:0.1,unit:"sec",start:1.0},
- {key:"flow",label:"Inspiratory flow",min:30,max:100,step:5,unit:"L/min",start:60},
- {key:"hp",label:"High pressure alarm",min:20,max:60,step:1,unit:"cm H₂O",start:40},
- {key:"lp",label:"Low pressure alarm",min:5,max:35,step:1,unit:"cm H₂O",start:15},
- {key:"lowvt",label:"Low exhaled VT alarm",min:200,max:800,step:10,unit:"mL",start:400}
+ {key:"peep",label:"PEEP",min:0,max:20,step:1,unit:"cm H₂O",start:10},
+ {key:"ti",label:"Inspiratory time",min:0.5,max:1.5,step:0.1,unit:"sec",start:1.3},
+ {key:"flow",label:"Inspiratory flow",min:30,max:100,step:5,unit:"L/min",start:40},
+ {key:"hp",label:"High pressure alarm",min:20,max:60,step:1,unit:"cm H₂O",start:55},
+ {key:"lp",label:"Low pressure alarm",min:5,max:35,step:1,unit:"cm H₂O",start:8},
+ {key:"lowvt",label:"Low exhaled VT alarm",min:200,max:800,step:10,unit:"mL",start:250}
 ];
 
 let directIndex=0,directDone=0,simIndex=0,simMastered=0;
@@ -186,9 +172,9 @@ const results=document.getElementById("simResults"),nextWrap=document.getElement
 
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function updateProgress(){
- const total=12,done=directDone+simMastered,pct=Math.round(done/total*100);
+ const total=13,done=directDone+simMastered,pct=Math.round(done/total*100);
  progressFill.style.width=pct+"%";
- progressText.textContent=directDone<6?`Part 1 · ${directDone} of 6 scenarios mastered`:`Part 2 · ${simMastered} of 6 simulator patients mastered`;
+ progressText.textContent=directDone<7?`Part 1 · ${directDone} of 7 scenarios mastered`:`Part 2 · ${simMastered} of 6 simulator patients mastered`;
  if(done===total){
    completeBox.classList.remove("hidden");
    window.PulmoActivityProgress?.report({percent:100,completed:true});
@@ -206,8 +192,8 @@ function renderDirect(){
      if(o[1]===s.correct){
        scenarioHost.dataset.locked="true";b.classList.add("ok");[...box.children].forEach(x=>x.disabled=true);
        fb.className="feedback show ok";fb.innerHTML=o[2];
-       const n=document.createElement("button");n.type="button";n.className="next";n.textContent=directIndex===5?"Unlock simulator →":"Next scenario →";
-       n.addEventListener("click",()=>{directDone++;updateProgress();scenarioHost.dataset.locked="false";if(directIndex<5){directIndex++;renderDirect();window.scrollTo({top:scenarioHost.offsetTop-80,behavior:"smooth"});}else{simPanel.classList.remove("hidden");renderSim();simPanel.scrollIntoView({behavior:"smooth"});}});
+       const n=document.createElement("button");n.type="button";n.className="next";n.textContent=directIndex===6?"Unlock simulator →":"Next scenario →";
+       n.addEventListener("click",()=>{directDone++;updateProgress();scenarioHost.dataset.locked="false";if(directIndex<6){directIndex++;renderDirect();window.scrollTo({top:scenarioHost.offsetTop-80,behavior:"smooth"});}else{simPanel.classList.remove("hidden");renderSim();simPanel.scrollIntoView({behavior:"smooth"});}});
        fb.appendChild(document.createElement("br"));fb.appendChild(n);
      } else {
        b.classList.add("bad");fb.className="feedback show bad";fb.textContent=o[2]+" Try another complete setting set.";
@@ -218,15 +204,17 @@ function renderDirect(){
 function pbw(c){return c.sex==="Male"?50+2.3*(c.height-60):45.5+2.3*(c.height-60);}
 function makeControls(){
  controls.forEach(c=>{
-   const d=document.createElement("div");d.className="control";d.dataset.key=c.key;d.dataset.value=c.start;
-   d.innerHTML=`<label>${c.label}</label><div class="knob" aria-hidden="true"></div><div class="readout"></div><div class="adjust"><button type="button" data-dir="-1" aria-label="Decrease ${c.label}">−</button><button type="button" data-dir="1" aria-label="Increase ${c.label}">+</button></div>`;
+   const d=document.createElement("div");d.className="control";d.dataset.key=c.key;d.dataset.value=c.start;d.dataset.touched="false";
+   d.innerHTML=`<label>${c.label}</label><div class="knob" aria-hidden="true"></div><div class="readout"></div><div class="adjust"><button type="button" data-dir="-1" aria-label="Decrease ${c.label}">−</button><button type="button" data-dir="1" aria-label="Increase ${c.label}">+</button></div><div class="touch-note" style="font-size:.75rem;color:var(--slate);margin-top:5px">Adjust this control</div>`;
    controlsHost.appendChild(d);
    d.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>setValue(d,c,Number(b.dataset.dir))));
    paint(d,c);
  });
 }
 function setValue(d,c,dir){
- let v=Number(d.dataset.value)+dir*c.step;v=Math.max(c.min,Math.min(c.max,Math.round(v*10)/10));d.dataset.value=v;paint(d,c);
+ let v=Number(d.dataset.value)+dir*c.step;v=Math.max(c.min,Math.min(c.max,Math.round(v*10)/10));d.dataset.value=v;d.dataset.touched="true";
+ const note=d.querySelector(".touch-note");if(note){note.textContent="Adjusted";note.style.color="var(--teal2)";}
+ paint(d,c);
 }
 function paint(d,c){
  const v=Number(d.dataset.value),frac=(v-c.min)/(c.max-c.min),rot=-130+260*frac;
@@ -234,29 +222,37 @@ function paint(d,c){
  d.querySelector(".readout").textContent=(c.key==="ti"?v.toFixed(1):v)+" "+c.unit;
 }
 function resetControls(){
- controls.forEach(c=>{const d=controlsHost.querySelector(`[data-key="${c.key}"]`);d.dataset.value=c.start;paint(d,c);});
+ controls.forEach(c=>{const d=controlsHost.querySelector(`[data-key="${c.key}"]`);d.dataset.value=c.start;d.dataset.touched="false";const note=d.querySelector(".touch-note");if(note){note.textContent="Adjust this control";note.style.color="var(--slate)";}paint(d,c);});
  results.classList.remove("show");results.innerHTML="";nextWrap.classList.add("hidden");
 }
 function renderSim(){
  const c=simCases[simIndex],p=Math.round(pbw(c)*10)/10;
  patientCard.innerHTML=`<div class="eyebrow">Simulator patient ${simIndex+1} of 6</div><h3>${c.name}</h3><p>${c.history}</p><div class="data-grid"><div class="datum"><b>Sex</b>${c.sex}</div><div class="datum"><b>Height</b>${Math.floor(c.height/12)}'${c.height%12}"</div><div class="datum"><b>PBW</b>Calculate it yourself</div></div>`;
  mode.innerHTML="";
- ["VC-AC","PC-AC","SIMV","Pressure Support","CPAP"].forEach(m=>{const o=document.createElement("option");o.textContent=m;o.value=m;mode.appendChild(o);});
+ ["AC-VC","SIMV-VC","AC-PC","SIMV-PC"].forEach(m=>{const o=document.createElement("option");o.textContent=m;o.value=m;mode.appendChild(o);});
  resetControls();
 }
 function gradeSim(){
- const c=simCases[simIndex],p=Math.round(pbw(c)*10)/10,rows=[];let correct=0,total=controls.length+1;
- const modeGood=c.mode.includes(mode.value);if(modeGood)correct++;
- rows.push([modeGood?"good":"bad","Mode",mode.value,modeGood?"Appropriate full-support starting strategy.":"Choose an initial strategy that provides reliable support for this patient."]);
+ const c=simCases[simIndex],p=Math.round(pbw(c)*10)/10;
+ const untouched=controls.filter(def=>controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.touched!=="true");
+ if(untouched.length){
+   results.className="results show";
+   results.innerHTML=`<div class="score">Set the ventilator first</div><p>You still need to actively adjust <strong>${untouched.length}</strong> control${untouched.length===1?"":"s"}: ${untouched.map(x=>x.label).join(", ")}.</p>`;
+   nextWrap.classList.add("hidden");return;
+ }
+ const rows=[];let correct=0,total=controls.length;
+ const criticalKeys=["vt","rr","fio2","peep","ti"]; let criticalMisses=0;
+ const invasiveModes=["AC-VC","SIMV-VC","AC-PC","SIMV-PC"],modeGood=invasiveModes.includes(mode.value);
+ rows.push([modeGood?"good":"warn","Mode",mode.value,modeGood?"Acceptable invasive mode. Mode is reviewed but not scored; the setting pattern is the target.":"Choose one of the four invasive setup modes taught in Lesson 1.3."]);
  controls.forEach(def=>{
-   const v=Number(controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.value),r=c.ranges[def.key],good=v>=r[0]&&v<=r[1];if(good)correct++;
+   const v=Number(controlsHost.querySelector(`[data-key="${def.key}"]`).dataset.value),r=c.ranges[def.key],good=v>=r[0]&&v<=r[1];if(good)correct++;else if(criticalKeys.includes(def.key))criticalMisses++;
    let note=good?"Within an appropriate learning range for this scenario.":`Target learning range: ${r[0]}–${r[1]} ${def.unit}.`;
    if(def.key==="vt"){const mlkg=Math.round(v/p*10)/10;note+=` Your VT = ${mlkg} mL/kg PBW (PBW ≈ ${p} kg).`;}
    rows.push([good?"good":"bad",def.label,v+" "+def.unit,note]);
  });
- const pct=Math.round(correct/total*100),mastery=pct>=80;
+ const pct=Math.round(correct/total*100),mastery=pct>=85 && criticalMisses===0;
  results.className="results show";
- results.innerHTML=`<div class="score">${pct}% · ${mastery?"Scenario mastered":"Revise the setup"}</div><p>${mastery?"Your overall setting pattern is clinically defensible for this patient. Review any highlighted controls before moving on.":"Use the feedback below to adjust the controls. You need at least 80% to master this patient."}</p><div class="result-grid">${rows.map(r=>`<div class="result ${r[0]}"><strong>${r[1]}:</strong> ${r[2]}<br><small>${r[3]}</small></div>`).join("")}</div>`;
+ results.innerHTML=`<div class="score">${pct}% · ${mastery?"Scenario mastered":"Revise the setup"}</div><p>${mastery?"Your setting pattern is clinically defensible. Mode was reviewed but not scored.":"Adjust the highlighted controls. You need at least 85% overall, and VT, rate, FiO₂, PEEP, and Ti must all be in range."}</p><div class="result-grid">${rows.map(r=>`<div class="result ${r[0]}"><strong>${r[1]}:</strong> ${r[2]}<br><small>${r[3]}</small></div>`).join("")}</div>`;
  if(mastery){nextWrap.classList.remove("hidden");document.getElementById("checkSim").disabled=true;}else nextWrap.classList.add("hidden");
 }
 document.getElementById("checkSim").addEventListener("click",gradeSim);
@@ -286,75 +282,5 @@ makeControls();renderDirect();updateProgress();
   }catch(e){console.warn("LTI score passback unavailable",e);}
 })();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
