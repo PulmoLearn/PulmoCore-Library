@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GAS-02 | Cylinder Duration & Medical-Gas Calculations — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button,input,select{font:inherit}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:920px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;cursor:pointer}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:920px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.8rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800;cursor:pointer}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900;cursor:pointer}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.formula{font-size:1.08rem;font-weight:900;color:var(--navy);background:var(--soft);border:1px solid #bfe5e5;padding:14px;border-radius:14px;text-align:center;margin:12px 0}
+.factorgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.factor{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe;text-align:center}.factor strong{display:block;font-size:1.25rem;color:var(--navy)}.factor span{font-size:.82rem;color:var(--muted)}
+.calc{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.field{display:grid;gap:4px}.field label{font-size:.76rem;font-weight:900;color:var(--navy)}.field input,.field select{width:100%;border:1px solid #bdd0d8;border-radius:10px;padding:10px;background:#fff}.result{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfdfe}.result strong{font-size:1.18rem;color:var(--navy)}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900;cursor:pointer}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:760px){.flow,.rulegrid,.grid,.factorgrid,.calc{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">GAS-02</div><div class="name">Cylinder Duration & Medical-Gas Calculations</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">Medical Gas Systems & Specialty Gases • GAS-02</div>
+<h1>Cylinder Duration & Medical-Gas Calculations</h1>
+<p>Calculate cylinder duration correctly, build in a transport reserve, and decide whether the available gas supply is truly adequate before leaving a dependable oxygen source.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.C.7 Cardiopulmonary calculations</span><span class="chip">Shared: I.D.7 Interpret calculations</span></div>
+<div class="flow">
+<div><strong>Identify</strong>Which cylinder size and factor?</div>
+<div><strong>Calculate</strong>Pressure × factor ÷ flow.</div>
+<div><strong>Reserve</strong>Do not plan to use every calculated minute.</div>
+<div><strong>Decide</strong>Is the supply enough for travel, wait, procedure, return, and delay?</div>
+</div>
+</section>
+
+<section class="section" id="string">
+<div class="head"><div class="kicker">Socratic calculation string</div><h2>What information belongs in the calculation?</h2><p>Most errors happen before the arithmetic: wrong cylinder size, wrong factor, wrong flow, or no reserve plan.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next calculation clue</button>
+</div></div>
+</section>
+
+<section class="section gated" id="formula">
+<div class="head"><div class="kicker">Core formula</div><h2>Cylinder duration is pressure converted to usable volume</h2><p>The source lesson uses the formula below and these cylinder factors.</p></div>
+<div class="body">
+<div class="formula">Cylinder duration (min) = Pressure (psig) × Cylinder factor ÷ Flow (L/min)</div>
+<div class="factorgrid">
+<div class="factor"><strong>D = 0.16</strong><span>Portable cylinder</span></div>
+<div class="factor"><strong>E = 0.28</strong><span>Common transport cylinder</span></div>
+<div class="factor"><strong>G = 2.41</strong><span>Large cylinder</span></div>
+<div class="factor"><strong>H/K = 3.14</strong><span>Large stationary cylinders</span></div>
+</div>
+<div class="rule"><strong>Memory rule</strong><p><b>Pressure × factor ÷ flow.</b> Identify the cylinder letter first. A correct formula with the wrong factor still gives the wrong answer.</p></div>
+<button class="primary" id="formulaDone" style="width:100%">Continue to calculator →</button>
+</div>
+</section>
+
+<section class="section gated" id="calculator">
+<div class="head"><div class="kicker">Cylinder duration calculator</div><h2>Calculate the time—then decide if it is safe</h2><p>The calculator also shows a conservative planning time using the source lesson’s two-thirds reserve rule.</p></div>
+<div class="body">
+<div class="calc">
+<div class="field"><label for="size">Cylinder</label><select id="size"><option value="0.16">D</option><option value="0.28" selected>E</option><option value="2.41">G</option><option value="3.14">H/K</option></select></div>
+<div class="field"><label for="pressure">Pressure (psig)</label><input id="pressure" type="number" value="1600" step="50"></div>
+<div class="field"><label for="flow">Flow (L/min)</label><input id="flow" type="number" value="4" step="0.5"></div>
+<div class="field"><label for="planned">Planned away time (min)</label><input id="planned" type="number" value="45" step="5"></div>
+</div>
+<div class="result"><div>Calculated cylinder duration</div><strong id="duration">112 min</strong><div id="hours">≈ 1 hr 52 min</div></div>
+<div class="result"><div>Conservative planned-use limit</div><strong id="reserve">≈ 75 min</strong><div id="decision">45 min planned: within the conservative limit.</div></div>
+<button class="primary" id="calcDone" style="width:100%;margin-top:12px">I understand the calculation →</button>
+</div>
+</section>
+
+<section class="section gated" id="planning">
+<div class="head"><div class="kicker">Interpretation & planning</div><h2>The calculation is not the final answer</h2><p>Open each planning rule once to continue.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 5 reviewed</strong><span>Review all planning rules.</span></div>
+<div class="acc">
+
+<div class="accitem" data-key="budget"><button class="accbtn"><span>Build the full time budget <small>Transport is more than travel time</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Include</label><ul><li>Travel to destination</li><li>Waiting time</li><li>Procedure/test time</li><li>Return trip</li><li>Likely delays</li></ul></div>
+<div class="box"><label>Do not</label><ul><li>Compare cylinder duration only with one-way travel time</li></ul></div>
+<div class="box wide"><label>Exam move</label><strong>A cylinder whose calculated duration only barely equals the expected total trip is not a robust transport plan.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="reserve"><button class="accbtn"><span>Reserve margin <small>Plan below the theoretical maximum</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Source lesson rule</label><ul><li>Use about two-thirds of the calculated duration as a conservative maximum planned transport time</li></ul></div>
+<div class="box"><label>Why</label><ul><li>Unexpected delay</li><li>Flow may need to increase</li><li>Gauge/factor estimates are not a reason to use every last minute</li></ul></div>
+<div class="box wide"><label>Example</label><strong>Calculated duration 112 min → conservative planned-use limit ≈ 75 min.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="increase"><button class="accbtn"><span>Flow changes duration <small>Higher flow = shorter duration</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Relationship</label><ul><li>Duration is inversely related to flow</li><li>If flow doubles and pressure is unchanged, duration is cut in half</li></ul></div>
+<div class="box"><label>Planning implication</label><ul><li>Use the flow the patient is actually likely to need—not the lowest possible number</li></ul></div>
+<div class="box wide"><label>Exam cue</label><strong>A patient whose oxygen requirement is rising needs a larger reserve than the original calculation suggests.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="factor"><button class="accbtn"><span>Wrong factor = wrong answer <small>Identify cylinder size first</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Source lesson factors</label><ul><li>D 0.16</li><li>E 0.28</li><li>G 2.41</li><li>H/K 3.14</li></ul></div>
+<div class="box"><label>Classic trap</label><ul><li>Using H/K factor for an E cylinder creates a dramatically exaggerated duration</li></ul></div>
+<div class="box wide"><label>Safe sequence</label><strong>Identify cylinder → read pressure → confirm flow → select factor → calculate → interpret.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="adequacy"><button class="accbtn"><span>Adequacy decision <small>“Enough” is a clinical judgment</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Adequate plan</label><ul><li>Supply exceeds the entire expected time with meaningful reserve</li><li>Backup source is available when risk is high</li></ul></div>
+<div class="box"><label>Inadequate plan</label><ul><li>Calculated duration barely covers expected time</li><li>Patient is unstable or oxygen need may increase</li><li>No backup exists for foreseeable delays</li></ul></div>
+<div class="box wide"><label>Shared NBRC angle</label><strong>The task is not only to perform the calculation but to interpret whether the available supply is safe for the planned care.</strong></div>
+</div></div></div>
+
+</div>
+</section>
+
+<section class="section gated" id="gatherCheck">
+<div class="head"><div class="kicker">Primary task: gather the inputs correctly</div><h2>What must be known before you calculate?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> The patient must leave the unit on a portable cylinder.</div>
+<div class="mcq" data-question="gatherCheck">
+<button data-correct="false">Only the cylinder pressure.</button>
+<button data-correct="true">Cylinder size/factor, current pressure, required flow, and the full expected time away from a dependable source.</button>
+<button data-correct="false">Only the one-way transport time.</button>
+<button data-correct="false">Cylinder color and patient diagnosis are sufficient.</button>
+</div><div class="feedback" id="gatherFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="calcCheck">
+<div class="head"><div class="kicker">Calculation check</div><h2>Calculate the duration</h2></div>
+<div class="body">
+<div class="case"><strong>E cylinder:</strong> 1,600 psig • flow 4 L/min</div>
+<div class="mcq" data-question="calcCheck">
+<button data-correct="false">64 minutes</button>
+<button data-correct="true">112 minutes</button>
+<button data-correct="false">400 minutes</button>
+<button data-correct="false">1,256 minutes</button>
+</div><div class="feedback" id="calcFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="interpretCheck">
+<div class="head"><div class="kicker">Shared task: interpret the calculation</div><h2>Is the supply adequate?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> The calculated duration is 112 minutes. The total expected time away from wall oxygen is 70 minutes, and no unusual delays are expected.</div>
+<div class="mcq" data-question="interpretCheck">
+<button data-correct="false">The transport is unsafe because 70 minutes is greater than half of 112.</button>
+<button data-correct="true">The transport fits within the source lesson’s conservative two-thirds planning limit of about 75 minutes, but the therapist should still account for clinical stability and backup needs.</button>
+<button data-correct="false">The transport is automatically safe because any calculated duration longer than the trip is enough.</button>
+<button data-correct="false">Reserve planning is unnecessary when using an E cylinder.</button>
+</div><div class="feedback" id="interpretFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="flowChangeCheck">
+<div class="head"><div class="kicker">Changing clinical need</div><h2>What happens if the required flow doubles?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A cylinder would last 90 minutes at 4 L/min. The patient now requires 8 L/min from the same cylinder pressure.</div>
+<div class="mcq" data-question="flowChangeCheck">
+<button data-correct="true">Duration falls to about 45 minutes.</button>
+<button data-correct="false">Duration remains 90 minutes because cylinder pressure did not change.</button>
+<button data-correct="false">Duration doubles to 180 minutes.</button>
+<button data-correct="false">Flow does not affect cylinder duration.</button>
+</div><div class="feedback" id="flowChangeFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style transport problem</div><h2>Calculate, reserve, and decide</h2></div>
+<div class="body">
+<div class="case"><strong>Transport plan:</strong><ul>
+<li>E cylinder pressure = 1,200 psig</li>
+<li>Flow = 6 L/min</li>
+<li>Travel + waiting + procedure + return = 45 minutes</li>
+<li>Patient’s oxygen need has been increasing</li>
+</ul></div>
+<div class="mcq" data-question="integrate">
+<button data-correct="false">Proceed because calculated duration is 56 minutes and 56 is greater than 45.</button>
+<button data-correct="true">Do not rely on this cylinder for the full plan; calculated duration is about 56 minutes and the conservative two-thirds limit is only about 37 minutes, with additional concern that the patient’s flow requirement may rise.</button>
+<button data-correct="false">Proceed because E cylinders always provide at least 60 minutes.</button>
+<button data-correct="false">Use the H/K factor because transport requires a larger safety margin.</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>GAS-02 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed Cylinder Duration & Medical-Gas Calculations.</strong>
+<p style="margin:5px 0 0">You practiced selecting the correct cylinder factor, calculating duration, building in a reserve, accounting for flow changes and total transport time, and deciding whether the available supply is clinically adequate.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Calculation-input string</li><li>Formula and cylinder factors</li><li>Working duration calculator</li><li>Reserve and transport planning</li><li>Gather required inputs</li><li>Calculate duration</li><li>Interpret adequacy</li><li>Flow-change effect</li><li>Integrated transport decision</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_gas02_v1';
+
+const items=[
+{id:'q1',stage:1,patient:'You are calculating duration for an E cylinder.',prompt:'Which factor belongs in the formula?',correct:'0.28',choices:['0.28','0.16','3.14'],good:'The source lesson uses E = 0.28. Identifying the cylinder size is the first step because the wrong factor produces the wrong duration.',hint:'E is the common portable transport cylinder factor.'},
+{id:'q2',stage:1,patient:'Cylinder pressure is known, but the oxygen flow is not documented.',prompt:'Can cylinder duration be calculated safely?',correct:'No—verify the actual required flow first',choices:['No—verify the actual required flow first','Yes—pressure alone determines duration','Yes—assume 2 L/min'],good:'Flow is in the denominator of the duration formula and directly changes how quickly the cylinder is consumed.',hint:'Duration depends on how fast gas is leaving the cylinder.'},
+{id:'q3',stage:1,patient:'The transport is expected to take 20 minutes one way, with a 20-minute procedure and 20-minute return.',prompt:'Which time should be compared with cylinder supply?',correct:'At least the full 60-minute plan plus reserve for delays',choices:['At least the full 60-minute plan plus reserve for delays','Only the first 20-minute leg','Only the procedure time'],good:'Transport planning includes travel, wait/procedure time, return travel, and reserve. One-way travel time is not enough.',hint:'Budget the entire time away from a dependable source.'},
+{id:'q4',stage:2,patient:'An E cylinder reads 1,600 psig and is running at 4 L/min.',prompt:'What is the approximate duration?',correct:'112 minutes',choices:['112 minutes','64 minutes','400 minutes'],good:'1,600 × 0.28 ÷ 4 = 112 minutes.',hint:'Pressure × E factor ÷ flow.'},
+{id:'q5',stage:2,patient:'A cylinder lasts 100 minutes at 4 L/min. The patient now needs 8 L/min.',prompt:'What happens to duration?',correct:'It falls to about 50 minutes',choices:['It falls to about 50 minutes','It remains 100 minutes','It rises to about 200 minutes'],good:'Duration is inversely related to flow. Doubling flow halves the duration when pressure and cylinder size are unchanged.',hint:'Higher flow empties the cylinder faster.'},
+{id:'q6',stage:2,patient:'Calculated duration is 90 minutes and the planned trip is exactly 90 minutes.',prompt:'Is this an adequate transport plan?',correct:'No—the plan uses the entire theoretical duration and has no meaningful reserve',choices:['No—the plan uses the entire theoretical duration and has no meaningful reserve','Yes—equal duration and trip time is sufficient','Yes—reserve is only needed for H cylinders'],good:'The source lesson explicitly treats cylinder duration as a planning calculation. A trip that consumes every calculated minute is not a safe plan.',hint:'The number must exceed the plan by a meaningful margin.'}
+];
+
+const reviewKeys=['budget','reserve','increase','factor','adequacy'];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),formulaDone:false,calcDone:false,reviewed:[],checks:{gatherCheck:false,calcCheck:false,interpretCheck:false,flowChangeCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices();
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){
+ if(stringDone())reveal('formula');
+ if(state.formulaDone)reveal('calculator');
+ if(state.calcDone)reveal('planning');
+ if(reviewDone())reveal('gatherCheck');
+ if(state.checks.gatherCheck)reveal('calcCheck');
+ if(state.checks.calcCheck)reveal('interpretCheck');
+ if(state.checks.interpretCheck)reveal('flowChangeCheck');
+ if(state.checks.flowChangeCheck)reveal('integrate');
+ if(state.complete||state.checks.integrate)reveal('finish')
+}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){
+  $('#roundLabel').textContent='Calculation string complete';
+  $('#patientLine').textContent='You have identified the cylinder factor, pressure, flow, and time-budget inputs that determine whether a cylinder is adequate.';
+  $('#prompt').textContent='The formula and factors are now available below.';
+  $('#choices').innerHTML='';$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Next:</strong> calculate the duration, then convert the number into a safe transport decision.';
+  $('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();$('#roundLabel').textContent='Calculation clue '+(state.round+1)+' of '+items.length;
+ $('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+  btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');
+  requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+  btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the duration framework:</strong> '+x.hint;
+  setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('formula')};
+$('#formulaDone').onclick=()=>{state.formulaDone=true;save();reveal('calculator');setTimeout(()=>$('#calculator').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+function calc(){
+ let factor=Number($('#size').value),p=Number($('#pressure').value),f=Number($('#flow').value),plan=Number($('#planned').value);
+ if(!(factor>0&&p>=0&&f>0)){ $('#duration').textContent='—';$('#hours').textContent='Enter valid values.';$('#reserve').textContent='—';$('#decision').textContent=''; return; }
+ let min=p*factor/f, safe=min*(2/3), h=Math.floor(min/60), m=Math.round(min-h*60);
+ $('#duration').textContent=Math.round(min)+' min';
+ $('#hours').textContent='≈ '+h+' hr '+m+' min';
+ $('#reserve').textContent='≈ '+Math.round(safe)+' min';
+ if(plan>0){
+   $('#decision').textContent=plan<=safe ? plan+' min planned: within the conservative limit.' : plan+' min planned: exceeds the conservative limit.';
+ }
+}
+['#size','#pressure','#flow','#planned'].forEach(id=>$(id).addEventListener('input',calc));
+$('#calcDone').onclick=()=>{state.calcDone=true;save();reveal('planning');setTimeout(()=>$('#planning').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('gatherCheck')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+   state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{
+   btn.classList.add('wrong');f.className='feedback show try';
+   f.innerHTML='<strong>Not quite.</strong> Identify cylinder size first, use pressure × factor ÷ flow, then compare the result with the full planned time plus a meaningful reserve.'
+  }
+ })
+}
+bind('gatherCheck','#gatherFeedback','The registry requires gathering the information needed to perform the calculation correctly. Cylinder size/factor, pressure, flow, and total expected time away from a dependable source are all needed before the adequacy decision can be made.','calcCheck');
+bind('calcCheck','#calcFeedback','E factor = 0.28. Duration = 1,600 × 0.28 ÷ 4 = 112 minutes. The other distractors represent common errors: wrong factor or pressure ÷ flow without applying a factor.','interpretCheck');
+bind('interpretCheck','#interpretFeedback','The source lesson uses a conservative two-thirds planning limit: 112 × 2/3 ≈ 75 minutes. A 70-minute plan fits inside that limit, but patient stability, the likelihood of increased flow, and backup access still matter.','flowChangeCheck');
+bind('flowChangeCheck','#flowChangeFeedback','With pressure and cylinder size unchanged, duration is inversely related to flow. Doubling flow from 4 to 8 L/min halves the available time from 90 to about 45 minutes.','integrate');
+bind('integrate','#integrateFeedback','1,200 × 0.28 ÷ 6 = 56 minutes calculated duration. Two-thirds is about 37 minutes—already shorter than the planned 45 minutes—and the rising oxygen requirement makes the plan even less robust. Use a larger/adequate supply or other safe transport plan.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.formulaDone,state.calcDone,reviewDone(),state.checks.gatherCheck,state.checks.calcCheck,state.checks.interpretCheck,state.checks.flowChangeCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();calc();
+</script>
+</body>
+</html>

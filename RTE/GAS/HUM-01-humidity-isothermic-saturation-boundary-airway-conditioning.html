@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HUM-01 | Humidity, the Isothermic Saturation Boundary & Airway Conditioning — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button,input{font:inherit}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:920px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;cursor:pointer}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:920px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.8rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800;cursor:pointer}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900;cursor:pointer}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.formula{font-size:1.06rem;font-weight:900;color:var(--navy);background:var(--soft);border:1px solid #bfe5e5;padding:14px;border-radius:14px;text-align:center;margin:10px 0}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:4px}.field label{font-size:.76rem;font-weight:900;color:var(--navy)}.field input{width:100%;border:1px solid #bdd0d8;border-radius:10px;padding:10px;background:#fff}.result{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfdfe}.result strong{font-size:1.2rem;color:var(--navy)}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900;cursor:pointer}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow,.rulegrid,.grid,.calc{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">HUM-01</div><div class="name">Humidity, the Isothermic Saturation Boundary & Airway Conditioning</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">Humidification & Aerosol Systems • HUM-01</div>
+<h1>Humidity, the Isothermic Saturation Boundary & Airway Conditioning</h1>
+<p>Understand how normal airways warm and humidify inspired gas, distinguish absolute from relative humidity, calculate humidity deficit, and recognize when an artificial airway or high ventilatory demand shifts the conditioning burden deeper into the lung.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">III.A.6 Maintain adequate humidification</span><span class="chip">Airway safety</span></div>
+<div class="flow">
+<div><strong>Warm</strong>Upper airway adds heat to inspired gas.</div>
+<div><strong>Humidify</strong>Water vapor is added as gas moves distally.</div>
+<div><strong>Reach ISB</strong>37°C • 100% RH • 44 mg/L AH.</div>
+<div><strong>Protect airway</strong>Prevent drying, thick secretions, and impaired clearance.</div>
+</div>
+</section>
+
+<section class="section" id="string">
+<div class="head"><div class="kicker">Socratic humidity string</div><h2>Which humidity concept explains the finding?</h2><p>Keep three ideas separate: actual water content, percent saturation, and where full conditioning is reached.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next humidity concept</button>
+</div></div>
+</section>
+
+<section class="section gated" id="framework">
+<div class="head"><div class="kicker">Core humidity framework</div><h2>Humidity and aerosol are not the same thing</h2><p>Your existing competency guide makes this the first distinction: humidity is vapor; aerosol is liquid droplets.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>Humidity</strong><span>Invisible water vapor dissolved in the gas. Humidifiers add or recycle vapor.</span></div>
+<div class="minirule"><strong>Aerosol</strong><span>Actual liquid droplets or particles suspended in gas. Nebulizers generate droplets.</span></div>
+<div class="minirule"><strong>Absolute humidity (AH)</strong><span>Actual mass of water vapor in a volume of gas, measured in mg/L.</span></div>
+<div class="minirule"><strong>Relative humidity (RH)</strong><span>How full the gas is compared with its water-vapor capacity at that temperature, expressed as a percentage.</span></div>
+</div>
+<div class="rule"><strong>Body-condition benchmark</strong><p>Fully conditioned gas at body temperature contains <b>44 mg/L AH at 37°C and 100% RH</b>.</p></div>
+<button class="primary" id="frameworkDone" style="width:100%">Continue →</button>
+</div>
+</section>
+
+<section class="section gated" id="formulas">
+<div class="head"><div class="kicker">Board-prep formulas</div><h2>Turn humidity values into clinical meaning</h2><p>These formulas come directly from your existing PulmoLearn humidity competency guide.</p></div>
+<div class="body">
+<div class="formula">Relative Humidity (%) = Absolute Humidity ÷ Water-vapor capacity at that temperature × 100</div>
+<div class="formula">Body Humidity (%) = Absolute Humidity ÷ 44 mg/L × 100</div>
+<div class="formula">Humidity Deficit = 44 mg/L − Delivered Absolute Humidity</div>
+
+<div class="calc">
+<div class="field"><label for="ah">Delivered absolute humidity (mg/L)</label><input id="ah" type="number" value="22" step="1" min="0"></div>
+<div class="field"><label for="capacity">Water-vapor capacity at current temperature (mg/L)</label><input id="capacity" type="number" value="30" step="1" min="0.1"></div>
+</div>
+<div class="result"><div>Body humidity</div><strong id="bh">50%</strong><div id="def">Humidity deficit = 22 mg/L</div></div>
+<div class="result"><div>Relative humidity at this temperature</div><strong id="rh">73%</strong><div>Same AH can produce a different RH if temperature changes.</div></div>
+<button class="primary" id="formulaDone" style="width:100%;margin-top:12px">Continue →</button>
+</div>
+</section>
+
+<section class="section gated" id="recognition">
+<div class="head"><div class="kicker">Airway conditioning & ISB</div><h2>Know what shifts the conditioning burden deeper</h2><p>Open each concept once to continue.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 5 reviewed</strong><span>Review all airway-conditioning concepts.</span></div>
+<div class="acc">
+
+<div class="accitem" data-key="isb"><button class="accbtn"><span>Isothermic saturation boundary <small>37°C • 100% RH • 44 mg/L</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Definition</label><ul><li>Point where inspired gas reaches body temperature and full saturation</li><li>Course benchmark: 37°C, 100% RH, 44 mg/L AH</li></ul></div>
+<div class="box"><label>Normal course location</label><ul><li>Approximately 5 cm below the carina</li></ul></div>
+<div class="box wide"><label>Meaning</label><strong>If full conditioning occurs deeper than normal, more lower-airway mucosa must supply heat and water to the inspired gas.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="deeper"><button class="accbtn"><span>What shifts the ISB deeper? <small>More airway work</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Source examples</label><ul><li>Mouth breathing</li><li>Cold/dry inspired gas</li><li>Artificial airway</li><li>High minute ventilation</li></ul></div>
+<div class="box"><label>Why it matters</label><ul><li>Lower airways must provide more heat and moisture</li><li>Drying burden increases</li></ul></div>
+<div class="box wide"><label>Exam cue</label><strong>Artificial airways and high ventilatory demand move the problem distal—exactly where airway drying becomes more dangerous.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="artificial"><button class="accbtn"><span>Artificial-airway bypass <small>Natural conditioning is removed</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>What is bypassed</label><ul><li>Nasal passages</li><li>Pharynx</li><li>Larynx</li><li>Much of normal upper-airway heat/moisture exchange</li></ul></div>
+<div class="box"><label>Clinical consequence</label><ul><li>Dry gas can reach the trachea directly</li><li>The tracheobronchial tree must replace the missing conditioning</li></ul></div>
+<div class="box wide"><label>Airway-safety rule</label><strong>Humidification is not optional comfort care for an artificial airway; it supports secretion mobility, mucosal integrity, and airway patency.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="drying"><button class="accbtn"><span>What inadequate humidity does <small>Dry airway → secretion problem</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Source effects</label><ul><li>Thicker secretions</li><li>Reduced ciliary function</li><li>Mucosal irritation</li><li>Secretion retention</li><li>Airway obstruction risk</li></ul></div>
+<div class="box"><label>What to assess</label><ul><li>Secretion thickness</li><li>Airway patency</li><li>Need for suction</li><li>Current humidification method</li><li>Minute ventilation / gas flow demand</li></ul></div>
+<div class="box wide"><label>Exam move</label><strong>When secretions become thick and difficult to clear in an artificial-airway patient, think inadequate airway conditioning until proven otherwise.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="temperature"><button class="accbtn"><span>Temperature changes RH <small>Same water, different percentage</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>If AH stays the same and gas warms</label><ul><li>Water-holding capacity increases</li><li>RH falls</li></ul></div>
+<div class="box"><label>If AH stays the same and gas cools</label><ul><li>Water-holding capacity decreases</li><li>RH rises</li><li>If saturated gas cools enough, water condenses</li></ul></div>
+<div class="box wide"><label>Common mistake</label><strong>High RH does not necessarily mean high actual water content. Always connect RH to the gas temperature and absolute humidity.</strong></div>
+</div></div></div>
+
+</div>
+</section>
+
+<section class="section gated" id="calcCheck">
+<div class="head"><div class="kicker">Calculation check</div><h2>Find the humidity deficit</h2></div>
+<div class="body">
+<div class="case"><strong>Delivered gas:</strong> absolute humidity = 22 mg/L</div>
+<div class="mcq" data-question="calcCheck">
+<button data-correct="false">22% humidity deficit</button>
+<button data-correct="true">22 mg/L humidity deficit</button>
+<button data-correct="false">44 mg/L humidity deficit</button>
+<button data-correct="false">66 mg/L humidity deficit</button>
+</div><div class="feedback" id="calcFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="rhCheck">
+<div class="head"><div class="kicker">Temperature & RH</div><h2>Same AH, warmer gas</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> Absolute humidity stays constant while the gas temperature rises.</div>
+<div class="mcq" data-question="rhCheck">
+<button data-correct="true">Relative humidity falls because the warmer gas can hold more water vapor.</button>
+<button data-correct="false">Relative humidity rises because warmer gas always becomes more saturated.</button>
+<button data-correct="false">Absolute humidity must fall whenever temperature rises.</button>
+<button data-correct="false">Temperature does not affect relative humidity.</button>
+</div><div class="feedback" id="rhFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="isbCheck">
+<div class="head"><div class="kicker">ISB application</div><h2>Which condition pushes the ISB deeper?</h2></div>
+<div class="body">
+<div class="case"><strong>Patient:</strong> Intubated, high minute ventilation, inspired gas is inadequately humidified.</div>
+<div class="mcq" data-question="isbCheck">
+<button data-correct="false">The ISB moves more proximally because an ETT improves natural airway conditioning.</button>
+<button data-correct="true">The ISB shifts deeper because upper-airway conditioning is bypassed and the lower airway must supply more heat and moisture.</button>
+<button data-correct="false">The ISB disappears because only aerosol therapy creates an ISB.</button>
+<button data-correct="false">The ISB remains fixed at the nose in all patients.</button>
+</div><div class="feedback" id="isbFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="airwayCheck">
+<div class="head"><div class="kicker">Primary task: maintain airway patency</div><h2>Act on the airway consequences of poor humidification</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> An intubated patient develops increasingly thick secretions, frequent suction needs, and mucus plugging while receiving inadequately conditioned gas.</div>
+<div class="mcq" data-question="airwayCheck">
+<button data-correct="false">Reduce humidification because wet secretions increase obstruction risk.</button>
+<button data-correct="true">Recognize inadequate humidification as an airway-patency threat and correct the humidification strategy while reassessing secretions and airway clearance.</button>
+<button data-correct="false">Ignore the humidification issue because secretion viscosity is unrelated to airway conditioning.</button>
+<button data-correct="false">Switch to visible aerosol solely because aerosol and humidity are interchangeable.</button>
+</div><div class="feedback" id="airwayFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style humidification problem</div><h2>Connect physics to airway safety</h2></div>
+<div class="body">
+<div class="case"><strong>Patient:</strong><ul>
+<li>Tracheostomy bypasses the upper airway</li>
+<li>High minute ventilation</li>
+<li>Delivered gas has a large humidity deficit</li>
+<li>Secretions are becoming thick and difficult to mobilize</li>
+<li>Airway resistance is increasing</li>
+</ul></div>
+<div class="mcq" data-question="integrate">
+<button data-correct="false">No change is needed because high relative humidity alone proves the gas is adequately conditioned.</button>
+<button data-correct="true">Recognize a deeper ISB and excessive airway drying burden; increase/optimize appropriate humidification and reassess secretion mobility and airway patency.</button>
+<button data-correct="false">Reduce water delivery because thicker secretions indicate over-humidification.</button>
+<button data-correct="false">Use aerosol droplets as a direct replacement for all humidification needs.</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>HUM-01 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed Humidity, the Isothermic Saturation Boundary & Airway Conditioning.</strong>
+<p style="margin:5px 0 0">You practiced distinguishing humidity from aerosol, using AH and RH correctly, calculating body humidity and humidity deficit, locating and interpreting the ISB, recognizing deeper ISB shifts, and linking inadequate conditioning to secretion retention and airway-patency risk.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Humidity concept string</li><li>Humidity vs aerosol</li><li>AH, RH, body humidity & deficit</li><li>ISB definition and shifts</li><li>Artificial-airway bypass</li><li>Airway drying consequences</li><li>Calculation and application checks</li><li>Integrated airway-safety decision</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_hum01_v1';
+
+const items=[
+{id:'u1',stage:1,patient:'The question asks for the actual mass of water vapor in one liter of gas.',prompt:'Which humidity term is being tested?',correct:'Absolute humidity',choices:['Absolute humidity','Relative humidity','Humidity deficit'],good:'Absolute humidity is the actual amount of water vapor present and is measured in mg/L.',hint:'Look for actual water mass per volume.'},
+{id:'u2',stage:1,patient:'The question asks how full the gas is compared with its water-vapor capacity at the current temperature.',prompt:'Which humidity term fits?',correct:'Relative humidity',choices:['Relative humidity','Absolute humidity','Body humidity deficit'],good:'Relative humidity is the percentage of the gas’s water-holding capacity that is filled at that temperature.',hint:'Think percentage of capacity.'},
+{id:'u3',stage:1,patient:'Inspired gas reaches 37°C, 100% RH, and 44 mg/L AH.',prompt:'What boundary has been reached?',correct:'Isothermic saturation boundary',choices:['Isothermic saturation boundary','Anatomic dead-space boundary','Alveolar-capillary membrane'],good:'Those are the course benchmarks for the ISB—the point where inspired gas reaches full body-temperature conditioning.',hint:'37°C + 100% RH + 44 mg/L.'},
+{id:'u4',stage:2,patient:'An endotracheal tube bypasses the nose, pharynx, and larynx.',prompt:'What happens to the airway-conditioning burden?',correct:'It shifts deeper into the lower airway',choices:['It shifts deeper into the lower airway','It disappears because the ETT humidifies gas','It moves only into the oral cavity'],good:'Bypassing the upper airway forces the tracheobronchial tree to perform more conditioning, moving the ISB distally.',hint:'The natural heat-and-moisture exchanger has been bypassed.'},
+{id:'u5',stage:2,patient:'Absolute humidity remains unchanged while gas temperature increases.',prompt:'What happens to relative humidity?',correct:'Relative humidity decreases',choices:['Relative humidity decreases','Relative humidity increases','Relative humidity stays exactly the same'],good:'Warmer gas can hold more water. With the same actual water content, the percentage saturation falls.',hint:'Same water divided by a larger capacity.'},
+{id:'u6',stage:2,patient:'Delivered gas has 22 mg/L AH.',prompt:'What is the humidity deficit relative to fully conditioned body gas?',correct:'22 mg/L',choices:['22 mg/L','44 mg/L','66 mg/L'],good:'Humidity deficit = 44 − 22 = 22 mg/L.',hint:'Subtract delivered AH from 44 mg/L.'}
+];
+
+const reviewKeys=['isb','deeper','artificial','drying','temperature'];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),frameworkDone:false,formulaDone:false,reviewed:[],checks:{calcCheck:false,rhCheck:false,isbCheck:false,airwayCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices();
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){
+ if(stringDone())reveal('framework');
+ if(state.frameworkDone)reveal('formulas');
+ if(state.formulaDone)reveal('recognition');
+ if(reviewDone())reveal('calcCheck');
+ if(state.checks.calcCheck)reveal('rhCheck');
+ if(state.checks.rhCheck)reveal('isbCheck');
+ if(state.checks.isbCheck)reveal('airwayCheck');
+ if(state.checks.airwayCheck)reveal('integrate');
+ if(state.complete||state.checks.integrate)reveal('finish')
+}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){
+  $('#roundLabel').textContent='Humidity string complete';
+  $('#patientLine').textContent='You have separated actual water content, percent saturation, humidity deficit, and the ISB.';
+  $('#prompt').textContent='The airway-conditioning framework is now available below.';
+  $('#choices').innerHTML='';$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Next:</strong> connect the humidity physics to artificial-airway safety and secretion management.';
+  $('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();$('#roundLabel').textContent='Concept '+(state.round+1)+' of '+items.length;
+ $('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+  btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');
+  requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+  btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the humidity framework:</strong> '+x.hint;
+  setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('framework')};
+$('#frameworkDone').onclick=()=>{state.frameworkDone=true;save();reveal('formulas');setTimeout(()=>$('#formulas').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+function calc(){
+ let ah=Number($('#ah').value),cap=Number($('#capacity').value);
+ let bh=(ah/44)*100, deficit=44-ah, rh=(ah/cap)*100;
+ $('#bh').textContent=isFinite(bh)?Math.round(bh)+'%':'—';
+ $('#def').textContent=isFinite(deficit)?'Humidity deficit = '+deficit.toFixed(0)+' mg/L':'—';
+ $('#rh').textContent=isFinite(rh)?Math.round(rh)+'%':'—';
+}
+$('#ah').addEventListener('input',calc);$('#capacity').addEventListener('input',calc);
+$('#formulaDone').onclick=()=>{state.formulaDone=true;save();reveal('recognition');setTimeout(()=>$('#recognition').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('calcCheck')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+   state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{
+   btn.classList.add('wrong');f.className='feedback show try';
+   f.innerHTML='<strong>Not quite.</strong> Use the source definitions: 44 mg/L is the fully conditioned body benchmark, RH depends on temperature, and bypassing the upper airway shifts the conditioning burden distally.'
+  }
+ })
+}
+bind('calcCheck','#calcFeedback','The source formula is humidity deficit = 44 mg/L − delivered AH. Therefore, 44 − 22 = 22 mg/L.','rhCheck');
+bind('rhCheck','#rhFeedback','Your competency guide states that if AH stays constant while gas is heated, water-vapor capacity increases and RH falls. Cooling does the opposite and may cause condensation when saturation is reached.','isbCheck');
+bind('isbCheck','#isbFeedback','The source lesson specifically identifies artificial airways and high minute ventilation as conditions that shift the ISB deeper. The lower airway must then provide more heat and water to the inspired gas.','airwayCheck');
+bind('airwayCheck','#airwayFeedback','HUM-01’s primary NBRC task is maintaining adequate humidification as part of artificial-airway safety. The supplied guide links dry gas to thick secretions, impaired ciliary function, retention, and airway obstruction, so the humidification strategy must be corrected and the airway reassessed.','integrate');
+bind('integrate','#integrateFeedback','This case combines every core HUM-01 clue: upper-airway bypass, high minute ventilation, large humidity deficit, thick secretions, and increasing resistance. Together they indicate a deeper ISB and inadequate airway conditioning that threatens airway patency.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.frameworkDone,state.formulaDone,reviewDone(),state.checks.calcCheck,state.checks.rhCheck,state.checks.isbCheck,state.checks.airwayCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();calc();
+</script>
+</body>
+</html>
