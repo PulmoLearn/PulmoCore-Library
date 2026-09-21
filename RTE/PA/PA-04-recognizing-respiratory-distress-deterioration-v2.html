@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PA-04 | Recognizing Respiratory Distress & Deterioration — PulmoLearn</title>
+<style>
+:root{
+  --navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+  --bg:#f4f7f8;--card:#fff;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;
+  --ok:#1f7a4d;--okbg:#eaf7f0;--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;
+  --shadow:0 8px 24px rgba(11,31,51,.08)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}
+.brand{font-weight:900}.brand span{color:#50d2d0}.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}
+.hero p,.head p{margin:0}.hero p{color:#dce8ef}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.82rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}
+.body{padding:8px 18px 20px}.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.rulegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.mcq{display:grid;gap:8px;margin-top:12px}.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.pattern{font-size:.93rem}.pattern b{color:var(--navy)}.tag{display:inline-block;border-radius:999px;background:var(--soft);color:var(--teal-dark);padding:3px 8px;font-size:.72rem;font-weight:900;margin:2px 3px 2px 0}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow,.rulegrid{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <div class="brand">Pulmo<span>Learn</span></div>
+    <div class="mini"><div class="id">PA-04</div><div class="name">Recognizing Respiratory Distress & Deterioration</div></div>
+    <div class="actions">
+      <a class="icon" href="https://www.pulmolearn.com/RTE" aria-label="Return to RTE library">← RTE</a>
+      <button class="icon" id="outlineBtn">☰</button>
+      <button class="icon" id="resetBtn">↺</button>
+    </div>
+  </div>
+  <div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="eyebrow">Patient Assessment & Clinical Data Gathering • PA-04</div>
+  <h1>Recognizing Respiratory Distress & Deterioration</h1>
+  <p>Turn chest-assessment terminology into recognizable disease patterns, then decide whether the patient is stable or getting worse.</p>
+  <div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.A.8 Determine condition</span><span class="chip">Shared: I.B.1 Clinical assessment</span></div>
+  <div class="flow">
+    <div><strong>1. Name it</strong>Recognize the assessment term.</div>
+    <div><strong>2. Pattern it</strong>Combine findings to identify the likely condition.</div>
+    <div><strong>3. Watch change</strong>Recognize deterioration even when one finding looks “better.”</div>
+  </div>
+</section>
+
+<section class="section" id="terms">
+  <div class="head"><div class="kicker">Terminology first</div><h2>Know the language before you diagnose the pattern</h2><p>Identify the finding from the clue. These terms become the building blocks for every disease pattern that follows.</p></div>
+  <div class="body">
+    <div class="card">
+      <div class="round" id="termRound">Question 1</div>
+      <div class="patient" id="termPatient"></div>
+      <div class="prompt" id="termPrompt"></div>
+      <div class="choices" id="termChoices"></div>
+      <div class="feedback" id="termFeedback"></div>
+      <button class="next" id="termNext">Next clue</button>
+    </div>
+  </div>
+</section>
+
+<section class="section gated" id="rules">
+  <div class="head"><div class="kicker">Three rules that unlock the patterns</div><h2>Use the physics instead of memorizing seven rows</h2><p>These three distinctions do most of the work.</p></div>
+  <div class="body">
+    <div class="rulegrid">
+      <div class="minirule"><strong>1. Percussion: air vs density</strong><span><b>Hyperresonant</b> suggests more air. <b>Dull</b> suggests more density, fluid, or tissue.</span></div>
+      <div class="minirule"><strong>2. Fremitus: vibration transmission</strong><span><b>Consolidated lung</b> transmits vibration better. <b>Pleural air or fluid</b> reduces transmission to the chest wall.</span></div>
+      <div class="minirule"><strong>3. Focal vs diffuse</strong><span><b>Focal/unilateral</b> findings suggest a localized process. <b>Diffuse/bilateral</b> findings suggest a generalized process.</span></div>
+    </div>
+    <div class="rule"><strong>Fast discriminator</strong><p>Decreased fremitus + hyperresonance → think pleural air. Decreased fremitus + dullness → think pleural fluid. Increased fremitus + dullness → think consolidated lung.</p></div>
+    <button class="primary" id="rulesDone" style="width:100%">I’m ready to apply the rules →</button>
+  </div>
+</section>
+
+<section class="section gated" id="patterns">
+  <div class="head"><div class="kicker">Socratic disease-pattern string</div><h2>Which condition best fits the cluster?</h2><p>Use each distinction you establish to eliminate choices on the next pattern.</p></div>
+  <div class="body">
+    <div class="card">
+      <div class="round" id="patternRound">Pattern 1</div>
+      <div class="patient" id="patternPatient"></div>
+      <div class="prompt">Which condition is MOST consistent with these findings?</div>
+      <div class="choices" id="patternChoices"></div>
+      <div class="feedback" id="patternFeedback"></div>
+      <button class="next" id="patternNext">Next pattern</button>
+    </div>
+  </div>
+</section>
+
+<section class="section gated" id="patternReview">
+  <div class="head"><div class="kicker">Quick recognition</div><h2>See all seven patterns side by side</h2><p>Open each condition once. Focus on the finding that separates it from its closest look-alike.</p></div>
+  <div class="progressnote"><strong id="reviewCount">0 of 7 reviewed</strong><span>Review all patterns to continue.</span></div>
+  <div class="acc">
+
+    <div class="accitem" data-key="normal"><button class="accbtn"><span>Normal <small>Symmetric and internally consistent</small></span><span class="plus">+</span></button><div class="panel"><div class="pattern">
+      <span class="tag">Symmetric expansion</span><span class="tag">Expected fremitus</span><span class="tag">Resonant</span><span class="tag">Symmetric airflow</span>
+      <p><b>Recognition clue:</b> the major findings agree and are symmetric without increased work of breathing.</p>
+    </div></div></div>
+
+    <div class="accitem" data-key="emphysema"><button class="accbtn"><span>Emphysema <small>Too much trapped air diffusely</small></span><span class="plus">+</span></button><div class="panel"><div class="pattern">
+      <span class="tag">Hyperinflated appearance</span><span class="tag">Reduced excursion</span><span class="tag">Hyperresonant</span><span class="tag">Diminished breath sounds</span><span class="tag">Prolonged expiration</span>
+      <p><b>Recognition clue:</b> chronic, diffuse hyperinflation with decreased breath-sound intensity—not a sudden unilateral loss of sounds.</p>
+    </div></div></div>
+
+    <div class="accitem" data-key="asthma"><button class="accbtn"><span>Asthma <small>Diffuse airflow obstruction</small></span><span class="plus">+</span></button><div class="panel"><div class="pattern">
+      <span class="tag">Increased work</span><span class="tag">Prolonged expiration</span><span class="tag">Diffuse wheeze</span><span class="tag">Possible air trapping</span>
+      <p><b>Recognition clue:</b> diffuse expiratory airflow obstruction. In severe worsening asthma, wheezing may become quieter because less air is moving.</p>
+    </div></div></div>
+
+    <div class="accitem" data-key="effusion"><button class="accbtn"><span>Pleural effusion <small>Fluid outside the lung</small></span><span class="plus">+</span></button><div class="panel"><div class="pattern">
+      <span class="tag">Reduced expansion</span><span class="tag">↓ Fremitus</span><span class="tag">Dull</span><span class="tag">Diminished/absent sounds</span>
+      <p><b>Recognition clue:</b> pleural fluid creates dullness while reducing transmission of vibration and breath sounds.</p>
+    </div></div></div>
+
+    <div class="accitem" data-key="pneumo"><button class="accbtn"><span>Pneumothorax <small>Air outside the lung</small></span><span class="plus">+</span></button><div class="panel"><div class="pattern">
+      <span class="tag">Reduced expansion</span><span class="tag">↓ Fremitus</span><span class="tag">Hyperresonant</span><span class="tag">Diminished/absent sounds</span>
+      <p><b>Recognition clue:</b> unilateral quiet chest + hyperresonance points toward pleural air rather than pleural fluid.</p>
+    </div></div></div>
+
+    <div class="accitem" data-key="consolidation"><button class="accbtn"><span>Consolidation <small>Dense lung transmits vibration better</small></span><span class="plus">+</span></button><div class="panel"><div class="pattern">
+      <span class="tag">Focal abnormality</span><span class="tag">↑ Fremitus</span><span class="tag">Dull</span><span class="tag">Bronchial sounds/crackles</span>
+      <p><b>Recognition clue:</b> dullness can resemble effusion, but <b>increased fremitus</b> points toward consolidated lung rather than fluid in the pleural space.</p>
+    </div></div></div>
+
+    <div class="accitem" data-key="edema"><button class="accbtn"><span>Pulmonary edema <small>Diffuse wet alveolar pattern</small></span><span class="plus">+</span></button><div class="panel"><div class="pattern">
+      <span class="tag">Tachypnea/distress</span><span class="tag">Bilateral crackles</span><span class="tag">Often dependent/diffuse</span><span class="tag">No isolated unilateral pattern</span>
+      <p><b>Recognition clue:</b> widespread bilateral crackles fit a diffuse fluid process better than a focal pleural abnormality.</p>
+    </div></div></div>
+
+  </div>
+</section>
+
+<section class="section gated" id="trachea">
+  <div class="head"><div class="kicker">Tracheal position</div><h2>Use direction of shift to separate pressure from volume loss</h2><p>Tracheal position is especially useful when the rest of the chest findings are unilateral.</p></div>
+  <div class="body">
+    <div class="rulegrid">
+      <div class="minirule"><strong>Midline</strong><span>Expected with normal findings and many <b>bilateral</b> lung diseases, because there is no strong one-sided force pulling or pushing the mediastinum.</span></div>
+      <div class="minirule"><strong>Shift away from the affected side</strong><span>Think <b>pressure or volume outside the lung</b>, such as a large pneumothorax or large pleural effusion, pushing the mediastinum away.</span></div>
+      <div class="minirule"><strong>Shift toward the affected side</strong><span>Think <b>volume loss</b>, especially atelectasis, which pulls the mediastinum toward the affected side.</span></div>
+    </div>
+    <div class="rule"><strong>Fast rule</strong><p><b>Push = away. Pull = toward.</b> Pleural air/fluid can push the trachea away when large enough; atelectatic volume loss pulls it toward the affected side.</p></div>
+
+    <div class="case"><strong>Quick check:</strong> A patient has markedly diminished right-sided breath sounds, hyperresonance on the right, and the trachea is shifted to the left.</div>
+    <div class="mcq" data-question="tracheaCheck">
+      <button data-correct="true">The tracheal shift supports a large right-sided pleural air process pushing the mediastinum away.</button>
+      <button data-correct="false">The tracheal shift suggests right-sided atelectatic volume loss.</button>
+      <button data-correct="false">The tracheal position makes a unilateral pleural process less likely.</button>
+      <button data-correct="false">The trachea should shift toward the right whenever breath sounds are diminished on the right.</button>
+    </div>
+    <div class="feedback" id="tracheaFeedback"></div>
+  </div>
+</section>
+
+<section class="section gated" id="deterioration">
+  <div class="head"><div class="kicker">Deterioration trap</div><h2>When “less wheezing” is not improvement</h2><p>Trend the whole patient, not one sound.</p></div>
+  <div class="body">
+    <div class="case"><strong>Severe asthma:</strong><ul>
+      <li>20 minutes ago: loud diffuse wheezing, RR 30/min, speaking short phrases</li>
+      <li>Now: wheezing is barely audible, RR 34/min, marked accessory-muscle use, increasingly fatigued</li>
+    </ul></div>
+    <div class="mcq" data-question="deterioration">
+      <button data-correct="false">The bronchodilator is working because the wheeze is quieter.</button>
+      <button data-correct="true">Air movement may be worsening despite less audible wheezing.</button>
+      <button data-correct="false">The assessment is now consistent with a pleural effusion.</button>
+      <button data-correct="false">The patient is stable because respiratory rate changed only slightly.</button>
+    </div>
+    <div class="feedback" id="deteriorationFeedback"></div>
+  </div>
+</section>
+
+<section class="section gated" id="integrate">
+  <div class="head"><div class="kicker">Integrated RTE-style scenario</div><h2>Recognize the condition from the physical pattern</h2><p>Use the cluster; do not anchor on a single abnormality.</p></div>
+  <div class="body">
+    <div class="case"><strong>A patient develops sudden dyspnea after a procedure.</strong><ul>
+      <li>Right chest expands less than the left</li>
+      <li>Tactile fremitus is decreased on the right</li>
+      <li>Percussion is hyperresonant on the right</li>
+      <li>Breath sounds are markedly diminished on the right</li>
+    </ul></div>
+    <div class="mcq" data-question="integrate">
+      <button data-correct="false">Pulmonary edema</button>
+      <button data-correct="false">Right lower-lobe consolidation</button>
+      <button data-correct="true">Right pneumothorax</button>
+      <button data-correct="false">Right pleural effusion</button>
+    </div>
+    <div class="feedback" id="integrateFeedback"></div>
+  </div>
+</section>
+
+<section class="section gated" id="finish">
+  <div class="head"><div class="kicker">Lesson complete</div><h2>PA-04 complete</h2></div>
+  <div class="body">
+    <div class="complete">
+      <strong>✓ You completed Recognizing Respiratory Distress & Deterioration.</strong>
+      <p style="margin:5px 0 0">You practiced translating physical-assessment terminology into normal, obstructive, pleural, consolidation, and pulmonary-edema patterns, using tracheal position to distinguish push from pull, and recognizing when a changing assessment signals deterioration.</p>
+      <div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+      <div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody">
+<ol><li>Terminology</li><li>Three pattern rules</li><li>Disease-pattern string</li><li>Seven-pattern quick review</li><li>Tracheal position</li><li>Deterioration trap</li><li>Integrated scenario</li></ol>
+</div></div></div>
+
+<script>
+const KEY='pulmolearn_pa04_v1';
+
+const termItems=[
+{id:'t1',stage:1,patient:'Percussion produces a hollow, booming note compared with the opposite side.',prompt:'What is this percussion finding called?',correct:'Hyperresonance',choices:['Hyperresonance','Dullness','Resonance'],good:'Hyperresonance suggests increased air. Later, you will use whether it is focal or diffuse to narrow the pattern.',hint:'Think “more air than expected.”'},
+{id:'t2',stage:1,patient:'Percussion produces a short, flat sound over an abnormal area.',prompt:'What is this percussion finding called?',correct:'Dullness',choices:['Dullness','Hyperresonance','Resonance'],good:'Dullness suggests increased density, fluid, or tissue beneath the chest wall.',hint:'Think “more density than expected.”'},
+{id:'t3',stage:1,patient:'The expected percussion note is heard over healthy aerated lung.',prompt:'What is the normal finding?',correct:'Resonance',choices:['Resonance','Dullness','Hyperresonance'],good:'Resonance is the expected percussion note over normally aerated lung.',hint:'Choose the normal percussion term.'},
+{id:'t4',stage:2,patient:'Vibrations felt on the chest wall while the patient speaks are stronger over one focal area.',prompt:'What finding is present?',correct:'Increased tactile fremitus',choices:['Increased tactile fremitus','Decreased tactile fremitus','Crepitus'],good:'Increased tactile fremitus means vibration is transmitted more strongly through the underlying lung.',hint:'The key clue is stronger transmitted voice vibration.'},
+{id:'t5',stage:2,patient:'Voice vibrations are noticeably weaker over the right lower chest than the left.',prompt:'What finding is present?',correct:'Decreased tactile fremitus',choices:['Decreased tactile fremitus','Increased tactile fremitus','Normal resonance'],good:'Decreased tactile fremitus means vibration is not transmitting to the chest wall as well.',hint:'The key clue is reduced transmitted vibration.'},
+{id:'t6',stage:2,patient:'A musical, mostly expiratory sound is heard diffusely.',prompt:'Which term best describes the sound?',correct:'Wheeze',choices:['Wheeze','Crackles','Diminished breath sounds'],good:'Wheezing is a musical sound associated with airflow through narrowed airways.',hint:'Musical + expiratory points to wheeze.'},
+{id:'t7',stage:2,patient:'Discontinuous popping sounds are heard at both lung bases.',prompt:'Which term best describes the sound?',correct:'Crackles',choices:['Crackles','Wheeze','Stridor'],good:'Crackles are discontinuous popping sounds. Their distribution and the rest of the assessment determine what they mean.',hint:'Think discontinuous popping sounds.'},
+{id:'t8',stage:3,patient:'Air movement is much quieter on the right than the left.',prompt:'Which term best describes the finding?',correct:'Diminished breath sounds',choices:['Diminished breath sounds','Diffuse wheeze','Increased fremitus'],good:'Diminished breath sounds describe reduced audible airflow. The cause depends on the accompanying percussion, fremitus, and symmetry findings.',hint:'The key clue is reduced audible airflow.'}
+];
+
+const patternItems=[
+{id:'p1',stage:1,patient:'Unilateral ↓ expansion + ↓ tactile fremitus + hyperresonance + markedly diminished breath sounds',correct:'Pneumothorax',choices:['Pneumothorax','Pleural effusion','Consolidation'],good:'Pleural air decreases vibration and breath sounds while producing hyperresonance. The hyperresonance separates this from pleural effusion.'},
+{id:'p2',stage:1,patient:'Unilateral ↓ expansion + ↓ tactile fremitus + dullness + diminished breath sounds',correct:'Pleural effusion',choices:['Pleural effusion','Pneumothorax','Consolidation'],good:'Pleural fluid creates dullness and blocks transmission of both fremitus and breath sounds.'},
+{id:'p3',stage:1,patient:'Focal ↑ tactile fremitus + dullness + bronchial breath sounds/crackles',correct:'Consolidation',choices:['Consolidation','Pleural effusion','Pneumothorax'],good:'Consolidated lung is dense, so percussion becomes dull, but vibration transmission increases rather than decreases.'},
+{id:'p4',stage:2,patient:'Diffuse expiratory wheeze + prolonged expiration + increased work of breathing',correct:'Asthma',choices:['Asthma','Emphysema','Pulmonary edema'],good:'The dominant pattern is diffuse airflow obstruction. Wheezing and prolonged expiration fit asthma more directly than edema or chronic emphysematous hyperinflation.'},
+{id:'p5',stage:2,patient:'Chronic hyperinflated chest + reduced excursion + diffuse hyperresonance + diminished breath sounds + prolonged expiration',correct:'Emphysema',choices:['Emphysema','Asthma','Pneumothorax'],good:'The chronic, diffuse hyperinflation pattern fits emphysema. Pneumothorax would be focal/unilateral; asthma more often emphasizes active wheezing.'},
+{id:'p6',stage:2,patient:'Tachypnea + diffuse bilateral crackles + increased work of breathing without a focal unilateral pattern',correct:'Pulmonary edema',choices:['Pulmonary edema','Pleural effusion','Pneumothorax'],good:'Diffuse bilateral crackles fit a widespread fluid/alveolar process better than a unilateral pleural abnormality.'},
+{id:'p7',stage:3,patient:'Symmetric chest expansion + expected fremitus + resonant percussion + symmetric breath sounds without added sounds',correct:'Normal',choices:['Normal','Emphysema','Consolidation'],good:'The findings are symmetric and internally consistent with normally aerated lungs.'}
+];
+
+const reviewKeys=['normal','emphysema','asthma','effusion','pneumo','consolidation','edema'];
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(items){return [...new Set(items.map(x=>x.stage))].sort().flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoiceMap(items){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{termRound:0,termOrder:makeOrder(termItems),termChoices:makeChoiceMap(termItems),rulesDone:false,patternRound:0,patternOrder:makeOrder(patternItems),patternChoices:makeChoiceMap(patternItems),reviewed:[],checks:{tracheaCheck:false,deterioration:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();
+try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.termOrder)||state.termOrder.length!==termItems.length)state.termOrder=makeOrder(termItems);
+if(!state.termChoices)state.termChoices=makeChoiceMap(termItems);
+if(!Array.isArray(state.patternOrder)||state.patternOrder.length!==patternItems.length)state.patternOrder=makeOrder(patternItems);
+if(!state.patternChoices)state.patternChoices=makeChoiceMap(patternItems);
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function termsDone(){return state.termRound>=termItems.length}
+function patternsDone(){return state.patternRound>=patternItems.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function sync(){
+ if(termsDone())reveal('rules');
+ if(state.rulesDone)reveal('patterns');
+ if(patternsDone())reveal('patternReview');
+ if(reviewDone())reveal('trachea');
+ if(state.checks.tracheaCheck)reveal('deterioration');
+ if(state.checks.deterioration)reveal('integrate');
+ if(state.complete||state.checks.integrate)reveal('finish')
+}
+
+function renderString(kind){
+ const isTerm=kind==='term',items=isTerm?termItems:patternItems,roundKey=isTerm?'termRound':'patternRound',orderKey=isTerm?'termOrder':'patternOrder',choiceKey=isTerm?'termChoices':'patternChoices';
+ const r=state[roundKey],done=r>=items.length;
+ const ids=isTerm?{round:'#termRound',patient:'#termPatient',prompt:'#termPrompt',choices:'#termChoices',feedback:'#termFeedback',next:'#termNext'}:{round:'#patternRound',patient:'#patternPatient',choices:'#patternChoices',feedback:'#patternFeedback',next:'#patternNext'};
+ if(done){
+   $(ids.round).textContent=isTerm?'Terminology complete':'Disease patterns complete';
+   $(ids.patient).textContent=isTerm?'You now have the vocabulary needed to interpret the chest patterns.':'You have identified all seven core chest-assessment patterns.';
+   if(isTerm)$(ids.prompt).textContent='The pattern rules are now available below.';
+   $(ids.choices).innerHTML='';
+   $(ids.feedback).className='feedback show good';
+   $(ids.feedback).innerHTML=isTerm?'<strong>Next:</strong> use percussion, fremitus, and focal-vs-diffuse clues to build patterns.':'<strong>Next:</strong> review all seven patterns side by side, then apply them to deterioration.';
+   $(ids.next).classList.remove('show');sync();return;
+ }
+ const x=items.find(i=>i.id===state[orderKey][r]);
+ $(ids.round).textContent=(isTerm?'Question ':'Pattern ')+(r+1)+' of '+items.length;
+ $(ids.patient).textContent=x.patient;
+ if(isTerm)$(ids.prompt).textContent=x.prompt;
+ const box=$(ids.choices);box.innerHTML='';box.classList.remove('answered');
+ $(ids.feedback).className='feedback';$(ids.next).classList.remove('show');
+ state[choiceKey][x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answerString(kind,b,c,x);box.appendChild(b)})
+}
+function answerString(kind,btn,c,x){
+ const choicesSel=kind==='term'?'#termChoices .choice':'#patternChoices .choice';
+ const feedbackSel=kind==='term'?'#termFeedback':'#patternFeedback';
+ const nextSel=kind==='term'?'#termNext':'#patternNext';
+ let buttons=$$(choicesSel);buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+   btn.classList.add('correct');$(kind==='term'?'#termChoices':'#patternChoices').classList.add('answered');
+   $(feedbackSel).className='feedback show good';$(feedbackSel).innerHTML='<strong>Correct.</strong> '+x.good;
+   $(nextSel).classList.add('show');requestAnimationFrame(()=>$(feedbackSel).scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+   btn.classList.add('wrong');$(feedbackSel).className='feedback show try';
+   $(feedbackSel).innerHTML=kind==='term'?'<strong>Use the clue:</strong> '+x.hint:'<strong>Not quite.</strong> Compare percussion first, then fremitus, then decide whether the pattern is focal or diffuse.';
+   setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#termNext').onclick=()=>{state.termRound++;save();renderString('term');if(termsDone())reveal('rules')};
+$('#patternNext').onclick=()=>{state.patternRound++;save();renderString('pattern');if(patternsDone())reveal('patternReview')};
+$('#rulesDone').onclick=()=>{state.rulesDone=true;save();reveal('patterns');setTimeout(()=>$('#patterns').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('deterioration')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){
+   let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale
+ }
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;
+  buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+   state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{
+   btn.classList.add('wrong');f.className='feedback show try';
+   f.innerHTML='<strong>Not quite.</strong> Rebuild the pattern from the assessment findings instead of relying on one familiar word.'
+  }
+ })
+}
+bind('tracheaCheck','#tracheaFeedback','A large right-sided pleural air process can push the mediastinum and trachea away from the affected side. By contrast, atelectatic volume loss tends to pull the trachea toward the affected side.','deterioration');
+bind('deterioration','#deteriorationFeedback','A quieter wheeze is only reassuring if the rest of the patient is improving. Here, worsening fatigue, respiratory effort, and tachypnea suggest declining airflow and deterioration.','integrate');
+bind('integrate','#integrateFeedback','The combination of unilateral decreased expansion, decreased fremitus, hyperresonance, and markedly diminished breath sounds is the classic physical-assessment pattern for pneumothorax.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[termsDone(),state.rulesDone,patternsDone(),reviewDone(),state.checks.tracheaCheck,state.checks.deterioration,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;
+['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});
+setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+renderString('term');renderString('pattern');renderReview();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>
