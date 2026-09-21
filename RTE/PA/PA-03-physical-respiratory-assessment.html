@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PA-03 | Physical Respiratory Assessment — PulmoLearn</title>
+<style>
+:root{
+  --navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+  --bg:#f4f7f8;--card:#fff;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;
+  --ok:#1f7a4d;--okbg:#eaf7f0;--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;
+  --shadow:0 8px 24px rgba(11,31,51,.08)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}
+.brand{font-weight:900}.brand span{color:#50d2d0}.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}
+.hero p,.head p{margin:0}.hero p{color:#dce8ef}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.82rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}
+.body{padding:8px 18px 20px}.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}.mcq{display:grid;gap:8px;margin-top:12px}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <div class="brand">Pulmo<span>Learn</span></div>
+    <div class="mini"><div class="id">PA-03</div><div class="name">Physical Respiratory Assessment</div></div>
+    <div class="actions">
+      <a class="icon" href="https://www.pulmolearn.com/RTE" aria-label="Return to RTE library">← RTE</a>
+      <button class="icon" id="outlineBtn">☰</button>
+      <button class="icon" id="resetBtn">↺</button>
+    </div>
+  </div>
+  <div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="eyebrow">Patient Assessment & Clinical Data Gathering • PA-03</div>
+  <h1>Physical Respiratory Assessment</h1>
+  <p>Use inspection, palpation, percussion, and auscultation to recognize meaningful cardiopulmonary findings—and know which method gives you the information you need.</p>
+  <div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.B.1 Observation</span><span class="chip">I.B.2 Palpation</span><span class="chip">I.B.3 Auscultation</span></div>
+  <div class="flow">
+    <div><strong>Inspect</strong>Look before touching.</div>
+    <div><strong>Palpate</strong>Feel movement and vibration.</div>
+    <div><strong>Percuss</strong>Estimate underlying density.</div>
+    <div><strong>Auscultate</strong>Listen to airflow and added sounds.</div>
+  </div>
+</section>
+
+<section class="section" id="methodString">
+  <div class="head"><div class="kicker">Socratic string</div><h2>Which assessment method gives you the answer?</h2><p>Start with obvious findings, then separate findings that can be confused.</p></div>
+  <div class="body">
+    <div class="card">
+      <div class="round" id="roundLabel">Question 1</div>
+      <div class="patient" id="patientLine"></div>
+      <div class="prompt" id="prompt"></div>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next" id="nextBtn">Next finding</button>
+    </div>
+  </div>
+</section>
+
+<section class="section gated" id="recognize">
+  <div class="head"><div class="kicker">Quick recognition</div><h2>Know what to look for</h2><p>Open each area once. Focus on the clue that tells you what the finding means.</p></div>
+  <div class="progressnote"><strong id="reviewCount">0 of 7 reviewed</strong><span>Review all areas to continue.</span></div>
+  <div class="acc" id="accordion">
+
+    <div class="accitem" data-key="inspect"><button class="accbtn"><span>Inspection <small>What can you see before touching?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+      <div class="box"><label>Look for</label><ul><li>Respiratory rate and pattern</li><li>Accessory-muscle use</li><li>Retractions or paradoxical movement</li><li>Chest symmetry</li><li>Positioning and ability to speak</li></ul></div>
+      <div class="box"><label>Quick clues</label><ul><li>Tripod posture</li><li>Nasal flaring</li><li>Unequal chest rise</li><li>One-word speech</li><li>Visible fatigue</li></ul></div>
+      <div class="box wide"><label>Exam move</label><strong>Inspection answers “What is the patient doing right now?”</strong> Work of breathing, symmetry, posture, and mental status are often apparent before equipment is used.</div>
+    </div></div></div>
+
+    <div class="accitem" data-key="mental"><button class="accbtn"><span>Mental status & general appearance <small>Behavior is respiratory data</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+      <div class="box"><label>Look for</label><ul><li>Alertness and orientation</li><li>Agitation</li><li>Somnolence</li><li>Ability to cooperate</li><li>Overall appearance</li></ul></div>
+      <div class="box"><label>Quick clues</label><ul><li>New agitation</li><li>Confusion</li><li>Drowsiness</li><li>Cannot stay awake</li></ul></div>
+      <div class="box wide"><label>Exam move</label><strong>Do not dismiss a mental-status change as “just behavior.”</strong> In a respiratory patient, a new change can be a meaningful clinical finding.</div>
+    </div></div></div>
+
+    <div class="accitem" data-key="palpate"><button class="accbtn"><span>Palpation <small>Feel movement, position, pulse, vibration</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+      <div class="box"><label>Look for</label><ul><li>Chest expansion symmetry</li><li>Crepitus</li><li>Tenderness</li><li>Tactile rhonchi/fremitus</li><li>Tracheal position</li><li>Pulse rhythm/intensity</li></ul></div>
+      <div class="box"><label>Quick clues</label><ul><li>One side expands less</li><li>Crackling sensation under skin</li><li>Trachea not midline</li><li>Vibration felt through chest wall</li></ul></div>
+      <div class="box wide"><label>Exam move</label><strong>If the question says “feel,” think palpation.</strong> Palpation confirms movement, position, tenderness, and transmitted vibration.</div>
+    </div></div></div>
+
+    <div class="accitem" data-key="percuss"><button class="accbtn"><span>Percussion <small>What is under the chest wall?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+      <div class="box"><label>Look for</label><ul><li>Resonance</li><li>Dullness</li><li>Hyperresonance</li><li>Side-to-side differences</li></ul></div>
+      <div class="box"><label>Quick clues</label><ul><li>Dull = increased density</li><li>Hyperresonant = increased air</li><li>Compare symmetric areas</li></ul></div>
+      <div class="box wide"><label>Exam move</label><strong>Percussion estimates density; it does not identify a diagnosis by itself.</strong> Combine the percussion note with the rest of the assessment.</div>
+    </div></div></div>
+
+    <div class="accitem" data-key="ausc"><button class="accbtn"><span>Auscultation <small>Listen to airflow and added sounds</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+      <div class="box"><label>Look for</label><ul><li>Air movement</li><li>Symmetry</li><li>Wheezes</li><li>Crackles</li><li>Rhonchi</li><li>Stridor</li></ul></div>
+      <div class="box"><label>Quick clues</label><ul><li>Wheeze = musical airflow limitation</li><li>Crackles = discontinuous popping sounds</li><li>Rhonchi = coarse/low-pitched secretions</li><li>Stridor = upper-airway sound</li></ul></div>
+      <div class="box wide"><label>Exam move</label><strong>First ask whether air movement is present and symmetric.</strong> Then identify added sounds. A sound is not useful if you ignore the amount of airflow.</div>
+    </div></div></div>
+
+    <div class="accitem" data-key="vitals"><button class="accbtn"><span>Vital signs <small>Interpret the pattern, not one number</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+      <div class="box"><label>Look for</label><ul><li>Respiratory rate</li><li>Heart rate</li><li>Blood pressure</li><li>Temperature</li><li>SpO₂ in context</li></ul></div>
+      <div class="box"><label>Quick clues</label><ul><li>Rising RR</li><li>Tachycardia with distress</li><li>Fever with new respiratory symptoms</li><li>Same SpO₂ on more support</li></ul></div>
+      <div class="box wide"><label>Exam move</label><strong>Trend + clinical context beats a single “normal” value.</strong> PA-04 will go deeper into deterioration.</div>
+    </div></div></div>
+
+    <div class="accitem" data-key="sequence"><button class="accbtn"><span>Assessment sequence <small>Use a consistent order</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+      <div class="box"><label>Routine sequence</label><ul><li>Inspect</li><li>Palpate</li><li>Percuss</li><li>Auscultate</li></ul></div>
+      <div class="box"><label>Why it helps</label><ul><li>Reduces missed findings</li><li>Supports side-to-side comparison</li><li>Builds from visible to tactile to acoustic data</li></ul></div>
+      <div class="box wide"><label>Exam move</label><strong>Use the method that directly answers the question.</strong> If asked about asymmetrical movement, palpate. If asked about airflow, auscultate.</div>
+    </div></div></div>
+  </div>
+</section>
+
+<section class="section gated" id="palpationCheck">
+  <div class="head"><div class="kicker">Shared NBRC task: palpation</div><h2>Which finding is obtained by palpation?</h2><p>All choices are clinically relevant; choose the one that depends on touch.</p></div>
+  <div class="body">
+    <div class="case"><strong>Assessment findings under consideration:</strong> unilateral wheezing, asymmetric chest expansion, dullness to percussion, and accessory-muscle use.</div>
+    <div class="mcq" data-question="palpationCheck">
+      <button data-correct="false">Unilateral wheezing</button>
+      <button data-correct="true">Asymmetric chest expansion</button>
+      <button data-correct="false">Dullness over the right base</button>
+      <button data-correct="false">Accessory-muscle use</button>
+    </div>
+    <div class="feedback" id="palpationFeedback"></div>
+  </div>
+</section>
+
+<section class="section gated" id="auscCheck">
+  <div class="head"><div class="kicker">Shared NBRC task: auscultation</div><h2>What should you notice before naming the added sound?</h2><p>Auscultation is more than labeling wheezes and crackles.</p></div>
+  <div class="body">
+    <div class="case"><strong>Patient:</strong> visible dyspnea with unequal breath sounds reported by the previous therapist.</div>
+    <div class="mcq" data-question="auscCheck">
+      <button data-correct="false">Whether the patient has a prior diagnosis of asthma</button>
+      <button data-correct="true">Whether air movement is present and symmetric before classifying added sounds</button>
+      <button data-correct="false">Whether percussion is resonant over both lung bases</button>
+      <button data-correct="false">Whether the patient uses a rescue inhaler at home</button>
+    </div>
+    <div class="feedback" id="auscFeedback"></div>
+  </div>
+</section>
+
+<section class="section gated" id="integrate">
+  <div class="head"><div class="kicker">Integrated physical assessment</div><h2>Which finding combination is most meaningful?</h2><p>Combine methods instead of treating findings as isolated facts.</p></div>
+  <div class="body">
+    <div class="case">
+      <strong>A patient is assessed at the bedside:</strong>
+      <ul>
+        <li>Respiratory rate 30/min with visible accessory-muscle use</li>
+        <li>Right chest expands less than the left</li>
+        <li>Percussion is dull at the right base</li>
+        <li>Breath sounds are diminished at the right base</li>
+        <li>Patient is alert but increasingly anxious</li>
+      </ul>
+    </div>
+    <div class="mcq" data-question="integrate">
+      <button data-correct="false">The normal mental status rules out a significant respiratory problem.</button>
+      <button data-correct="false">Only the respiratory rate is meaningful because it is abnormal.</button>
+      <button data-correct="true">The right-sided asymmetry is supported by inspection/palpation, percussion, and auscultation and should be treated as a meaningful focal finding.</button>
+      <button data-correct="false">Diminished breath sounds alone identify the exact diagnosis.</button>
+    </div>
+    <div class="feedback" id="integrateFeedback"></div>
+  </div>
+</section>
+
+<section class="section gated" id="finish">
+  <div class="head"><div class="kicker">Lesson complete</div><h2>PA-03 complete</h2></div>
+  <div class="body">
+    <div class="complete">
+      <strong>✓ You completed Physical Respiratory Assessment.</strong>
+      <p style="margin:5px 0 0">You practiced selecting the correct assessment method, recognizing meaningful findings, and combining inspection, palpation, percussion, and auscultation.</p>
+      <div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+      <div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody">
+<ol><li>Choose the assessment method</li><li>Quick recognition</li><li>Palpation check</li><li>Auscultation check</li><li>Integrated physical assessment</li><li>Completion</li></ol>
+</div></div></div>
+
+<script>
+const KEY='pulmolearn_pa03_v1';
+
+const items=[
+{id:'i1',stage:1,patient:'You notice visible use of the sternocleidomastoid muscles during inspiration.',prompt:'Which assessment method identifies this finding?',correct:'Inspection',choices:['Inspection','Palpation','Auscultation'],good:'Accessory-muscle use is visible, so inspection identifies it. Palpation can assess movement and position; auscultation assesses airflow and added sounds.',hint:'Choose the method that uses what you can SEE.'},
+{id:'i2',stage:1,patient:'You need to determine whether both sides of the chest expand equally.',prompt:'Which method gives the most direct information?',correct:'Palpation',choices:['Inspection','Palpation','Percussion'],good:'Palpating the chest wall lets you compare expansion directly. Inspection may suggest asymmetry, but palpation confirms movement.',hint:'Choose the method that lets you FEEL chest-wall movement.'},
+{id:'i3',stage:1,patient:'You need to determine whether the right base sounds unusually dense compared with the left.',prompt:'Which method is designed for this comparison?',correct:'Percussion',choices:['Percussion','Palpation','Auscultation'],good:'Percussion estimates underlying density. Dullness suggests increased density; hyperresonance suggests increased air.',hint:'Choose the method that estimates underlying DENSITY.'},
+{id:'i4',stage:1,patient:'You need to compare airflow between the right and left lung fields.',prompt:'Which method gives the most direct information?',correct:'Auscultation',choices:['Inspection','Percussion','Auscultation'],good:'Auscultation directly evaluates air movement and added sounds. First compare whether airflow is present and symmetric.',hint:'Choose the method that lets you LISTEN to airflow.'},
+{id:'i5',stage:2,patient:'The patient has a crackling sensation under the skin near a chest-tube site.',prompt:'Which assessment method identifies this finding?',correct:'Palpation',choices:['Inspection','Palpation','Auscultation'],good:'Crepitus is felt under the skin, so palpation identifies it. A visible wound may be inspected, but the crackling sensation itself is tactile.',hint:'The key clue is “felt under the skin.”'},
+{id:'i6',stage:2,patient:'You hear a high-pitched musical sound during expiration.',prompt:'Which assessment method produced this finding?',correct:'Auscultation',choices:['Auscultation','Palpation','Percussion'],good:'A wheeze is an auscultatory finding. The important first step is still to judge how much air is moving and whether the sound is symmetric.',hint:'This is a SOUND heard with the stethoscope.'},
+{id:'i7',stage:2,patient:'You note one side of the chest rises less and the trachea is not centered.',prompt:'Which method is specifically used to confirm tracheal position?',correct:'Palpation',choices:['Inspection','Palpation','Percussion'],good:'Tracheal position is assessed by palpation. Visible asymmetry may raise suspicion, but touch confirms position.',hint:'Choose the method used to feel the tracheal position.'},
+{id:'i8',stage:3,patient:'Respiratory rate is 28/min, the patient is leaning forward, and sentences are shortened by dyspnea.',prompt:'Which method provides these findings before you touch the patient?',correct:'Inspection',choices:['Inspection','Palpation','Auscultation'],good:'Rate, posture, speech pattern, and visible work of breathing are inspection findings. They can signal clinically meaningful respiratory effort before other methods are used.',hint:'These findings are apparent by observation.'}
+];
+
+const reviewKeys=['inspect','mental','palpate','percuss','ausc','vitals','sequence'];
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2,3].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),reviewed:[],checks:{palpationCheck:false,auscCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();
+try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices();
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function methodDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){const e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){if(methodDone())reveal('recognize');if(reviewDone())reveal('palpationCheck');if(state.checks.palpationCheck)reveal('auscCheck');if(state.checks.auscCheck)reveal('integrate');if(state.complete||state.checks.integrate)reveal('finish')}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+
+function render(){
+ if(methodDone()){
+   $('#roundLabel').textContent='Assessment methods complete';
+   $('#patientLine').textContent='You have sorted findings by the method that directly identifies them.';
+   $('#prompt').textContent='The quick-recognition section is now available below.';
+   $('#choices').innerHTML='';
+   $('#feedback').className='feedback show good';
+   $('#feedback').innerHTML='<strong>Key rule:</strong> choose the assessment method that directly answers the question.';
+   $('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();
+ $('#roundLabel').textContent='Question '+(state.round+1)+' of '+items.length;
+ $('#patientLine').textContent=x.patient;
+ $('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');
+ $('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+   btn.classList.add('correct');$('#choices').classList.add('answered');
+   $('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;
+   $('#nextBtn').classList.add('show');
+   requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+   btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the clue:</strong> '+x.hint;
+   setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(methodDone())reveal('recognize')};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');
+ $$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){
+   item.classList.add('open');let k=item.dataset.key;
+   if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('palpationCheck')}
+ }
+});
+function renderReview(){
+ $('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';
+ $$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))
+}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){
+   let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+ }
+ buttons.forEach(btn=>btn.onclick=()=>{
+   if(state.checks[name])return;
+   buttons.forEach(b=>b.classList.remove('wrong','correct'));
+   if(btn.dataset.correct==='true'){
+     btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+     state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+     requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+     if(name==='integrate')completeLesson();else reveal(next)
+   }else{
+     btn.classList.add('wrong');f.className='feedback show try';
+     f.innerHTML='<strong>Not quite.</strong> All choices are clinically relevant. Choose the finding or method that most directly answers the task in the stem.'
+   }
+ })
+}
+
+bind('palpationCheck','#palpationFeedback','Asymmetric chest expansion is specifically assessed by palpation. Wheezing is auscultated, dullness is percussed, and accessory-muscle use is inspected.','auscCheck');
+bind('auscCheck','#auscFeedback','Before labeling an added sound, determine whether airflow is present and symmetric. A quiet chest can represent poor air movement, so sound identification alone is not enough.','integrate');
+bind('integrate','#integrateFeedback','Several methods point to the same focal right-sided abnormality: reduced expansion, dullness, and diminished breath sounds. The pattern is more meaningful than any single finding alone, but this lesson stops short of assigning the final diagnosis.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[methodDone(),reviewDone(),state.checks.palpationCheck,state.checks.auscCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;
+['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});
+setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();
+</script>
+</body></html>
