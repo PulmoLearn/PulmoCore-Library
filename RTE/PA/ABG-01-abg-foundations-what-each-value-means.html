@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABG-01 | ABG Foundations: What Each Value Means — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.82rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.tablewrap{overflow-x:auto}.abgtable{width:100%;border-collapse:collapse;font-size:.92rem}.abgtable th,.abgtable td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;vertical-align:top}.abgtable th{color:var(--navy);background:#f8fbfc}.abgtable strong{color:var(--navy)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">ABG-01</div><div class="name">ABG Foundations: What Each Value Means</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">ABGs, Acid-Base & Ventilation Assessment • ABG-01</div>
+<h1>ABG Foundations: What Each Value Means</h1>
+<p>Before you interpret an acid-base disorder, know exactly what each blood-gas value represents and what question it answers.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.A.2 Laboratory results</span><span class="chip">I.C.5 Blood gas / hemoximetry</span><span class="chip">I.D.5 Evaluate results</span><span class="chip">I.E.8 Recommend testing</span></div>
+<div class="flow"><div><strong>1. Identify</strong>Know what each value measures.</div><div><strong>2. Sort</strong>Ventilation, oxygenation, or metabolic status?</div><div><strong>3. Use</strong>Recognize which value answers the clinical question.</div></div>
+</section>
+
+<section class="section" id="valueString">
+<div class="head"><div class="kicker">Socratic value string</div><h2>Which value answers the question?</h2><p>Start with the obvious roles, then separate values that students commonly mix up.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next value</button>
+</div></div>
+</section>
+
+<section class="section gated" id="reference">
+<div class="head"><div class="kicker">Core reference</div><h2>Know the normal ranges and the job of each value</h2><p>This lesson teaches the individual values. Full acid-base classification comes in ABG-02.</p></div>
+<div class="body">
+<div class="tablewrap"><table class="abgtable">
+<tr><th>Value</th><th>Typical adult arterial range</th><th>What it tells you</th></tr>
+<tr><td><strong>pH</strong></td><td>7.35–7.45</td><td>Overall acidity or alkalinity of the blood.</td></tr>
+<tr><td><strong>PaCO₂</strong></td><td>35–45 mmHg</td><td>Ventilation. CO₂ rises when alveolar ventilation falls and falls when alveolar ventilation increases.</td></tr>
+<tr><td><strong>HCO₃⁻</strong></td><td>22–26 mEq/L</td><td>Major metabolic/renal buffer component.</td></tr>
+<tr><td><strong>PaO₂</strong></td><td>80–100 mmHg</td><td>Partial pressure of oxygen dissolved in arterial plasma; used to assess arterial oxygenation.</td></tr>
+<tr><td><strong>SaO₂</strong></td><td>≈95–100%</td><td>Percentage of hemoglobin binding sites occupied by oxygen.</td></tr>
+<tr><td><strong>Base excess</strong></td><td>−2 to +2 mEq/L</td><td>Direction and magnitude of the metabolic acid/base contribution; negative suggests base deficit, positive suggests excess base.</td></tr>
+</table></div>
+<div class="rule"><strong>Fast mental map</strong><p><b>pH = overall direction.</b> <b>PaCO₂ = ventilation.</b> <b>HCO₃⁻ and base excess = metabolic side.</b> <b>PaO₂ and SaO₂ = oxygenation—but they describe different things.</b></p></div>
+<button class="primary" id="referenceDone" style="width:100%">Continue →</button>
+</div>
+</section>
+
+<section class="section gated" id="recognition">
+<div class="head"><div class="kicker">Quick recognition</div><h2>Know the clue that identifies each value</h2><p>Open each value once to continue.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 6 reviewed</strong><span>Review all values.</span></div>
+<div class="acc">
+<div class="accitem" data-key="ph"><button class="accbtn"><span>pH <small>Overall acid or alkaline direction</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Look for</label><ul><li>&lt; 7.35 = acidemia</li><li>&gt; 7.45 = alkalemia</li></ul></div><div class="box"><label>Quick clue</label><ul><li>pH tells you the overall direction, not the cause.</li></ul></div><div class="box wide"><label>Boundary</label><strong>Do not fully classify the disorder here.</strong> ABG-02 teaches respiratory vs metabolic disorders and compensation.</div></div></div></div>
+<div class="accitem" data-key="paco2"><button class="accbtn"><span>PaCO₂ <small>Ventilation</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Look for</label><ul><li>High PaCO₂ = hypoventilation relative to CO₂ production</li><li>Low PaCO₂ = increased alveolar ventilation</li></ul></div><div class="box"><label>Quick clue</label><ul><li>Think “CO₂ clearance.”</li><li>PaCO₂ moves inversely with alveolar ventilation.</li></ul></div><div class="box wide"><label>Exam move</label><strong>If the question asks whether the patient is ventilating, look first at PaCO₂.</strong></div></div></div></div>
+<div class="accitem" data-key="hco3"><button class="accbtn"><span>HCO₃⁻ <small>Metabolic/renal buffer</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Look for</label><ul><li>Low bicarbonate = less base</li><li>High bicarbonate = more base</li></ul></div><div class="box"><label>Quick clue</label><ul><li>Think “metabolic side.”</li></ul></div><div class="box wide"><label>Exam move</label><strong>HCO₃⁻ helps identify the metabolic contribution.</strong> Compensation patterns come later.</div></div></div></div>
+<div class="accitem" data-key="pao2"><button class="accbtn"><span>PaO₂ <small>Dissolved arterial oxygen pressure</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Look for</label><ul><li>Measured in mmHg</li><li>Reflects oxygen dissolved in arterial plasma</li></ul></div><div class="box"><label>Quick clue</label><ul><li>Think “oxygen pressure,” not hemoglobin percentage.</li></ul></div><div class="box wide"><label>Exam move</label><strong>PaO₂ and SaO₂ are related but not interchangeable.</strong> PaO₂ is pressure; SaO₂ is hemoglobin saturation.</div></div></div></div>
+<div class="accitem" data-key="sao2"><button class="accbtn"><span>SaO₂ <small>Hemoglobin oxygen saturation</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Look for</label><ul><li>Reported as a percentage</li><li>Represents oxygen-bound hemoglobin sites</li></ul></div><div class="box"><label>Quick clue</label><ul><li>Think “percent of hemoglobin sites occupied.”</li></ul></div><div class="box wide"><label>Boundary</label><strong>This does not tell you total oxygen content by itself.</strong> Hemoglobin concentration and dyshemoglobins are handled in later lessons.</div></div></div></div>
+<div class="accitem" data-key="be"><button class="accbtn"><span>Base excess <small>Metabolic acid/base contribution</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Look for</label><ul><li>Negative = base deficit direction</li><li>Positive = excess-base direction</li></ul></div><div class="box"><label>Quick clue</label><ul><li>Think “metabolic magnitude.”</li></ul></div><div class="box wide"><label>Exam move</label><strong>Use base excess as another clue to the metabolic component.</strong> Full mixed-disorder interpretation belongs in ABG-02.</div></div></div></div>
+</div>
+</section>
+
+<section class="section gated" id="resultCheck">
+<div class="head"><div class="kicker">Evaluate the result</div><h2>Which value is abnormal for the clinical question?</h2></div>
+<div class="body">
+<div class="case"><strong>ABG:</strong> pH 7.38, PaCO₂ 58 mmHg, HCO₃⁻ 33 mEq/L, PaO₂ 74 mmHg, SaO₂ 94%</div>
+<div class="mcq" data-question="resultCheck">
+<button data-correct="true">PaCO₂ is elevated, indicating impaired CO₂ clearance / reduced alveolar ventilation relative to CO₂ production.</button>
+<button data-correct="false">PaO₂ is the value that directly measures ventilation.</button>
+<button data-correct="false">SaO₂ is elevated and indicates excessive ventilation.</button>
+<button data-correct="false">HCO₃⁻ directly measures arterial oxygenation.</button>
+</div><div class="feedback" id="resultFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="recommendCheck">
+<div class="head"><div class="kicker">Recommend blood-gas testing</div><h2>When does an ABG answer something pulse oximetry cannot?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient receiving oxygen has an SpO₂ of 95% but is increasingly somnolent with shallow breathing. The therapist needs to know whether ventilation and acid-base status are worsening.</div>
+<div class="mcq" data-question="recommendCheck">
+<button data-correct="false">No additional testing is needed because SpO₂ is normal.</button>
+<button data-correct="true">Recommend blood gas analysis because SpO₂ does not provide PaCO₂ or pH.</button>
+<button data-correct="false">Recommend spirometry because it directly measures PaCO₂.</button>
+<button data-correct="false">Recommend chest radiography because it directly measures acid-base status.</button>
+</div><div class="feedback" id="recommendFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style check</div><h2>Match each clinical question to the ABG value</h2></div>
+<div class="body">
+<div class="case"><strong>The therapist asks three questions:</strong><ul><li>Is the blood acidemic or alkalemic?</li><li>Is CO₂ being adequately eliminated?</li><li>What is the arterial oxygen pressure?</li></ul></div>
+<div class="mcq" data-question="integrate">
+<button data-correct="true">pH → overall acid/base direction; PaCO₂ → ventilation; PaO₂ → arterial oxygen pressure</button>
+<button data-correct="false">PaO₂ → acid/base direction; HCO₃⁻ → ventilation; SaO₂ → arterial oxygen pressure</button>
+<button data-correct="false">SaO₂ → acid/base direction; pH → ventilation; PaCO₂ → arterial oxygen pressure</button>
+<button data-correct="false">Base excess → ventilation; PaO₂ → metabolic status; pH → hemoglobin saturation</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>ABG-01 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed ABG Foundations: What Each Value Means.</strong>
+<p style="margin:5px 0 0">You practiced identifying what pH, PaCO₂, HCO₃⁻, PaO₂, SaO₂, and base excess represent, interpreting individual abnormalities, and recognizing when a blood gas is needed to answer a ventilation or acid-base question.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Socratic value string</li><li>Core ranges & roles</li><li>Quick recognition</li><li>Evaluate a result</li><li>Recommend blood-gas testing</li><li>Integrated check</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_abg01_v1';
+
+const items=[
+{id:'v1',stage:1,patient:'You need the overall acid-versus-alkaline direction of the blood.',prompt:'Which ABG value answers that question?',correct:'pH',choices:['pH','PaCO₂','PaO₂'],good:'pH tells you the overall acid-base direction. It does not identify the cause by itself.',hint:'Choose the value that directly reports acidity/alkalinity.'},
+{id:'v2',stage:1,patient:'You need to know whether the patient is eliminating carbon dioxide adequately.',prompt:'Which ABG value answers that question?',correct:'PaCO₂',choices:['PaCO₂','SaO₂','HCO₃⁻'],good:'PaCO₂ reflects ventilation and CO₂ clearance. It rises when alveolar ventilation falls relative to CO₂ production.',hint:'Think ventilation and CO₂ clearance.'},
+{id:'v3',stage:1,patient:'You need the partial pressure of dissolved oxygen in arterial blood.',prompt:'Which ABG value answers that question?',correct:'PaO₂',choices:['PaO₂','SaO₂','Base excess'],good:'PaO₂ is the arterial oxygen partial pressure, reported in mmHg.',hint:'Choose the oxygen value reported as a pressure.'},
+{id:'v4',stage:2,patient:'You need the percentage of hemoglobin oxygen-binding sites occupied by oxygen.',prompt:'Which value answers that question?',correct:'SaO₂',choices:['SaO₂','PaO₂','PaCO₂'],good:'SaO₂ is hemoglobin oxygen saturation, reported as a percentage. PaO₂ is oxygen pressure, not percentage saturation.',hint:'Choose the oxygen value reported as a percentage.'},
+{id:'v5',stage:2,patient:'You need the major metabolic/renal buffer value on the blood gas.',prompt:'Which value answers that question?',correct:'HCO₃⁻',choices:['HCO₃⁻','PaCO₂','PaO₂'],good:'Bicarbonate represents the major metabolic buffer component used in acid-base assessment.',hint:'Think metabolic/renal buffer.'},
+{id:'v6',stage:2,patient:'You want another measure of the direction and magnitude of the metabolic acid/base contribution.',prompt:'Which value is most useful?',correct:'Base excess',choices:['Base excess','SaO₂','PaCO₂'],good:'Base excess helps describe the metabolic component: negative values point toward base deficit; positive values toward excess base.',hint:'Think metabolic magnitude rather than oxygenation or ventilation.'}
+];
+
+const reviewKeys=['ph','paco2','hco3','pao2','sao2','be'];
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),referenceDone:false,reviewed:[],checks:{resultCheck:false,recommendCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();if(!state.choiceOrders)state.choiceOrders=makeChoices();if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){if(stringDone())reveal('reference');if(state.referenceDone)reveal('recognition');if(reviewDone())reveal('resultCheck');if(state.checks.resultCheck)reveal('recommendCheck');if(state.checks.recommendCheck)reveal('integrate');if(state.complete||state.checks.integrate)reveal('finish')}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){ $('#roundLabel').textContent='Value roles complete';$('#patientLine').textContent='You have matched each core ABG value to the clinical question it answers.';$('#prompt').textContent='The reference ranges are now available below.';$('#choices').innerHTML='';$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Next:</strong> connect each value with its normal range and quick recognition clue.';$('#nextBtn').classList.remove('show');sync();return;}
+ let x=current();$('#roundLabel').textContent='Value '+(state.round+1)+' of '+items.length;$('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))}
+ else{btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the clinical question:</strong> '+x.hint;setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)}
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('reference')};
+$('#referenceDone').onclick=()=>{state.referenceDone=true;save();reveal('recognition');setTimeout(()=>$('#recognition').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('resultCheck')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));
+ if(btn.dataset.correct==='true'){btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();if(name==='integrate')completeLesson();else reveal(next)}
+ else{btn.classList.add('wrong');f.className='feedback show try';f.innerHTML='<strong>Not quite.</strong> Ask which physiologic question the stem is asking: overall pH direction, ventilation, metabolic contribution, oxygen pressure, or hemoglobin saturation.'}})}
+bind('resultCheck','#resultFeedback','PaCO₂ is the ventilation value. At 58 mmHg it is above the typical arterial range, indicating reduced CO₂ elimination relative to production. This lesson identifies the abnormal value; ABG-02 will teach full acid-base classification.','recommendCheck');
+bind('recommendCheck','#recommendFeedback','Pulse oximetry estimates oxygen saturation but does not provide PaCO₂ or pH. When ventilation or acid-base status is the unresolved question, blood gas analysis supplies the needed information.','integrate');
+bind('integrate','#integrateFeedback','The mapping is foundational: pH gives overall acid/base direction, PaCO₂ reflects ventilation, and PaO₂ gives arterial oxygen pressure. HCO₃⁻ and base excess describe the metabolic side, while SaO₂ describes hemoglobin saturation.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.referenceDone,reviewDone(),state.checks.resultCheck,state.checks.recommendCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>
