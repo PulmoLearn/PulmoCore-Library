@@ -11,7 +11,28 @@ main{max-width:920px;margin:auto;padding:18px 14px 70px}.hero{background:linear-
 .card,.case,.box{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;text-transform:uppercase}.patient{padding:11px 12px;background:#eef3f7;border-radius:12px;margin:9px 0 12px}.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);color:#145f3a}.try{background:var(--warnbg);color:#704b00}.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}.wide{grid-column:1/-1;background:#eef3f7}.note{background:var(--warnbg);border:1px solid #efd99d;border-radius:12px;padding:12px;color:#704b00}.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.accitem{border-top:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:#138486}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.reviewed .accbtn{background:#fbfefd}.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}.modal{position:fixed;inset:0;background:rgba(5,18,31,.72);z-index:100;display:none;padding:20px}.modal.show{display:grid;place-items:center}.modalbox{background:#fff;width:min(650px,100%);max-height:85vh;overflow:auto;border-radius:18px;padding:20px}.modalhead{display:flex;justify-content:space-between;gap:14px}.close{border:0;background:#eef3f6;border-radius:10px;padding:8px 11px;font-weight:900;color:var(--navy)}.outline{padding-left:20px}
 @media(max-width:700px){.flow,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.brand{display:none}}
-</style></head>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style></head>
 <body>
 <header class="top"><div class="topin"><div class="brand">Pulmo<span>Learn</span></div><div class="mini"><div class="id">SUC-02</div><div class="name">Artificial-Airway Suction Technique, Safety & Complications</div></div><div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div></div><div class="track"><div id="bar"></div></div></header>
 
@@ -103,4 +124,74 @@ function restart(){localStorage.removeItem(KEY);location.reload()}$('#resetBtn')
 let last=Date.now(),idle=0,active=true;['click','touchstart','keydown','scroll'].forEach(ev=>addEventListener(ev,()=>{idle=0;active=true},{passive:true}));setInterval(()=>{let n=Date.now(),dt=n-last;last=n;if(!document.hidden&&!state.complete){idle+=dt;if(active&&idle<45000)state.activeMs+=dt;else active=false}},1000);
 render();sync();progress();renderTime();
 </script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body></html>
