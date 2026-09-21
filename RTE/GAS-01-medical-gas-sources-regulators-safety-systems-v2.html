@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GAS-01 | Medical Gas Sources, Regulators & Safety Systems — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:920px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:920px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.8rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.gascolors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 16px}
+.gascolor{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:12px;padding:9px;background:#fbfdfe;font-size:.85rem}
+.swatch{width:22px;height:22px;border-radius:7px;border:1px solid rgba(11,31,51,.18);flex:0 0 auto}
+.gascolor strong{display:block;color:var(--navy);line-height:1.1}.gascolor small{display:block;color:var(--muted);margin-top:2px}
+.twoswatch{display:flex;width:22px;height:22px;border-radius:7px;overflow:hidden;border:1px solid rgba(11,31,51,.18);flex:0 0 auto}
+.twoswatch span{width:50%}
+.colorwarn{font-size:.82rem;background:var(--warnbg);border:1px solid #efd99d;color:#704b00;border-radius:11px;padding:10px 11px;margin-bottom:13px}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:540px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow,.rulegrid,.grid,.gascolors{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">GAS-01</div><div class="name">Medical Gas Sources, Regulators & Safety Systems</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">Medical Gas Systems & Specialty Gases • GAS-01</div>
+<h1>Medical Gas Sources, Regulators & Safety Systems</h1>
+<p>Follow the gas from source to patient: identify the correct source and connection, reduce pressure safely, meter flow accurately, verify the delivered mixture, and troubleshoot the system without trusting a single gauge or color cue.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">II.A.2 Medical gas delivery / clinical analyzing devices</span><span class="chip">Shared: II.A.1 Medical gas delivery interfaces</span></div>
+<div class="flow">
+<div><strong>Source</strong>Pipeline, cylinder, concentrator, or other supply.</div>
+<div><strong>Pressure</strong>Regulator reduces high cylinder pressure to working pressure.</div>
+<div><strong>Flow</strong>Flowmeter meters gas toward the patient.</div>
+<div><strong>Verify</strong>Safety connection and analyzer confirm the intended gas delivery.</div>
+</div>
+</section>
+
+<section class="section" id="string">
+<div class="head"><div class="kicker">Socratic equipment string</div><h2>Which component or safety system is this?</h2><p>Recognize function first—the exam can change the equipment picture but not what the component must do.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next component</button>
+</div></div>
+</section>
+
+<section class="section gated" id="framework">
+<div class="head"><div class="kicker">Source-to-patient framework</div><h2>Never let one “normal” component end the troubleshooting process</h2><p>The source lesson repeatedly teaches that a displayed pressure or flow does not prove gas is reaching the patient.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>1. Identify the gas</strong><span>Read the cylinder or outlet label. Color is a secondary cue and should not be the sole method of gas identification.</span></div>
+<div class="minirule"><strong>2. Verify a compatible connection</strong><span>PISS and DISS are gas-specific mechanical safeguards designed to prevent wrong-gas connections.</span></div>
+<div class="minirule"><strong>3. Control pressure and flow</strong><span>The regulator reduces high cylinder pressure; the flowmeter controls or indicates flow delivered downstream.</span></div>
+<div class="minirule"><strong>4. Verify actual delivery</strong><span>Trace the system through tubing, interfaces, blenders, and analyzers, then confirm the patient response.</span></div>
+</div>
+<div class="rule"><strong>Safe troubleshooting path</strong><p><b>Patient → source → pressure/regulator → flowmeter → tubing/connections → delivery interface/analyzer → patient response.</b></p></div>
+<button class="primary" id="frameworkDone" style="width:100%">Continue →</button>
+</div>
+</section>
+
+<section class="section gated" id="recognition">
+<div class="head"><div class="kicker">Equipment quick recognition</div><h2>Know the operating rule and the failure clue</h2><p>Open each equipment group once to continue.</p></div>
+<div class="colorwarn"><strong>U.S. cylinder color cue:</strong> Use color as a memory aid only. Always identify the gas from the cylinder <strong>label</strong> and verify the gas-specific connection before use. Color conventions can differ outside the U.S. or with specialty mixtures.</div>
+<div class="gascolors">
+  <div class="gascolor"><span class="swatch" style="background:#2e8b57"></span><div><strong>Oxygen</strong><small>Green</small></div></div>
+  <div class="gascolor"><span class="swatch" style="background:#f1c40f"></span><div><strong>Medical air</strong><small>Yellow</small></div></div>
+  <div class="gascolor"><span class="swatch" style="background:#2f6fed"></span><div><strong>Nitrous oxide</strong><small>Blue</small></div></div>
+  <div class="gascolor"><span class="swatch" style="background:#9aa0a6"></span><div><strong>Carbon dioxide</strong><small>Gray</small></div></div>
+  <div class="gascolor"><span class="swatch" style="background:#8b5a2b"></span><div><strong>Helium</strong><small>Brown</small></div></div>
+  <div class="gascolor"><span class="swatch" style="background:#111"></span><div><strong>Nitrogen</strong><small>Black</small></div></div>
+  <div class="gascolor"><span class="twoswatch"><span style="background:#8b5a2b"></span><span style="background:#2e8b57"></span></span><div><strong>Heliox</strong><small>Brown / green</small></div></div>
+</div>
+<div class="progressnote"><strong id="reviewCount">0 of 7 reviewed</strong><span>Review all groups.</span></div>
+<div class="acc">
+
+<div class="accitem" data-key="pipeline"><button class="accbtn"><span>Pipeline & wall outlets <small>Central source → piped distribution</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>System concept</label><ul><li>Hospital gas is supplied centrally and distributed through a pipeline to wall outlets</li><li>Gas-specific outlet connections reduce wrong-gas attachment risk</li></ul></div>
+<div class="box"><label>If wall gas fails</label><ul><li>Support the patient first</li><li>Move to a known working backup source</li><li>Then evaluate outlet/supply failure</li></ul></div>
+<div class="box wide"><label>Exam cue</label><strong>A wall outlet that provides no gas is a source problem until proven otherwise; do not keep turning the flowmeter while the patient remains unsupported.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="cylinder"><button class="accbtn"><span>Compressed gas cylinders <small>High pressure requires safe handling</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Source lesson</label><ul><li>Full oxygen cylinder pressure may be about 2,200 psig</li><li>Cylinder must be secured upright</li><li>Read the label before use</li><li>Inspect valve/connection before attaching equipment</li></ul></div>
+<div class="box"><label>Safety</label><ul><li>Keep oil/grease away from oxygen equipment</li><li>Keep ignition sources away</li><li>Protect the valve from damage</li><li>Never rely on cylinder color alone</li></ul></div>
+<div class="box wide"><label>Boundary</label><strong>GAS-02 owns cylinder-duration calculations and reserve planning.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="regulator"><button class="accbtn"><span>Pressure-reducing regulator <small>High pressure → usable working pressure</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Function</label><ul><li>Reduces cylinder pressure from up to about 2,200 psig to approximately 50 psig working pressure</li><li>Pressure gauge displays cylinder pressure</li><li>Outlet supplies gas to the downstream flow-control device</li></ul></div>
+<div class="box"><label>Failure clues</label><ul><li>Hissing at connection</li><li>Rapid pressure loss</li><li>No downstream gas despite an open cylinder</li></ul></div>
+<div class="box wide"><label>Troubleshoot</label><strong>Check connection/washer or O-ring, cylinder pressure, valve position, and regulator integrity; remove leaking or failed equipment from service.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="flowmeter"><button class="accbtn"><span>Flowmeters <small>Know Thorpe tube vs Bourdon</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Thorpe tube</label><ul><li>Gravity dependent</li><li>Must be upright</li><li>Read the center of a ball float</li><li>Tilting causes inaccurate readings</li></ul></div>
+<div class="box"><label>Bourdon gauge</label><ul><li>Pressure based</li><li>Works in different orientations</li><li>Useful for transport</li><li>Back-pressure can create a falsely high reading</li></ul></div>
+<div class="box wide"><label>Exam cue</label><strong>Kinked downstream tubing can make a Bourdon gauge look reassuring or even high while actual patient flow is reduced.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="safety"><button class="accbtn"><span>PISS vs DISS <small>Gas-specific wrong-connection prevention</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>PISS</label><ul><li>Pin Index Safety System</li><li>Pin-and-hole yoke connection</li><li>Used for small cylinders in the source lesson (A–E)</li></ul></div>
+<div class="box"><label>DISS</label><ul><li>Diameter Index Safety System</li><li>Gas-specific threaded connection</li><li>Used for large cylinders and wall-outlet connections in the source lesson</li></ul></div>
+<div class="box wide"><label>Never defeat the safety system</label><strong>If a connector does not fit, do not force, alter, add washers to bypass indexing, or substitute a non-gas-specific connection.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="blender"><button class="accbtn"><span>Air-oxygen blender <small>Selected FiO₂ requires two source gases</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Function</label><ul><li>Combines compressed air and oxygen</li><li>Produces a selected oxygen concentration downstream</li></ul></div>
+<div class="box"><label>Troubleshoot</label><ul><li>Verify both air and oxygen sources are connected and available</li><li>Verify selected FiO₂</li><li>Use an analyzer when the delivered concentration must be confirmed</li></ul></div>
+<div class="box wide"><label>Exam cue</label><strong>A set blender FiO₂ is not proof of delivered FiO₂ if a source gas is disconnected, supply pressure is lost, or the system is malfunctioning.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="analyzer"><button class="accbtn"><span>Oxygen analyzer <small>Measure, calibrate, verify</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Purpose</label><ul><li>Measures delivered oxygen concentration</li><li>Used to verify gas delivery when the set FiO₂ may not equal actual FiO₂</li></ul></div>
+<div class="box"><label>Source review</label><ul><li>Calibrate/recalibrate when indicated</li><li>Verify against known concentration</li><li>The source review teaches accuracy within 2% of the known value</li><li>Recalibration is needed when altitude changes affect the reading</li></ul></div>
+<div class="box wide"><label>Exam cue</label><strong>If the displayed/set FiO₂ and patient response do not agree, confirm the actual delivered concentration with a calibrated analyzer rather than assuming the set value is correct.</strong></div>
+</div></div></div>
+
+</div>
+</section>
+
+<section class="section gated" id="labelCheck">
+<div class="head"><div class="kicker">Safety identification</div><h2>Color is not enough</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> Before transport, the therapist selects a cylinder that appears green.</div>
+<div class="mcq" data-question="labelCheck">
+<button data-correct="false">Attach the oxygen regulator because green confirms oxygen.</button>
+<button data-correct="true">Read the cylinder label to confirm the gas contents before attaching the regulator.</button>
+<button data-correct="false">Open the valve and identify the gas by odor.</button>
+<button data-correct="false">Use cylinder pressure to identify which gas is inside.</button>
+</div><div class="feedback" id="labelFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="connectionCheck">
+<div class="head"><div class="kicker">Primary task: troubleshoot setup</div><h2>The regulator will not fit the cylinder</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A yoke regulator intended for a small oxygen cylinder will not seat correctly on the selected cylinder valve.</div>
+<div class="mcq" data-question="connectionCheck">
+<button data-correct="false">Force the yoke into place because pressure will seal the connection.</button>
+<button data-correct="false">Remove the indexing pins so the regulator fits any cylinder.</button>
+<button data-correct="true">Stop and verify the gas/cylinder/regulator combination; the PISS connection is designed not to fit an incompatible gas valve.</button>
+<button data-correct="false">Add extra washers until the pins no longer contact the valve.</button>
+</div><div class="feedback" id="connectionFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="flowCheck">
+<div class="head"><div class="kicker">Flowmeter troubleshooting</div><h2>The gauge says flow is high—but the patient receives little gas</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> During transport, a Bourdon gauge reads higher than expected after the oxygen tubing becomes kinked.</div>
+<div class="mcq" data-question="flowCheck">
+<button data-correct="false">The higher reading proves actual patient flow increased.</button>
+<button data-correct="true">Back-pressure can make the Bourdon gauge read falsely high; correct the downstream obstruction and verify actual gas delivery.</button>
+<button data-correct="false">Turn the cylinder off because the higher reading means overpressure.</button>
+<button data-correct="false">Tilt the gauge upright because Bourdon gauges depend on gravity.</button>
+</div><div class="feedback" id="flowFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="blenderCheck">
+<div class="head"><div class="kicker">Analyzer & blender troubleshooting</div><h2>Do not trust the dial when the gases disagree</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A blender is set to a specific FiO₂, but a calibrated analyzer reads substantially lower. One high-pressure source gas has become disconnected.</div>
+<div class="mcq" data-question="blenderCheck">
+<button data-correct="false">Ignore the analyzer because the blender dial is the ordered setting.</button>
+<button data-correct="true">Restore the missing source gas, verify both source pressures/connections, then recheck the delivered FiO₂ with the analyzer.</button>
+<button data-correct="false">Increase downstream flow without correcting the source-gas problem.</button>
+<button data-correct="false">Replace the patient interface first because it controls the blender mixture.</button>
+</div><div class="feedback" id="blenderFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style equipment problem</div><h2>Trace the gas path</h2></div>
+<div class="body">
+<div class="case"><strong>Patient:</strong><ul>
+<li>Oxygen saturation is falling</li>
+<li>Cylinder valve is open</li>
+<li>Pressure gauge shows adequate cylinder pressure</li>
+<li>Flowmeter is set to the ordered flow</li>
+<li>No gas is felt at the cannula</li>
+<li>Tubing is kinked under the bedrail</li>
+</ul></div>
+<div class="mcq" data-question="integrate">
+<button data-correct="false">Increase the flowmeter setting because both gauges appear normal.</button>
+<button data-correct="false">Replace the cylinder first because any desaturation on cylinder oxygen means the source is empty.</button>
+<button data-correct="true">Correct the kink, verify gas reaches the interface, support/reassess the patient, and do not assume gauge readings alone prove delivery.</button>
+<button data-correct="false">Ignore the tubing because the cylinder pressure proves gas is reaching the patient.</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>GAS-01 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed Medical Gas Sources, Regulators & Safety Systems.</strong>
+<p style="margin:5px 0 0">You practiced identifying pipeline and cylinder sources, regulator function, Thorpe and Bourdon flowmeters, PISS/DISS connections, blender/analyzer checks, and source-to-patient troubleshooting.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Equipment recognition string</li><li>Source-to-patient framework</li><li>Pipeline & cylinders</li><li>Regulators & flowmeters</li><li>PISS / DISS</li><li>Blenders & analyzers</li><li>Setup troubleshooting</li><li>Integrated gas-path problem</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_gas01_v1';
+
+const items=[
+{id:'g1',stage:1,patient:'A device reduces cylinder pressure from as high as about 2,200 psig to approximately 50 psig working pressure.',prompt:'Which component is described?',correct:'Pressure-reducing regulator',choices:['Pressure-reducing regulator','Thorpe tube flowmeter','Oxygen analyzer'],good:'The regulator drops high cylinder pressure to a safe usable working pressure before downstream flow is metered.',hint:'This component changes pressure, not FiO₂.'},
+{id:'g2',stage:1,patient:'A vertical transparent flowmeter contains a floating ball and becomes inaccurate when tilted.',prompt:'Which device is this?',correct:'Thorpe tube flowmeter',choices:['Thorpe tube flowmeter','Bourdon gauge flowmeter','Pressure regulator'],good:'The source lesson identifies the Thorpe tube as gravity dependent, requiring an upright position and a ball read at its center.',hint:'Think gravity-dependent variable-area flowmeter.'},
+{id:'g3',stage:1,patient:'A portable flowmeter works in different orientations but can read falsely high when downstream resistance increases.',prompt:'Which device is this?',correct:'Bourdon gauge flowmeter',choices:['Bourdon gauge flowmeter','Thorpe tube flowmeter','Gas blender'],good:'The Bourdon gauge is pressure based and suitable for transport, but back-pressure from a kink or obstruction can create a falsely high flow reading.',hint:'Think pressure-based transport flowmeter.'},
+{id:'g4',stage:2,patient:'A small E cylinder uses a yoke with gas-specific pins and matching holes.',prompt:'Which safety system is being used?',correct:'PISS',choices:['PISS','DISS','Oxygen analyzer'],good:'PISS means Pin Index Safety System. The source lesson applies it to small cylinders and uses gas-specific pins/holes to prevent wrong-gas attachment.',hint:'Pins = PISS.'},
+{id:'g5',stage:2,patient:'A gas connection uses a gas-specific threaded connector rather than a yoke and pin pattern.',prompt:'Which safety system best fits?',correct:'DISS',choices:['DISS','PISS','Bourdon gauge'],good:'DISS means Diameter Index Safety System. The source lesson uses gas-specific threaded connectors for large cylinders and wall-outlet connections.',hint:'Threads/diameter = DISS.'},
+{id:'g6',stage:2,patient:'A device combines compressed air and oxygen to create a selected oxygen concentration.',prompt:'Which device is described?',correct:'Air-oxygen blender',choices:['Air-oxygen blender','Pressure regulator','Flow restrictor'],good:'A blender mixes the two source gases to produce a selected FiO₂. Both source gases must be available for reliable output.',hint:'This device controls mixture, not cylinder pressure.'}
+];
+
+const reviewKeys=['pipeline','cylinder','regulator','flowmeter','safety','blender','analyzer'];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),frameworkDone:false,reviewed:[],checks:{labelCheck:false,connectionCheck:false,flowCheck:false,blenderCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices();
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){
+ if(stringDone())reveal('framework');
+ if(state.frameworkDone)reveal('recognition');
+ if(reviewDone())reveal('labelCheck');
+ if(state.checks.labelCheck)reveal('connectionCheck');
+ if(state.checks.connectionCheck)reveal('flowCheck');
+ if(state.checks.flowCheck)reveal('blenderCheck');
+ if(state.checks.blenderCheck)reveal('integrate');
+ if(state.complete||state.checks.integrate)reveal('finish')
+}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){
+  $('#roundLabel').textContent='Equipment string complete';
+  $('#patientLine').textContent='You have identified the major source, pressure, flow, connection, and gas-verification components.';
+  $('#prompt').textContent='The troubleshooting framework is now available below.';
+  $('#choices').innerHTML='';$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Next:</strong> connect each component to its characteristic failure and safest corrective action.';
+  $('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();$('#roundLabel').textContent='Component '+(state.round+1)+' of '+items.length;
+ $('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+  btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');
+  requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+  btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the component function:</strong> '+x.hint;
+  setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('framework')};
+$('#frameworkDone').onclick=()=>{state.frameworkDone=true;save();reveal('recognition');setTimeout(()=>$('#recognition').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('labelCheck')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+   state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{
+   btn.classList.add('wrong');f.className='feedback show try';
+   f.innerHTML='<strong>Not quite.</strong> Follow the gas path and use the safety feature as designed rather than bypassing it or trusting a single display.'
+  }
+ })
+}
+bind('labelCheck','#labelFeedback','The existing medical-gas lesson explicitly teaches that cylinder color is only a secondary check. The label is the primary identification step before a regulator is attached.','connectionCheck');
+bind('connectionCheck','#connectionFeedback','PISS is a wrong-gas prevention system. A regulator that does not fit should trigger verification of gas, cylinder, and regulator—not modification of the safety connection.','flowCheck');
+bind('flowCheck','#flowFeedback','The source lesson specifically warns that Bourdon gauges can read falsely high when downstream back-pressure rises. Correct the kink or obstruction and verify actual delivery.','blenderCheck');
+bind('blenderCheck','#blenderFeedback','A blender requires both compressed air and oxygen sources. If one source is lost, the set dial alone cannot be trusted; restore the source and verify the actual output with a calibrated analyzer.','integrate');
+bind('integrate','#integrateFeedback','The cylinder and flowmeter displays describe upstream conditions but do not prove gas reaches the patient. Correct the visible tubing obstruction, verify flow at the cannula, support/reassess the patient, and continue troubleshooting if delivery is still inadequate.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.frameworkDone,reviewDone(),state.checks.labelCheck,state.checks.connectionCheck,state.checks.flowCheck,state.checks.blenderCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>
