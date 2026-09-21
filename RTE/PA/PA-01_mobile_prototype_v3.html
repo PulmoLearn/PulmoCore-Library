@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PA-01 | Reading the Respiratory Patient Record — PulmoLearn Prototype v3</title>
+<title>PA-01 | Reading the Respiratory Patient Record — PulmoLearn Prototype v5</title>
 <meta name="description" content="Mobile-friendly PulmoLearn prototype for PA-01: Reading the Respiratory Patient Record." />
 <style>
   :root{
@@ -110,6 +110,9 @@
   .choice:hover,.choice:focus-visible{border-color:var(--teal);box-shadow:0 0 0 3px rgba(28,167,168,.12)}
   .choice.correct{border-color:#6bc59e;background:var(--success-bg);color:var(--success)}
   .choice.wrong{border-color:#e6a0a0;background:var(--danger-bg);color:var(--danger)}
+  .choice-grid.answered-correct .choice:not(.correct){display:none}
+  .choice-grid.answered-correct{grid-template-columns:1fr}
+  .choice-grid.answered-correct .choice.correct{min-height:42px;padding:9px 10px}
   .feedback{margin-top:12px;padding:12px 13px;border-radius:12px;display:none;font-size:.92rem}
   .feedback.show{display:block}
   .feedback.good{background:var(--success-bg);color:#145f3a;border:1px solid #b8e4cf}
@@ -241,28 +244,7 @@
   }
 
   @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <header class="topbar">
@@ -505,6 +487,7 @@
           <div class="button-row">
             <button class="primary-btn" id="nextLessonBtn">Go to PA-02 →</button>
             <button class="secondary-btn" id="reviewLessonBtn">Review this lesson</button>
+            <button class="secondary-btn" id="restartLessonBtn">Restart prototype</button>
           </div>
         </div>
       </div>
@@ -543,7 +526,7 @@
 
 <script>
 (function(){
-  const STORAGE_KEY='pulmolearn_pa01_proto_v3';
+  const STORAGE_KEY='pulmolearn_pa01_proto_v5';
   const categories=[
     {name:'Imaging', short:'X-ray, CT, ultrasound, V/Q'},
     {name:'Laboratory', short:'CBC, electrolytes, ABG, cultures'},
@@ -674,7 +657,7 @@
     $('#socraticFeedback').className='feedback'; $('#socraticFeedback').textContent='';
     $('#socraticNext').classList.remove('show');
     $('#socraticNext').textContent=state.round===rounds.length-1?'Finish map':'Next clue';
-    const grid=$('#socraticChoices'); grid.innerHTML='';
+    const grid=$('#socraticChoices'); grid.innerHTML=''; grid.classList.remove('answered-correct');
     state.choiceOrders[r.id].forEach(ch=>{
       const b=document.createElement('button'); b.className='choice'; b.textContent=ch;
       b.addEventListener('click',()=>answerRound(b,ch)); grid.appendChild(b);
@@ -687,10 +670,12 @@
     if(choice===r.correct){
       btn.classList.add('correct');
       if(!state.mastered.includes(r.correct)) state.mastered.push(r.correct);
+      $('#socraticChoices').classList.add('answered-correct');
       $('#socraticFeedback').className='feedback show good';
       $('#socraticFeedback').innerHTML='<strong>Correct.</strong> '+r.good;
       $('#socraticNext').classList.add('show');
       save(); renderLocked();
+      requestAnimationFrame(()=>$('#socraticFeedback').scrollIntoView({behavior:'smooth',block:'nearest'}));
     }else{
       btn.classList.add('wrong');
       $('#socraticFeedback').className='feedback show try';
@@ -762,10 +747,11 @@
       const f=$(feedbackId);
       if(good){
         btn.classList.add('correct');
-        buttons.forEach(b=>b.disabled=true);
+        buttons.forEach(b=>{b.disabled=true; if(b!==btn) b.style.display='none';});
         state.checks[name]=true;
         f.className='feedback show good';
         f.innerHTML='<strong>Correct.</strong> '+rationale+' <strong>The next section is now available below.</strong>';
+        requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));
         if(name==='integrate') completeLesson(); else { save(); unlockAfter(name); }
       }else{
         btn.classList.add('wrong');
@@ -831,12 +817,16 @@
   document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') noteActivity(); else save(); });
   window.addEventListener('pagehide',save);
 
-  $('#resetBtn').addEventListener('click',()=>{
+  function resetPrototype(){
     if(confirm('Reset this prototype lesson and clear saved progress?')){
       try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
-      location.reload();
+      // Replace rather than reload so the browser does not restore the prior scroll position/state.
+      location.replace(location.pathname + location.search + location.hash.replace(/#.*/,''));
     }
-  });
+  }
+  $('#resetBtn').addEventListener('click',resetPrototype);
+  const restartLessonBtn=$('#restartLessonBtn');
+  if(restartLessonBtn) restartLessonBtn.addEventListener('click',resetPrototype);
 
   const modal=$('#outlineModal');
   $('#outlineBtn').addEventListener('click',()=>modal.classList.add('show'));
@@ -868,75 +858,5 @@
   renderCompletion();
 })();
 </script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
