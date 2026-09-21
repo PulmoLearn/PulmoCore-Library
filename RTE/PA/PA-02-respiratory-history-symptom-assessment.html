@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PA-02 | Respiratory History & Symptom Assessment — PulmoLearn </title>
+<style>
+:root{
+ --navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+ --bg:#f4f7f8;--card:#fff;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;
+ --ok:#1f7a4d;--okbg:#eaf7f0;--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;
+ --shadow:0 8px 24px rgba(11,31,51,.08)
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}
+.brand{font-weight:900}.brand span{color:#50d2d0}.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}
+.hero p,.head p{margin:0}.hero p{color:#dce8ef}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.83rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}
+.body{padding:8px 18px 20px}.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:6px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.path{margin-top:13px;display:grid;gap:7px}.path div{padding:9px 11px;border-radius:11px;background:#f4f8f9;border:1px solid var(--line);font-size:.88rem}.path strong{color:var(--navy)}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}.mcq{display:grid;gap:8px;margin-top:12px}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topin">
+  <div class="brand">Pulmo<span>Learn</span></div>
+  <div class="mini"><div class="id">PA-02</div><div class="name">Respiratory History & Symptom Assessment</div></div>
+  <div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE" style="text-decoration:none;display:inline-flex;align-items:center">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+ </div>
+ <div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+ <div class="eyebrow">Patient Assessment & Clinical Data Gathering • PA-02</div>
+ <h1>Respiratory History & Symptom Assessment</h1>
+ <p>Turn a vague complaint into a focused respiratory history by asking the next question that actually changes what you know.</p>
+ <div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.B.1 Observation / interview</span><span class="chip">Shared: I.A.1 Patient history</span></div>
+ <div class="flow">
+  <div><strong>1. Ask</strong>Choose the highest-yield next question.</div>
+  <div><strong>2. Clarify</strong>Compare symptoms with baseline, triggers, and treatment response.</div>
+  <div><strong>3. Use</strong>Recognize which answer changes the clinical picture.</div>
+ </div>
+</section>
+
+<section class="section" id="interview">
+ <div class="head"><div class="kicker">Socratic interview string</div><h2>Build the focused respiratory history</h2><p>Each patient answer gives you just enough information to decide what to clarify next.</p></div>
+ <div class="body">
+  <div class="card">
+   <div class="round" id="roundLabel">Question 1</div>
+   <div class="patient" id="patientLine"></div>
+   <div class="prompt" id="prompt"></div>
+   <div class="choices" id="choices"></div>
+   <div class="feedback" id="feedback"></div>
+   <button class="next" id="nextBtn">Continue interview</button>
+   <div class="path" id="path"></div>
+  </div>
+ </div>
+</section>
+
+<section class="section gated" id="recognize">
+ <div class="head"><div class="kicker">Quick recognition</div><h2>Know what to ask for</h2><p>Open each area once. Focus on clues that quickly separate a routine history from a meaningful change.</p></div>
+ <div class="progressnote"><strong id="reviewCount">0 of 7 reviewed</strong><span>Review all areas to continue.</span></div>
+ <div class="acc" id="accordion">
+  <div class="accitem" data-key="symptoms"><button class="accbtn"><span>Current symptoms <small>What is happening?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+   <div class="box"><label>Look for</label><ul><li>Dyspnea</li><li>Cough</li><li>Sputum amount/character</li><li>Wheeze/chest tightness</li><li>Hemoptysis</li></ul></div>
+   <div class="box"><label>Quick clues</label><ul><li>New at rest</li><li>New productive cough</li><li>Increased sputum</li><li>Blood-streaked sputum</li></ul></div>
+   <div class="box wide"><label>Exam move</label><strong>Define the symptom before interpreting it.</strong> A symptom name alone is rarely enough.</div>
+  </div></div></div>
+  <div class="accitem" data-key="pattern"><button class="accbtn"><span>Symptom pattern <small>When, how often, what changes it?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+   <div class="box"><label>Look for</label><ul><li>Onset</li><li>Duration</li><li>Progression</li><li>Triggers</li><li>Relieving factors</li><li>Treatment response</li></ul></div>
+   <div class="box"><label>Quick clues</label><ul><li>“Started yesterday”</li><li>“Worse over 3 days”</li><li>“Only with exertion”</li><li>“Albuterol no longer helps”</li></ul></div>
+   <div class="box wide"><label>Exam move</label><strong>Acute change + worsening pattern</strong> deserves more attention than a stable chronic complaint.</div>
+  </div></div></div>
+  <div class="accitem" data-key="exposure"><button class="accbtn"><span>Smoking, vaping & exposures <small>Does timing track with exposure?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+   <div class="box"><label>Look for</label><ul><li>Current/former smoking</li><li>Vaping or inhaled products</li><li>Dust, fumes, chemicals</li><li>Mold, animals, smoke</li></ul></div>
+   <div class="box"><label>Quick clues</label><ul><li>Symptoms improve on weekends</li><li>Started after remodeling</li><li>Works around dust/fumes</li><li>Vapes daily</li></ul></div>
+   <div class="box wide"><label>Exam move</label><strong>Match symptom timing to exposure timing.</strong> Exposure history changes the differential but does not replace current assessment.</div>
+  </div></div></div>
+  <div class="accitem" data-key="sleep"><button class="accbtn"><span>Sleep history <small>Could sleep-related breathing contribute?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+   <div class="box"><label>Look for</label><ul><li>Snoring</li><li>Witnessed apnea</li><li>Morning headache</li><li>Daytime sleepiness</li><li>PAP use/adherence</li></ul></div>
+   <div class="box"><label>Quick clues</label><ul><li>“Stops breathing in sleep”</li><li>“Falls asleep during the day”</li><li>“Stopped using CPAP”</li></ul></div>
+   <div class="box wide"><label>Exam move</label><strong>Recognize the sleep signal, then route detailed interpretation to the sleep lessons.</strong></div>
+  </div></div></div>
+  <div class="accitem" data-key="function"><button class="accbtn"><span>Function & activity tolerance <small>What can the patient actually do now?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+   <div class="box"><label>Look for</label><ul><li>Walking distance</li><li>Stairs</li><li>ADLs</li><li>Exertional symptoms</li><li>Change from usual</li></ul></div>
+   <div class="box"><label>Quick clues</label><ul><li>“Used to walk a block”</li><li>“Now stops after 20 feet”</li><li>“Needs help dressing”</li></ul></div>
+   <div class="box wide"><label>Exam move</label><strong>Baseline → current ability → degree of change.</strong> Functional decline is often the fastest way to uncover severity.</div>
+  </div></div></div>
+  <div class="accitem" data-key="adherence"><button class="accbtn"><span>Treatment adherence <small>Is prescribed therapy actually being used?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+   <div class="box"><label>Look for</label><ul><li>Medication frequency</li><li>Oxygen use</li><li>PAP use</li><li>Airway clearance</li><li>Reason therapy is missed</li></ul></div>
+   <div class="box"><label>Quick clues</label><ul><li>Controller used only PRN</li><li>CPAP stopped due to leak</li><li>Oxygen not used outside home</li></ul></div>
+   <div class="box wide"><label>Exam move</label><strong>Ask why.</strong> A barrier may explain “nonadherence” and change what should happen next.</div>
+  </div></div></div>
+  <div class="accitem" data-key="support"><button class="accbtn"><span>Home support & barriers <small>Can the plan actually work?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+   <div class="box"><label>Look for</label><ul><li>Caregiver support</li><li>Equipment access</li><li>Medication affordability</li><li>Transportation</li><li>Follow-up access</li></ul></div>
+   <div class="box"><label>Quick clues</label><ul><li>Cannot refill inhaler</li><li>No ride to appointments</li><li>No help managing equipment</li></ul></div>
+   <div class="box wide"><label>Exam move</label><strong>A good treatment plan must be usable.</strong> Identify barriers before assuming the patient simply will not follow it.</div>
+  </div></div></div>
+ </div>
+</section>
+
+<section class="section gated" id="nextq">
+ <div class="head"><div class="kicker">Choose the next question</div><h2>Which question gives the most useful new information?</h2><p>Avoid collecting data just because it is available.</p></div>
+ <div class="body">
+  <div class="case"><strong>Patient statement:</strong> “I have COPD, so I’m always short of breath.”</div>
+  <div class="mcq" data-question="nextq">
+   <button data-correct="false">Have you ever required home oxygen?</button>
+   <button data-correct="true">How far can you walk now compared with what you can usually do?</button>
+   <button data-correct="false">Do you usually wheeze with respiratory infections?</button>
+   <button data-correct="false">Have you ever completed pulmonary rehabilitation?</button>
+  </div>
+  <div class="feedback" id="nextqFeedback"></div>
+ </div>
+</section>
+
+<section class="section gated" id="chartbridge">
+ <div class="head"><div class="kicker">PA-01 → PA-02 bridge</div><h2>Read it first. Ask when it is missing or unclear.</h2><p>The chart and interview are complementary, not competing sources.</p></div>
+ <div class="body">
+  <div class="rule"><strong>Fast rule</strong><p>If the answer is already clearly documented and current, use it. If it is missing, vague, outdated, or conflicting, clarify with the patient or another reliable source.</p></div>
+  <div class="case"><strong>Chart:</strong> “Home oxygen 2 L/min.”<br><strong>Patient:</strong> “I’ve been turning it up to 5 L/min every afternoon because I get winded.”</div>
+  <div class="mcq" data-question="chartbridge">
+   <button data-correct="false">Use the charted 2 L/min and ignore the patient report.</button>
+   <button data-correct="false">Replace the chart entry with 5 L/min.</button>
+   <button data-correct="true">Clarify when the increased oxygen use began, what symptoms trigger it, and how often it occurs.</button>
+   <button data-correct="false">Skip further history because home oxygen use is already documented.</button>
+  </div>
+  <div class="feedback" id="chartbridgeFeedback"></div>
+ </div>
+</section>
+
+<section class="section gated" id="integrate">
+ <div class="head"><div class="kicker">Integrated interview</div><h2>Which finding changes the picture most?</h2><p>Use the history to identify the meaningful change, not merely the longest list of facts.</p></div>
+ <div class="body">
+  <div class="case">
+   <strong>A 67-year-old with chronic lung disease reports:</strong>
+   <ul>
+    <li>Usually walks from the bedroom to the kitchen without stopping.</li>
+    <li>For 2 days, must stop halfway because of dyspnea.</li>
+    <li>Rescue inhaler now used every 2–3 hours instead of once or twice per day.</li>
+    <li>Productive cough has increased from baseline.</li>
+    <li>No recent change in occupation or home environment.</li>
+   </ul>
+  </div>
+  <div class="mcq" data-question="integrate">
+   <button data-correct="false">The absence of a new environmental exposure</button>
+   <button data-correct="true">The decline in activity tolerance with increased rescue-medication use</button>
+   <button data-correct="false">The history of chronic productive cough</button>
+   <button data-correct="false">The diagnosis of chronic lung disease by itself</button>
+  </div>
+  <div class="feedback" id="integrateFeedback"></div>
+ </div>
+</section>
+
+<section class="section gated" id="finish">
+ <div class="head"><div class="kicker">Lesson complete</div><h2>PA-02 complete</h2></div>
+ <div class="body">
+  <div class="complete">
+   <strong>✓ You completed Respiratory History & Symptom Assessment.</strong>
+   <p style="margin:5px 0 0">You practiced choosing high-yield interview questions, comparing current function with baseline, and clarifying missing or conflicting history.</p>
+   <div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+   <div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart </button></div>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody">
+ <ol><li>Socratic interview string</li><li>Quick recognition</li><li>Choose the next question</li><li>Chart-to-interview bridge</li><li>Integrated interview</li><li>Completion</li></ol>
+</div></div></div>
+
+<script>
+const KEY='pulmolearn_pa02_v1';
+const interviewItems=[
+ {id:'onset',stage:1,patient:'“I’ve been more short of breath.”',prompt:'What should you clarify FIRST?',correct:'When did the shortness of breath begin?',choices:['When did the shortness of breath begin?','Do you usually sleep with extra pillows?','Have you ever been intubated?'],good:'Start by defining the current symptom. Onset helps separate a new problem from a chronic baseline complaint. Prior intubation or orthopnea may matter later, but neither tells you when this episode began.',hint:'Ask a question that defines the current respiratory complaint.'},
+ {id:'progression',stage:1,patient:'“It started yesterday.”',prompt:'Which question best defines whether the problem is changing?',correct:'Has it been getting better, worse, or staying the same?',choices:['Has it been getting better, worse, or staying the same?','Do you use oxygen at home?','Have you ever had pneumonia?'],good:'Progression tells you whether the symptom is stable or worsening. Home oxygen use and prior pneumonia are relevant background, but neither tells you whether today’s complaint is getting worse.',hint:'Look for the direction of change.'},
+ {id:'trigger',stage:1,patient:'“It is worse today.”',prompt:'What should you ask next?',correct:'What activities or situations make it worse?',choices:['What activities or situations make it worse?','Do you have a home nebulizer?','Have you ever had a sleep study?'],good:'Triggers help define severity and may reveal exertional or exposure-related patterns. A home nebulizer or prior sleep study may be relevant, but they do not identify what provokes the current dyspnea.',hint:'Clarify what provokes the symptom.'},
+ {id:'baseline',stage:2,patient:'“Walking to the bathroom makes me stop to catch my breath.”',prompt:'Which question gives the most useful comparison?',correct:'Is that different from what you can usually do?',choices:['Is that different from what you can usually do?','Do you use a spacer with your inhaler?','Have you ever been told you wheeze at night?'],good:'Current function means more when compared with the patient’s usual ability. Spacer use or nocturnal wheeze may matter, but neither tells you how far function has changed from baseline.',hint:'Compare current function with baseline.'},
+ {id:'response',stage:2,patient:'“Normally I can walk there without stopping.”',prompt:'Which question best clarifies treatment response?',correct:'What have you tried for the shortness of breath, and did it help?',choices:['What have you tried for the shortness of breath, and did it help?','Do you usually cough more in the morning?','Have you ever needed oxygen during exercise?'],good:'Usual therapy and its response can show that the current problem is behaving differently from baseline. Morning cough or prior exercise oxygen use may be relevant, but first determine whether usual treatment is still effective.',hint:'Ask what the patient already tried and whether it worked.'},
+ {id:'sputum',stage:2,patient:'“My inhaler usually helps, but today it barely does.”',prompt:'You have established acute worsening dyspnea with reduced response to the usual bronchodilator. Which question best checks for another CURRENT lower-respiratory change?',correct:'Has your cough or sputum amount or character changed?',choices:['Has your cough or sputum amount or character changed?','Have your nighttime PAP symptoms changed?','When was your last pulmonary function test?'],good:'A new or changed cough or sputum pattern adds current illness information that may help explain the acute worsening. PAP symptoms and prior PFTs may still matter, but they do not directly clarify this new lower-respiratory change.',hint:'Choose the question that most directly evaluates a new symptom occurring with the acute change.'},
+ {id:'exposure',stage:3,patient:'“I’m coughing up more sputum than usual.”',prompt:'Which history question may reveal a contributing trigger?',correct:'Any recent smoking, vaping, workplace, home, dust, fume, mold, or smoke exposure?',choices:['Any recent smoking, vaping, workplace, home, dust, fume, mold, or smoke exposure?','Do you normally use a rescue inhaler before exercise?','Have you ever had a chest CT?'],good:'Exposure timing can help explain why respiratory symptoms changed. Rescue-inhaler habits or prior CT imaging may matter, but neither directly tests whether a new inhaled exposure coincides with symptom onset.',hint:'Look for inhaled exposures that may track with symptom onset.'},
+ {id:'adherence',stage:3,patient:'“No new exposures.”',prompt:'What is the best next question about ongoing respiratory therapy?',correct:'How are you actually using your inhalers, oxygen, or PAP at home?',choices:['How are you actually using your inhalers, oxygen, or PAP at home?','Do you usually have a productive cough in the morning?','Have you ever completed pulmonary rehabilitation?'],good:'Prescribed therapy and actual use may differ. Ask what the patient is really doing and why. Chronic cough history or prior pulmonary rehab may be useful background, but they do not establish whether current therapy is being used as prescribed.',hint:'Clarify actual therapy use rather than assuming the prescription equals behavior.'}
+];
+const reviewKeys=['symptoms','pattern','exposure','sleep','function','adherence','support'];
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2,3].flatMap(s=>shuffle(interviewItems.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(interviewItems.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),reviewed:[],checks:{nextq:false,chartbridge:false,integrate:false},complete:false,activeMs:0,doneMs:null,path:[]}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==interviewItems.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices(); if(!Array.isArray(state.reviewed))state.reviewed=[]; if(!state.path)state.path=[];
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function interviewDone(){return state.round>=interviewItems.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){const e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){if(interviewDone())reveal('recognize');if(reviewDone())reveal('nextq');if(state.checks.nextq)reveal('chartbridge');if(state.checks.chartbridge)reveal('integrate');if(state.complete||state.checks.integrate)reveal('finish')}
+function current(){return interviewItems.find(x=>x.id===state.order[state.round])}
+function renderPath(){let p=$('#path');p.innerHTML='';state.path.forEach((x,i)=>{let d=document.createElement('div');d.innerHTML='<strong>'+ (i+1)+'. '+x.q+'</strong><br>'+x.a;p.appendChild(d)})}
+function renderInterview(){
+ renderPath();
+ if(interviewDone()){
+  $('#roundLabel').textContent='Interview complete';$('#patientLine').textContent='You have enough focused history to recognize a meaningful change.';
+  $('#prompt').textContent='The next section is now available below.';$('#choices').innerHTML='';$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Focused history built.</strong> Notice how each answer determined the next question.';$('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();$('#roundLabel').textContent='Question '+(state.round+1)+' of '+interviewItems.length;$('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answerInterview(b,c);box.appendChild(b)})
+}
+function answerInterview(btn,c){
+ let x=current(), buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+  btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;
+  $('#nextBtn').classList.add('show');requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+  btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the clue:</strong> '+x.hint;
+  setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),400)
+ }
+}
+$('#nextBtn').onclick=()=>{let x=current();state.path.push({q:x.patient.replace(/[“”]/g,''),a:x.correct});state.round++;save();renderInterview();if(interviewDone())reveal('recognize')};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('nextq')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'), buttons=Array.from(box.querySelectorAll('button')), f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;
+  buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{btn.classList.add('wrong');f.className='feedback show try';f.innerHTML='<strong>Not quite.</strong> The other choices may still belong in a complete respiratory history, but they do not answer the immediate question as directly. Choose the option that best clarifies the patient’s current change, severity, trigger, or actual treatment response.'}
+ })
+}
+bind('nextq','#nextqFeedback','Comparing current activity tolerance with the patient’s usual function directly establishes whether chronic dyspnea has worsened. Prior oxygen use, wheezing with infections, and pulmonary rehabilitation are relevant history, but none measures today’s change from baseline as directly.','chartbridge');
+bind('chartbridge','#chartbridgeFeedback','The chart establishes the prescribed baseline, while the patient reports a new pattern of higher oxygen use. Clarify when the change began, what symptoms trigger it, how often it occurs, and why the patient increased the flow. Do not ignore either source or simply overwrite one with the other.','integrate');
+bind('integrate','#integrateFeedback','The strongest signal is the combination of declining activity tolerance and much more frequent rescue-medication use. The chronic diagnosis and cough history provide context, but the change from baseline identifies the current problem.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[interviewDone(),reviewDone(),state.checks.nextq,state.checks.chartbridge,state.checks.integrate];let pct=parts.filter(Boolean).length/parts.length*100;$('#bar').style.width=pct+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{ window.location.href='https://www.pulmolearn.com/RTE'; };
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')}
+
+let last=Date.now(),active=true,idleMs=0;
+['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});
+setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+renderInterview();renderReview();sync();updateProgress();renderTime();
+</script>
+</body></html>
