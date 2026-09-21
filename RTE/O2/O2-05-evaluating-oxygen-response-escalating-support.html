@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>O2-05 | Evaluating Oxygen Response & Escalating Support — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.8rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow,.rulegrid,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">O2-05</div><div class="name">Evaluating Oxygen Response & Escalating Support</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">Oxygen Therapy & Delivery Devices • O2-05</div>
+<h1>Evaluating Oxygen Response & Escalating Support</h1>
+<p>Decide whether oxygen therapy is working, identify the function that is still failing, and recommend the next level of respiratory support without waiting for deterioration to become irreversible.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">III.E.2 Recommend care-plan changes</span><span class="chip">Shared: oxygen titration • minimize hypoxemia • terminate unsafe treatment</span></div>
+<div class="flow">
+<div><strong>Oxygen alone</strong>Isolated hypoxemia with preserved ventilation and airway protection.</div>
+<div><strong>HFNC / CPAP</strong>More oxygenation support or recruitment when spontaneous ventilation is preserved.</div>
+<div><strong>Bilevel NIV</strong>Add inspiratory assistance when ventilation is failing and NIV is safe.</div>
+<div><strong>Invasive support</strong>Airway protection loss, apnea, instability, or failed noninvasive support.</div>
+</div>
+</section>
+
+<section class="section" id="string">
+<div class="head"><div class="kicker">Socratic escalation string</div><h2>What is failing now?</h2><p>Match the next level of support to the physiologic problem and the patient’s ability to protect the airway.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next escalation decision</button>
+</div></div>
+</section>
+
+<section class="section gated" id="framework">
+<div class="head"><div class="kicker">Escalation framework</div><h2>Choose the least invasive support that can reliably meet the need</h2><p>The source notes frame escalation around the failing function: oxygenation, ventilation, or airway protection.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>Oxygen problem only</strong><span>Low PaO₂/SpO₂ with acceptable pH, PaCO₂, mental status, breathing effectiveness, and airway protection can often begin with supplemental oxygen and close reassessment.</span></div>
+<div class="minirule"><strong>Need more oxygenation support</strong><span>HFNC can provide high-flow oxygen support. CPAP primarily adds continuous distending pressure for oxygenation/recruitment when spontaneous ventilation is adequate.</span></div>
+<div class="minirule"><strong>Ventilation is failing</strong><span>Bilevel NIV adds inspiratory assistance. A cooperative patient with hypercapnic acidemia who can protect the airway may be appropriate for a closely monitored trial.</span></div>
+<div class="minirule"><strong>Airway or noninvasive support is failing</strong><span>Apnea, inability to protect the airway, severe/worsening altered consciousness, vomiting/aspiration risk, unmanageable secretions, marked instability, or objective NIV failure should trigger rapid invasive escalation.</span></div>
+</div>
+<div class="rule"><strong>Core decision rule</strong><p><b>Do not just increase oxygen when the failing function is ventilation or airway protection.</b> Oxygen raises inspired O₂; it does not replace ventilation or secure the airway.</p></div>
+<button class="primary" id="frameworkDone" style="width:100%">Continue →</button>
+</div>
+</section>
+
+<section class="section gated" id="response">
+<div class="head"><div class="kicker">Is the current support working?</div><h2>Trend objective response—not one reassuring number</h2><p>Open each response domain once to continue.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 6 reviewed</strong><span>Review all response domains.</span></div>
+<div class="acc">
+
+<div class="accitem" data-key="oxygenation"><button class="accbtn"><span>Oxygenation <small>SpO₂ / PaO₂ / FiO₂ requirement</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Improving</label><ul><li>Target oxygenation reached</li><li>Stable or decreasing oxygen requirement</li></ul></div>
+<div class="box"><label>Failing</label><ul><li>Persistent hypoxemia</li><li>Increasing FiO₂/device requirement</li></ul></div>
+<div class="box wide"><label>Exam move</label><strong>A better SpO₂ achieved only by rapidly escalating support is not the same as physiologic recovery.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="ventilation"><button class="accbtn"><span>Ventilation <small>pH / PaCO₂ / VT / breathing effectiveness</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Improving</label><ul><li>pH improves</li><li>PaCO₂ trends toward goal</li><li>Effective tidal ventilation improves</li></ul></div>
+<div class="box"><label>Failing</label><ul><li>pH falls</li><li>PaCO₂ rises</li><li>Shallow ineffective breathing</li></ul></div>
+<div class="box wide"><label>Key point</label><strong>Oxygen alone can correct saturation while ventilatory failure continues underneath.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="effort"><button class="accbtn"><span>Work of breathing & respiratory rate <small>Look for fatigue</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Improving</label><ul><li>RR decreases appropriately</li><li>Accessory-muscle use decreases</li><li>Patient appears less distressed</li></ul></div>
+<div class="box"><label>Failing</label><ul><li>Persistent/worsening tachypnea</li><li>Increasing accessory-muscle use</li><li>Progressive fatigue or paradoxical breathing</li></ul></div>
+<div class="box wide"><label>Trap</label><strong>A suddenly slower respiratory rate can be deterioration if it reflects exhaustion rather than recovery.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="mental"><button class="accbtn"><span>Mental status & airway protection <small>Can the patient safely stay noninvasive?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Required for NIV trial</label><ul><li>Sufficient alertness/cooperation</li><li>Manageable secretions</li><li>Ability to protect airway</li><li>Ability to tolerate/remove interface when needed</li></ul></div>
+<div class="box"><label>Escalation clues</label><ul><li>Obtundation</li><li>Apnea</li><li>Vomiting/aspiration risk</li><li>Absent protective reflexes</li></ul></div>
+<div class="box wide"><label>Priority</label><strong>Airway protection can mandate invasive support even when the ABG looks less dramatic.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="hemo"><button class="accbtn"><span>Hemodynamics & tolerance <small>Can the patient tolerate the strategy?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Assess</label><ul><li>Blood pressure/perfusion</li><li>Arrhythmia or instability</li><li>Mask/interface tolerance</li><li>Skin injury, vomiting, severe anxiety</li></ul></div>
+<div class="box"><label>Unsafe trend</label><ul><li>Worsening hemodynamic instability</li><li>Severe intolerance that makes support ineffective</li></ul></div>
+<div class="box wide"><label>Shared NBRC angle</label><strong>A severe complication or adverse event can require stopping the current treatment and moving to a safer plan.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="trajectory"><button class="accbtn"><span>Trajectory <small>Did the patient improve soon enough?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Ask</label><ul><li>Are oxygenation, ventilation, effort, and mental status improving together?</li><li>Is the same support now enough—or does each reassessment require more?</li></ul></div>
+<div class="box"><label>Failure principle</label><ul><li>Do not allow an initially reasonable HFNC/NIV trial to delay intubation after objective failure appears</li></ul></div>
+<div class="box wide"><label>Communication</label><strong>Recommend the next step using objective evidence: current support, trend, ABG/monitoring, work of breathing, mental status, airway protection, and specific proposed change.</strong></div>
+</div></div></div>
+
+</div>
+</section>
+
+<section class="section gated" id="gatherCheck">
+<div class="head"><div class="kicker">Shared task: gather the right information</div><h2>Before recommending escalation, what must you know?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient on oxygen is “worse.” The chart contains only a single current SpO₂ value.</div>
+<div class="mcq" data-question="gatherCheck">
+<button data-correct="false">Escalate directly to intubation based only on the single saturation value.</button>
+<button data-correct="true">Gather the support level and trend, respiratory rate/effort, mental status, airway protection, oxygenation, and ventilation data before recommending the next level—unless an immediate airway emergency is already present.</button>
+<button data-correct="false">Increase oxygen until the SpO₂ normalizes and do not assess ventilation.</button>
+<button data-correct="false">Wait for a complete pulmonary function test before changing support.</button>
+</div><div class="feedback" id="gatherFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="hfCheck">
+<div class="head"><div class="kicker">Escalate oxygenation support</div><h2>When conventional oxygen is no longer enough</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> Hypoxemia persists on conventional oxygen. The patient is alert, protecting the airway, breathing spontaneously, and PaCO₂/pH do not indicate ventilatory failure. Inspiratory demand is high.</div>
+<div class="mcq" data-question="hfCheck">
+<button data-correct="true">Escalate to a higher-level oxygenation strategy such as HFNC and reassess closely.</button>
+<button data-correct="false">Intubate solely because conventional oxygen is no longer adequate.</button>
+<button data-correct="false">Choose bilevel NIV only because PaO₂ is low, even though ventilation is adequate.</button>
+<button data-correct="false">Continue the same conventional oxygen indefinitely despite persistent hypoxemia.</button>
+</div><div class="feedback" id="hfFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="nivCheck">
+<div class="head"><div class="kicker">Escalate ventilation support</div><h2>When oxygen cannot fix the failing function</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A cooperative patient has rising PaCO₂, worsening respiratory acidosis, increased work of breathing, manageable secretions, stable hemodynamics, and intact airway protection.</div>
+<div class="mcq" data-question="nivCheck">
+<button data-correct="false">Increase oxygen alone because oxygen treats hypercapnia.</button>
+<button data-correct="true">Recommend a closely monitored bilevel NIV trial because inspiratory assistance is needed and the patient is an appropriate noninvasive candidate.</button>
+<button data-correct="false">Use CPAP only because continuous pressure directly increases ventilation as much as bilevel support.</button>
+<button data-correct="false">Withhold all support until pH falls below a single mandatory threshold.</button>
+</div><div class="feedback" id="nivFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="intubateCheck">
+<div class="head"><div class="kicker">Recognize when noninvasive support is unsafe</div><h2>Airway protection overrides a “reasonable” ABG</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient with respiratory failure is obtunded, actively vomiting, and cannot manage secretions.</div>
+<div class="mcq" data-question="intubateCheck">
+<button data-correct="false">Start bilevel NIV because it is less invasive.</button>
+<button data-correct="true">Recommend invasive airway management because airway protection is inadequate and mask-based support is unsafe.</button>
+<button data-correct="false">Use HFNC and wait for the mental status to improve.</button>
+<button data-correct="false">Base the decision only on PaCO₂ before addressing the airway.</button>
+</div><div class="feedback" id="intubateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="adverseCheck">
+<div class="head"><div class="kicker">Shared task: terminate unsafe treatment</div><h2>When an adverse event changes the plan</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> During a mask-based NIV trial, the patient develops repeated emesis and can no longer reliably protect the airway.</div>
+<div class="mcq" data-question="adverseCheck">
+<button data-correct="false">Continue NIV because the initial decision to start it was correct.</button>
+<button data-correct="true">Stop the unsafe mask-based strategy, protect the airway, and escalate to a safer level of support.</button>
+<button data-correct="false">Tighten the mask to prevent aspiration.</button>
+<button data-correct="false">Decrease EPAP only and continue the trial.</button>
+</div><div class="feedback" id="adverseFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style care-plan change</div><h2>Use the trend to recommend the next step</h2></div>
+<div class="body">
+<div class="case"><strong>Trend over the last hour:</strong><ul>
+<li>Support increased from conventional oxygen to HFNC</li>
+<li>FiO₂ requirement continues to rise</li>
+<li>SpO₂ remains below target</li>
+<li>RR 34 → 38/min with increasing accessory-muscle use</li>
+<li>Patient is becoming fatigued and less responsive</li>
+</ul></div>
+<div class="mcq" data-question="integrate">
+<button data-correct="false">Continue HFNC unchanged because escalation should occur only after apnea.</button>
+<button data-correct="false">Increase oxygen concentration only and ignore the worsening effort and mental status.</button>
+<button data-correct="true">Recognize failure of the current strategy and urgently recommend escalation to ventilatory/airway support based on airway protection, gas exchange, and the worsening clinical trajectory.</button>
+<button data-correct="false">Return to a lower-level oxygen device to reassess from baseline.</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>O2-05 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed Evaluating Oxygen Response & Escalating Support.</strong>
+<p style="margin:5px 0 0">You practiced gathering the data needed to judge response, interpreting oxygenation and ventilation trends, moving from conventional oxygen to HFNC or positive-pressure support, identifying NIV candidates, recognizing airway-protection failure, terminating an unsafe strategy, and recommending a care-plan change.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Escalation decision string</li><li>Oxygenation vs ventilation vs airway protection</li><li>Response assessment</li><li>Gather escalation data</li><li>Escalate to HFNC</li><li>Escalate to NIV</li><li>Recognize need for invasive airway</li><li>Terminate unsafe treatment</li><li>Integrated care-plan change</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_o205_v1';
+
+const items=[
+{id:'e1',stage:1,patient:'Hypoxemia persists on conventional oxygen, but pH and PaCO₂ are acceptable, the patient is alert, and airway protection is intact.',prompt:'What is the main failing function?',correct:'Oxygenation',choices:['Oxygenation','Ventilation','Airway protection'],good:'The unresolved problem is oxygenation. Higher-level oxygen support such as HFNC may be appropriate while ventilation and airway protection remain adequate.',hint:'Separate low oxygen from high CO₂ and airway failure.'},
+{id:'e2',stage:1,patient:'PaCO₂ is rising, pH is falling, and work of breathing is increasing despite acceptable SpO₂.',prompt:'What is the main failing function?',correct:'Ventilation',choices:['Ventilation','Oxygenation only','Airway humidification'],good:'A falling pH with rising PaCO₂ identifies worsening ventilatory failure. More oxygen alone does not correct inadequate ventilation.',hint:'Use the pH/PaCO₂ trend.'},
+{id:'e3',stage:1,patient:'The patient is obtunded, vomiting, and unable to clear secretions.',prompt:'What has become the highest-priority problem?',correct:'Airway protection',choices:['Airway protection','Isolated oxygenation','Exercise tolerance'],good:'Loss of airway protection can make mask-based support unsafe regardless of how attractive a noninvasive strategy looked earlier.',hint:'Think aspiration risk and ability to protect the airway.'},
+{id:'e4',stage:2,patient:'After starting oxygen, SpO₂ reaches target but RR rises from 28 to 36/min and accessory-muscle use worsens.',prompt:'How should the response be interpreted?',correct:'The patient is not clearly improving despite better oxygenation',choices:['The patient is not clearly improving despite better oxygenation','The therapy is successful because SpO₂ improved','No further assessment is needed'],good:'Response must include work of breathing and trajectory. A better saturation can coexist with worsening respiratory failure.',hint:'Do not judge response from SpO₂ alone.'},
+{id:'e5',stage:2,patient:'A cooperative patient with hypercapnic acidemia can protect the airway and manage secretions.',prompt:'Which escalation may be appropriate?',correct:'Closely monitored bilevel NIV',choices:['Closely monitored bilevel NIV','Oxygen alone regardless of PaCO₂','Immediate intubation in every case'],good:'The source notes support bilevel NIV when inspiratory assistance is needed and the patient is an appropriate noninvasive candidate.',hint:'Ventilatory assistance is needed, but airway protection is still intact.'},
+{id:'e6',stage:2,patient:'An NIV trial was reasonable initially, but pH worsens, PaCO₂ rises, mental status declines, and fatigue progresses.',prompt:'What is the key care-plan decision?',correct:'Do not delay invasive escalation after objective NIV failure develops',choices:['Do not delay invasive escalation after objective NIV failure develops','Continue NIV because the initial decision must remain correct','Increase oxygen alone'],good:'A treatment can be appropriate at first and later fail. New objective failure criteria require a new level of support.',hint:'Reassess the current response, not the original decision.'}
+];
+
+const reviewKeys=['oxygenation','ventilation','effort','mental','hemo','trajectory'];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),frameworkDone:false,reviewed:[],checks:{gatherCheck:false,hfCheck:false,nivCheck:false,intubateCheck:false,adverseCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices();
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){
+ if(stringDone())reveal('framework');
+ if(state.frameworkDone)reveal('response');
+ if(reviewDone())reveal('gatherCheck');
+ if(state.checks.gatherCheck)reveal('hfCheck');
+ if(state.checks.hfCheck)reveal('nivCheck');
+ if(state.checks.nivCheck)reveal('intubateCheck');
+ if(state.checks.intubateCheck)reveal('adverseCheck');
+ if(state.checks.adverseCheck)reveal('integrate');
+ if(state.complete||state.checks.integrate)reveal('finish')
+}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){
+  $('#roundLabel').textContent='Escalation string complete';
+  $('#patientLine').textContent='You have separated oxygenation failure, ventilatory failure, airway-protection failure, and treatment failure.';
+  $('#prompt').textContent='The escalation framework is now available below.';
+  $('#choices').innerHTML='';$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Next:</strong> judge whether the current support is working and recommend the next care-plan change from the objective trend.';
+  $('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();$('#roundLabel').textContent='Decision '+(state.round+1)+' of '+items.length;
+ $('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+  btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');
+  requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+  btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the failing-function framework:</strong> '+x.hint;
+  setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('framework')};
+$('#frameworkDone').onclick=()=>{state.frameworkDone=true;save();reveal('response');setTimeout(()=>$('#response').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('gatherCheck')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+   state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{
+   btn.classList.add('wrong');f.className='feedback show try';
+   f.innerHTML='<strong>Not quite.</strong> Match the support to the failing function, then use airway protection and the patient’s trajectory to decide whether a noninvasive option is still safe.'
+  }
+ })
+}
+bind('gatherCheck','#gatherFeedback','The registry requires gathering the clinical information needed to judge oxygen response. The decision should use current support and trend, oxygenation, ventilation, respiratory effort, mental status, airway protection, and stability—not a single saturation value.','hfCheck');
+bind('hfCheck','#hfFeedback','This is persistent oxygenation failure with preserved ventilation and airway protection. A higher-level oxygenation strategy such as HFNC is a reasonable next step with close reassessment.','nivCheck');
+bind('nivCheck','#nivFeedback','The failing function is ventilation. The patient remains cooperative, stable, able to manage secretions, and able to protect the airway, so the source notes support a closely monitored bilevel NIV trial.','intubateCheck');
+bind('intubateCheck','#intubateFeedback','Obtundation, active emesis, and inability to manage secretions make mask-based support unsafe. Airway protection can mandate invasive support even when the ABG by itself might otherwise permit an NIV trial.','adverseCheck');
+bind('adverseCheck','#adverseFeedback','The registry maps this lesson to terminating treatment for a severe complication/adverse event. Once emesis and airway-protection failure develop, continuing mask NIV is unsafe; stop the failing strategy and move to airway protection/escalation.','integrate');
+bind('integrate','#integrateFeedback','The entire trajectory is worsening despite escalating oxygenation support: FiO₂ need, hypoxemia, respiratory rate, effort, fatigue, and responsiveness. That is failure of the current care plan and requires urgent escalation rather than another isolated oxygen adjustment.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.frameworkDone,reviewDone(),state.checks.gatherCheck,state.checks.hfCheck,state.checks.nivCheck,state.checks.intubateCheck,state.checks.adverseCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>O2-06 | Home & Ambulatory Oxygen — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.8rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow,.rulegrid,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">O2-06</div><div class="name">Home & Ambulatory Oxygen</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">Oxygen Therapy & Delivery Devices • O2-06</div>
+<h1>Home & Ambulatory Oxygen</h1>
+<p>Match the home oxygen system to the prescribed therapy and the patient’s real life, verify oxygen needs during activity, build a backup plan, and teach the patient or caregiver to use the system safely.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">III.I.2 Patient & family education</span><span class="chip">Shared: I.C.6 • I.C.19 • I.D.20</span></div>
+<div class="flow">
+<div><strong>Need</strong>What oxygen is prescribed at rest and with activity?</div>
+<div><strong>System</strong>Can the home and portable source supply that need?</div>
+<div><strong>Backup</strong>What happens during power/equipment failure?</div>
+<div><strong>Teach-back</strong>Can the patient demonstrate safe use?</div>
+</div>
+</section>
+
+<section class="section" id="string">
+<div class="head"><div class="kicker">Socratic home-oxygen string</div><h2>Which home-care decision is safest?</h2><p>Think beyond the prescription: the oxygen system must work during the patient’s actual daily routine.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next home-care decision</button>
+</div></div>
+</section>
+
+<section class="section gated" id="framework">
+<div class="head"><div class="kicker">Home-oxygen framework</div><h2>Reliable therapy requires more than an oxygen device</h2><p>The registry emphasizes indications, home and portable systems, activity needs, reassessment, safety, and patient/caregiver education.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>1. Verify the prescribed need</strong><span>Know the ordered oxygen delivery method and setting, when it is required, and whether the need changes with activity. Do not invent a qualification threshold that is not in the order or testing data.</span></div>
+<div class="minirule"><strong>2. Match the source to the need</strong><span>A stationary concentrator may be practical for continuous low-flow home use; portable cylinders or liquid/portable systems can support mobility. The chosen system must reliably provide the prescribed therapy.</span></div>
+<div class="minirule"><strong>3. Plan for failure</strong><span>Concentrators depend on electricity. Home safety requires a backup oxygen plan, adequate reserve for emergencies/transport, and a clear contact plan for equipment problems.</span></div>
+<div class="minirule"><strong>4. Verify function in real life</strong><span>Assess oxygen response under the conditions that matter—rest, walking/activity, and recovery when applicable—then document the setting and response.</span></div>
+</div>
+<div class="rule"><strong>Home-care exam move</strong><p>The best system is not simply the lightest, cheapest, or most familiar. It is the system that <b>reliably supplies the ordered therapy in the patient’s actual environment</b> with a safe backup plan.</p></div>
+<button class="primary" id="frameworkDone" style="width:100%">Continue →</button>
+</div>
+</section>
+
+<section class="section gated" id="systems">
+<div class="head"><div class="kicker">Home oxygen systems & safety</div><h2>Know what each system solves—and what can make it fail</h2><p>Open each topic once to continue.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 6 reviewed</strong><span>Review all home-care topics.</span></div>
+<div class="acc">
+
+<div class="accitem" data-key="concentrator"><button class="accbtn"><span>Stationary oxygen concentrator <small>Continuous home supply</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>How it works</label><ul><li>Draws room air through molecular-sieve material that removes nitrogen</li><li>Produces oxygen-enriched gas continuously without cylinder refills</li></ul></div>
+<div class="box"><label>Source-material limits</label><ul><li>Requires electricity</li><li>Typical units in the source lesson provide roughly 90–95% oxygen and about 5–6 L/min maximum output</li><li>Performance must match the actual prescription</li></ul></div>
+<div class="box wide"><label>Safety plan</label><strong>A patient who depends on a concentrator needs backup oxygen for power failure or equipment failure and must know how to switch to it.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="portable"><button class="accbtn"><span>Portable systems <small>Mobility is part of the prescription</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Options represented in the source library</label><ul><li>Compressed oxygen cylinder</li><li>Liquid oxygen portable system</li><li>Portable oxygen concentrator</li><li>Oxygen-conserving delivery systems when appropriate</li></ul></div>
+<div class="box"><label>Selection question</label><ul><li>Can this exact system meet the patient’s prescribed oxygen need for the expected duration and activity?</li></ul></div>
+<div class="box wide"><label>Exam move</label><strong>Do not assume every portable system performs the same way.</strong> Verify the actual device and patient response under the intended conditions.</div>
+</div></div></div>
+
+<div class="accitem" data-key="liquid"><button class="accbtn"><span>Liquid oxygen <small>High-capacity portable/home option</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Source-material advantages</label><ul><li>Stores a large amount of oxygen in a compact cryogenic system</li><li>Portable refillable units can support active patients</li><li>Does not depend on household electricity for oxygen production</li></ul></div>
+<div class="box"><label>Safety</label><ul><li>Requires correct handling</li><li>Cryogenic liquid creates frost/cold injury hazards</li><li>Oxygen enrichment still increases fire risk</li></ul></div>
+<div class="box wide"><label>Selection clue</label><strong>The source lesson highlights liquid oxygen for patients needing higher-capacity portability or when electricity is unreliable.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="activity"><button class="accbtn"><span>Ambulatory oxygen & exercise titration <small>Test the condition that causes desaturation</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Gather</label><ul><li>Baseline SpO₂ and symptoms</li><li>Current device/oxygen setting</li><li>Heart rate</li><li>Activity or test condition</li></ul></div>
+<div class="box"><label>Evaluate</label><ul><li>Lowest SpO₂ during exertion</li><li>Symptoms and dyspnea</li><li>Effective oxygen setting/device</li><li>Recovery after exercise</li></ul></div>
+<div class="box wide"><label>Shared NBRC angle</label><strong>O2-06 maps directly to oxygen titration with exercise and oxygen-titration result evaluation.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="safety"><button class="accbtn"><span>Fire, cylinder & tubing safety <small>Oxygen supports combustion</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Teach</label><ul><li>No smoking or open flames around oxygen</li><li>Keep ignition sources away</li><li>Store/secure cylinders safely</li><li>Avoid unsafe products or equipment around oxygen</li><li>Manage long tubing to reduce trip hazards</li></ul></div>
+<div class="box"><label>Prepare</label><ul><li>Adequate portable reserve</li><li>Emergency/transport supply plan</li><li>Know who to call for equipment failure</li></ul></div>
+<div class="box wide"><label>Home-care principle</label><strong>Safety planning assumes predictable failures can happen and creates redundancy before they happen.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="education"><button class="accbtn"><span>Patient & caregiver education <small>Teach-back, not “I understand”</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Patient should be able to explain/show</label><ul><li>When and how oxygen is used</li><li>How to connect and operate the prescribed system</li><li>How to use the backup source</li><li>Fire and cylinder precautions</li><li>What to do for equipment failure or unexpected symptoms</li></ul></div>
+<div class="box"><label>Verify understanding</label><ul><li>Use teach-back</li><li>Use return demonstration for equipment skills</li><li>Correct errors before discharge/home handoff</li></ul></div>
+<div class="box wide"><label>Primary NBRC home</label><strong>This lesson’s primary task is patient and family education, so the learner must verify understanding rather than only list facts.</strong></div>
+</div></div></div>
+
+</div>
+</section>
+
+<section class="section gated" id="gatherCheck">
+<div class="head"><div class="kicker">Shared task: gather information during exercise</div><h2>What must be documented during ambulatory oxygen assessment?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient is being evaluated for oxygen needs while walking before discharge.</div>
+<div class="mcq" data-question="gatherCheck">
+<button data-correct="false">Only the resting SpO₂ before walking.</button>
+<button data-correct="true">Baseline SpO₂/symptoms, device and setting, response during exertion, lowest SpO₂, symptoms/heart rate, and recovery.</button>
+<button data-correct="false">Only the oxygen flow used at the end of the walk.</button>
+<button data-correct="false">The home address and oxygen supplier name are sufficient for the titration assessment.</button>
+</div><div class="feedback" id="gatherFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="interpretCheck">
+<div class="head"><div class="kicker">Shared task: evaluate oxygen titration</div><h2>Did the ambulatory system meet the patient’s need?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> The patient maintains the ordered target at rest. During usual walking with the portable system, SpO₂ falls below target and symptoms increase. A higher prescribed setting during repeat walking restores the target and improves symptoms.</div>
+<div class="mcq" data-question="interpretCheck">
+<button data-correct="false">The resting setting is adequate for all activity because resting SpO₂ was acceptable.</button>
+<button data-correct="true">The patient has a greater oxygen need with activity; document the effective ambulatory setting and communicate the result for the home plan.</button>
+<button data-correct="false">Portable oxygen cannot be adjusted during exertion.</button>
+<button data-correct="false">Ignore the walking result because only resting oxygenation matters for home therapy.</button>
+</div><div class="feedback" id="interpretFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="backupCheck">
+<div class="head"><div class="kicker">Home-system planning</div><h2>What is missing from this discharge plan?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient who requires continuous low-flow oxygen will use a stationary concentrator at home. The area has occasional power outages. No alternate oxygen source has been arranged.</div>
+<div class="mcq" data-question="backupCheck">
+<button data-correct="true">Arrange an adequate backup oxygen source and teach the patient how and when to use it during power/equipment failure.</button>
+<button data-correct="false">No change is needed because concentrators continue producing oxygen without electricity.</button>
+<button data-correct="false">Tell the patient to increase concentrator flow during a power outage.</button>
+<button data-correct="false">Use room air during outages unless symptoms become severe.</button>
+</div><div class="feedback" id="backupFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="teachCheck">
+<div class="head"><div class="kicker">Primary task: patient & family education</div><h2>How do you know the teaching worked?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> After home-oxygen teaching, the patient says, “Yes, I understand everything.”</div>
+<div class="mcq" data-question="teachCheck">
+<button data-correct="false">Document successful teaching because the patient verbally agreed.</button>
+<button data-correct="true">Ask the patient to teach back key safety steps and demonstrate setup, normal use, and switching to the backup system.</button>
+<button data-correct="false">Repeat the same lecture more loudly.</button>
+<button data-correct="false">Have the oxygen supplier verify understanding at some later time instead.</button>
+</div><div class="feedback" id="teachFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="safetyCheck">
+<div class="head"><div class="kicker">Essential safety</div><h2>Identify the highest-priority correction</h2></div>
+<div class="body">
+<div class="case"><strong>Home visit:</strong><ul>
+<li>Oxygen concentrator operating normally</li>
+<li>Backup cylinder present</li>
+<li>Long tubing routed across a walkway</li>
+<li>A family member is smoking in the same room as the oxygen equipment</li>
+</ul></div>
+<div class="mcq" data-question="safetyCheck">
+<button data-correct="false">The tubing trip hazard is the only issue that needs correction.</button>
+<button data-correct="true">Stop smoking/open-flame exposure around oxygen immediately, then correct the tubing hazard and reinforce the full safety plan.</button>
+<button data-correct="false">Remove the backup cylinder because cylinders create more danger than benefit.</button>
+<button data-correct="false">Turn the concentrator flow down while the family member smokes.</button>
+</div><div class="feedback" id="safetyFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style home plan</div><h2>Choose the safest discharge recommendation</h2></div>
+<div class="body">
+<div class="case"><strong>Patient:</strong><ul>
+<li>Requires continuous low-flow oxygen at home</li>
+<li>Desaturates with walking and needs a higher prescribed setting during activity</li>
+<li>Lives where power outages occur</li>
+<li>Plans to attend appointments and leave home regularly</li>
+</ul></div>
+<div class="mcq" data-question="integrate">
+<button data-correct="false">Provide only a stationary concentrator because the patient is stable at rest.</button>
+<button data-correct="true">Provide a home system that meets the resting prescription, an appropriate portable system that meets the tested activity need, an adequate backup supply, and verified patient/caregiver safety education.</button>
+<button data-correct="false">Use the same untested portable setting as the resting prescription because ambulatory titration is unnecessary.</button>
+<button data-correct="false">Avoid backup oxygen because emergencies are uncommon.</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>O2-06 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed Home & Ambulatory Oxygen.</strong>
+<p style="margin:5px 0 0">You practiced matching home and portable oxygen systems to the prescribed need, assessing oxygen during activity, evaluating titration results, planning backup oxygen, correcting home safety hazards, and verifying patient/caregiver understanding through teach-back and return demonstration.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Home-oxygen decision string</li><li>Home-system framework</li><li>Concentrators and portable systems</li><li>Ambulatory oxygen assessment</li><li>Safety and backup planning</li><li>Patient/caregiver education</li><li>Evaluate titration result</li><li>Integrated discharge plan</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_o206_v1';
+
+const items=[
+{id:'h1',stage:1,patient:'A patient needs continuous low-flow oxygen at home and has reliable electrical service most of the time.',prompt:'Which routine home source is appropriate if it can meet the prescription?',correct:'Stationary oxygen concentrator',choices:['Stationary oxygen concentrator','No oxygen source is needed at home','A simple mask without an oxygen source'],good:'The source equipment lesson identifies the concentrator as a practical routine source for stable home patients requiring continuous low-flow oxygen, provided the device can meet the prescription.',hint:'Think continuous home supply without routine cylinder refills.'},
+{id:'h2',stage:1,patient:'The same patient lives in an area with occasional power outages.',prompt:'What must be added to the plan?',correct:'Adequate backup oxygen and training for power failure',choices:['Adequate backup oxygen and training for power failure','A second electrical outlet only','Instructions to stop oxygen during an outage'],good:'A concentrator depends on electricity. The source materials repeatedly emphasize backup oxygen and caregiver knowledge of how to use it during a power failure.',hint:'Plan for the predictable concentrator failure mode.'},
+{id:'h3',stage:1,patient:'Resting oxygenation is acceptable, but the patient desaturates during usual walking.',prompt:'What information is needed for the home oxygen plan?',correct:'Oxygen response and required setting during activity',choices:['Oxygen response and required setting during activity','Only the resting SpO₂','Only the patient’s diagnosis'],good:'O2-06 is shared with oxygen titration during exercise. Home therapy must reflect the condition in which the oxygen need actually occurs.',hint:'Test the patient under the condition that causes the problem.'},
+{id:'h4',stage:2,patient:'An active patient needs a portable oxygen system for time outside the home.',prompt:'What is the most important selection rule?',correct:'Verify the specific portable system can meet the prescribed oxygen need during the intended activity',choices:['Verify the specific portable system can meet the prescribed oxygen need during the intended activity','Always choose the smallest device regardless of performance','Use the resting setting without activity testing'],good:'The source registry includes cylinders, liquid oxygen, portable concentrators, and conserving devices. The safe choice is the one verified to meet the patient’s need in real use.',hint:'Portability only helps if the prescribed therapy is actually delivered.'},
+{id:'h5',stage:2,patient:'The patient says, “I understand the oxygen safety instructions.”',prompt:'What best verifies education?',correct:'Teach-back plus return demonstration',choices:['Teach-back plus return demonstration','A yes/no question only','A signed form without demonstration'],good:'Because the primary NBRC home is patient and family education, understanding should be verified by having the patient explain key points and demonstrate equipment use.',hint:'Verify understanding, do not assume it.'},
+{id:'h6',stage:2,patient:'A family member smokes beside the oxygen concentrator while the patient is using oxygen.',prompt:'What is the priority teaching point?',correct:'No smoking or open flames around oxygen',choices:['No smoking or open flames around oxygen','Lower the flow while smoking occurs','Move the concentrator closer to the smoker'],good:'The home-care source explicitly identifies smoking/open flames as a major oxygen fire hazard.',hint:'Oxygen supports combustion.'}
+];
+
+const reviewKeys=['concentrator','portable','liquid','activity','safety','education'];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),frameworkDone:false,reviewed:[],checks:{gatherCheck:false,interpretCheck:false,backupCheck:false,teachCheck:false,safetyCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices();
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){
+ if(stringDone())reveal('framework');
+ if(state.frameworkDone)reveal('systems');
+ if(reviewDone())reveal('gatherCheck');
+ if(state.checks.gatherCheck)reveal('interpretCheck');
+ if(state.checks.interpretCheck)reveal('backupCheck');
+ if(state.checks.backupCheck)reveal('teachCheck');
+ if(state.checks.teachCheck)reveal('safetyCheck');
+ if(state.checks.safetyCheck)reveal('integrate');
+ if(state.complete||state.checks.integrate)reveal('finish')
+}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){
+  $('#roundLabel').textContent='Home-oxygen string complete';
+  $('#patientLine').textContent='You have matched oxygen needs to home-system, activity, backup, safety, and education decisions.';
+  $('#prompt').textContent='The full home-oxygen framework is now available below.';
+  $('#choices').innerHTML='';$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Next:</strong> connect the equipment plan to ambulatory titration and verified patient/caregiver education.';
+  $('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();$('#roundLabel').textContent='Decision '+(state.round+1)+' of '+items.length;
+ $('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+  btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';
+  $('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');
+  requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+  btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the home-care framework:</strong> '+x.hint;
+  setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('framework')};
+$('#frameworkDone').onclick=()=>{state.frameworkDone=true;save();reveal('systems');setTimeout(()=>$('#systems').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('gatherCheck')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+   state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{
+   btn.classList.add('wrong');f.className='feedback show try';
+   f.innerHTML='<strong>Not quite.</strong> Home oxygen must meet the prescribed need during the patient’s real activities, remain available during predictable failures, and be used safely by a patient/caregiver who can demonstrate understanding.'
+  }
+ })
+}
+bind('gatherCheck','#gatherFeedback','The existing exercise-oxygen materials specify collecting baseline and exertional SpO₂, heart rate, dyspnea/symptoms, device/flow, activity performance, and recovery. That is the information needed to connect testing to an ambulatory oxygen plan.','interpretCheck');
+bind('interpretCheck','#interpretFeedback','Rest and activity can require different oxygen settings. The shared O2-06 task is to interpret the titration result, identify the effective ambulatory setting/device, document it, and communicate it into the home plan.','backupCheck');
+bind('backupCheck','#backupFeedback','The source home-equipment lessons explicitly teach that concentrators depend on electricity and that a backup compressed oxygen supply is an essential part of the plan, especially where power may be unreliable.','teachCheck');
+bind('teachCheck','#teachFeedback','The primary NBRC home is patient and family education. A statement of understanding is not enough; teach-back verifies the decision knowledge and return demonstration verifies the equipment skill.','safetyCheck');
+bind('safetyCheck','#safetyFeedback','Smoking/open flame near oxygen is the highest-priority immediate hazard because oxygen supports combustion. The tubing trip hazard also needs correction, but after the fire hazard is stopped.','integrate');
+bind('integrate','#integrateFeedback','This plan matches the entire registry focus: a home source that meets the resting prescription, a portable system verified under activity, backup supply for predictable failure, and patient/caregiver education that has been demonstrated rather than merely stated.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.frameworkDone,reviewDone(),state.checks.gatherCheck,state.checks.interpretCheck,state.checks.backupCheck,state.checks.teachCheck,state.checks.safetyCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>
