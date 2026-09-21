@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABG-02 | Acid-Base Interpretation — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.82rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow,.rulegrid{grid-template-columns:1fr}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">ABG-02</div><div class="name">Acid-Base Interpretation</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">ABGs, Acid-Base & Ventilation Assessment • ABG-02</div>
+<h1>Acid-Base Interpretation</h1>
+<p>Use pH, PaCO₂, and HCO₃⁻ in a consistent order to identify respiratory and metabolic acidosis/alkalosis, recognize compensation, and spot obvious mixed disorders.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.D.5 Evaluate blood gas results</span><span class="chip">Shared: I.C.5 Blood gas analysis</span></div>
+<div class="flow"><div><strong>1. pH</strong>Acid or alkaline?</div><div><strong>2. PaCO₂</strong>Respiratory direction?</div><div><strong>3. HCO₃⁻</strong>Metabolic direction?</div><div><strong>4. Compare</strong>Primary, compensation, or mixed?</div></div>
+</section>
+
+<section class="section" id="string">
+<div class="head"><div class="kicker">Socratic interpretation string</div><h2>Build the sequence one decision at a time</h2><p>Use the same order every time: pH → PaCO₂ → HCO₃⁻ → compensation/mixed check.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next ABG</button>
+</div></div>
+</section>
+
+<section class="section gated" id="framework">
+<div class="head"><div class="kicker">Core interpretation framework</div><h2>Use direction, not memorized labels</h2><p>Normal ranges: pH 7.35–7.45 • PaCO₂ 35–45 mmHg • HCO₃⁻ 22–26 mEq/L.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>Respiratory component</strong><span>PaCO₂ changes in the <b>opposite direction</b> from pH: high CO₂ pushes acidic; low CO₂ pushes alkaline.</span></div>
+<div class="minirule"><strong>Metabolic component</strong><span>HCO₃⁻ changes in the <b>same direction</b> as pH: low bicarbonate pushes acidic; high bicarbonate pushes alkaline.</span></div>
+<div class="minirule"><strong>Compensation</strong><span>The secondary system moves in the direction that brings pH back toward normal. Compensation does <b>not</b> create an overcorrection past normal by itself.</span></div>
+<div class="minirule"><strong>Obvious mixed disorder</strong><span>If PaCO₂ and HCO₃⁻ are both pushing pH in the <b>same abnormal direction</b>, both processes are primary rather than one compensating for the other.</span></div>
+</div>
+<div class="rule"><strong>Fast rule</strong><p><b>ROME:</b> Respiratory Opposite, Metabolic Equal. Use it as a direction check—not as a substitute for reading the whole ABG.</p></div>
+<button class="primary" id="frameworkDone" style="width:100%">Apply the framework →</button>
+</div>
+</section>
+
+<section class="section gated" id="compCheck">
+<div class="head"><div class="kicker">Compensation</div><h2>Is the second system helping?</h2></div>
+<div class="body">
+<div class="case"><strong>ABG:</strong> pH 7.30, PaCO₂ 55 mmHg, HCO₃⁻ 29 mEq/L</div>
+<div class="mcq" data-question="compCheck">
+<button data-correct="true">Respiratory acidosis with metabolic compensation</button>
+<button data-correct="false">Metabolic acidosis with respiratory compensation</button>
+<button data-correct="false">Respiratory alkalosis with metabolic compensation</button>
+<button data-correct="false">Mixed respiratory and metabolic alkalosis</button>
+</div><div class="feedback" id="compFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="fullCheck">
+<div class="head"><div class="kicker">Near-normal pH</div><h2>Normal pH does not always mean normal ABG</h2></div>
+<div class="body">
+<div class="case"><strong>ABG:</strong> pH 7.37, PaCO₂ 52 mmHg, HCO₃⁻ 30 mEq/L</div>
+<div class="mcq" data-question="fullCheck">
+<button data-correct="true">A compensated respiratory-acidotic pattern is present; both PaCO₂ and HCO₃⁻ are abnormal even though pH is in range.</button>
+<button data-correct="false">The ABG is normal because the pH is between 7.35 and 7.45.</button>
+<button data-correct="false">The pattern is primary metabolic alkalosis because HCO₃⁻ is elevated.</button>
+<button data-correct="false">The pattern is respiratory alkalosis because PaCO₂ is abnormal.</button>
+</div><div class="feedback" id="fullFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="mixedCheck">
+<div class="head"><div class="kicker">Mixed-disorder clue</div><h2>Are both components pushing in the same direction?</h2></div>
+<div class="body">
+<div class="case"><strong>ABG:</strong> pH 7.20, PaCO₂ 60 mmHg, HCO₃⁻ 18 mEq/L</div>
+<div class="mcq" data-question="mixedCheck">
+<button data-correct="false">Respiratory acidosis with appropriate metabolic compensation</button>
+<button data-correct="true">Mixed respiratory and metabolic acidosis</button>
+<button data-correct="false">Metabolic acidosis with appropriate respiratory compensation</button>
+<button data-correct="false">Fully compensated respiratory acidosis</button>
+</div><div class="feedback" id="mixedFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style interpretation</div><h2>Interpret the pattern in the correct order</h2></div>
+<div class="body">
+<div class="case"><strong>ABG:</strong> pH 7.49, PaCO₂ 30 mmHg, HCO₃⁻ 23 mEq/L</div>
+<div class="mcq" data-question="integrate">
+<button data-correct="false">Metabolic alkalosis</button>
+<button data-correct="true">Respiratory alkalosis</button>
+<button data-correct="false">Respiratory acidosis</button>
+<button data-correct="false">Mixed respiratory and metabolic acidosis</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>ABG-02 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed Acid-Base Interpretation.</strong>
+<p style="margin:5px 0 0">You practiced using pH, PaCO₂, and HCO₃⁻ in sequence to identify respiratory and metabolic disorders, recognize compensation, and identify an obvious mixed acid-base pattern.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Socratic interpretation string</li><li>Core acid-base framework</li><li>Compensation</li><li>Near-normal pH</li><li>Mixed disorder clue</li><li>Integrated interpretation</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_abg02_v1';
+const items=[
+{id:'a1',stage:1,patient:'pH 7.29 • PaCO₂ 58 • HCO₃⁻ 25',prompt:'What is the primary acid-base disorder?',correct:'Respiratory acidosis',choices:['Respiratory acidosis','Metabolic acidosis','Respiratory alkalosis'],good:'The pH is acidemic and PaCO₂ is elevated. CO₂ moves opposite pH, so the respiratory component explains the acidemia.',hint:'Start with pH, then ask which abnormal component moves pH in that direction.'},
+{id:'a2',stage:1,patient:'pH 7.51 • PaCO₂ 29 • HCO₃⁻ 24',prompt:'What is the primary acid-base disorder?',correct:'Respiratory alkalosis',choices:['Respiratory alkalosis','Metabolic alkalosis','Respiratory acidosis'],good:'The pH is alkalemic and PaCO₂ is low. Low CO₂ pushes pH upward, so this is respiratory alkalosis.',hint:'For respiratory disorders, PaCO₂ and pH move in opposite directions.'},
+{id:'a3',stage:1,patient:'pH 7.28 • PaCO₂ 40 • HCO₃⁻ 18',prompt:'What is the primary acid-base disorder?',correct:'Metabolic acidosis',choices:['Metabolic acidosis','Respiratory acidosis','Metabolic alkalosis'],good:'The pH is acidemic and HCO₃⁻ is low. Bicarbonate moves in the same direction as pH, identifying metabolic acidosis.',hint:'For metabolic disorders, HCO₃⁻ and pH move in the same direction.'},
+{id:'a4',stage:1,patient:'pH 7.50 • PaCO₂ 42 • HCO₃⁻ 31',prompt:'What is the primary acid-base disorder?',correct:'Metabolic alkalosis',choices:['Metabolic alkalosis','Respiratory alkalosis','Metabolic acidosis'],good:'The pH is alkalemic and HCO₃⁻ is elevated. The metabolic component is moving with the pH.',hint:'Look for the component that moves in the same direction as the alkalemic pH.'},
+{id:'a5',stage:2,patient:'pH 7.31 • PaCO₂ 56 • HCO₃⁻ 30',prompt:'What additional feature is present?',correct:'Metabolic compensation for respiratory acidosis',choices:['Metabolic compensation for respiratory acidosis','Respiratory compensation for metabolic acidosis','No compensation'],good:'The primary problem is respiratory acidosis. HCO₃⁻ has risen in the alkaline direction, opposing the acidemia and showing metabolic compensation.',hint:'Ask whether the secondary system is moving pH back toward normal.'},
+{id:'a6',stage:2,patient:'pH 7.47 • PaCO₂ 47 • HCO₃⁻ 32',prompt:'What additional feature is present?',correct:'Respiratory compensation for metabolic alkalosis',choices:['Respiratory compensation for metabolic alkalosis','Metabolic compensation for respiratory alkalosis','No compensation'],good:'The primary process is metabolic alkalosis. PaCO₂ is elevated, which pushes pH downward and therefore acts in the compensatory direction.',hint:'The compensating system should oppose the primary pH change.'}
+];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),frameworkDone:false,checks:{compCheck:false,fullCheck:false,mixedCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();if(!state.choiceOrders)state.choiceOrders=makeChoices();
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){if(stringDone())reveal('framework');if(state.frameworkDone)reveal('compCheck');if(state.checks.compCheck)reveal('fullCheck');if(state.checks.fullCheck)reveal('mixedCheck');if(state.checks.mixedCheck)reveal('integrate');if(state.complete||state.checks.integrate)reveal('finish')}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){ $('#roundLabel').textContent='Core patterns complete';$('#patientLine').textContent='You have identified the four primary acid-base disorders and basic compensation direction.';$('#prompt').textContent='The interpretation framework is now available below.';$('#choices').innerHTML='';$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Next:</strong> use the same direction rules to distinguish compensation from mixed disorders.';$('#nextBtn').classList.remove('show');sync();return;}
+ let x=current();$('#roundLabel').textContent='ABG '+(state.round+1)+' of '+items.length;$('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);if(c===x.correct){btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))}else{btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the sequence:</strong> '+x.hint;setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)}}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('framework')};
+$('#frameworkDone').onclick=()=>{state.frameworkDone=true;save();reveal('compCheck');setTimeout(()=>$('#compCheck').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}buttons.forEach(btn=>btn.onclick=()=>{if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));if(btn.dataset.correct==='true'){btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();if(name==='integrate')completeLesson();else reveal(next)}else{btn.classList.add('wrong');f.className='feedback show try';f.innerHTML='<strong>Not quite.</strong> Start with pH, identify which component explains that direction, then decide whether the other component is compensating or also pushing pH in the same abnormal direction.'}})}
+bind('compCheck','#compFeedback','The pH is acidemic and PaCO₂ is high, so respiratory acidosis is primary. HCO₃⁻ is elevated in the opposite, alkalinizing direction, showing metabolic compensation.','fullCheck');
+bind('fullCheck','#fullFeedback','A pH inside the reference range does not make the ABG normal when PaCO₂ and HCO₃⁻ are both abnormal. The slightly acid-side pH plus elevated PaCO₂ with elevated HCO₃⁻ is consistent with a compensated respiratory-acidotic pattern. ABG-03 will go deeper into acute versus chronic ventilatory failure.','mixedCheck');
+bind('mixedCheck','#mixedFeedback','Both abnormalities push the pH acidic: high PaCO₂ is respiratory acidifying and low HCO₃⁻ is metabolic acidifying. Because they reinforce rather than compensate for each other, this is a mixed respiratory and metabolic acidosis.','integrate');
+bind('integrate','#integrateFeedback','The pH is alkalemic and PaCO₂ is low, which is the respiratory pattern that explains the alkalemia. HCO₃⁻ is still within the typical range, so this is an uncompensated respiratory alkalosis pattern.','finish');
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.frameworkDone,state.checks.compCheck,state.checks.fullCheck,state.checks.mixedCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+render();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>

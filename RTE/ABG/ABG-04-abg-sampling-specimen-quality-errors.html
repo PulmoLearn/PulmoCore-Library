@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABG-04 | ABG Sampling, Specimen Quality & Errors — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.82rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow,.rulegrid,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">ABG-04</div><div class="name">ABG Sampling, Specimen Quality & Errors</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">ABGs, Acid-Base & Ventilation Assessment • ABG-04</div>
+<h1>ABG Sampling, Specimen Quality & Errors</h1>
+<p>Decide whether a blood gas result represents the patient—or a collection, handling, or documentation problem that must be corrected before treatment decisions are made.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.C.4 Blood gas sample collection</span><span class="chip">Shared: I.E.8 Recommend blood gas / hemoximetry</span></div>
+<div class="flow"><div><strong>1. Collect correctly</strong>Verify patient, source, oxygen conditions, site, and specimen handling.</div><div><strong>2. Trust the sample?</strong>Look for air, delay, dilution, clot, venous admixture, or labeling problems.</div><div><strong>3. Act safely</strong>Withhold unreliable data, correct the problem, or recollect when needed.</div></div>
+</section>
+
+<section class="section" id="errorString">
+<div class="head"><div class="kicker">Socratic specimen-quality string</div><h2>What went wrong with the sample?</h2><p>Use the pattern of the result plus the collection history to identify the most likely preanalytic error.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next sample</button>
+</div></div>
+</section>
+
+<section class="section gated" id="sampling">
+<div class="head"><div class="kicker">Correct collection first</div><h2>Build a specimen you can actually interpret</h2><p>A precise analyzer cannot rescue a bad specimen.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>Before the draw</strong><span>Verify two identifiers, the clinical question, bleeding risk, intended source/site, and the exact oxygen device plus flow or FiO₂ at the time of collection.</span></div>
+<div class="minirule"><strong>Radial puncture safety</strong><span>Confirm an appropriate pulse and collateral circulation according to the taught procedure before using the radial site.</span></div>
+<div class="minirule"><strong>During collection</strong><span>Use an approved preheparinized syringe. A true arterial sample should fill from arterial pressure rather than forceful aspiration.</span></div>
+<div class="minirule"><strong>After collection</strong><span>Apply firm pressure, check for hematoma/distal perfusion, remove air bubbles, cap, gently mix, label at the bedside, and transport promptly.</span></div>
+</div>
+<div class="rule"><strong>Modified Allen sequence</strong><p>Clench hand → compress radial and ulnar arteries → open hand and observe blanching → release ulnar pressure while maintaining radial compression → observe color return. The source lesson teaches 5–7 seconds as adequate return and &gt;15 seconds as a reason not to use that radial site.</p></div>
+<button class="primary" id="samplingDone" style="width:100%">Continue to error fingerprints →</button>
+</div>
+</section>
+
+<section class="section gated" id="errors">
+<div class="head"><div class="kicker">Error fingerprints</div><h2>Know what each preanalytic problem tends to do</h2><p>Open each error once. The goal is not just to name it—the goal is to know whether the result should be trusted.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 7 reviewed</strong><span>Review all specimen problems.</span></div>
+<div class="acc">
+<div class="accitem" data-key="air"><button class="accbtn"><span>Air contamination <small>PaCO₂ tends down; pH tends up</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Typical effect</label><ul><li>PaCO₂ tends to decrease</li><li>pH tends to increase</li><li>PaO₂ moves toward room-air equilibrium and may rise or fall depending on starting value</li></ul></div><div class="box"><label>Response</label><ul><li>Expel bubbles immediately</li><li>Withhold interpretation if contamination is meaningful</li><li>Recollect when integrity is uncertain</li></ul></div><div class="box wide"><label>Common trap</label><strong>An air bubble does not always raise PaO₂.</strong> It moves the sample toward ambient equilibrium.</div></div></div></div>
+<div class="accitem" data-key="delay"><button class="accbtn"><span>Delayed analysis <small>Cells keep metabolizing</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Typical effect</label><ul><li>PaO₂ decreases</li><li>PaCO₂ increases</li><li>pH decreases</li></ul></div><div class="box"><label>Why</label><ul><li>Cells continue consuming O₂</li><li>Cells continue producing CO₂</li></ul></div><div class="box wide"><label>Response</label><strong>Follow approved timing/transport procedure.</strong> The source lesson teaches prompt analysis and ice slurry when a delay is unavoidable.</div></div></div></div>
+<div class="accitem" data-key="venous"><button class="accbtn"><span>Venous sample / venous admixture <small>Source matters</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Clues</label><ul><li>Weak pulsatility or difficult/prolonged probing</li><li>Unexpectedly low PaO₂ compared with reliable SpO₂/prior arterial data</li><li>Possible higher CO₂ and lower pH than arterial blood</li></ul></div><div class="box"><label>Response</label><ul><li>Verify the source and collection characteristics</li><li>Do not use a questionable venous sample for arterial oxygenation decisions</li></ul></div><div class="box wide"><label>Boundary</label><strong>Venous and arterial blood are not interchangeable for oxygenation decisions.</strong></div></div></div></div>
+<div class="accitem" data-key="heparin"><button class="accbtn"><span>Excess liquid heparin / underfilled syringe <small>Dilution</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Concern</label><ul><li>Dilution may lower measured gases and electrolytes</li><li>Calculated bicarbonate may also be altered</li></ul></div><div class="box"><label>Response</label><ul><li>Use approved balanced-heparin device</li><li>Use the required fill volume</li><li>Recollect correctly if dilution is suspected</li></ul></div><div class="box wide"><label>Common trap</label><strong>More heparin is not “safer.”</strong> Too much liquid heparin can distort the specimen.</div></div></div></div>
+<div class="accitem" data-key="clot"><button class="accbtn"><span>Clot / inadequate mixing <small>Unreliable and unsafe for analyzer</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Concern</label><ul><li>Unreliable values</li><li>May obstruct or damage the analyzer sample path</li></ul></div><div class="box"><label>Response</label><ul><li>Do not force a clotted specimen through the analyzer</li><li>Reject/recollect according to policy</li></ul></div><div class="box wide"><label>Prevention</label><strong>Gently mix the specimen as required after collection.</strong></div></div></div></div>
+<div class="accitem" data-key="line"><button class="accbtn"><span>Line contamination <small>Flush, medication, or venous blood</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Concern</label><ul><li>Flush solution may dilute values</li><li>Medication or venous admixture may distort results</li></ul></div><div class="box"><label>Response</label><ul><li>Follow discard-volume and line-draw policy</li><li>Verify source</li><li>Recollect if integrity is uncertain</li></ul></div><div class="box wide"><label>Exam move</label><strong>Unexpected values after a line draw should trigger a source-integrity check before treatment changes.</strong></div></div></div></div>
+<div class="accitem" data-key="context"><button class="accbtn"><span>Wrong label / mismatched oxygen settings <small>Correct number, wrong context</small></span><span class="plus">+</span></button><div class="panel"><div class="grid"><div class="box"><label>Check</label><ul><li>Two patient identifiers</li><li>Source/site</li><li>Time of draw</li><li>Oxygen device and flow/FiO₂</li><li>Recent oxygen or ventilator changes</li></ul></div><div class="box"><label>Why it matters</label><ul><li>A PaO₂ cannot be interpreted correctly without the support conditions present at the draw</li><li>A mislabeled result cannot safely be assigned to the patient</li></ul></div><div class="box wide"><label>Rule</label><strong>Do not call an ABG “room air” when the patient was receiving oxygen.</strong></div></div></div></div>
+</div>
+</section>
+
+<section class="section gated" id="arterialVenous">
+<div class="head"><div class="kicker">Arterial or venous?</div><h2>Use the sample source that answers the clinical question</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient has an unexpectedly low oxygen value from a sample obtained after prolonged probing with weak pulsatility. Bedside SpO₂ and the prior arterial result do not fit the reported PaO₂.</div>
+<div class="mcq" data-question="arterialVenous">
+<button data-correct="false">Accept the result as definite arterial hypoxemia because any blood sample provides the same PaO₂.</button>
+<button data-correct="true">Suspect venous admixture or a venous sample, verify the source, and recollect appropriately before making an arterial oxygenation decision.</button>
+<button data-correct="false">Average this result with the prior arterial blood gas.</button>
+<button data-correct="false">Assume the pulse oximeter must be wrong because the blood gas analyzer is more precise.</button>
+</div><div class="feedback" id="arterialVenousFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="trustCheck">
+<div class="head"><div class="kicker">Trust the result?</div><h2>When the ABG and the patient do not agree</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient on room air has an SpO₂ of 84%, but the ABG reports PaO₂ 96 mmHg. A visible air bubble remained in the syringe during transport.</div>
+<div class="mcq" data-question="trustCheck">
+<button data-correct="false">Interpret the PaO₂ as sudden clinical improvement.</button>
+<button data-correct="true">Withhold interpretation of the contaminated sample and recollect according to policy.</button>
+<button data-correct="false">Average the PaO₂ with the pulse-ox value to estimate the true oxygenation.</button>
+<button data-correct="false">Increase oxygen based only on the ABG without considering specimen quality.</button>
+</div><div class="feedback" id="trustFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="recommendCheck">
+<div class="head"><div class="kicker">Shared task: recommend another blood gas</div><h2>When is recollection the diagnostic recommendation?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A blood gas is clotted and the oxygen setting documented on the label does not match the device currently on the patient. The patient remains clinically stable.</div>
+<div class="mcq" data-question="recommendCheck">
+<button data-correct="false">Report the values with a note that the sample may be inaccurate.</button>
+<button data-correct="true">Reject the unreliable specimen and recommend a properly collected repeat sample with the actual oxygen setting documented.</button>
+<button data-correct="false">Correct the values mathematically using the current oxygen setting.</button>
+<button data-correct="false">Use the result because the patient is stable.</button>
+</div><div class="feedback" id="recommendFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>ABG-04 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed ABG Sampling, Specimen Quality & Errors.</strong>
+<p style="margin:5px 0 0">You practiced correct collection priorities, arterial-versus-venous source recognition, preanalytic error fingerprints, deciding whether a result is trustworthy, and knowing when recollection is the safest next diagnostic step.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Specimen-quality string</li><li>Correct collection</li><li>Error fingerprints</li><li>Arterial vs venous source</li><li>Trust the result?</li><li>Recommend recollection</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_abg04_v1';
+const items=[
+{id:'e1',stage:1,patient:'Sample contains a visible air bubble. PaCO₂ is lower and pH is higher than expected.',prompt:'Which preanalytic error best fits?',correct:'Air contamination',choices:['Air contamination','Delayed analysis','Excess liquid heparin'],good:'Air contamination tends to lower PaCO₂ and raise pH. PaO₂ moves toward room-air equilibrium and can move either direction depending on the starting value.',hint:'Look for the error that exposes blood to room air.'},
+{id:'e2',stage:1,patient:'The syringe sat unprocessed. Compared with the earlier sample, PaO₂ fell, PaCO₂ rose, and pH fell.',prompt:'Which preanalytic error best fits?',correct:'Delayed analysis',choices:['Delayed analysis','Air contamination','Wrong oxygen documentation'],good:'Ongoing cellular metabolism consumes oxygen and produces carbon dioxide, causing PaO₂ to fall, PaCO₂ to rise, and pH to fall.',hint:'Think ongoing cell metabolism after collection.'},
+{id:'e3',stage:1,patient:'A very small specimen was collected into a syringe containing excess liquid heparin. Gases and electrolytes are unexpectedly low.',prompt:'Which error best fits?',correct:'Dilution from excess heparin',choices:['Dilution from excess heparin','Venous admixture','Delayed analysis'],good:'Excess liquid heparin can dilute an underfilled specimen, lowering measured gases/electrolytes and altering calculated bicarbonate.',hint:'The clue is underfilling plus too much liquid anticoagulant.'},
+{id:'e4',stage:2,patient:'Weak pulsatility during the puncture and an unexpectedly low PaO₂ do not match reliable SpO₂ or prior arterial data.',prompt:'Which problem should be suspected?',correct:'Venous admixture / venous sample',choices:['Venous admixture / venous sample','Air contamination','Correct arterial deterioration'],good:'The collection characteristics and discordant oxygen data suggest the sample may not be truly arterial. Verify the source before oxygenation decisions.',hint:'Ask whether the specimen source is really arterial.'},
+{id:'e5',stage:2,patient:'A visible clot is present in the blood-gas syringe.',prompt:'What is the safest interpretation?',correct:'The sample is unreliable and should not be forced through the analyzer',choices:['The sample is unreliable and should not be forced through the analyzer','The clot only affects PaO₂, so the rest can be reported','The clot can be removed and the sample used normally'],good:'A clot can obstruct the analyzer and produce unreliable results. The safe response is rejection/recollection according to policy.',hint:'Think specimen integrity and analyzer safety.'},
+{id:'e6',stage:2,patient:'The label says “room air,” but the patient was actually on supplemental oxygen when the sample was drawn.',prompt:'What is the key problem?',correct:'The oxygenation result is documented in the wrong treatment context',choices:['The oxygenation result is documented in the wrong treatment context','PaCO₂ can no longer be measured','The sample automatically becomes venous'],good:'PaO₂ cannot be interpreted correctly without knowing the oxygen conditions at the time of collection.',hint:'The issue is not necessarily the blood—it is the context assigned to it.'}
+];
+const reviewKeys=['air','delay','venous','heparin','clot','line','context'];
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),samplingDone:false,reviewed:[],checks:{arterialVenous:false,trustCheck:false,recommendCheck:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();if(!state.choiceOrders)state.choiceOrders=makeChoices();if(!Array.isArray(state.reviewed))state.reviewed=[];
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){if(stringDone())reveal('sampling');if(state.samplingDone)reveal('errors');if(reviewDone())reveal('arterialVenous');if(state.checks.arterialVenous)reveal('trustCheck');if(state.checks.trustCheck)reveal('recommendCheck');if(state.complete||state.checks.recommendCheck)reveal('finish')}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){ $('#roundLabel').textContent='Error string complete';$('#patientLine').textContent='You have identified the major specimen-quality patterns.';$('#prompt').textContent='The correct-collection section is now available below.';$('#choices').innerHTML='';$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Next:</strong> prevent these errors by building a valid sample from the start.';$('#nextBtn').classList.remove('show');sync();return;}
+ let x=current();$('#roundLabel').textContent='Sample '+(state.round+1)+' of '+items.length;$('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);if(c===x.correct){btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))}else{btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the specimen clue:</strong> '+x.hint;setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)}}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('sampling')};
+$('#samplingDone').onclick=()=>{state.samplingDone=true;save();reveal('errors');setTimeout(()=>$('#errors').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('arterialVenous')}}});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}buttons.forEach(btn=>btn.onclick=()=>{if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));if(btn.dataset.correct==='true'){btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();if(name==='recommendCheck')completeLesson();else reveal(next)}else{btn.classList.add('wrong');f.className='feedback show try';f.innerHTML='<strong>Not quite.</strong> Before interpreting the number, verify source, specimen integrity, handling, patient identity, and oxygen conditions. Unreliable data should be corrected or recollected—not averaged into a treatment decision.'}})}
+bind('arterialVenous','#arterialVenousFeedback','Venous blood is not interchangeable with arterial blood for oxygenation decisions. Weak pulsatility plus an unexpectedly low PaO₂ that conflicts with reliable bedside data should trigger source verification and appropriate recollection.','trustCheck');
+bind('trustCheck','#trustFeedback','A visible air bubble makes the specimen unreliable. The source lesson specifically uses this type of mismatch to teach withholding interpretation and recollecting instead of treating the result as sudden improvement.','recommendCheck');
+bind('recommendCheck','#recommendFeedback','A clotted specimen plus incorrect oxygen documentation fails both specimen-quality and context checks. The safest diagnostic recommendation is a properly collected repeat sample with the actual support conditions documented.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.samplingDone,reviewDone(),state.checks.arterialVenous,state.checks.trustCheck,state.checks.recommendCheck];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+render();renderReview();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>
