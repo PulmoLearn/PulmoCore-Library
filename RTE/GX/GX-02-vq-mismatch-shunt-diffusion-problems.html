@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GX-02 | V/Q Mismatch, Shunt & Diffusion Problems — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.8rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow{grid-template-columns:1fr 1fr}.rulegrid,.grid{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">GX-02</div><div class="name">V/Q Mismatch, Shunt & Diffusion Problems</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">Oxygenation, Gas Exchange & Oxygen Transport • GX-02</div>
+<h1>V/Q Mismatch, Shunt & Diffusion Problems</h1>
+<p>Differentiate the major gas-exchange mechanisms by what is wrong, what the clinical clues look like, and how the hypoxemia responds to supplemental oxygen.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.A.8 Determine condition</span><span class="chip">III.C.1 Minimize hypoxemia</span></div>
+<div class="flow">
+<div><strong>Low V/Q</strong>Some ventilation, too much perfusion for it.</div>
+<div><strong>High V/Q</strong>Plenty of ventilation, too little perfusion.</div>
+<div><strong>Shunt</strong>Perfusion with no effective ventilation.</div>
+<div><strong>Diffusion</strong>O₂ transfer across the membrane is slowed.</div>
+</div>
+</section>
+
+<section class="section" id="mechanismString">
+<div class="head"><div class="kicker">Socratic gas-exchange string</div><h2>Which mechanism best fits?</h2><p>Use ventilation, perfusion, and oxygen response—not disease names alone.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next mechanism</button>
+</div></div>
+</section>
+
+<section class="section gated" id="framework">
+<div class="head"><div class="kicker">Core framework</div><h2>Ventilation and perfusion must meet</h2><p>Normal gas exchange depends on matching air reaching alveoli with blood reaching those alveoli.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>Normal V/Q</strong><span>Ventilation and perfusion are appropriately matched. Neither low-V/Q nor high-V/Q regions dominate.</span></div>
+<div class="minirule"><strong>Low V/Q</strong><span>Ventilation is reduced relative to perfusion. Blood leaves those units under-oxygenated. Supplemental oxygen usually improves the problem because some ventilation is still present.</span></div>
+<div class="minirule"><strong>High V/Q</strong><span>Ventilation is present but perfusion is reduced. This behaves like increased wasted ventilation / dead-space physiology rather than a pure shunt.</span></div>
+<div class="minirule"><strong>Shunt</strong><span>Blood reaches arterial circulation without contacting ventilated alveoli. Large shunts respond poorly to increased FiO₂ because the shunted blood never sees the added oxygen.</span></div>
+<div class="minirule"><strong>Diffusion limitation</strong><span>Reduced surface area, increased membrane thickness, or shortened capillary transit time limits equilibration. It often appears first with exercise and generally improves with supplemental oxygen.</span></div>
+<div class="minirule"><strong>A-a gradient clue</strong><span>An elevated A-a gradient points toward impaired transfer such as V/Q mismatch, diffusion limitation, or shunt rather than isolated hypoventilation or low inspired oxygen.</span></div>
+</div>
+<div class="rule"><strong>Fast discriminator</strong><p><b>Improves well with oxygen?</b> Think V/Q mismatch or diffusion. <b>Improves poorly despite high FiO₂?</b> Think large shunt.</p></div>
+<button class="primary" id="frameworkDone" style="width:100%">Continue →</button>
+</div>
+</section>
+
+<section class="section gated" id="recognition">
+<div class="head"><div class="kicker">Quick recognition</div><h2>Know the clue that separates the mechanisms</h2><p>Open each pattern once to continue.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 5 reviewed</strong><span>Review all patterns.</span></div>
+<div class="acc">
+
+<div class="accitem" data-key="lowvq"><button class="accbtn"><span>Low V/Q <small>Not enough ventilation for the blood flow</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Mechanism</label><ul><li>Ventilation ↓ relative to perfusion</li><li>Some alveolar ventilation remains</li></ul></div>
+<div class="box"><label>Quick clues</label><ul><li>Common cause of hypoxemia</li><li>Usually improves with supplemental oxygen</li></ul></div>
+<div class="box wide"><label>Why oxygen helps</label><strong>The poorly ventilated units still receive some gas, so increasing inspired oxygen can raise alveolar oxygen in those units.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="highvq"><button class="accbtn"><span>High V/Q <small>Too little perfusion for the ventilation</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Mechanism</label><ul><li>Ventilation maintained</li><li>Perfusion reduced</li></ul></div>
+<div class="box"><label>Quick clue</label><ul><li>Ventilation is being “wasted” because too little blood is available for gas exchange</li></ul></div>
+<div class="box wide"><label>Connection</label><strong>As perfusion approaches zero, the unit behaves more like alveolar dead space.</strong> GX-03 will go deeper into dead-space physiology.</div>
+</div></div></div>
+
+<div class="accitem" data-key="shunt"><button class="accbtn"><span>Shunt <small>Perfusion without effective ventilation</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Mechanism</label><ul><li>Blood bypasses ventilated alveoli or perfuses nonventilated units</li><li>Shunted blood never sees added alveolar oxygen</li></ul></div>
+<div class="box"><label>Quick clue</label><ul><li>Elevated A-a gradient</li><li>Large shunt = limited response to high FiO₂</li></ul></div>
+<div class="box wide"><label>Exam move</label><strong>Refractory hypoxemia despite substantial oxygen should make you think beyond simple low V/Q.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="diffusion"><button class="accbtn"><span>Diffusion limitation <small>Transfer across the membrane is too slow</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Mechanism</label><ul><li>Surface area ↓</li><li>Membrane thickness ↑</li><li>Transit time shortened</li></ul></div>
+<div class="box"><label>Quick clues</label><ul><li>May appear first during exercise</li><li>Usually improves with supplemental oxygen</li></ul></div>
+<div class="box wide"><label>Why exercise unmasks it</label><strong>Faster capillary transit leaves less time for oxygen to equilibrate across an impaired membrane.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="aagradient"><button class="accbtn"><span>A-a gradient <small>Did transfer fail?</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Normal / near-normal gradient</label><ul><li>Low inspired oxygen</li><li>Isolated alveolar hypoventilation</li></ul></div>
+<div class="box"><label>Elevated gradient</label><ul><li>V/Q mismatch</li><li>Diffusion limitation</li><li>Shunt</li></ul></div>
+<div class="box wide"><label>Exam move</label><strong>The A-a gradient organizes the problem; oxygen response helps distinguish the mechanism further.</strong></div>
+</div></div></div>
+
+</div>
+</section>
+
+<section class="section gated" id="oxygenResponse">
+<div class="head"><div class="kicker">Shared task: minimize hypoxemia</div><h2>Use the oxygen response as diagnostic information</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A hypoxemic patient improves substantially after supplemental oxygen is increased. PaO₂ rises and saturation improves.</div>
+<div class="mcq" data-question="oxygenResponse">
+<button data-correct="true">This response is more consistent with V/Q mismatch or diffusion limitation than with a large shunt.</button>
+<button data-correct="false">A strong oxygen response is most characteristic of a large right-to-left shunt.</button>
+<button data-correct="false">The response proves perfusion is absent from ventilated alveoli.</button>
+<button data-correct="false">The response means the A-a gradient must be normal.</button>
+</div><div class="feedback" id="oxygenResponseFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="shuntCheck">
+<div class="head"><div class="kicker">Refractory hypoxemia</div><h2>When high FiO₂ does not fix the problem</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> A patient remains markedly hypoxemic despite a large increase in FiO₂. Imaging and clinical findings suggest alveoli are perfused but not effectively ventilated.</div>
+<div class="mcq" data-question="shuntCheck">
+<button data-correct="false">The pattern is most consistent with isolated low inspired oxygen.</button>
+<button data-correct="true">A large shunt is likely because part of the blood is bypassing ventilated alveoli and cannot benefit from the added oxygen.</button>
+<button data-correct="false">The poor oxygen response proves isolated alveolar hypoventilation.</button>
+<button data-correct="false">The finding is typical of normal V/Q matching.</button>
+</div><div class="feedback" id="shuntCheckFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="exerciseCheck">
+<div class="head"><div class="kicker">Exercise clue</div><h2>When oxygen transfer fails first during exertion</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> Resting oxygenation is near acceptable, but hypoxemia develops with exercise in a patient with reduced gas-exchange surface area. Supplemental oxygen improves the exercise desaturation.</div>
+<div class="mcq" data-question="exerciseCheck">
+<button data-correct="false">Large shunt</button>
+<button data-correct="true">Diffusion limitation</button>
+<button data-correct="false">Isolated low inspired oxygen</button>
+<button data-correct="false">Normal V/Q matching</button>
+</div><div class="feedback" id="exerciseCheckFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style mechanism check</div><h2>Put A-a gradient and oxygen response together</h2></div>
+<div class="body">
+<div class="case"><strong>At sea level on room air:</strong><ul>
+<li>PaCO₂ = 40 mmHg</li>
+<li>Estimated PAO₂ ≈ 100 mmHg</li>
+<li>PaO₂ = 55 mmHg</li>
+<li>A-a gradient ≈ 45 mmHg</li>
+<li>PaO₂ rises markedly after supplemental oxygen</li>
+</ul></div>
+<div class="mcq" data-question="integrate">
+<button data-correct="false">The pattern is most consistent with isolated alveolar hypoventilation because the A-a gradient is elevated.</button>
+<button data-correct="true">The elevated A-a gradient shows impaired transfer, and the strong oxygen response favors V/Q mismatch or diffusion limitation over a large shunt.</button>
+<button data-correct="false">The findings prove a large shunt because any elevated A-a gradient is a shunt.</button>
+<button data-correct="false">The findings are most consistent with low inspired oxygen because PaCO₂ is normal.</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>GX-02 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed V/Q Mismatch, Shunt & Diffusion Problems.</strong>
+<p style="margin:5px 0 0">You practiced distinguishing low and high V/Q, shunt, and diffusion limitation using mechanism, A-a gradient, clinical clues, and expected response to supplemental oxygen.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Gas-exchange mechanism string</li><li>Core framework</li><li>Quick recognition</li><li>Oxygen response</li><li>Refractory hypoxemia</li><li>Exercise clue</li><li>Integrated A-a gradient check</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_gx02_v1';
+const items=[
+{id:'m1',stage:1,patient:'An alveolar unit receives blood flow but less ventilation than it needs. Some ventilation is still present.',prompt:'Which mechanism best fits?',correct:'Low V/Q',choices:['Low V/Q','High V/Q','Shunt'],good:'Low V/Q means ventilation is reduced relative to perfusion. Because some ventilation remains, supplemental oxygen usually helps.',hint:'There is still some ventilation, but not enough for the blood flow.'},
+{id:'m2',stage:1,patient:'An alveolar unit is well ventilated but receives very little blood flow.',prompt:'Which mechanism best fits?',correct:'High V/Q',choices:['High V/Q','Low V/Q','Shunt'],good:'High V/Q means ventilation is present but perfusion is reduced, creating wasted ventilation.',hint:'Ventilation is available, but perfusion is the missing side.'},
+{id:'m3',stage:1,patient:'Blood reaches arterial circulation without contacting ventilated alveoli.',prompt:'Which mechanism best fits?',correct:'Shunt',choices:['Shunt','Low V/Q','Diffusion limitation'],good:'Shunt is perfusion without effective ventilation. Added oxygen cannot reach the shunted blood directly.',hint:'The key clue is blood bypassing ventilated alveoli.'},
+{id:'m4',stage:2,patient:'Oxygen transfer is limited because the membrane is thickened or gas-exchange surface area is reduced.',prompt:'Which mechanism best fits?',correct:'Diffusion limitation',choices:['Diffusion limitation','Shunt','High V/Q'],good:'Diffusion limitation slows equilibration across the alveolar-capillary membrane and may become more apparent during exercise.',hint:'The problem is transfer across the membrane itself.'},
+{id:'m5',stage:2,patient:'Hypoxemia improves substantially with supplemental oxygen.',prompt:'Which mechanism is LESS likely if the hypoxemia is severe?',correct:'Large shunt',choices:['Large shunt','Low V/Q mismatch','Diffusion limitation'],good:'A large shunt characteristically responds poorly to increased FiO₂ because shunted blood never sees the added oxygen.',hint:'Choose the mechanism that is least corrected by added oxygen.'},
+{id:'m6',stage:2,patient:'Hypoxemia is worse during exercise, and supplemental oxygen improves it.',prompt:'Which mechanism should move higher on the list?',correct:'Diffusion limitation',choices:['Diffusion limitation','Large shunt','Low inspired oxygen'],good:'Shortened capillary transit time during exercise can reveal diffusion limitation, and supplemental oxygen generally improves the driving gradient.',hint:'Think about reduced time for equilibration during exercise.'}
+];
+const reviewKeys=['lowvq','highvq','shunt','diffusion','aagradient'];
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),frameworkDone:false,reviewed:[],checks:{oxygenResponse:false,shuntCheck:false,exerciseCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();if(!state.choiceOrders)state.choiceOrders=makeChoices();if(!Array.isArray(state.reviewed))state.reviewed=[];
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){if(stringDone())reveal('framework');if(state.frameworkDone)reveal('recognition');if(reviewDone())reveal('oxygenResponse');if(state.checks.oxygenResponse)reveal('shuntCheck');if(state.checks.shuntCheck)reveal('exerciseCheck');if(state.checks.exerciseCheck)reveal('integrate');if(state.complete||state.checks.integrate)reveal('finish')}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){ $('#roundLabel').textContent='Mechanism string complete';$('#patientLine').textContent='You have identified the major V/Q, shunt, and diffusion patterns.';$('#prompt').textContent='The mechanism framework is now available below.';$('#choices').innerHTML='';$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Next:</strong> use oxygen response and A-a gradient to separate the mechanisms clinically.';$('#nextBtn').classList.remove('show');sync();return;}
+ let x=current();$('#roundLabel').textContent='Mechanism '+(state.round+1)+' of '+items.length;$('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);if(c===x.correct){btn.classList.add('correct');$('#choices').classList.add('answered');$('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;$('#nextBtn').classList.add('show');requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))}else{btn.classList.add('wrong');$('#feedback').className='feedback show try';$('#feedback').innerHTML='<strong>Use the mechanism:</strong> '+x.hint;setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)}}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('framework')};
+$('#frameworkDone').onclick=()=>{state.frameworkDone=true;save();reveal('recognition');setTimeout(()=>$('#recognition').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('oxygenResponse')}}});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}buttons.forEach(btn=>btn.onclick=()=>{if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));if(btn.dataset.correct==='true'){btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();if(name==='integrate')completeLesson();else reveal(next)}else{btn.classList.add('wrong');f.className='feedback show try';f.innerHTML='<strong>Not quite.</strong> Identify whether the problem is ventilation-to-perfusion matching, blood bypassing ventilated alveoli, or slow membrane transfer. Then use the oxygen response as a second clue.'}})}
+bind('oxygenResponse','#oxygenResponseFeedback','V/Q mismatch and diffusion limitation generally improve with supplemental oxygen because oxygen still reaches the affected alveolar units. A large shunt is different: shunted blood never contacts the added alveolar oxygen.','shuntCheck');
+bind('shuntCheck','#shuntCheckFeedback','Persistent severe hypoxemia despite high FiO₂ is a classic clue for a large shunt because a portion of blood bypasses ventilated alveoli altogether.','exerciseCheck');
+bind('exerciseCheck','#exerciseCheckFeedback','Diffusion limitation often becomes more apparent during exercise because shortened capillary transit time leaves less time for equilibration. Supplemental oxygen generally improves the driving gradient.','integrate');
+bind('integrate','#integrateFeedback','The A-a gradient is elevated, so oxygen transfer is impaired rather than explained by isolated low inspired oxygen or hypoventilation. The strong response to supplemental oxygen makes a large shunt less likely and favors V/Q mismatch or diffusion limitation.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.frameworkDone,reviewDone(),state.checks.oxygenResponse,state.checks.shuntCheck,state.checks.exerciseCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+render();renderReview();sync();updateProgress();renderTime();
+</script>
+</body>
+</html>

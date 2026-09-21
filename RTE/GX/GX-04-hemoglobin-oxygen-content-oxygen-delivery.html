@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GX-04 | Hemoglobin, Oxygen Content & Oxygen Delivery — PulmoLearn</title>
+<style>
+:root{
+--navy:#0B1F33;--teal:#1CA7A8;--teal-dark:#138486;--ink:#17324a;--muted:#617587;
+--bg:#f4f7f8;--line:#dbe5e8;--soft:#eaf7f7;--soft2:#eef3f7;--ok:#1f7a4d;--okbg:#eaf7f0;
+--warn:#7a5200;--warnbg:#fff7df;--bad:#9c2f2f;--badbg:#fff0f0;--shadow:0 8px 24px rgba(11,31,51,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Atkinson Hyperlegible,Montserrat,Arial,sans-serif;line-height:1.5}
+button,input{font:inherit}.top{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.97);color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.topin{max-width:900px;margin:auto;padding:10px 14px 8px;display:flex;gap:10px;align-items:center}.brand{font-weight:900}.brand span{color:#50d2d0}
+.mini{flex:1;min-width:0}.id{font-size:.72rem;opacity:.72;letter-spacing:.08em}.name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actions{display:flex;gap:6px}.icon{border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;cursor:pointer}
+.track{height:4px;background:rgba(255,255,255,.12)}#bar{height:100%;width:0;background:#50d2d0;transition:width .3s}
+main{max-width:900px;margin:auto;padding:18px 14px 70px}.hero{background:linear-gradient(135deg,#0B1F33,#143955 72%,#176c73 120%);color:#fff;border-radius:22px;padding:25px 20px;box-shadow:var(--shadow)}
+.eyebrow,.kicker{font-size:.73rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900}.eyebrow{opacity:.78}.kicker{color:var(--teal-dark)}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{margin:5px 0 6px;color:var(--navy);font-size:1.4rem;line-height:1.18}.hero p,.head p{margin:0}.hero p{color:#dce8ef}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.chip{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 10px;font-size:.77rem;font-weight:800}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.flow div{background:rgba(255,255,255,.08);border-radius:13px;padding:10px;font-size:.8rem}.flow strong{display:block}
+.section{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.head{padding:19px 18px 10px}.head p{color:var(--muted)}.body{padding:8px 18px 20px}
+.gated{display:none}.gated.revealed{display:block;animation:reveal .3s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdfe}.round{font-size:.73rem;color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.prompt{font-size:1.08rem;font-weight:900;color:var(--navy);margin-bottom:8px}.patient{padding:11px 12px;background:var(--soft2);border-radius:12px;margin:9px 0 12px;color:#3d566c}
+.choices,.mcq{display:grid;gap:8px}.choice,.mcq button{border:1.5px solid #bed0d7;background:#fff;color:var(--navy);border-radius:12px;padding:12px;text-align:left;font-weight:800;cursor:pointer}
+.choice:hover,.mcq button:hover{border-color:var(--teal)}.correct{border-color:#6bc59e!important;background:var(--okbg)!important;color:var(--ok)!important}.wrong{border-color:#e2a4a4!important;background:var(--badbg)!important;color:var(--bad)!important}
+.choices.answered .choice:not(.correct){display:none}.feedback{display:none;margin-top:11px;padding:12px;border-radius:12px}.feedback.show{display:block}.good{background:var(--okbg);border:1px solid #b8e4cf;color:#145f3a}.try{background:var(--warnbg);border:1px solid #efd99d;color:#704b00}
+.next{display:none;width:100%;margin-top:11px;border:0;border-radius:12px;padding:12px;background:var(--navy);color:#fff;font-weight:900;cursor:pointer}.next.show{display:block}
+.rulegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.minirule{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfdfe}.minirule strong{display:block;color:var(--navy);margin-bottom:5px}.minirule span{font-size:.9rem;color:var(--muted)}
+.rule{background:var(--navy);color:#fff;border-radius:15px;padding:15px;margin:12px 0}.rule p{margin:4px 0 0;color:#d8e6ed}
+.case{border:1px solid var(--line);border-radius:16px;background:#fbfdfe;padding:14px}.case ul{margin:8px 0 0;padding-left:20px}
+.formula{font-size:1.1rem;font-weight:900;color:var(--navy);background:var(--soft);border:1px solid #bfe5e5;padding:14px;border-radius:14px;text-align:center;margin:12px 0}
+.calc{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.field{display:grid;gap:4px}.field label{font-size:.76rem;font-weight:900;color:var(--navy)}.field input{width:100%;border:1px solid #bdd0d8;border-radius:10px;padding:10px;background:#fff}.result{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfdfe}.result strong{font-size:1.18rem;color:var(--navy)}
+.progressnote{display:flex;justify-content:space-between;gap:10px;margin:0 16px 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc;color:var(--muted);font-size:.82rem}.progressnote strong{color:var(--navy)}
+.acc{border-top:1px solid var(--line)}.accitem{border-bottom:1px solid var(--line)}.accbtn{width:100%;border:0;background:#fff;text-align:left;padding:15px 17px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-weight:900;cursor:pointer}.accbtn small{color:var(--teal-dark);font-weight:900}.panel{display:none;padding:0 17px 17px}.accitem.open .panel{display:block}.accitem.open .plus{transform:rotate(45deg)}.accitem.reviewed .accbtn{background:#fbfefd}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.box{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfe}.box label{display:block;font-size:.68rem;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:4px}.box ul{margin:0;padding-left:18px}.wide{grid-column:1/-1;background:var(--soft2)}
+.complete{background:var(--okbg);border:1px solid #b4dfc9;border-radius:18px;padding:18px}.time{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cce7d8;border-radius:14px;padding:13px;margin-top:13px}.timebig{font-size:1.25rem;font-weight:900;color:var(--navy)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.primary,.secondary{border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer}.primary{border:0;background:var(--teal);color:#062b2c}.secondary{background:#eef3f6;border:1px solid var(--line);color:var(--navy)}
+.modalbg{display:none;position:fixed;inset:0;z-index:90;background:rgba(4,18,31,.66);padding:18px;align-items:center;justify-content:center}.modalbg.show{display:flex}.modal{max-width:520px;width:100%;background:#fff;border-radius:18px;max-height:88vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.modalbody{padding:15px 17px}.close{border:0;border-radius:10px;padding:8px 10px;font-weight:900}
+@media(max-width:700px){.flow{grid-template-columns:1fr 1fr}.rulegrid,.grid,.calc{grid-template-columns:1fr}.wide{grid-column:auto}.section{border-radius:16px}.brand{display:none}.head{padding:17px 16px 9px}.body{padding:8px 16px 18px}.icon{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="topin">
+<div class="brand">Pulmo<span>Learn</span></div>
+<div class="mini"><div class="id">GX-04</div><div class="name">Hemoglobin, Oxygen Content & Oxygen Delivery</div></div>
+<div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="outlineBtn">☰</button><button class="icon" id="resetBtn">↺</button></div>
+</div><div class="track"><div id="bar"></div></div>
+</header>
+
+<main>
+<section class="hero">
+<div class="eyebrow">Oxygenation, Gas Exchange & Oxygen Transport • GX-04</div>
+<h1>Hemoglobin, Oxygen Content & Oxygen Delivery</h1>
+<p>Move beyond PaO₂ and SpO₂: calculate how much oxygen blood contains, how much reaches tissues each minute, and what venous oxygen tells you about extraction.</p>
+<div class="chips"><span class="chip">2027 RTE</span><span class="chip">I.C.7 Cardiopulmonary calculations</span></div>
+<div class="flow">
+<div><strong>CaO₂</strong>How much O₂ is in arterial blood?</div>
+<div><strong>DO₂</strong>How much O₂ reaches tissues per minute?</div>
+<div><strong>Extraction</strong>How much O₂ do tissues remove?</div>
+<div><strong>SvO₂</strong>How much O₂ remains after systemic extraction?</div>
+</div>
+</section>
+
+<section class="section" id="conceptString">
+<div class="head"><div class="kicker">Socratic oxygen-transport string</div><h2>Which variable is limiting oxygen transport?</h2><p>Identify the weak link before reaching for a formula.</p></div>
+<div class="body"><div class="card">
+<div class="round" id="roundLabel"></div><div class="patient" id="patientLine"></div><div class="prompt" id="prompt"></div>
+<div class="choices" id="choices"></div><div class="feedback" id="feedback"></div><button class="next" id="nextBtn">Next transport clue</button>
+</div></div>
+</section>
+
+<section class="section gated" id="framework">
+<div class="head"><div class="kicker">Core framework</div><h2>Pressure, saturation, content, and delivery are not the same thing</h2><p>The registry expects you to connect hemoglobin, saturation, PaO₂, cardiac output, oxygen content, delivery, extraction, and mixed venous oxygenation.</p></div>
+<div class="body">
+<div class="rulegrid">
+<div class="minirule"><strong>PaO₂</strong><span>Oxygen partial pressure dissolved in arterial plasma. It helps describe oxygenation but contributes only a small amount to total oxygen content.</span></div>
+<div class="minirule"><strong>SaO₂</strong><span>Percentage of hemoglobin oxygen-binding sites occupied by oxygen.</span></div>
+<div class="minirule"><strong>Hemoglobin</strong><span>The major oxygen carrier. Severe anemia can sharply reduce oxygen content even with normal PaO₂ and saturation.</span></div>
+<div class="minirule"><strong>Cardiac output</strong><span>Determines how much oxygenated blood moves to tissues each minute. Normal content cannot rescue critically low flow.</span></div>
+</div>
+<div class="formula">CaO₂ = (1.34 × Hb × SaO₂) + (0.003 × PaO₂)</div>
+<div class="formula">DO₂ = Cardiac Output × CaO₂ × 10</div>
+<div class="rule"><strong>Memory rule</strong><p><b>Content = what each dL carries.</b> <b>Delivery = content × flow.</b> A normal oxygen pressure does not guarantee either one.</p></div>
+<button class="primary" id="frameworkDone" style="width:100%">Continue to calculators →</button>
+</div>
+</section>
+
+<section class="section gated" id="calculator">
+<div class="head"><div class="kicker">Calculation practice</div><h2>Calculate CaO₂ and DO₂</h2><p>SaO₂ may be entered as 95 or 0.95. The calculator converts percentages automatically.</p></div>
+<div class="body">
+<div class="calc">
+<div class="field"><label for="hb">Hb (g/dL)</label><input id="hb" type="number" value="10" step="0.1"></div>
+<div class="field"><label for="sat">SaO₂ (%)</label><input id="sat" type="number" value="90" step="0.1"></div>
+<div class="field"><label for="pao2">PaO₂ (mmHg)</label><input id="pao2" type="number" value="60" step="1"></div>
+<div class="field"><label for="co">Cardiac output (L/min)</label><input id="co" type="number" value="3" step="0.1"></div>
+</div>
+<div class="result"><div>Arterial oxygen content</div><strong id="cao2Result">12.2 mL O₂/dL</strong><div id="cao2Interp"></div></div>
+<div class="result"><div>Systemic oxygen delivery</div><strong id="do2Result">366 mL O₂/min</strong><div id="do2Interp"></div></div>
+<button class="primary" id="calculatorDone" style="width:100%;margin-top:12px">I understand the calculation →</button>
+</div>
+</section>
+
+<section class="section gated" id="recognition">
+<div class="head"><div class="kicker">Interpret the weak link</div><h2>What can make oxygen delivery fail?</h2><p>Open each pattern once to continue.</p></div>
+<div class="progressnote"><strong id="reviewCount">0 of 5 reviewed</strong><span>Review all transport patterns.</span></div>
+<div class="acc">
+<div class="accitem" data-key="anemia"><button class="accbtn"><span>Anemia <small>Low carrying capacity</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Pattern</label><ul><li>PaO₂ may be normal</li><li>SaO₂ may be normal</li><li>Hb is low</li><li>CaO₂ falls</li></ul></div>
+<div class="box"><label>Exam move</label><ul><li>Do not call oxygen transport adequate from SpO₂ alone.</li></ul></div>
+<div class="box wide"><label>Why</label><strong>Most oxygen rides on hemoglobin, so severe anemia can cause tissue hypoxia without arterial hypoxemia.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="hypoxemia"><button class="accbtn"><span>Hypoxemia <small>Reduced oxygen loading</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Pattern</label><ul><li>PaO₂ low</li><li>SaO₂ may be low</li><li>CaO₂ falls if hemoglobin loading falls</li></ul></div>
+<div class="box"><label>Exam move</label><ul><li>Connect oxygenation failure to content, not just the PaO₂ number.</li></ul></div>
+<div class="box wide"><label>Reminder</label><strong>The hemoglobin-bound portion usually dominates CaO₂; dissolved oxygen contributes relatively little.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="lowco"><button class="accbtn"><span>Low cardiac output <small>Content may be fine; delivery still falls</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>Pattern</label><ul><li>CaO₂ can be normal</li><li>Cardiac output low</li><li>DO₂ falls</li></ul></div>
+<div class="box"><label>Clinical clue</label><ul><li>Poor perfusion can persist despite good saturation.</li></ul></div>
+<div class="box wide"><label>Rule</label><strong>DO₂ depends on both oxygen content and blood flow.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="extraction"><button class="accbtn"><span>Increased extraction <small>Tissues remove more O₂</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>What happens</label><ul><li>C(a-v)O₂ widens</li><li>Venous oxygen saturation tends to fall</li></ul></div>
+<div class="box"><label>Why</label><ul><li>Delivery is low, demand is high, or both</li></ul></div>
+<div class="box wide"><label>Typical resting concept</label><strong>Oxygen extraction is commonly around 20–30% at rest; interpret trends with the whole clinical picture.</strong></div>
+</div></div></div>
+
+<div class="accitem" data-key="svo2"><button class="accbtn"><span>Mixed venous oxygenation <small>Balance of delivery and demand</small></span><span class="plus">+</span></button><div class="panel"><div class="grid">
+<div class="box"><label>SvO₂</label><ul><li>Commonly about 60–80% in a stable adult</li><li>Represents oxygen remaining after systemic extraction</li></ul></div>
+<div class="box"><label>Low SvO₂ can reflect</label><ul><li>Low delivery</li><li>High metabolic demand</li><li>Or both</li></ul></div>
+<div class="box wide"><label>Trend with</label><strong>Perfusion, lactate, hemodynamics, temperature, activity, and overall clinical condition.</strong></div>
+</div></div></div>
+</div>
+</section>
+
+<section class="section gated" id="anemiaCheck">
+<div class="head"><div class="kicker">Same PaO₂, very different content</div><h2>Which patient has the lower CaO₂?</h2></div>
+<div class="body">
+<div class="case"><strong>Both patients:</strong> PaO₂ 92 mmHg • SaO₂ 97%<br><strong>Patient A:</strong> Hb 14 g/dL<br><strong>Patient B:</strong> Hb 6 g/dL</div>
+<div class="mcq" data-question="anemiaCheck">
+<button data-correct="false">Patient A, because higher hemoglobin lowers oxygen content.</button>
+<button data-correct="true">Patient B, because severe anemia sharply reduces hemoglobin-bound oxygen despite normal PaO₂ and saturation.</button>
+<button data-correct="false">They have the same CaO₂ because PaO₂ and SaO₂ are identical.</button>
+<button data-correct="false">Neither can have low oxygen content unless PaO₂ is below 60 mmHg.</button>
+</div><div class="feedback" id="anemiaFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="flowCheck">
+<div class="head"><div class="kicker">Same CaO₂, different delivery</div><h2>What happens when cardiac output falls?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> CaO₂ remains 20 mL/dL, but cardiac output falls from 5 L/min to 2.5 L/min.</div>
+<div class="mcq" data-question="flowCheck">
+<button data-correct="true">DO₂ falls by about half even though oxygen content is unchanged.</button>
+<button data-correct="false">DO₂ stays the same because CaO₂ is unchanged.</button>
+<button data-correct="false">PaO₂ must double to maintain the same CaO₂.</button>
+<button data-correct="false">SvO₂ must increase because perfusion is lower.</button>
+</div><div class="feedback" id="flowFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="venousCheck">
+<div class="head"><div class="kicker">Extraction & mixed venous oxygen</div><h2>What does a falling SvO₂ suggest?</h2></div>
+<div class="body">
+<div class="case"><strong>Scenario:</strong> SvO₂ falls while lactate rises, extremities become cool, and cardiac output decreases.</div>
+<div class="mcq" data-question="venousCheck">
+<button data-correct="false">Tissues are extracting less oxygen because delivery is excessive.</button>
+<button data-correct="true">Oxygen delivery may be inadequate relative to demand, so tissues are extracting more oxygen.</button>
+<button data-correct="false">The falling SvO₂ proves PaO₂ is low.</button>
+<button data-correct="false">Venous oxygenation is unrelated to perfusion or metabolic demand.</button>
+</div><div class="feedback" id="venousFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="integrate">
+<div class="head"><div class="kicker">Integrated RTE-style calculation</div><h2>Calculate, then interpret the failing component</h2></div>
+<div class="body">
+<div class="case"><strong>Data:</strong> Hb 10 g/dL • SaO₂ 90% • PaO₂ 60 mmHg • Cardiac output 3.0 L/min</div>
+<div class="mcq" data-question="integrate">
+<button data-correct="true">CaO₂ ≈ 12.2 mL/dL and DO₂ ≈ 366 mL/min; both oxygen content and systemic delivery are reduced.</button>
+<button data-correct="false">CaO₂ ≈ 20 mL/dL and DO₂ ≈ 600 mL/min; oxygen transport is normal.</button>
+<button data-correct="false">CaO₂ ≈ 12.2 mL/dL but DO₂ is normal because PaO₂ is 60 mmHg.</button>
+<button data-correct="false">DO₂ cannot be calculated unless SvO₂ is known.</button>
+</div><div class="feedback" id="integrateFeedback"></div>
+</div>
+</section>
+
+<section class="section gated" id="finish">
+<div class="head"><div class="kicker">Lesson complete</div><h2>GX-04 complete</h2></div>
+<div class="body"><div class="complete">
+<strong>✓ You completed Hemoglobin, Oxygen Content & Oxygen Delivery.</strong>
+<p style="margin:5px 0 0">You practiced calculating CaO₂ and DO₂, separating oxygen pressure from oxygen content, recognizing anemia and low-flow delivery failure, and using venous oxygenation as a clue to the balance between delivery and tissue extraction.</p>
+<div class="time"><div>⏱</div><div><div class="timebig" id="timeValue">0 min</div><div style="color:var(--muted);font-size:.8rem">Active learning time in this lesson</div></div></div>
+<div class="btnrow"><button class="primary" id="nextLesson">Continue to RTE Library →</button><button class="secondary" id="reviewBtn">Review this lesson</button><button class="secondary" id="restartBtn">Restart lesson</button></div>
+</div></div>
+</section>
+</main>
+
+<div class="modalbg" id="modal"><div class="modal"><div class="modalhead"><strong>Lesson outline</strong><button class="close" id="closeModal">Close</button></div><div class="modalbody"><ol><li>Oxygen-transport string</li><li>CaO₂ and DO₂ framework</li><li>Calculation practice</li><li>Transport failure patterns</li><li>Anemia case</li><li>Low cardiac-output case</li><li>SvO₂/extraction case</li><li>Integrated calculation</li></ol></div></div></div>
+
+<script>
+const KEY='pulmolearn_gx04_v1';
+
+const items=[
+{id:'o1',stage:1,patient:'PaO₂ is normal and SaO₂ is 98%, but hemoglobin is 6 g/dL.',prompt:'Which oxygen-transport component is most limited?',correct:'Oxygen-carrying capacity',choices:['Oxygen-carrying capacity','Alveolar ventilation','Inspired oxygen concentration'],good:'Most oxygen is carried on hemoglobin. Severe anemia can reduce CaO₂ despite normal PaO₂ and saturation.',hint:'Ask what carries most oxygen in blood.'},
+{id:'o2',stage:1,patient:'CaO₂ is normal, but cardiac output is severely reduced.',prompt:'Which variable is most directly threatened?',correct:'Systemic oxygen delivery',choices:['Systemic oxygen delivery','Arterial oxygen content','PaO₂'],good:'DO₂ depends on both CaO₂ and cardiac output. Normal content does not guarantee normal delivery when flow is low.',hint:'Think content × flow.'},
+{id:'o3',stage:1,patient:'PaO₂ falls and SaO₂ also falls while hemoglobin is unchanged.',prompt:'Which quantity should also tend to fall?',correct:'CaO₂',choices:['CaO₂','Cardiac output automatically','Hemoglobin concentration'],good:'Lower hemoglobin saturation reduces the dominant hemoglobin-bound component of arterial oxygen content.',hint:'Connect saturation to oxygen content.'},
+{id:'o4',stage:2,patient:'SvO₂ falls while cardiac output falls and tissue demand is unchanged.',prompt:'What does the venous change most likely mean?',correct:'Tissues are extracting more oxygen because delivery is lower',choices:['Tissues are extracting more oxygen because delivery is lower','Arterial PaO₂ must be higher','Oxygen delivery is excessive'],good:'When delivery falls, tissues can compensate by extracting more oxygen, leaving less in mixed venous blood.',hint:'SvO₂ reflects the balance between delivery and tissue use.'},
+{id:'o5',stage:2,patient:'CaO₂ is unchanged while cardiac output drops from 6 to 3 L/min.',prompt:'What happens to DO₂?',correct:'It decreases by about half',choices:['It decreases by about half','It stays the same','It doubles'],good:'DO₂ = CO × CaO₂ × 10. With CaO₂ unchanged, halving cardiac output halves delivery.',hint:'Delivery changes directly with flow if content stays constant.'},
+{id:'o6',stage:2,patient:'Two patients have identical PaO₂ and SaO₂, but one has hemoglobin 14 g/dL and the other 7 g/dL.',prompt:'Which statement is correct?',correct:'The patient with lower hemoglobin has lower CaO₂',choices:['The patient with lower hemoglobin has lower CaO₂','Their CaO₂ values are identical','The patient with lower hemoglobin must have a lower PaO₂'],good:'At the same saturation and PaO₂, hemoglobin concentration becomes the major determinant of the difference in oxygen content.',hint:'Most oxygen content is hemoglobin-bound.'}
+];
+
+const reviewKeys=['anemia','hypoxemia','lowco','extraction','svo2'];
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function makeOrder(){return [1,2].flatMap(s=>shuffle(items.filter(x=>x.stage===s)).map(x=>x.id))}
+function makeChoices(){return Object.fromEntries(items.map(x=>[x.id,shuffle(x.choices)]))}
+function fresh(){return{round:0,order:makeOrder(),choiceOrders:makeChoices(),frameworkDone:false,calculatorDone:false,reviewed:[],checks:{anemiaCheck:false,flowCheck:false,venousCheck:false,integrate:false},complete:false,activeMs:0,doneMs:null}}
+let state=fresh();try{let s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s)}catch(e){}
+if(!Array.isArray(state.order)||state.order.length!==items.length)state.order=makeOrder();
+if(!state.choiceOrders)state.choiceOrders=makeChoices();
+if(!Array.isArray(state.reviewed))state.reviewed=[];
+
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function stringDone(){return state.round>=items.length}
+function reviewDone(){return state.reviewed.length>=reviewKeys.length}
+function reveal(id){let e=document.getElementById(id);if(e)e.classList.add('revealed')}
+function sync(){
+ if(stringDone())reveal('framework');
+ if(state.frameworkDone)reveal('calculator');
+ if(state.calculatorDone)reveal('recognition');
+ if(reviewDone())reveal('anemiaCheck');
+ if(state.checks.anemiaCheck)reveal('flowCheck');
+ if(state.checks.flowCheck)reveal('venousCheck');
+ if(state.checks.venousCheck)reveal('integrate');
+ if(state.complete||state.checks.integrate)reveal('finish')
+}
+function current(){return items.find(x=>x.id===state.order[state.round])}
+function render(){
+ if(stringDone()){
+   $('#roundLabel').textContent='Transport string complete';
+   $('#patientLine').textContent='You have identified the major limiting variables in oxygen content and delivery.';
+   $('#prompt').textContent='The calculation framework is now available below.';
+   $('#choices').innerHTML='';$('#feedback').className='feedback show good';
+   $('#feedback').innerHTML='<strong>Next:</strong> calculate CaO₂ and DO₂, then interpret which component is failing.';
+   $('#nextBtn').classList.remove('show');sync();return;
+ }
+ let x=current();$('#roundLabel').textContent='Transport clue '+(state.round+1)+' of '+items.length;
+ $('#patientLine').textContent=x.patient;$('#prompt').textContent=x.prompt;
+ let box=$('#choices');box.innerHTML='';box.classList.remove('answered');$('#feedback').className='feedback';$('#nextBtn').classList.remove('show');
+ state.choiceOrders[x.id].forEach(c=>{let b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(b,c);box.appendChild(b)})
+}
+function answer(btn,c){
+ let x=current(),buttons=$$('#choices .choice');buttons.forEach(b=>b.disabled=true);
+ if(c===x.correct){
+   btn.classList.add('correct');$('#choices').classList.add('answered');
+   $('#feedback').className='feedback show good';$('#feedback').innerHTML='<strong>Correct.</strong> '+x.good;
+   $('#nextBtn').classList.add('show');requestAnimationFrame(()=>$('#feedback').scrollIntoView({behavior:'smooth',block:'nearest'}))
+ }else{
+   btn.classList.add('wrong');$('#feedback').className='feedback show try';
+   $('#feedback').innerHTML='<strong>Use the pathway:</strong> '+x.hint;
+   setTimeout(()=>buttons.forEach(b=>{b.disabled=false;b.classList.remove('wrong')}),350)
+ }
+}
+$('#nextBtn').onclick=()=>{state.round++;save();render();if(stringDone())reveal('framework')};
+$('#frameworkDone').onclick=()=>{state.frameworkDone=true;save();reveal('calculator');setTimeout(()=>$('#calculator').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+function cleanSat(v){let s=Number(v);if(!isFinite(s)||s<=0)return null;if(s>1)s=s/100;return s}
+function calc(){
+ const hb=Number($('#hb').value),sat=cleanSat($('#sat').value),pao2=Number($('#pao2').value),co=Number($('#co').value);
+ if(!isFinite(hb)||hb<=0||!sat||sat>1||!isFinite(pao2)||pao2<0||!isFinite(co)||co<=0){
+   $('#cao2Result').textContent='—';$('#do2Result').textContent='—';$('#cao2Interp').textContent='Enter valid values.';$('#do2Interp').textContent='';return
+ }
+ const cao2=(1.34*hb*sat)+(0.003*pao2),do2=co*cao2*10;
+ $('#cao2Result').textContent=(Math.round(cao2*10)/10)+' mL O₂/dL';
+ $('#do2Result').textContent=Math.round(do2)+' mL O₂/min';
+ $('#cao2Interp').textContent='Most of this value comes from hemoglobin-bound oxygen; the dissolved PaO₂ term is small.';
+ $('#do2Interp').textContent='Delivery combines oxygen content with cardiac output.';
+}
+['#hb','#sat','#pao2','#co'].forEach(id=>$(id).addEventListener('input',calc));
+$('#calculatorDone').onclick=()=>{state.calculatorDone=true;save();reveal('recognition');setTimeout(()=>$('#recognition').scrollIntoView({behavior:'smooth',block:'start'}),80)};
+
+$$('.accbtn').forEach(b=>b.onclick=()=>{
+ let item=b.closest('.accitem'),open=item.classList.contains('open');$$('.accitem').forEach(i=>i.classList.remove('open'));
+ if(!open){item.classList.add('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);save();renderReview();if(reviewDone())reveal('anemiaCheck')}}
+});
+function renderReview(){$('#reviewCount').textContent=state.reviewed.length+' of '+reviewKeys.length+' reviewed';$$('.accitem').forEach(i=>i.classList.toggle('reviewed',state.reviewed.includes(i.dataset.key)))}
+
+$$('.mcq').forEach(box=>shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b)));
+function bind(name,feedback,rationale,next){
+ let box=document.querySelector('[data-question="'+name+'"]'),buttons=Array.from(box.querySelectorAll('button')),f=$(feedback);
+ if(state.checks[name]){let c=buttons.find(b=>b.dataset.correct==='true');buttons.forEach(b=>b.style.display=b===c?'block':'none');c.classList.add('correct');c.disabled=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale}
+ buttons.forEach(btn=>btn.onclick=()=>{
+  if(state.checks[name])return;buttons.forEach(b=>b.classList.remove('wrong','correct'));
+  if(btn.dataset.correct==='true'){
+   btn.classList.add('correct');buttons.forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});
+   state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;
+   requestAnimationFrame(()=>f.scrollIntoView({behavior:'smooth',block:'nearest'}));save();
+   if(name==='integrate')completeLesson();else reveal(next)
+  }else{
+   btn.classList.add('wrong');f.className='feedback show try';
+   f.innerHTML='<strong>Not quite.</strong> Decide whether the problem is oxygen loading, hemoglobin carrying capacity, blood flow, or tissue extraction before choosing the answer.'
+  }
+ })
+}
+bind('anemiaCheck','#anemiaFeedback','Because the hemoglobin-bound component dominates CaO₂, the patient with Hb 6 g/dL has far less oxygen content despite the same PaO₂ and saturation.','flowCheck');
+bind('flowCheck','#flowFeedback','DO₂ = CO × CaO₂ × 10. With CaO₂ fixed at 20 mL/dL, reducing cardiac output from 5 to 2.5 L/min reduces delivery from about 1000 to 500 mL O₂/min.','venousCheck');
+bind('venousCheck','#venousFeedback','Mixed venous oxygenation reflects the balance between delivery and tissue extraction. Falling SvO₂ with low output, rising lactate, and cool extremities supports inadequate delivery relative to demand.','integrate');
+bind('integrate','#integrateFeedback','CaO₂ = (1.34 × 10 × 0.90) + (0.003 × 60) ≈ 12.2 mL/dL. DO₂ = 12.2 × 3 × 10 ≈ 366 mL/min. Both content and delivery are reduced.','finish');
+
+function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
+function renderTime(){let ms=state.doneMs??state.activeMs,sec=Math.round(ms/1000),min=Math.floor(sec/60),rem=sec%60;$('#timeValue').textContent=min?min+' min '+rem+' sec':rem+' sec'}
+function updateProgress(){let parts=[stringDone(),state.frameworkDone,state.calculatorDone,reviewDone(),state.checks.anemiaCheck,state.checks.flowCheck,state.checks.venousCheck,state.checks.integrate];$('#bar').style.width=(parts.filter(Boolean).length/parts.length*100)+'%'}
+function restart(){localStorage.removeItem(KEY);location.reload()}
+$('#resetBtn').onclick=restart;$('#restartBtn').onclick=restart;$('#reviewBtn').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});$('#nextLesson').onclick=()=>{window.location.href='https://www.pulmolearn.com/RTE'};
+$('#outlineBtn').onclick=()=>$('#modal').classList.add('show');$('#closeModal').onclick=()=>$('#modal').classList.remove('show');$('#modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+let last=Date.now(),active=true,idleMs=0;['click','touchstart','keydown','scroll'].forEach(ev=>document.addEventListener(ev,()=>{active=true;idleMs=0},{passive:true}));
+document.addEventListener('visibilitychange',()=>{last=Date.now()});setInterval(()=>{let now=Date.now(),dt=now-last;last=now;if(!document.hidden&&!state.complete){idleMs+=dt;if(active&&idleMs<45000){state.activeMs+=dt;if(Math.round(state.activeMs/1000)%10===0)save()}else active=false}},1000);
+
+render();renderReview();sync();updateProgress();renderTime();calc();
+</script>
+</body>
+</html>
