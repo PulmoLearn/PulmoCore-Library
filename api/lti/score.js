@@ -233,7 +233,7 @@ export default async function handler(req, res) {
           "lti_sub, line_item_url, scopes"
         )
         .eq("user_id", userId)
-        .eq("lesson_id", lessonId)
+        .eq("lesson_id", contextLessonId)
         .maybeSingle();
 
     if (contextError) {
