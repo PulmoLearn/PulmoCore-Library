@@ -173,6 +173,12 @@ export default async function handler(req, res) {
     const lessonId =
       body?.lesson_id;
 
+    const contextLessonId =
+  lessonId ===
+  "smoke_inhalation_thermal_lung_injury_carbon_monoxide_intoxication"
+    ? "smoke_inhalation"
+    : lessonId;
+
     const completed =
       body?.completed === true;
 
