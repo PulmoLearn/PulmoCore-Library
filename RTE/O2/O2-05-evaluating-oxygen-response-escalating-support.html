@@ -61,8 +61,9 @@ h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{marg
       border: 0;
     }
   </style>
+<link rel="stylesheet" href="/RTE/rte-lesson-shell.css">
 </head>
-<body>
+<body data-lesson-id="O2-05">
 <header class="top">
 <div class="topin">
 <div class="brand">Pulmo<span>Learn</span></div>
@@ -152,7 +153,7 @@ h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{marg
 </section>
 
 <section class="section gated" id="gatherCheck">
-<div class="head"><div class="kicker">Shared task: gather the right information</div><h2>Before recommending escalation, what must you know?</h2></div>
+<div class="head"><div class="kicker">gather the right information</div><h2>Before recommending escalation, what must you know?</h2></div>
 <div class="body">
 <div class="case"><strong>Scenario:</strong> A patient on oxygen is “worse.” The chart contains only a single current SpO₂ value.</div>
 <div class="mcq" data-question="gatherCheck">
@@ -204,7 +205,7 @@ h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.08;margin:7px 0 10px}h2{marg
 </section>
 
 <section class="section gated" id="adverseCheck">
-<div class="head"><div class="kicker">Shared task: terminate unsafe treatment</div><h2>When an adverse event changes the plan</h2></div>
+<div class="head"><div class="kicker">terminate unsafe treatment</div><h2>When an adverse event changes the plan</h2></div>
 <div class="body">
 <div class="case"><strong>Scenario:</strong> During a mask-based NIV trial, the patient develops repeated emesis and can no longer reliably protect the airway.</div>
 <div class="mcq" data-question="adverseCheck">
@@ -338,11 +339,11 @@ function bind(name,feedback,rationale,next){
   }
  })
 }
-bind('gatherCheck','#gatherFeedback','The registry requires gathering the clinical information needed to judge oxygen response. The decision should use current support and trend, oxygenation, ventilation, respiratory effort, mental status, airway protection, and stability—not a single saturation value.','hfCheck');
+bind('gatherCheck','#gatherFeedback','This RTE review gathering the clinical information needed to judge oxygen response. The decision should use current support and trend, oxygenation, ventilation, respiratory effort, mental status, airway protection, and stability—not a single saturation value.','hfCheck');
 bind('hfCheck','#hfFeedback','This is persistent oxygenation failure with preserved ventilation and airway protection. A higher-level oxygenation strategy such as HFNC is a reasonable next step with close reassessment.','nivCheck');
 bind('nivCheck','#nivFeedback','The failing function is ventilation. The patient remains cooperative, stable, able to manage secretions, and able to protect the airway, so the source notes support a closely monitored bilevel NIV trial.','intubateCheck');
 bind('intubateCheck','#intubateFeedback','Obtundation, active emesis, and inability to manage secretions make mask-based support unsafe. Airway protection can mandate invasive support even when the ABG by itself might otherwise permit an NIV trial.','adverseCheck');
-bind('adverseCheck','#adverseFeedback','The registry maps this lesson to terminating treatment for a severe complication/adverse event. Once emesis and airway-protection failure develop, continuing mask NIV is unsafe; stop the failing strategy and move to airway protection/escalation.','integrate');
+bind('adverseCheck','#adverseFeedback','this RTE review maps this lesson to terminating treatment for a severe complication/adverse event. Once emesis and airway-protection failure develop, continuing mask NIV is unsafe; stop the failing strategy and move to airway protection/escalation.','integrate');
 bind('integrate','#integrateFeedback','The entire trajectory is worsening despite escalating oxygenation support: FiO₂ need, hypoxemia, respiratory rate, effort, fatigue, and responsiveness. That is failure of the current care plan and requires urgent escalation rather than another isolated oxygen adjustment.','finish');
 
 function completeLesson(){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime();setTimeout(()=>$('#finish').scrollIntoView({behavior:'smooth',block:'start'}),100)}
@@ -427,5 +428,10 @@ render();renderReview();sync();updateProgress();renderTime();
   })();
   </script>
 
+
+<script src="/RTE/rte-lesson-registry.js"></script>
+<script src="/RTE/rte-learner-engine.js"></script>
+<script src="/RTE/rte-lesson-bridge.js"></script>
+<script src="/RTE/progress-tracker.js"></script>
 </body>
 </html>
