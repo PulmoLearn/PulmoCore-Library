@@ -36,8 +36,9 @@ main{max-width:920px;margin:auto;padding:18px 14px 70px}.hero{background:linear-
       border: 0;
     }
   </style>
+<link rel="stylesheet" href="/RTE/rte-lesson-shell.css">
 </head>
-<body>
+<body data-lesson-id="HUM-03">
 <header class="top"><div class="topin"><div class="brand">Pulmo<span>Learn</span></div><div class="mini"><div class="id">HUM-03</div><div class="name">Humidification Troubleshooting & Complications</div></div><div class="actions"><a class="icon" href="https://www.pulmolearn.com/RTE">← RTE</a><button class="icon" id="resetBtn">↺</button></div></div><div class="track"><div id="bar"></div></div></header>
 
 <main>
@@ -66,7 +67,7 @@ main{max-width:920px;margin:auto;padding:18px 14px 70px}.hero{background:linear-
 
 <section class="section gated" id="rainoutCheck"><div class="head"><div class="kicker">Primary task: troubleshoot device setup</div><h2>Heavy condensate is collecting in the inspiratory limb</h2></div><div class="body"><div class="case"><strong>Scenario:</strong> A ventilated patient has pooled water in dependent tubing and intermittent gurgling.</div><div class="mcq" data-question="rainoutCheck"><button data-correct="false">Lift the tubing and drain the water toward the patient.</button><button data-correct="true">Drain the condensate into the water trap away from the patient, discard it, and verify heated-wire/circuit temperature management.</button><button data-correct="false">Pour the condensate back into the humidifier chamber.</button><button data-correct="false">Increase water-chamber temperature until all visible water evaporates.</button></div><div class="feedback" id="rainoutFeedback"></div></div></section>
 
-<section class="section gated" id="secretionsCheck"><div class="head"><div class="kicker">Shared task: maintain airway patency</div><h2>Recognize inadequate humidification from the airway</h2></div><div class="body"><div class="case"><strong>Scenario:</strong> An intubated patient develops thick secretions, increased suction frequency, and recurrent mucus plugging.</div><div class="mcq" data-question="secretionsCheck"><button data-correct="false">Reduce humidification because retained secretions indicate excessive water.</button><button data-correct="true">Assess the humidification system and correct inadequate conditioning while clearing the airway and reassessing patency.</button><button data-correct="false">Ignore the humidifier because secretion viscosity is unrelated to airway conditioning.</button><button data-correct="false">Add an HME in series with the heated humidifier.</button></div><div class="feedback" id="secretionsFeedback"></div></div></section>
+<section class="section gated" id="secretionsCheck"><div class="head"><div class="kicker">maintain airway patency</div><h2>Recognize inadequate humidification from the airway</h2></div><div class="body"><div class="case"><strong>Scenario:</strong> An intubated patient develops thick secretions, increased suction frequency, and recurrent mucus plugging.</div><div class="mcq" data-question="secretionsCheck"><button data-correct="false">Reduce humidification because retained secretions indicate excessive water.</button><button data-correct="true">Assess the humidification system and correct inadequate conditioning while clearing the airway and reassessing patency.</button><button data-correct="false">Ignore the humidifier because secretion viscosity is unrelated to airway conditioning.</button><button data-correct="false">Add an HME in series with the heated humidifier.</button></div><div class="feedback" id="secretionsFeedback"></div></div></section>
 
 <section class="section gated" id="hmeCheck"><div class="head"><div class="kicker">Resistance complication</div><h2>The HME is wet and airway pressure is rising</h2></div><div class="body"><div class="case"><strong>Scenario:</strong> A patient on an HME has recently received aerosol therapy. The HME is visibly wet, and resistance has increased.</div><div class="mcq" data-question="hmeCheck"><button data-correct="false">Leave the HME in place because wetting improves passive humidity.</button><button data-correct="true">Remove/replace the saturated HME and reassess resistance; avoid aerosol delivery through the HME element.</button><button data-correct="false">Add a second HME downstream.</button><button data-correct="false">Increase ventilator pressure to overcome the obstruction without correcting the HME.</button></div><div class="feedback" id="hmeFeedback"></div></div></section>
 
@@ -101,7 +102,7 @@ $('#nextBtn').onclick=()=>{state.round++;save();render()};$('#frameworkDone').on
 $$('.accbtn').forEach(b=>b.onclick=()=>{let item=b.closest('.accitem');item.classList.toggle('open');let k=item.dataset.key;if(!state.reviewed.includes(k)){state.reviewed.push(k);item.classList.add('reviewed');save();if(reviewDone())reveal('rainoutCheck')}});
 function bind(name,feedback,rationale,next){let box=document.querySelector('[data-question="'+name+'"]'),f=$(feedback);shuffle(Array.from(box.children)).forEach(b=>box.appendChild(b));Array.from(box.children).forEach(btn=>btn.onclick=()=>{if(btn.dataset.correct==='true'){btn.classList.add('correct');Array.from(box.children).forEach(b=>{b.disabled=true;if(b!==btn)b.style.display='none'});state.checks[name]=true;f.className='feedback show good';f.innerHTML='<strong>Correct.</strong> '+rationale;save();if(name==='integrate'){state.complete=true;state.doneMs=state.activeMs;save();reveal('finish');renderTime()}else reveal(next)}else{btn.classList.add('wrong');f.className='feedback show try';f.innerHTML='<strong>Not quite.</strong> Use patient-first troubleshooting, then trace water, heat, circuit, device, and airway.'}})}
 bind('rainoutCheck','#rainoutFeedback','The source lesson says condensate should be collected at low points, drained away from the patient, discarded, and reduced with heated-wire circuits when appropriate.','secretionsCheck');
-bind('secretionsCheck','#secretionsFeedback','The registry requires an airway-patency action. Thick secretions and mucus plugging are classic inadequate-humidification consequences, so correct the humidification problem while clearing and reassessing the airway.','hmeCheck');
+bind('secretionsCheck','#secretionsFeedback','This RTE review an airway-patency action. Thick secretions and mucus plugging are classic inadequate-humidification consequences, so correct the humidification problem while clearing and reassessing the airway.','hmeCheck');
 bind('hmeCheck','#hmeFeedback','A saturated HME can become functionally obstructive. The source lesson also prohibits aerosol delivery through the HME because droplets can clog the element.','tempCheck');
 bind('tempCheck','#tempFeedback','The source material lists hypothermia when heater function fails and thermal injury/hyperthermia when temperature is excessive. Temperature-control integrity must be checked directly.','integrate');
 bind('integrate','#integrateFeedback','This pattern combines rainout and inadequate conditioning. The safe response is to drain condensate away from the patient, restore heated-wire function, verify the humidifier output, clear the airway, and then reassess secretions and resistance.','finish');
@@ -181,5 +182,10 @@ render();sync();progress();renderTime();
   })();
   </script>
 
+
+<script src="/RTE/rte-lesson-registry.js"></script>
+<script src="/RTE/rte-learner-engine.js"></script>
+<script src="/RTE/rte-lesson-bridge.js"></script>
+<script src="/RTE/progress-tracker.js"></script>
 </body>
 </html>
