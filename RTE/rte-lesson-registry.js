@@ -1,9 +1,9 @@
 // PulmoLearn RTE canonical lesson registry
-// Source: 2027 RTE Authoring-Ready Micro-Lesson Registry
+// Source: 2027 RTE Authoring-Ready Micro-Lesson Registry + canonical HEM-05 addition
 window.PULMOLEARN_RTE = {
   "schemaVersion": "1.0.0",
   "source": "PulmoLearn RTE Authoring-Ready Micro-Lesson Registry",
-  "canonicalLessonCount": 248,
+  "canonicalLessonCount": 249,
   "completionKey": "lesson.id",
   "lessons": [
     {
@@ -2259,6 +2259,23 @@ window.PULMOLEARN_RTE = {
         "Interpret procedure or monitoring results and determine what they mean clinically."
       ],
       "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery, Oxygen Therapy, Hemodynamics. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "HEM-05",
+      "title": "Venous Oxygen & Perfusion Trends",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-05-venous-oxygen-perfusion-trends.html",
+      "coreFocus": "Interpret venous oxygen saturation, lactate, cardiac output, urine output, skin perfusion, and related trends together to recognize impaired tissue perfusion.",
+      "primaryNbrc": "I.D.8 - 8. Hemodynamic parameters",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate monitoring trends rather than relying on a single value.",
+        "Interpret venous oxygen and bedside perfusion findings in clinical context."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery, Oxygenation, Cardiovascular/ACLS. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results"
     },
     {
       "id": "HEM-06",
