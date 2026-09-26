@@ -1,0 +1,4361 @@
+// PulmoLearn RTE canonical lesson registry
+// Source: 2027 RTE Authoring-Ready Micro-Lesson Registry
+window.PULMOLEARN_RTE = {
+  "schemaVersion": "1.0.0",
+  "source": "PulmoLearn RTE Authoring-Ready Micro-Lesson Registry",
+  "canonicalLessonCount": 248,
+  "completionKey": "lesson.id",
+  "lessons": [
+    {
+      "id": "PA-01",
+      "title": "Reading the Respiratory Patient Record",
+      "topic": "Patient Assessment & Clinical Data Gathering",
+      "topicCode": "PA",
+      "href": "/RTE/PA/PA-01-reading-the-respiratory-patient-record.html",
+      "coreFocus": "Extract relevant history, diagnoses, medications, trends, prior testing, home therapies, exposures, and other chart data that affect respiratory care.",
+      "primaryNbrc": "I.A.1 - 1. Patient history",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Patient Assessment & Clinical Data Gathering, Home Care, Pharmacology. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "PA-02",
+      "title": "Respiratory History & Symptom Assessment",
+      "topic": "Patient Assessment & Clinical Data Gathering",
+      "topicCode": "PA",
+      "href": "/RTE/PA/PA-02-respiratory-history-symptom-assessment.html",
+      "coreFocus": "Gather a focused respiratory history including symptoms, smoking/vaping, occupational and environmental exposures, sleep, function, adherence, and home support.",
+      "primaryNbrc": "I.B.1 - 1. Evaluate through observation or interview",
+      "sharedNbrc": [
+        "I.A.1 - 1. Patient history"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Patient Assessment & Clinical Data Gathering, Sleep, Home Care. NBRC remediation: A. Evaluate Data in the Patient Record; B. Perform Clinical Assessment"
+    },
+    {
+      "id": "PA-03",
+      "title": "Physical Respiratory Assessment",
+      "topic": "Patient Assessment & Clinical Data Gathering",
+      "topicCode": "PA",
+      "href": "/RTE/PA/PA-03-physical-respiratory-assessment.html",
+      "coreFocus": "Use inspection, palpation, percussion, auscultation, vital signs, mental status, and work of breathing to identify clinically meaningful findings.",
+      "primaryNbrc": "I.B.1 - 1. Evaluate through observation or interview",
+      "sharedNbrc": [
+        "I.B.2 - 2. Evaluate through palpation",
+        "I.B.3 - 3. Auscultate to assess the cardiopulmonary system"
+      ],
+      "requiredPracticeAngles": [
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Patient Assessment & Clinical Data Gathering. NBRC remediation: B. Perform Clinical Assessment"
+    },
+    {
+      "id": "PA-04",
+      "title": "Recognizing Respiratory Distress & Deterioration",
+      "topic": "Patient Assessment & Clinical Data Gathering",
+      "topicCode": "PA",
+      "href": "/RTE/PA/PA-04-recognizing-respiratory-distress-deterioration.html",
+      "coreFocus": "Recognize early and late signs of respiratory compromise and distinguish stable findings from urgent deterioration requiring escalation.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [
+        "I.B.1 - 1. Evaluate through observation or interview"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Patient Assessment & Clinical Data Gathering. NBRC remediation: A. Evaluate Data in the Patient Record; B. Perform Clinical Assessment"
+    },
+    {
+      "id": "PA-05",
+      "title": "Turning Assessment Findings Into the Next Step",
+      "topic": "Patient Assessment & Clinical Data Gathering",
+      "topicCode": "PA",
+      "href": "/RTE/PA/PA-05-turning-assessment-findings-into-the-next-step.html",
+      "coreFocus": "Integrate chart, history, and physical findings to decide what additional assessment, diagnostic test, intervention, or escalation is appropriate.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [
+        "I.E.2 - 2. Laboratory tests",
+        "I.E.3 - 3. Imaging studies",
+        "I.E.6 - 6. Pulmonary function testing",
+        "I.E.7 - 7. Noninvasive monitoring",
+        "I.E.8 - 8. Blood gas and/or hemoximetry",
+        "I.E.9 - 9. ECG",
+        "I.E.11 - 11. Hemodynamic monitoring",
+        "III.E.1 - 1. Terminate treatment for severe complication / adverse event",
+        "III.E.2 - 2. Recommendations for treatment / care-plan changes"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Patient Assessment & Clinical Data Gathering. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "ABG-01",
+      "title": "ABG Foundations: What Each Value Means",
+      "topic": "ABGs, Acid-Base & Ventilation Assessment",
+      "topicCode": "ABG",
+      "href": "/RTE/ABG/ABG-01-abg-foundations-what-each-value-means.html",
+      "coreFocus": "Review pH, PaCO2, HCO3-, PaO2, SaO2, base excess, and how each value reflects ventilation, oxygenation, or metabolic status.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.C.5 - 5. Blood gas analysis / hemoximetry",
+        "I.D.5 - 5. Blood gas analysis / hemoximetry",
+        "I.E.8 - 8. Blood gas and/or hemoximetry"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "ABGs, Acid-Base & Ventilation Assessment, Mechanical Ventilation, Oxygen Therapy. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "ABG-02",
+      "title": "Acid-Base Interpretation",
+      "topic": "ABGs, Acid-Base & Ventilation Assessment",
+      "topicCode": "ABG",
+      "href": "/RTE/ABG/ABG-02-acid-base-interpretation.html",
+      "coreFocus": "Systematically identify respiratory and metabolic acidosis/alkalosis, compensation, and mixed acid-base disorders.",
+      "primaryNbrc": "I.D.5 - 5. Blood gas analysis / hemoximetry",
+      "sharedNbrc": [
+        "I.C.5 - 5. Blood gas analysis / hemoximetry"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "ABGs, Acid-Base & Ventilation Assessment. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "ABG-03",
+      "title": "Acute, Chronic & Acute-on-Chronic Ventilatory Failure",
+      "topic": "ABGs, Acid-Base & Ventilation Assessment",
+      "topicCode": "ABG",
+      "href": "/RTE/ABG/ABG-03-acute-chronic-acute-on-chronic-ventilatory-failure.html",
+      "coreFocus": "Use pH, PaCO2, and bicarbonate patterns to distinguish acute, chronic, and acute-on-chronic ventilatory failure.",
+      "primaryNbrc": "I.D.5 - 5. Blood gas analysis / hemoximetry",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "ABGs, Acid-Base & Ventilation Assessment, Mechanical Ventilation. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "ABG-04",
+      "title": "ABG Sampling, Specimen Quality & Errors",
+      "topic": "ABGs, Acid-Base & Ventilation Assessment",
+      "topicCode": "ABG",
+      "href": "/RTE/ABG/ABG-04-abg-sampling-specimen-quality-errors.html",
+      "coreFocus": "Recognize arterial vs venous sampling, preanalytic errors, air contamination, delay, excess heparin, dilution, labeling errors, and mismatched oxygen settings.",
+      "primaryNbrc": "I.C.4 - 4. Blood gas sample collection",
+      "sharedNbrc": [
+        "I.E.8 - 8. Blood gas and/or hemoximetry"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "ABGs, Acid-Base & Ventilation Assessment, Oxygen Therapy, Quality/Safety. NBRC remediation: C. Perform Procedures to Gather Clinical Information; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "GX-01",
+      "title": "How Oxygen Moves From Atmosphere to Tissues",
+      "topic": "Oxygenation, Gas Exchange & Oxygen Transport",
+      "topicCode": "GX",
+      "href": "/RTE/GX/GX-01-how-oxygen-moves-from-atmosphere-to-tissues.html",
+      "coreFocus": "Trace oxygen from inspired gas through alveoli, blood, circulation, and tissue delivery, linking each step to common causes of hypoxemia.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Oxygenation, Gas Exchange & Oxygen Transport, Oxygen Therapy. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "GX-02",
+      "title": "V/Q Mismatch, Shunt & Diffusion Problems",
+      "topic": "Oxygenation, Gas Exchange & Oxygen Transport",
+      "topicCode": "GX",
+      "href": "/RTE/GX/GX-02-v-q-mismatch-shunt-diffusion-problems.html",
+      "coreFocus": "Differentiate ventilation-perfusion mismatch, shunt, and diffusion impairment by mechanism, clinical clues, and expected response to oxygen.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [
+        "III.C.1 - 1. Minimize hypoxemia"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Oxygenation, Gas Exchange & Oxygen Transport, Mechanical Ventilation, Oxygen Therapy. NBRC remediation: A. Evaluate Data in the Patient Record; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "GX-03",
+      "title": "Dead Space & Alveolar Ventilation",
+      "topic": "Oxygenation, Gas Exchange & Oxygen Transport",
+      "topicCode": "GX",
+      "href": "/RTE/GX/GX-03-dead-space-alveolar-ventilation.html",
+      "coreFocus": "Distinguish anatomic, alveolar, and physiologic dead space and relate alveolar ventilation to PaCO2.",
+      "primaryNbrc": "I.C.7 - 7. Cardiopulmonary calculations",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable."
+      ],
+      "linkedPathways": "Oxygenation, Gas Exchange & Oxygen Transport, Mechanical Ventilation. NBRC remediation: C. Perform Procedures to Gather Clinical Information"
+    },
+    {
+      "id": "GX-04",
+      "title": "Hemoglobin, Oxygen Content & Oxygen Delivery",
+      "topic": "Oxygenation, Gas Exchange & Oxygen Transport",
+      "topicCode": "GX",
+      "href": "/RTE/GX/GX-04-hemoglobin-oxygen-content-oxygen-delivery.html",
+      "coreFocus": "Connect hemoglobin, saturation, PaO2, cardiac output, oxygen content, delivery, extraction, and mixed venous oxygenation.",
+      "primaryNbrc": "I.C.7 - 7. Cardiopulmonary calculations",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable."
+      ],
+      "linkedPathways": "Oxygenation, Gas Exchange & Oxygen Transport, Oxygen Therapy, Cardiovascular/ACLS. NBRC remediation: C. Perform Procedures to Gather Clinical Information"
+    },
+    {
+      "id": "GX-05",
+      "title": "Dyshemoglobins & Misleading Oxygen Measurements",
+      "topic": "Oxygenation, Gas Exchange & Oxygen Transport",
+      "topicCode": "GX",
+      "href": "/RTE/GX/GX-05-dyshemoglobins-misleading-oxygen-measurements.html",
+      "coreFocus": "Recognize carbon monoxide and methemoglobin problems and understand when pulse oximetry or PaO2 can appear reassuring despite impaired oxygen carriage.",
+      "primaryNbrc": "I.D.5 - 5. Blood gas analysis / hemoximetry",
+      "sharedNbrc": [
+        "I.A.2 - 2. Laboratory results",
+        "I.C.5 - 5. Blood gas analysis / hemoximetry",
+        "I.E.8 - 8. Blood gas and/or hemoximetry"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Oxygenation, Gas Exchange & Oxygen Transport, Oxygen Therapy. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "GX-06",
+      "title": "Gas-Exchange Calculations & Clinical Interpretation",
+      "topic": "Oxygenation, Gas Exchange & Oxygen Transport",
+      "topicCode": "GX",
+      "href": "/RTE/GX/GX-06-gas-exchange-calculations-clinical-interpretation.html",
+      "coreFocus": "Use alveolar gas, A-a gradient, P/F, S/F, dead-space, oxygen-content, and related calculations to interpret gas-exchange problems clinically.",
+      "primaryNbrc": "I.C.7 - 7. Cardiopulmonary calculations",
+      "sharedNbrc": [
+        "I.D.7 - 7. Cardiopulmonary calculations"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Oxygenation, Gas Exchange & Oxygen Transport, Oxygen Therapy, Calculations. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "O2-01",
+      "title": "Oxygen Therapy Foundations & Titration",
+      "topic": "Oxygen Therapy & Delivery Devices",
+      "topicCode": "O2",
+      "href": "/RTE/O2/O2-01-oxygen-therapy-foundations-titration.html",
+      "coreFocus": "Select oxygen targets, titrate therapy to physiologic need, and balance correction of hypoxemia with risks of excessive oxygen.",
+      "primaryNbrc": "III.C.2a - 2a. Initiate / maintain / titrate oxygen therapy",
+      "sharedNbrc": [
+        "I.C.6 - 6. Oxygen titration with exercise",
+        "I.C.19 - 19. Oxygen titration",
+        "I.D.6 - 6. Oxygen titration with exercise",
+        "I.D.20 - 20. Oxygen titration",
+        "III.C.1 - 1. Minimize hypoxemia",
+        "III.F.1 - 1. Respiratory-driven protocols"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "Oxygen Therapy & Delivery Devices, Oxygen Therapy. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation; F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "O2-02",
+      "title": "Oxygen Devices: Selection & Troubleshooting",
+      "topic": "Oxygen Therapy & Delivery Devices",
+      "topicCode": "O2",
+      "href": "/RTE/O2/O2-02-oxygen-devices-selection-troubleshooting.html",
+      "coreFocus": "Choose and troubleshoot low-flow and reservoir devices, masks, tracheostomy interfaces, flowmeters, regulators, blenders, and oxygen sources.",
+      "primaryNbrc": "II.A.1 - 1. Medical gas delivery interfaces",
+      "sharedNbrc": [
+        "III.C.2a - 2a. Initiate / maintain / titrate oxygen therapy"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Oxygen Therapy & Delivery Devices, Oxygen Therapy, Tracheostomy. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "O2-03",
+      "title": "High-Flow Nasal Cannula",
+      "topic": "Oxygen Therapy & Delivery Devices",
+      "topicCode": "O2",
+      "href": "/RTE/O2/O2-03-high-flow-nasal-cannula.html",
+      "coreFocus": "Explain high-flow nasal cannula setup, flow and FiO2 effects, humidification, physiologic benefits, patient selection, and response assessment.",
+      "primaryNbrc": "III.C.2b - 2b. Heated high-flow devices",
+      "sharedNbrc": [
+        "II.A.3 - 3. Heated high-flow devices"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Oxygen Therapy & Delivery Devices. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "O2-04",
+      "title": "Oxygen in COPD & Hypercapnic Respiratory Failure",
+      "topic": "Oxygen Therapy & Delivery Devices",
+      "topicCode": "O2",
+      "href": "/RTE/O2/O2-04-oxygen-in-copd-hypercapnic-respiratory-failure.html",
+      "coreFocus": "Apply controlled oxygen therapy in patients at risk for oxygen-induced hypercapnia using current physiologic reasoning and reassessment.",
+      "primaryNbrc": "III.C.2a - 2a. Initiate / maintain / titrate oxygen therapy",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Oxygen Therapy & Delivery Devices, COPD, Oxygen Therapy. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "O2-05",
+      "title": "Evaluating Oxygen Response & Escalating Support",
+      "topic": "Oxygen Therapy & Delivery Devices",
+      "topicCode": "O2",
+      "href": "/RTE/O2/O2-05-evaluating-oxygen-response-escalating-support.html",
+      "coreFocus": "Determine whether oxygen therapy is working and when worsening gas exchange requires HFNC, NIV, invasive support, or other escalation.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "I.C.19 - 19. Oxygen titration",
+        "I.D.6 - 6. Oxygen titration with exercise",
+        "I.D.20 - 20. Oxygen titration",
+        "III.C.1 - 1. Minimize hypoxemia",
+        "III.C.2a - 2a. Initiate / maintain / titrate oxygen therapy",
+        "III.E.1 - 1. Terminate treatment for severe complication / adverse event"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Oxygen Therapy & Delivery Devices, NIV/CPAP, Oxygen Therapy. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "O2-06",
+      "title": "Home & Ambulatory Oxygen",
+      "topic": "Oxygen Therapy & Delivery Devices",
+      "topicCode": "O2",
+      "href": "/RTE/O2/O2-06-home-ambulatory-oxygen.html",
+      "coreFocus": "Review home oxygen indications, concentrators and portable systems, activity needs, reassessment, and essential safety practices.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [
+        "I.C.6 - 6. Oxygen titration with exercise",
+        "I.C.19 - 19. Oxygen titration",
+        "I.D.20 - 20. Oxygen titration"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Oxygen Therapy & Delivery Devices, Oxygen Therapy, Home Care. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "GAS-01",
+      "title": "Medical Gas Sources, Regulators & Safety Systems",
+      "topic": "Medical Gas Systems & Specialty Gases",
+      "topicCode": "GAS",
+      "href": "/RTE/GAS/GAS-01-medical-gas-sources-regulators-safety-systems.html",
+      "coreFocus": "Recognize pipeline systems, cylinders, regulators, flowmeters, pressure-reducing systems, PISS/DISS safety connections, blenders, and analyzers.",
+      "primaryNbrc": "II.A.2 - 2. Medical gas delivery / clinical analyzing devices",
+      "sharedNbrc": [
+        "II.A.1 - 1. Medical gas delivery interfaces"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Medical Gas Systems & Specialty Gases. NBRC remediation: A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "GAS-02",
+      "title": "Cylinder Duration & Medical-Gas Calculations",
+      "topic": "Medical Gas Systems & Specialty Gases",
+      "topicCode": "GAS",
+      "href": "/RTE/GAS/GAS-02-cylinder-duration-medical-gas-calculations.html",
+      "coreFocus": "Calculate cylinder duration and reserve for bedside, transport, and emergency planning and interpret whether available supply is adequate.",
+      "primaryNbrc": "I.C.7 - 7. Cardiopulmonary calculations",
+      "sharedNbrc": [
+        "I.D.7 - 7. Cardiopulmonary calculations"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Medical Gas Systems & Specialty Gases, Calculations. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "GAS-03",
+      "title": "Heliox: When and Why It Works",
+      "topic": "Medical Gas Systems & Specialty Gases",
+      "topicCode": "GAS",
+      "href": "/RTE/GAS/GAS-03-heliox-when-and-why-it-works.html",
+      "coreFocus": "Explain how low-density helium-oxygen mixtures reduce turbulent resistance, identify appropriate indications, and recognize limitations and delivery issues.",
+      "primaryNbrc": "III.D.3 - 3. Specialty gases (for example, He/O2, inhaled NO)",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, administer, or evaluate respiratory medications and specialty gases."
+      ],
+      "linkedPathways": "Medical Gas Systems & Specialty Gases, Oxygen Therapy. NBRC remediation: D. Administer Medications and Specialty Gases"
+    },
+    {
+      "id": "GAS-04",
+      "title": "Inhaled Pulmonary Vasodilators",
+      "topic": "Medical Gas Systems & Specialty Gases",
+      "topicCode": "GAS",
+      "href": "/RTE/GAS/GAS-04-inhaled-pulmonary-vasodilators.html",
+      "coreFocus": "Review inhaled nitric oxide and inhaled prostacyclin concepts, indications, delivery, monitoring, adverse effects, and troubleshooting.",
+      "primaryNbrc": "III.D.3 - 3. Specialty gases (for example, He/O2, inhaled NO)",
+      "sharedNbrc": [
+        "II.A.17 - 17. Inhaled gas or medication delivery devices",
+        "III.E.3 - 3. Recommendations for pharmacologic interventions"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, administer, or evaluate respiratory medications and specialty gases.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Medical Gas Systems & Specialty Gases. NBRC remediation: A. Troubleshoot Devices During and After Assembling; D. Administer Medications and Specialty Gases; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "HUM-01",
+      "title": "Humidity, the Isothermic Saturation Boundary & Airway Conditioning",
+      "topic": "Humidification & Aerosol Systems",
+      "topicCode": "HUM",
+      "href": "/RTE/HUM/HUM-01-humidity-the-isothermic-saturation-boundary-airway-conditioning.html",
+      "coreFocus": "Explain normal airway conditioning, the isothermic saturation boundary, absolute and relative humidity, body humidity, and humidity deficit.",
+      "primaryNbrc": "III.A.6 - 6. Maintain adequate humidification",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Humidification & Aerosol Systems, Airway. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "HUM-02",
+      "title": "Active vs Passive Humidification",
+      "topic": "Humidification & Aerosol Systems",
+      "topicCode": "HUM",
+      "href": "/RTE/HUM/HUM-02-active-vs-passive-humidification.html",
+      "coreFocus": "Compare heated humidifiers and heat-moisture exchangers, including indications, contraindications, performance needs, and airway considerations.",
+      "primaryNbrc": "II.A.5 - 5. Humidifiers",
+      "sharedNbrc": [
+        "III.A.6 - 6. Maintain adequate humidification"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Humidification & Aerosol Systems, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "HUM-03",
+      "title": "Humidification Troubleshooting & Complications",
+      "topic": "Humidification & Aerosol Systems",
+      "topicCode": "HUM",
+      "href": "/RTE/HUM/HUM-03-humidification-troubleshooting-complications.html",
+      "coreFocus": "Recognize inadequate humidification, condensation, excess resistance/dead space, secretion problems, temperature issues, and device-specific corrective actions.",
+      "primaryNbrc": "II.A.5 - 5. Humidifiers",
+      "sharedNbrc": [
+        "III.A.6 - 6. Maintain adequate humidification"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Humidification & Aerosol Systems. NBRC remediation: A. Troubleshoot Devices During and After Assembling; A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "HUM-04",
+      "title": "Bland Aerosol & Large-Volume Aerosol Systems",
+      "topic": "Humidification & Aerosol Systems",
+      "topicCode": "HUM",
+      "href": "/RTE/HUM/HUM-04-bland-aerosol-large-volume-aerosol-systems.html",
+      "coreFocus": "Differentiate humidification from aerosol therapy and review large-volume aerosol systems used with masks, tracheostomy collars, T-pieces, and related interfaces.",
+      "primaryNbrc": "II.A.5 - 5. Humidifiers",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Humidification & Aerosol Systems, Tracheostomy. NBRC remediation: A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "AER-01",
+      "title": "How Aerosol Therapy Reaches the Lung",
+      "topic": "Aerosol Drug Delivery & Inhaler Devices",
+      "topicCode": "AER",
+      "href": "/RTE/AER/AER-01-how-aerosol-therapy-reaches-the-lung.html",
+      "coreFocus": "Explain particle behavior, deposition, airway geometry, breathing pattern, device factors, and patient factors that determine pulmonary drug delivery.",
+      "primaryNbrc": "III.D.1 - 1. Aerosolized therapies",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, administer, or evaluate respiratory medications and specialty gases."
+      ],
+      "linkedPathways": "Aerosol Drug Delivery & Inhaler Devices, Airway, Pharmacology. NBRC remediation: D. Administer Medications and Specialty Gases"
+    },
+    {
+      "id": "AER-02",
+      "title": "MDI, Spacer/VHC & Soft-Mist Inhaler Technique",
+      "topic": "Aerosol Drug Delivery & Inhaler Devices",
+      "topicCode": "AER",
+      "href": "/RTE/AER/AER-02-mdi-spacer-vhc-soft-mist-inhaler-technique.html",
+      "coreFocus": "Teach and evaluate correct MDI, valved holding chamber, and soft-mist inhaler technique, including common errors and troubleshooting.",
+      "primaryNbrc": "II.A.7 - 7. Inhalers and accessories",
+      "sharedNbrc": [
+        "II.A.17 - 17. Inhaled gas or medication delivery devices",
+        "III.D.1 - 1. Aerosolized therapies"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, administer, or evaluate respiratory medications and specialty gases."
+      ],
+      "linkedPathways": "Aerosol Drug Delivery & Inhaler Devices, Education/Communication. NBRC remediation: A. Troubleshoot Devices During and After Assembling; D. Administer Medications and Specialty Gases"
+    },
+    {
+      "id": "AER-03",
+      "title": "Dry-Powder Inhalers & Inspiratory-Flow Requirements",
+      "topic": "Aerosol Drug Delivery & Inhaler Devices",
+      "topicCode": "AER",
+      "href": "/RTE/AER/AER-03-dry-powder-inhalers-inspiratory-flow-requirements.html",
+      "coreFocus": "Explain DPI activation, inspiratory-flow needs, humidity sensitivity, patient selection, and common technique failures.",
+      "primaryNbrc": "II.A.7 - 7. Inhalers and accessories",
+      "sharedNbrc": [
+        "II.A.17 - 17. Inhaled gas or medication delivery devices",
+        "III.D.1 - 1. Aerosolized therapies"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, administer, or evaluate respiratory medications and specialty gases."
+      ],
+      "linkedPathways": "Aerosol Drug Delivery & Inhaler Devices. NBRC remediation: A. Troubleshoot Devices During and After Assembling; D. Administer Medications and Specialty Gases"
+    },
+    {
+      "id": "AER-04",
+      "title": "Nebulizers: Jet, Mesh, Ultrasonic & Continuous Delivery",
+      "topic": "Aerosol Drug Delivery & Inhaler Devices",
+      "topicCode": "AER",
+      "href": "/RTE/AER/AER-04-nebulizers-jet-mesh-ultrasonic-continuous-delivery.html",
+      "coreFocus": "Compare nebulizer technologies, setup, output, driving gas, treatment efficiency, continuous therapy, and common device problems.",
+      "primaryNbrc": "II.A.6 - 6. Nebulizers",
+      "sharedNbrc": [
+        "II.A.17 - 17. Inhaled gas or medication delivery devices",
+        "III.D.1 - 1. Aerosolized therapies"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, administer, or evaluate respiratory medications and specialty gases."
+      ],
+      "linkedPathways": "Aerosol Drug Delivery & Inhaler Devices. NBRC remediation: A. Troubleshoot Devices During and After Assembling; D. Administer Medications and Specialty Gases"
+    },
+    {
+      "id": "AER-05",
+      "title": "Aerosol Delivery During Mechanical Ventilation & Artificial Airways",
+      "topic": "Aerosol Drug Delivery & Inhaler Devices",
+      "topicCode": "AER",
+      "href": "/RTE/AER/AER-05-aerosol-delivery-during-mechanical-ventilation-artificial-airways.html",
+      "coreFocus": "Optimize aerosol delivery through ventilator circuits and artificial airways by considering device placement, humidification, circuit configuration, and patient factors.",
+      "primaryNbrc": "III.D.1 - 1. Aerosolized therapies",
+      "sharedNbrc": [
+        "II.A.14 - 14. Breathing circuits",
+        "II.A.17 - 17. Inhaled gas or medication delivery devices",
+        "III.D.2 - 2. Endotracheal instillation"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, administer, or evaluate respiratory medications and specialty gases."
+      ],
+      "linkedPathways": "Aerosol Drug Delivery & Inhaler Devices, Mechanical Ventilation, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; D. Administer Medications and Specialty Gases"
+    },
+    {
+      "id": "PHARM-01",
+      "title": "Bronchodilators: Beta-Agonists & Anticholinergics",
+      "topic": "Respiratory Pharmacology",
+      "topicCode": "PHARM",
+      "href": "/RTE/PHARM/PHARM-01-bronchodilators-beta-agonists-anticholinergics.html",
+      "coreFocus": "Compare short- and long-acting beta-agonists and anticholinergics by mechanism, indication, route, adverse effects, and clinical response.",
+      "primaryNbrc": "III.E.3 - 3. Recommendations for pharmacologic interventions",
+      "sharedNbrc": [
+        "III.D.1 - 1. Aerosolized therapies"
+      ],
+      "requiredPracticeAngles": [
+        "Select, administer, or evaluate respiratory medications and specialty gases.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Respiratory Pharmacology. NBRC remediation: D. Administer Medications and Specialty Gases; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PHARM-02",
+      "title": "Anti-Inflammatory & Asthma Controller Therapy",
+      "topic": "Respiratory Pharmacology",
+      "topicCode": "PHARM",
+      "href": "/RTE/PHARM/PHARM-02-anti-inflammatory-asthma-controller-therapy.html",
+      "coreFocus": "Review inhaled/systemic corticosteroids, leukotriene modifiers, controller strategies, magnesium in severe asthma, and appropriate monitoring.",
+      "primaryNbrc": "III.E.3 - 3. Recommendations for pharmacologic interventions",
+      "sharedNbrc": [
+        "III.D.1 - 1. Aerosolized therapies"
+      ],
+      "requiredPracticeAngles": [
+        "Select, administer, or evaluate respiratory medications and specialty gases.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Respiratory Pharmacology, Asthma. NBRC remediation: D. Administer Medications and Specialty Gases; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PHARM-03",
+      "title": "Severe-Asthma Biologics & Phenotype-Directed Therapy",
+      "topic": "Respiratory Pharmacology",
+      "topicCode": "PHARM",
+      "href": "/RTE/PHARM/PHARM-03-severe-asthma-biologics-phenotype-directed-therapy.html",
+      "coreFocus": "Recognize major biologic classes and the concept of selecting advanced asthma therapy according to inflammatory phenotype and severity.",
+      "primaryNbrc": "III.E.3 - 3. Recommendations for pharmacologic interventions",
+      "sharedNbrc": [
+        "III.D.1 - 1. Aerosolized therapies"
+      ],
+      "requiredPracticeAngles": [
+        "Select, administer, or evaluate respiratory medications and specialty gases.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Respiratory Pharmacology, Asthma. NBRC remediation: D. Administer Medications and Specialty Gases; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PHARM-04",
+      "title": "Mucolytics, Airway-Secretions Drugs & CF Therapies",
+      "topic": "Respiratory Pharmacology",
+      "topicCode": "PHARM",
+      "href": "/RTE/PHARM/PHARM-04-mucolytics-airway-secretions-drugs-cf-therapies.html",
+      "coreFocus": "Review acetylcysteine, dornase alfa, hypertonic saline concepts, airway-secretion therapies, and modern CFTR-modulator recognition.",
+      "primaryNbrc": "III.E.3 - 3. Recommendations for pharmacologic interventions",
+      "sharedNbrc": [
+        "III.D.1 - 1. Aerosolized therapies"
+      ],
+      "requiredPracticeAngles": [
+        "Select, administer, or evaluate respiratory medications and specialty gases.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Respiratory Pharmacology, Airway, Pharmacology. NBRC remediation: D. Administer Medications and Specialty Gases; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PHARM-05",
+      "title": "Sedation, Analgesia, Paralysis & Reversal Agents",
+      "topic": "Respiratory Pharmacology",
+      "topicCode": "PHARM",
+      "href": "/RTE/PHARM/PHARM-05-sedation-analgesia-paralysis-reversal-agents.html",
+      "coreFocus": "Differentiate analgesia, sedation, neuromuscular blockade, and reversal agents and recognize respiratory implications of commonly tested drugs.",
+      "primaryNbrc": "III.E.3 - 3. Recommendations for pharmacologic interventions",
+      "sharedNbrc": [
+        "III.H.8 - 8. Moderate sedation"
+      ],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Respiratory Pharmacology, Pharmacology. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "AIR-01",
+      "title": "Recognizing Airway Compromise & Assessing the Airway",
+      "topic": "Airway Management & Airway Adjuncts",
+      "topicCode": "AIR",
+      "href": "/RTE/AIR/AIR-01-recognizing-airway-compromise-assessing-the-airway.html",
+      "coreFocus": "Identify obstruction, loss of airway protection, difficult-airway features, and signs that immediate airway intervention may be required.",
+      "primaryNbrc": "III.A.2 - 2. Recognize a difficult airway",
+      "sharedNbrc": [
+        "III.A.1 - 1. Proper positioning"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Airway Management & Airway Adjuncts, Airway. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "AIR-02",
+      "title": "Basic Airway Maneuvers & Adjuncts",
+      "topic": "Airway Management & Airway Adjuncts",
+      "topicCode": "AIR",
+      "href": "/RTE/AIR/AIR-02-basic-airway-maneuvers-adjuncts.html",
+      "coreFocus": "Apply positioning, jaw thrust/head-tilt concepts, oropharyngeal and nasopharyngeal airways, and bag-mask support appropriately.",
+      "primaryNbrc": "III.A.3 - 3. Establish and manage the airway",
+      "sharedNbrc": [
+        "III.A.1 - 1. Proper positioning"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Airway Management & Airway Adjuncts, Airway. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "AIR-03",
+      "title": "Preparing for Endotracheal Intubation",
+      "topic": "Airway Management & Airway Adjuncts",
+      "topicCode": "AIR",
+      "href": "/RTE/AIR/AIR-03-preparing-for-endotracheal-intubation.html",
+      "coreFocus": "Review preoxygenation, equipment, suction, monitoring, medication/RSI awareness, backup plans, and team preparation for intubation.",
+      "primaryNbrc": "III.H.1 - 1. Intubation",
+      "sharedNbrc": [
+        "II.A.10 - 10. Intubation equipment",
+        "III.A.3 - 3. Establish and manage the airway",
+        "III.A.5 - 5. Exchange artificial airways"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Airway Management & Airway Adjuncts, Oxygen Therapy, Tracheostomy, Pharmacology. NBRC remediation: A. Troubleshoot Devices During and After Assembling; A. Maintain a Patent Airway Including Care of Artificial Airways; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "AIR-04",
+      "title": "Confirming & Assessing Endotracheal Tube Placement",
+      "topic": "Airway Management & Airway Adjuncts",
+      "topicCode": "AIR",
+      "href": "/RTE/AIR/AIR-04-confirming-assessing-endotracheal-tube-placement.html",
+      "coreFocus": "Use waveform capnography, clinical assessment, depth checks, and imaging to confirm position and recognize esophageal, mainstem, high, or migrated tubes.",
+      "primaryNbrc": "III.A.3 - 3. Establish and manage the airway",
+      "sharedNbrc": [
+        "III.H.1 - 1. Intubation"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Airway Management & Airway Adjuncts, Tracheostomy, Imaging. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "AIR-05",
+      "title": "Difficult-Airway & Rescue-Airway Strategies",
+      "topic": "Airway Management & Airway Adjuncts",
+      "topicCode": "AIR",
+      "href": "/RTE/AIR/AIR-05-difficult-airway-rescue-airway-strategies.html",
+      "coreFocus": "Recognize failed-airway pathways, supraglottic rescue, video/direct laryngoscopy concepts, emergency surgical-airway recognition, and airway-fire risk.",
+      "primaryNbrc": "III.A.2 - 2. Recognize a difficult airway",
+      "sharedNbrc": [
+        "II.A.10 - 10. Intubation equipment",
+        "III.A.3 - 3. Establish and manage the airway",
+        "III.A.5 - 5. Exchange artificial airways",
+        "III.H.1 - 1. Intubation",
+        "III.H.5 - 5. Tracheotomy"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Airway Management & Airway Adjuncts, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; A. Maintain a Patent Airway Including Care of Artificial Airways; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "AA-01",
+      "title": "Artificial Airway Types, Features & Indications",
+      "topic": "Artificial Airways & Tracheostomy Management",
+      "topicCode": "AA",
+      "href": "/RTE/AA/AA-01-artificial-airway-types-features-indications.html",
+      "coreFocus": "Compare endotracheal, tracheostomy, supraglottic, specialty, extended-length, and other airway devices and their clinical uses.",
+      "primaryNbrc": "II.A.11 - 11. Artificial airways and accessories",
+      "sharedNbrc": [
+        "III.A.3 - 3. Establish and manage the airway",
+        "III.A.5 - 5. Exchange artificial airways",
+        "III.H.5 - 5. Tracheotomy"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Artificial Airways & Tracheostomy Management, Airway, Tracheostomy. NBRC remediation: A. Troubleshoot Devices During and After Assembling; A. Maintain a Patent Airway Including Care of Artificial Airways; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "AA-02",
+      "title": "Cuff Management, Tube Security & Airway Integrity",
+      "topic": "Artificial Airways & Tracheostomy Management",
+      "topicCode": "AA",
+      "href": "/RTE/AA/AA-02-cuff-management-tube-security-airway-integrity.html",
+      "coreFocus": "Use cuff manometry, assess leaks and tube position, secure the airway, and recognize pressure-related or displacement problems.",
+      "primaryNbrc": "I.C.16 - 16. Cuff management",
+      "sharedNbrc": [
+        "I.D.17 - 17. Cuff status",
+        "II.A.11 - 11. Artificial airways and accessories"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Artificial Airways & Tracheostomy Management, Airway. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "AA-03",
+      "title": "Tracheostomy Care, Humidification & Secretion Management",
+      "topic": "Artificial Airways & Tracheostomy Management",
+      "topicCode": "AA",
+      "href": "/RTE/AA/AA-03-tracheostomy-care-humidification-secretion-management.html",
+      "coreFocus": "Review routine tracheostomy assessment and care, airway conditioning needs, secretion management, and stoma/tube considerations.",
+      "primaryNbrc": "III.A.4 - 4. Tracheostomy care",
+      "sharedNbrc": [
+        "III.A.6 - 6. Maintain adequate humidification",
+        "III.H.5 - 5. Tracheotomy"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Artificial Airways & Tracheostomy Management, Airway, Tracheostomy. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "AA-04",
+      "title": "Speaking Valves, Cuff Deflation & Communication",
+      "topic": "Artificial Airways & Tracheostomy Management",
+      "topicCode": "AA",
+      "href": "/RTE/AA/AA-04-speaking-valves-cuff-deflation-communication.html",
+      "coreFocus": "Explain speaking-valve prerequisites, cuff deflation, upper-airway patency, exhalation path, monitoring, and common safety failures.",
+      "primaryNbrc": "III.A.3 - 3. Establish and manage the airway",
+      "sharedNbrc": [
+        "I.D.17 - 17. Cuff status",
+        "III.A.4 - 4. Tracheostomy care"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Artificial Airways & Tracheostomy Management, Airway. NBRC remediation: D. Evaluate Procedure Results; A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "AA-05",
+      "title": "Tracheostomy Emergencies: Obstruction, Dislodgement & Decannulation",
+      "topic": "Artificial Airways & Tracheostomy Management",
+      "topicCode": "AA",
+      "href": "/RTE/AA/AA-05-tracheostomy-emergencies-obstruction-dislodgement-decannulation.html",
+      "coreFocus": "Recognize and respond to blocked tubes, inability to pass a suction catheter, accidental decannulation, false passage, bleeding, and stoma-maturity considerations.",
+      "primaryNbrc": "III.A.3 - 3. Establish and manage the airway",
+      "sharedNbrc": [
+        "II.A.11 - 11. Artificial airways and accessories",
+        "III.A.4 - 4. Tracheostomy care"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Artificial Airways & Tracheostomy Management, Tracheostomy. NBRC remediation: A. Troubleshoot Devices During and After Assembling; A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "AA-06",
+      "title": "Tracheostomy vs Laryngectomy Airway Emergencies",
+      "topic": "Artificial Airways & Tracheostomy Management",
+      "topicCode": "AA",
+      "href": "/RTE/AA/AA-06-tracheostomy-vs-laryngectomy-airway-emergencies.html",
+      "coreFocus": "Distinguish tracheostomy from total laryngectomy anatomy and direct emergency oxygenation/ventilation to the correct airway.",
+      "primaryNbrc": "III.A.3 - 3. Establish and manage the airway",
+      "sharedNbrc": [
+        "II.A.11 - 11. Artificial airways and accessories",
+        "III.A.4 - 4. Tracheostomy care"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Artificial Airways & Tracheostomy Management, Mechanical Ventilation, Oxygen Therapy, Airway, Tracheostomy. NBRC remediation: A. Troubleshoot Devices During and After Assembling; A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "AA-07",
+      "title": "Artificial-Airway Liberation & Decannulation Readiness",
+      "topic": "Artificial Airways & Tracheostomy Management",
+      "topicCode": "AA",
+      "href": "/RTE/AA/AA-07-artificial-airway-liberation-decannulation-readiness.html",
+      "coreFocus": "Review cuff-deflation tolerance, secretion and cough adequacy, upper-airway patency, speaking-valve/capping progression, and decannulation readiness.",
+      "primaryNbrc": "III.A.7 - 7. Extubation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Artificial Airways & Tracheostomy Management, Airway. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "SUC-01",
+      "title": "Recognizing When Suction Is Needed",
+      "topic": "Suctioning & Secretion Management",
+      "topicCode": "SUC",
+      "href": "/RTE/SUC/SUC-01-recognizing-when-suction-is-needed.html",
+      "coreFocus": "Identify clinical evidence of retained secretions and distinguish indication-based suctioning from unnecessary routine suction.",
+      "primaryNbrc": "III.B.2 - 2. Suctioning",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select and evaluate airway-clearance or lung-expansion therapy."
+      ],
+      "linkedPathways": "Suctioning & Secretion Management. NBRC remediation: B. Perform Airway Clearance and Lung Expansion Techniques"
+    },
+    {
+      "id": "SUC-02",
+      "title": "Artificial-Airway Suction Technique, Safety & Complications",
+      "topic": "Suctioning & Secretion Management",
+      "topicCode": "SUC",
+      "href": "/RTE/SUC/SUC-02-artificial-airway-suction-technique-safety-complications.html",
+      "coreFocus": "Apply safe catheter sizing, preoxygenation, duration, pressure, open/closed technique, and monitoring while recognizing hypoxemia, arrhythmia, trauma, and other complications.",
+      "primaryNbrc": "III.B.2 - 2. Suctioning",
+      "sharedNbrc": [
+        "II.A.12 - 12. Suctioning equipment",
+        "III.E.1 - 1. Terminate treatment for severe complication / adverse event"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select and evaluate airway-clearance or lung-expansion therapy.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Suctioning & Secretion Management, Oxygen Therapy, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; B. Perform Airway Clearance and Lung Expansion Techniques; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "SUC-03",
+      "title": "Secretion Management Beyond Suctioning",
+      "topic": "Suctioning & Secretion Management",
+      "topicCode": "SUC",
+      "href": "/RTE/SUC/SUC-03-secretion-management-beyond-suctioning.html",
+      "coreFocus": "Match secretion characteristics and cough effectiveness with hydration, humidification, airway-clearance, cough-assist, positioning, and other strategies.",
+      "primaryNbrc": "III.B.4 - 4. Assisted cough",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select and evaluate airway-clearance or lung-expansion therapy."
+      ],
+      "linkedPathways": "Suctioning & Secretion Management, Airway. NBRC remediation: B. Perform Airway Clearance and Lung Expansion Techniques"
+    },
+    {
+      "id": "ACL-01",
+      "title": "Choosing Airway-Clearance Therapy",
+      "topic": "Airway Clearance & Lung Expansion",
+      "topicCode": "ACL",
+      "href": "/RTE/ACL/ACL-01-choosing-airway-clearance-therapy.html",
+      "coreFocus": "Match secretion burden, cough effectiveness, diagnosis, contraindications, and patient ability with appropriate airway-clearance interventions.",
+      "primaryNbrc": "III.B.3 - 3. Mechanical secretion-clearance devices",
+      "sharedNbrc": [
+        "III.B.1 - 1. Postural drainage, percussion, vibration"
+      ],
+      "requiredPracticeAngles": [
+        "Select and evaluate airway-clearance or lung-expansion therapy."
+      ],
+      "linkedPathways": "Airway Clearance & Lung Expansion, Airway. NBRC remediation: B. Perform Airway Clearance and Lung Expansion Techniques"
+    },
+    {
+      "id": "ACL-02",
+      "title": "Chest Physiotherapy, Positioning & Manual Secretion Clearance",
+      "topic": "Airway Clearance & Lung Expansion",
+      "topicCode": "ACL",
+      "href": "/RTE/ACL/ACL-02-chest-physiotherapy-positioning-manual-secretion-clearance.html",
+      "coreFocus": "Review postural drainage anatomy, percussion, vibration, manual cough, huff cough, indications, and precautions.",
+      "primaryNbrc": "III.B.1 - 1. Postural drainage, percussion, vibration",
+      "sharedNbrc": [
+        "III.A.1 - 1. Proper positioning"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Select and evaluate airway-clearance or lung-expansion therapy."
+      ],
+      "linkedPathways": "Airway Clearance & Lung Expansion. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways; B. Perform Airway Clearance and Lung Expansion Techniques"
+    },
+    {
+      "id": "ACL-03",
+      "title": "PEP, OPEP & Mechanical Airway-Clearance Devices",
+      "topic": "Airway Clearance & Lung Expansion",
+      "topicCode": "ACL",
+      "href": "/RTE/ACL/ACL-03-pep-opep-mechanical-airway-clearance-devices.html",
+      "coreFocus": "Compare PEP, oscillatory PEP, high-frequency chest wall oscillation, mechanical insufflation-exsufflation, and related device selection.",
+      "primaryNbrc": "III.B.3 - 3. Mechanical secretion-clearance devices",
+      "sharedNbrc": [
+        "II.A.16 - 16. Secretion clearance devices",
+        "III.B.4 - 4. Assisted cough"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select and evaluate airway-clearance or lung-expansion therapy."
+      ],
+      "linkedPathways": "Airway Clearance & Lung Expansion, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; B. Perform Airway Clearance and Lung Expansion Techniques"
+    },
+    {
+      "id": "ACL-04",
+      "title": "Lung Expansion Therapy",
+      "topic": "Airway Clearance & Lung Expansion",
+      "topicCode": "ACL",
+      "href": "/RTE/ACL/ACL-04-lung-expansion-therapy.html",
+      "coreFocus": "Review incentive spirometry, positive-pressure/lung-expansion approaches, CPAP, manual hyperinflation concepts, and the distinction between alveolar recruitment and secretion clearance.",
+      "primaryNbrc": "III.B.5 - 5. Hyperinflation therapy",
+      "sharedNbrc": [
+        "II.A.15 - 15. Hyperinflation devices"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select and evaluate airway-clearance or lung-expansion therapy."
+      ],
+      "linkedPathways": "Airway Clearance & Lung Expansion, NIV/CPAP, Pulmonary Function Testing. NBRC remediation: A. Troubleshoot Devices During and After Assembling; B. Perform Airway Clearance and Lung Expansion Techniques"
+    },
+    {
+      "id": "MVF-01",
+      "title": "Why Mechanical Ventilation Is Needed",
+      "topic": "Mechanical Ventilation Fundamentals",
+      "topicCode": "MVF",
+      "href": "/RTE/MVF/MVF-01-why-mechanical-ventilation-is-needed.html",
+      "coreFocus": "Recognize indications for invasive ventilatory support and define the primary goals of supporting ventilation, oxygenation, work of breathing, and airway protection.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Mechanical Ventilation Fundamentals, Mechanical Ventilation, Oxygen Therapy, Airway. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVF-02",
+      "title": "Breath Variables: Trigger, Limit, Cycle & Baseline",
+      "topic": "Mechanical Ventilation Fundamentals",
+      "topicCode": "MVF",
+      "href": "/RTE/MVF/MVF-02-breath-variables-trigger-limit-cycle-baseline.html",
+      "coreFocus": "Define ventilator phase variables and use them to describe how a mechanical breath starts, is controlled, ends, and returns to baseline.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Mechanical Ventilation Fundamentals, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVF-03",
+      "title": "Volume-Controlled vs Pressure-Controlled Ventilation",
+      "topic": "Mechanical Ventilation Fundamentals",
+      "topicCode": "MVF",
+      "href": "/RTE/MVF/MVF-03-volume-controlled-vs-pressure-controlled-ventilation.html",
+      "coreFocus": "Compare what is set, what varies, waveform behavior, advantages, limitations, and clinical consequences of volume- and pressure-targeted breaths.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Mechanical Ventilation Fundamentals, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVF-04",
+      "title": "Common Ventilator Modes & Breath Types",
+      "topic": "Mechanical Ventilation Fundamentals",
+      "topicCode": "MVF",
+      "href": "/RTE/MVF/MVF-04-common-ventilator-modes-breath-types.html",
+      "coreFocus": "Differentiate control, assist, spontaneous, mandatory, synchronized, support, and common mode combinations without relying on brand-specific labels.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Mechanical Ventilation Fundamentals, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVF-05",
+      "title": "Ventilator Circuit, Setup & Pre-Use Safety",
+      "topic": "Mechanical Ventilation Fundamentals",
+      "topicCode": "MVF",
+      "href": "/RTE/MVF/MVF-05-ventilator-circuit-setup-pre-use-safety.html",
+      "coreFocus": "Review circuit assembly, humidification, filters, sensors, alarm checks, oxygen supply, leak testing, and pre-use verification before connecting a patient.",
+      "primaryNbrc": "II.A.9 - 9. Mechanical ventilators",
+      "sharedNbrc": [
+        "II.A.14 - 14. Breathing circuits",
+        "II.B.4 - 4. Quality control procedures"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Mechanical Ventilation Fundamentals, Mechanical Ventilation, Oxygen Therapy. NBRC remediation: A. Troubleshoot Devices During and After Assembling; B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "MVF-06",
+      "title": "Initial Ventilator Strategy & First Reassessment",
+      "topic": "Mechanical Ventilation Fundamentals",
+      "topicCode": "MVF",
+      "href": "/RTE/MVF/MVF-06-initial-ventilator-strategy-first-reassessment.html",
+      "coreFocus": "Set an initial strategy based on the patient's problem and immediately reassess pressures, volumes, synchrony, gas exchange, hemodynamics, and safety.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Mechanical Ventilation Fundamentals, Mechanical Ventilation, Hemodynamics. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVS-01",
+      "title": "Tidal Volume, Respiratory Rate & Minute Ventilation",
+      "topic": "Ventilator Settings, Timing & Calculations",
+      "topicCode": "MVS",
+      "href": "/RTE/MVS/MVS-01-tidal-volume-respiratory-rate-minute-ventilation.html",
+      "coreFocus": "Relate VT and rate to minute ventilation, choose appropriate targets, and recognize when changes affect PaCO2 or risk excessive ventilation.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [
+        "I.C.7 - 7. Cardiopulmonary calculations"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Settings, Timing & Calculations, Mechanical Ventilation. NBRC remediation: C. Perform Procedures to Gather Clinical Information; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVS-02",
+      "title": "Alveolar Ventilation, Dead Space & PaCO2 Adjustment",
+      "topic": "Ventilator Settings, Timing & Calculations",
+      "topicCode": "MVS",
+      "href": "/RTE/MVS/MVS-02-alveolar-ventilation-dead-space-paco2-adjustment.html",
+      "coreFocus": "Use alveolar ventilation and dead-space concepts to predict and make rational ventilator changes for PaCO2 problems.",
+      "primaryNbrc": "I.C.7 - 7. Cardiopulmonary calculations",
+      "sharedNbrc": [
+        "I.D.7 - 7. Cardiopulmonary calculations"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Ventilator Settings, Timing & Calculations, Mechanical Ventilation. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "MVS-03",
+      "title": "Inspiratory Flow, Inspiratory Time & I:E Ratio",
+      "topic": "Ventilator Settings, Timing & Calculations",
+      "topicCode": "MVS",
+      "href": "/RTE/MVS/MVS-03-inspiratory-flow-inspiratory-time-i-e-ratio.html",
+      "coreFocus": "Calculate and adjust flow, inspiratory time, expiratory time, and I:E ratio to meet demand and avoid inadequate exhalation.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [
+        "I.C.7 - 7. Cardiopulmonary calculations"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Settings, Timing & Calculations. NBRC remediation: C. Perform Procedures to Gather Clinical Information; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVS-04",
+      "title": "PEEP, FiO2 & Oxygenation Strategy",
+      "topic": "Ventilator Settings, Timing & Calculations",
+      "topicCode": "MVS",
+      "href": "/RTE/MVS/MVS-04-peep-fio2-oxygenation-strategy.html",
+      "coreFocus": "Use FiO2 and PEEP together to improve oxygenation while reassessing recruitment, overdistention, toxicity, and hemodynamic effects.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Settings, Timing & Calculations, Oxygen Therapy, Hemodynamics. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "MVS-05",
+      "title": "Compliance, Resistance & Pressure Calculations",
+      "topic": "Ventilator Settings, Timing & Calculations",
+      "topicCode": "MVS",
+      "href": "/RTE/MVS/MVS-05-compliance-resistance-pressure-calculations.html",
+      "coreFocus": "Calculate and interpret plateau pressure, compliance, airway resistance, and driving pressure and distinguish resistance from compliance problems.",
+      "primaryNbrc": "I.C.8 - 8. Pulmonary compliance and airway resistance",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results",
+        "I.C.7 - 7. Cardiopulmonary calculations",
+        "I.C.9 - 9. Plateau pressure",
+        "I.D.7 - 7. Cardiopulmonary calculations",
+        "I.D.9 - 9. Pulmonary compliance and airway resistance",
+        "I.D.10 - 10. Plateau pressure"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Ventilator Settings, Timing & Calculations, Airway, Calculations. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "MVS-06",
+      "title": "Auto-PEEP, Time Constants & Dynamic Hyperinflation",
+      "topic": "Ventilator Settings, Timing & Calculations",
+      "topicCode": "MVS",
+      "href": "/RTE/MVS/MVS-06-auto-peep-time-constants-dynamic-hyperinflation.html",
+      "coreFocus": "Explain time constants, incomplete exhalation, intrinsic PEEP, dynamic hyperinflation, recognition clues, and corrective ventilator strategies.",
+      "primaryNbrc": "I.C.10 - 10. Auto-PEEP determination",
+      "sharedNbrc": [
+        "I.D.11 - 11. Auto-PEEP",
+        "III.C.4 - 4. Recognize and correct patient-ventilator dyssynchrony"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Settings, Timing & Calculations, Mechanical Ventilation. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "VGR-01",
+      "title": "Reading Pressure, Flow & Volume Waveforms",
+      "topic": "Ventilator Graphics & Patient-Ventilator Interaction",
+      "topicCode": "VGR",
+      "href": "/RTE/VGR/VGR-01-reading-pressure-flow-volume-waveforms.html",
+      "coreFocus": "Recognize normal ventilator waveforms and use pressure, flow, and volume changes to identify abnormalities.",
+      "primaryNbrc": "III.C.5 - 5. Use ventilator graphics",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Graphics & Patient-Ventilator Interaction, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "VGR-02",
+      "title": "Pressure-Volume & Flow-Volume Loops",
+      "topic": "Ventilator Graphics & Patient-Ventilator Interaction",
+      "topicCode": "VGR",
+      "href": "/RTE/VGR/VGR-02-pressure-volume-flow-volume-loops.html",
+      "coreFocus": "Interpret common loop patterns for compliance, resistance, overdistention, air trapping, leaks, and patient effort.",
+      "primaryNbrc": "III.C.5 - 5. Use ventilator graphics",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Graphics & Patient-Ventilator Interaction. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "VGR-03",
+      "title": "Resistance, Compliance & Secretion Problems on Graphics",
+      "topic": "Ventilator Graphics & Patient-Ventilator Interaction",
+      "topicCode": "VGR",
+      "href": "/RTE/VGR/VGR-03-resistance-compliance-secretion-problems-on-graphics.html",
+      "coreFocus": "Differentiate airway resistance, reduced compliance, secretion/water obstruction, and other mechanical problems using pressures and waveform changes.",
+      "primaryNbrc": "III.C.5 - 5. Use ventilator graphics",
+      "sharedNbrc": [
+        "I.C.8 - 8. Pulmonary compliance and airway resistance",
+        "I.D.9 - 9. Pulmonary compliance and airway resistance"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Graphics & Patient-Ventilator Interaction, Airway. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "VGR-04",
+      "title": "Triggering Problems: Ineffective Effort & Autotriggering",
+      "topic": "Ventilator Graphics & Patient-Ventilator Interaction",
+      "topicCode": "VGR",
+      "href": "/RTE/VGR/VGR-04-triggering-problems-ineffective-effort-autotriggering.html",
+      "coreFocus": "Recognize trigger delay, ineffective effort, auto-triggering, inappropriate sensitivity, and patient/circuit causes.",
+      "primaryNbrc": "III.C.4 - 4. Recognize and correct patient-ventilator dyssynchrony",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Graphics & Patient-Ventilator Interaction. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "VGR-05",
+      "title": "Flow & Cycling Dyssynchrony",
+      "topic": "Ventilator Graphics & Patient-Ventilator Interaction",
+      "topicCode": "VGR",
+      "href": "/RTE/VGR/VGR-05-flow-cycling-dyssynchrony.html",
+      "coreFocus": "Recognize flow starvation, double triggering, breath stacking, premature/late cycling, and related patient-ventilator mismatch.",
+      "primaryNbrc": "III.C.4 - 4. Recognize and correct patient-ventilator dyssynchrony",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Graphics & Patient-Ventilator Interaction, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "VGR-06",
+      "title": "Auto-PEEP & Dynamic Hyperinflation on Graphics",
+      "topic": "Ventilator Graphics & Patient-Ventilator Interaction",
+      "topicCode": "VGR",
+      "href": "/RTE/VGR/VGR-06-auto-peep-dynamic-hyperinflation-on-graphics.html",
+      "coreFocus": "Use expiratory-flow patterns, pressure behavior, and patient effort to recognize incomplete exhalation and intrinsic PEEP.",
+      "primaryNbrc": "III.C.5 - 5. Use ventilator graphics",
+      "sharedNbrc": [
+        "I.C.10 - 10. Auto-PEEP determination",
+        "I.D.11 - 11. Auto-PEEP"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Graphics & Patient-Ventilator Interaction. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "ALM-01",
+      "title": "Ventilator Troubleshooting Framework: Patient First",
+      "topic": "Ventilator Alarms & Troubleshooting",
+      "topicCode": "ALM",
+      "href": "/RTE/ALM/ALM-01-ventilator-troubleshooting-framework-patient-first.html",
+      "coreFocus": "Use a patient-first sequence: assess the patient, manually ventilate if unstable, then evaluate airway, circuit, ventilator, and source.",
+      "primaryNbrc": "II.A.9 - 9. Mechanical ventilators",
+      "sharedNbrc": [
+        "III.C.3d - 3d. Ventilator alarms",
+        "III.E.1 - 1. Terminate treatment for severe complication / adverse event"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Ventilator Alarms & Troubleshooting, Mechanical Ventilation, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "ALM-02",
+      "title": "High-Pressure Alarms",
+      "topic": "Ventilator Alarms & Troubleshooting",
+      "topicCode": "ALM",
+      "href": "/RTE/ALM/ALM-02-high-pressure-alarms.html",
+      "coreFocus": "Differentiate airway obstruction, secretions, biting, bronchospasm, decreased compliance, water, kinks, and patient coughing or fighting the ventilator.",
+      "primaryNbrc": "II.A.9 - 9. Mechanical ventilators",
+      "sharedNbrc": [
+        "III.C.3d - 3d. Ventilator alarms"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Alarms & Troubleshooting, Mechanical Ventilation, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "ALM-03",
+      "title": "Low-Pressure, Low-Volume & Leak Alarms",
+      "topic": "Ventilator Alarms & Troubleshooting",
+      "topicCode": "ALM",
+      "href": "/RTE/ALM/ALM-03-low-pressure-low-volume-leak-alarms.html",
+      "coreFocus": "Recognize disconnection, cuff leak, circuit leak, tube displacement, low delivered volume, and other causes of lost pressure or volume.",
+      "primaryNbrc": "II.A.9 - 9. Mechanical ventilators",
+      "sharedNbrc": [
+        "III.C.3d - 3d. Ventilator alarms"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Alarms & Troubleshooting. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "ALM-04",
+      "title": "Apnea, Low Minute Ventilation & Backup Ventilation",
+      "topic": "Ventilator Alarms & Troubleshooting",
+      "topicCode": "ALM",
+      "href": "/RTE/ALM/ALM-04-apnea-low-minute-ventilation-backup-ventilation.html",
+      "coreFocus": "Evaluate apnea and low-minute-ventilation alarms, patient effort, sedation, trigger problems, backup ventilation, and circuit issues.",
+      "primaryNbrc": "II.A.9 - 9. Mechanical ventilators",
+      "sharedNbrc": [
+        "III.C.3d - 3d. Ventilator alarms"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Alarms & Troubleshooting, Mechanical Ventilation. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "ALM-05",
+      "title": "Alarm Settings, False Alarms & Safe Limits",
+      "topic": "Ventilator Alarms & Troubleshooting",
+      "topicCode": "ALM",
+      "href": "/RTE/ALM/ALM-05-alarm-settings-false-alarms-safe-limits.html",
+      "coreFocus": "Set clinically appropriate alarm limits, avoid unsafe alarm disabling, reduce nuisance alarms, and reassess limits as patient needs change.",
+      "primaryNbrc": "II.A.9 - 9. Mechanical ventilators",
+      "sharedNbrc": [
+        "III.C.3d - 3d. Ventilator alarms"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Ventilator Alarms & Troubleshooting. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "DVM-01",
+      "title": "Ventilating Obstructive Lung Disease",
+      "topic": "Disease-Specific Mechanical Ventilation",
+      "topicCode": "DVM",
+      "href": "/RTE/DVM/DVM-01-ventilating-obstructive-lung-disease.html",
+      "coreFocus": "Adapt rate, flow, expiratory time, VT, pressure, and PEEP strategies to reduce dynamic hyperinflation and support COPD/asthma physiology.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Disease-Specific Mechanical Ventilation, COPD, Asthma, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "DVM-02",
+      "title": "Ventilating Restrictive & Low-Compliance Lungs",
+      "topic": "Disease-Specific Mechanical Ventilation",
+      "topicCode": "DVM",
+      "href": "/RTE/DVM/DVM-02-ventilating-restrictive-low-compliance-lungs.html",
+      "coreFocus": "Use lung-protective principles for stiff lungs while balancing VT, pressure, PEEP, oxygenation, and hemodynamic tolerance.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Disease-Specific Mechanical Ventilation, Mechanical Ventilation, Oxygen Therapy, Hemodynamics. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "DVM-03",
+      "title": "Ventilating Neuromuscular & Chest-Wall Disorders",
+      "topic": "Disease-Specific Mechanical Ventilation",
+      "topicCode": "DVM",
+      "href": "/RTE/DVM/DVM-03-ventilating-neuromuscular-chest-wall-disorders.html",
+      "coreFocus": "Support ventilatory pump failure while accounting for relatively preserved lungs, secretion burden, cough weakness, and liberation challenges.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Disease-Specific Mechanical Ventilation, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "DVM-04",
+      "title": "Ventilating Unilateral & Post-Surgical Lung Disease",
+      "topic": "Disease-Specific Mechanical Ventilation",
+      "topicCode": "DVM",
+      "href": "/RTE/DVM/DVM-04-ventilating-unilateral-post-surgical-lung-disease.html",
+      "coreFocus": "Address asymmetric lung mechanics, post-pneumonectomy/postoperative considerations, positioning, and ventilation of unevenly affected lungs.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Disease-Specific Mechanical Ventilation, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "DVM-05",
+      "title": "Ventilating Patients With Air Leaks & Bronchopleural Fistula",
+      "topic": "Disease-Specific Mechanical Ventilation",
+      "topicCode": "DVM",
+      "href": "/RTE/DVM/DVM-05-ventilating-patients-with-air-leaks-bronchopleural-fistula.html",
+      "coreFocus": "Minimize flow through air leaks while maintaining adequate ventilation and oxygenation and recognizing when leak behavior indicates worsening fistula or tube problems.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Disease-Specific Mechanical Ventilation, Mechanical Ventilation, Oxygen Therapy, Pleural/Chest Tube. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "RES-01",
+      "title": "When Conventional Ventilation Is Failing",
+      "topic": "Advanced/Rescue Ventilation & Air-Leak Syndromes",
+      "topicCode": "RES",
+      "href": "/RTE/RES/RES-01-when-conventional-ventilation-is-failing.html",
+      "coreFocus": "Recognize refractory oxygenation/ventilation failure and determine when conventional adjustments are no longer sufficient.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Advanced/Rescue Ventilation & Air-Leak Syndromes, Mechanical Ventilation, Oxygen Therapy. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "RES-02",
+      "title": "Prone Positioning, Recruitment & Advanced Oxygenation Strategies",
+      "topic": "Advanced/Rescue Ventilation & Air-Leak Syndromes",
+      "topicCode": "RES",
+      "href": "/RTE/RES/RES-02-prone-positioning-recruitment-advanced-oxygenation-strategies.html",
+      "coreFocus": "Review the physiologic rationale, indications, monitoring, and risks of prone positioning and selected recruitment/advanced oxygenation strategies.",
+      "primaryNbrc": "III.C.6 - 6. Perform lung recruitment maneuvers",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Advanced/Rescue Ventilation & Air-Leak Syndromes, Oxygen Therapy. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "RES-03",
+      "title": "High-Frequency Ventilation Fundamentals",
+      "topic": "Advanced/Rescue Ventilation & Air-Leak Syndromes",
+      "topicCode": "RES",
+      "href": "/RTE/RES/RES-03-high-frequency-ventilation-fundamentals.html",
+      "coreFocus": "Recognize HFOV and HFJV concepts, mean airway pressure, amplitude, frequency, gas-exchange relationships, and major clinical applications.",
+      "primaryNbrc": "III.C.3c - 3c. High-frequency ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Advanced/Rescue Ventilation & Air-Leak Syndromes, Mechanical Ventilation, Airway. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "RES-04",
+      "title": "ECMO & Extracorporeal Rescue Concepts",
+      "topic": "Advanced/Rescue Ventilation & Air-Leak Syndromes",
+      "topicCode": "RES",
+      "href": "/RTE/RES/RES-04-ecmo-extracorporeal-rescue-concepts.html",
+      "coreFocus": "Recognize ECMO as rescue support, broad VV/VA distinctions, indications for referral, and the RT's role in monitoring and ongoing lung support.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Advanced/Rescue Ventilation & Air-Leak Syndromes. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "RES-05",
+      "title": "Barotrauma & Air-Leak Syndromes",
+      "topic": "Advanced/Rescue Ventilation & Air-Leak Syndromes",
+      "topicCode": "RES",
+      "href": "/RTE/RES/RES-05-barotrauma-air-leak-syndromes.html",
+      "coreFocus": "Recognize pneumothorax, tension pneumothorax, pneumomediastinum, pulmonary interstitial emphysema, subcutaneous emphysema, and bronchopleural fistula.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Advanced/Rescue Ventilation & Air-Leak Syndromes, Pleural/Chest Tube. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "RES-06",
+      "title": "Troubleshooting Large Air Leaks During Ventilation",
+      "topic": "Advanced/Rescue Ventilation & Air-Leak Syndromes",
+      "topicCode": "RES",
+      "href": "/RTE/RES/RES-06-troubleshooting-large-air-leaks-during-ventilation.html",
+      "coreFocus": "Distinguish cuff/circuit/tube leaks from intrathoracic air leaks and choose corrective actions that maintain ventilation while limiting further injury.",
+      "primaryNbrc": "II.A.9 - 9. Mechanical ventilators",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Advanced/Rescue Ventilation & Air-Leak Syndromes, Mechanical Ventilation. NBRC remediation: A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "NIV-01",
+      "title": "NIV & CPAP Fundamentals",
+      "topic": "Noninvasive Ventilation & CPAP",
+      "topicCode": "NIV",
+      "href": "/RTE/NIV/NIV-01-niv-cpap-fundamentals.html",
+      "coreFocus": "Explain CPAP, IPAP, EPAP, pressure support, backup rate, trigger/cycle behavior, and how pressure differences influence ventilation.",
+      "primaryNbrc": "III.C.3b - 3b. Noninvasive ventilation",
+      "sharedNbrc": [
+        "I.C.15 - 15. CPAP / NPPV titration during sleep",
+        "III.C.2c - 2c. CPAP by mask or nasal interface"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Noninvasive Ventilation & CPAP, Mechanical Ventilation, NIV/CPAP. NBRC remediation: C. Perform Procedures to Gather Clinical Information; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "NIV-02",
+      "title": "Selecting the Right Patient for NIV",
+      "topic": "Noninvasive Ventilation & CPAP",
+      "topicCode": "NIV",
+      "href": "/RTE/NIV/NIV-02-selecting-the-right-patient-for-niv.html",
+      "coreFocus": "Identify appropriate indications, contraindications, expected benefit, airway-protection needs, cooperation, secretion burden, and situations requiring immediate intubation.",
+      "primaryNbrc": "III.C.3b - 3b. Noninvasive ventilation",
+      "sharedNbrc": [
+        "III.C.2c - 2c. CPAP by mask or nasal interface"
+      ],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Noninvasive Ventilation & CPAP, NIV/CPAP, Airway. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "NIV-03",
+      "title": "NIV Interfaces, Circuits & Leak Management",
+      "topic": "Noninvasive Ventilation & CPAP",
+      "topicCode": "NIV",
+      "href": "/RTE/NIV/NIV-03-niv-interfaces-circuits-leak-management.html",
+      "coreFocus": "Compare masks/interfaces and circuit types, intentional vs unintentional leak, exhalation ports, skin protection, and common interface problems.",
+      "primaryNbrc": "II.A.4 - 4. CPAP / NPPV with patient interfaces",
+      "sharedNbrc": [
+        "II.A.14 - 14. Breathing circuits",
+        "III.C.3b - 3b. Noninvasive ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Noninvasive Ventilation & CPAP, NIV/CPAP. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "NIV-04",
+      "title": "Adjusting NIV for Ventilation & Oxygenation",
+      "topic": "Noninvasive Ventilation & CPAP",
+      "topicCode": "NIV",
+      "href": "/RTE/NIV/NIV-04-adjusting-niv-for-ventilation-oxygenation.html",
+      "coreFocus": "Use IPAP/pressure support to improve ventilation and EPAP/FiO2 to improve oxygenation while preserving adequate VT and comfort.",
+      "primaryNbrc": "III.C.3b - 3b. Noninvasive ventilation",
+      "sharedNbrc": [
+        "I.C.15 - 15. CPAP / NPPV titration during sleep",
+        "I.D.16 - 16. CPAP / NPPV titration during sleep",
+        "III.C.2c - 2c. CPAP by mask or nasal interface"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Noninvasive Ventilation & CPAP, Mechanical Ventilation, NIV/CPAP, Oxygen Therapy. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "NIV-05",
+      "title": "Evaluating NIV Response & Recognizing Failure",
+      "topic": "Noninvasive Ventilation & CPAP",
+      "topicCode": "NIV",
+      "href": "/RTE/NIV/NIV-05-evaluating-niv-response-recognizing-failure.html",
+      "coreFocus": "Reassess pH/PaCO2, oxygenation, RR, VT, effort, mental status, synchrony, and trajectory and avoid delaying intubation when NIV is failing.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "I.D.16 - 16. CPAP / NPPV titration during sleep",
+        "III.C.3b - 3b. Noninvasive ventilation",
+        "III.E.1 - 1. Terminate treatment for severe complication / adverse event"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Noninvasive Ventilation & CPAP, NIV/CPAP, Oxygen Therapy. NBRC remediation: D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "NIV-06",
+      "title": "NIV Troubleshooting & Tolerance Problems",
+      "topic": "Noninvasive Ventilation & CPAP",
+      "topicCode": "NIV",
+      "href": "/RTE/NIV/NIV-06-niv-troubleshooting-tolerance-problems.html",
+      "coreFocus": "Address leak, mask discomfort, dryness, aerophagia, asynchrony, poor triggering, rebreathing, inadequate ventilation, and patient intolerance.",
+      "primaryNbrc": "II.A.4 - 4. CPAP / NPPV with patient interfaces",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Noninvasive Ventilation & CPAP, Mechanical Ventilation, NIV/CPAP. NBRC remediation: A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "LIB-01",
+      "title": "Readiness for Ventilator Liberation",
+      "topic": "Liberation, SBTs & Extubation",
+      "topicCode": "LIB",
+      "href": "/RTE/LIB/LIB-01-readiness-for-ventilator-liberation.html",
+      "coreFocus": "Assess improvement in the original problem, gas exchange, hemodynamics, mental status, ventilatory demand, and ability to initiate spontaneous breathing.",
+      "primaryNbrc": "III.C.7 - 7. Liberate from mechanical ventilation",
+      "sharedNbrc": [
+        "III.F.1 - 1. Respiratory-driven protocols"
+      ],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "Liberation, SBTs & Extubation, Mechanical Ventilation, Hemodynamics. NBRC remediation: C. Support Oxygenation and Ventilation; F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "LIB-02",
+      "title": "Spontaneous Breathing Trials",
+      "topic": "Liberation, SBTs & Extubation",
+      "topicCode": "LIB",
+      "href": "/RTE/LIB/LIB-02-spontaneous-breathing-trials.html",
+      "coreFocus": "Compare common SBT methods, conduct an appropriate trial, monitor tolerance, and interpret signs of success or failure.",
+      "primaryNbrc": "I.C.11 - 11. Spontaneous breathing trial (SBT)",
+      "sharedNbrc": [
+        "I.D.12 - 12. Spontaneous breathing trial",
+        "III.C.7 - 7. Liberate from mechanical ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Liberation, SBTs & Extubation. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "LIB-03",
+      "title": "Liberation Parameters & What They Really Mean",
+      "topic": "Liberation, SBTs & Extubation",
+      "topicCode": "LIB",
+      "href": "/RTE/LIB/LIB-03-liberation-parameters-what-they-really-mean.html",
+      "coreFocus": "Interpret RSBI, VC, MIP/NIF, VE, VT, respiratory rate, and related measures as supporting data rather than absolute pass/fail gates.",
+      "primaryNbrc": "I.A.7 - 7. Trends in monitoring results",
+      "sharedNbrc": [
+        "I.C.3 - 3. Mechanics of spontaneous ventilation",
+        "I.D.4 - 4. Mechanics of spontaneous ventilation",
+        "I.D.12 - 12. Spontaneous breathing trial",
+        "III.C.7 - 7. Liberate from mechanical ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Liberation, SBTs & Extubation. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "LIB-04",
+      "title": "Extubation Readiness: Airway, Cough & Secretions",
+      "topic": "Liberation, SBTs & Extubation",
+      "topicCode": "LIB",
+      "href": "/RTE/LIB/LIB-04-extubation-readiness-airway-cough-secretions.html",
+      "coreFocus": "Evaluate airway patency, cough, secretion load, mental status, airway edema risk, and ability to protect the airway before extubation.",
+      "primaryNbrc": "III.A.7 - 7. Extubation",
+      "sharedNbrc": [
+        "I.D.12 - 12. Spontaneous breathing trial",
+        "III.C.7 - 7. Liberate from mechanical ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Liberation, SBTs & Extubation, Airway. NBRC remediation: D. Evaluate Procedure Results; A. Maintain a Patent Airway Including Care of Artificial Airways; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "LIB-05",
+      "title": "Extubation & Immediate Post-Extubation Assessment",
+      "topic": "Liberation, SBTs & Extubation",
+      "topicCode": "LIB",
+      "href": "/RTE/LIB/LIB-05-extubation-immediate-post-extubation-assessment.html",
+      "coreFocus": "Monitor breathing pattern, gas exchange, stridor, secretion management, work of breathing, and early signs of post-extubation deterioration.",
+      "primaryNbrc": "III.A.7 - 7. Extubation",
+      "sharedNbrc": [
+        "III.C.7 - 7. Liberate from mechanical ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Liberation, SBTs & Extubation. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "LIB-06",
+      "title": "Post-Extubation Support: Oxygen, HFNC & NIV",
+      "topic": "Liberation, SBTs & Extubation",
+      "topicCode": "LIB",
+      "href": "/RTE/LIB/LIB-06-post-extubation-support-oxygen-hfnc-niv.html",
+      "coreFocus": "Select conventional oxygen, HFNC, or prophylactic NIV for appropriate patients and reassess response.",
+      "primaryNbrc": "III.C.7 - 7. Liberate from mechanical ventilation",
+      "sharedNbrc": [
+        "III.A.7 - 7. Extubation"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Liberation, SBTs & Extubation, NIV/CPAP, Oxygen Therapy. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "LIB-07",
+      "title": "Extubation Failure & Reintubation Decisions",
+      "topic": "Liberation, SBTs & Extubation",
+      "topicCode": "LIB",
+      "href": "/RTE/LIB/LIB-07-extubation-failure-reintubation-decisions.html",
+      "coreFocus": "Recognize established post-extubation respiratory failure and determine when continued noninvasive support may delay necessary reintubation.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "III.A.7 - 7. Extubation",
+        "III.C.7 - 7. Liberate from mechanical ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Liberation, SBTs & Extubation. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways; C. Support Oxygenation and Ventilation; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PFT-01",
+      "title": "Spirometry Quality Before Interpretation",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-01-spirometry-quality-before-interpretation.html",
+      "coreFocus": "Verify acceptability, repeatability, effort, and technical quality before interpreting spirometric results.",
+      "primaryNbrc": "I.D.21 - 21. Spirometry",
+      "sharedNbrc": [
+        "I.A.3 - 3. Pulmonary function testing results",
+        "I.C.20 - 20. Spirometry",
+        "I.E.6 - 6. Pulmonary function testing",
+        "II.A.18 - 18. Portable spirometer"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Pulmonary Function Testing, Quality/Safety. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures; A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "PFT-02",
+      "title": "Recognizing Obstructive Patterns",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-02-recognizing-obstructive-patterns.html",
+      "coreFocus": "Use FEV1/FVC relative to LLN/z-score, expiratory flow patterns, severity context, and bronchodilator data to recognize obstruction.",
+      "primaryNbrc": "I.A.3 - 3. Pulmonary function testing results",
+      "sharedNbrc": [
+        "I.C.20 - 20. Spirometry",
+        "I.D.3 - 3. Peak flow",
+        "I.D.21 - 21. Spirometry"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Pulmonary Function Testing. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "PFT-03",
+      "title": "Recognizing Restrictive & Mixed Patterns",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-03-recognizing-restrictive-mixed-patterns.html",
+      "coreFocus": "Distinguish suspected restriction from confirmed low TLC and recognize mixed obstructive-restrictive patterns.",
+      "primaryNbrc": "I.A.3 - 3. Pulmonary function testing results",
+      "sharedNbrc": [
+        "I.C.20 - 20. Spirometry",
+        "I.D.21 - 21. Spirometry"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Pulmonary Function Testing. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "PFT-04",
+      "title": "Lung Volumes, Air Trapping & Hyperinflation",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-04-lung-volumes-air-trapping-hyperinflation.html",
+      "coreFocus": "Interpret TLC, RV, FRC, RV/TLC, and measurement methods to identify restriction, air trapping, and hyperinflation.",
+      "primaryNbrc": "I.A.3 - 3. Pulmonary function testing results",
+      "sharedNbrc": [
+        "I.C.22 - 22. Lung volumes",
+        "I.D.23 - 23. Lung volumes"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Pulmonary Function Testing. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "PFT-05",
+      "title": "DLCO & Gas-Transfer Interpretation",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-05-dlco-gas-transfer-interpretation.html",
+      "coreFocus": "Explain DLCO physiology and interpret low or high diffusion capacity in the context of hemoglobin, lung volume, and disease.",
+      "primaryNbrc": "I.A.3 - 3. Pulmonary function testing results",
+      "sharedNbrc": [
+        "I.C.21 - 21. DLCO",
+        "I.D.22 - 22. DLCO"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Pulmonary Function Testing. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "PFT-06",
+      "title": "Bronchodilator Response & Reversibility",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-06-bronchodilator-response-reversibility.html",
+      "coreFocus": "Apply current bronchodilator-response interpretation while recognizing older thresholds as legacy exam language.",
+      "primaryNbrc": "I.D.21 - 21. Spirometry",
+      "sharedNbrc": [
+        "I.A.3 - 3. Pulmonary function testing results",
+        "I.C.20 - 20. Spirometry"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Pulmonary Function Testing. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "PFT-07",
+      "title": "Flow-Volume Loops & Upper-Airway Obstruction",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-07-flow-volume-loops-upper-airway-obstruction.html",
+      "coreFocus": "Recognize fixed and variable upper-airway obstruction and common obstructive/restrictive loop patterns.",
+      "primaryNbrc": "I.D.21 - 21. Spirometry",
+      "sharedNbrc": [
+        "I.A.3 - 3. Pulmonary function testing results",
+        "III.A.2 - 2. Recognize a difficult airway"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Pulmonary Function Testing, Airway. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results; A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "PFT-08",
+      "title": "Respiratory Muscle & Exercise Testing",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-08-respiratory-muscle-exercise-testing.html",
+      "coreFocus": "Interpret MIP/MEP, MVV, 6-minute walk testing, exertional oxygen response, and related respiratory-muscle/exercise information.",
+      "primaryNbrc": "I.C.23 - 23. Respiratory muscle strength testing - MIP, MEP, MVV",
+      "sharedNbrc": [
+        "I.A.3 - 3. Pulmonary function testing results",
+        "I.C.3 - 3. Mechanics of spontaneous ventilation",
+        "I.C.18 - 18. 6-minute walk test",
+        "I.D.4 - 4. Mechanics of spontaneous ventilation",
+        "I.D.19 - 19. 6-minute walk test",
+        "I.D.24 - 24. Respiratory muscle strength testing - MIP, MEP, MVV",
+        "I.E.6 - 6. Pulmonary function testing",
+        "III.B.6 - 6. Inspiratory muscle training"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Select and evaluate airway-clearance or lung-expansion therapy."
+      ],
+      "linkedPathways": "Pulmonary Function Testing, Oxygen Therapy. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures; B. Perform Airway Clearance and Lung Expansion Techniques"
+    },
+    {
+      "id": "PFT-09",
+      "title": "PFT Equipment, Calibration & Quality Control",
+      "topic": "Pulmonary Function Testing",
+      "topicCode": "PFT",
+      "href": "/RTE/PFT/PFT-09-pft-equipment-calibration-quality-control.html",
+      "coreFocus": "Review spirometer/pneumotach operation, 3-L syringe verification, leaks, calibration/verification concepts, and quality-control requirements.",
+      "primaryNbrc": "II.A.19 - 19. Pulmonary function laboratory equipment",
+      "sharedNbrc": [
+        "II.A.18 - 18. Portable spirometer",
+        "II.B.4 - 4. Quality control procedures"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Pulmonary Function Testing, Quality/Safety. NBRC remediation: A. Troubleshoot Devices During and After Assembling; B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "MON-01",
+      "title": "Pulse Oximetry: Signal Quality & Limitations",
+      "topic": "Capnography & Noninvasive Monitoring",
+      "topicCode": "MON",
+      "href": "/RTE/MON/MON-01-pulse-oximetry-signal-quality-limitations.html",
+      "coreFocus": "Assess pleth quality, perfusion, motion artifact, probe problems, dyshemoglobin limitations, and whether SpO2 is believable.",
+      "primaryNbrc": "I.C.2 - 2. Noninvasive monitoring",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results",
+        "I.C.14 - 14. Overnight pulse oximetry / transcutaneous CO2 monitoring",
+        "I.D.2 - 2. Noninvasive monitoring",
+        "I.D.15 - 15. Overnight pulse oximetry / transcutaneous CO2 monitoring",
+        "I.E.7 - 7. Noninvasive monitoring",
+        "II.A.2 - 2. Medical gas delivery / clinical analyzing devices",
+        "II.A.21 - 21. Noninvasive monitoring"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Capnography & Noninvasive Monitoring, Quality/Safety. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures; A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "MON-02",
+      "title": "Capnography Fundamentals & Normal Waveform",
+      "topic": "Capnography & Noninvasive Monitoring",
+      "topicCode": "MON",
+      "href": "/RTE/MON/MON-02-capnography-fundamentals-normal-waveform.html",
+      "coreFocus": "Explain the capnogram phases, normal waveform shape, PetCO2, ventilation-perfusion relationships, and PaCO2-PetCO2 gradient.",
+      "primaryNbrc": "I.C.2 - 2. Noninvasive monitoring",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results",
+        "I.E.7 - 7. Noninvasive monitoring",
+        "I.E.10 - 10. Exhaled gas analysis",
+        "II.A.21 - 21. Noninvasive monitoring"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Capnography & Noninvasive Monitoring, Mechanical Ventilation. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; E. Recommend Diagnostic Procedures; A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "MON-03",
+      "title": "Capnogram Pattern Recognition",
+      "topic": "Capnography & Noninvasive Monitoring",
+      "topicCode": "MON",
+      "href": "/RTE/MON/MON-03-capnogram-pattern-recognition.html",
+      "coreFocus": "Recognize obstructive patterns, rebreathing, hypoventilation/hyperventilation, disconnection, esophageal placement, CPR changes, and other common abnormalities.",
+      "primaryNbrc": "I.D.2 - 2. Noninvasive monitoring",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results",
+        "I.E.10 - 10. Exhaled gas analysis"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Capnography & Noninvasive Monitoring, Mechanical Ventilation. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "MON-04",
+      "title": "Capnography for Airway Confirmation, CPR & Deterioration",
+      "topic": "Capnography & Noninvasive Monitoring",
+      "topicCode": "MON",
+      "href": "/RTE/MON/MON-04-capnography-for-airway-confirmation-cpr-deterioration.html",
+      "coreFocus": "Use waveform capnography to confirm airway placement, monitor CPR quality/ROSC, trend ventilation, and identify abrupt physiologic change.",
+      "primaryNbrc": "I.D.2 - 2. Noninvasive monitoring",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Capnography & Noninvasive Monitoring, Mechanical Ventilation, Airway, Quality/Safety. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "MON-05",
+      "title": "Transcutaneous Monitoring, SpCO & Specialty Noninvasive Monitors",
+      "topic": "Capnography & Noninvasive Monitoring",
+      "topicCode": "MON",
+      "href": "/RTE/MON/MON-05-transcutaneous-monitoring-spco-specialty-noninvasive-monitors.html",
+      "coreFocus": "Review transcutaneous O2/CO2, pulse CO-oximetry, apnea monitoring, and specialty-monitor uses and limitations.",
+      "primaryNbrc": "I.C.2 - 2. Noninvasive monitoring",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results",
+        "I.C.12 - 12. Apnea monitoring",
+        "I.C.14 - 14. Overnight pulse oximetry / transcutaneous CO2 monitoring",
+        "I.D.2 - 2. Noninvasive monitoring",
+        "I.D.13 - 13. Apnea monitoring",
+        "I.D.15 - 15. Overnight pulse oximetry / transcutaneous CO2 monitoring",
+        "I.E.7 - 7. Noninvasive monitoring",
+        "II.A.21 - 21. Noninvasive monitoring"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Capnography & Noninvasive Monitoring. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures; A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "CV-01",
+      "title": "Cardiovascular Assessment for the Respiratory Therapist",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-01-cardiovascular-assessment-for-the-respiratory-therapist.html",
+      "coreFocus": "Recognize perfusion, heart failure, edema, JVD, pulses, blood pressure, chest discomfort, and cardiopulmonary findings relevant to respiratory care.",
+      "primaryNbrc": "I.B.2 - 2. Evaluate through palpation",
+      "sharedNbrc": [
+        "I.B.3 - 3. Auscultate to assess the cardiopulmonary system"
+      ],
+      "requiredPracticeAngles": [
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation. NBRC remediation: B. Perform Clinical Assessment"
+    },
+    {
+      "id": "CV-02",
+      "title": "ECG Basics & Rhythm Recognition",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-02-ecg-basics-rhythm-recognition.html",
+      "coreFocus": "Identify rate, rhythm, P waves, QRS, intervals, artifact, and common rhythm patterns that alter respiratory or emergency management.",
+      "primaryNbrc": "I.C.1 - 1. ECG",
+      "sharedNbrc": [
+        "I.A.4 - 4. Imaging study results",
+        "I.D.1 - 1. ECG",
+        "I.E.9 - 9. ECG"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation, Cardiovascular/ACLS. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "CV-03",
+      "title": "Tachyarrhythmias: Stable vs Unstable Decisions",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-03-tachyarrhythmias-stable-vs-unstable-decisions.html",
+      "coreFocus": "Differentiate stable from unstable tachyarrhythmias and recognize when synchronized cardioversion or medication pathways apply.",
+      "primaryNbrc": "I.D.1 - 1. ECG",
+      "sharedNbrc": [
+        "III.H.9 - 9. Cardioversion"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation, Pharmacology. NBRC remediation: D. Evaluate Procedure Results; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "CV-04",
+      "title": "Bradycardia, Heart Block & Pacing",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-04-bradycardia-heart-block-pacing.html",
+      "coreFocus": "Recognize symptomatic bradycardia and major heart blocks and understand atropine, transcutaneous pacing, and escalation concepts.",
+      "primaryNbrc": "I.D.1 - 1. ECG",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "CV-05",
+      "title": "Cardiac Arrest Rhythms & Defibrillation",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-05-cardiac-arrest-rhythms-defibrillation.html",
+      "coreFocus": "Distinguish shockable VF/pVT from nonshockable PEA/asystole and apply current defibrillation concepts and energy selection.",
+      "primaryNbrc": "II.A.8 - 8. Resuscitation equipment",
+      "sharedNbrc": [
+        "III.G.1 - 1. Emergency"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation, Cardiovascular/ACLS. NBRC remediation: A. Troubleshoot Devices During and After Assembling; G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "CV-06",
+      "title": "ACLS Medications & Reversible Causes",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-06-acls-medications-reversible-causes.html",
+      "coreFocus": "Recognize current arrest medications, amiodarone/lidocaine use, epinephrine timing, and reversible causes with emphasis on respiratory contributors.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation, Pharmacology. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "CV-07",
+      "title": "Capnography, Airway & Ventilation During CPR",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-07-capnography-airway-ventilation-during-cpr.html",
+      "coreFocus": "Apply appropriate ventilation and airway strategy during resuscitation and use capnography to assess CPR quality and return of circulation.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [
+        "III.G.2 - 2. Closed-loop communication"
+      ],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation, Mechanical Ventilation, Airway, Quality/Safety. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "CV-08",
+      "title": "Ischemia, Infarction & Respiratory-Care Implications",
+      "topic": "Cardiovascular Assessment, ECG & Resuscitation",
+      "topicCode": "CV",
+      "href": "/RTE/CV/CV-08-ischemia-infarction-respiratory-care-implications.html",
+      "coreFocus": "Recognize ischemia/infarction clues, cardiogenic respiratory consequences, pulmonary edema, oxygen considerations, and when respiratory support is needed.",
+      "primaryNbrc": "I.D.1 - 1. ECG",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Cardiovascular Assessment, ECG & Resuscitation, Oxygen Therapy. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "HEM-01",
+      "title": "Hemodynamic Foundations: Pressure, Flow & Perfusion",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-01-hemodynamic-foundations-pressure-flow-perfusion.html",
+      "coreFocus": "Review preload, afterload, contractility, stroke volume, cardiac output/index, MAP, and the relationship between pressure and tissue perfusion.",
+      "primaryNbrc": "I.D.8 - 8. Hemodynamic parameters",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results",
+        "I.E.11 - 11. Hemodynamic monitoring"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery, Cardiovascular/ACLS, Hemodynamics. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "HEM-02",
+      "title": "Right- and Left-Sided Filling Pressures",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-02-right-and-left-sided-filling-pressures.html",
+      "coreFocus": "Interpret CVP, right-sided pressures, PAP, and wedge pressure while recognizing their limitations as direct measures of volume status.",
+      "primaryNbrc": "I.D.8 - 8. Hemodynamic parameters",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "HEM-03",
+      "title": "Shock Patterns & Hemodynamic Profiles",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-03-shock-patterns-hemodynamic-profiles.html",
+      "coreFocus": "Differentiate hypovolemic, distributive, cardiogenic, and obstructive shock using clinical and hemodynamic patterns.",
+      "primaryNbrc": "I.D.8 - 8. Hemodynamic parameters",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery, Hemodynamics. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "HEM-04",
+      "title": "Pulmonary Hypertension & Right-Ventricular Failure",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-04-pulmonary-hypertension-right-ventricular-failure.html",
+      "coreFocus": "Recognize elevated pulmonary vascular load, RV failure, hemodynamic consequences, oxygenation issues, and supportive strategies.",
+      "primaryNbrc": "I.D.8 - 8. Hemodynamic parameters",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery, Oxygen Therapy, Hemodynamics. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "HEM-06",
+      "title": "Fluid Responsiveness & Dynamic Assessment",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-06-fluid-responsiveness-dynamic-assessment.html",
+      "coreFocus": "Use dynamic indices and clinical response rather than isolated static filling pressures to assess probable benefit from additional fluid.",
+      "primaryNbrc": "I.D.8 - 8. Hemodynamic parameters",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "HEM-07",
+      "title": "Invasive Line Waveforms, Leveling & Troubleshooting",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-07-invasive-line-waveforms-leveling-troubleshooting.html",
+      "coreFocus": "Review arterial and hemodynamic transducer leveling, zeroing, waveform damping, pressure-flush systems, artifact, and implausible readings.",
+      "primaryNbrc": "II.A.23 - 23. Hemodynamic monitors, transducers, and arterial catheters",
+      "sharedNbrc": [
+        "I.A.7 - 7. Trends in monitoring results",
+        "I.D.8 - 8. Hemodynamic parameters",
+        "I.E.11 - 11. Hemodynamic monitoring",
+        "III.H.7 - 7. Arterial or venous catheter insertion"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery, Hemodynamics. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures; A. Troubleshoot Devices During and After Assembling; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "HEM-08",
+      "title": "Positive Pressure, PEEP & Hemodynamic Effects",
+      "topic": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "topicCode": "HEM",
+      "href": "/RTE/HEM/HEM-08-positive-pressure-peep-hemodynamic-effects.html",
+      "coreFocus": "Explain how intrathoracic pressure and PEEP influence venous return, RV/LV loading, blood pressure, and cardiac output.",
+      "primaryNbrc": "I.D.8 - 8. Hemodynamic parameters",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Hemodynamics & Cardiopulmonary Oxygen Delivery, Cardiovascular/ACLS, Hemodynamics. NBRC remediation: D. Evaluate Procedure Results"
+    },
+    {
+      "id": "IMG-01",
+      "title": "Systematic Chest X-Ray Review",
+      "topic": "Chest Imaging & Diagnostic Procedures",
+      "topicCode": "IMG",
+      "href": "/RTE/IMG/IMG-01-systematic-chest-x-ray-review.html",
+      "coreFocus": "Use a consistent approach to image quality, airway, bones/soft tissue, cardiac silhouette, diaphragm, lungs/pleura, and devices.",
+      "primaryNbrc": "I.B.4 - 4. Evaluate a patient's chest radiograph",
+      "sharedNbrc": [
+        "I.A.4 - 4. Imaging study results"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Chest Imaging & Diagnostic Procedures, Airway, Cardiovascular/ACLS, Quality/Safety. NBRC remediation: A. Evaluate Data in the Patient Record; B. Perform Clinical Assessment"
+    },
+    {
+      "id": "IMG-02",
+      "title": "Common Pulmonary Radiographic Patterns",
+      "topic": "Chest Imaging & Diagnostic Procedures",
+      "topicCode": "IMG",
+      "href": "/RTE/IMG/IMG-02-common-pulmonary-radiographic-patterns.html",
+      "coreFocus": "Recognize consolidation, atelectasis, edema, ARDS-like diffuse opacity, hyperinflation, cardiomegaly, shift, and diaphragmatic abnormalities.",
+      "primaryNbrc": "I.B.4 - 4. Evaluate a patient's chest radiograph",
+      "sharedNbrc": [
+        "I.A.4 - 4. Imaging study results"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Chest Imaging & Diagnostic Procedures, ARDS, Imaging. NBRC remediation: A. Evaluate Data in the Patient Record; B. Perform Clinical Assessment"
+    },
+    {
+      "id": "IMG-03",
+      "title": "Pleural & Air-Leak Findings on Imaging",
+      "topic": "Chest Imaging & Diagnostic Procedures",
+      "topicCode": "IMG",
+      "href": "/RTE/IMG/IMG-03-pleural-air-leak-findings-on-imaging.html",
+      "coreFocus": "Recognize pneumothorax, tension features, pleural effusion, hemothorax, subcutaneous emphysema, and related air-leak findings.",
+      "primaryNbrc": "I.B.4 - 4. Evaluate a patient's chest radiograph",
+      "sharedNbrc": [
+        "I.A.4 - 4. Imaging study results"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Chest Imaging & Diagnostic Procedures, Imaging, Pleural/Chest Tube. NBRC remediation: A. Evaluate Data in the Patient Record; B. Perform Clinical Assessment"
+    },
+    {
+      "id": "IMG-04",
+      "title": "Lines, Tubes & Device Position",
+      "topic": "Chest Imaging & Diagnostic Procedures",
+      "topicCode": "IMG",
+      "href": "/RTE/IMG/IMG-04-lines-tubes-device-position.html",
+      "coreFocus": "Assess ETT, tracheostomy, central/feeding tubes, chest tubes, and other common thoracic device positions and malpositions.",
+      "primaryNbrc": "I.B.4 - 4. Evaluate a patient's chest radiograph",
+      "sharedNbrc": [
+        "I.A.4 - 4. Imaging study results"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Chest Imaging & Diagnostic Procedures, Tracheostomy, Pleural/Chest Tube. NBRC remediation: A. Evaluate Data in the Patient Record; B. Perform Clinical Assessment"
+    },
+    {
+      "id": "IMG-05",
+      "title": "CT, CTPA, Ultrasound & V/Q Imaging",
+      "topic": "Chest Imaging & Diagnostic Procedures",
+      "topicCode": "IMG",
+      "href": "/RTE/IMG/IMG-05-ct-ctpa-ultrasound-v-q-imaging.html",
+      "coreFocus": "Recognize the roles of CT/CTPA, lung ultrasound, V/Q scanning, and selected fluoroscopic studies in respiratory diagnosis.",
+      "primaryNbrc": "I.A.4 - 4. Imaging study results",
+      "sharedNbrc": [
+        "I.E.3 - 3. Imaging studies"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Chest Imaging & Diagnostic Procedures, Imaging. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "IMG-06",
+      "title": "Choosing the Next Diagnostic Imaging Study",
+      "topic": "Chest Imaging & Diagnostic Procedures",
+      "topicCode": "IMG",
+      "href": "/RTE/IMG/IMG-06-choosing-the-next-diagnostic-imaging-study.html",
+      "coreFocus": "Match clinical presentation and suspected pathology with an appropriate imaging study while considering urgency and test limitations.",
+      "primaryNbrc": "I.E.3 - 3. Imaging studies",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Chest Imaging & Diagnostic Procedures, Imaging. NBRC remediation: E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "PROC-01",
+      "title": "Bronchoscopy Indications, Preparation & Safety",
+      "topic": "Bronchoscopy & Respiratory Procedures",
+      "topicCode": "PROC",
+      "href": "/RTE/PROC/PROC-01-bronchoscopy-indications-preparation-safety.html",
+      "coreFocus": "Differentiate diagnostic vs therapeutic bronchoscopy, assess readiness/risk, prepare equipment and monitoring, and recognize major contraindications and safety concerns.",
+      "primaryNbrc": "I.E.4 - 4. Bronchoscopy - diagnostic / therapeutic",
+      "sharedNbrc": [
+        "I.E.5 - 5. Bronchoalveolar lavage (BAL)",
+        "II.A.22 - 22. Bronchoscopes",
+        "III.H.2 - 2. Bronchoscopy",
+        "III.H.8 - 8. Moderate sedation"
+      ],
+      "requiredPracticeAngles": [
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Bronchoscopy & Respiratory Procedures, Bronchoscopy/Procedures. NBRC remediation: E. Recommend Diagnostic Procedures; A. Troubleshoot Devices During and After Assembling; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "PROC-02",
+      "title": "Flexible, Rigid & Advanced Bronchoscopy Procedures",
+      "topic": "Bronchoscopy & Respiratory Procedures",
+      "topicCode": "PROC",
+      "href": "/RTE/PROC/PROC-02-flexible-rigid-advanced-bronchoscopy-procedures.html",
+      "coreFocus": "Compare flexible and rigid bronchoscopy and recognize BAL, biopsy, EBUS/TBNA, navigational bronchoscopy, and other advanced procedural concepts.",
+      "primaryNbrc": "III.H.3 - 3. Specialized bronchoscopy (EBUS / ENB)",
+      "sharedNbrc": [
+        "I.E.4 - 4. Bronchoscopy - diagnostic / therapeutic"
+      ],
+      "requiredPracticeAngles": [
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Bronchoscopy & Respiratory Procedures, Bronchoscopy/Procedures. NBRC remediation: E. Recommend Diagnostic Procedures; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "PROC-03",
+      "title": "Respiratory Specimen Collection Procedures",
+      "topic": "Bronchoscopy & Respiratory Procedures",
+      "topicCode": "PROC",
+      "href": "/RTE/PROC/PROC-03-respiratory-specimen-collection-procedures.html",
+      "coreFocus": "Compare sputum induction, endotracheal aspirate, mini-BAL, BAL, biopsy-related samples, and specimen-quality/handling considerations.",
+      "primaryNbrc": "I.C.17 - 17. Sputum induction",
+      "sharedNbrc": [
+        "I.C.24 - 24. Mini-BAL",
+        "I.D.18 - 18. Sputum sample characteristics",
+        "I.D.25 - 25. Mini-BAL",
+        "I.E.5 - 5. Bronchoalveolar lavage (BAL)",
+        "II.B.3 - 3. Proper handling of biohazardous materials"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Bronchoscopy & Respiratory Procedures, Tracheostomy, Quality/Safety. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures; B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "PROC-04",
+      "title": "Bronchoscopy in Mechanically Ventilated Patients",
+      "topic": "Bronchoscopy & Respiratory Procedures",
+      "topicCode": "PROC",
+      "href": "/RTE/PROC/PROC-04-bronchoscopy-in-mechanically-ventilated-patients.html",
+      "coreFocus": "Anticipate increased airway resistance, altered pressures/volumes, oxygenation changes, adapter/circuit issues, and ventilator adjustments during bronchoscopy.",
+      "primaryNbrc": "III.H.2 - 2. Bronchoscopy",
+      "sharedNbrc": [
+        "II.A.22 - 22. Bronchoscopes"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Bronchoscopy & Respiratory Procedures, Mechanical Ventilation, Oxygen Therapy, Airway, Bronchoscopy/Procedures. NBRC remediation: A. Troubleshoot Devices During and After Assembling; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "PROC-05",
+      "title": "Bronchoscopy Complications & Postprocedure Assessment",
+      "topic": "Bronchoscopy & Respiratory Procedures",
+      "topicCode": "PROC",
+      "href": "/RTE/PROC/PROC-05-bronchoscopy-complications-postprocedure-assessment.html",
+      "coreFocus": "Recognize hypoxemia, bronchospasm, bleeding, pneumothorax, sedation effects, fever, and other complications and perform focused postprocedure reassessment.",
+      "primaryNbrc": "III.H.2 - 2. Bronchoscopy",
+      "sharedNbrc": [
+        "III.E.1 - 1. Terminate treatment for severe complication / adverse event",
+        "III.H.8 - 8. Moderate sedation"
+      ],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Bronchoscopy & Respiratory Procedures, Bronchoscopy/Procedures. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "PROC-06",
+      "title": "Brain-Death Apnea Testing",
+      "topic": "Bronchoscopy & Respiratory Procedures",
+      "topicCode": "PROC",
+      "href": "/RTE/PROC/PROC-06-brain-death-apnea-testing.html",
+      "coreFocus": "Review prerequisites, oxygenation, baseline data, observation for respiratory effort, current PaCO2/pH completion criteria, and abort conditions for apnea testing.",
+      "primaryNbrc": "I.C.13 - 13. Apnea test (brain death determination)",
+      "sharedNbrc": [
+        "I.D.14 - 14. Apnea test"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Bronchoscopy & Respiratory Procedures, Oxygen Therapy. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "PLE-01",
+      "title": "Pleural Physiology & Pleural Disorders",
+      "topic": "Pleural Disease, Chest Tubes & Drainage Systems",
+      "topicCode": "PLE",
+      "href": "/RTE/PLE/PLE-01-pleural-physiology-pleural-disorders.html",
+      "coreFocus": "Differentiate pneumothorax, tension pneumothorax, pleural effusion, hemothorax, empyema, chylothorax, and transudative vs exudative processes.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "I.E.13 - 13. Thoracentesis"
+      ],
+      "requiredPracticeAngles": [
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Pleural Disease, Chest Tubes & Drainage Systems, Pleural/Chest Tube. NBRC remediation: E. Recommend Diagnostic Procedures; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PLE-02",
+      "title": "Thoracentesis & Pleural Procedures",
+      "topic": "Pleural Disease, Chest Tubes & Drainage Systems",
+      "topicCode": "PLE",
+      "href": "/RTE/PLE/PLE-02-thoracentesis-pleural-procedures.html",
+      "coreFocus": "Review indications, ultrasound guidance concepts, patient preparation, controlled drainage, monitoring, and complications of pleural procedures.",
+      "primaryNbrc": "III.H.4 - 4. Thoracentesis",
+      "sharedNbrc": [
+        "I.E.13 - 13. Thoracentesis",
+        "III.H.6 - 6. Chest tube insertion"
+      ],
+      "requiredPracticeAngles": [
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Pleural Disease, Chest Tubes & Drainage Systems, Pleural/Chest Tube. NBRC remediation: E. Recommend Diagnostic Procedures; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "PLE-03",
+      "title": "Chest Drainage Systems: How They Work",
+      "topic": "Pleural Disease, Chest Tubes & Drainage Systems",
+      "topicCode": "PLE",
+      "href": "/RTE/PLE/PLE-03-chest-drainage-systems-how-they-work.html",
+      "coreFocus": "Explain collection, water-seal, and suction-control chambers and compare wet and dry drainage-system behavior.",
+      "primaryNbrc": "II.A.20 - 20. Chest drainage system",
+      "sharedNbrc": [
+        "III.H.6 - 6. Chest tube insertion"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Pleural Disease, Chest Tubes & Drainage Systems. NBRC remediation: A. Troubleshoot Devices During and After Assembling; H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "PLE-04",
+      "title": "Interpreting Bubbling, Tidaling & Drainage",
+      "topic": "Pleural Disease, Chest Tubes & Drainage Systems",
+      "topicCode": "PLE",
+      "href": "/RTE/PLE/PLE-04-interpreting-bubbling-tidaling-drainage.html",
+      "coreFocus": "Distinguish expected from abnormal bubbling/tidaling, assess drainage amount/character, and recognize air leak or obstruction clues.",
+      "primaryNbrc": "II.A.20 - 20. Chest drainage system",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Pleural Disease, Chest Tubes & Drainage Systems. NBRC remediation: A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "PLE-05",
+      "title": "Chest Tube Troubleshooting & Emergencies",
+      "topic": "Pleural Disease, Chest Tubes & Drainage Systems",
+      "topicCode": "PLE",
+      "href": "/RTE/PLE/PLE-05-chest-tube-troubleshooting-emergencies.html",
+      "coreFocus": "Respond to kinks, disconnection, accidental removal, loss of water seal, continuous air leak, occlusion, sudden bloody drainage, and tension physiology.",
+      "primaryNbrc": "II.A.20 - 20. Chest drainage system",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action."
+      ],
+      "linkedPathways": "Pleural Disease, Chest Tubes & Drainage Systems, Pleural/Chest Tube. NBRC remediation: A. Troubleshoot Devices During and After Assembling"
+    },
+    {
+      "id": "OBS-01",
+      "title": "Obstructive Physiology & How to Recognize It",
+      "topic": "Obstructive Pulmonary Disease",
+      "topicCode": "OBS",
+      "href": "/RTE/OBS/OBS-01-obstructive-physiology-how-to-recognize-it.html",
+      "coreFocus": "Explain airflow limitation, airway resistance, air trapping, dynamic hyperinflation, and common PFT/imaging/clinical clues of obstructive disease.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Obstructive Pulmonary Disease, Airway, Imaging. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "OBS-02",
+      "title": "COPD: Assessment, Diagnosis & Baseline Management",
+      "topic": "Obstructive Pulmonary Disease",
+      "topicCode": "OBS",
+      "href": "/RTE/OBS/OBS-02-copd-assessment-diagnosis-baseline-management.html",
+      "coreFocus": "Review COPD phenotypes, symptoms, diagnostic confirmation, exacerbation risk, inhaled therapy concepts, prevention, and chronic management priorities.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [
+        "I.A.1 - 1. Patient history"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Obstructive Pulmonary Disease, COPD. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "OBS-03",
+      "title": "COPD Exacerbation: Clinical Assessment & Escalation",
+      "topic": "Obstructive Pulmonary Disease",
+      "topicCode": "OBS",
+      "href": "/RTE/OBS/OBS-03-copd-exacerbation-clinical-assessment-escalation.html",
+      "coreFocus": "Recognize exacerbation severity, evaluate oxygenation/ventilation, identify need for bronchodilation, controlled oxygen, NIV, and escalation while linking to canonical therapy lessons.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Obstructive Pulmonary Disease, COPD, Mechanical Ventilation, NIV/CPAP, Oxygen Therapy. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "OBS-04",
+      "title": "Asthma: Assessment, Severity & Long-Term Control",
+      "topic": "Obstructive Pulmonary Disease",
+      "topicCode": "OBS",
+      "href": "/RTE/OBS/OBS-04-asthma-assessment-severity-long-term-control.html",
+      "coreFocus": "Assess variable airflow obstruction, triggers, symptom control, severity, controller therapy, technique/adherence, and prevention.",
+      "primaryNbrc": "III.F.3 - 3. Apply national or international guidelines",
+      "sharedNbrc": [
+        "I.D.3 - 3. Peak flow",
+        "III.E.3 - 3. Recommendations for pharmacologic interventions",
+        "III.F.2 - 2. Classification of disease severity"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan.",
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "Obstructive Pulmonary Disease, Asthma. NBRC remediation: D. Evaluate Procedure Results; E. Make or Recommend Changes to the Respiratory Care Plan; F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "OBS-05",
+      "title": "Severe Asthma & Status Asthmaticus",
+      "topic": "Obstructive Pulmonary Disease",
+      "topicCode": "OBS",
+      "href": "/RTE/OBS/OBS-05-severe-asthma-status-asthmaticus.html",
+      "coreFocus": "Recognize worsening airflow, fatigue, silent chest, rising PaCO2, severe work of breathing, and need for aggressive bronchodilation and ventilatory escalation.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "I.D.3 - 3. Peak flow"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Obstructive Pulmonary Disease, Asthma, Mechanical Ventilation. NBRC remediation: D. Evaluate Procedure Results; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "OBS-06",
+      "title": "Bronchiectasis & Chronic Secretion Disease",
+      "topic": "Obstructive Pulmonary Disease",
+      "topicCode": "OBS",
+      "href": "/RTE/OBS/OBS-06-bronchiectasis-chronic-secretion-disease.html",
+      "coreFocus": "Review airway dilation, recurrent infection, chronic sputum, secretion clearance, exacerbation patterns, and long-term respiratory management.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "I.D.18 - 18. Sputum sample characteristics"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Obstructive Pulmonary Disease, Bronchiectasis, Airway, Infection. NBRC remediation: D. Evaluate Procedure Results; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "OBS-07",
+      "title": "Cystic Fibrosis: Pulmonary Management & Modern Therapy",
+      "topic": "Obstructive Pulmonary Disease",
+      "topicCode": "OBS",
+      "href": "/RTE/OBS/OBS-07-cystic-fibrosis-pulmonary-management-modern-therapy.html",
+      "coreFocus": "Review CF airway disease, infection, airway clearance, dornase/hypertonic therapy, nutrition context, and CFTR-modulator recognition.",
+      "primaryNbrc": "III.F.3 - 3. Apply national or international guidelines",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "Obstructive Pulmonary Disease, Cystic Fibrosis, Airway, Infection. NBRC remediation: F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "RST-01",
+      "title": "Restrictive Physiology: Intrinsic vs Extrinsic",
+      "topic": "Restrictive, Neuromuscular & Chest-Wall Disease",
+      "topicCode": "RST",
+      "href": "/RTE/RST/RST-01-restrictive-physiology-intrinsic-vs-extrinsic.html",
+      "coreFocus": "Differentiate intrinsic parenchymal restriction from extrapulmonary/chest-wall/neuromuscular restriction using mechanics, PFTs, and clinical context.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Restrictive, Neuromuscular & Chest-Wall Disease. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "RST-02",
+      "title": "Interstitial & Parenchymal Restrictive Disease",
+      "topic": "Restrictive, Neuromuscular & Chest-Wall Disease",
+      "topicCode": "RST",
+      "href": "/RTE/RST/RST-02-interstitial-parenchymal-restrictive-disease.html",
+      "coreFocus": "Review reduced compliance, diffusion impairment, exertional hypoxemia, imaging/PFT patterns, oxygen needs, and progression in parenchymal restrictive disease.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Restrictive, Neuromuscular & Chest-Wall Disease, Oxygen Therapy, Imaging. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "RST-03",
+      "title": "Neuromuscular Respiratory Failure Assessment",
+      "topic": "Restrictive, Neuromuscular & Chest-Wall Disease",
+      "topicCode": "RST",
+      "href": "/RTE/RST/RST-03-neuromuscular-respiratory-failure-assessment.html",
+      "coreFocus": "Use VC, MIP/MEP, cough strength, bulbar status, secretion burden, and trends to detect impending ventilatory pump failure.",
+      "primaryNbrc": "I.C.23 - 23. Respiratory muscle strength testing - MIP, MEP, MVV",
+      "sharedNbrc": [
+        "I.C.3 - 3. Mechanics of spontaneous ventilation",
+        "I.D.4 - 4. Mechanics of spontaneous ventilation",
+        "I.D.24 - 24. Respiratory muscle strength testing - MIP, MEP, MVV"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Restrictive, Neuromuscular & Chest-Wall Disease, Mechanical Ventilation. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "RST-04",
+      "title": "Myasthenia Gravis, Guillain-Barre & ALS",
+      "topic": "Restrictive, Neuromuscular & Chest-Wall Disease",
+      "topicCode": "RST",
+      "href": "/RTE/RST/RST-04-myasthenia-gravis-guillain-barre-als.html",
+      "coreFocus": "Differentiate common neuromuscular patterns, progression, respiratory complications, and monitoring priorities.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Restrictive, Neuromuscular & Chest-Wall Disease. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "RST-05",
+      "title": "NIV, Cough Assistance & Ventilatory Support in Neuromuscular Disease",
+      "topic": "Restrictive, Neuromuscular & Chest-Wall Disease",
+      "topicCode": "RST",
+      "href": "/RTE/RST/RST-05-niv-cough-assistance-ventilatory-support-in-neuromuscular-disease.html",
+      "coreFocus": "Apply disease-specific reasoning for NIV, cough assistance, secretion support, invasive ventilation, and escalation without duplicating device mechanics.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "III.B.4 - 4. Assisted cough",
+        "III.B.6 - 6. Inspiratory muscle training",
+        "III.C.3b - 3b. Noninvasive ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Select and evaluate airway-clearance or lung-expansion therapy.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Restrictive, Neuromuscular & Chest-Wall Disease, Mechanical Ventilation, NIV/CPAP. NBRC remediation: B. Perform Airway Clearance and Lung Expansion Techniques; C. Support Oxygenation and Ventilation; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "RST-06",
+      "title": "Chest-Wall, Obesity & Other Extrapulmonary Restriction",
+      "topic": "Restrictive, Neuromuscular & Chest-Wall Disease",
+      "topicCode": "RST",
+      "href": "/RTE/RST/RST-06-chest-wall-obesity-other-extrapulmonary-restriction.html",
+      "coreFocus": "Recognize kyphoscoliosis, obesity-related mechanics, chest-wall limitation, hypoventilation risk, and respiratory support considerations.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Restrictive, Neuromuscular & Chest-Wall Disease, Mechanical Ventilation. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "INF-01",
+      "title": "Recognizing Pneumonia & Lower Respiratory Infection",
+      "topic": "Pneumonia, Infection & Acute Respiratory Failure",
+      "topicCode": "INF",
+      "href": "/RTE/INF/INF-01-recognizing-pneumonia-lower-respiratory-infection.html",
+      "coreFocus": "Differentiate common clinical, laboratory, imaging, and risk patterns of community, viral, aspiration, and other lower respiratory infections.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [
+        "I.D.18 - 18. Sputum sample characteristics"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Pneumonia, Infection & Acute Respiratory Failure, Imaging, Infection. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "INF-02",
+      "title": "Hospital-Acquired, Ventilator-Associated & Aspiration Infection",
+      "topic": "Pneumonia, Infection & Acute Respiratory Failure",
+      "topicCode": "INF",
+      "href": "/RTE/INF/INF-02-hospital-acquired-ventilator-associated-aspiration-infection.html",
+      "coreFocus": "Recognize HAP/VAP concepts, aspiration risk, prevention priorities, and the distinction between pneumonia diagnoses and ventilator-associated events.",
+      "primaryNbrc": "II.B.5 - 5. Protocols to prevent ventilator-associated events (VAE)",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Pneumonia, Infection & Acute Respiratory Failure, Mechanical Ventilation, Infection. NBRC remediation: B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "INF-03",
+      "title": "Tuberculosis & Airborne Respiratory Infection",
+      "topic": "Pneumonia, Infection & Acute Respiratory Failure",
+      "topicCode": "INF",
+      "href": "/RTE/INF/INF-03-tuberculosis-airborne-respiratory-infection.html",
+      "coreFocus": "Review exposure risk, respiratory assessment, airborne precautions, specimen/testing concepts, and implications for respiratory procedures.",
+      "primaryNbrc": "I.E.1 - 1. Testing for tuberculosis",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Pneumonia, Infection & Acute Respiratory Failure, Infection. NBRC remediation: E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "INF-04",
+      "title": "Acute Hypoxemic, Hypercapnic & Mixed Respiratory Failure",
+      "topic": "Pneumonia, Infection & Acute Respiratory Failure",
+      "topicCode": "INF",
+      "href": "/RTE/INF/INF-04-acute-hypoxemic-hypercapnic-mixed-respiratory-failure.html",
+      "coreFocus": "Classify respiratory failure by physiology and ABG pattern and connect the type of failure to likely causes and needed support.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Pneumonia, Infection & Acute Respiratory Failure. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "INF-05",
+      "title": "Recognizing Sepsis & Respiratory Deterioration",
+      "topic": "Pneumonia, Infection & Acute Respiratory Failure",
+      "topicCode": "INF",
+      "href": "/RTE/INF/INF-05-recognizing-sepsis-respiratory-deterioration.html",
+      "coreFocus": "Identify worsening infection, perfusion abnormalities, lactate/context, shock clues, increased respiratory support needs, and urgent escalation.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Pneumonia, Infection & Acute Respiratory Failure, Infection. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "INF-06",
+      "title": "Choosing Respiratory Support in Acute Respiratory Failure",
+      "topic": "Pneumonia, Infection & Acute Respiratory Failure",
+      "topicCode": "INF",
+      "href": "/RTE/INF/INF-06-choosing-respiratory-support-in-acute-respiratory-failure.html",
+      "coreFocus": "Select and escalate conventional oxygen, HFNC, NIV, or invasive ventilation according to physiology, severity, and trajectory.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "III.C.1 - 1. Minimize hypoxemia"
+      ],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Pneumonia, Infection & Acute Respiratory Failure, Mechanical Ventilation, NIV/CPAP, Oxygen Therapy. NBRC remediation: C. Support Oxygenation and Ventilation; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "ARDS-01",
+      "title": "Recognizing ARDS & Acute Lung Injury Physiology",
+      "topic": "ARDS & Severe Refractory Hypoxemia",
+      "topicCode": "ARDS",
+      "href": "/RTE/ARDS/ARDS-01-recognizing-ards-acute-lung-injury-physiology.html",
+      "coreFocus": "Recognize predisposing insults, noncardiogenic permeability edema, shunt, low compliance, diffuse imaging findings, and current severity concepts.",
+      "primaryNbrc": "III.F.3 - 3. Apply national or international guidelines",
+      "sharedNbrc": [
+        "I.A.8 - 8. Determination of a patient's condition",
+        "III.F.2 - 2. Classification of disease severity"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "ARDS & Severe Refractory Hypoxemia, ARDS, Imaging. NBRC remediation: A. Evaluate Data in the Patient Record; F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "ARDS-02",
+      "title": "Applying Lung-Protective Ventilation in ARDS",
+      "topic": "ARDS & Severe Refractory Hypoxemia",
+      "topicCode": "ARDS",
+      "href": "/RTE/ARDS/ARDS-02-applying-lung-protective-ventilation-in-ards.html",
+      "coreFocus": "Apply PBW-based low tidal volume, pressure limitation, permissive hypercapnia, and repeated reassessment in ARDS while linking to core ventilator mechanics.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "ARDS & Severe Refractory Hypoxemia, ARDS, Mechanical Ventilation. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "ARDS-03",
+      "title": "Prone Positioning & Refractory Hypoxemia",
+      "topic": "ARDS & Severe Refractory Hypoxemia",
+      "topicCode": "ARDS",
+      "href": "/RTE/ARDS/ARDS-03-prone-positioning-refractory-hypoxemia.html",
+      "coreFocus": "Explain why prone positioning can improve severe oxygenation failure and review indications, monitoring, safety, and response assessment.",
+      "primaryNbrc": "III.C.6 - 6. Perform lung recruitment maneuvers",
+      "sharedNbrc": [
+        "III.C.1 - 1. Minimize hypoxemia"
+      ],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "ARDS & Severe Refractory Hypoxemia, Oxygen Therapy. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "ARDS-04",
+      "title": "Escalation & Rescue in Severe ARDS",
+      "topic": "ARDS & Severe Refractory Hypoxemia",
+      "topicCode": "ARDS",
+      "href": "/RTE/ARDS/ARDS-04-escalation-rescue-in-severe-ards.html",
+      "coreFocus": "Recognize when optimized conventional support is failing and connect the patient to rescue strategies such as inhaled vasodilators and ECMO referral.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "ARDS & Severe Refractory Hypoxemia, ARDS. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "SLP-01",
+      "title": "Sleep-Disordered Breathing Fundamentals",
+      "topic": "Sleep-Disordered Breathing",
+      "topicCode": "SLP",
+      "href": "/RTE/SLP/SLP-01-sleep-disordered-breathing-fundamentals.html",
+      "coreFocus": "Differentiate obstructive, central, mixed apnea, hypopnea, and sleep-related hypoventilation and connect each to airway or ventilatory-control physiology.",
+      "primaryNbrc": "I.A.6 - 6. Sleep study results",
+      "sharedNbrc": [
+        "I.E.12 - 12. Sleep studies"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Sleep-Disordered Breathing, Mechanical Ventilation, Airway, Sleep. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "SLP-02",
+      "title": "Polysomnography & Sleep Study Interpretation",
+      "topic": "Sleep-Disordered Breathing",
+      "topicCode": "SLP",
+      "href": "/RTE/SLP/SLP-02-polysomnography-sleep-study-interpretation.html",
+      "coreFocus": "Interpret airflow, effort, SpO2, CO2, sleep events, AHI, and common study findings at the recognition/application level.",
+      "primaryNbrc": "I.A.6 - 6. Sleep study results",
+      "sharedNbrc": [
+        "I.C.12 - 12. Apnea monitoring",
+        "I.C.14 - 14. Overnight pulse oximetry / transcutaneous CO2 monitoring",
+        "I.D.13 - 13. Apnea monitoring",
+        "I.D.15 - 15. Overnight pulse oximetry / transcutaneous CO2 monitoring",
+        "I.E.12 - 12. Sleep studies"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Sleep-Disordered Breathing, Sleep. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "SLP-03",
+      "title": "OSA Treatment & PAP Selection",
+      "topic": "Sleep-Disordered Breathing",
+      "topicCode": "SLP",
+      "href": "/RTE/SLP/SLP-03-osa-treatment-pap-selection.html",
+      "coreFocus": "Select CPAP/APAP and recognize when bilevel or other support may be appropriate for obstructive sleep apnea.",
+      "primaryNbrc": "I.C.15 - 15. CPAP / NPPV titration during sleep",
+      "sharedNbrc": [
+        "I.D.16 - 16. CPAP / NPPV titration during sleep",
+        "III.C.2c - 2c. CPAP by mask or nasal interface"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Sleep-Disordered Breathing, NIV/CPAP, Sleep. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "SLP-04",
+      "title": "Central Sleep Apnea & Sleep-Related Hypoventilation",
+      "topic": "Sleep-Disordered Breathing",
+      "topicCode": "SLP",
+      "href": "/RTE/SLP/SLP-04-central-sleep-apnea-sleep-related-hypoventilation.html",
+      "coreFocus": "Recognize absent respiratory effort, neuromuscular/OHS contributors, backup ventilation needs, and nuanced PAP/ASV concepts.",
+      "primaryNbrc": "I.C.14 - 14. Overnight pulse oximetry / transcutaneous CO2 monitoring",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable."
+      ],
+      "linkedPathways": "Sleep-Disordered Breathing, Mechanical Ventilation, Sleep. NBRC remediation: C. Perform Procedures to Gather Clinical Information"
+    },
+    {
+      "id": "SLP-05",
+      "title": "PAP Titration, Adherence & Troubleshooting",
+      "topic": "Sleep-Disordered Breathing",
+      "topicCode": "SLP",
+      "href": "/RTE/SLP/SLP-05-pap-titration-adherence-troubleshooting.html",
+      "coreFocus": "Address pressure tolerance, residual events, leak, dryness, rainout, aerophagia, skin injury, interface fit, and adherence barriers.",
+      "primaryNbrc": "II.A.4 - 4. CPAP / NPPV with patient interfaces",
+      "sharedNbrc": [
+        "I.C.15 - 15. CPAP / NPPV titration during sleep",
+        "I.D.16 - 16. CPAP / NPPV titration during sleep",
+        "III.I.2 - 2. Patient and family education"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Sleep-Disordered Breathing. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; A. Troubleshoot Devices During and After Assembling; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "NEO-01",
+      "title": "Fetal-to-Neonatal Cardiopulmonary Transition",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-01-fetal-to-neonatal-cardiopulmonary-transition.html",
+      "coreFocus": "Review fetal circulation, placental gas exchange, fetal shunts, pulmonary vascular resistance, first breaths, and post-birth circulatory transition.",
+      "primaryNbrc": "I.A.5 - 5. Maternal and perinatal / neonatal history",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Neonatal. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "NEO-02",
+      "title": "Initial Newborn Assessment & Transition",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-02-initial-newborn-assessment-transition.html",
+      "coreFocus": "Assess gestational age, tone, color, breathing, heart rate, preductal SpO2, temperature, and normal vs abnormal transition.",
+      "primaryNbrc": "I.B.1 - 1. Evaluate through observation or interview",
+      "sharedNbrc": [
+        "I.A.5 - 5. Maternal and perinatal / neonatal history"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care. NBRC remediation: A. Evaluate Data in the Patient Record; B. Perform Clinical Assessment"
+    },
+    {
+      "id": "NEO-03",
+      "title": "Neonatal Resuscitation: Ventilation First",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-03-neonatal-resuscitation-ventilation-first.html",
+      "coreFocus": "Apply the current resuscitation sequence emphasizing effective PPV, heart-rate response, oxygen titration, corrective ventilation, and escalation.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [
+        "II.A.8 - 8. Resuscitation equipment"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Mechanical Ventilation, Oxygen Therapy, Neonatal. NBRC remediation: A. Troubleshoot Devices During and After Assembling; G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "NEO-04",
+      "title": "Neonatal Chest Compressions, Medications & Advanced Resuscitation",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-04-neonatal-chest-compressions-medications-advanced-resuscitation.html",
+      "coreFocus": "Recognize when compressions are indicated after effective ventilation, use the 3:1 approach, and review epinephrine/access concepts.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Mechanical Ventilation, Neonatal, Pharmacology. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "NEO-05",
+      "title": "Respiratory Distress Syndrome & Surfactant Deficiency",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-05-respiratory-distress-syndrome-surfactant-deficiency.html",
+      "coreFocus": "Explain surfactant deficiency, imaging/clinical findings, CPAP/noninvasive support, selective surfactant, and escalation to invasive ventilation.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [
+        "III.D.2 - 2. Endotracheal instillation",
+        "III.E.3 - 3. Recommendations for pharmacologic interventions"
+      ],
+      "requiredPracticeAngles": [
+        "Select, administer, or evaluate respiratory medications and specialty gases.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Mechanical Ventilation, NIV/CPAP, Imaging. NBRC remediation: D. Administer Medications and Specialty Gases; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "NEO-06",
+      "title": "TTN, Meconium Aspiration & Neonatal Pneumonia",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-06-ttn-meconium-aspiration-neonatal-pneumonia.html",
+      "coreFocus": "Differentiate common causes of neonatal respiratory distress by timing, risk factors, clinical findings, imaging, and respiratory-support needs.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Neonatal, Imaging. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "NEO-07",
+      "title": "PPHN & Neonatal Pulmonary Vascular Disease",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-07-pphn-neonatal-pulmonary-vascular-disease.html",
+      "coreFocus": "Recognize persistent pulmonary hypertension, pre/postductal differences, right-to-left shunting, oxygenation/hemodynamic effects, and inhaled vasodilator concepts.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Oxygen Therapy, Neonatal, Hemodynamics. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "NEO-08",
+      "title": "Apnea of Prematurity & Neonatal Respiratory Control",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-08-apnea-of-prematurity-neonatal-respiratory-control.html",
+      "coreFocus": "Differentiate central apnea from other neonatal events and review monitoring, caffeine therapy, and evaluation of secondary causes.",
+      "primaryNbrc": "I.C.12 - 12. Apnea monitoring",
+      "sharedNbrc": [
+        "I.D.13 - 13. Apnea monitoring",
+        "III.E.3 - 3. Recommendations for pharmacologic interventions"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Neonatal. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "NEO-09",
+      "title": "BPD & Chronic Neonatal Lung Disease",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-09-bpd-chronic-neonatal-lung-disease.html",
+      "coreFocus": "Review chronic lung injury, prolonged oxygen/ventilation exposure, ongoing support needs, growth considerations, and long-term respiratory management.",
+      "primaryNbrc": "I.A.8 - 8. Determination of a patient's condition",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Mechanical Ventilation, Oxygen Therapy, Neonatal. NBRC remediation: A. Evaluate Data in the Patient Record"
+    },
+    {
+      "id": "NEO-10",
+      "title": "Neonatal Airway, Ventilation & Equipment",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-10-neonatal-airway-ventilation-equipment.html",
+      "coreFocus": "Review neonatal airway sizing principles, circuits, apparatus dead space, CPAP interfaces, ventilator considerations, and equipment-related safety.",
+      "primaryNbrc": "II.A.11 - 11. Artificial airways and accessories",
+      "sharedNbrc": [
+        "III.C.3a - 3a. Invasive mechanical ventilation",
+        "III.C.3c - 3c. High-frequency ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Mechanical Ventilation, NIV/CPAP, Airway, Neonatal. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "NEO-11",
+      "title": "Neonatal Blood Gases, Monitoring & Oxygenation",
+      "topic": "Neonatal Respiratory Care",
+      "topicCode": "NEO",
+      "href": "/RTE/NEO/NEO-11-neonatal-blood-gases-monitoring-oxygenation.html",
+      "coreFocus": "Interpret arterial/capillary blood gases, preductal monitoring, oxygenation trends, target ranges, and consequences of under- or over-oxygenation.",
+      "primaryNbrc": "I.C.2 - 2. Noninvasive monitoring",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable."
+      ],
+      "linkedPathways": "Neonatal Respiratory Care, Oxygen Therapy, Neonatal. NBRC remediation: C. Perform Procedures to Gather Clinical Information"
+    },
+    {
+      "id": "PED-01",
+      "title": "Pediatric Respiratory Assessment & Early Deterioration",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-01-pediatric-respiratory-assessment-early-deterioration.html",
+      "coreFocus": "Use age-appropriate respiratory rate, work of breathing, retractions, behavior, feeding/speech, mental status, and fatigue to recognize deterioration.",
+      "primaryNbrc": "I.B.1 - 1. Evaluate through observation or interview",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Assess the patient clinically and identify meaningful findings or deterioration."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Pediatric. NBRC remediation: B. Perform Clinical Assessment"
+    },
+    {
+      "id": "PED-02",
+      "title": "Pediatric Airway & Ventilation Differences",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-02-pediatric-airway-ventilation-differences.html",
+      "coreFocus": "Explain pediatric airway size, resistance, oxygen consumption, rapid desaturation, dead-space sensitivity, and airway-tube considerations.",
+      "primaryNbrc": "III.A.3 - 3. Establish and manage the airway",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Mechanical Ventilation, Oxygen Therapy, Airway, Pediatric. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "PED-03",
+      "title": "Bronchiolitis",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-03-bronchiolitis.html",
+      "coreFocus": "Recognize typical bronchiolitis, emphasize supportive care, oxygen/HFNC escalation, hydration, suction needs, and therapies not recommended routinely.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Oxygen Therapy. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PED-04",
+      "title": "Croup, Epiglottitis & Upper-Airway Emergencies",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-04-croup-epiglottitis-upper-airway-emergencies.html",
+      "coreFocus": "Differentiate common upper-airway presentations, recognize stridor severity, use dexamethasone/nebulized epinephrine appropriately, and protect the airway without unnecessary agitation.",
+      "primaryNbrc": "III.A.2 - 2. Recognize a difficult airway",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Airway. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways"
+    },
+    {
+      "id": "PED-05",
+      "title": "Pediatric Asthma & Severe Exacerbation",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-05-pediatric-asthma-severe-exacerbation.html",
+      "coreFocus": "Assess severity, deliver bronchodilator/steroid therapy, recognize fatigue/rising CO2, and escalate respiratory support when pediatric asthma becomes life threatening.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Asthma, Pediatric. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "PED-06",
+      "title": "Foreign Body Aspiration & Pediatric Airway Obstruction",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-06-foreign-body-aspiration-pediatric-airway-obstruction.html",
+      "coreFocus": "Recognize sudden obstruction, asymmetric findings, choking history, and when rigid/flexible bronchoscopy or emergency airway action is required.",
+      "primaryNbrc": "III.H.2 - 2. Bronchoscopy",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prepare for, assist with, and reassess after provider-performed procedures."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Airway, Pediatric, Bronchoscopy/Procedures. NBRC remediation: H. Assist a Physician or Provider in Performing Procedures"
+    },
+    {
+      "id": "PED-07",
+      "title": "Pediatric Oxygen, HFNC, CPAP & NIV",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-07-pediatric-oxygen-hfnc-cpap-niv.html",
+      "coreFocus": "Choose noninvasive respiratory support according to oxygenation vs ventilation needs, work of breathing, age/size, and response.",
+      "primaryNbrc": "III.C.2b - 2b. Heated high-flow devices",
+      "sharedNbrc": [
+        "II.A.3 - 3. Heated high-flow devices",
+        "II.A.4 - 4. CPAP / NPPV with patient interfaces",
+        "III.C.3b - 3b. Noninvasive ventilation"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Mechanical Ventilation, NIV/CPAP, Oxygen Therapy, Pediatric. NBRC remediation: A. Troubleshoot Devices During and After Assembling; C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "PED-08",
+      "title": "Pediatric Mechanical Ventilation & Dead-Space Considerations",
+      "topic": "Pediatric Respiratory Care",
+      "topicCode": "PED",
+      "href": "/RTE/PED/PED-08-pediatric-mechanical-ventilation-dead-space-considerations.html",
+      "coreFocus": "Apply weight-appropriate ventilation while accounting for circuit/compressible volume, apparatus dead space, airway size, and pediatric pressure/volume concerns.",
+      "primaryNbrc": "III.C.3a - 3a. Invasive mechanical ventilation",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Select, initiate, adjust, or reassess support of oxygenation and/or ventilation."
+      ],
+      "linkedPathways": "Pediatric Respiratory Care, Mechanical Ventilation, Airway, Pediatric. NBRC remediation: C. Support Oxygenation and Ventilation"
+    },
+    {
+      "id": "EM-01",
+      "title": "Initial Respiratory Assessment in High-Risk Emergencies",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-01-initial-respiratory-assessment-in-high-risk-emergencies.html",
+      "coreFocus": "Prioritize airway and breathing threats using a rapid primary survey and determine which problem requires immediate respiratory intervention.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [
+        "I.A.8 - 8. Determination of a patient's condition"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure, Airway. NBRC remediation: A. Evaluate Data in the Patient Record; G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "EM-02",
+      "title": "Chest Trauma & Life-Threatening Thoracic Injury",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-02-chest-trauma-life-threatening-thoracic-injury.html",
+      "coreFocus": "Recognize and prioritize tension/open pneumothorax, hemothorax, flail chest, pulmonary contusion, tracheobronchial injury, and diaphragmatic injury.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure, Tracheostomy. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "EM-03",
+      "title": "Airway Trauma & Inhalation Injury",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-03-airway-trauma-inhalation-injury.html",
+      "coreFocus": "Identify facial/neck injury, soot, burns, edema, hoarseness, airway distortion, and signs supporting early airway protection.",
+      "primaryNbrc": "III.A.2 - 2. Recognize a difficult airway",
+      "sharedNbrc": [
+        "III.G.1 - 1. Emergency"
+      ],
+      "requiredPracticeAngles": [
+        "Select or perform actions that maintain airway patency and artificial-airway safety.",
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure, Airway. NBRC remediation: A. Maintain a Patent Airway Including Care of Artificial Airways; G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "EM-04",
+      "title": "Carbon Monoxide & Cyanide Toxicity",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-04-carbon-monoxide-cyanide-toxicity.html",
+      "coreFocus": "Recognize tissue hypoxia despite misleading PaO2/SpO2, use CO-oximetry concepts, and identify oxygen and antidote/escalation priorities.",
+      "primaryNbrc": "I.D.5 - 5. Blood gas analysis / hemoximetry",
+      "sharedNbrc": [
+        "III.G.1 - 1. Emergency"
+      ],
+      "requiredPracticeAngles": [
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure, Oxygen Therapy. NBRC remediation: D. Evaluate Procedure Results; G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "EM-05",
+      "title": "Anaphylaxis & Acute Upper-Airway Compromise",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-05-anaphylaxis-acute-upper-airway-compromise.html",
+      "coreFocus": "Recognize multisystem anaphylaxis, wheeze/stridor/edema, intramuscular epinephrine priority, and need for airway escalation.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure, Airway. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "EM-06",
+      "title": "Overdose, Sedative/Opioid Respiratory Depression & Antidotes",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-06-overdose-sedative-opioid-respiratory-depression-antidotes.html",
+      "coreFocus": "Support ventilation first, recognize opioid vs sedative effects, and correctly associate naloxone and flumazenil with their intended agents and limitations.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure, Mechanical Ventilation. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "EM-07",
+      "title": "Pulmonary Embolism & Acute Obstructive Cardiopulmonary Emergencies",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-07-pulmonary-embolism-acute-obstructive-cardiopulmonary-emergencies.html",
+      "coreFocus": "Recognize PE physiology, hypoxemia/dead space, RV strain, diagnostic clues, and need for urgent cardiopulmonary support.",
+      "primaryNbrc": "I.E.3 - 3. Imaging studies",
+      "sharedNbrc": [
+        "III.G.1 - 1. Emergency"
+      ],
+      "requiredPracticeAngles": [
+        "Decide when an additional diagnostic procedure should be recommended and why.",
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure. NBRC remediation: E. Recommend Diagnostic Procedures; G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "EM-08",
+      "title": "Burns, Smoke Exposure & Respiratory Failure",
+      "topic": "Emergency, Trauma, Burn & Toxic Exposure",
+      "topicCode": "EM",
+      "href": "/RTE/EM/EM-08-burns-smoke-exposure-respiratory-failure.html",
+      "coreFocus": "Integrate inhalation injury, toxic-gas exposure, airway edema risk, pulmonary injury, monitoring, and respiratory-support escalation in burn patients.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Emergency, Trauma, Burn & Toxic Exposure, Airway. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "ALT-01",
+      "title": "Altitude Physiology & Hypoxemia",
+      "topic": "Altitude, Diving & Dysbaric Emergencies",
+      "topicCode": "ALT",
+      "href": "/RTE/ALT/ALT-01-altitude-physiology-hypoxemia.html",
+      "coreFocus": "Explain how lower barometric pressure reduces inspired oxygen tension and affects oxygenation, acclimatization, and supplemental-oxygen needs.",
+      "primaryNbrc": "III.E.2 - 2. Recommendations for treatment / care-plan changes",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Reassess the response and recommend an appropriate change in the respiratory care plan."
+      ],
+      "linkedPathways": "Altitude, Diving & Dysbaric Emergencies, Oxygen Therapy. NBRC remediation: E. Make or Recommend Changes to the Respiratory Care Plan"
+    },
+    {
+      "id": "ALT-02",
+      "title": "High-Altitude Illness",
+      "topic": "Altitude, Diving & Dysbaric Emergencies",
+      "topicCode": "ALT",
+      "href": "/RTE/ALT/ALT-02-high-altitude-illness.html",
+      "coreFocus": "Differentiate acute mountain sickness, HAPE, and HACE and review descent, oxygen, pressure/evacuation, and medication concepts.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Altitude, Diving & Dysbaric Emergencies, Oxygen Therapy, Pharmacology. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "ALT-03",
+      "title": "Diving Physics, Barotrauma & Gas Expansion",
+      "topic": "Altitude, Diving & Dysbaric Emergencies",
+      "topicCode": "ALT",
+      "href": "/RTE/ALT/ALT-03-diving-physics-barotrauma-gas-expansion.html",
+      "coreFocus": "Apply Boyle's law and pressure-volume relationships to ascent/descent injury, pulmonary barotrauma, and trapped-gas emergencies.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Altitude, Diving & Dysbaric Emergencies. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "ALT-04",
+      "title": "Decompression Sickness & Arterial Gas Embolism",
+      "topic": "Altitude, Diving & Dysbaric Emergencies",
+      "topicCode": "ALT",
+      "href": "/RTE/ALT/ALT-04-decompression-sickness-arterial-gas-embolism.html",
+      "coreFocus": "Differentiate decompression sickness from arterial gas embolism by mechanism and presentation and recognize oxygen/hyperbaric referral priorities.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Altitude, Diving & Dysbaric Emergencies, Oxygen Therapy. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "TRN-01",
+      "title": "Preparing a Respiratory Patient for Transport",
+      "topic": "Transport, Disaster & Emergency Equipment",
+      "topicCode": "TRN",
+      "href": "/RTE/TRN/TRN-01-preparing-a-respiratory-patient-for-transport.html",
+      "coreFocus": "Assess stability, airway, oxygenation, ventilation, monitoring, access, and foreseeable deterioration before moving the patient.",
+      "primaryNbrc": "III.G.3 - 3. Patient transport",
+      "sharedNbrc": [
+        "III.G.2 - 2. Closed-loop communication"
+      ],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Transport, Disaster & Emergency Equipment, Mechanical Ventilation, Oxygen Therapy, Airway. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "TRN-02",
+      "title": "Transport Oxygen, Cylinders & Power Planning",
+      "topic": "Transport, Disaster & Emergency Equipment",
+      "topicCode": "TRN",
+      "href": "/RTE/TRN/TRN-02-transport-oxygen-cylinders-power-planning.html",
+      "coreFocus": "Calculate oxygen duration, reserve and battery needs and confirm adequate backup supplies before transport.",
+      "primaryNbrc": "III.G.3 - 3. Patient transport",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Transport, Disaster & Emergency Equipment, Oxygen Therapy. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "TRN-03",
+      "title": "Transport Ventilators & Emergency Respiratory Equipment",
+      "topic": "Transport, Disaster & Emergency Equipment",
+      "topicCode": "TRN",
+      "href": "/RTE/TRN/TRN-03-transport-ventilators-emergency-respiratory-equipment.html",
+      "coreFocus": "Prepare transport ventilators, BVM, suction, airway devices, monitors, circuits, and alarm/backup equipment for safe transfer.",
+      "primaryNbrc": "III.G.3 - 3. Patient transport",
+      "sharedNbrc": [
+        "II.A.8 - 8. Resuscitation equipment"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Transport, Disaster & Emergency Equipment, Mechanical Ventilation, Airway. NBRC remediation: A. Troubleshoot Devices During and After Assembling; G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "TRN-04",
+      "title": "Neonatal/Pediatric & High-Risk Transport",
+      "topic": "Transport, Disaster & Emergency Equipment",
+      "topicCode": "TRN",
+      "href": "/RTE/TRN/TRN-04-neonatal-pediatric-high-risk-transport.html",
+      "coreFocus": "Account for size-specific equipment, thermoregulation, dead space, oxygenation/ventilation needs, and instability during specialized transport.",
+      "primaryNbrc": "III.G.3 - 3. Patient transport",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Transport, Disaster & Emergency Equipment, Mechanical Ventilation, Oxygen Therapy, Neonatal, Pediatric. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "TRN-05",
+      "title": "Disaster Response, Triage & Limited Resources",
+      "topic": "Transport, Disaster & Emergency Equipment",
+      "topicCode": "TRN",
+      "href": "/RTE/TRN/TRN-05-disaster-response-triage-limited-resources.html",
+      "coreFocus": "Apply respiratory-care priorities, triage concepts, equipment/resource allocation, oxygen conservation, and safety when resources are constrained.",
+      "primaryNbrc": "III.G.1 - 1. Emergency",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Transport, Disaster & Emergency Equipment, Oxygen Therapy. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "HOME-01",
+      "title": "Assessing the Home Respiratory-Care Environment",
+      "topic": "Home Respiratory Care",
+      "topicCode": "HOME",
+      "href": "/RTE/HOME/HOME-01-assessing-the-home-respiratory-care-environment.html",
+      "coreFocus": "Evaluate physical environment, mobility, electricity, smoking/fire risk, caregiver ability, storage, emergency access, and barriers to safe home therapy.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Home Respiratory Care, Home Care. NBRC remediation: I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "HOME-02",
+      "title": "Home PAP, Aerosol & Airway-Clearance Equipment",
+      "topic": "Home Respiratory Care",
+      "topicCode": "HOME",
+      "href": "/RTE/HOME/HOME-02-home-pap-aerosol-airway-clearance-equipment.html",
+      "coreFocus": "Review setup, cleaning, troubleshooting, adherence, replacement/maintenance, and safe use of common respiratory devices in the home.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Home Respiratory Care, Airway, Home Care. NBRC remediation: I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "HOME-03",
+      "title": "Home Ventilation & Tracheostomy Care",
+      "topic": "Home Respiratory Care",
+      "topicCode": "HOME",
+      "href": "/RTE/HOME/HOME-03-home-ventilation-tracheostomy-care.html",
+      "coreFocus": "Assess caregiver competency for ventilation, alarms, suction, humidification, airway emergencies, backup ventilation, and tracheostomy care.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Home Respiratory Care, Mechanical Ventilation, Airway, Tracheostomy, Home Care. NBRC remediation: I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "HOME-04",
+      "title": "Emergency Planning for Home Respiratory Equipment",
+      "topic": "Home Respiratory Care",
+      "topicCode": "HOME",
+      "href": "/RTE/HOME/HOME-04-emergency-planning-for-home-respiratory-equipment.html",
+      "coreFocus": "Create practical plans for power loss, oxygen/device failure, airway emergencies, symptom worsening, backup equipment, and when to call emergency services.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Home Respiratory Care, Oxygen Therapy, Airway, Home Care. NBRC remediation: I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "HOME-05",
+      "title": "Reassessment, Follow-Up & Transition of Care",
+      "topic": "Home Respiratory Care",
+      "topicCode": "HOME",
+      "href": "/RTE/HOME/HOME-05-reassessment-follow-up-transition-of-care.html",
+      "coreFocus": "Reevaluate oxygen and device needs after discharge, identify adherence or equipment problems, and coordinate changes as the patient's condition evolves.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [
+        "I.A.1 - 1. Patient history"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Home Respiratory Care, Oxygen Therapy. NBRC remediation: A. Evaluate Data in the Patient Record; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "REHAB-01",
+      "title": "Pulmonary Rehabilitation: Who Benefits & What It Includes",
+      "topic": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management",
+      "topicCode": "REHAB",
+      "href": "/RTE/REHAB/REHAB-01-pulmonary-rehabilitation-who-benefits-what-it-includes.html",
+      "coreFocus": "Review exercise training, education, symptom management, behavior change, multidisciplinary support, and common candidates for pulmonary rehabilitation.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [
+        "III.B.6 - 6. Inspiratory muscle training"
+      ],
+      "requiredPracticeAngles": [
+        "Select and evaluate airway-clearance or lung-expansion therapy.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management, Rehabilitation. NBRC remediation: B. Perform Airway Clearance and Lung Expansion Techniques; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "REHAB-02",
+      "title": "Exercise Assessment & Monitoring",
+      "topic": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management",
+      "topicCode": "REHAB",
+      "href": "/RTE/REHAB/REHAB-02-exercise-assessment-monitoring.html",
+      "coreFocus": "Use 6-minute walk testing, dyspnea, SpO2, heart rate, blood pressure, symptoms, and oxygen response to assess activity tolerance safely.",
+      "primaryNbrc": "I.C.18 - 18. 6-minute walk test",
+      "sharedNbrc": [
+        "I.C.6 - 6. Oxygen titration with exercise",
+        "I.D.6 - 6. Oxygen titration with exercise",
+        "I.D.19 - 19. 6-minute walk test"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically."
+      ],
+      "linkedPathways": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management, Oxygen Therapy. NBRC remediation: C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results"
+    },
+    {
+      "id": "REHAB-03",
+      "title": "Energy Conservation, Breathing Strategies & Daily Function",
+      "topic": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management",
+      "topicCode": "REHAB",
+      "href": "/RTE/REHAB/REHAB-03-energy-conservation-breathing-strategies-daily-function.html",
+      "coreFocus": "Teach pacing, task modification, pursed-lip breathing, recovery breathing, ADL strategies, and practical energy conservation.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management, Education/Communication. NBRC remediation: I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "REHAB-04",
+      "title": "Smoking & Vaping Cessation",
+      "topic": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management",
+      "topicCode": "REHAB",
+      "href": "/RTE/REHAB/REHAB-04-smoking-vaping-cessation.html",
+      "coreFocus": "Use evidence-based counseling, nicotine-replacement/medication recognition, relapse support, and repeated follow-up while avoiding unsupported claims for e-cigarettes as cessation therapy.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [
+        "III.F.3 - 3. Apply national or international guidelines"
+      ],
+      "requiredPracticeAngles": [
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management, Pharmacology. NBRC remediation: F. Use Evidence-Based Practice; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "REHAB-05",
+      "title": "Chronic Disease Self-Management & Exacerbation Prevention",
+      "topic": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management",
+      "topicCode": "REHAB",
+      "href": "/RTE/REHAB/REHAB-05-chronic-disease-self-management-exacerbation-prevention.html",
+      "coreFocus": "Support action plans, vaccination, adherence, symptom recognition, trigger avoidance, follow-up, and early response to worsening chronic respiratory disease.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management. NBRC remediation: I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "EDU-01",
+      "title": "Assessing Learning Needs & Barriers",
+      "topic": "Patient/Family Education & Communication",
+      "topicCode": "EDU",
+      "href": "/RTE/EDU/EDU-01-assessing-learning-needs-barriers.html",
+      "coreFocus": "Identify literacy, language, sensory, cognitive, cultural, readiness, access, and caregiver barriers before teaching.",
+      "primaryNbrc": "I.B.1 - 1. Evaluate through observation or interview",
+      "sharedNbrc": [
+        "III.I.2 - 2. Patient and family education"
+      ],
+      "requiredPracticeAngles": [
+        "Assess the patient clinically and identify meaningful findings or deterioration.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Patient/Family Education & Communication, Education/Communication. NBRC remediation: B. Perform Clinical Assessment; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "EDU-02",
+      "title": "Teaching Effectively: Teach-Back & Return Demonstration",
+      "topic": "Patient/Family Education & Communication",
+      "topicCode": "EDU",
+      "href": "/RTE/EDU/EDU-02-teaching-effectively-teach-back-return-demonstration.html",
+      "coreFocus": "Use plain language, demonstration, teach-back, return demonstration, correction, reinforcement, and documentation to verify learning.",
+      "primaryNbrc": "III.I.2 - 2. Patient and family education",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Patient/Family Education & Communication, Education/Communication. NBRC remediation: I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "EDU-03",
+      "title": "Clinical Communication, Handoffs & Escalation",
+      "topic": "Patient/Family Education & Communication",
+      "topicCode": "EDU",
+      "href": "/RTE/EDU/EDU-03-clinical-communication-handoffs-escalation.html",
+      "coreFocus": "Use concise structured handoffs, closed-loop communication, escalation of deterioration, and clear interprofessional communication.",
+      "primaryNbrc": "III.I.1 - 1. Interdisciplinary team",
+      "sharedNbrc": [
+        "III.G.2 - 2. Closed-loop communication",
+        "III.G.4 - 4. Debriefing following adverse patient events",
+        "III.H.10 - 10. Withdrawal of life support"
+      ],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations.",
+        "Prepare for, assist with, and reassess after provider-performed procedures.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Patient/Family Education & Communication. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations; H. Assist a Physician or Provider in Performing Procedures; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "EDU-04",
+      "title": "Trauma-Informed, Culturally Responsive & Patient-Centered Communication",
+      "topic": "Patient/Family Education & Communication",
+      "topicCode": "EDU",
+      "href": "/RTE/EDU/EDU-04-trauma-informed-culturally-responsive-patient-centered-communication.html",
+      "coreFocus": "Use interpreters appropriately, respect patient preferences, avoid assumptions, support shared decisions, and communicate in a psychologically safe manner.",
+      "primaryNbrc": "III.I.1 - 1. Interdisciplinary team",
+      "sharedNbrc": [
+        "III.H.10 - 10. Withdrawal of life support"
+      ],
+      "requiredPracticeAngles": [
+        "Prepare for, assist with, and reassess after provider-performed procedures.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Patient/Family Education & Communication. NBRC remediation: H. Assist a Physician or Provider in Performing Procedures; I. Interact with Team Members, Patients, and Families"
+    },
+    {
+      "id": "IPC-01",
+      "title": "Standard Precautions, Transmission-Based Precautions & PPE",
+      "topic": "Infection Prevention, Equipment Processing & Safety",
+      "topicCode": "IPC",
+      "href": "/RTE/IPC/IPC-01-standard-precautions-transmission-based-precautions-ppe.html",
+      "coreFocus": "Select standard, contact, droplet, or airborne precautions and appropriate PPE according to exposure risk and respiratory procedure.",
+      "primaryNbrc": "II.B.1 - 1. Infection prevention / control policies and procedures",
+      "sharedNbrc": [
+        "II.B.3 - 3. Proper handling of biohazardous materials"
+      ],
+      "requiredPracticeAngles": [
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Infection Prevention, Equipment Processing & Safety. NBRC remediation: B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "IPC-02",
+      "title": "Cleaning, Disinfection & Sterilization",
+      "topic": "Infection Prevention, Equipment Processing & Safety",
+      "topicCode": "IPC",
+      "href": "/RTE/IPC/IPC-02-cleaning-disinfection-sterilization.html",
+      "coreFocus": "Differentiate cleaning, high-level disinfection, and sterilization using critical/semicritical/noncritical device classification and manufacturer instructions.",
+      "primaryNbrc": "II.B.2 - 2. Disinfection policies and procedures",
+      "sharedNbrc": [
+        "II.B.3 - 3. Proper handling of biohazardous materials"
+      ],
+      "requiredPracticeAngles": [
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Infection Prevention, Equipment Processing & Safety, Infection, Infection Prevention. NBRC remediation: B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "IPC-03",
+      "title": "Bronchoscope & Respiratory Equipment Reprocessing",
+      "topic": "Infection Prevention, Equipment Processing & Safety",
+      "topicCode": "IPC",
+      "href": "/RTE/IPC/IPC-03-bronchoscope-respiratory-equipment-reprocessing.html",
+      "coreFocus": "Apply the sequence of cleaning before high-level disinfection, channel processing, rinsing/drying/storage, documentation, and competency safeguards.",
+      "primaryNbrc": "II.B.2 - 2. Disinfection policies and procedures",
+      "sharedNbrc": [
+        "II.A.22 - 22. Bronchoscopes"
+      ],
+      "requiredPracticeAngles": [
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Infection Prevention, Equipment Processing & Safety, ARDS, Bronchoscopy/Procedures, Infection, Infection Prevention. NBRC remediation: A. Troubleshoot Devices During and After Assembling; B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "IPC-04",
+      "title": "Preventing Ventilator-Associated & Device-Associated Infection",
+      "topic": "Infection Prevention, Equipment Processing & Safety",
+      "topicCode": "IPC",
+      "href": "/RTE/IPC/IPC-04-preventing-ventilator-associated-device-associated-infection.html",
+      "coreFocus": "Review hand hygiene, airway/device practices, circuit/condensate handling, unnecessary breaks, and infection-prevention measures relevant to respiratory equipment.",
+      "primaryNbrc": "II.B.5 - 5. Protocols to prevent ventilator-associated events (VAE)",
+      "sharedNbrc": [
+        "II.B.1 - 1. Infection prevention / control policies and procedures"
+      ],
+      "requiredPracticeAngles": [
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Infection Prevention, Equipment Processing & Safety, Mechanical Ventilation, Airway, Infection. NBRC remediation: B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "QC-01",
+      "title": "Quality Control, Calibration & Verification Fundamentals",
+      "topic": "Quality Control, Calibration & Equipment Performance",
+      "topicCode": "QC",
+      "href": "/RTE/QC/QC-01-quality-control-calibration-verification-fundamentals.html",
+      "coreFocus": "Differentiate accuracy, precision, bias, calibration, calibration verification, QC, QA, and when a measurement system should be questioned.",
+      "primaryNbrc": "II.B.4 - 4. Quality control procedures",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Quality Control, Calibration & Equipment Performance, Quality/Safety. NBRC remediation: B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "QC-02",
+      "title": "Analyzer QC: Blood Gas, CO-Oximetry & Gas Measurement",
+      "topic": "Quality Control, Calibration & Equipment Performance",
+      "topicCode": "QC",
+      "href": "/RTE/QC/QC-02-analyzer-qc-blood-gas-co-oximetry-gas-measurement.html",
+      "coreFocus": "Review controls, analyzer verification, implausible values, calibration problems, sample/system checks, and when testing should be repeated or stopped.",
+      "primaryNbrc": "II.B.4 - 4. Quality control procedures",
+      "sharedNbrc": [
+        "I.C.5 - 5. Blood gas analysis / hemoximetry",
+        "II.A.2 - 2. Medical gas delivery / clinical analyzing devices",
+        "II.A.13 - 13. Blood analyzers"
+      ],
+      "requiredPracticeAngles": [
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Recognize setup/device problems and choose the safest troubleshooting action.",
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Quality Control, Calibration & Equipment Performance. NBRC remediation: C. Perform Procedures to Gather Clinical Information; A. Troubleshoot Devices During and After Assembling; B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "QC-03",
+      "title": "Levey-Jennings, Trends, Shifts & QC Failure",
+      "topic": "Quality Control, Calibration & Equipment Performance",
+      "topicCode": "QC",
+      "href": "/RTE/QC/QC-03-levey-jennings-trends-shifts-qc-failure.html",
+      "coreFocus": "Interpret control-chart patterns including random error, shifts, trends, and outliers and decide when investigation is required.",
+      "primaryNbrc": "II.B.4 - 4. Quality control procedures",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Apply infection prevention, safety, quality-control, or equipment-processing standards."
+      ],
+      "linkedPathways": "Quality Control, Calibration & Equipment Performance. NBRC remediation: B. Infection Prevention / Control, Safety, and Quality Assurance"
+    },
+    {
+      "id": "LAB-01",
+      "title": "CBC & Oxygen-Carrying Capacity",
+      "topic": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "topicCode": "LAB",
+      "href": "/RTE/LAB/LAB-01-cbc-oxygen-carrying-capacity.html",
+      "coreFocus": "Interpret hemoglobin/hematocrit/RBC, WBC/differential, and platelets and connect abnormalities to oxygen content, infection, bleeding risk, and respiratory care.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.E.2 - 2. Laboratory tests"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Laboratory Data & Relevant Nonrespiratory Findings, Oxygen Therapy, Infection. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "LAB-02",
+      "title": "Electrolytes, Renal Function & Respiratory Implications",
+      "topic": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "topicCode": "LAB",
+      "href": "/RTE/LAB/LAB-02-electrolytes-renal-function-respiratory-implications.html",
+      "coreFocus": "Recognize Na, K, Mg, phosphate, BUN/creatinine, and renal-function abnormalities that affect muscle function, arrhythmia risk, fluid balance, and respiratory treatment.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.E.2 - 2. Laboratory tests"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Laboratory Data & Relevant Nonrespiratory Findings. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "LAB-03",
+      "title": "Glucose, Lactate & Metabolic Stress",
+      "topic": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "topicCode": "LAB",
+      "href": "/RTE/LAB/LAB-03-glucose-lactate-metabolic-stress.html",
+      "coreFocus": "Interpret hyper/hypoglycemia and lactate in context and recognize metabolic acidosis, DKA, shock, and systemic stress patterns relevant to breathing.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.E.2 - 2. Laboratory tests"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Laboratory Data & Relevant Nonrespiratory Findings. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "LAB-04",
+      "title": "Coagulation & Procedure-Related Bleeding Risk",
+      "topic": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "topicCode": "LAB",
+      "href": "/RTE/LAB/LAB-04-coagulation-procedure-related-bleeding-risk.html",
+      "coreFocus": "Interpret platelets, PT/INR, aPTT and related data before invasive respiratory procedures and when evaluating bleeding complications.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.E.2 - 2. Laboratory tests"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Laboratory Data & Relevant Nonrespiratory Findings. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "LAB-05",
+      "title": "Cardiac Biomarkers & Cardiopulmonary Interpretation",
+      "topic": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "topicCode": "LAB",
+      "href": "/RTE/LAB/LAB-05-cardiac-biomarkers-cardiopulmonary-interpretation.html",
+      "coreFocus": "Recognize troponin and BNP/NT-proBNP and use them as contextual data rather than standalone diagnoses in cardiopulmonary assessment.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.E.2 - 2. Laboratory tests"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Laboratory Data & Relevant Nonrespiratory Findings, Cardiovascular/ACLS. NBRC remediation: A. Evaluate Data in the Patient Record; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "LAB-06",
+      "title": "Microbiology, Pathogen Testing & Susceptibility Results",
+      "topic": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "topicCode": "LAB",
+      "href": "/RTE/LAB/LAB-06-microbiology-pathogen-testing-susceptibility-results.html",
+      "coreFocus": "Interpret Gram stain, culture, sensitivity, viral/molecular testing, AFB/TB studies, and specimen-quality clues relevant to respiratory infection.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.D.25 - 25. Mini-BAL",
+        "I.E.1 - 1. Testing for tuberculosis",
+        "I.E.2 - 2. Laboratory tests"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Laboratory Data & Relevant Nonrespiratory Findings, Infection, Quality/Safety. NBRC remediation: A. Evaluate Data in the Patient Record; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "LAB-07",
+      "title": "Dyshemoglobins & Specialty Blood Tests",
+      "topic": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "topicCode": "LAB",
+      "href": "/RTE/LAB/LAB-07-dyshemoglobins-specialty-blood-tests.html",
+      "coreFocus": "Interpret COHb, MetHb, selected immune markers such as IgE, and other specialty tests that alter respiratory assessment or therapy.",
+      "primaryNbrc": "I.A.2 - 2. Laboratory results",
+      "sharedNbrc": [
+        "I.C.5 - 5. Blood gas analysis / hemoximetry",
+        "I.D.5 - 5. Blood gas analysis / hemoximetry",
+        "I.E.2 - 2. Laboratory tests"
+      ],
+      "requiredPracticeAngles": [
+        "Evaluate chart/history/laboratory/imaging/monitoring data before acting.",
+        "Gather the required clinical information correctly, including procedure technique or measurement when applicable.",
+        "Interpret procedure or monitoring results and determine what they mean clinically.",
+        "Decide when an additional diagnostic procedure should be recommended and why."
+      ],
+      "linkedPathways": "Laboratory Data & Relevant Nonrespiratory Findings. NBRC remediation: A. Evaluate Data in the Patient Record; C. Perform Procedures to Gather Clinical Information; D. Evaluate Procedure Results; E. Recommend Diagnostic Procedures"
+    },
+    {
+      "id": "QEP-01",
+      "title": "Evidence-Based Respiratory Care & Guideline Use",
+      "topic": "Respiratory Care Quality, Protocols & Departmental Practice",
+      "topicCode": "QEP",
+      "href": "/RTE/QEP/QEP-01-evidence-based-respiratory-care-guideline-use.html",
+      "coreFocus": "Understand evidence hierarchy, guideline recommendations, applicability, contraindications, and how evidence informs patient-specific respiratory decisions.",
+      "primaryNbrc": "III.F.3 - 3. Apply national or international guidelines",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "Respiratory Care Quality, Protocols & Departmental Practice. NBRC remediation: F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "QEP-02",
+      "title": "Respiratory Care Protocols",
+      "topic": "Respiratory Care Quality, Protocols & Departmental Practice",
+      "topicCode": "QEP",
+      "href": "/RTE/QEP/QEP-02-respiratory-care-protocols.html",
+      "coreFocus": "Apply RT-driven oxygen, aerosol, airway-clearance, and ventilator-liberation protocols while recognizing protocol limits and need for escalation.",
+      "primaryNbrc": "III.F.1 - 1. Respiratory-driven protocols",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "Respiratory Care Quality, Protocols & Departmental Practice, Mechanical Ventilation, Oxygen Therapy, Airway. NBRC remediation: F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "QEP-03",
+      "title": "Disease Severity Tools & Clinical Pathways",
+      "topic": "Respiratory Care Quality, Protocols & Departmental Practice",
+      "topicCode": "QEP",
+      "href": "/RTE/QEP/QEP-03-disease-severity-tools-clinical-pathways.html",
+      "coreFocus": "Use severity frameworks and structured pathways to support consistent assessment, intervention, and escalation without replacing clinical judgment.",
+      "primaryNbrc": "III.F.2 - 2. Classification of disease severity",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Apply evidence, guidelines, protocols, or severity frameworks appropriately."
+      ],
+      "linkedPathways": "Respiratory Care Quality, Protocols & Departmental Practice. NBRC remediation: F. Use Evidence-Based Practice"
+    },
+    {
+      "id": "QEP-04",
+      "title": "Quality Improvement, Safety Events & Root-Cause Thinking",
+      "topic": "Respiratory Care Quality, Protocols & Departmental Practice",
+      "topicCode": "QEP",
+      "href": "/RTE/QEP/QEP-04-quality-improvement-safety-events-root-cause-thinking.html",
+      "coreFocus": "Differentiate QI, QA, and QC and use event review, near misses, root-cause analysis, metrics, and systems thinking to improve respiratory care.",
+      "primaryNbrc": "III.G.4 - 4. Debriefing following adverse patient events",
+      "sharedNbrc": [],
+      "requiredPracticeAngles": [
+        "Prioritize immediate respiratory actions in high-risk or emergency situations."
+      ],
+      "linkedPathways": "Respiratory Care Quality, Protocols & Departmental Practice, Quality/Safety. NBRC remediation: G. Provide Respiratory Care in High-Risk Situations"
+    },
+    {
+      "id": "QEP-05",
+      "title": "Documentation, Scope & Professional Accountability",
+      "topic": "Respiratory Care Quality, Protocols & Departmental Practice",
+      "topicCode": "QEP",
+      "href": "/RTE/QEP/QEP-05-documentation-scope-professional-accountability.html",
+      "coreFocus": "Apply accurate documentation, scope-of-practice awareness, protocol authority, escalation, ethics, and professional accountability to respiratory-care decisions.",
+      "primaryNbrc": "III.I.1 - 1. Interdisciplinary team",
+      "sharedNbrc": [
+        "III.H.10 - 10. Withdrawal of life support"
+      ],
+      "requiredPracticeAngles": [
+        "Prepare for, assist with, and reassess after provider-performed procedures.",
+        "Communicate, educate, hand off, and verify patient/caregiver understanding."
+      ],
+      "linkedPathways": "Respiratory Care Quality, Protocols & Departmental Practice. NBRC remediation: H. Assist a Physician or Provider in Performing Procedures; I. Interact with Team Members, Patients, and Families"
+    }
+  ],
+  "topics": [
+    {
+      "code": "PA",
+      "title": "Patient Assessment & Clinical Data Gathering",
+      "lessonCount": 5
+    },
+    {
+      "code": "ABG",
+      "title": "ABGs, Acid-Base & Ventilation Assessment",
+      "lessonCount": 4
+    },
+    {
+      "code": "GX",
+      "title": "Oxygenation, Gas Exchange & Oxygen Transport",
+      "lessonCount": 6
+    },
+    {
+      "code": "O2",
+      "title": "Oxygen Therapy & Delivery Devices",
+      "lessonCount": 6
+    },
+    {
+      "code": "GAS",
+      "title": "Medical Gas Systems & Specialty Gases",
+      "lessonCount": 4
+    },
+    {
+      "code": "HUM",
+      "title": "Humidification & Aerosol Systems",
+      "lessonCount": 4
+    },
+    {
+      "code": "AER",
+      "title": "Aerosol Drug Delivery & Inhaler Devices",
+      "lessonCount": 5
+    },
+    {
+      "code": "PHARM",
+      "title": "Respiratory Pharmacology",
+      "lessonCount": 5
+    },
+    {
+      "code": "AIR",
+      "title": "Airway Management & Airway Adjuncts",
+      "lessonCount": 5
+    },
+    {
+      "code": "AA",
+      "title": "Artificial Airways & Tracheostomy Management",
+      "lessonCount": 7
+    },
+    {
+      "code": "SUC",
+      "title": "Suctioning & Secretion Management",
+      "lessonCount": 3
+    },
+    {
+      "code": "ACL",
+      "title": "Airway Clearance & Lung Expansion",
+      "lessonCount": 4
+    },
+    {
+      "code": "MVF",
+      "title": "Mechanical Ventilation Fundamentals",
+      "lessonCount": 6
+    },
+    {
+      "code": "MVS",
+      "title": "Ventilator Settings, Timing & Calculations",
+      "lessonCount": 6
+    },
+    {
+      "code": "VGR",
+      "title": "Ventilator Graphics & Patient-Ventilator Interaction",
+      "lessonCount": 6
+    },
+    {
+      "code": "ALM",
+      "title": "Ventilator Alarms & Troubleshooting",
+      "lessonCount": 5
+    },
+    {
+      "code": "DVM",
+      "title": "Disease-Specific Mechanical Ventilation",
+      "lessonCount": 5
+    },
+    {
+      "code": "RES",
+      "title": "Advanced/Rescue Ventilation & Air-Leak Syndromes",
+      "lessonCount": 6
+    },
+    {
+      "code": "NIV",
+      "title": "Noninvasive Ventilation & CPAP",
+      "lessonCount": 6
+    },
+    {
+      "code": "LIB",
+      "title": "Liberation, SBTs & Extubation",
+      "lessonCount": 7
+    },
+    {
+      "code": "PFT",
+      "title": "Pulmonary Function Testing",
+      "lessonCount": 9
+    },
+    {
+      "code": "MON",
+      "title": "Capnography & Noninvasive Monitoring",
+      "lessonCount": 5
+    },
+    {
+      "code": "CV",
+      "title": "Cardiovascular Assessment, ECG & Resuscitation",
+      "lessonCount": 8
+    },
+    {
+      "code": "HEM",
+      "title": "Hemodynamics & Cardiopulmonary Oxygen Delivery",
+      "lessonCount": 7
+    },
+    {
+      "code": "IMG",
+      "title": "Chest Imaging & Diagnostic Procedures",
+      "lessonCount": 6
+    },
+    {
+      "code": "PROC",
+      "title": "Bronchoscopy & Respiratory Procedures",
+      "lessonCount": 6
+    },
+    {
+      "code": "PLE",
+      "title": "Pleural Disease, Chest Tubes & Drainage Systems",
+      "lessonCount": 5
+    },
+    {
+      "code": "OBS",
+      "title": "Obstructive Pulmonary Disease",
+      "lessonCount": 7
+    },
+    {
+      "code": "RST",
+      "title": "Restrictive, Neuromuscular & Chest-Wall Disease",
+      "lessonCount": 6
+    },
+    {
+      "code": "INF",
+      "title": "Pneumonia, Infection & Acute Respiratory Failure",
+      "lessonCount": 6
+    },
+    {
+      "code": "ARDS",
+      "title": "ARDS & Severe Refractory Hypoxemia",
+      "lessonCount": 4
+    },
+    {
+      "code": "SLP",
+      "title": "Sleep-Disordered Breathing",
+      "lessonCount": 5
+    },
+    {
+      "code": "NEO",
+      "title": "Neonatal Respiratory Care",
+      "lessonCount": 11
+    },
+    {
+      "code": "PED",
+      "title": "Pediatric Respiratory Care",
+      "lessonCount": 8
+    },
+    {
+      "code": "EM",
+      "title": "Emergency, Trauma, Burn & Toxic Exposure",
+      "lessonCount": 8
+    },
+    {
+      "code": "ALT",
+      "title": "Altitude, Diving & Dysbaric Emergencies",
+      "lessonCount": 4
+    },
+    {
+      "code": "TRN",
+      "title": "Transport, Disaster & Emergency Equipment",
+      "lessonCount": 5
+    },
+    {
+      "code": "HOME",
+      "title": "Home Respiratory Care",
+      "lessonCount": 5
+    },
+    {
+      "code": "REHAB",
+      "title": "Pulmonary Rehabilitation, Smoking Cessation & Self-Management",
+      "lessonCount": 5
+    },
+    {
+      "code": "EDU",
+      "title": "Patient/Family Education & Communication",
+      "lessonCount": 4
+    },
+    {
+      "code": "IPC",
+      "title": "Infection Prevention, Equipment Processing & Safety",
+      "lessonCount": 4
+    },
+    {
+      "code": "QC",
+      "title": "Quality Control, Calibration & Equipment Performance",
+      "lessonCount": 3
+    },
+    {
+      "code": "LAB",
+      "title": "Laboratory Data & Relevant Nonrespiratory Findings",
+      "lessonCount": 7
+    },
+    {
+      "code": "QEP",
+      "title": "Respiratory Care Quality, Protocols & Departmental Practice",
+      "lessonCount": 5
+    }
+  ]
+};
