@@ -10,7 +10,28 @@
 @media(max-width:800px){.hero{grid-template-columns:1fr}.topics{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.lesson{grid-template-columns:1fr}.lesson a{width:100%}.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:520px){.shell{padding:18px 13px 55px}.card{padding:17px}.topics{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:1rem}.brand small{display:none}.seg{overflow:auto}.seg button{white-space:nowrap}}
 
 .goalProgress{height:9px;background:#e8eef3;border-radius:99px;overflow:hidden;margin:14px 0 8px}.goalProgress>div{height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));width:0}.goalMeta{display:flex;justify-content:space-between;gap:10px;font-size:.78rem;color:var(--muted)}.modal{position:fixed;inset:0;background:rgba(16,42,67,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}.modal.open{display:flex}.modalCard{background:#fff;border-radius:20px;width:min(620px,100%);max-height:90vh;overflow:auto;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.rhythms,.minutes,.days{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid var(--line);background:#fff;color:var(--navy);padding:10px 13px;border-radius:11px;font-weight:750;cursor:pointer}.choice.active{background:var(--teal);border-color:var(--teal);color:#fff}.fieldLabel{font-weight:800;margin:18px 0 8px;display:block}.customMinutes{width:130px;border:1px solid var(--line);border-radius:11px;padding:10px}.validation{font-size:.82rem;color:var(--danger);min-height:1.2em;margin-top:8px}.btn:disabled{opacity:.45;cursor:not-allowed}.outlineGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.outlineMajor{border-top:4px solid var(--teal)}.outlineSections{display:grid;gap:9px;margin-top:14px}.outlineSection{border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;background:#fbfdff}.outlineSection:hover{border-color:#9fcbd1}.outlineSection h3{font-size:.9rem;margin:2px 0 8px}.outlineItem{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}.outlineItem summary{cursor:pointer;font-weight:800}.outlineItem .itemMeta{font-size:.78rem;color:var(--muted);margin:6px 0 10px}.outlineLessons{display:grid;gap:8px;margin-top:10px}.outlineLesson{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px;background:#f5f8fb;border-radius:10px}.outlineLesson a{font-size:.78rem}.viewTabs{display:flex;gap:8px;margin:22px 0 4px}.viewTabs .btn.active{background:var(--navy);color:#fff}.milestoneGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}.milestone{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fbfdff}.milestone h3{font-size:.92rem;margin:4px 0 8px}@media(max-width:800px){.outlineGrid{grid-template-columns:1fr}}@media(max-width:620px){.milestoneGrid{grid-template-columns:1fr}.outlineLesson{align-items:flex-start;flex-direction:column}.outlineLesson a{width:100%}}
-</style>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 <body>
 <header class="topbar"><div class="brand"><div><h1>PulmoLearn</h1><small>RTE Prep</small></div><div id="registryStatus" style="font-size:.78rem;opacity:.8">Loading library…</div></div></header>
@@ -75,4 +96,74 @@
  refreshStats();renderTopics();renderOutline();
 })();
 </script>
+
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
 </body></html>
