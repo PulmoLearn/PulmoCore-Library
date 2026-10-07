@@ -215,7 +215,7 @@
       { key: "equipment", label: "Equipment & Procedures", baseUrl: "/equipment/", description: "Aerosol devices, humidity therapy, airway clearance, lung expansion, oxygen devices, and core bedside procedures." },
       { key: "neonatal-pediatric", label: "Neonatal & Pediatric Respiratory Care", baseUrl: "/Neonatal_Pediatric/", description: "Neonatal transition, stabilization, respiratory support, neonatal disease, pediatric assessment, airway management, ventilation, critical illness, transport, and family-centered care." },
       { key: "calculators", label: "Clinical Calculators", baseUrl: "/calculators/", description: "Interactive respiratory therapy calculators for clinical practice, board preparation, and patient assessment." },
-      { key: "abgcenter", label: "ABG Learning Center", baseUrl: "/abg/", description: "ABG guides, cheat sheets, normal values, practice cases, printable references, and the upcoming 50-case mastery challenge." }
+      { key: "abgcenter", label: "ABG Learning Center", baseUrl: "/abg/", description: "Explore the free ABG interpretation guide, five guided learning Steps, clinical references, printable PDF, and ABG Challenge." }
     ];
 
     let activeCourseGroup = localStorage.getItem("dashboardActiveGroup") || "diseases";
@@ -368,13 +368,8 @@
       { id: "np_2_5", title: "Obstructive, Infectious & Chronic Pulmonary Disorders", category: "Neonatal & Pediatric · Pediatric Pulmonary Disease", time: "55–70 min", level: "Intermediate / Clinical Application", href: "2_5_Obstructive_Infectious_and_Chronic_Pulmonary_Disorders.html", description: "Asthma, bronchiolitis, croup, epiglottitis, pneumonia, cystic fibrosis, bronchopulmonary disorders, chronic respiratory support, and pediatric disease-specific interventions.", courseGroup: "neonatal-pediatric" },
       { id: "np_2_6", title: "Cardiac, Neurologic, Neuromuscular, Shock, Trauma & ECMO", category: "Neonatal & Pediatric · Pediatric Critical Care", time: "65–80 min", level: "Advanced / Critical Care", href: "2_6_Cardiac_Neurologic_Neuromuscular_Shock_Trauma_and_ECMO.html", description: "Congenital heart disease, neurologic and neuromuscular respiratory failure, pediatric shock, trauma, cardiopulmonary emergencies, ECMO concepts, and multidisciplinary respiratory support.", courseGroup: "neonatal-pediatric" },
       { id: "np_2_7", title: "Transport, Home Care, Safety, Family Education & End-of-Life Care", category: "Neonatal & Pediatric · Continuity and Family-Centered Care", time: "45–60 min", level: "Clinical Application", href: "2_7_Transport_Home_Care_Safety_Family_Education_and_End_of_Life_Care.html", description: "Neonatal and pediatric transport, home oxygen and ventilation, equipment safety, caregiver education, discharge planning, emergency preparation, palliative support, and end-of-life care.", courseGroup: "neonatal-pediatric" },
-      { id: "abg_hub", title: "ABG Learning Center", courseGroup: "abgcenter", category: "ABG Learning Center", time: "Self-paced", level: "Beginner to Advanced", href: "index.html", description: "Central hub for ABG interpretation guides, practice cases, quick references, and printable resources." },
-      { id: "abg_cases", title: "ABG Practice Cases", courseGroup: "abgcenter", category: "ABG Practice", time: "5 guided cases", level: "Beginner", href: "case-1.html", description: "Work through guided patient scenarios using pH, PaCO₂, HCO₃⁻, compensation, oxygenation, and final interpretation." },
-      { id: "abg_interpret_guide", title: "How to Interpret an ABG", courseGroup: "abgcenter", category: "ABG Guide", time: "Quick review", level: "Beginner", href: "how-to-interpret-an-abg.html", description: "Learn the repeatable five-step method for interpreting arterial blood gases." },
-      { id: "abg_normal_values", title: "Normal ABG Values", courseGroup: "abgcenter", category: "ABG Reference", time: "Quick reference", level: "Beginner", href: "normal-abg-values.html", description: "Review normal pH, PaCO₂, HCO₃⁻, PaO₂, SaO₂, and oxygenation interpretation ranges." },
-      { id: "abg_cheat_sheet", title: "ABG Cheat Sheet", courseGroup: "abgcenter", category: "ABG Reference", time: "Quick reference", level: "Beginner", href: "abg-cheat-sheet.html", description: "Use quick ABG pattern recognition, compensation clues, oxygenation categories, and common mistakes." },
-      { id: "abg_printable_pdf", title: "Printable ABG Guide", courseGroup: "abgcenter", category: "ABG PDF", time: "Download", level: "Beginner", href: "PulmoLearn_Free_ABG_Interpretation_Guide.pdf", description: "Download the branded PulmoLearn ABG interpretation guide for quick study and review." },
-      { id: "abg_50_challenge", title: "50-Case ABG Mastery Challenge", courseGroup: "abgcenter", category: "Coming Soon", time: "Coming soon", level: "Progression Challenge", href: "#", description: "Coming soon: a progression-based ABG challenge with scoring, streaks, levels, and mastery tracking." },
+      { id: "abg_hub", title: "ABG Learning Center", courseGroup: "abgcenter", category: "Free ABG Learning Center", time: "Self-paced", level: "5 guided Steps + references", href: "index.html", description: "Start with the interpretation guide, work through five guided Steps, review acid-base references, and practice with the ABG Challenge.", isResourceHub: true },
+      { id: "abg_challenge_hub", title: "ABG Challenge", courseGroup: "abgcenter", category: "Interactive ABG Practice", time: "Self-paced", level: "Randomized ABGs + leaderboard", href: "abg-challenge.html", description: "Test your interpretation speed and accuracy with randomized ABGs, practice goals, streaks, and an optional leaderboard.", isResourceHub: true },
 
     ].map(lesson => ({ ...lesson, courseGroup: lesson.courseGroup || "diseases" }));
 
@@ -424,6 +419,15 @@
     }
 
     function lessonCardTemplate(lesson, progress) {
+      if (lesson.isResourceHub) {
+        return `
+        <article class="disease-card" data-status="resource-hub">
+          <div class="disease-header"><div class="disease-title-group"><h3>${lesson.title}</h3><div class="disease-category">${lesson.category}</div></div></div>
+          <p class="disease-description">${lesson.description}</p>
+          <div class="disease-meta"><span class="pill">${lesson.time}</span><span class="pill">${lesson.level}</span></div>
+          <div class="card-actions"><a class="btn btn-primary" href="${resolveLessonHref(lesson)}" target="_blank" rel="noopener noreferrer" aria-label="${lesson.id === 'abg_challenge_hub' ? 'Launch ABG Challenge' : 'Explore ABG Center'} (opens in a new tab)">${lesson.id === 'abg_challenge_hub' ? 'Launch ABG Challenge ↗' : 'Explore ABG Center ↗'}</a></div>
+        </article>`;
+      }
       const item = progress[lesson.id] || { percent: 0, completed: false };
       const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
       const status = getStatus(item);
@@ -466,7 +470,7 @@
           const item = progress[lesson.id] || { percent: 0, completed: false };
           const status = getStatus(item);
           const matchesSearch = [lesson.title, lesson.category, lesson.description].join(" ").toLowerCase().includes(query);
-          const matchesFilter = filter === "all" || status === filter;
+          const matchesFilter = lesson.isResourceHub || filter === "all" || status === filter;
           return matchesSearch && matchesFilter;
         });
         const cards = filteredLessons.length
@@ -480,9 +484,10 @@
     }
 
     function updateSummary(progress) {
-      const total = lessons.length;
+      const trackedLessons = lessons.filter(lesson => !lesson.isResourceHub);
+      const total = trackedLessons.length;
       let completed = 0, inProgress = 0, percentSum = 0;
-      lessons.forEach(lesson => {
+      trackedLessons.forEach(lesson => {
         const item = progress[lesson.id] || { percent: 0, completed: false };
         const percent = Math.max(0, Math.min(100, Number(item.percent || 0)));
         percentSum += percent;
