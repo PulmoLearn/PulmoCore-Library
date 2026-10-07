@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PulmoLearn ABG Challenge</title>
+<style>
+:root{
+  --bg:#07131d;--panel:#0d1f2b;--panel2:#102837;--text:#f6fbff;--muted:#9eb4c2;
+  --accent:#54d6c3;--accent2:#72a7ff;--good:#69d58b;--bad:#ff7b7b;--line:#244253;
+  --shadow:0 18px 55px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:
+radial-gradient(circle at 20% 0%,#10344a 0,transparent 34rem),var(--bg);color:var(--text);min-height:100vh}
+button,input{font:inherit}
+.wrap{max-width:1080px;margin:auto;padding:22px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+.brand{font-weight:900;letter-spacing:.03em}.brand span{color:var(--accent)}
+.pill{border:1px solid var(--line);background:#0a1923;border-radius:999px;padding:8px 12px;color:var(--muted);font-size:.88rem}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px}
+.card{background:rgba(13,31,43,.96);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.game{padding:24px}.side{padding:18px}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.streak{font-weight:850}.streak strong{color:#ffd66e;font-size:1.25rem}
+.timer{font-variant-numeric:tabular-nums;color:var(--muted)}
+.abg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 22px}
+.value{background:var(--panel2);border:1px solid var(--line);border-radius:17px;padding:15px 8px;text-align:center}
+.value small{display:block;color:var(--muted);font-weight:700;margin-bottom:6px}.value b{font-size:1.65rem;font-variant-numeric:tabular-nums}
+.row{margin:15px 0}.row-title{font-size:.78rem;font-weight:900;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+.options{display:flex;gap:8px;flex-wrap:wrap}
+.choice{flex:1;min-width:120px;border:1px solid var(--line);background:#0a1923;color:var(--text);padding:12px 10px;border-radius:12px;cursor:pointer;font-weight:750;transition:.12s}
+.choice:hover{border-color:#52738a;transform:translateY(-1px)}
+.choice.selected{background:#173f4a;border-color:var(--accent);box-shadow:0 0 0 2px rgba(84,214,195,.12)}
+.choice:disabled{opacity:.38;cursor:not-allowed;transform:none}
+.normal{width:100%;margin:3px 0 8px;border:1px dashed #4f7890;background:#0a1923;color:#cce4ef;padding:11px;border-radius:12px;font-weight:800;cursor:pointer}
+.normal.selected{border-style:solid;border-color:var(--accent2);background:#142c4b}
+.lock{width:100%;margin-top:12px;border:0;border-radius:14px;padding:15px;background:linear-gradient(135deg,var(--accent),#57a8ff);color:#04151d;font-weight:950;letter-spacing:.04em;cursor:pointer}
+.lock:disabled{opacity:.42;cursor:not-allowed}
+.feedback{display:none;margin-top:14px;padding:14px;border-radius:14px;line-height:1.45}
+.feedback.good{display:block;background:rgba(105,213,139,.1);border:1px solid rgba(105,213,139,.45)}
+.feedback.bad{display:block;background:rgba(255,123,123,.09);border:1px solid rgba(255,123,123,.45)}
+.feedback b{display:block;margin-bottom:4px}
+h1{font-size:1.5rem;margin:0}h2{font-size:1rem;margin:0 0 12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#0a1923;border:1px solid var(--line);border-radius:13px;padding:12px}
+.stat small{display:block;color:var(--muted);font-size:.72rem}.stat b{font-size:1.15rem}
+.goal{margin-top:18px}.goalBtns{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.goalBtns button{border:1px solid var(--line);background:#0a1923;color:var(--text);border-radius:10px;padding:9px;cursor:pointer}
+.goalBtns button.active{border-color:var(--accent);color:var(--accent)}
+.progress{height:8px;background:#07131d;border-radius:999px;overflow:hidden;margin-top:10px}.progress>div{height:100%;width:0;background:var(--accent)}
+.tabs{display:flex;gap:6px;margin-bottom:9px}.tabs button{flex:1;border:1px solid var(--line);background:#0a1923;color:var(--muted);border-radius:9px;padding:8px;cursor:pointer}.tabs button.active{color:var(--text);border-color:#52738a}
+.leader{margin-top:18px}.leaderRow{display:grid;grid-template-columns:34px 1fr 55px 58px;gap:6px;padding:8px 4px;border-bottom:1px solid rgba(36,66,83,.55);font-size:.86rem}.leaderRow span:last-child{text-align:right}
+.initials{display:flex;gap:6px;margin-top:10px}.initials input{width:46px;text-align:center;text-transform:uppercase;background:#07131d;color:white;border:1px solid var(--line);border-radius:9px;padding:9px;font-weight:900}
+.post{flex:1;border:0;border-radius:9px;background:var(--accent);font-weight:900;cursor:pointer}
+.note{font-size:.75rem;color:var(--muted);line-height:1.4;margin-top:10px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}
+.modal.hidden{display:none}.modalBox{width:min(520px,100%);padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.modalBox h2{font-size:1.35rem}.modalBox p{color:var(--muted);line-height:1.5}
+.startGoals{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.startGoals button{padding:13px;border:1px solid var(--line);border-radius:12px;background:#0a1923;color:white;cursor:pointer;font-weight:800}
+.startGoals button:hover{border-color:var(--accent)}
+.ref{margin-top:13px;font-size:.72rem;color:#7894a5}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.side{order:2}.wrap{padding:13px}.game{padding:16px}.abg{gap:6px}.value{padding:12px 4px}.value b{font-size:1.35rem}.choice{min-width:calc(50% - 5px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand"><span>Pulmo</span>Learn · ABG Challenge</div><div class="pill">Public Practice · V2.8 · Live leaderboard test</div></header>
+<div class="grid">
+<main class="card game">
+  <div class="topline">
+    <div><h1>Build the interpretation</h1><div class="timer" id="caseTimer">Case 0.0s</div></div>
+    <div class="streak">🔥 Streak <strong id="streak">0</strong></div>
+  </div>
+
+  <div class="abg">
+    <div class="value"><small>pH</small><b id="ph">7.40</b></div>
+    <div class="value"><small>PaCO₂</small><b id="co2">40</b></div>
+    <div class="value"><small>HCO₃⁻</small><b id="hco3">24</b></div>
+    <div class="value"><small>PaO₂</small><b id="o2">90</b></div>
+  </div>
+
+  <button class="normal" id="normalBtn">Normal acid-base balance</button>
+
+  <div class="row"><div class="row-title">COMPENSATION</div><div class="options" data-group="comp">
+    <button class="choice" data-value="Uncompensated">Uncompensated</button>
+    <button class="choice" data-value="Partially compensated">Partial</button>
+    <button class="choice" data-value="Fully compensated">Full</button>
+  </div></div>
+
+  <div class="row"><div class="row-title">PRIMARY PROCESS</div><div class="options" data-group="primary">
+    <button class="choice" data-value="Respiratory">Respiratory</button>
+    <button class="choice" data-value="Metabolic">Metabolic</button>
+  </div></div>
+
+  <div class="row"><div class="row-title">ACID / BASE</div><div class="options" data-group="balance">
+    <button class="choice" data-value="Acidosis">Acidosis</button>
+    <button class="choice" data-value="Alkalosis">Alkalosis</button>
+  </div></div>
+
+  <div class="row"><div class="row-title">OXYGENATION</div><div class="options" data-group="oxygen">
+    <button class="choice" data-value="Normal oxygenation">Normal</button>
+    <button class="choice" data-value="Mild hypoxemia">Mild</button>
+    <button class="choice" data-value="Moderate hypoxemia">Moderate</button>
+    <button class="choice" data-value="Severe hypoxemia">Severe</button>
+  </div></div>
+
+  <button class="lock" id="lockBtn" disabled>LOCK IT IN</button>
+  <div class="feedback" id="feedback"></div>
+  <div class="ref" style="font-size:.8rem;line-height:1.65">
+<strong style="color:var(--text)">Normal Reference Ranges</strong><br>
+pH: 7.35–7.45<br>
+PaCO₂: 35–45 mmHg<br>
+HCO₃⁻: 22–26 mEq/L<br>
+PaO₂: 80–100 mmHg<br>
+Mild hypoxemia: 60–79 mmHg<br>
+Moderate hypoxemia: 40–59 mmHg<br>
+Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.00–7.55</span>
+</div>
+</main>
+
+<aside class="card side">
+  <h2>Your stats</h2>
+  <div class="stats">
+    <div class="stat"><small>BEST STREAK</small><b id="best">0</b></div>
+    <div class="stat"><small>TOTAL CORRECT</small><b id="correct">0</b></div>
+    <div class="stat"><small>ACCURACY</small><b id="accuracy">—</b></div>
+    <div class="stat"><small>AVG TIME</small><b id="avg">—</b></div>
+  </div>
+
+  <div class="goal">
+    <h2>Today's goal</h2>
+    <div class="goalBtns">
+      <button data-min="2">2 min</button><button data-min="5">5 min</button>
+      <button data-min="10">10 min</button><button data-min="15">15 min</button>
+    </div>
+    <div class="progress"><div id="goalBar"></div></div>
+    <div class="note" id="goalText">Choose a practice goal.</div>
+  </div>
+
+  <div class="leader" id="leaderboard">
+    <h2>🏆 ABG High Scores</h2>
+    <div class="tabs"><button class="active" data-tab="today">Today</button><button data-tab="all">All time</button></div>
+    <div id="leaderRows"></div>
+    <div class="note"><strong style="color:var(--text)">How the leaderboard works</strong><br>Your best streak is your score. Faster average response time breaks a tie. Enter three initials when you are ready to post your score. Posting is optional.</div>
+    <button class="normal" id="playAgainBtn" style="margin-top:12px">SET A NEW PRACTICE GOAL</button>
+    <div class="initials">
+      <input maxlength="1" aria-label="First initial"><input maxlength="1" aria-label="Second initial"><input maxlength="1" aria-label="Third initial">
+      <button class="post" id="postScore">POST</button>
+    </div>
+  </div>
+</aside>
+</div>
+</div>
+
+<div class="modal hidden" id="resumeModal">
+ <div class="modalBox">
+   <h2>🔥 Continue your streak?</h2>
+   <div id="resumeSummary" style="color:var(--muted);line-height:1.55;margin:12px 0"></div>
+   <button class="lock" id="resumeStreakBtn" style="margin-top:8px">CONTINUE STREAK</button>
+   <button class="normal" id="newStreakBtn" style="margin-top:9px">START A NEW STREAK</button>
+ </div>
+</div>
+
+<div class="modal hidden" id="correctModal">
+ <div class="modalBox">
+   <h2>✓ Correct!</h2>
+   <div id="correctSummary" style="font-weight:900;font-size:1.08rem;margin:12px 0"></div>
+   <div id="correctMeta" style="color:var(--muted);line-height:1.55"></div>
+   <button class="lock" id="nextBtn" style="margin-top:18px">NEXT ABG</button>
+ </div>
+</div>
+
+<div class="modal hidden" id="goalModal">
+ <div class="modalBox">
+   <h2>🎯 Daily goal complete!</h2>
+   <div id="goalSummary" style="color:var(--muted);line-height:1.55;margin:12px 0"></div>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+     <button class="lock" id="keepGoingBtn" style="margin-top:8px">KEEP GOING</button>
+     <button class="lock" id="leaderboardBtn" style="margin-top:8px;background:linear-gradient(135deg,#72a7ff,#8f7cff)">GO TO LEADERBOARD</button>
+   </div>
+ </div>
+</div>
+
+<div class="modal hidden" id="wrongModal">
+ <div class="modalBox">
+   <h2>Not quite — review this ABG</h2>
+   <div id="wrongSummary" style="font-weight:900;font-size:1.08rem;margin:12px 0"></div>
+   <div id="wrongWhy" style="color:var(--muted);line-height:1.55"></div>
+   <button class="lock" id="continueBtn" style="margin-top:18px">CONTINUE TO NEXT ABG</button>
+ </div>
+</div>
+
+<div class="modal" id="startModal">
+ <div class="modalBox">
+   <h2>How long do you want to practice?</h2>
+   <p>Your streak and lifetime stats continue from session to session on this device. Pick today's active-practice goal and start playing.</p>
+   <div class="startGoals">
+     <button data-start="2">2 minutes</button><button data-start="5">5 minutes</button>
+     <button data-start="10">10 minutes</button><button data-start="15">15 minutes</button>
+   </div>
+   <div class="note">No account required. Leaderboard participation is optional.</div>
+ </div>
+</div>
+
+<script>
+(() => {
+const KEY='pulmolearn_abg_v1';
+// V2.5 integration contract for the public leaderboard.
+// When Supabase is connected, replace the local leaderboard adapter only;
+// gameplay and private device stats can remain unchanged.
+const LEADERBOARD_CONFIG = {
+  enabled: true, // live Supabase leaderboard
+  supabaseUrl: 'https://fxcbcspwqmrmifbgjpnt.supabase.co',
+  anonKey: 'sb_publishable_H8_ZHl_wUQzejJm0LAmUiw_9XDZck4k',
+  submitFunction: 'submit-abg-score',
+  table: 'abg_leaderboard_scores',
+  maxInitials: 3,
+  allowedPlayerTypes: ['student','rt','other'], // reserved for future RT vs Student mode
+  dailyLimitPerDevice: 20
+};
+
+const defaultState={streak:0,best:0,correct:0,attempts:0,totalCorrectMs:0,goalMin:5,activeTodayMs:0,lastDay:'',leaders:{today:[],all:[]}};
+let state=load(), current=null, answer={}, normalMode=false, caseStart=0, caseTick=null, activeStart=null, feedbackLocked=false, leaderTab='today', goalNotified=false, practiceRunning=false, pendingGoal=null;
+
+function today(){return new Date().toISOString().slice(0,10)}
+function load(){try{return {...defaultState,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...defaultState}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function resetDay(){
+ if(state.lastDay!==today()){state.activeTodayMs=0;state.lastDay=today();state.leaders.today=[];save()}
+}
+resetDay();
+
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[ri(0,a.length-1)];
+const calcPH=(c,h)=>6.1+Math.log10(h/(.03*c));
+function oxyLabel(v){return v>=80?'Normal oxygenation':v>=60?'Mild hypoxemia':v>=40?'Moderate hypoxemia':'Severe hypoxemia'}
+function oxyValue(label){if(label==='Normal oxygenation')return ri(80,100);if(label==='Mild hypoxemia')return ri(60,79);if(label==='Moderate hypoxemia')return ri(40,59);return ri(28,39)}
+
+const acidTypes=[
+ ['Uncompensated','Respiratory','Acidosis'],['Uncompensated','Respiratory','Alkalosis'],
+ ['Uncompensated','Metabolic','Acidosis'],['Uncompensated','Metabolic','Alkalosis'],
+ ['Partially compensated','Respiratory','Acidosis'],['Partially compensated','Respiratory','Alkalosis'],
+ ['Partially compensated','Metabolic','Acidosis'],['Partially compensated','Metabolic','Alkalosis'],
+ ['Fully compensated','Respiratory','Acidosis'],['Fully compensated','Respiratory','Alkalosis'],
+ ['Fully compensated','Metabolic','Acidosis'],['Fully compensated','Metabolic','Alkalosis']
+];
+
+function classify(c,h){
+ const p=+calcPH(c,h).toFixed(2);
+ if(p>=7.35&&p<=7.45&&c>=35&&c<=45&&h>=22&&h<=26)return {normal:true};
+ let balance,primary;
+ if(p<7.35){balance='Acidosis';primary=c>45?'Respiratory':'Metabolic'}
+ else if(p>7.45){balance='Alkalosis';primary=c<35?'Respiratory':'Metabolic'}
+ else{
+   if(p===7.40)return {normal:false,ambiguous:true};
+   balance=p<7.40?'Acidosis':'Alkalosis';
+   primary=balance==='Acidosis'?(c>45?'Respiratory':'Metabolic'):(c<35?'Respiratory':'Metabolic');
+ }
+ const other=primary==='Respiratory'?(h<22||h>26):(c<35||c>45);
+ return {normal:false,comp:(p>=7.35&&p<=7.45)?'Fully compensated':(other?'Partially compensated':'Uncompensated'),primary,balance};
+}
+const near=(v,t,tol)=>Math.abs(v-t)<=tol;
+
+function physiologyOK(x){
+ const {ph,co2:c,hco3:h,comp,primary:pri,balance:bal}=x;
+ if(comp==='Fully compensated'){
+   if(bal==='Acidosis'&&!(ph>=7.35&&ph<=7.39))return false;
+   if(bal==='Alkalosis'&&!(ph>=7.41&&ph<=7.45))return false;
+   // Avoid borderline teaching cases that look normal except for a 1-unit drift.
+   if(pri==='Respiratory' && !(h<=20 || h>=28)) return false;
+   if(pri==='Metabolic' && !(c<=33 || c>=47)) return false;
+ }
+ if(comp==='Partially compensated'){
+   if(bal==='Acidosis'&&ph>=7.35)return false;
+   if(bal==='Alkalosis'&&ph<=7.45)return false;
+ }
+ if(comp==='Uncompensated')return pri==='Respiratory'?(h>=22&&h<=26):(c>=35&&c<=45);
+
+ if(pri==='Respiratory'){
+   let expected;
+   if(bal==='Acidosis'){
+     const rise=(c-40)/10;
+     expected=comp==='Fully compensated'?24+3.75*rise:24+1.0*rise;
+   }else{
+     const fall=(40-c)/10;
+     expected=comp==='Fully compensated'?24-4.5*fall:24-2.0*fall;
+   }
+   return near(h,expected,1.5);
+ }
+ if(pri==='Metabolic'&&bal==='Acidosis')return near(c,1.5*h+8,2);
+ if(pri==='Metabolic'&&bal==='Alkalosis')return near(c,40+0.7*(h-24),2);
+ return false;
+}
+
+function candidate(target){
+ const [comp,pri,bal]=target;
+ for(let i=0;i<30000;i++){
+   let c,h;
+   if(pri==='Respiratory'){
+     c=bal==='Acidosis'?ri(47,75):ri(20,33);
+     if(comp==='Uncompensated')h=ri(22,26);
+     else if(bal==='Acidosis'){
+       const rise=(c-40)/10;
+       h=Math.round((comp==='Fully compensated'?24+3.75*rise:24+rise)+pick([-1,0,0,0,1]));
+     }else{
+       const fall=(40-c)/10;
+       h=Math.round((comp==='Fully compensated'?24-4.5*fall:24-2*fall)+pick([-1,0,0,0,1]));
+     }
+   }else{
+     h=bal==='Acidosis'?ri(10,21):ri(27,40);
+     if(comp==='Uncompensated')c=ri(35,45);
+     else if(bal==='Acidosis')c=Math.round(1.5*h+8+pick([-2,-1,0,0,0,1,2]));
+     else c=Math.round(40+0.7*(h-24)+pick([-2,-1,0,0,0,1,2]));
+   }
+   const ph=+calcPH(c,h).toFixed(2),got=classify(c,h);
+   // Hard game-generation boundary: do not present pH values outside 7.00–7.55.
+   if(ph<7.00||ph>7.55)continue;
+   if(got.normal||got.ambiguous)continue;
+   const x={ph,co2:c,hco3:h,comp,primary:pri,balance:bal,normal:false};
+   if(got.comp===comp&&got.primary===pri&&got.balance===bal&&physiologyOK(x))return x;
+ }
+ return null;
+}
+
+function makeCase(){
+ const oxygen=pick(['Normal oxygenation','Mild hypoxemia','Moderate hypoxemia','Severe hypoxemia']);
+ if(Math.random()<.12){
+   const c=ri(37,43),h=ri(23,25),ph=+calcPH(c,h).toFixed(2);
+   if(ph<7.36||ph>7.44)return makeCase();
+   return {ph,co2:c,hco3:h,o2:oxyValue(oxygen),oxygen,normal:true};
+ }
+ const x=candidate(pick(acidTypes));
+ if(!x)return makeCase();
+ return {...x,o2:oxyValue(oxygen),oxygen};
+}
+function explain(x){
+ if(x.normal) return `pH, PaCO₂, and HCO₃⁻ are within the game reference ranges, so the acid-base pattern is normal. PaO₂ ${x.o2} mmHg is classified as ${x.oxygen.toLowerCase()} for this game.`;
+ const dir=x.primary==='Respiratory'?'PaCO₂':'HCO₃⁻';
+ const comp=x.comp==='Uncompensated'?'the other acid-base value remains in its reference range':
+   x.comp==='Partially compensated'?'the compensating value has moved by an expected physiologic amount, but pH remains abnormal':
+   'the compensating value has changed by an expected physiologic amount and pH has returned to the reference range without crossing 7.40';
+ return `The pH is ${x.balance==='Acidosis'?'acidic':'alkaline'}, and ${dir} identifies the primary ${x.primary.toLowerCase()} process. It is ${x.comp.toLowerCase()} because ${comp}. PaO₂ ${x.o2} mmHg = ${x.oxygen.toLowerCase()} in the game scale.`;
+}
+function fullLabel(x){return x.normal?`Normal acid-base with ${x.oxygen.toLowerCase()}`:`${x.comp} ${x.primary.toLowerCase()} ${x.balance.toLowerCase()} with ${x.oxygen.toLowerCase()}`}
+
+function newCase(){
+ feedbackLocked=false; answer={};normalMode=false;
+ $$('.choice').forEach(b=>{b.classList.remove('selected');b.disabled=false});
+ $('#normalBtn').classList.remove('selected');$('#feedback').className='feedback';$('#feedback').innerHTML='';
+ current=makeCase();
+ $('#ph').textContent=current.ph.toFixed(2);$('#co2').textContent=current.co2;$('#hco3').textContent=current.hco3;$('#o2').textContent=current.o2;
+ caseStart=performance.now();clearInterval(caseTick);caseTick=setInterval(()=>$('#caseTimer').textContent=`Case ${((performance.now()-caseStart)/1000).toFixed(1)}s`,100);
+ updateLock();
+}
+function updateLock(){
+ const ready=answer.oxygen && (normalMode || (answer.comp&&answer.primary&&answer.balance));
+ $('#lockBtn').disabled=!ready||feedbackLocked;
+}
+$$('.options').forEach(group=>group.addEventListener('click',e=>{
+ const b=e.target.closest('.choice');if(!b||feedbackLocked)return;
+ const g=group.dataset.group;group.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');answer[g]=b.dataset.value;updateLock();
+}));
+$('#normalBtn').onclick=()=>{
+ if(feedbackLocked)return;normalMode=!normalMode;$('#normalBtn').classList.toggle('selected',normalMode);
+ ['comp','primary','balance'].forEach(g=>{$(`[data-group="${g}"]`).querySelectorAll('.choice').forEach(b=>{b.disabled=normalMode;b.classList.remove('selected')});delete answer[g]});
+ updateLock();
+};
+$('#lockBtn').onclick=()=>{
+ if(feedbackLocked)return;feedbackLocked=true;clearInterval(caseTick);
+ const ms=performance.now()-caseStart;
+ const ok=answer.oxygen===current.oxygen&&(current.normal?normalMode:(!normalMode&&answer.comp===current.comp&&answer.primary===current.primary&&answer.balance===current.balance));
+ state.attempts++;
+
+ if(ok){
+   state.streak++;state.correct++;state.totalCorrectMs+=ms;state.best=Math.max(state.best,state.streak);
+   $('#correctSummary').innerHTML=`${fullLabel(current)}`;
+   $('#correctMeta').innerHTML=`🔥 Current streak: <strong>${state.streak}</strong><br>Case time: <strong>${(ms/1000).toFixed(1)} seconds</strong>`;
+   $('#correctModal').classList.remove('hidden');
+ }else{
+   const old=state.streak;state.streak=0;
+   const chosen=normalMode
+     ? `Normal acid-base with ${(answer.oxygen||'no oxygenation selection').toLowerCase()}`
+     : `${answer.comp||'—'} ${(answer.primary||'—').toLowerCase()} ${(answer.balance||'—').toLowerCase()} with ${(answer.oxygen||'—').toLowerCase()}`;
+   $('#wrongSummary').innerHTML=`Correct: <strong>${fullLabel(current)}</strong>`;
+   $('#wrongWhy').innerHTML=`<div style="margin-bottom:10px">You selected: <strong>${chosen}</strong></div>${explain(current)}<div style="margin-top:10px">Case time stopped at <strong>${(ms/1000).toFixed(1)} seconds</strong>. Your streak ended at <strong>${old}</strong>.</div>`;
+   $('#wrongModal').classList.remove('hidden');
+ }
+ save();renderStats();$('#lockBtn').disabled=true;
+};
+$('#nextBtn').onclick=()=>{
+ $('#correctModal').classList.add('hidden');
+ if(checkGoalReached()) return;
+ newCase();
+};
+$('#continueBtn').onclick=()=>{
+ $('#wrongModal').classList.add('hidden');
+ if(checkGoalReached()) return;
+ newCase();
+};
+
+function checkGoalReached(){
+ const goal=state.goalMin*60000;
+ if(!goalNotified && state.activeTodayMs>=goal){
+   goalNotified=true;
+   $('#goalSummary').innerHTML=`You completed your <strong>${state.goalMin}-minute</strong> practice goal.<br><br>🔥 Current streak: <strong>${state.streak}</strong><br>🏆 Best streak: <strong>${state.best}</strong><br>✓ Total correct: <strong>${state.correct}</strong><br><br>Keep practicing, or go to the leaderboard to post your best streak.`;
+   practiceRunning=false;
+   $('#goalModal').classList.remove('hidden');
+   return true;
+ }
+ return false;
+}
+$('#keepGoingBtn').onclick=()=>{
+ $('#goalModal').classList.add('hidden');
+ practiceRunning=true;
+ newCase();
+};
+$('#leaderboardBtn').onclick=()=>{
+ $('#goalModal').classList.add('hidden');
+ practiceRunning=false;
+ clearInterval(caseTick);
+ document.getElementById('leaderboard').scrollIntoView({behavior:'smooth',block:'start'});
+};
+$('#resumeStreakBtn').onclick=()=>{
+ $('#resumeModal').classList.add('hidden');
+ beginPractice(pendingGoal||state.goalMin,true);
+ pendingGoal=null;
+};
+$('#newStreakBtn').onclick=()=>{
+ $('#resumeModal').classList.add('hidden');
+ beginPractice(pendingGoal||state.goalMin,false);
+ pendingGoal=null;
+};
+$('#playAgainBtn').onclick=()=>{
+ practiceRunning=false;
+ $('#startModal').classList.remove('hidden');
+};
+
+function renderStats(){
+ $('#streak').textContent=state.streak;$('#best').textContent=state.best;$('#correct').textContent=state.correct;
+ $('#accuracy').textContent=state.attempts?Math.round(state.correct/state.attempts*100)+'%':'—';
+ $('#avg').textContent=state.correct?(state.totalCorrectMs/state.correct/1000).toFixed(1)+'s':'—';
+ const goal=state.goalMin*60000,p=Math.min(100,state.activeTodayMs/goal*100);$('#goalBar').style.width=p+'%';
+ $('#goalText').textContent=state.activeTodayMs>=goal
+ ? `Goal complete · ${Math.floor(state.activeTodayMs/60000)}:${String(Math.floor(state.activeTodayMs/1000)%60).padStart(2,'0')} practiced today`
+ : `${Math.floor(state.activeTodayMs/60000)}:${String(Math.floor(state.activeTodayMs/1000)%60).padStart(2,'0')} / ${state.goalMin}:00 active practice`;
+ $$('.goalBtns button').forEach(b=>b.classList.toggle('active',+b.dataset.min===state.goalMin));
+}
+function beginPractice(n,keepStreak){
+ setGoal(n);
+ if(!keepStreak) state.streak=0;
+ goalNotified=state.activeTodayMs>=state.goalMin*60000;
+ practiceRunning=true;
+ activeStart=performance.now();
+ save();renderStats();
+ newCase();
+}
+function requestPracticeStart(n){
+ pendingGoal=n;
+ if(state.streak>0){
+   $('#resumeSummary').innerHTML=`Your current streak is <strong>${state.streak} correct in a row</strong>.<br><br>You can carry it into this ${n}-minute practice goal, or intentionally start a new streak. Your best streak will not be erased.`;
+   $('#resumeStreakBtn').textContent=`CONTINUE STREAK — ${state.streak}`;
+   $('#resumeModal').classList.remove('hidden');
+ }else{
+   beginPractice(n,true);
+ }
+}
+function setGoal(n){state.goalMin=n;goalNotified=state.activeTodayMs>=n*60000;save();renderStats()}
+$$('.goalBtns button').forEach(b=>b.onclick=()=>{if(practiceRunning)setGoal(+b.dataset.min);else requestPracticeStart(+b.dataset.min)});
+$$('[data-start]').forEach(b=>b.onclick=()=>{$('#startModal').classList.add('hidden');requestPracticeStart(+b.dataset.start)});
+setInterval(()=>{
+ if(activeStart&&practiceRunning&&!document.hidden){
+   state.activeTodayMs+=1000;save();renderStats();
+ }
+},1000);
+
+async function fetchRemoteLeaders(){
+ if(!LEADERBOARD_CONFIG.enabled)return null;
+ const since=leaderTab==='today'?`&created_at=gte.${encodeURIComponent(new Date(new Date().setHours(0,0,0,0)).toISOString())}`:'';
+ const url=`${LEADERBOARD_CONFIG.supabaseUrl}/rest/v1/${LEADERBOARD_CONFIG.table}?select=initials,best_streak,average_response_seconds,created_at${since}&order=best_streak.desc,average_response_seconds.asc&limit=10`;
+ const r=await fetch(url,{headers:{apikey:LEADERBOARD_CONFIG.anonKey,Authorization:`Bearer ${LEADERBOARD_CONFIG.anonKey}`}});
+ if(!r.ok)throw new Error('Leaderboard unavailable');
+ return await r.json();
+}
+async function renderLeaders(){
+ $('#leaderRows').innerHTML='<div class="note">Loading scores…</div>';
+ try{
+   const remote=await fetchRemoteLeaders();
+   const arr=remote?remote.map(x=>({initials:x.initials,streak:x.best_streak,avg:+x.average_response_seconds})):(state.leaders?.[leaderTab]||[]).slice().sort((a,b)=>b.streak-a.streak||a.avg-b.avg).slice(0,10);
+   $('#leaderRows').innerHTML=arr.length?arr.map((x,i)=>`<div class="leaderRow"><span>${i+1}</span><b>${x.initials}</b><span>🔥${x.streak}</span><span>${x.avg.toFixed(1)}s</span></div>`).join(''):'<div class="note">No scores posted yet.</div>';
+ }catch(e){$('#leaderRows').innerHTML='<div class="note">Leaderboard is temporarily unavailable. Your practice streak is safe on this device.</div>'}
+}
+$$('.tabs button').forEach(b=>b.onclick=()=>{leaderTab=b.dataset.tab;$$('.tabs button').forEach(x=>x.classList.toggle('active',x===b));renderLeaders()});
+$$('.initials input').forEach((inp,i,all)=>inp.addEventListener('input',()=>{inp.value=inp.value.replace(/[^A-Za-z]/g,'').toUpperCase();if(inp.value&&all[i+1])all[i+1].focus()}));
+$('#postScore').onclick=async()=>{
+ const initials=$$('.initials input').map(x=>x.value).join('');
+ if(!/^[A-Z]{3}$/.test(initials))return alert('Enter three letters.');
+ if(state.best<1)return alert('Build a streak before posting a score.');
+ const avg=state.correct?state.totalCorrectMs/state.correct/1000:99;
+ const btn=$('#postScore');btn.disabled=true;btn.textContent='POSTING…';
+ try{
+   if(LEADERBOARD_CONFIG.enabled){
+     const r=await fetch(`${LEADERBOARD_CONFIG.supabaseUrl}/functions/v1/${LEADERBOARD_CONFIG.submitFunction}`,{method:'POST',headers:{'Content-Type':'application/json',apikey:LEADERBOARD_CONFIG.anonKey,Authorization:`Bearer ${LEADERBOARD_CONFIG.anonKey}`},body:JSON.stringify({initials,best_streak:state.best,average_response_seconds:+avg.toFixed(2),correct_count:state.correct,attempt_count:state.attempts,player_type:null,challenge_id:null})});
+     const body=await r.json().catch(()=>({}));if(!r.ok)throw new Error(body.error||'Unable to post score.');
+   }else{
+     const score={initials,streak:state.best,avg,date:today()};state.leaders=state.leaders||{today:[],all:[]};state.leaders.today.push(score);state.leaders.all.push(score);save();
+   }
+   $$('.initials input').forEach(x=>x.value='');await renderLeaders();
+ }catch(e){alert(e.message||'Unable to post score. Please try again.')}finally{btn.disabled=false;btn.textContent='POST'}
+};
+renderStats();renderLeaders();
+})();
+</script>
+</body>
+</html>
