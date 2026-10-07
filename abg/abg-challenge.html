@@ -56,6 +56,12 @@ h1{font-size:1.5rem;margin:0}h2{font-size:1rem;margin:0 0 12px}
 .initials{display:flex;gap:6px;margin-top:10px}.initials input{width:46px;text-align:center;text-transform:uppercase;background:#07131d;color:white;border:1px solid var(--line);border-radius:9px;padding:9px;font-weight:900}
 .post{flex:1;border:0;border-radius:9px;background:var(--accent);font-weight:900;cursor:pointer}
 .note{font-size:.75rem;color:var(--muted);line-height:1.4;margin-top:10px}
+.shareChallenge{margin-top:18px;padding-top:18px;border-top:1px solid rgba(36,66,83,.75)}
+.shareChallenge h2{margin-bottom:6px}
+.shareChallenge p{margin:0 0 11px;color:var(--muted);font-size:.82rem;line-height:1.5}
+.shareBtn{width:100%;border:1px solid var(--accent);background:#0a1923;color:var(--accent);border-radius:11px;padding:11px 12px;font-weight:900;cursor:pointer;transition:.12s}
+.shareBtn:hover,.shareBtn:focus-visible{background:#12313a;outline:none;box-shadow:0 0 0 2px rgba(84,214,195,.12)}
+
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}
 .modal.hidden{display:none}.modalBox{width:min(520px,100%);padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
 .modalBox h2{font-size:1.35rem}.modalBox p{color:var(--muted);line-height:1.5}
@@ -178,6 +184,13 @@ Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.0
       <input maxlength="1" aria-label="First initial"><input maxlength="1" aria-label="Second initial"><input maxlength="1" aria-label="Third initial">
       <button class="post" id="postScore">POST</button>
     </div>
+  </div>
+
+  <div class="shareChallenge" aria-labelledby="shareChallengeTitle">
+    <h2 id="shareChallengeTitle">Challenge your classmates</h2>
+    <p>Think you can beat your classmates, coworkers, or preceptors? Share the free ABG Challenge and compete for the longest streak. No account or sign-up required.</p>
+    <button class="shareBtn" id="shareChallengeBtn" type="button">SHARE THE ABG CHALLENGE</button>
+    <div class="note" id="shareStatus" role="status" aria-live="polite"></div>
   </div>
 </aside>
 </div>
@@ -566,6 +579,42 @@ $('#postScore').onclick=async()=>{
  }catch(e){alert(e.message||'Unable to post score. Please try again.')}finally{btn.disabled=false;btn.textContent='POST'}
 };
 $('#scoreCloseBtn').onclick=()=>$('#scoreModal').classList.add('hidden');
+
+const shareChallengeBtn=$('#shareChallengeBtn');
+const shareStatus=$('#shareStatus');
+if(shareChallengeBtn){
+  shareChallengeBtn.onclick=async()=>{
+    const original='SHARE THE ABG CHALLENGE';
+    const shareData={
+      title:'PulmoLearn ABG Challenge',
+      text:'Think you can beat my ABG streak? Try the free PulmoLearn ABG Challenge. No account or sign-up required. See how long you can keep your streak alive!',
+      url:window.location.href
+    };
+    try{
+      if(navigator.share){
+        await navigator.share(shareData);
+        shareStatus.textContent='Challenge shared!';
+      }else{
+        await navigator.clipboard.writeText(window.location.href);
+        shareChallengeBtn.textContent='✓ LINK COPIED!';
+        shareStatus.textContent='Challenge link copied to your clipboard.';
+        setTimeout(()=>{shareChallengeBtn.textContent=original;shareStatus.textContent='';},2200);
+      }
+    }catch(err){
+      // Canceling the native share sheet should not show an error.
+      if(err && err.name==='AbortError')return;
+      try{
+        await navigator.clipboard.writeText(window.location.href);
+        shareChallengeBtn.textContent='✓ LINK COPIED!';
+        shareStatus.textContent='Challenge link copied to your clipboard.';
+        setTimeout(()=>{shareChallengeBtn.textContent=original;shareStatus.textContent='';},2200);
+      }catch{
+        shareStatus.textContent='Unable to open sharing on this device. Copy the page address from your browser to share the challenge.';
+      }
+    }
+  };
+}
+
 renderStats();renderLeaders();
 })();
 </script>
