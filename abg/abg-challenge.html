@@ -178,7 +178,7 @@ Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.0
     <h2>🏆 ABG High Scores</h2>
     <div class="tabs"><button class="active" data-tab="today">Today</button><button data-tab="all">All time</button></div>
     <div id="leaderRows"></div>
-    <div class="note"><strong style="color:var(--text)">How the leaderboard works</strong><br>Your best streak is your score. Faster average response time breaks a tie. Enter three initials when you are ready to post your score. Posting is optional.</div>
+    <div class="note"><strong style="color:var(--text)">How the leaderboard works</strong><br>Your best streak in this practice session is your score. Faster average time within that streak breaks a tie. Enter three initials to post. Starting a new practice session resets the eligible score. Posting is optional.</div>
     <button class="normal" id="playAgainBtn" style="margin-top:12px">SET A NEW PRACTICE GOAL</button>
     <div class="initials">
       <input maxlength="1" aria-label="First initial"><input maxlength="1" aria-label="Second initial"><input maxlength="1" aria-label="Third initial">
@@ -269,6 +269,10 @@ const LEADERBOARD_CONFIG = {
 
 const defaultState={streak:0,best:0,correct:0,attempts:0,totalCorrectMs:0,goalMin:5,activeTodayMs:0,lastDay:'',leaders:{today:[],all:[]}};
 let state=load(), current=null, answer={}, normalMode=false, caseStart=0, caseTick=null, activeStart=null, feedbackLocked=false, leaderTab='today', goalNotified=false, practiceRunning=false, pendingGoal=null;
+// Leaderboard scores are scoped to this practice session, never device lifetime history.
+let sessionScore={streak:0,streakMs:0,best:0,bestMs:0};
+function resetSessionScore(){sessionScore={streak:0,streakMs:0,best:0,bestMs:0}}
+function sessionAverage(){return sessionScore.best?sessionScore.bestMs/sessionScore.best/1000:0}
 
 function today(){return new Date().toISOString().slice(0,10)}
 function load(){try{return {...defaultState,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...defaultState}}}
@@ -422,11 +426,15 @@ $('#lockBtn').onclick=()=>{
 
  if(ok){
    state.streak++;state.correct++;state.totalCorrectMs+=ms;state.best=Math.max(state.best,state.streak);
+   sessionScore.streak++;sessionScore.streakMs+=ms;
+   if(sessionScore.streak>sessionScore.best || (sessionScore.streak===sessionScore.best && sessionScore.streakMs<sessionScore.bestMs)){
+     sessionScore.best=sessionScore.streak;sessionScore.bestMs=sessionScore.streakMs;
+   }
    $('#correctSummary').innerHTML=`${fullLabel(current)}`;
    $('#correctMeta').innerHTML=`🔥 Current streak: <strong>${state.streak}</strong><br>Case time: <strong>${(ms/1000).toFixed(1)} seconds</strong>`;
    $('#correctModal').classList.remove('hidden');
  }else{
-   const old=state.streak;state.streak=0;
+   const old=state.streak;state.streak=0;sessionScore.streak=0;sessionScore.streakMs=0;
    const chosen=normalMode
      ? `Normal acid-base with ${(answer.oxygen||'no oxygenation selection').toLowerCase()}`
      : `${answer.comp||'—'} ${(answer.primary||'—').toLowerCase()} ${(answer.balance||'—').toLowerCase()} with ${(answer.oxygen||'—').toLowerCase()}`;
@@ -495,6 +503,7 @@ function renderStats(){
  $$('.goalBtns button').forEach(b=>b.classList.toggle('active',+b.dataset.min===state.goalMin));
 }
 function beginPractice(n,keepStreak){
+ resetSessionScore();
  setGoal(n);
  if(!keepStreak) state.streak=0;
  goalNotified=state.activeTodayMs>=state.goalMin*60000;
@@ -548,15 +557,15 @@ $$('.initials input').forEach((inp,i,all)=>inp.addEventListener('input',()=>{inp
 $('#postScore').onclick=async()=>{
  const initials=$$('.initials input').map(x=>x.value).join('');
  if(!/^[A-Z]{3}$/.test(initials))return alert('Enter three letters.');
- if(state.best<1)return alert('Build a streak before posting a score.');
- const avg=state.correct?state.totalCorrectMs/state.correct/1000:99;
+ if(sessionScore.best<1)return alert('Complete at least one correct ABG in this practice session before posting.');
+ const avg=sessionAverage();
  const btn=$('#postScore');btn.disabled=true;btn.textContent='POSTING…';
  try{
    if(LEADERBOARD_CONFIG.enabled){
-     const r=await fetch(`${LEADERBOARD_CONFIG.supabaseUrl}/functions/v1/${LEADERBOARD_CONFIG.submitFunction}`,{method:'POST',headers:{'Content-Type':'application/json',apikey:LEADERBOARD_CONFIG.anonKey},body:JSON.stringify({initials,best_streak:state.best,average_response_seconds:+avg.toFixed(2),correct_count:state.correct,attempt_count:state.attempts,player_type:null,challenge_id:null})});
+     const r=await fetch(`${LEADERBOARD_CONFIG.supabaseUrl}/functions/v1/${LEADERBOARD_CONFIG.submitFunction}`,{method:'POST',headers:{'Content-Type':'application/json',apikey:LEADERBOARD_CONFIG.anonKey},body:JSON.stringify({initials,best_streak:sessionScore.best,average_response_seconds:+avg.toFixed(2),correct_count:sessionScore.best,attempt_count:sessionScore.best,player_type:null,challenge_id:null})});
      const body=await r.json().catch(()=>({}));
      if(!r.ok)throw new Error(body.error||'Unable to post score.');
-     const best=body.leaderboard_best||{initials,streak:state.best,average_response_seconds:+avg.toFixed(2)};
+     const best=body.leaderboard_best||{initials,streak:sessionScore.best,average_response_seconds:+avg.toFixed(2)};
      const submitted=body.submitted||{streak:state.best,average_response_seconds:+avg.toFixed(2)};
      const bestTime=Number(best.average_response_seconds).toFixed(1);
      const submittedTime=Number(submitted.average_response_seconds).toFixed(1);
@@ -578,7 +587,7 @@ $('#postScore').onclick=async()=>{
      }
      $('#scoreModal').classList.remove('hidden');
    }else{
-     const score={initials,streak:state.best,avg,date:today()};state.leaders=state.leaders||{today:[],all:[]};state.leaders.today.push(score);state.leaders.all.push(score);save();
+     const score={initials,streak:sessionScore.best,avg,date:today()};state.leaders=state.leaders||{today:[],all:[]};state.leaders.today.push(score);state.leaders.all.push(score);save();
    }
    $$('.initials input').forEach(x=>x.value='');await renderLeaders();
  }catch(e){alert(e.message||'Unable to post score. Please try again.')}finally{btn.disabled=false;btn.textContent='POST'}
