@@ -63,7 +63,7 @@ h1{font-size:1.5rem;margin:0}h2{font-size:1rem;margin:0 0 12px}
 .shareBtn:hover,.shareBtn:focus-visible{background:#12313a;outline:none;box-shadow:0 0 0 2px rgba(84,214,195,.12)}
 
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}
-.modal.hidden{display:none}.modalBox{width:min(520px,100%);padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.hidden{display:none!important}.modal.hidden{display:none}.modalBox{width:min(520px,100%);padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
 .modalBox h2{font-size:1.35rem}.modalBox p{color:var(--muted);line-height:1.5}
 .startGoals{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.startGoals button{padding:13px;border:1px solid var(--line);border-radius:12px;background:#0a1923;color:white;cursor:pointer;font-weight:800}
 .startGoals button:hover{border-color:var(--accent)}
@@ -105,7 +105,7 @@ h1{font-size:1.5rem;margin:0}h2{font-size:1rem;margin:0 0 12px}
 <div class="grid">
 <main class="card game">
   <div class="topline">
-    <div><h1>Build the interpretation</h1><div class="timer" id="caseTimer">Case 0.0s</div></div>
+    <div><h1>Build the interpretation</h1><div class="timer" id="caseTimer">Case 0.0s</div><div id="sessionActions" class="hidden" style="margin-top:10px"><button id="postAnytime" class="nav-btn" style="cursor:pointer;color:var(--accent)">🏆 Post Score &amp; End Session</button></div></div>
     <div class="streak">🔥 Streak <strong id="streak">0</strong></div>
   </div>
 
@@ -156,10 +156,10 @@ Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.0
 </main>
 
 <aside class="card side">
-  <h2>Your stats</h2>
+  <h2>This session</h2>
   <div class="stats">
-    <div class="stat"><small>BEST STREAK</small><b id="best">0</b></div>
-    <div class="stat"><small>TOTAL CORRECT</small><b id="correct">0</b></div>
+    <div class="stat"><small>SESSION BEST</small><b id="best">0</b></div>
+    <div class="stat"><small>SESSION CORRECT</small><b id="correct">0</b></div>
     <div class="stat"><small>ACCURACY</small><b id="accuracy">—</b></div>
     <div class="stat"><small>AVG TIME</small><b id="avg">—</b></div>
   </div>
@@ -178,12 +178,9 @@ Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.0
     <h2>🏆 ABG High Scores</h2>
     <div class="tabs"><button class="active" data-tab="today">Today</button><button data-tab="all">All time</button></div>
     <div id="leaderRows"></div>
-    <div class="note"><strong style="color:var(--text)">How the leaderboard works</strong><br>Your best streak in this practice session is your score. Faster average time within that streak breaks a tie. Enter three initials to post. Starting a new practice session resets the eligible score. Posting is optional.</div>
+    <div class="note"><strong style="color:var(--text)">How the leaderboard works</strong><br>Every challenge starts at zero, with no saved browser history. Your best consecutive streak this session is your score; its average response time breaks ties. Posting is optional and available after your practice goal.</div>
     <button class="normal" id="playAgainBtn" style="margin-top:12px">SET A NEW PRACTICE GOAL</button>
-    <div class="initials">
-      <input maxlength="1" aria-label="First initial"><input maxlength="1" aria-label="Second initial"><input maxlength="1" aria-label="Third initial">
-      <button class="post" id="postScore">POST</button>
-    </div>
+    <div class="note" id="playerLabel">Enter your initials when starting a challenge.</div>
   </div>
 
   <div class="shareChallenge" aria-labelledby="shareChallengeTitle">
@@ -194,15 +191,6 @@ Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.0
   </div>
 </aside>
 </div>
-</div>
-
-<div class="modal hidden" id="resumeModal">
- <div class="modalBox">
-   <h2>🔥 Continue your streak?</h2>
-   <div id="resumeSummary" style="color:var(--muted);line-height:1.55;margin:12px 0"></div>
-   <button class="lock" id="resumeStreakBtn" style="margin-top:8px">CONTINUE STREAK</button>
-   <button class="normal" id="newStreakBtn" style="margin-top:9px">START A NEW STREAK</button>
- </div>
 </div>
 
 <div class="modal hidden" id="correctModal">
@@ -216,15 +204,13 @@ Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.0
 
 <div class="modal hidden" id="goalModal">
  <div class="modalBox">
-   <h2>🎯 Daily goal complete!</h2>
-   <div id="goalSummary" style="color:var(--muted);line-height:1.55;margin:12px 0"></div>
-   <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
-     <button class="lock" id="keepGoingBtn" style="margin-top:8px">KEEP GOING</button>
-     <button class="lock" id="leaderboardBtn" style="margin-top:8px;background:linear-gradient(135deg,#72a7ff,#8f7cff)">GO TO LEADERBOARD</button>
-   </div>
+  <h2>🎯 Practice goal complete!</h2>
+  <div id="goalSummary" style="color:var(--muted);line-height:1.55;margin:12px 0"></div>
+  <button class="lock" id="goalPostBtn">🏆 POST SCORE &amp; END SESSION</button>
+  <button class="normal" id="keepGoingBtn">🔥 CONTINUE PLAYING &amp; IMPROVE STREAK</button>
+  <button class="normal" id="goalHomeBtn">← RETURN TO ABG LEARNING CENTER</button>
  </div>
 </div>
-
 <div class="modal hidden" id="wrongModal">
  <div class="modalBox">
    <h2>Not quite — review this ABG</h2>
@@ -238,49 +224,50 @@ Severe hypoxemia: &lt;40 mmHg<br><span style="opacity:.8">Generated game pH: 7.0
  <div class="modalBox">
    <h2 id="scoreTitle">🏆 Leaderboard updated!</h2>
    <div id="scoreSummary" style="color:var(--muted);line-height:1.6;margin:12px 0"></div>
-   <button class="lock" id="scoreCloseBtn" style="margin-top:18px">KEEP PLAYING</button>
+   <button class="lock" id="scoreCloseBtn" style="margin-top:18px">FINISH SESSION</button>
  </div>
 </div>
 
 <div class="modal" id="startModal">
  <div class="modalBox">
-   <h2>How long do you want to practice?</h2>
-   <p>Your streak and lifetime stats continue from session to session on this device. Pick today's active-practice goal and start playing.</p>
-   <div class="startGoals">
-     <button data-start="2">2 minutes</button><button data-start="5">5 minutes</button>
-     <button data-start="10">10 minutes</button><button data-start="15">15 minutes</button>
-   </div>
-   <div class="note">No account required. Leaderboard participation is optional.</div>
+  <h2>Ready for your ABG Challenge?</h2>
+  <p>Each new challenge starts at streak zero. No streaks or practice history are saved on this device. Every challenge starts fresh.</p>
+  <label for="playerInitials" style="display:block;margin-bottom:8px;font-weight:800">Your three initials</label>
+  <input id="playerInitials" maxlength="3" autocomplete="off" placeholder="ABC" aria-label="Three player initials" style="width:120px;padding:12px;border-radius:10px;border:1px solid var(--line);background:#07131d;color:white;text-transform:uppercase;font-weight:900;letter-spacing:.15em;margin-bottom:16px">
+  <h2>Select your practice goal</h2>
+  <div class="startGoals">
+   <button data-start="2">2 minutes</button><button data-start="5">5 minutes</button>
+   <button data-start="10">10 minutes</button><button data-start="15">15 minutes</button>
+  </div>
+  <div class="note">After completing your goal, you can post your best session streak or keep playing to improve it.</div>
  </div>
 </div>
 
 <script>
 (() => {
-const KEY='pulmolearn_abg_v1';
+// No browser storage: only the active challenge exists in memory.
 const LEADERBOARD_CONFIG = {
   enabled: true,
   supabaseUrl: 'https://fxcbcspwqmrmifbgjpnt.supabase.co',
   anonKey: 'sb_publishable_H8_ZHl_wUQzejJm0LAmUiw_9XDZck4k',
   submitFunction: 'submit-abg-score',
-  table: 'abg_leaderboard_scores',
+  dailyTable: 'abg_daily_bests',
+  allTable: 'abg_alltime_bests',
   maxInitials: 3,
   allowedPlayerTypes: ['student','rt','other']
 };
 
 const defaultState={streak:0,best:0,correct:0,attempts:0,totalCorrectMs:0,goalMin:5,activeTodayMs:0,lastDay:'',leaders:{today:[],all:[]}};
-let state=load(), current=null, answer={}, normalMode=false, caseStart=0, caseTick=null, activeStart=null, feedbackLocked=false, leaderTab='today', goalNotified=false, practiceRunning=false, pendingGoal=null;
+let state={...defaultState}, current=null, answer={}, normalMode=false, caseStart=0, caseTick=null, activeStart=null, feedbackLocked=false, leaderTab='today', goalNotified=false, practiceRunning=false, pendingGoal=null;
 // Leaderboard scores are scoped to this practice session, never device lifetime history.
 let sessionScore={streak:0,streakMs:0,best:0,bestMs:0};
-function resetSessionScore(){sessionScore={streak:0,streakMs:0,best:0,bestMs:0}}
+let sessionInitials='', sessionActiveMs=0, sessionStarted=false, sessionEnded=false, posting=false;
+function resetSessionScore(){sessionScore={streak:0,streakMs:0,best:0,bestMs:0};sessionActiveMs=0;sessionEnded=false;sessionStarted=true;$('#sessionActions').classList.add('hidden')}
 function sessionAverage(){return sessionScore.best?sessionScore.bestMs/sessionScore.best/1000:0}
 
 function today(){return new Date().toISOString().slice(0,10)}
-function load(){try{return {...defaultState,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{return {...defaultState}}}
-function save(){localStorage.setItem(KEY,JSON.stringify(state))}
-function resetDay(){
- if(state.lastDay!==today()){state.activeTodayMs=0;state.lastDay=today();state.leaders.today=[];save()}
-}
-resetDay();
+function save(){} // Intentionally no-op; nothing persists in the browser.
+
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
@@ -457,9 +444,10 @@ $('#continueBtn').onclick=()=>{
 
 function checkGoalReached(){
  const goal=state.goalMin*60000;
- if(!goalNotified && state.activeTodayMs>=goal){
+ if(sessionStarted && !goalNotified && sessionActiveMs>=goal){
    goalNotified=true;
-   $('#goalSummary').innerHTML=`You completed your <strong>${state.goalMin}-minute</strong> practice goal.<br><br>🔥 Current streak: <strong>${state.streak}</strong><br>🏆 Best streak: <strong>${state.best}</strong><br>✓ Total correct: <strong>${state.correct}</strong><br><br>Keep practicing, or go to the leaderboard to post your best streak.`;
+   $('#goalSummary').innerHTML=`You completed your <strong>${state.goalMin}-minute</strong> practice goal.<br><br>🔥 Current session streak: <strong>${sessionScore.streak}</strong><br>🏆 Best session streak: <strong>${sessionScore.best}</strong><br>⏱ Best-streak average: <strong>${sessionScore.best?sessionAverage().toFixed(1)+'s':'—'}</strong><br><br>Post now, continue improving, or leave without posting.`;
+   $('#sessionActions').classList.remove('hidden');
    practiceRunning=false;
    $('#goalModal').classList.remove('hidden');
    return true;
@@ -471,70 +459,46 @@ $('#keepGoingBtn').onclick=()=>{
  practiceRunning=true;
  newCase();
 };
-$('#leaderboardBtn').onclick=()=>{
- $('#goalModal').classList.add('hidden');
- practiceRunning=false;
- clearInterval(caseTick);
- document.getElementById('leaderboard').scrollIntoView({behavior:'smooth',block:'start'});
-};
-$('#resumeStreakBtn').onclick=()=>{
- $('#resumeModal').classList.add('hidden');
- beginPractice(pendingGoal||state.goalMin,true);
- pendingGoal=null;
-};
-$('#newStreakBtn').onclick=()=>{
- $('#resumeModal').classList.add('hidden');
- beginPractice(pendingGoal||state.goalMin,false);
- pendingGoal=null;
-};
-$('#playAgainBtn').onclick=()=>{
- practiceRunning=false;
- $('#startModal').classList.remove('hidden');
-};
+function returnHome(){practiceRunning=false;sessionEnded=true;clearInterval(caseTick);window.location.href='/abg/'}
+$('#goalHomeBtn').onclick=returnHome;
+$('#goalPostBtn').onclick=()=>submitSessionScore();
+$('#postAnytime').onclick=()=>submitSessionScore();
+$('#playAgainBtn').onclick=()=>{if(sessionStarted&&!sessionEnded&&!confirm('End this challenge without posting and start a new one?'))return;practiceRunning=false;sessionEnded=true;$('#startModal').classList.remove('hidden')};
 
 function renderStats(){
  $('#streak').textContent=state.streak;$('#best').textContent=state.best;$('#correct').textContent=state.correct;
  $('#accuracy').textContent=state.attempts?Math.round(state.correct/state.attempts*100)+'%':'—';
  $('#avg').textContent=state.correct?(state.totalCorrectMs/state.correct/1000).toFixed(1)+'s':'—';
- const goal=state.goalMin*60000,p=Math.min(100,state.activeTodayMs/goal*100);$('#goalBar').style.width=p+'%';
- $('#goalText').textContent=state.activeTodayMs>=goal
- ? `Goal complete · ${Math.floor(state.activeTodayMs/60000)}:${String(Math.floor(state.activeTodayMs/1000)%60).padStart(2,'0')} practiced today`
- : `${Math.floor(state.activeTodayMs/60000)}:${String(Math.floor(state.activeTodayMs/1000)%60).padStart(2,'0')} / ${state.goalMin}:00 active practice`;
+ const goal=state.goalMin*60000,p=Math.min(100,sessionActiveMs/goal*100);$('#goalBar').style.width=p+'%';
+ $('#goalText').textContent=sessionActiveMs>=goal
+ ? `Goal complete · ${Math.floor(sessionActiveMs/60000)}:${String(Math.floor(sessionActiveMs/1000)%60).padStart(2,'0')} practiced this session`
+ : `${Math.floor(sessionActiveMs/60000)}:${String(Math.floor(sessionActiveMs/1000)%60).padStart(2,'0')} / ${state.goalMin}:00 active practice this session`;
  $$('.goalBtns button').forEach(b=>b.classList.toggle('active',+b.dataset.min===state.goalMin));
 }
-function beginPractice(n,keepStreak){
- resetSessionScore();
- setGoal(n);
- if(!keepStreak) state.streak=0;
- goalNotified=state.activeTodayMs>=state.goalMin*60000;
- practiceRunning=true;
- activeStart=performance.now();
- save();renderStats();
- newCase();
+function beginPractice(n){
+ state={...defaultState,goalMin:n};resetSessionScore();goalNotified=false;
+ sessionInitials=$('#playerInitials').value.trim().toUpperCase();
+ $('#playerLabel').textContent=`Playing as ${sessionInitials} · No saved browser history`;
+ $('#startModal').classList.add('hidden');$('#goalModal').classList.add('hidden');
+ practiceRunning=true;activeStart=performance.now();save();renderStats();newCase();
 }
-function requestPracticeStart(n){
- pendingGoal=n;
- if(state.streak>0){
-   $('#resumeSummary').innerHTML=`Your current streak is <strong>${state.streak} correct in a row</strong>.<br><br>You can carry it into this ${n}-minute practice goal, or intentionally start a new streak. Your best streak will not be erased.`;
-   $('#resumeStreakBtn').textContent=`CONTINUE STREAK — ${state.streak}`;
-   $('#resumeModal').classList.remove('hidden');
- }else{
-   beginPractice(n,true);
- }
-}
-function setGoal(n){state.goalMin=n;goalNotified=state.activeTodayMs>=n*60000;save();renderStats()}
-$$('.goalBtns button').forEach(b=>b.onclick=()=>{if(practiceRunning)setGoal(+b.dataset.min);else requestPracticeStart(+b.dataset.min)});
-$$('[data-start]').forEach(b=>b.onclick=()=>{$('#startModal').classList.add('hidden');requestPracticeStart(+b.dataset.start)});
+$('#playerInitials').addEventListener('input',e=>e.target.value=e.target.value.replace(/[^a-z]/gi,'').toUpperCase().slice(0,3));
+$$('[data-start]').forEach(b=>b.onclick=()=>{
+ if(!/^[A-Z]{3}$/.test($('#playerInitials').value.trim().toUpperCase())){alert('Enter exactly three letters to start.');$('#playerInitials').focus();return}
+ beginPractice(+b.dataset.start)
+});
+$$('.goalBtns button').forEach(b=>b.onclick=()=>{if(sessionStarted&&!sessionEnded){alert('The practice goal is fixed for this challenge. Start a new challenge to change it.');return}state.goalMin=+b.dataset.min;renderStats()});
 setInterval(()=>{
  if(activeStart&&practiceRunning&&!document.hidden){
-   state.activeTodayMs+=1000;save();renderStats();
+   sessionActiveMs+=1000;renderStats();
  }
 },1000);
 
 async function fetchRemoteLeaders(){
  if(!LEADERBOARD_CONFIG.enabled)return null;
- const since=leaderTab==='today'?`&created_at=gte.${encodeURIComponent(new Date(new Date().setHours(0,0,0,0)).toISOString())}`:'';
- const url=`${LEADERBOARD_CONFIG.supabaseUrl}/rest/v1/${LEADERBOARD_CONFIG.table}?select=initials,best_streak,average_response_seconds,created_at${since}&order=best_streak.desc,average_response_seconds.asc&limit=10`;
+ const table=leaderTab==='today'?LEADERBOARD_CONFIG.dailyTable:LEADERBOARD_CONFIG.allTable;
+ const since=leaderTab==='today'?`&score_date=eq.${new Date().toLocaleDateString('en-CA')}`:'';
+ const url=`${LEADERBOARD_CONFIG.supabaseUrl}/rest/v1/${table}?select=initials,best_streak,average_response_seconds${since}&order=best_streak.desc,average_response_seconds.asc&limit=10`;
  const r=await fetch(url,{headers:{apikey:LEADERBOARD_CONFIG.anonKey}});
  if(!r.ok)throw new Error('Leaderboard unavailable');
  return await r.json();
@@ -544,7 +508,7 @@ async function renderLeaders(){
  try{
    const remote=await fetchRemoteLeaders();
    console.log('[ABG Leaderboard] Retrieved scores:', remote);
-   const arr=remote?remote.map(x=>({initials:x.initials,streak:x.best_streak,avg:+x.average_response_seconds})):(state.leaders?.[leaderTab]||[]).slice().sort((a,b)=>b.streak-a.streak||a.avg-b.avg).slice(0,10);
+   const arr=(remote||[]).map(x=>({initials:x.initials,streak:x.best_streak,avg:+x.average_response_seconds}));
    $('#leaderRows').innerHTML=arr.length?arr.map((x,i)=>`<div class="leaderRow"><span>${i+1}</span><b>${x.initials}</b><span>🔥${x.streak}</span><span>${x.avg.toFixed(1)}s</span></div>`).join(''):'<div class="note">No scores posted yet.</div>';
  }catch(e){
   console.error('[ABG Leaderboard] Loading failed:', e);
@@ -553,20 +517,21 @@ async function renderLeaders(){
   }
 }
 $$('.tabs button').forEach(b=>b.onclick=()=>{leaderTab=b.dataset.tab;$$('.tabs button').forEach(x=>x.classList.toggle('active',x===b));renderLeaders()});
-$$('.initials input').forEach((inp,i,all)=>inp.addEventListener('input',()=>{inp.value=inp.value.replace(/[^A-Za-z]/g,'').toUpperCase();if(inp.value&&all[i+1])all[i+1].focus()}));
-$('#postScore').onclick=async()=>{
- const initials=$$('.initials input').map(x=>x.value).join('');
+async function submitSessionScore(){
+ const initials=sessionInitials;
+ if(posting||sessionEnded)return;
+ if(!goalNotified)return alert('Complete your practice goal before posting.');
  if(!/^[A-Z]{3}$/.test(initials))return alert('Enter three letters.');
  if(sessionScore.best<1)return alert('Complete at least one correct ABG in this practice session before posting.');
  const avg=sessionAverage();
- const btn=$('#postScore');btn.disabled=true;btn.textContent='POSTING…';
+ posting=true;const btn=$('#postAnytime');btn.disabled=true;btn.textContent='POSTING…';
  try{
    if(LEADERBOARD_CONFIG.enabled){
      const r=await fetch(`${LEADERBOARD_CONFIG.supabaseUrl}/functions/v1/${LEADERBOARD_CONFIG.submitFunction}`,{method:'POST',headers:{'Content-Type':'application/json',apikey:LEADERBOARD_CONFIG.anonKey},body:JSON.stringify({initials,best_streak:sessionScore.best,average_response_seconds:+avg.toFixed(2),correct_count:sessionScore.best,attempt_count:sessionScore.best,player_type:null,challenge_id:null})});
      const body=await r.json().catch(()=>({}));
      if(!r.ok)throw new Error(body.error||'Unable to post score.');
      const best=body.leaderboard_best||{initials,streak:sessionScore.best,average_response_seconds:+avg.toFixed(2)};
-     const submitted=body.submitted||{streak:state.best,average_response_seconds:+avg.toFixed(2)};
+     const submitted=body.submitted||{streak:sessionScore.best,average_response_seconds:+avg.toFixed(2)};
      const bestTime=Number(best.average_response_seconds).toFixed(1);
      const submittedTime=Number(submitted.average_response_seconds).toFixed(1);
      if(body.result_type==='personal_best_stands'){
@@ -586,13 +551,11 @@ $('#postScore').onclick=async()=>{
        $('#scoreSummary').innerHTML=`<strong>${best.initials}</strong> is now on the leaderboard with a streak of <strong>🔥 ${best.streak}</strong> · <strong>${bestTime}s</strong> average.`;
      }
      $('#scoreModal').classList.remove('hidden');
-   }else{
-     const score={initials,streak:sessionScore.best,avg,date:today()};state.leaders=state.leaders||{today:[],all:[]};state.leaders.today.push(score);state.leaders.all.push(score);save();
-   }
-   $$('.initials input').forEach(x=>x.value='');await renderLeaders();
- }catch(e){alert(e.message||'Unable to post score. Please try again.')}finally{btn.disabled=false;btn.textContent='POST'}
-};
-$('#scoreCloseBtn').onclick=()=>$('#scoreModal').classList.add('hidden');
+   }else{throw new Error('Leaderboard connection is required to post scores.');}
+   practiceRunning=false;sessionEnded=true;clearInterval(caseTick);$('#goalModal').classList.add('hidden');$('#sessionActions').classList.add('hidden');await renderLeaders();
+ }catch(e){alert(e.message||'Unable to post score. Please try again.')}finally{posting=false;btn.disabled=false;btn.textContent='🏆 Post Score & End Session'}
+}
+$('#scoreCloseBtn').onclick=()=>{ $('#scoreModal').classList.add('hidden');returnHome() };
 
 const shareChallengeBtn=$('#shareChallengeBtn');
 const shareStatus=$('#shareStatus');
