@@ -476,6 +476,7 @@
 <span class="eyebrow">Free ABG Learning Center</span>
 <h1>Free ABG Interpretation <span>Learning Steps</span></h1>
 <p>Build ABG interpretation skills across five guided learning Steps, from identifying pH to completing an independent interpretation. Then test your speed in the ABG Challenge.</p>
+<div class="btn-row"><a class="btn btn-primary" href="#challenge" aria-label="Jump to ABG Challenge leaderboard">🏆 Leaderboard</a></div>
 </section>
 <section class="block" id="method">
 <div class="section-label">How It Works</div>
@@ -653,12 +654,20 @@
     async function load(which) {
       activeTab = which;
       preview.innerHTML = '<div class="leader-empty">Loading scores…</div>';
-      var since = which === 'today'
-        ? '&created_at=gte.' + encodeURIComponent(new Date(new Date().setHours(0,0,0,0)).toISOString())
-        : '';
-      var url = SUPABASE_URL + '/rest/v1/abg_leaderboard_scores?select=initials,best_streak,average_response_seconds,created_at' + since + '&order=best_streak.desc,average_response_seconds.asc&limit=5';
+       // Supabase stores daily scores by Central Time calendar date.
+       var table = which === 'today' ? 'abg_daily_bests' : 'abg_alltime_bests';
+       var dateFilter = '';
+       if (which === 'today') {
+         var parts = new Intl.DateTimeFormat('en-US', {
+           timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit'
+         }).formatToParts(new Date());
+         var datePart = function(type) { return parts.find(function(p) { return p.type === type; }).value; };
+         var centralDate = datePart('year') + '-' + datePart('month') + '-' + datePart('day');
+         dateFilter = '&score_date=eq.' + centralDate;
+       }
+       var url = SUPABASE_URL + '/rest/v1/' + table + '?select=initials,best_streak,average_response_seconds' + dateFilter + '&order=best_streak.desc,average_response_seconds.asc&limit=10';
       try {
-        var response = await fetch(url, { headers: { apikey: SUPABASE_KEY } });
+        var response = await fetch(url, { headers: { apikey: SUPABASE_KEY }, cache: 'no-store' });
         if (!response.ok) throw new Error('Leaderboard unavailable');
         var rows = await response.json();
         if (activeTab !== which) return;
