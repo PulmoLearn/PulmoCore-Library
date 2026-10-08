@@ -534,9 +534,13 @@ async function renderLeaders(){
  $('#leaderRows').innerHTML='<div class="note">Loading scores…</div>';
  try{
    const remote=await fetchRemoteLeaders();
+   console.log('[ABG Leaderboard] Retrieved scores:', remote);
    const arr=remote?remote.map(x=>({initials:x.initials,streak:x.best_streak,avg:+x.average_response_seconds})):(state.leaders?.[leaderTab]||[]).slice().sort((a,b)=>b.streak-a.streak||a.avg-b.avg).slice(0,10);
    $('#leaderRows').innerHTML=arr.length?arr.map((x,i)=>`<div class="leaderRow"><span>${i+1}</span><b>${x.initials}</b><span>🔥${x.streak}</span><span>${x.avg.toFixed(1)}s</span></div>`).join(''):'<div class="note">No scores posted yet.</div>';
- }catch(e){$('#leaderRows').innerHTML='<div class="note">Leaderboard is temporarily unavailable. Your practice streak is safe on this device.</div>'}
+ }catch(e){
+  console.error('[ABG Leaderboard] Loading failed:', e);
+  $('#leaderRows').innerHTML =
+    '<div class="note">Unable to load leaderboard scores. Check the browser console.</div>';
 }
 $$('.tabs button').forEach(b=>b.onclick=()=>{leaderTab=b.dataset.tab;$$('.tabs button').forEach(x=>x.classList.toggle('active',x===b));renderLeaders()});
 $$('.initials input').forEach((inp,i,all)=>inp.addEventListener('input',()=>{inp.value=inp.value.replace(/[^A-Za-z]/g,'').toUpperCase();if(inp.value&&all[i+1])all[i+1].focus()}));
