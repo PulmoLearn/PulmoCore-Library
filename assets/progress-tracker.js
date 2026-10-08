@@ -1,11 +1,11 @@
 /**
- * PulmoLearn Progress Tracker v8.4
+ * PulmoLearn Progress Tracker v8.6
  */
 
 import { supabase } from '/assets/auth.js'
 import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
 
-console.log('PulmoLearn: progress-tracker.js v8.4 loaded')
+console.log('PulmoLearn: progress-tracker.js v8.6 loaded')
 
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual'
@@ -35,7 +35,7 @@ const ltiPassbackKey = `pulmolearn-lti-passback:${userId}:${lessonId}`
 let ltiPassbackInFlight = false
 
 async function sendLtiCompletionPassback() {
-  if (!isLtiLaunch || !session?.access_token || !lessonId) return
+  if (!isLtiLaunch || !lessonId) return
 
   if (sessionStorage.getItem(ltiPassbackKey) === 'sent') {
     return
@@ -45,13 +45,56 @@ async function sendLtiCompletionPassback() {
   ltiPassbackInFlight = true
 
   try {
+    // Always obtain a current Supabase session immediately before
+    // Canvas grade passback. Long lessons can outlive the access token
+    // captured when this module first loaded.
+    let currentSession = null
+
+    const {
+      data: refreshData,
+      error: refreshError
+    } = await supabase.auth.refreshSession()
+
+    if (!refreshError && refreshData?.session?.access_token) {
+      currentSession = refreshData.session
+    } else {
+      if (refreshError) {
+        console.warn(
+          'PulmoLearn: Session refresh before Canvas passback failed; trying current session:',
+          refreshError.message
+        )
+      }
+
+      const {
+        data: { session: latestSession },
+        error: sessionError
+      } = await supabase.auth.getSession()
+
+      if (sessionError) {
+        console.error(
+          'PulmoLearn: Could not get a current session for Canvas passback:',
+          sessionError.message
+        )
+        return
+      }
+
+      currentSession = latestSession
+    }
+
+    if (!currentSession?.access_token) {
+      console.error(
+        'PulmoLearn: Canvas passback stopped — no current PulmoLearn access token is available.'
+      )
+      return
+    }
+
     const response = await fetch('/api/lti/score', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        access_token: session.access_token,
+        access_token: currentSession.access_token,
         lesson_id: lessonId,
         completed: true
       })
@@ -1025,7 +1068,9 @@ window.addEventListener('load', async () => {
       })
     })
 
-  setTimeout(async () => {
+  // v8.6: initialize lesson first, then restore immediately without a fixed delay.
+  // Keep the observer paused until restoration finishes.
+  try {
     const isRestart =
       new URLSearchParams(
         window.location.search
@@ -1064,7 +1109,10 @@ window.addEventListener('load', async () => {
     setInterval(() => {
       saveProgress()
     }, 30000)
-  }, 3500)
+  } catch (error) {
+    console.error('PulmoLearn: Initialization/restoration failed', error)
+    observerPaused = false
+  }
 })
 
 // ── Save on tab close ──
