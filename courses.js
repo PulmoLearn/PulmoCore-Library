@@ -42,7 +42,7 @@ window.PULMOCORE_COURSES = [
   { title: "Tuberculosis", file: "/Tuberculosis.html" },
 
   /* ── PULMONARY ASSESSMENT ─────────────────────────────────────── */
-  { title: "Assessment 1.1: Intro to Respiratory Patient Assessment", file: "/assessment/PA_1_1_Introduction_to_Respiratory_Patient_Assessment___Interviewing.html" },
+  { title: "Assessment 1.1: Intro to Respiratory Patient Assessment", file: "/assessment/PA_1_1_Introduction_to_Respiratory_Patient_Assessment_&_Interviewing.html" },
   { title: "Assessment 1.2: Physical Assessment & Disease Differentiation", file: "/assessment/PA_1_2_Physical_Assessment_&_Disease_Differentiation.html" },
   { title: "Assessment 1.3: SOAP Notes & Clinical Documentation", file: "/assessment/PA_1_3_SOAP_Notes_&_Clinical_Documentation.html" },
   { title: "Assessment 1.4: Pulmonary Function Testing Basics", file: "/assessment/PA_1_4_Pulmonary_Function_Testing_Basics.html" },
@@ -189,7 +189,7 @@ function renderCourseMenu() {
     }
 
     const item = document.createElement("a");
-    item.href = course.file;
+    item.href = new URL(course.file, window.location.origin).href;
     item.className = "course-menu-item";
     item.setAttribute("role", "menuitem");
     item.dataset.courseFile = course.file;
@@ -201,7 +201,7 @@ function renderCourseMenu() {
 
     item.addEventListener("click", function (event) {
       event.stopPropagation();
-      window.location.href = course.file;
+      window.location.href = item.href;
     });
 
     list.appendChild(item);
