@@ -39,6 +39,11 @@ const lessonId =
 const courseId =
   meta.courseId ||
   meta.course_id ||
+  (
+    String(lessonId || '').startsWith('np_')
+      ? 'neonatal-pediatric-care'
+      : null
+  ) ||
   document.body?.dataset?.courseId ||
   'unknown'
 
