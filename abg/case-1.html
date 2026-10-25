@@ -82,10 +82,17 @@
   }
 
   function saveProgress(percent, completed){
-    const p = getProgress();
-    p[lessonKey] = { percent, completed, updatedAt: new Date().toISOString() };
-    localStorage.setItem(progressKey, JSON.stringify(p));
-  }
+  const p = getProgress();
+  const wasCompleted = p[lessonKey]?.completed === true;
+
+  p[lessonKey] = {
+    percent: completed || wasCompleted ? 100 : percent,
+    completed: completed || wasCompleted,
+    updatedAt: new Date().toISOString()
+  };
+
+  localStorage.setItem(progressKey, JSON.stringify(p));
+}
 
   function sections(){
     return Array.from(document.querySelectorAll('.lesson-stack > section'));
