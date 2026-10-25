@@ -262,6 +262,38 @@ let state={...defaultState}, current=null, answer={}, normalMode=false, caseStar
 // Leaderboard scores are scoped to this practice session, never device lifetime history.
 let sessionScore={streak:0,streakMs:0,best:0,bestMs:0};
 let sessionInitials='', sessionActiveMs=0, sessionStarted=false, sessionEnded=false, posting=false;
+// Student reporting uses a separate UUID per practice session; leaderboard stays unchanged.
+let reportingSessionId = null, reportingStartedAt = null;
+function reportingSnapshot(status = 'active') {
+  if (!reportingSessionId) return null;
+  return {
+    session_id: reportingSessionId,
+    started_at: reportingStartedAt,
+    initials: sessionInitials,
+    goal_minutes: state.goalMin,
+    active_seconds: Math.floor(sessionActiveMs / 1000),
+    attempts: state.attempts,
+    correct_answers: state.correct,
+    best_streak: sessionScore.best,
+    avg_correct_seconds: state.correct ? +(state.totalCorrectMs / state.correct / 1000).toFixed(2) : null,
+    status
+  };
+}
+function reportPractice(status = 'active') {
+  const snapshot = reportingSnapshot(status);
+  if (!snapshot) return Promise.resolve();
+  const jobs = [];
+  window.dispatchEvent(new CustomEvent('pulmolearn:abg-session', {
+    detail: { snapshot, waitUntil: promise => jobs.push(promise) }
+  }));
+  return Promise.allSettled(jobs);
+}
+async function endReport(status) {
+  if (!reportingSessionId) return;
+  await reportPractice(status);
+  reportingSessionId = null;
+}
+
 function resetSessionScore(){sessionScore={streak:0,streakMs:0,best:0,bestMs:0};sessionActiveMs=0;sessionEnded=false;sessionStarted=true;$('#sessionActions').classList.add('hidden')}
 function sessionAverage(){return sessionScore.best?sessionScore.bestMs/sessionScore.best/1000:0}
 
@@ -429,7 +461,8 @@ $('#lockBtn').onclick=()=>{
    $('#wrongWhy').innerHTML=`<div style="margin-bottom:10px">You selected: <strong>${chosen}</strong></div>${explain(current)}<div style="margin-top:10px">Case time stopped at <strong>${(ms/1000).toFixed(1)} seconds</strong>. Your streak ended at <strong>${old}</strong>.</div>`;
    $('#wrongModal').classList.remove('hidden');
  }
- save();renderStats();$('#lockBtn').disabled=true;
+  save();renderStats();$('#lockBtn').disabled=true;
+  reportPractice();
 };
 $('#nextBtn').onclick=()=>{
  $('#correctModal').classList.add('hidden');
@@ -459,11 +492,11 @@ $('#keepGoingBtn').onclick=()=>{
  practiceRunning=true;
  newCase();
 };
-function returnHome(){practiceRunning=false;sessionEnded=true;clearInterval(caseTick);window.location.href='/abg/'}
+async function returnHome(){practiceRunning=false;sessionEnded=true;clearInterval(caseTick);await endReport('finished');window.location.href='/abg/'}
 $('#goalHomeBtn').onclick=returnHome;
 $('#goalPostBtn').onclick=()=>submitSessionScore();
 $('#postAnytime').onclick=()=>submitSessionScore();
-$('#playAgainBtn').onclick=()=>{if(sessionStarted&&!sessionEnded&&!confirm('End this challenge without posting and start a new one?'))return;practiceRunning=false;sessionEnded=true;$('#startModal').classList.remove('hidden')};
+$('#playAgainBtn').onclick=async()=>{if(sessionStarted&&!sessionEnded&&!confirm('End this challenge without posting and start a new one?'))return;practiceRunning=false;sessionEnded=true;await endReport('restarted');$('#startModal').classList.remove('hidden')};
 
 function renderStats(){
  $('#streak').textContent=state.streak;$('#best').textContent=state.best;$('#correct').textContent=state.correct;
@@ -476,11 +509,13 @@ function renderStats(){
  $$('.goalBtns button').forEach(b=>b.classList.toggle('active',+b.dataset.min===state.goalMin));
 }
 function beginPractice(n){
- state={...defaultState,goalMin:n};resetSessionScore();goalNotified=false;
+  state={...defaultState,goalMin:n};resetSessionScore();goalNotified=false;
+  reportingSessionId=crypto.randomUUID();reportingStartedAt=new Date().toISOString();
  sessionInitials=$('#playerInitials').value.trim().toUpperCase();
  $('#playerLabel').textContent=`Playing as ${sessionInitials} · No saved browser history`;
  $('#startModal').classList.add('hidden');$('#goalModal').classList.add('hidden');
- practiceRunning=true;activeStart=performance.now();save();renderStats();newCase();
+  practiceRunning=true;activeStart=performance.now();save();renderStats();newCase();
+  reportPractice('active');
 }
 $('#playerInitials').addEventListener('input',e=>e.target.value=e.target.value.replace(/[^a-z]/gi,'').toUpperCase().slice(0,3));
 $$('[data-start]').forEach(b=>b.onclick=()=>{
@@ -489,8 +524,9 @@ $$('[data-start]').forEach(b=>b.onclick=()=>{
 });
 $$('.goalBtns button').forEach(b=>b.onclick=()=>{if(sessionStarted&&!sessionEnded){alert('The practice goal is fixed for this challenge. Start a new challenge to change it.');return}state.goalMin=+b.dataset.min;renderStats()});
 setInterval(()=>{
- if(activeStart&&practiceRunning&&!document.hidden){
-   sessionActiveMs+=1000;renderStats();
+  if(activeStart&&practiceRunning&&!document.hidden){
+    sessionActiveMs+=1000;renderStats();
+    if(Math.floor(sessionActiveMs/1000)%15===0)reportPractice();
  }
 },1000);
 
@@ -552,7 +588,8 @@ async function submitSessionScore(){
      }
      $('#scoreModal').classList.remove('hidden');
    }else{throw new Error('Leaderboard connection is required to post scores.');}
-   practiceRunning=false;sessionEnded=true;clearInterval(caseTick);$('#goalModal').classList.add('hidden');$('#sessionActions').classList.add('hidden');await renderLeaders();
+    practiceRunning=false;sessionEnded=true;clearInterval(caseTick);$('#goalModal').classList.add('hidden');$('#sessionActions').classList.add('hidden');
+    await endReport('posted');await renderLeaders();
  }catch(e){alert(e.message||'Unable to post score. Please try again.')}finally{posting=false;btn.disabled=false;btn.textContent='🏆 Post Score & End Session'}
 }
 $('#scoreCloseBtn').onclick=()=>{ $('#scoreModal').classList.add('hidden');returnHome() };
@@ -592,6 +629,10 @@ if(shareChallengeBtn){
   };
 }
 
+// Capture the most recent session snapshot if a student hides or leaves this page.
+// The periodic saves also preserve most progress if a browser closes unexpectedly.
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&sessionStarted&&!sessionEnded)reportPractice()});
+window.addEventListener('pagehide',()=>{if(sessionStarted&&!sessionEnded)reportPractice()});
 renderStats();renderLeaders();
 })();
 </script>
@@ -665,5 +706,6 @@ renderStats();renderLeaders();
   })();
   </script>
 
+<script type="module" src="/assets/abg-challenge-session-tracker.js"></script>
 </body>
 </html>
