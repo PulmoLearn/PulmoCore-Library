@@ -181,6 +181,7 @@
             <input id="rteSearch" type="search" placeholder="Search lessons in selected category…" aria-label="Search RTE-tagged lessons" />
           </div>
           <button type="button" id="rteRefresh" class="btn btn-secondary" style="margin:4px 0 12px">Refresh lesson tags</button>
+          <button type="button" id="rteDownloadDiagnostics" class="btn btn-secondary" style="margin:4px 0 12px" disabled title="Run Refresh lesson tags to build a complete diagnostic report">Download RTE scan report (CSV)</button>
           <p class="rte-info" id="rteScanStatus" role="status" aria-live="polite">Choose Browse to discover tags from the published lessons.</p>
           <div id="rteResults" class="disease-grid" aria-live="polite"></div>
         </div>
@@ -548,6 +549,32 @@
     function extractRteCodes(html) {
       return window.PULMO_RTE_BROWSER.extractCodes(html);
     }
+    // Diagnostics are recorded in the dashboard, not in the lesson reader.
+    // Export contains catalog metadata, request URL, RTE codes, and response status only.
+    let rteDiagnostics = [];
+    const diagnosticButton = document.getElementById('rteDownloadDiagnostics');
+    const csvCell = value => {
+      let s = String(value == null ? '' : value).replace(/[\r\n]+/g, ' ');
+      // Prevent spreadsheet applications interpreting text as a formula.
+      if (/^[\s]*[=+@\-]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    };
+    diagnosticButton.addEventListener('click', () => {
+      if (!rteDiagnostics.length) return;
+      const header = ['Lesson ID','Lesson title','Course','Status','Requested URL','HTTP status / error','RTE codes'];
+      const rows = rteDiagnostics.slice().sort((a,b) => a.course.localeCompare(b.course) || a.title.localeCompare(b.title));
+      const csv = '\uFEFF' + [header, ...rows.map(r => [r.id,r.title,r.course,r.status,r.url,r.error,r.codes.join('; ')])]
+        .map(cols => cols.map(csvCell).join(',')).join('\r\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'pulmolearn-rte-scan-diagnostics.csv';
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
     async function indexRteLessons(force = false) {
       if (rteIndexPromise && !force) return rteIndexPromise;
       if (force) { rteIndexPromise = null; window.PULMO_RTE_BROWSER.clearCache(); }
@@ -555,6 +582,8 @@
       rteIndexPromise = (async () => {
         const cached = !force && window.PULMO_RTE_BROWSER.readCache();
         let tagged = [], inaccessible = 0, unchecked = 0;
+        rteDiagnostics = [];
+        diagnosticButton.disabled = true;
         if (cached) {
           tagged = cached.entries.map(entry => {
             const lesson = rteEligibleLessons.find(l => l.id === entry.id);
@@ -562,33 +591,55 @@
           }).filter(Boolean);
           inaccessible = cached.inaccessible || 0;
           unchecked = cached.unchecked || 0;
+          // Older caches only store aggregates; a refresh is required for named rows.
+          rteDiagnostics = Array.isArray(cached.diagnostics) ? cached.diagnostics : [];
         } else {
           let next = 0, done = 0;
           const workers = Array.from({length:6}, async () => {
             while (next < rteEligibleLessons.length) {
               const lesson = rteEligibleLessons[next++];
+              const href = resolveLessonHref(lesson);
+              const row = { id: lesson.id, title: lesson.title || lesson.id,
+                course: lesson.courseGroup || '', url: href, status: '', error: '', codes: [] };
               try {
-                const response = await fetch(resolveLessonHref(lesson), {credentials:'same-origin'});
+                const response = await fetch(href, {credentials:'same-origin'});
                 if (!response.ok) throw new Error('HTTP ' + response.status);
-                const codes = extractRteCodes(await response.text());
-                if (codes.length) tagged.push({...lesson, rteCodes:codes});
-                else unchecked++;
+                const html = await response.text();
+                const codes = extractRteCodes(html);
+                row.codes = codes;
+                if (codes.length) {
+                  tagged.push({...lesson, rteCodes:codes});
+                  row.status = 'Tagged';
+                } else {
+                  unchecked++;
+                  row.status = 'No readable tags';
+                  // Helpful for a 200 OK response that returned a missing-page or login screen.
+                  if (/\<title[^>]*>[^<]*(?:404|not found|sign in|login)[^<]*<\/title>/i.test(html))
+                    row.error = 'Page appears to be an error or login screen';
+                }
               } catch (err) {
                 inaccessible++;
+                row.status = 'Page could not load';
+                row.error = err && err.message ? err.message : String(err);
                 console.warn('[RTE Browse] Could not read lesson metadata:', lesson.id, err);
               }
+              rteDiagnostics.push(row);
               done++;
               if (done % 10 === 0 || done === rteEligibleLessons.length)
                 status.textContent = `Checking published RTE metadata: ${done} of ${rteEligibleLessons.length} lessons…`;
             }
           });
           await Promise.all(workers);
-          window.PULMO_RTE_BROWSER.writeCache({entries:tagged.map(l=>({id:l.id,codes:l.rteCodes})),inaccessible,unchecked});
+          window.PULMO_RTE_BROWSER.writeCache({entries:tagged.map(l=>({id:l.id,codes:l.rteCodes})),inaccessible,unchecked,diagnostics:rteDiagnostics});
         }
+        diagnosticButton.disabled = rteDiagnostics.length === 0;
+        diagnosticButton.title = rteDiagnostics.length
+          ? `Download per-lesson results for ${rteDiagnostics.length} lessons`
+          : 'Click Refresh lesson tags to generate the per-lesson diagnostic report';
         rteTaggedLessons = tagged.sort((a,b) => a.title.localeCompare(b.title));
         rteProgress = await loadProgress();
         const suffix = inaccessible ? ` ${inaccessible} pages could not be loaded.` : '';
-        status.textContent = `${tagged.length} of ${rteEligibleLessons.length} existing lessons have readable RTE codes; ${unchecked} have no readable tags.${suffix} These are published mappings, not a curriculum gap assessment.` + (cached ? ' · Cached scan' : '');
+        status.textContent = `${tagged.length} of ${rteEligibleLessons.length} existing lessons have readable RTE codes; ${unchecked} have no readable tags.${suffix} These are published mappings, not a curriculum gap assessment.` + (cached ? ' · Cached scan' : '') + (rteDiagnostics.length ? ' · Diagnostic CSV ready.' : ' · Click Refresh lesson tags to create a diagnostic CSV.');
         populateRteFilters();
         renderRteResults();
       })().catch(err => { rteIndexPromise = null; status.textContent = 'Unable to load the RTE tag index. Try Refresh lesson tags.'; console.error(err); });
