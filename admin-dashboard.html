@@ -136,26 +136,28 @@ th{background:#E5F0F6}
 
   <section class="card section-spacer" id="prospectCard" style="display:none">
     <div class="detail-header">
-      <div>
-        <h2>Independent Account Review</h2>
-        <div class="sub">Review registrations, access labels, and recorded learning activity. A profile marked free is a candidate only until confirmed against paid access and institutional membership records.</div>
-      </div>
+      <div><h2>Independent Account Review</h2>
+      <div class="sub">Account classifications use registered profiles, user_access, and organization_members. No recorded learning activity does not mean inactive.</div></div>
       <select id="prospectFilter" aria-label="Account classification filter">
+        <option value="prospects">Potential free prospects</option>
         <option value="all">All registered profiles</option>
-        <option value="free">Profiles labeled free</option>
-        <option value="unknown">Unknown or other access</option>
+        <option value="institutional">Institutional accounts</option>
+        <option value="paid">Paid accounts</option>
+        <option value="voucher">Voucher accounts</option>
+        <option value="review">Needs review</option>
       </select>
     </div>
+    <p id="prospectLoadNote" class="sub" role="status"></p>
     <div class="grid cards section-spacer">
-      <div class="card"><div class="metric" id="reviewAccounts">0</div><div class="sub">Registered profiles visible</div></div>
-      <div class="card"><div class="metric" id="reviewFree">0</div><div class="sub">Free-labeled profiles (unverified)</div></div>
-      <div class="card"><div class="metric" id="reviewWithActivity">0</div><div class="sub">With recorded learning activity</div></div>
-      <div class="card"><div class="metric" id="reviewActive30">0</div><div class="sub">Active within 30 days</div></div>
-      <div class="card"><div class="metric" id="reviewUnknown">0</div><div class="sub">Unclassified access</div></div>
+      <div class="card"><div class="metric" id="reviewAccounts">—</div><div class="sub">Profiles visible</div></div>
+      <div class="card"><div class="metric" id="reviewFree">—</div><div class="sub">Potential free prospects</div></div>
+      <div class="card"><div class="metric" id="reviewPaid">—</div><div class="sub">Paid entitlements</div></div>
+      <div class="card"><div class="metric" id="reviewInstitutional">—</div><div class="sub">Institutional memberships</div></div>
+      <div class="card"><div class="metric" id="reviewNoActivity">—</div><div class="sub">Profiles without tracked activity</div></div>
     </div>
-    <div class="controls"><input type="search" id="prospectSearch" placeholder="Search email, name or access label..." aria-label="Search account review" /></div>
-    <div class="table-wrap"><table><thead><tr><th>Account</th><th>Profile role</th><th>Access label</th><th>Lessons</th><th>Completed</th><th>Activities</th><th>ABG sessions</th><th>Learning time</th><th>Last learning activity</th></tr></thead><tbody id="prospectRows"></tbody></table></div>
-    <p class="sub">Activity is limited to lessons, interactive activities and signed-in ABG sessions. Registration dates, visits without tracked learning, paid subscriptions and organization membership are not available from the supplied dashboard code. Counts are not a verified sales funnel.</p>
+    <div class="controls"><input type="search" id="prospectSearch" placeholder="Search email, name or access..." aria-label="Search account review" /></div>
+    <div class="table-wrap"><table><thead><tr><th>Account</th><th>Classification</th><th>Recorded access</th><th>Lessons</th><th>Completed</th><th>Activities</th><th>ABG sessions</th><th>Learning time</th><th>Last learning activity</th></tr></thead><tbody id="prospectRows"></tbody></table></div>
+    <p class="sub">A potential prospect is a non-admin profile with no recorded paid/voucher entitlement and no organization membership. Historical students not listed in organization_members may still need manual review. This report does not measure anonymous visits to free pages.</p>
   </section>
 
   <section class="card section-spacer" id="studentDetailCard" style="display:none">
@@ -249,6 +251,10 @@ let allRows = [];
 let allActivities = [];
 let allAbgSessions = [];
 let profileMap = {};
+let accessRows = [];
+let membershipRows = [];
+let classificationReady = false;
+let classificationError = "";
 
 const statusEl = document.getElementById("status");
   async function fetchAllRows(table, orderColumn) {
@@ -335,6 +341,23 @@ async function loadData(){
   statusEl.style.display="block";
   statusEl.textContent="Loading admin analytics...";
   await loadProfiles();
+  classificationReady = false;
+  classificationError = "";
+  try {
+    // Supabase RLS must allow only verified admins to read these records.
+    const [access, members] = await Promise.all([
+      fetchAllRows("user_access", "access_granted_at"),
+      fetchAllRows("organization_members", "created_at")
+    ]);
+    accessRows = access;
+    membershipRows = members;
+    classificationReady = true;
+  } catch (error) {
+    accessRows = [];
+    membershipRows = [];
+    classificationError = error.message || String(error);
+    console.warn("Account classification unavailable:", classificationError);
+  }
 
 try {
   allRows = await fetchAllRows(
@@ -766,28 +789,44 @@ function renderUserProgress(rows){
 
 function renderAccountReview(){
   const profiles=Object.values(profileMap).filter(p=>p && p.id);
-  const isFree=p=>["free","free_tier","free-tier","free_user"].includes(String(p.access_level||"").toLowerCase().trim());
-  const isUnknown=p=>!p.access_level || ["unknown","none","null"].includes(String(p.access_level).toLowerCase().trim());
-  const now=Date.now();
+  const note=document.getElementById("prospectLoadNote");
+  document.getElementById("reviewAccounts").textContent=profiles.length;
+  const tbody=document.getElementById("prospectRows");
+  if(!classificationReady){
+    ["reviewFree","reviewPaid","reviewInstitutional","reviewNoActivity"].forEach(id=>document.getElementById(id).textContent="—");
+    note.textContent="Classification unavailable: " + (classificationError||"Could not load access records") + ". Check admin SELECT permissions for user_access and organization_members. No accounts have been classified.";
+    tbody.innerHTML='<tr><td colspan="9">Access verification unavailable. Prospect list intentionally hidden.</td></tr>';
+    return;
+  }
+  note.textContent="Classification loaded from Supabase. Accounts without tracked activity may include historical users.";
+  const byAccess=groupBy(accessRows,r=>r.user_id);
+  const members=new Set(membershipRows.map(r=>r.user_id));
+  const byLesson=groupBy(allRows,r=>r.user_id);
+  const byAct=groupBy(allActivities,r=>r.user_id);
+  const byAbg=groupBy(allAbgSessions,r=>r.user_id);
   const summarized=profiles.map(p=>{
-    const lessons=allRows.filter(r=>r.user_id===p.id);
-    const acts=allActivities.filter(r=>r.user_id===p.id);
-    const abgs=allAbgSessions.filter(r=>r.user_id===p.id);
+    const lessons=byLesson[p.id]||[], acts=byAct[p.id]||[], abgs=byAbg[p.id]||[];
+    const entitlements=byAccess[p.id]||[];
+    const types=[...new Set(entitlements.map(r=>String(r.access_type||"").toLowerCase().trim()))];
+    let classification="prospects", label="Potential free prospect";
+    if(String(p.role||"").toLowerCase()==="admin") {classification="review";label="Admin / internal";}
+    else if(members.has(p.id)) {classification="institutional";label="Institutional learner";}
+    else if(types.includes("paid")) {classification="paid";label="Paid member";}
+    else if(types.includes("voucher")) {classification="voucher";label="Voucher access";}
+    else if(types.length) {classification="review";label="Unrecognized access";}
     const dates=[...lessons.map(r=>r.last_visited_at),...acts.map(r=>r.updated_at),...abgs.map(r=>r.updated_at||r.started_at)].filter(Boolean).sort();
     const last=dates.at(-1)||null;
-    const seconds=lessons.reduce((s,r)=>s+Number(r.total_seconds||0),0)+acts.reduce((s,r)=>s+Number(r.time_seconds||0),0)+abgs.reduce((s,r)=>s+Number(r.active_seconds||0),0);
-    return {p,lessons:lessons.length,completed:lessons.filter(r=>r.completed).length,activities:acts.length,abgs:abgs.length,seconds,last,hasActivity:!!(lessons.length||acts.length||abgs.length)};
+    const seconds=lessons.reduce((sum,r)=>sum+Number(r.total_seconds||0),0)+acts.reduce((sum,r)=>sum+Number(r.time_seconds||0),0)+abgs.reduce((sum,r)=>sum+Number(r.active_seconds||0),0);
+    return {p,classification,label,types,lessons:lessons.length,completed:lessons.filter(r=>r.completed).length,activities:acts.length,abgs:abgs.length,seconds,last,hasActivity:!!(lessons.length||acts.length||abgs.length)};
   });
-  document.getElementById("reviewAccounts").textContent=summarized.length;
-  document.getElementById("reviewFree").textContent=summarized.filter(x=>isFree(x.p)).length;
-  document.getElementById("reviewWithActivity").textContent=summarized.filter(x=>x.hasActivity).length;
-  document.getElementById("reviewActive30").textContent=summarized.filter(x=>x.last && now-new Date(x.last).getTime()<=30*86400000).length;
-  document.getElementById("reviewUnknown").textContent=summarized.filter(x=>isUnknown(x.p)).length;
+  document.getElementById("reviewFree").textContent=summarized.filter(x=>x.classification==="prospects").length;
+  document.getElementById("reviewPaid").textContent=summarized.filter(x=>x.classification==="paid").length;
+  document.getElementById("reviewInstitutional").textContent=summarized.filter(x=>x.classification==="institutional").length;
+  document.getElementById("reviewNoActivity").textContent=summarized.filter(x=>!x.hasActivity).length;
   const filter=document.getElementById("prospectFilter").value;
   const q=document.getElementById("prospectSearch").value.toLowerCase().trim();
-  const shown=summarized.filter(x=>(filter==="all"||(filter==="free"&&isFree(x.p))||(filter==="unknown"&&isUnknown(x.p))) && [x.p.email,x.p.full_name,x.p.role,x.p.access_level].join(" ").toLowerCase().includes(q)).sort((a,b)=>new Date(b.last||0)-new Date(a.last||0));
-  const tbody=document.getElementById("prospectRows");
-  tbody.innerHTML=shown.map(x=>`<tr class="account-review-row" data-user-id="${escapeHtml(x.p.id)}" tabindex="0" style="cursor:pointer"><td><strong>${escapeHtml(x.p.full_name||"Unnamed")}</strong><br><span class="sub">${escapeHtml(x.p.email||x.p.id)}</span></td><td>${escapeHtml(x.p.role||"—")}</td><td>${escapeHtml(x.p.access_level||"Unclassified")}${isFree(x.p)?'<br><span class="sub">Not payment-verified</span>':''}</td><td>${x.lessons}</td><td>${x.completed}</td><td>${x.activities}</td><td>${x.abgs}</td><td>${hours(x.seconds)} hrs</td><td>${dateText(x.last)||"No tracked activity"}</td></tr>`).join("")||'<tr><td colspan="9">No accounts match this filter.</td></tr>';
+  const shown=summarized.filter(x=>(filter==="all"||filter===x.classification) && [x.p.email,x.p.full_name,x.p.role,x.p.access_level,x.label].join(" ").toLowerCase().includes(q)).sort((a,b)=>new Date(b.last||0)-new Date(a.last||0));
+  tbody.innerHTML=shown.map(x=>`<tr class="account-review-row" data-user-id="${escapeHtml(x.p.id)}" tabindex="0" style="cursor:pointer"><td><strong>${escapeHtml(x.p.full_name||"Unnamed")}</strong><br><span class="sub">${escapeHtml(x.p.email||x.p.id)}</span></td><td><span class="badge ${x.classification==="prospects"?"progress":"good"}">${escapeHtml(x.label)}</span></td><td>${escapeHtml(x.types.join(", ")||"none")}</td><td>${x.lessons}</td><td>${x.completed}</td><td>${x.activities}</td><td>${x.abgs}</td><td>${hours(x.seconds)} hrs</td><td>${dateText(x.last)||"No tracked activity"}</td></tr>`).join("")||'<tr><td colspan="9">No accounts match this filter.</td></tr>';
 }
 
 function render(){
