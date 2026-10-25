@@ -133,6 +133,31 @@ th{background:#E5F0F6}
     <button id="refreshBtn">Refresh</button>
   </div>
 
+
+  <section class="card section-spacer" id="prospectCard" style="display:none">
+    <div class="detail-header">
+      <div>
+        <h2>Independent Account Review</h2>
+        <div class="sub">Review registrations, access labels, and recorded learning activity. A profile marked free is a candidate only until confirmed against paid access and institutional membership records.</div>
+      </div>
+      <select id="prospectFilter" aria-label="Account classification filter">
+        <option value="all">All registered profiles</option>
+        <option value="free">Profiles labeled free</option>
+        <option value="unknown">Unknown or other access</option>
+      </select>
+    </div>
+    <div class="grid cards section-spacer">
+      <div class="card"><div class="metric" id="reviewAccounts">0</div><div class="sub">Registered profiles visible</div></div>
+      <div class="card"><div class="metric" id="reviewFree">0</div><div class="sub">Free-labeled profiles (unverified)</div></div>
+      <div class="card"><div class="metric" id="reviewWithActivity">0</div><div class="sub">With recorded learning activity</div></div>
+      <div class="card"><div class="metric" id="reviewActive30">0</div><div class="sub">Active within 30 days</div></div>
+      <div class="card"><div class="metric" id="reviewUnknown">0</div><div class="sub">Unclassified access</div></div>
+    </div>
+    <div class="controls"><input type="search" id="prospectSearch" placeholder="Search email, name or access label..." aria-label="Search account review" /></div>
+    <div class="table-wrap"><table><thead><tr><th>Account</th><th>Profile role</th><th>Access label</th><th>Lessons</th><th>Completed</th><th>Activities</th><th>ABG sessions</th><th>Learning time</th><th>Last learning activity</th></tr></thead><tbody id="prospectRows"></tbody></table></div>
+    <p class="sub">Activity is limited to lessons, interactive activities and signed-in ABG sessions. Registration dates, visits without tracked learning, paid subscriptions and organization membership are not available from the supplied dashboard code. Counts are not a verified sales funnel.</p>
+  </section>
+
   <section class="card section-spacer" id="studentDetailCard" style="display:none">
     <div class="detail-header">
       <div>
@@ -341,6 +366,7 @@ try {
   statusEl.style.display="none";
   ["activitySnapshot","metrics","activityMetrics"].forEach(id=>document.getElementById(id).style.display="grid");
   ["controls"].forEach(id=>document.getElementById(id).style.display="flex");
+  document.getElementById("prospectCard").style.display="block";
   ["studentSummaryCard","courseSummaryCard","activitySummaryCard","lessonSummaryCard","userProgressCard"].forEach(id=>document.getElementById(id).style.display="block");
 
   populateCourseFilter();
@@ -737,10 +763,38 @@ function renderUserProgress(rows){
   }).join("");
 }
 
+
+function renderAccountReview(){
+  const profiles=Object.values(profileMap).filter(p=>p && p.id);
+  const isFree=p=>["free","free_tier","free-tier","free_user"].includes(String(p.access_level||"").toLowerCase().trim());
+  const isUnknown=p=>!p.access_level || ["unknown","none","null"].includes(String(p.access_level).toLowerCase().trim());
+  const now=Date.now();
+  const summarized=profiles.map(p=>{
+    const lessons=allRows.filter(r=>r.user_id===p.id);
+    const acts=allActivities.filter(r=>r.user_id===p.id);
+    const abgs=allAbgSessions.filter(r=>r.user_id===p.id);
+    const dates=[...lessons.map(r=>r.last_visited_at),...acts.map(r=>r.updated_at),...abgs.map(r=>r.updated_at||r.started_at)].filter(Boolean).sort();
+    const last=dates.at(-1)||null;
+    const seconds=lessons.reduce((s,r)=>s+Number(r.total_seconds||0),0)+acts.reduce((s,r)=>s+Number(r.time_seconds||0),0)+abgs.reduce((s,r)=>s+Number(r.active_seconds||0),0);
+    return {p,lessons:lessons.length,completed:lessons.filter(r=>r.completed).length,activities:acts.length,abgs:abgs.length,seconds,last,hasActivity:!!(lessons.length||acts.length||abgs.length)};
+  });
+  document.getElementById("reviewAccounts").textContent=summarized.length;
+  document.getElementById("reviewFree").textContent=summarized.filter(x=>isFree(x.p)).length;
+  document.getElementById("reviewWithActivity").textContent=summarized.filter(x=>x.hasActivity).length;
+  document.getElementById("reviewActive30").textContent=summarized.filter(x=>x.last && now-new Date(x.last).getTime()<=30*86400000).length;
+  document.getElementById("reviewUnknown").textContent=summarized.filter(x=>isUnknown(x.p)).length;
+  const filter=document.getElementById("prospectFilter").value;
+  const q=document.getElementById("prospectSearch").value.toLowerCase().trim();
+  const shown=summarized.filter(x=>(filter==="all"||(filter==="free"&&isFree(x.p))||(filter==="unknown"&&isUnknown(x.p))) && [x.p.email,x.p.full_name,x.p.role,x.p.access_level].join(" ").toLowerCase().includes(q)).sort((a,b)=>new Date(b.last||0)-new Date(a.last||0));
+  const tbody=document.getElementById("prospectRows");
+  tbody.innerHTML=shown.map(x=>`<tr class="account-review-row" data-user-id="${escapeHtml(x.p.id)}" tabindex="0" style="cursor:pointer"><td><strong>${escapeHtml(x.p.full_name||"Unnamed")}</strong><br><span class="sub">${escapeHtml(x.p.email||x.p.id)}</span></td><td>${escapeHtml(x.p.role||"—")}</td><td>${escapeHtml(x.p.access_level||"Unclassified")}${isFree(x.p)?'<br><span class="sub">Not payment-verified</span>':''}</td><td>${x.lessons}</td><td>${x.completed}</td><td>${x.activities}</td><td>${x.abgs}</td><td>${hours(x.seconds)} hrs</td><td>${dateText(x.last)||"No tracked activity"}</td></tr>`).join("")||'<tr><td colspan="9">No accounts match this filter.</td></tr>';
+}
+
 function render(){
   const rows=getFilteredRows();
   const activities=getFilteredActivities();
   const sessions=getFilteredSessions();
+  renderAccountReview();
   renderAbgChallenge(sessions);
   renderActivitySnapshot(rows,activities);
   renderMetrics(rows);
@@ -752,6 +806,10 @@ function render(){
   renderUserProgress(rows);
 }
 
+document.getElementById("prospectFilter").addEventListener("change",renderAccountReview);
+document.getElementById("prospectSearch").addEventListener("input",renderAccountReview);
+document.getElementById("prospectRows").addEventListener("click",e=>{const row=e.target.closest(".account-review-row");if(row)renderStudentDetail(row.dataset.userId)});
+document.getElementById("prospectRows").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){const row=e.target.closest(".account-review-row");if(row){e.preventDefault();renderStudentDetail(row.dataset.userId)}}});
 document.getElementById("courseFilter").addEventListener("change",render);
 document.getElementById("searchBox").addEventListener("input",render);
 document.getElementById("refreshBtn").addEventListener("click",loadData);
