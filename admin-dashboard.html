@@ -102,6 +102,31 @@ th{background:#E5F0F6}
     <div class="card"><div class="metric" id="guessFlags">0</div><div class="sub">Potential guessing flags</div></div>
   </section>
 
+  <section class="card section-spacer" id="abgChallengeCard" style="display:none">
+    <div class="detail-header">
+      <div>
+        <h2>ABG Challenge Analytics</h2>
+        <div class="sub">Individual signed-in practice sessions · time excludes background tabs · leaderboard remains separate.</div>
+      </div>
+    </div>
+    <div class="grid cards section-spacer" id="abgChallengeMetrics">
+      <div class="card"><div class="metric" id="abgLearners">0</div><div class="sub">Challenge learners</div></div>
+      <div class="card"><div class="metric" id="abgSessions">0</div><div class="sub">Practice sessions</div></div>
+      <div class="card"><div class="metric" id="abgActiveTime">0</div><div class="sub">Active minutes</div></div>
+      <div class="card"><div class="metric" id="abgAttempts">0</div><div class="sub">ABGs attempted</div></div>
+      <div class="card"><div class="metric" id="abgAccuracy">—</div><div class="sub">Overall accuracy</div></div>
+    </div>
+    <h3 class="section-spacer">Student Challenge Summary</h3>
+    <div class="table-wrap"><table><thead><tr>
+      <th>Student</th><th>Sessions</th><th>Active time</th><th>ABGs attempted</th><th>Correct</th><th>Accuracy</th><th>Best streak</th><th>Last practiced</th>
+    </tr></thead><tbody id="abgStudentSummary"></tbody></table></div>
+    <h3 class="section-spacer">Challenge Session History</h3>
+    <div class="sub" style="margin-bottom:10px">Each row represents one practice session, including unfinished sessions.</div>
+    <div class="table-wrap"><table><thead><tr>
+      <th>Student</th><th>Started</th><th>Status</th><th>Active time</th><th>ABGs</th><th>Correct</th><th>Accuracy</th><th>Best streak</th><th>Avg correct time</th><th>Goal</th>
+    </tr></thead><tbody id="abgSessionHistory"></tbody></table></div>
+  </section>
+
   <div class="controls" id="controls" style="display:none">
     <select id="courseFilter"><option value="">All courses</option></select>
     <input id="searchBox" type="search" placeholder="Search student, email, lesson title, lesson ID, or user ID..." />
@@ -124,6 +149,20 @@ th{background:#E5F0F6}
       <div class="card"><div class="metric" id="detailHours">0</div><div class="sub">Learning hours</div></div>
       <div class="card"><div class="metric" id="detailAvgAttempts">0</div><div class="sub">Avg attempts</div></div>
     </section>
+
+    <div id="studentAbgChallenge" class="section-spacer" style="display:none">
+      <h3>ABG Challenge Practice</h3>
+      <div class="grid cards section-spacer">
+        <div class="card"><div class="metric" id="studentAbgSessions">0</div><div class="sub">Sessions</div></div>
+        <div class="card"><div class="metric" id="studentAbgMinutes">0</div><div class="sub">Active minutes</div></div>
+        <div class="card"><div class="metric" id="studentAbgAttempts">0</div><div class="sub">ABGs attempted</div></div>
+        <div class="card"><div class="metric" id="studentAbgAccuracy">—</div><div class="sub">Accuracy</div></div>
+        <div class="card"><div class="metric" id="studentAbgStreak">0</div><div class="sub">Best streak</div></div>
+      </div>
+      <div class="table-wrap"><table><thead><tr>
+        <th>Started</th><th>Ended</th><th>Status</th><th>Active time</th><th>ABGs</th><th>Correct</th><th>Accuracy</th><th>Best streak</th><th>Avg correct time</th><th>Goal</th>
+      </tr></thead><tbody id="studentAbgSessionHistory"></tbody></table></div>
+    </div>
 
     <h3 class="section-spacer">Lesson Progress</h3>
     <div class="table-wrap"><table><thead>
@@ -183,6 +222,7 @@ import { supabase } from "/assets/auth.js";
 
 let allRows = [];
 let allActivities = [];
+let allAbgSessions = [];
 let profileMap = {};
 
 const statusEl = document.getElementById("status");
@@ -213,6 +253,19 @@ const statusEl = document.getElementById("status");
 function minutes(seconds){return Math.round((Number(seconds||0)/60)*10)/10}
 function hours(seconds){return Math.round((Number(seconds||0)/3600)*10)/10}
 function pct(value){return `${Math.round(Number(value||0))}%`}
+function abgAccuracy(rows){
+  const attempts=rows.reduce((n,r)=>n+Number(r.attempts||0),0);
+  const correct=rows.reduce((n,r)=>n+Number(r.correct_answers||0),0);
+  return attempts ? `${Math.round(correct/attempts*100)}%` : "—";
+}
+function abgSum(rows, field){return rows.reduce((n,r)=>n+Number(r[field]||0),0)}
+function abgBest(rows){return rows.reduce((n,r)=>Math.max(n,Number(r.best_streak||0)),0)}
+function abgMin(seconds){return `${minutes(seconds)} min`}
+function abgStatus(status){
+  const state=String(status||"active");
+  const css=state==="posted"||state==="finished" ? "complete" : state==="active" ? "progress" : "warn";
+  return `<span class="badge ${css}">${escapeHtml(state)}</span>`;
+}
 function dateText(value){return value ? new Date(value).toLocaleString() : ""}
 function dayStart(date){const d=new Date(date); d.setHours(0,0,0,0); return d}
 function daysAgo(n){const d=new Date(); d.setDate(d.getDate()-n); return d}
@@ -264,13 +317,20 @@ try {
     "last_visited_at"
   );
 
-  allActivities = await fetchAllRows(
-    "activity_progress",
-    "updated_at"
+   allActivities = await fetchAllRows(
+     "activity_progress",
+     "updated_at"
   );
 
+   // Uses a separate admin-only SELECT policy, installed by the accompanying SQL.
+   allAbgSessions = await fetchAllRows(
+     "abg_practice_sessions",
+     "started_at"
+   );
+
   console.log("Lesson records loaded:", allRows.length);
-  console.log("Activity records loaded:", allActivities.length);
+   console.log("Activity records loaded:", allActivities.length);
+   console.log("ABG Challenge sessions loaded:", allAbgSessions.length);
 
 } catch (error) {
   statusEl.textContent =
@@ -290,7 +350,7 @@ try {
 function populateCourseFilter(){
   const filter=document.getElementById("courseFilter");
   const current=filter.value;
-  const courses=[...new Set([...allRows.map(r=>r.course_id||"unknown"),...allActivities.map(r=>r.course_id||"unknown")])].sort();
+  const courses=[...new Set([...allRows.map(r=>r.course_id||"unknown"),...allActivities.map(r=>r.course_id||"unknown"),"abg-challenge"])].sort();
   filter.innerHTML=`<option value="">All courses</option>`+courses.map(course=>`<option value="${escapeHtml(course)}">${escapeHtml(course)}</option>`).join("");
   filter.value=current;
 }
@@ -315,6 +375,51 @@ function getFilteredActivities(){
     const haystack=[row.user_id,profile.full_name,profile.email,row.course_id,row.lesson_id,row.activity_id,row.activity_name,row.activity_type].join(" ").toLowerCase();
     return matchesCourse && (!search || haystack.includes(search));
   });
+}
+
+function getFilteredSessions(){
+  const course=document.getElementById("courseFilter").value;
+  if(course && course!=="abg-challenge") return [];
+  const search=document.getElementById("searchBox").value.toLowerCase().trim();
+  return allAbgSessions.filter(row=>{
+    const profile=getProfile(row.user_id);
+    const haystack=[row.user_id, profile.full_name, profile.email, row.initials, row.status, "abg challenge"].join(" ").toLowerCase();
+    return !search || haystack.includes(search);
+  });
+}
+
+function renderAbgChallenge(sessions){
+  const course=document.getElementById("courseFilter").value;
+  const card=document.getElementById("abgChallengeCard");
+  card.style.display=(!course||course==="abg-challenge")?"block":"none";
+  const learners=new Set(sessions.map(s=>s.user_id)).size;
+  document.getElementById("abgLearners").textContent=learners;
+  document.getElementById("abgSessions").textContent=sessions.length;
+  document.getElementById("abgActiveTime").textContent=minutes(abgSum(sessions,"active_seconds"));
+  document.getElementById("abgAttempts").textContent=abgSum(sessions,"attempts");
+  document.getElementById("abgAccuracy").textContent=abgAccuracy(sessions);
+
+  const byUser=groupBy(sessions,s=>s.user_id);
+  document.getElementById("abgStudentSummary").innerHTML=Object.entries(byUser).map(([userId,items])=>{
+    const p=getProfile(userId);
+    const latest=items.map(i=>i.started_at).filter(Boolean).sort().pop();
+    return `<tr><td><strong>${escapeHtml(p.full_name||"Unknown User")}</strong><br><span class="sub">${escapeHtml(p.email||userId)}</span></td>
+      <td>${items.length}</td><td>${abgMin(abgSum(items,"active_seconds"))}</td>
+      <td>${abgSum(items,"attempts")}</td><td>${abgSum(items,"correct_answers")}</td>
+      <td>${abgAccuracy(items)}</td><td>${abgBest(items)}</td><td>${dateText(latest)}</td></tr>`;
+  }).join("") || `<tr><td colspan="8">No ABG Challenge sessions match these filters.</td></tr>`;
+
+  document.getElementById("abgSessionHistory").innerHTML=sessions.map(s=>{
+    const p=getProfile(s.user_id);
+    const accuracy=Number(s.attempts)>0?`${Math.round(Number(s.correct_answers||0)/Number(s.attempts)*100)}%`:"—";
+    return `<tr>
+      <td><strong>${escapeHtml(p.full_name||"Unknown User")}</strong><br><span class="sub">${escapeHtml(p.email||s.user_id)}</span></td>
+      <td>${dateText(s.started_at)}</td><td>${abgStatus(s.status)}</td>
+      <td>${abgMin(s.active_seconds)}</td><td>${Number(s.attempts||0)}</td>
+      <td>${Number(s.correct_answers||0)}</td><td>${accuracy}</td><td>${Number(s.best_streak||0)}</td>
+      <td>${s.avg_correct_seconds==null?"—":`${Number(s.avg_correct_seconds).toFixed(1)} sec`}</td>
+      <td>${Number(s.goal_minutes||0)} min</td></tr>`;
+  }).join("") || `<tr><td colspan="10">No ABG Challenge session history found.</td></tr>`;
 }
 
 function renderActivitySnapshot(rows, activities){
@@ -372,8 +477,8 @@ function renderActivityMetrics(rows){
   document.getElementById("guessFlags").textContent=flags;
 }
 
-function renderStudentSummary(rows,activities){
-  const userIds=[...new Set([...rows.map(r=>r.user_id),...activities.map(a=>a.user_id)])];
+function renderStudentSummary(rows,activities,sessions){
+  const userIds=[...new Set([...rows.map(r=>r.user_id),...activities.map(a=>a.user_id),...sessions.map(s=>s.user_id)])];
   const body=document.getElementById("studentSummary");
 
   const summaries=userIds.map(userId=>{
@@ -388,7 +493,8 @@ function renderStudentSummary(rows,activities){
     const avgAttempts=userActivities.length?userActivities.reduce((s,a)=>s+Number(a.attempts||0),0)/userActivities.length:0;
     const lastLesson=userRows.map(r=>r.last_visited_at).filter(Boolean).sort().pop();
     const lastActivity=userActivities.map(a=>a.updated_at).filter(Boolean).sort().pop();
-    const lastActive=[lastLesson,lastActivity].filter(Boolean).sort().pop();
+    const lastChallenge=sessions.filter(s=>s.user_id===userId).map(s=>s.updated_at||s.started_at).filter(Boolean).sort().pop();
+    const lastActive=[lastLesson,lastActivity,lastChallenge].filter(Boolean).sort().pop();
     return {userId,name:profile.full_name||"Unknown User",email:profile.email||userId,role:profile.role||"student",access:profile.access_level||"unknown",lessonsStarted,lessonsCompleted,avgProgress,totalSeconds,activitiesCompleted,avgAttempts,lastActive};
   });
 
@@ -413,6 +519,7 @@ function renderStudentDetail(userId){
   const profile=getProfile(userId);
   const rows=getFilteredRows().filter(r=>r.user_id===userId);
   const activities=getFilteredActivities().filter(a=>a.user_id===userId);
+  const abgSessions=getFilteredSessions().filter(s=>s.user_id===userId);
 
   const lessonsStarted=rows.length;
   const lessonsCompleted=rows.filter(r=>r.completed).length;
@@ -438,6 +545,23 @@ function renderStudentDetail(userId){
       <td>${dateText(row.last_visited_at)}</td>
     </tr>
   `).join("") || `<tr><td colspan="6">No lesson progress found for this filter.</td></tr>`;
+
+  const abgDetail=document.getElementById("studentAbgChallenge");
+  abgDetail.style.display=(!document.getElementById("courseFilter").value||document.getElementById("courseFilter").value==="abg-challenge")?"block":"none";
+  document.getElementById("studentAbgSessions").textContent=abgSessions.length;
+  document.getElementById("studentAbgMinutes").textContent=minutes(abgSum(abgSessions,"active_seconds"));
+  document.getElementById("studentAbgAttempts").textContent=abgSum(abgSessions,"attempts");
+  document.getElementById("studentAbgAccuracy").textContent=abgAccuracy(abgSessions);
+  document.getElementById("studentAbgStreak").textContent=abgBest(abgSessions);
+  document.getElementById("studentAbgSessionHistory").innerHTML=abgSessions.map(s=>{
+    const accuracy=Number(s.attempts)>0?`${Math.round(Number(s.correct_answers||0)/Number(s.attempts)*100)}%`:"—";
+    return `<tr><td>${dateText(s.started_at)}</td><td>${dateText(s.ended_at)||"—"}</td>
+      <td>${abgStatus(s.status)}</td><td>${abgMin(s.active_seconds)}</td>
+      <td>${Number(s.attempts||0)}</td><td>${Number(s.correct_answers||0)}</td><td>${accuracy}</td>
+      <td>${Number(s.best_streak||0)}</td>
+      <td>${s.avg_correct_seconds==null?"—":`${Number(s.avg_correct_seconds).toFixed(1)} sec`}</td>
+      <td>${Number(s.goal_minutes||0)} min</td></tr>`;
+  }).join("") || `<tr><td colspan="10">No ABG Challenge sessions for this student.</td></tr>`;
 
   document.getElementById("studentActivityDetail").innerHTML=activities.map(a=>`
     <tr>
@@ -616,10 +740,12 @@ function renderUserProgress(rows){
 function render(){
   const rows=getFilteredRows();
   const activities=getFilteredActivities();
+  const sessions=getFilteredSessions();
+  renderAbgChallenge(sessions);
   renderActivitySnapshot(rows,activities);
   renderMetrics(rows);
   renderActivityMetrics(activities);
-  renderStudentSummary(rows,activities);
+  renderStudentSummary(rows,activities,sessions);
   renderCourseSummary(rows);
   renderActivitySummary(activities);
   renderLessonSummary(rows);
