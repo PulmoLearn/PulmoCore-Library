@@ -1,7 +1,7 @@
-/* PulmoLearn RTE Browser metadata reader v3 · no lesson page scripts are executed. */
+/* PulmoLearn RTE Browser metadata reader v4 · no lesson page scripts are executed. */
 (function(global){
   'use strict';
-  const CACHE_KEY='pulmolearn-rte-lesson-tags-v3';
+  const CACHE_KEY='pulmolearn-rte-lesson-tags-v4';
   const TTL=12*60*60*1000;
   const codePattern=/^(?:I|II|III)\.[A-Z](?:\.\d+)?$/;
   function valid(code){
@@ -13,9 +13,25 @@
     return !/\.\d+$/.test(code) || Boolean(registry.getBreadthItem('BOK-'+code));
   }
   function normalize(v){const code=String(v).replace(/^BOK-/,'').trim();return valid(code)?code:null;}
-  function extractCodes(html){
+  function validDepth(code){
+    const registry=global.NBRC_RT_DCO_2027?.depthOfClinicalJudgment?.patientConditionTypes;
+    if(!registry)return false;
+    return registry.some(group => group.id===code || (group.categories||[]).some(cat =>
+      cat.id===code || (cat.subtypes||[]).some(sub=>sub.id===code)));
+  }
+  function extractAlignment(html){
     const doc=new DOMParser().parseFromString(html,'text/html');
     const codes=new Set();
+    const depthCodes=new Set();
+    const addDepth=value=>{
+      const raw=String(value||'').trim();
+      // Original 2027 depth notation: 1.* = adult, 2.* = child/neonate.
+      const m=raw.match(/^([12])\.([A-Z])(?:\.(\d+))?$/i);
+      if(!m)return;
+      const group=m[1]==='1'?'ADULT':'CHILD';
+      const canonical='DCJ-'+group+'-'+m[2].toUpperCase()+(m[3]?'.'+m[3]:'');
+      if(validDepth(canonical))depthCodes.add(canonical);
+    };
     const add=v=>{const code=normalize(v);if(code)codes.add(code);};
     // Diseases and legacy lessons: explicit visible author tags.
     const tagged=Array.from(doc.querySelectorAll('.direct-codes,[data-rte-codes],[data-nbrc-codes]'));
@@ -76,6 +92,16 @@
           add(m[0].match(/^(?:III|II|I)\.[A-Z]\.\d+/)[0]);
         }
       }
+      // Older Equipment metadata keeps the Roman domain and letter section separate.
+      // Only combine fields in each individual outline entry (not across entries).
+      for(const entry of [bok,outline]){
+        const blockRE=/(?:["']?domainId["']?)\s*:\s*["'](I|II|III)["'][\s\S]{0,300}?(?:["']?sectionId["']?)\s*:\s*["']([A-Z])["']/g;
+        for(const m of entry.matchAll(blockRE)) add(m[1]+'.'+m[2]);
+      }
+      // Depth of Clinical Judgment is distinct from Breadth of Knowledge.
+      // Do not substitute disease-condition codes as content-outline codes.
+      const depth=findValueBlock(nbrc,'depthOfClinicalJudgmentCodes','[',']');
+      for(const m of depth.matchAll(/["']([12]\.[A-Z](?:\.\d+)?)["']/gi))addDepth(m[1]);
       const lineItems=findValueBlock(nbrc,'lineItems','[',']');
       for(const m of lineItems.matchAll(/BOK-((?:III|II|I)\.[A-Z](?:\.\d+)?)/g))add(m[1]);
     }
@@ -84,7 +110,20 @@
       if(!/window\.PULMO_LESSON\s*=/.test(source))continue;
       fromSource(source);
     }
-    return [...codes].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+    return {breadth:[...codes].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})),
+      depth:[...depthCodes].sort()};
+  }
+  function extractCodes(html){return extractAlignment(html).breadth;}
+  function depthLabel(code){
+    const groups=global.NBRC_RT_DCO_2027?.depthOfClinicalJudgment?.patientConditionTypes||[];
+    for(const group of groups){
+      if(group.id===code)return group.label;
+      for(const category of group.categories||[]){
+        if(category.id===code)return group.label+' · '+category.label;
+        for(const subtype of category.subtypes||[])if(subtype.id===code)return group.label+' · '+category.label+' · '+subtype.label;
+      }
+    }
+    return code;
   }
   function label(code){
     const helpers=global.NBRC_RT_DCO_2027_HELPERS;
@@ -95,5 +134,5 @@
   function readCache(){try{const x=JSON.parse(sessionStorage.getItem(CACHE_KEY)||'null');return x&&Date.now()-x.created<TTL?x:null;}catch{return null;}}
   function writeCache(payload){try{sessionStorage.setItem(CACHE_KEY,JSON.stringify({...payload,created:Date.now()}));}catch{}}
   function clearCache(){try{sessionStorage.removeItem(CACHE_KEY);}catch{}}
-  global.PULMO_RTE_BROWSER={extractCodes,label,readCache,writeCache,clearCache};
+  global.PULMO_RTE_BROWSER={extractCodes,extractAlignment,label,depthLabel,readCache,writeCache,clearCache};
 })(window);
