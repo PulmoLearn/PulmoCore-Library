@@ -441,11 +441,18 @@
     }
 
     function resolveLessonHref(lesson, mode = '') {
-      const section = courseSections.find(item => item.key === lesson.courseGroup);
-      const baseUrl = section && section.baseUrl ? section.baseUrl : '';
-      const href = /^https?:\/\//i.test(lesson.href) ? lesson.href : `${baseUrl}${lesson.href}`;
-      return mode ? `${href}${href.includes('?') ? '&' : '?'}${mode}=true` : href;
-    }
+  const section = courseSections.find(item => item.key === lesson.courseGroup);
+  const baseUrl = section && section.baseUrl ? section.baseUrl : '';
+
+  const href =
+    /^https?:\/\//i.test(lesson.href) || lesson.href.startsWith('/')
+      ? lesson.href
+      : `${baseUrl}${lesson.href}`;
+
+  return mode
+    ? `${href}${href.includes('?') ? '&' : '?'}${mode}=true`
+    : href;
+}
 
     function lessonCardTemplate(lesson, progress) {
       if (lesson.isResourceHub) {
