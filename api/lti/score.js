@@ -179,7 +179,9 @@ export default async function handler(req, res) {
     ? "smoke_inhalation"
     : lessonId === "pa_2_4"
       ? "pa-2-4"
-      : lessonId;
+      : lessonId === "pa_3_1"
+        ? "pa-3-1"
+        : lessonId;
 
     const completed =
       body?.completed === true;
