@@ -655,6 +655,32 @@ function findLessonCard(section, lessonId) {
   }) || null;
 }
 
+// Reconcile completed cards even when another render inserted them earlier.
+// This protects the Retake control from asynchronous dashboard render order.
+function reconcileRetakeButtons() {
+  document.querySelectorAll('.program-activity-card[data-program-activity="true"]').forEach(card => {
+    if (card.querySelector('.btn-retake-activity')) return;
+    const link = card.querySelector('.card-actions a[href]');
+    if (!link) return;
+    const activity = Object.values(activityMap).flat().find(item =>
+      !item.placeholder && getActivityKey(item.href) === getActivityKey(link.getAttribute('href'))
+    );
+    if (!activity) return;
+    const key = getActivityKey(activity.href);
+    const stored = getActivityProgress(activity);
+    const completed = Boolean(stored.completed) || Number(stored.percent_complete || 0) >= 100;
+    if (!completed || !verifiedRetakeStorageKeys[key]) return;
+    const actions = card.querySelector('.card-actions');
+    if (!actions) return;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn btn-secondary btn-retake-activity';
+    button.textContent = 'Retake Activity';
+    button.addEventListener('click', () => startVerifiedActivityRetake(activity));
+    actions.appendChild(button);
+  });
+}
+
 function addActivitiesToVisibleSections() {
   Object.entries(activityMap).forEach(([courseGroup, activities]) => {
     document
@@ -665,7 +691,10 @@ function addActivitiesToVisibleSections() {
 
         // The dashboard rebuilds this grid on every tab/search/filter render,
         // so insert only when these cards are not already present.
-        if (grid.querySelector("[data-program-activity='true']")) return;
+        if (grid.querySelector("[data-program-activity='true']")) {
+          reconcileRetakeButtons();
+          return;
+        }
 
         let inserted = 0;
 
@@ -688,6 +717,7 @@ function addActivitiesToVisibleSections() {
         }
       });
   });
+  reconcileRetakeButtons();
 }
 
 async function loadActivityDashboardProgress() {
@@ -764,6 +794,8 @@ async function initProgramActivities() {
 
   await loadActivityDashboardProgress();
   addActivitiesToVisibleSections();
+  reconcileRetakeButtons();
+  console.info("PulmoLearn activity dashboard retake reconciliation v1.1 active");
 
   const target = document.getElementById("courseSections");
   if (!target) return;
