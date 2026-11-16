@@ -40,6 +40,47 @@ function getActivityProgress(activity) {
   };
 }
 
+// Verified practice-state keys. Only these activities have been inspected.
+// Extend this map after inspecting additional activity files.
+const verifiedRetakeStorageKeys = Object.freeze({
+  '1-2-respiratory-math-safety-practice': [
+    'ahrc152_math_safety_lab_v1',
+    'PL_FOUNDATIONS_UI_STATE_1_2_V1'
+  ],
+  '2-4-radiologic-imaging-practice': [
+    'PA_2_4_complete',
+    'PL_PA_ANSWERS_V3_2-4-radiologic-imaging-practice'
+  ],
+  '3-2-cardiac-pathology-hemodynamics-practice': [
+    'AHRC155_3_2_hemodynamics_v1'
+  ]
+});
+
+function startVerifiedActivityRetake(activity) {
+  const key = getActivityKey(activity.href);
+  const storageKeys = verifiedRetakeStorageKeys[key];
+  if (!storageKeys || !storageKeys.length) return;
+
+  const proceed = window.confirm(
+    `Retake ${activity.title} from the beginning?\n\n` +
+    'Your practice answers on this device will be cleared. ' +
+    'Previously recorded PulmoLearn and Canvas completion will be retained.'
+  );
+  if (!proceed) return;
+
+  // Deliberately clear only verified, activity-owned local browser keys.
+  // Never delete Supabase completion, grades, LTI context, or other activities.
+  try {
+    storageKeys.forEach(storageKey => window.localStorage.removeItem(storageKey));
+  } catch (error) {
+    window.alert('Browser storage could not be cleared. Your activity was not restarted.');
+    console.warn('PulmoLearn: Activity retake storage reset failed:', error);
+    return;
+  }
+
+  window.location.assign(activity.href);
+}
+
 const activityMap = {
   foundations: [
     {
@@ -549,6 +590,10 @@ function makeActivityCard(activity) {
   article.className =
     `disease-card program-activity-card${completed ? " is-complete" : ""}`;
 
+  const retakeAvailable = completed && Boolean(
+    verifiedRetakeStorageKeys[getActivityKey(activity.href)]
+  );
+
   article.innerHTML = `
     <div class="disease-header">
       <div>
@@ -578,8 +623,15 @@ function makeActivityCard(activity) {
     </div>
     <div class="card-actions">
       <a class="btn btn-program-practice" href="${activity.href}">${buttonText}</a>
+      ${retakeAvailable ? '<button type="button" class="btn btn-secondary btn-retake-activity">Retake Activity</button>' : ''}
     </div>
   `;
+
+  if (retakeAvailable) {
+    article.querySelector('.btn-retake-activity')?.addEventListener('click', () => {
+      startVerifiedActivityRetake(activity);
+    });
+  }
 
   return article;
 }
