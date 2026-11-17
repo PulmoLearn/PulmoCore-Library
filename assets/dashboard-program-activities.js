@@ -40,44 +40,107 @@ function getActivityProgress(activity) {
   };
 }
 
-// Verified practice-state keys. Only these activities have been inspected.
-// Extend this map after inspecting additional activity files.
+// Known-safe storage keys for the three activities individually inspected.
+// Additional activity-owned keys are discovered from each activity's published HTML.
 const verifiedRetakeStorageKeys = Object.freeze({
   '1-2-respiratory-math-safety-practice': [
-    'ahrc152_math_safety_lab_v1',
-    'PL_FOUNDATIONS_UI_STATE_1_2_V1'
+    'ahrc152_math_safety_lab_v1', 'PL_FOUNDATIONS_UI_STATE_1_2_V1'
   ],
   '2-4-radiologic-imaging-practice': [
-    'PA_2_4_complete',
-    'PL_PA_ANSWERS_V3_2-4-radiologic-imaging-practice'
+    'PA_2_4_complete', 'PL_PA_ANSWERS_V3_2-4-radiologic-imaging-practice'
   ],
   '3-2-cardiac-pathology-hemodynamics-practice': [
     'AHRC155_3_2_hemodynamics_v1'
   ]
 });
 
-function startVerifiedActivityRetake(activity) {
-  const key = getActivityKey(activity.href);
-  const storageKeys = verifiedRetakeStorageKeys[key];
-  if (!storageKeys || !storageKeys.length) return;
+// Never clear authentication, enrollment, grade, or LTI records. Restrict
+// changes to *this browser's* activity-owned localStorage, not Supabase.
+function isProtectedStorageKey(key) {
+  return /(?:supabase|auth|token|session|canvas|lti|passback|grade|credential|entitlement|dashboard|lesson_progress|activity_dashboard_progress)/i.test(key);
+}
 
-  const proceed = window.confirm(
-    `Retake ${activity.title} from the beginning?\n\n` +
-    'Your practice answers on this device will be cleared. ' +
-    'Previously recorded PulmoLearn and Canvas completion will be retained.'
-  );
-  if (!proceed) return;
+function discoverActivityStorageKeys(html) {
+  // Consider only the activity's inline scripts, not shared tracking modules.
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const scripts = [...doc.querySelectorAll('script:not([src])')]
+    .map(el => el.textContent || '');
+  const result = new Set();
+  for (const script of scripts) {
+    const variables = new Map();
+    // Resolve literal constants such as const STORE = 'unique_activity_key'.
+    for (const match of script.matchAll(/\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(['"])([^'"\r\n]+)\2\s*[;,]/g)) {
+      variables.set(match[1], match[3]);
+    }
+    for (const match of script.matchAll(/(?:window\.)?localStorage\s*\.\s*(?:getItem|setItem)\s*\(\s*(?:(['"])([^'"\r\n]+)\1|([A-Za-z_$][\w$]*))/g)) {
+      const key = match[2] || variables.get(match[3]);
+      if (key && key.length >= 6 && key.length <= 160 && !isProtectedStorageKey(key)) {
+        result.add(key);
+      }
+    }
+  }
+  return [...result];
+}
 
-  // Deliberately clear only verified, activity-owned local browser keys.
-  // Never delete Supabase completion, grades, LTI context, or other activities.
+async function startVerifiedActivityRetake(activity) {
+  const activityKey = getActivityKey(activity.href);
+  const known = verifiedRetakeStorageKeys[activityKey] || [];
+  let discovered = [];
+
   try {
-    storageKeys.forEach(storageKey => window.localStorage.removeItem(storageKey));
+    // Same-origin fetch, so no external service or privileged API is involved.
+    const url = new URL(activity.href, window.location.href);
+    if (url.origin !== window.location.origin) throw new Error('Cross-origin activity blocked');
+    const response = await fetch(url.href, { credentials: 'same-origin', cache: 'no-store' });
+    if (!response.ok) throw new Error(`Activity HTML request failed: ${response.status}`);
+    discovered = discoverActivityStorageKeys(await response.text());
   } catch (error) {
-    window.alert('Browser storage could not be cleared. Your activity was not restarted.');
-    console.warn('PulmoLearn: Activity retake storage reset failed:', error);
+    console.warn('PulmoLearn: Could not inspect activity storage', activity.href, error);
+    if (!known.length) {
+      window.alert('This activity cannot be safely reset yet. No practice data was cleared.');
+      return;
+    }
+  }
+
+  const keys = [...new Set([...known, ...discovered])]
+    .filter(key => !isProtectedStorageKey(key));
+  let existing;
+  try {
+    existing = keys.filter(key => window.localStorage.getItem(key) !== null);
+  } catch (error) {
+    console.warn('PulmoLearn: Unable to inspect local storage', error);
+    window.alert('Your browser blocked access to saved practice answers. Nothing was reset.');
     return;
   }
 
+  if (!existing.length) {
+    window.alert('No saved answers for this activity could be identified on this device. Nothing was cleared. This activity may need a specific reset configuration.');
+    return;
+  }
+
+  const proceed = window.confirm(
+    `Retake ${activity.title} from the beginning?\n\n` +
+    'This clears saved practice answers for this activity on this device. ' +
+    'Your PulmoLearn/Canvas completion records will not be deleted. '
+  );
+  if (!proceed) return;
+
+  try {
+    // Back up in memory to permit rollback if a browser storage write fails.
+    const backup = existing.map(key => [key, window.localStorage.getItem(key)]);
+    try {
+      for (const key of existing) window.localStorage.removeItem(key);
+    } catch (error) {
+      for (const [key, value] of backup) {
+        try { if (value !== null) window.localStorage.setItem(key, value); } catch (_) {}
+      }
+      throw error;
+    }
+  } catch (error) {
+    window.alert('Browser storage could not be cleared. This activity was not restarted.');
+    console.warn('PulmoLearn: Activity retake failed', error);
+    return;
+  }
   window.location.assign(activity.href);
 }
 
@@ -590,9 +653,7 @@ function makeActivityCard(activity) {
   article.className =
     `disease-card program-activity-card${completed ? " is-complete" : ""}`;
 
-  const retakeAvailable = completed && Boolean(
-    verifiedRetakeStorageKeys[getActivityKey(activity.href)]
-  );
+  const retakeAvailable = completed;
 
   article.innerHTML = `
     <div class="disease-header">
@@ -666,10 +727,9 @@ function reconcileRetakeButtons() {
       !item.placeholder && getActivityKey(item.href) === getActivityKey(link.getAttribute('href'))
     );
     if (!activity) return;
-    const key = getActivityKey(activity.href);
     const stored = getActivityProgress(activity);
     const completed = Boolean(stored.completed) || Number(stored.percent_complete || 0) >= 100;
-    if (!completed || !verifiedRetakeStorageKeys[key]) return;
+    if (!completed) return;
     const actions = card.querySelector('.card-actions');
     if (!actions) return;
     const button = document.createElement('button');
@@ -795,7 +855,7 @@ async function initProgramActivities() {
   await loadActivityDashboardProgress();
   addActivitiesToVisibleSections();
   reconcileRetakeButtons();
-  console.info("PulmoLearn activity dashboard retake reconciliation v1.1 active");
+  console.info("PulmoLearn activity dashboard retake reconciliation v1.2 all activities active");
 
   const target = document.getElementById("courseSections");
   if (!target) return;
