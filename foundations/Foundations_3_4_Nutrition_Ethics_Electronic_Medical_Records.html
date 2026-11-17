@@ -367,6 +367,8 @@ details.accordion{background:var(--white);border:1px solid var(--soft-border);bo
 .glossary-list{display:grid;gap:10px;margin-top:14px}
 .glossary-item{border:1px solid var(--soft-border);border-radius:12px;padding:12px 14px;background:#FAFDFF}
 .glossary-item strong{color:var(--core-navy)}
+/* The unfolding case uses the main progression control to advance stages. */
+#scenario .case-next { display: none !important; }
 </style>
 </head>
 <body>
@@ -1356,6 +1358,7 @@ initSingleQuiz("ehr-check","ehr-option","ehrFeedback");
         feedback.className="quiz-feedback case-feedback show";feedback.style.background="var(--airway-mint)";
         feedback.innerHTML=option.dataset.caseFeedback+"<br><br><strong>You may continue.</strong>";
         const next=stage.querySelector(".case-next button");if(next)next.disabled=false;
+        section.dispatchEvent(new CustomEvent("caseStageReady",{bubbles:true}));
       }else{
         option.classList.add("incorrect-choice");
         feedback.className="quiz-feedback case-feedback show";feedback.style.background="#FDE9E9";
@@ -1373,6 +1376,7 @@ initSingleQuiz("ehr-check","ehr-option","ehrFeedback");
       if(idx+1===stages.length-1)markActivityComplete(section);
       button.closest(".case-next").remove();
       next.scrollIntoView({behavior:"smooth",block:"start"});
+      section.dispatchEvent(new CustomEvent("caseStageReady",{bubbles:true}));
     });
   });
 })();
@@ -1414,7 +1418,24 @@ function initializeProgressiveSections(){
   sections.forEach((section,index)=>{section.dataset.sectionIndex=index;if(index>0)section.classList.add("lesson-hidden")});
   function getSectionTitle(section){const heading=section.querySelector("h2,h3");return heading?heading.textContent.trim():"Next Section"}
   function isSectionComplete(section){const required=Array.from(section.querySelectorAll(".require-complete"));if(section.classList.contains("require-complete"))required.push(section);return required.every(item=>item.dataset.complete==="true")}
-  function setContinueState(section){const button=section.querySelector(":scope > .section-continue button");if(!button)return;const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");if(!requires){button.disabled=false;return}const complete=isSectionComplete(section);button.disabled=!complete;button.textContent=complete?button.dataset.readyText:"Complete activity to continue"}
+  function setContinueState(section){
+    const button=section.querySelector(":scope > .section-continue button");
+    if(!button)return;
+    if(section.id==="scenario" && !isSectionComplete(section)){
+      const stages=Array.from(section.querySelectorAll(".case-stage"));
+      const current=stages.findLast(s=>!s.classList.contains("lesson-hidden"));
+      const index=stages.indexOf(current);
+      const stageNext=current?.querySelector(".case-next button");
+      button.disabled=!(stageNext && !stageNext.disabled);
+      button.textContent=button.disabled?`Answer Stage ${index+1} to continue`:(index===stages.length-2?"Complete Case →":`Continue to Stage ${index+2} →`);
+      return;
+    }
+    const requires=section.classList.contains("require-complete")||section.querySelector(".require-complete");
+    if(!requires){button.disabled=false;return}
+    const complete=isSectionComplete(section);
+    button.disabled=!complete;
+    button.textContent=complete?button.dataset.readyText:"Complete activity to continue";
+  }
   function updateAll(){sections.forEach(setContinueState)}
   function updateNav(currentIndex){navLinks.forEach(link=>{const target=document.querySelector(link.getAttribute("href"));const targetIndex=target?Number(target.dataset.sectionIndex):-1;const visible=target&&!target.classList.contains("lesson-hidden");link.classList.toggle("locked",!visible);link.classList.toggle("current",targetIndex===currentIndex)})}
   function revealThrough(targetIndex,scroll=true){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);const currentSection=sections[currentVisible];if(targetIndex>currentVisible+1&&!isSectionComplete(currentSection)){setContinueState(currentSection);currentSection.scrollIntoView({behavior:"smooth",block:"start"});return}sections.forEach((section,index)=>{if(index<=targetIndex)section.classList.remove("lesson-hidden")});updateNav(targetIndex);updateAll();if(scroll&&sections[targetIndex])sections[targetIndex].scrollIntoView({behavior:"smooth",block:"start"})}
@@ -1424,11 +1445,24 @@ function initializeProgressiveSections(){
     const nextTitle=getSectionTitle(next);
     const wrapper=document.createElement("div");wrapper.className="section-continue";
     wrapper.innerHTML=`<button class="btn btn-primary" type="button" data-ready-text="Continue to ${nextTitle} →">Continue to ${nextTitle} →</button>`;
-    wrapper.querySelector("button").addEventListener("click",()=>{const button=wrapper.querySelector("button");if(button.disabled)return;revealThrough(index+1);wrapper.remove()});
+    wrapper.querySelector("button").addEventListener("click",()=>{
+      const button=wrapper.querySelector("button");
+      if(button.disabled)return;
+      if(section.id==="scenario" && !isSectionComplete(section)){
+        const stages=Array.from(section.querySelectorAll(".case-stage"));
+        const current=stages.findLast(s=>!s.classList.contains("lesson-hidden"));
+        const stageNext=current?.querySelector(".case-next button");
+        if(stageNext && !stageNext.disabled)stageNext.click();
+        updateAll();
+        return;
+      }
+      revealThrough(index+1);wrapper.remove();
+    });
     section.appendChild(wrapper);
   });
   navLinks.forEach(link=>{link.addEventListener("click",event=>{const target=document.querySelector(link.getAttribute("href"));if(!target||target.dataset.sectionIndex===undefined)return;event.preventDefault();if(target.classList.contains("lesson-hidden")){const currentVisible=sections.reduce((h,s,i)=>!s.classList.contains("lesson-hidden")?i:h,0);sections[currentVisible].scrollIntoView({behavior:"smooth",block:"start"});return}revealThrough(Number(target.dataset.sectionIndex))})});
   document.addEventListener("activityComplete",updateAll);
+  document.addEventListener("caseStageReady",updateAll);
   const note=document.createElement("span");note.className="section-progress-note";
   note.textContent="Use Continue buttons to reveal the lesson one section at a time. Activities must be completed before continuing.";
   sections[0].appendChild(note);
