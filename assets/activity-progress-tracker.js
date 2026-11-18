@@ -19,6 +19,7 @@
  */
 
 import { supabase } from '/assets/auth.js'
+import '/assets/error-reporter.js'
 import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
 import '/assets/activity-dashboard-sync.js'
 

@@ -3,6 +3,7 @@
  */
 
 import { supabase } from '/assets/auth.js'
+import '/assets/error-reporter.js'
 import { initializeActivityAnalytics } from '/assets/activity-analytics.js'
 
 console.log('PulmoLearn: progress-tracker.js v8.6 loaded')
