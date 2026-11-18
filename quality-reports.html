@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PulmoLearn | Quality & Feedback Center</title>
+<style>body{margin:0;background:#f4fafc;color:#0B1F33;font:16px/1.5 Arial,sans-serif}header{background:#0B1F33;color:white;padding:22px max(20px,calc((100vw - 1120px)/2))}main{max-width:1120px;margin:28px auto;padding:0 18px}h1{margin:0;font-size:28px}h2{font-size:21px}.panels{display:flex;gap:12px;flex-wrap:wrap}.stat{flex:1;min-width:150px;background:white;border:1px solid #d7e6ef;border-radius:12px;padding:16px}.stat strong{display:block;font-size:26px}.controls{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}select,input,textarea,button{font:inherit;padding:9px;border:1px solid #aabfc9;border-radius:9px}button{cursor:pointer;background:#128486;color:white;border-color:#128486;font-weight:700}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #F4B860;outline-offset:2px}.entry{background:white;border:1px solid #d7e6ef;border-radius:14px;padding:18px;margin:14px 0}.muted{color:#415A77;font-size:14px}.entry p{white-space:pre-wrap;overflow-wrap:anywhere}.entry input[type=checkbox]{width:auto}.fields{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}.fields>label{display:grid;gap:4px}.notes{display:grid;margin-top:10px}.notes textarea{width:100%;box-sizing:border-box;min-height:66px}.entry button{margin-top:10px}.message{padding:12px;border-radius:10px;background:#fff;border:1px solid #d7e6ef}a{color:#128486;overflow-wrap:anywhere}</style></head>
+<body><header><h1>PulmoLearn Quality & Feedback Center</h1><div>Private instructor review · student contributions</div></header><main><p id="message" class="message" role="status">Checking administrator access…</p><div id="app" hidden><div class="panels" id="stats"></div><div class="controls"><select id="statusFilter" aria-label="Filter by status"><option value="all">All statuses</option><option>open</option><option>reviewing</option><option>resolved</option><option>duplicate</option><option>not_an_issue</option></select><input id="filter" type="search" placeholder="Search courses, students, comments" aria-label="Search reports"><button id="refresh">Refresh</button></div><h2>Issue reports</h2><div id="reports"></div><h2>Student contributions</h2><div id="contributors"></div></div></main>
+<script type="module">
+import { supabase } from '/assets/auth.js';
+const $=id=>document.getElementById(id);let reports=[];
+const statuses=['open','reviewing','resolved','duplicate','not_an_issue'];
+function element(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=String(text);if(cls)e.className=cls;return e;}
+async function load(){ $('message').textContent='Loading reports…';
+  const {data:{user},error:e}=await supabase.auth.getUser();
+  if(e||!user){$('message').textContent='Please sign in to PulmoLearn first.';return;}
+  const {data:admin,error:adminError}=await supabase.from('quality_admins').select('user_id').eq('user_id',user.id).maybeSingle();
+  if(adminError||!admin){$('message').textContent='Access denied: instructor/admin membership required.';return;}
+  const {data,error}=await supabase.rpc('quality_admin_report_list');
+  if(error){$('message').textContent=`Could not load reports: ${error.message}`;return;}
+  reports=Array.isArray(data)?data:[];$('message').textContent=`Loaded ${reports.length} reports`;$('app').hidden=false;render();
+}
+function render(){
+  const stats=$('stats');stats.replaceChildren();
+  const counts=[['Total',reports.length],['Open',reports.filter(x=>x.status==='open').length],['Verified',reports.filter(x=>x.verified).length],['Contributors',new Set(reports.map(x=>x.reporter_id)).size]];
+  counts.forEach(([label,num])=>{const box=element('div',undefined,'stat');box.append(element('strong',num),element('span',label));stats.append(box);});
+  const query=$('filter').value.trim().toLowerCase(),status=$('statusFilter').value;
+  const list=reports.filter(r=>(status==='all'||r.status===status)&&[r.reporter_email,r.lesson_title,r.lesson_id,r.course_title,r.description,r.issue_type,r.location_hint].some(v=>String(v||'').toLowerCase().includes(query)));
+  const host=$('reports');host.replaceChildren();if(!list.length)host.append(element('p','No matching reports.'));
+  list.forEach(r=>{const card=element('article',undefined,'entry');card.append(element('h3',`${r.issue_type} · ${r.lesson_title}`),element('div',`${r.reporter_email||r.reporter_id} · ${new Date(r.created_at).toLocaleString()}`,'muted'));
+    const link=document.createElement('a');link.textContent='Open lesson';const raw=String(r.page_url||'');try{const u=new URL(raw);if(u.origin===location.origin)link.href=u.href;else link.textContent='External/unrecognized URL';}catch{link.textContent='No valid URL';}link.target='_blank';link.rel='noopener';card.append(link);
+    if(r.location_hint)card.append(element('p',`Location: ${r.location_hint}`));card.append(element('p',r.description));
+    const fields=element('div',undefined,'fields'),statusLabel=element('label','Status'),sel=document.createElement('select');statuses.forEach(s=>{const o=element('option',s);o.value=s;sel.append(o);});sel.value=r.status;statusLabel.append(sel);fields.append(statusLabel);
+    const verifiedLabel=element('label','Verified contribution'),check=document.createElement('input');check.type='checkbox';check.checked=!!r.verified;verifiedLabel.append(check);fields.append(verifiedLabel);card.append(fields);
+    const notes=element('label','Instructor notes (private)','notes'),ta=document.createElement('textarea');ta.value=r.admin_notes||'';notes.append(ta);card.append(notes);
+    const save=element('button','Save changes');save.addEventListener('click',async()=>{save.disabled=true;const {error}=await supabase.from('quality_reports').update({status:sel.value,verified:check.checked,admin_notes:ta.value,updated_at:new Date().toISOString()}).eq('id',r.id);if(error){alert(`Save failed: ${error.message}`);save.disabled=false;return;}r.status=sel.value;r.verified=check.checked;r.admin_notes=ta.value;save.disabled=false;render();});card.append(save);host.append(card);
+  });
+  const contributions=new Map();reports.forEach(r=>{const key=r.reporter_id;const c=contributions.get(key)||{email:r.reporter_email||key,submitted:0,verified:0,resolved:0};c.submitted++;if(r.verified)c.verified++;if(r.status==='resolved')c.resolved++;contributions.set(key,c);});
+  const cont=$('contributors');cont.replaceChildren();[...contributions.values()].sort((a,b)=>b.verified-a.verified||b.submitted-a.submitted).forEach(c=>{const div=element('div',`${c.email} · ${c.submitted} submitted · ${c.verified} verified · ${c.resolved} resolved`,'entry');cont.append(div);});
+}
+$('filter').addEventListener('input',render);$('statusFilter').addEventListener('change',render);$('refresh').addEventListener('click',load);load();
+</script></body></html>
