@@ -181,7 +181,9 @@ export default async function handler(req, res) {
       ? "pa-2-4"
       : lessonId === "pa_3_1"
         ? "pa-3-1"
-        : lessonId;
+        : lessonId === "meconium_aspiration_syndrome"
+          ? "mas"
+          : lessonId;
 
     const completed =
       body?.completed === true;
