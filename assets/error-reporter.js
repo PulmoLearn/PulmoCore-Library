@@ -1,9 +1,12 @@
-/** PulmoLearn Quality & Feedback Center — student report overlay v1.0 */
+/** PulmoLearn Quality & Feedback Center — student report overlay v1.1 */
 import { supabase } from '/assets/auth.js';
 
 if (!document.getElementById('pl-report-launcher')) {
   const css = document.createElement('style');
   css.textContent = `
+  #plqr-history-launcher{position:fixed;right:18px;bottom:76px;z-index:2147482000;border:1px solid #b8d1de;border-radius:999px;background:#fff;color:#0B1F33;padding:10px 16px;font:700 14px Arial,sans-serif;box-shadow:0 6px 18px #0002;cursor:pointer}
+  #plqr-history-launcher:focus-visible{outline:3px solid #F4B860;outline-offset:3px}
+  .plqr-history-entry{padding:14px 0;border-top:1px solid #d7e6ef}.plqr-history-entry p{margin:5px 0}.plqr-history-status{font-weight:700;color:#128486}.plqr-image-note{font-size:13px;color:#415A77;margin:4px 0}.plqr-dialog .plqr-view-image{display:inline-block;padding:6px 10px;border:1px solid #b8d1de;border-radius:9px;color:#128486;background:#fff;cursor:pointer}
   #pl-report-launcher{position:fixed;right:18px;bottom:20px;z-index:2147482000;border:0;border-radius:999px;background:#0B1F33;color:#fff;padding:13px 18px;font:700 15px Arial,sans-serif;box-shadow:0 8px 24px #0004;cursor:pointer}
   #pl-report-launcher:hover{background:#128486}#pl-report-launcher:focus-visible,.plqr-dialog :focus-visible{outline:3px solid #F4B860;outline-offset:3px}
   .plqr-backdrop{position:fixed;inset:0;z-index:2147483000;background:#071827b8;display:grid;place-items:center;padding:16px}
@@ -24,6 +27,11 @@ if (!document.getElementById('pl-report-launcher')) {
   launch.textContent = '⚑ Report an Error';
   launch.setAttribute('aria-haspopup','dialog');
   document.body.appendChild(launch);
+  const historyLaunch = document.createElement('button');
+  historyLaunch.id = 'plqr-history-launcher';
+  historyLaunch.type = 'button';
+  historyLaunch.textContent = 'My Reports';
+  document.body.appendChild(historyLaunch);
 
   function readContext() {
     const m = window.PULMO_LESSON || {};
@@ -70,6 +78,8 @@ if (!document.getElementById('pl-report-launcher')) {
     form.innerHTML = `<label for="plqr-kind">Issue type</label><select id="plqr-kind" required></select>
       <label for="plqr-location">Where in this lesson? (optional)</label><input id="plqr-location" maxlength="240" placeholder="e.g. Quiz question 4, section 3">
       <label for="plqr-details">Describe the issue</label><textarea id="plqr-details" minlength="10" maxlength="4000" required placeholder="What seems wrong, and what should we check?"></textarea>
+      <label for="plqr-image">Screenshot (optional; PNG, JPEG or WebP, up to 5 MB)</label><input id="plqr-image" type="file" accept="image/png,image/jpeg,image/webp">
+      <p class="plqr-image-note">Only include learning materials. Remove patient information, passwords, and private messages before uploading.</p>
       <p class="plqr-note">Your signed-in PulmoLearn account and lesson are automatically linked to this report. Do not include patient information or passwords.</p>
       <div class="plqr-message" role="status" aria-live="polite"></div>
       <div class="plqr-actions"><button type="button" id="plqr-cancel">Cancel</button><button type="submit">Submit report</button></div>`;
@@ -85,8 +95,23 @@ if (!document.getElementById('pl-report-launcher')) {
         if(authError||!user) throw new Error('Please sign in to PulmoLearn to submit a report.');
         const payload={...context,issue_type:kind.value,location_hint:form.querySelector('#plqr-location').value.trim()||null,description:form.querySelector('#plqr-details').value.trim(),reporter_id:user.id};
         if(payload.description.length<10) throw new Error('Please provide at least 10 characters.');
+        const screenshot = form.querySelector('#plqr-image').files?.[0] || null;
+        let screenshotPath = null;
+        if (screenshot) {
+          const allowed = ['image/png','image/jpeg','image/webp'];
+          if (!allowed.includes(screenshot.type)) throw new Error('Choose a PNG, JPEG, or WebP screenshot.');
+          if (screenshot.size > 5*1024*1024) throw new Error('Screenshot must be 5 MB or smaller.');
+          const suffix = {'image/png':'png','image/jpeg':'jpg','image/webp':'webp'}[screenshot.type];
+          screenshotPath = `${user.id}/${crypto.randomUUID()}.${suffix}`;
+          const {error:uploadError} = await supabase.storage.from('quality-screenshots').upload(screenshotPath,screenshot,{contentType:screenshot.type,upsert:false,cacheControl:'3600'});
+          if (uploadError) throw new Error(`Screenshot upload failed: ${uploadError.message}`);
+          payload.screenshot_path = screenshotPath;
+        }
         const {error}=await supabase.from('quality_reports').insert(payload);
-        if(error) throw new Error('Unable to save the report. Please try again.');
+        if(error) {
+          if (screenshotPath) await supabase.storage.from('quality-screenshots').remove([screenshotPath]);
+          throw new Error(`Unable to save the report: ${error.message}`);
+        }
         form.replaceChildren();
         const done=document.createElement('p');done.setAttribute('role','status');done.textContent='Thank you! Your report was received and will be reviewed.';form.appendChild(done);
         const exit=document.createElement('button');exit.type='button';exit.textContent='Close';exit.addEventListener('click',close);form.appendChild(exit);exit.focus();
@@ -96,5 +121,43 @@ if (!document.getElementById('pl-report-launcher')) {
     overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
     document.addEventListener('keydown',onKey);
     kind.focus();
+  });
+  historyLaunch.addEventListener('click', async () => {
+    if (dialog) return;
+    previousFocus = document.activeElement;
+    const overlay = document.createElement('div'); overlay.className='plqr-backdrop';
+    const panel = document.createElement('div');panel.className='plqr-dialog';panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','plqr-history-heading');
+    const heading=document.createElement('h2');heading.id='plqr-history-heading';heading.textContent='My PulmoLearn Reports';panel.appendChild(heading);
+    const status=document.createElement('p');status.setAttribute('role','status');status.textContent='Loading your reports…';panel.appendChild(status);
+    const list=document.createElement('div');panel.appendChild(list);
+    const closeBtn=document.createElement('button');closeBtn.type='button';closeBtn.textContent='Close';closeBtn.addEventListener('click',close);panel.appendChild(closeBtn);
+    overlay.appendChild(panel);document.body.appendChild(overlay);dialog=overlay;
+    overlay.addEventListener('click',e=>{if(e.target===overlay)close();});document.addEventListener('keydown',onKey);closeBtn.focus();
+    try {
+      const {data:{user},error:authError}=await supabase.auth.getUser();
+      if (authError||!user) throw new Error('Sign in to view your reports.');
+      const {data,error}=await supabase.rpc('quality_my_report_history');
+      if(error) throw error;
+      const reports=Array.isArray(data)?data:[];
+      status.textContent=reports.length?`${reports.length} report${reports.length===1?'':'s'} submitted`:'You have not submitted any reports yet.';
+      for (const r of reports) {
+        const entry=document.createElement('article');entry.className='plqr-history-entry';
+        const title=document.createElement('strong');title.textContent=r.lesson_title || 'Lesson';entry.appendChild(title);
+        const meta=document.createElement('p');meta.className='plqr-note';meta.textContent=`${new Date(r.created_at).toLocaleString()} · ${r.issue_type||'Issue'}`;entry.appendChild(meta);
+        const issue=document.createElement('p');issue.textContent=r.description||'';entry.appendChild(issue);
+        const state=document.createElement('p');state.className='plqr-history-status';state.textContent=`Status: ${String(r.status||'open').replaceAll('_',' ')}${r.verified?' · Verified contribution':''}`;entry.appendChild(state);
+        if(r.screenshot_path) {
+          const btn=document.createElement('button');btn.type='button';btn.className='plqr-view-image';btn.textContent='View my screenshot';
+          btn.addEventListener('click',async()=>{
+            btn.disabled=true;
+            const {data:link,error:linkError}=await supabase.storage.from('quality-screenshots').createSignedUrl(r.screenshot_path,60);
+            btn.disabled=false;
+            if(linkError||!link?.signedUrl){alert('Could not open screenshot.');return;}
+            window.open(link.signedUrl,'_blank','noopener,noreferrer');
+          });entry.appendChild(btn);
+        }
+        list.appendChild(entry);
+      }
+    } catch(e) {status.textContent=`Could not load your reports: ${e.message}`;}
   });
 }
