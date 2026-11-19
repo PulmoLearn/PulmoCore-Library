@@ -18,28 +18,7 @@
 .anatomy-label{fill:#eff9ff;font-size:18px;font-weight:850;paint-order:stroke;stroke:#07192d;stroke-width:4px}
 .vessel-label{fill:#e5f3fc;font-size:12px;font-weight:750;paint-order:stroke;stroke:#07192d;stroke-width:3px}
 .signal-label{fill:#ffdf89;font-size:12px;font-weight:750;paint-order:stroke;stroke:#07192d;stroke-width:3px}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style></head><body>
+</style></head><body>
 <header><div><div class="eyebrow">PulmoLearn · Live interactive lecture</div><h1>One heartbeat: electrical signal → pressure → valves → blood flow</h1><p>Follow the ECG, pressure gradients, valve motion, heart sounds, and circulation in one interactive lecture.</p></div><div class="pill">Facilitated session · 40–50 minutes</div></header>
 <main><div class="topbar"><button class="btn primary" id="play" aria-label="Play animation">▶ Play cycle</button><button class="btn" id="prev">← Previous phase</button><button class="btn" id="next">Next phase →</button><button class="btn" id="speed">Speed: 1×</button><button class="btn" id="present">Presentation view</button><button class="btn" id="reset">Restart</button><button class="btn" id="sound" aria-pressed="false">🔇 Enable S1/S2</button><label style="margin-left:auto;color:#b4cddb;font-size:.85rem"><input type="checkbox" id="labels" checked> Show chamber labels</label></div>
 <div class="layout"><section class="panel"><div class="section-label">Animated anatomy · embedded artwork and synchronized flow paths</div><div class="diagram"><svg viewBox="0 0 700 540" role="img" aria-label="Heart cross-section with synchronized valve positions, blood-flow particles and conduction-system highlighting">
@@ -87,7 +66,7 @@ const phases=[
 {short:'P wave',title:'SA node fires → P wave',desc:'The impulse starts in the sinoatrial node and spreads through the atrial muscle. The P wave reflects atrial depolarization.',elec:'P wave · atrial depolarization',mechanical:'Atrial contraction begins shortly AFTER depolarization',av:'OPEN · tricuspid + mitral',sl:'CLOSED · pulmonic + aortic',concept:'Electrical depolarization triggers atrial systole; the ECG wave itself is not the squeeze.',avOpen:1,slOpen:0,flows:['venous','pulmVein','rvFill','lvFill'],nodes:['sa'],wires:['sa-av']},
 {short:'PR / AV',title:'AV nodal delay → atrial kick',desc:'The AV node delays conduction briefly while the atria finish pushing an additional volume into the ventricles.',elec:'PR segment · AV conduction delay',mechanical:'Atrial systole completes ventricular filling',av:'OPEN · tricuspid + mitral',sl:'CLOSED · pulmonic + aortic',concept:'The AV delay helps coordinate filling before ventricular contraction. Atrial kick is particularly important when ventricular compliance is reduced.',avOpen:1,slOpen:0,flows:['rvFill','lvFill'],nodes:['av'],wires:['av-his']},
 {short:'QRS / S1',title:'QRS → isovolumetric contraction',desc:'Rapid conduction through the His–Purkinje system depolarizes the ventricles. Ventricular pressure rises and closes the AV valves: S1.',elec:'QRS complex · ventricular depolarization',mechanical:'Ventricular contraction starts; pressure rises before ejection',av:'CLOSED · S1 (first heart sound)',sl:'CLOSED · not yet enough pressure to eject',concept:'Both sets of valves are closed. Ventricular pressure rises, but ventricular volume stays constant until semilunar valves open. Atrial repolarization is usually hidden in the QRS.',avOpen:0,slOpen:0,flows:['venous','pulmVein'],nodes:['his','purk'],wires:['av-his','branches','purkinje']},
-{short:'Ejection',title:'Semilunar valves open → ventricular ejection',desc:'Ejection begins shortly after the QRS, once ventricular pressure rises above pulmonary artery and aortic pressure. The semilunar valves swing open like trap doors.',elec:'Early ST segment · ventricles remain depolarized while ejection occurs',mechanical:'Ventricular systole · blood ejected',av:'CLOSED',sl:'OPEN · pulmonic + aortic',concept:'Mechanical ejection follows electrical depolarization. The QRS starts ventricular contraction; a brief delay later, the pulmonic and aortic valves open and blood is ejected during the ST segment.',avOpen:0,slOpen:1,flows:['toLungs','toBody','venous','pulmVein'],nodes:[],wires:[]},
+{short:'Ejection',title:'Semilunar valves open → ventricular ejection',desc:'Ejection begins shortly after the QRS, once ventricular pressure rises above pulmonary artery and aortic pressure. The semilunar valves swing open like trap doors.',elec:'Immediately after QRS · early ST segment (ejection begins)',mechanical:'Ventricular systole · blood ejected',av:'CLOSED',sl:'OPEN · pulmonic + aortic',concept:'Mechanical ejection follows electrical depolarization. The QRS starts ventricular contraction; a brief delay later, the pulmonic and aortic valves open and blood is ejected during the ST segment.',avOpen:0,slOpen:1,flows:['toLungs','toBody','venous','pulmVein'],nodes:[],wires:[]},
 {short:'T / S2',title:'T wave → relaxation and S2',desc:'Near the end of the T wave, ventricular pressure falls below arterial pressure. The aortic and pulmonic valves snap shut (S2); isovolumetric relaxation follows.',elec:'Late T wave · repolarization nearly complete',mechanical:'Pressure falls below great-artery pressure; ejection ends',av:'CLOSED · still higher ventricular pressure',sl:'CLOSED · S2 (second heart sound)',concept:'The T wave precedes or overlaps the beginning of ventricular relaxation; it is not a direct recording of relaxation. S2 marks semilunar valve closure.',avOpen:0,slOpen:0,flows:['venous','pulmVein'],nodes:[],wires:[]},
 {short:'Relaxation',title:'Isovolumetric relaxation → filling resumes',desc:'After S2, both valve sets stay closed briefly as ventricular pressure falls. When pressure drops below atrial pressure, AV valves reopen.',elec:'Return toward baseline',mechanical:'Early ventricular diastole · pressure falls at fixed volume',av:'CLOSED → opens at phase transition',sl:'CLOSED',concept:'Volume remains constant while both valve sets are closed. Opening of AV valves restarts passive filling and the next cycle.',avOpen:0,slOpen:0,flows:['venous','ivcFlow','pulmVein'],nodes:[],wires:[]}
 ];
@@ -108,8 +87,9 @@ const questions=[
 {q:'ECG shows an organized rhythm but no palpable pulse. What is true?',a:['Electrical activity guarantees blood flow','This can occur in pulseless electrical activity','QRS always proves ejection','A P wave proves perfusion'],right:1,why:'An ECG documents electrical activity, not mechanical cardiac output or perfusion.'}
 ];
 let position=0, playing=false, timer=null, speed=1, qindex=0, selected=null, tab='flow';
-const phaseBounds=[0,110,185,275,335,545,610,700];
-const phaseCenters=[55,148,235,305,415,575,653];
+// Ejection begins just after QRS ends (~0.448 of the illustrated beat), as LV pressure overtakes aortic pressure.
+const phaseBounds=[0,110,185,275,319,545,610,700];
+const phaseCenters=[55,148,235,296,329,575,653];
 function phaseIndex(p){for(let i=0;i<phaseBounds.length-1;i++){if(p<phaseBounds[i+1]) return i}return 6}
 function setPhase(i){setPos(phaseCenters[i]);if(soundOn&&(i===3||i===5))heartSound(i===3?'S1':'S2')}
 function setPos(n){const old=position;position=Math.max(0,Math.min(699,Math.round(n)));checkSounds(old,position);$('scrub').value=position;render()}
@@ -192,74 +172,4 @@ $('valveChallenge').addEventListener('click',()=>{challengeMode=!challengeMode;$
 $('valveNext').addEventListener('click',()=>{stop();setPhase((phaseIndex(position)+1)%7);makeChallenge()});
 $('dropRoute').setAttribute('points','');
 drawECG();drawPressure();showQuestion();updateTab('flow');render();
-</script>
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
-</body></html>
+</script></body></html>
