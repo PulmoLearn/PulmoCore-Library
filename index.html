@@ -21,7 +21,28 @@ main{padding:12px max(12px,1.7vw);max-width:1700px;margin:auto}.chapters{display
 @media(max-width:650px){.chapters{gap:5px}.chapter strong{font-size:.76rem}.chapter small{display:none}.num{height:24px;width:24px;font-size:.8rem}.chapter{gap:4px;padding:7px}.phase-nav{grid-template-columns:repeat(2,minmax(0,1fr))}.phasebtn{font-size:.75rem;padding:8px}.diagram svg{max-height:none}.controlrow{gap:5px}.btn{padding:8px;font-size:.78rem}}
 @media(min-width:1100px) and (max-height:850px){header{padding-top:8px;padding-bottom:8px}main{padding-top:7px}.chapters{margin-bottom:7px}.diagram svg{max-height:50vh}.panel{padding:10px}.lesson{gap:7px}.explain,.quiz{padding:9px 11px}.answer{padding:7px 9px}}
 @media(prefers-reduced-motion:reduce){.flow,.wire.active{animation:none}}
-</style></head><body>
+
+    /* ── 508 Accessibility: keyboard focus indicators ── */
+    .hotspot-btn:focus-visible {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
+      z-index: 10;
+    }
+    .hotspot-btn:focus {
+      outline: 3px solid var(--clinical-amber, #F4B860);
+      outline-offset: 4px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style></head><body>
 <header><div><div class="eyebrow">PulmoLearn · Hemodynamics · Lesson 1</div><h1>One Heartbeat · Guided Interactive Tutorial</h1><p>Discover blood flow first, then conduction, then how electrical events appear on the ECG.</p></div><span class="header-note">Self-service · three progressive chapters · default 40 bpm · 1× = 80 bpm</span></header>
 <main><nav class="chapters" aria-label="Tutorial chapters"><button class="chapter active" data-chapter="0"><span class="num">1</span><span><strong>Blood flow & valves</strong><small>Understand the mechanical cycle</small></span></button><button class="chapter" data-chapter="1"><span class="num">2</span><span><strong>Electrical conduction</strong><small>Connect electrical and mechanical activity</small></span></button><button class="chapter" data-chapter="2"><span class="num">3</span><span><strong>ECG integration</strong><small>See every event in one heartbeat</small></span></button></nav>
 <div class="shell"><section class="panel visual" aria-label="Heart and ECG animation"><div class="visual-top"><span class="micro" id="visualLabel">01 · Blood flow and valves</span><span class="state">Valve state: <b id="valveState">AV open · semilunar closed</b></span></div><div class="diagram-shell"><div class="phase-nav" aria-label="Jump to a cardiac cycle phase"><button class="phasebtn" data-phase="0">1. Filling<span>AV valves open</span></button><button class="phasebtn" data-phase="1">2. P wave<span>Atria depolarize</span></button><button class="phasebtn" data-phase="2">3. Atrial kick<span>Final ventricular fill</span></button><button class="phasebtn" data-phase="3">4. QRS / S1<span>AV valves close</span></button><button class="phasebtn" data-phase="4">5. Ejection<span>Semilunar valves open</span></button><button class="phasebtn" data-phase="5">6. T / S2<span>Semilunar close</span></button><button class="phasebtn" data-phase="6">7. Relaxation<span>All valves closed</span></button></div><div class="diagram"><svg viewBox="0 0 700 540" role="img" aria-label="Heart cross-section with synchronized valve positions, blood-flow particles and conduction-system highlighting">
@@ -140,4 +161,74 @@ $('labels').addEventListener('change',e=>{$('anatomyLabels').style.display=e.tar
 document.querySelectorAll('.phasebtn').forEach(btn=>btn.addEventListener('click',()=>{const idx=Number(btn.dataset.phase);stopCycle();setPos(phaseCenter(idx));$('watchHint').textContent='Paused on a selected phase. Use Watch two heartbeats to see it in motion.';}));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopCycle()});
 makePools();drawECG();updateSpeedUI();changeStep(0);
-</script></body></html>
+</script>
+  <script>
+  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
+  (function () {
+    function initA11yHotspots() {
+      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
+        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
+        var panel   = demo.querySelector('.hotspot-panel');
+
+        /* aria-live region so screen readers hear the hotspot content */
+        var live = demo.querySelector('[data-a11y-live]');
+        if (!live) {
+          live = document.createElement('div');
+          live.setAttribute('aria-live', 'polite');
+          live.setAttribute('aria-atomic', 'true');
+          live.setAttribute('data-a11y-live', '1');
+          live.className = 'sr-only';
+          demo.appendChild(live);
+        }
+
+        buttons.forEach(function (btn, idx) {
+          /* Arrow-key, Home, End navigation within the hotspot group */
+          btn.addEventListener('keydown', function (e) {
+            var target;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              target = buttons[(idx + 1) % buttons.length];
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              target = buttons[(idx - 1 + buttons.length) % buttons.length];
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              target = buttons[0];
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              target = buttons[buttons.length - 1];
+            }
+            if (target) target.focus();
+          });
+
+          /* On activation, push content to aria-live region */
+          btn.addEventListener('click', function () {
+            var title = btn.dataset.title || '';
+            var text  = btn.dataset.text  || '';
+            live.textContent = title + '. ' + text;
+            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
+          });
+        });
+
+        /* When focus enters the hotspot container, route to first unvisited button */
+        var container = demo.querySelector('.hotspot-lung');
+        if (container && buttons.length > 0) {
+          container.addEventListener('focus', function () {
+            var first = buttons.find(function (b) {
+              return !b.classList.contains('visited');
+            }) || buttons[0];
+            first.focus();
+          }, true);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initA11yHotspots);
+    } else {
+      initA11yHotspots();
+    }
+  })();
+  </script>
+
+</body></html>
