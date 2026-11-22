@@ -158,8 +158,323 @@ const stations=[...document.querySelectorAll("[data-station]")];function save(){
 function stationDone(s){return[...s.querySelectorAll("[data-q]")].every(q=>state.correct.has(q.dataset.q))}function unlock(){let open=true;stations.forEach(s=>{s.dataset.locked=open?"false":"true";if(stationDone(s)){s.classList.add("complete");s.querySelector(".badge").textContent="Mastered ✓"}else{s.classList.remove("complete");const qs=[...s.querySelectorAll("[data-q]")],n=qs.filter(q=>state.correct.has(q.dataset.q)).length;s.querySelector(".badge").textContent=open?`${n} / ${qs.length} mastered`:"Locked";open=false;}})}
 function progress(){const all=[...document.querySelectorAll("[data-q]")],n=all.filter(q=>state.correct.has(q.dataset.q)).length,p=Math.round(n/all.length*100);document.getElementById("progressText").textContent=`${p}% complete`;document.getElementById("progressBar").style.width=`${p}%`;try{window.PulmoActivityProgress?.report({percent:p,completed:p===100})}catch(e){}window.dispatchEvent(new CustomEvent("pulmolearn:activity-progress-report",{detail:{percent:p,completed:p===100}}));if(p===100){document.getElementById("completeBox").classList.add("show");window.dispatchEvent(new CustomEvent("pulmolearn:complete",{detail:{percent:100,completed:true,lessonId:window.PULMO_LESSON_ID}}));}}
 function restore(){document.querySelectorAll("[data-q]").forEach(q=>{const fb=q.querySelector(".feedback");fb.setAttribute("role","status");fb.setAttribute("aria-live","polite");if(state.correct.has(q.dataset.q)){q.querySelectorAll(".option").forEach(b=>b.disabled=true);const good=q.querySelector('[data-correct="true"]');if(good)good.classList.add("correct");fb.innerHTML="<strong>Mastered.</strong> This decision is saved in your current browser progress.";fb.className="feedback show ok";}});document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===state.active));document.querySelectorAll(".patient").forEach(p=>p.classList.toggle("active",p.dataset.patient===state.active));unlock();progress();}
-document.addEventListener("click",e=>{const tab=e.target.closest(".tab");if(tab){state.active=tab.dataset.tab;save();restore();return}const b=e.target.closest(".option");if(!b)return;const s=b.closest("[data-station]");if(s.dataset.locked==="true")return;const q=b.closest("[data-q]");if(state.correct.has(q.dataset.q))return;const options=[...q.querySelectorAll(".option")],index=options.indexOf(b),fb=q.querySelector(".feedback"),correct=b.dataset.correct==="true",rationale=RATIONALES[q.dataset.q]?.[index]||"Reconsider the calculation, support goal, disease mechanics, and setting being changed.";options.forEach(x=>x.classList.remove("incorrect"));fb.innerHTML=`<strong>${correct?"Correct.":"Not quite."}</strong> ${rationale.replace(/^Correct\.\s*/,"")}`;if(correct){b.classList.add("correct");options.forEach(x=>x.disabled=true);state.correct.add(q.dataset.q);fb.className="feedback show ok";save();unlock();progress();}else{b.classList.add("incorrect");fb.className="feedback show bad";}});restore();
-document.addEventListener("DOMContentLoaded",()=>{for(const item of window.PULMO_LESSON.interactions){const el=document.querySelector(`[data-activity-id="${item.id}"]`);if(!el)continue;el.dataset.activityName=item.title||item.id;el.dataset.activityType=item.type;el.dataset.estimatedMinutes=String(item.estimatedMinutes||"");el.dataset.required=String(Boolean(item.required));el.dataset.competencies=(item.competencyIds||[]).join(" ");el.dataset.rteSections=(item.rteSections||[]).join(" ");el.dataset.clinicalJudgment=(item.clinicalJudgment||[]).join("|");el.dataset.rteTags=(item.rteTags||[]).join(" ");}});
+const groups = stations.flatMap(s =>
+  s.dataset.station === "capstone" ? [...s.querySelectorAll(".patient")] : [s]
+);
+
+const review = {
+  one: "Use height-based PBW for a prescribed PBW-based tidal volume. Keep the quick IBW estimate separate. Multiply PBW by the selected mL/kg, then round.",
+  two: "Convert mL to liters before multiplying by total respiratory rate. A calculated rate can meet the arithmetic target without leaving enough time for exhalation.",
+  three: "Volume control targets VT. Pressure control targets pressure, so measure exhaled VT. In obstruction, consider how much of the breath cycle is available for exhalation.",
+  four: "Calculate IPAP minus EPAP for each pair. Compare that pressure difference and EPAP separately.",
+  five: "Use the measured baseline and the specific alarm rule given in the exercise. Broad defaults are not the same as calculated patient-specific limits.",
+  ards: "Calculate the intended VT from PBW. Then verify delivered VT and assess oxygenation separately.",
+  copd: "Check VT against PBW, then use the expiratory waveform to judge whether the selected timing allows exhalation.",
+  niv: "EPAP is the expiratory baseline. Pressure support is IPAP minus EPAP. Raising both by the same amount preserves pressure support."
+};
+
+const bank = {
+  one: [
+    ["PBW is 65 kg. What VT equals 6 mL/kg?", "390 mL", "325 mL", "520 mL",
+      "Multiply 65 by 6."],
+    ["PBW is 72 kg. What range corresponds to 6–8 mL/kg?", "432–576 mL", "360–504 mL", "504–648 mL",
+      "Multiply 72 by each endpoint."],
+    ["An adult weighs 120 kg and has PBW 60 kg. Which VT matches a target of 7 mL/kg PBW?", "420 mL", "360 mL", "840 mL",
+      "Use PBW rather than scale weight: 60 × 7."],
+    ["Which weight belongs in a prescribed PBW-based VT calculation?", "Height-based PBW", "Actual scale weight", "Quick IBW estimate",
+      "The prompt specifically calls for PBW."]
+  ],
+  two: [
+    ["Exhaled VT is 500 mL at total RR 18/min. What is measured V̇E?", "9.0 L/min", "7.2 L/min", "10.0 L/min",
+      "0.50 × 18 = 9.0."],
+    ["Target V̇E is 8.4 L/min with VT 420 mL. What rate calculates to the target?", "20/min", "18/min", "24/min",
+      "8.4 ÷ 0.42 = 20."],
+    ["Set RR is 14/min, total RR is 20/min, and VTe is 450 mL. What is measured V̇E?", "9.0 L/min", "6.3 L/min", "7.0 L/min",
+      "Use total RR, including triggered breaths."],
+    ["Which waveform finding calls a proposed rate increase into question in the obstructive simulation?", "Expiratory flow persists into the next breath", "Inspiratory flow starts promptly", "Pressure returns to the set baseline",
+      "Persistent expiratory flow suggests incomplete exhalation."]
+  ],
+  three: [
+    ["Which control strategy directly targets the selected VT in the simulator?", "Volume control", "Pressure control", "Pressure support",
+      "Volume control targets VT."],
+    ["Which measurement checks whether pressure control delivered the intended volume?", "Exhaled tidal volume", "Set inspiratory pressure", "Set inspiratory time",
+      "The settings are inputs; exhaled VT is the measured result."],
+    ["At unchanged VT and rate, a constant-flow volume-control breath is delivered faster. What changes?", "Inspiration shortens and expiration lengthens", "Inspiration lengthens and expiration shortens", "Inspiration and expiration both lengthen",
+      "At the same rate, shortening inspiration leaves more time for expiration."],
+    ["At a fixed pressure target and inspiratory time, what should be rechecked after a mechanics change?", "Delivered volume", "Selected mandatory rate", "Selected pressure target",
+      "Mechanics can change the volume delivered at the same pressure."]
+  ],
+  four: [
+    ["What is pressure support on bilevel 17/6?", "11 cm H₂O", "6 cm H₂O", "17 cm H₂O",
+      "17 − 6 = 11."],
+    ["Which simulated change widens the pressure difference from 14/7 while keeping EPAP fixed?", "17/7", "17/10", "14/10",
+      "17/7 raises pressure support from 7 to 10 while keeping EPAP at 7."],
+    ["On 16/7, which pair raises EPAP by 2 and preserves pressure support?", "18/9", "16/9", "18/7",
+      "Both 16 − 7 and 18 − 9 equal 9."],
+    ["How does pressure support change from 15/6 to 19/8?", "Increases from 9 to 11", "Stays at 9", "Decreases from 9 to 7",
+      "Compare both differences: 15 − 6 and 19 − 8."]
+  ],
+  five: [
+    ["Using the exercise’s PIP + 10 rule, where is the high alarm if stable PIP is 27?", "37 cm H₂O", "30 cm H₂O", "47 cm H₂O",
+      "Add 10 to the measured PIP."],
+    ["Using a 10% margin, what is the low V̇E limit for a stable 8 L/min?", "7.2 L/min", "6.8 L/min", "8.8 L/min",
+      "Subtract 0.8 L/min from 8."],
+    ["Stable total RR is 24/min. The exercise calls for limits 10 below and above. Which pair fits?", "14 and 34/min", "8 and 30/min", "20 and 28/min",
+      "Apply the specified margin to 24, not to a generic pair."],
+    ["Which value anchors a percentage-based low minute-ventilation alarm in this exercise?", "Stable measured minute ventilation", "Set mandatory respiratory rate", "Measured peak inspiratory pressure",
+      "The percentage margin applies to the measured value that the alarm monitors."]
+  ]
+};
+
+const topic = { ards: "one", copd: "two", niv: "four" };
+
+const applied = {
+  one: ["A patient weighs 104 kg, has PBW 55 kg, and receives 440 mL. The simulated plan calls for 6 rather than 8 mL/kg PBW. Which change matches?",
+    "Decrease VT to 330 mL", "Keep VT at 440 mL", "Increase VT to 624 mL",
+    "440 ÷ 55 = 8. The new target is 55 × 6 = 330 mL."],
+  two: ["VTe is 400 mL and total RR is 18/min. Expiratory flow persists into the next breath. What would a proposed rate of 24/min do if VT stayed the same?",
+    "Raise calculated V̇E and leave less time per breath", "Raise calculated V̇E and leave more time per breath", "Keep calculated V̇E unchanged because VT is unchanged",
+    "At fixed VT, increasing RR raises calculated V̇E but shortens the breath cycle."],
+  three: ["A patient in pressure control has unchanged set pressure and inspiratory time after compliance worsens. Which observation tells you whether the intended volume is still being delivered?",
+    "Exhaled VT compared with the intended volume", "Set pressure compared with the prior setting", "Inspiratory time compared with the prior setting",
+    "Unchanged settings do not establish the volume delivered."],
+  four: ["On bilevel 16/6, the simulation calls for EPAP to rise by 2 and pressure support to rise by 3. Which pair meets both goals?",
+    "21/8", "18/8", "19/8",
+    "The new EPAP is 8. Pressure support rises from 10 to 13, so IPAP is 21."],
+  five: ["After simulated stabilization, measured V̇E is 9 L/min. Which low alarm uses the requested 10% margin instead of a broad default?",
+    "8.1 L/min", "7.7 L/min", "3.0 L/min",
+    "Subtract 0.9 from the measured baseline of 9."],
+  ards: ["A simulated patient with PBW 64 kg receives 510 mL. The exercise specifies a new target of 6 mL/kg. Which interpretation is accurate?",
+    "Current VT is near 8 mL/kg; target is 384 mL", "Current VT is near 6 mL/kg; target is 510 mL", "Current VT is near 8 mL/kg; target is 448 mL",
+    "510 ÷ 64 is near 8, and 64 × 6 = 384."],
+  copd: ["Two plans calculate to 8 L/min: 400 mL × 20/min and 500 mL × 16/min. What should be compared before deciding which fits the obstructive simulation?",
+    "VT relative to PBW and actual expiratory timing", "Minute ventilation alone because the products match", "Set rate alone because timing depends only on rate",
+    "Equal V̇E does not mean equal VT or equal time available for exhalation."],
+  niv: ["On bilevel 20/8, the simulation calls for 2 more cm H₂O of EPAP without reducing inspiratory assistance. Which pair preserves pressure support?",
+    "22/10", "20/10", "22/8",
+    "Both 20 − 8 and 22 − 10 equal 12."]
+};
+
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+groups.forEach(g => {
+  const key = g.dataset.patient || g.dataset.station;
+  const base = [...g.querySelectorAll("[data-q]")];
+  const rows = bank[topic[key] || key];
+  let attempt = 0;
+  let reviewed = false;
+  let submitted = false;
+
+  const controls = document.createElement("div");
+  controls.innerHTML = `
+    <button type="button" data-submit>Submit section</button>
+    <button type="button" data-review>Review key concepts</button>
+    <button type="button" data-extra>Extra practice</button>
+    <button type="button" data-retry hidden>Try a new set</button>
+    <p role="status"></p>
+    <div data-notes hidden></div>
+    <div data-set hidden></div>
+    <div data-practice hidden></div>
+  `;
+  g.append(controls);
+
+  const get = selector => controls.querySelector(selector);
+  const status = get('[role="status"]');
+  const notes = get("[data-notes]");
+  const set = get("[data-set]");
+  const extra = get("[data-practice]");
+  const next = get("[data-retry]");
+  const mastered = () => base.every(q => state.correct.has(q.dataset.q));
+
+  function render(box, items, seed) {
+    box.replaceChildren();
+    box.hidden = false;
+    const E = 5 + (seed % 5);
+    const D = 6 + (seed % 4);
+    const values = { E, D, I: E + D, A: D + 2, F: E + 2 };
+    const format = str => str.replace(/\{([A-Z])\}/g, (_, k) => values[k]);
+
+    items.forEach(([stem, correct, wrong1, wrong2, rationale], i) => {
+      const field = document.createElement("fieldset");
+      const legend = document.createElement("legend");
+      legend.textContent = format(stem);
+      field.append(legend);
+
+      shuffle([correct, wrong1, wrong2].map((text, index) => ({
+        text, right: index === 0
+      }))).forEach(option => {
+        const label = document.createElement("label");
+        label.style.display = "block";
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `${key}-${box === extra ? "practice" : "retry"}-${i}`;
+        input.value = option.right ? "correct" : "incorrect";
+        label.append(input, " " + format(option.text));
+        field.append(label);
+      });
+
+      const feedback = document.createElement("p");
+      feedback.setAttribute("role", "status");
+      feedback.hidden = true;
+      field.append(feedback);
+      field.dataset.rationale = rationale;
+      box.append(field);
+    });
+  }
+
+  function grade(box) {
+    const fields = [...box.querySelectorAll("fieldset")];
+    const picks = fields.map(field => field.querySelector("input:checked"));
+    if (picks.some(pick => !pick)) return null;
+
+    fields.forEach((field, i) => {
+      const feedback = field.querySelector("p");
+      feedback.hidden = false;
+      feedback.textContent =
+        (picks[i].value === "correct" ? "Correct. " : "Not quite. ") +
+        field.dataset.rationale;
+      field.disabled = true;
+    });
+
+    return picks.every(pick => pick.value === "correct");
+  }
+
+  controls.addEventListener("click", e => {
+    const button = e.target.closest("button");
+    if (!button || g.closest("[data-station]").dataset.locked === "true") return;
+
+    if (button.hasAttribute("data-review")) {
+      notes.hidden = false;
+      notes.textContent = review[key];
+      reviewed = true;
+      if (submitted && !mastered()) next.hidden = false;
+      return;
+    }
+
+    if (button.hasAttribute("data-extra")) {
+      render(extra, [rows[0], rows[1], applied[key]], attempt + 3);
+      const check = document.createElement("button");
+      check.type = "button";
+      check.dataset.check = "1";
+      check.textContent = "Check extra practice";
+      extra.append(check);
+      return;
+    }
+
+    if (button.hasAttribute("data-check")) {
+      if (grade(extra) === null) {
+        status.textContent = "Answer all three practice questions first.";
+        return;
+      }
+      button.disabled = true;
+      status.textContent = "Extra practice does not change completion.";
+      return;
+    }
+
+    if (button === next) {
+      if (!reviewed || mastered()) return;
+      attempt++;
+      submitted = false;
+      reviewed = false;
+      next.hidden = true;
+      notes.hidden = true;
+      base.forEach(q => { q.hidden = true; });
+
+      const available = [0, 1, 2, 3].filter(i => i !== (attempt - 1) % 4);
+      let order = shuffle(available);
+      if (order.every((value, i) => value === available[i])) {
+        order = [order[1], order[2], order[0]];
+      }
+      render(set, order.map(i => rows[i]), attempt);
+      status.textContent = "Answer the new set, then submit.";
+      return;
+    }
+
+    if (!button.hasAttribute("data-submit")) return;
+    if (mastered()) {
+      status.textContent = "This section is already mastered.";
+      return;
+    }
+    if (submitted) return;
+
+    let pass;
+    if (attempt > 0) {
+      pass = grade(set);
+      if (pass === null) {
+        status.textContent = "Answer every question before submitting.";
+        return;
+      }
+    } else {
+      const pending = base.filter(q => !state.correct.has(q.dataset.q));
+      const picks = pending.map(q => q.querySelector('[aria-pressed="true"]'));
+      if (picks.some(pick => !pick)) {
+        status.textContent = "Answer every question before submitting.";
+        return;
+      }
+
+      pending.forEach((q, i) => {
+        const pick = picks[i];
+        const options = [...q.querySelectorAll(".option")];
+        const good = pick.dataset.correct === "true";
+        const feedback = q.querySelector(".feedback");
+        const rationale = RATIONALES[q.dataset.q]?.[options.indexOf(pick)] || "";
+        pick.classList.add(good ? "correct" : "incorrect");
+        options.forEach(option => {
+          option.disabled = true;
+          option.style.outline = "";
+        });
+        feedback.className = "feedback show " + (good ? "ok" : "bad");
+        feedback.textContent =
+          (good ? "Correct. " : "Not quite. ") + rationale.replace(/^Correct\.\s*/, "");
+      });
+
+      pass = picks.every(pick => pick.dataset.correct === "true");
+    }
+
+    submitted = true;
+    reviewed = false;
+    notes.hidden = true;
+
+    if (pass) {
+      base.forEach(q => state.correct.add(q.dataset.q));
+      save();
+      unlock();
+      progress();
+      next.hidden = true;
+      status.textContent = "Section mastered.";
+    } else {
+      status.textContent = "Review key concepts to unlock another attempt.";
+    }
+  });
+});
+
+document.addEventListener("click", e => {
+  const tab = e.target.closest(".tab");
+  if (tab) {
+    state.active = tab.dataset.tab;
+    save();
+    restore();
+    return;
+  }
+
+  const button = e.target.closest(".option");
+  const q = button?.closest("[data-q]");
+  if (!q || button.disabled || q.closest("[data-station]").dataset.locked === "true") return;
+
+  q.querySelectorAll(".option").forEach(option => {
+    option.setAttribute("aria-pressed", String(option === button));
+    option.style.outline = option === button ? "2px solid #137c81" : "";
+  });
+});
+
+restore();document.addEventListener("DOMContentLoaded",()=>{for(const item of window.PULMO_LESSON.interactions){const el=document.querySelector(`[data-activity-id="${item.id}"]`);if(!el)continue;el.dataset.activityName=item.title||item.id;el.dataset.activityType=item.type;el.dataset.estimatedMinutes=String(item.estimatedMinutes||"");el.dataset.required=String(Boolean(item.required));el.dataset.competencies=(item.competencyIds||[]).join(" ");el.dataset.rteSections=(item.rteSections||[]).join(" ");el.dataset.clinicalJudgment=(item.clinicalJudgment||[]).join("|");el.dataset.rteTags=(item.rteTags||[]).join(" ");}});
 </script>
 <script type="module" src="/assets/activity-progress-tracker.js"></script>
 <script type="module">
