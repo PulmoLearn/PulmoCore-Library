@@ -43,28 +43,7 @@ window.PULMO_LESSON_ID=window.PULMO_LESSON.lessonId;window.LESSON_ID=window.PULM
 .activity{border:1px solid #9bcbe0;border-radius:16px;padding:17px;margin-top:18px;background:#fbfdfe}.activity-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.status{white-space:nowrap;background:#eef4f7;color:var(--muted);font-weight:800;border-radius:99px;padding:6px 10px}.status.done{background:var(--mint);color:#145a51}.question{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}.options{display:grid;gap:8px;margin-top:10px}.option{border:1px solid #b9ccd6;background:#fff;color:var(--ink);border-radius:11px;text-align:left;padding:10px 12px}.option:hover:not(:disabled){background:var(--sky);border-color:var(--blue)}.option.correct{background:var(--mint);border-color:#63bbaa}.option.incorrect{background:var(--redbg);border-color:#e29494}.feedback{display:none;padding:11px 13px;border-radius:10px;margin-top:8px}.feedback.show{display:block}.feedback.ok{background:var(--mint)}.feedback.bad{background:var(--redbg)}
 .glossary-progress{margin:14px 0}.glossary-track{height:10px;background:#e4eef3;border-radius:99px;overflow:hidden;margin-top:6px}.glossary-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue))}.flashcard{min-height:180px;border:2px solid #a9cedc;border-radius:17px;background:#fff;display:grid;place-items:center;text-align:center;padding:25px;cursor:pointer}.flashcard-term{font:800 1.55rem var(--head);color:var(--navy)}.flashcard-definition{max-width:720px}.deck-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.deck-btn{border:1px solid #a8bec9;background:#fff;border-radius:10px;padding:9px 12px}.deck-btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}.deck-btn.warn{border-color:#d59a33}.glossary-note{color:var(--muted)}.complete-banner{display:none;background:var(--navy);color:#fff;border-radius:18px;padding:25px;margin-top:22px}.complete-banner.show{display:block}.complete-banner h2{color:#fff}.footer{background:var(--navy);color:#dbeaf2;padding:25px clamp(18px,5vw,60px);text-align:center}
 @media(max-width:920px){.layout{grid-template-columns:1fr}.nav{position:static}.competency-list,.grid4{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.meta,.grid2,.grid3,.grid4,.competency-list,.patient-example-grid{grid-template-columns:1fr}.activity-title{display:block}.status{display:inline-block;margin-top:5px}}
-
-    /* ── 508 Accessibility: keyboard focus indicators ── */
-    .hotspot-btn:focus-visible {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-      box-shadow: 0 0 0 6px rgba(244,184,96,0.35);
-      z-index: 10;
-    }
-    .hotspot-btn:focus {
-      outline: 3px solid var(--clinical-amber, #F4B860);
-      outline-offset: 4px;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
+</style>
 </head>
 <body>
 <header class="top"><div class="brand">Pulmo<span>Learn</span></div><div class="hero"><div class="eyebrow">Mechanical Ventilation · Unit 1 · Lesson 1.3</div><h1>Establish Initial Ventilator and NIV Settings</h1><p>Build a safe starting plan from patient size, the ventilation and oxygenation goals, breath-delivery mode, disease mechanics, and immediate safety needs.</p><div class="meta"><div><strong>Estimated time</strong><br>60–75 minutes</div><div><strong>Level</strong><br>New mechanical-ventilation learner</div><div><strong>Completion</strong><br>Eight required interactions</div></div></div></header>
@@ -187,76 +166,44 @@ const GLOSSARY_TERMS=[
 function initGlossary(){const card=document.getElementById("glossaryCard");if(!card)return;let active=[...GLOSSARY_TERMS],mastered=[],index=0,revealed=false;const term=document.getElementById("glossaryTerm"),definition=document.getElementById("glossaryDefinition"),progress=document.getElementById("glossaryProgress"),fill=document.getElementById("glossaryFill"),note=document.getElementById("glossaryNote");function render(){revealed=false;definition.hidden=true;progress.textContent=`${mastered.length} / ${GLOSSARY_TERMS.length} mastered`;fill.style.width=`${mastered.length/GLOSSARY_TERMS.length*100}%`;if(!active.length){term.textContent="Deck complete ✓";definition.textContent="You marked all lesson terms as known. Reset the deck whenever you want another retrieval round.";definition.hidden=false;note.textContent="All glossary terms mastered.";return}if(index>=active.length)index=0;term.textContent=active[index].term;definition.textContent=active[index].definition;note.textContent=`Card ${index+1} of ${active.length} remaining`;}function flip(){if(!active.length)return;revealed=!revealed;definition.hidden=!revealed;}function review(){if(!active.length)return;index=(index+1)%active.length;render();}card.addEventListener("click",flip);card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip();}});document.getElementById("glossaryFlip").addEventListener("click",flip);document.getElementById("glossaryReview").addEventListener("click",review);document.getElementById("glossaryKnow").addEventListener("click",()=>{if(!active.length)return;mastered.push(active.splice(index,1)[0]);if(index>=active.length)index=0;render();});document.getElementById("glossaryReset").addEventListener("click",()=>{active=[...GLOSSARY_TERMS];mastered=[];index=0;render();});render();}
 document.addEventListener("DOMContentLoaded",()=>{for(const item of window.PULMO_LESSON.interactions){const el=document.querySelector(`[data-activity-id="${item.id}"]`);if(!el)continue;el.dataset.activityName=item.title||item.id;el.dataset.activityType=item.type;el.dataset.estimatedMinutes=String(item.estimatedMinutes||"");el.dataset.required=String(Boolean(item.required));el.dataset.competencies=(item.competencyIds||[]).join(" ");el.dataset.rteSections=(item.rteSections||[]).join(" ");el.dataset.clinicalJudgment=(item.clinicalJudgment||[]).join("|");el.dataset.rteTags=(item.rteTags||[]).join(" ");}document.querySelectorAll(".require-complete").forEach(initActivity);initGlossary();});
 </script>
+<style>
+.lesson-stack > .lesson-hidden,.lesson-stack-top > .lesson-hidden{display:none!important}
+.section-continue{margin:16px 0;padding:9px 16px;border:0;border-radius:8px;background:#0e6270;color:white;font:inherit;font-weight:700;cursor:pointer}
+.section-continue:disabled{opacity:.55;cursor:default}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const stack=document.querySelector("main.full-content");
+ if(!stack)return;
+ stack.classList.add("lesson-stack");
+ const glossary=document.getElementById("glossary"), banner=document.getElementById("completeBanner");
+ if(banner){const wrap=document.createElement("div");wrap.hidden=true;banner.before(wrap);wrap.append(banner);}
+ const finish=document.createElement("section");
+ finish.className="card";finish.id="lesson-finish";finish.innerHTML="<h2>Lesson complete</h2><p>The glossary below remains available for review.</p>";
+ stack.append(finish);
+ if(glossary){
+  const key=glossary.dataset.activityId;
+  window.PULMO_LESSON.interactions=window.PULMO_LESSON.interactions.filter(a=>a.id!==key);
+  for(const attr of [...glossary.attributes])if(attr.name.startsWith("data-"))glossary.removeAttribute(attr.name);
+  const ref=document.createElement("div");ref.append(glossary);stack.append(ref);
+ }
+ const sections=[...document.querySelectorAll(".lesson-stack-top > section, .lesson-stack > section")];
+ sections.forEach((s,i)=>{
+  if(i)s.classList.add("lesson-hidden");
+  const next=sections[i+1];if(!next)return;
+  const required=[...s.querySelectorAll(".require-complete,[data-activity-id][data-required=true]")];
+  const btn=document.createElement("button"),note=document.createElement("p");
+  btn.type="button";btn.className="section-continue";btn.textContent=next===finish?"Finish lesson":"Continue";
+  note.className="section-gate-note";note.textContent="Complete this section’s practice check to continue.";
+  s.append(btn,note);
+  const sync=()=>{btn.disabled=required.some(r=>r.dataset.complete!=="true");note.hidden=!btn.disabled;};
+  for(const r of required)new MutationObserver(sync).observe(r,{attributes:true,attributeFilter:["data-complete"]});
+  sync();
+  btn.onclick=()=>{if(btn.disabled)return;next.classList.remove("lesson-hidden");btn.remove();note.remove();const h=next.querySelector("h2,h3")||next;h.tabIndex=-1;h.focus({preventScroll:true});next.scrollIntoView({block:"start"});};
+ });
+ document.addEventListener("progressRestored",()=>sections.forEach(s=>{if(!s.querySelector(".section-continue"))s.querySelector(".section-gate-note")?.remove();}));
+});
+</script>
 <script type="module" src="/assets/progress-tracker.js"></script>
-
-  <script>
-  /* ── 508 Accessibility: keyboard navigation for hotspot activities ── */
-  (function () {
-    function initA11yHotspots() {
-      document.querySelectorAll('.hotspot-demo').forEach(function (demo) {
-        var buttons = Array.from(demo.querySelectorAll('.hotspot-btn'));
-        var panel   = demo.querySelector('.hotspot-panel');
-
-        /* aria-live region so screen readers hear the hotspot content */
-        var live = demo.querySelector('[data-a11y-live]');
-        if (!live) {
-          live = document.createElement('div');
-          live.setAttribute('aria-live', 'polite');
-          live.setAttribute('aria-atomic', 'true');
-          live.setAttribute('data-a11y-live', '1');
-          live.className = 'sr-only';
-          demo.appendChild(live);
-        }
-
-        buttons.forEach(function (btn, idx) {
-          /* Arrow-key, Home, End navigation within the hotspot group */
-          btn.addEventListener('keydown', function (e) {
-            var target;
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-              e.preventDefault();
-              target = buttons[(idx + 1) % buttons.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-              e.preventDefault();
-              target = buttons[(idx - 1 + buttons.length) % buttons.length];
-            } else if (e.key === 'Home') {
-              e.preventDefault();
-              target = buttons[0];
-            } else if (e.key === 'End') {
-              e.preventDefault();
-              target = buttons[buttons.length - 1];
-            }
-            if (target) target.focus();
-          });
-
-          /* On activation, push content to aria-live region */
-          btn.addEventListener('click', function () {
-            var title = btn.dataset.title || '';
-            var text  = btn.dataset.text  || '';
-            live.textContent = title + '. ' + text;
-            if (panel) panel.setAttribute('aria-label', title + ': ' + text);
-          });
-        });
-
-        /* When focus enters the hotspot container, route to first unvisited button */
-        var container = demo.querySelector('.hotspot-lung');
-        if (container && buttons.length > 0) {
-          container.addEventListener('focus', function () {
-            var first = buttons.find(function (b) {
-              return !b.classList.contains('visited');
-            }) || buttons[0];
-            first.focus();
-          }, true);
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initA11yHotspots);
-    } else {
-      initA11yHotspots();
-    }
-  })();
-  </script>
-
 </body>
 </html>
