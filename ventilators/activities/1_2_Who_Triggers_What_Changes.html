@@ -234,7 +234,301 @@ const stations=[...document.querySelectorAll("[data-station]")];function save(){
 function stationDone(s){return[...s.querySelectorAll("[data-q]")].every(q=>state.correct.has(q.dataset.q))}function unlock(){let open=true;stations.forEach(s=>{s.dataset.locked=open?"false":"true";if(stationDone(s)){s.classList.add("complete");s.querySelector(".badge").textContent="Mastered ✓"}else{s.classList.remove("complete");const qs=[...s.querySelectorAll("[data-q]")],n=qs.filter(q=>state.correct.has(q.dataset.q)).length;s.querySelector(".badge").textContent=open?`${n} / ${qs.length} mastered`:"Locked";open=false;}})}
 function progress(){const all=[...document.querySelectorAll("[data-q]")],n=all.filter(q=>state.correct.has(q.dataset.q)).length,p=Math.round(n/all.length*100);document.getElementById("progressText").textContent=`${p}% complete`;document.getElementById("progressBar").style.width=`${p}%`;try{window.PulmoActivityProgress?.report({percent:p,completed:p===100})}catch(e){}window.dispatchEvent(new CustomEvent("pulmolearn:activity-progress-report",{detail:{percent:p,completed:p===100}}));if(p===100){document.getElementById("completeBox").classList.add("show");window.dispatchEvent(new CustomEvent("pulmolearn:complete",{detail:{percent:100,completed:true,lessonId:window.PULMO_LESSON_ID}}));}}
 function restore(){document.querySelectorAll("[data-q]").forEach(q=>{const fb=q.querySelector(".feedback");fb.setAttribute("role","status");fb.setAttribute("aria-live","polite");if(state.correct.has(q.dataset.q)){q.querySelectorAll(".option").forEach(b=>b.disabled=true);const good=q.querySelector('[data-correct="true"]');if(good)good.classList.add("correct");fb.innerHTML="<strong>Mastered.</strong> This decision is saved in your current browser progress.";fb.className="feedback show ok";}});document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===state.active));document.querySelectorAll(".patient").forEach(p=>p.classList.toggle("active",p.dataset.patient===state.active));unlock();progress();}
-document.addEventListener("click",e=>{const tab=e.target.closest(".tab");if(tab){state.active=tab.dataset.tab;save();restore();return}const b=e.target.closest(".option");if(!b)return;const s=b.closest("[data-station]");if(s.dataset.locked==="true")return;const q=b.closest("[data-q]");if(state.correct.has(q.dataset.q))return;const options=[...q.querySelectorAll(".option")],index=options.indexOf(b),fb=q.querySelector(".feedback"),correct=b.dataset.correct==="true",rationale=RATIONALES[q.dataset.q]?.[index]||"Reconsider how this breath is initiated, targeted, or monitored.";options.forEach(x=>x.classList.remove("incorrect"));fb.innerHTML=`<strong>${correct?"Correct.":"Not quite."}</strong> ${rationale.replace(/^Correct\.\s*/,"")}`;if(correct){b.classList.add("correct");options.forEach(x=>x.disabled=true);state.correct.add(q.dataset.q);fb.className="feedback show ok";save();unlock();progress();}else{b.classList.add("incorrect");fb.className="feedback show bad";}});restore();
+const groups = stations.flatMap(s =>
+  s.dataset.station === "capstone" ? [...s.querySelectorAll(".patient")] : [s]
+);
+
+const review = {
+  one: "The trigger starts inspiration. Control is the delivery target. Cycling ends inspiration. Baseline is the pressure between breaths.",
+  two: "CPAP maintains one continuous pressure. In bilevel, EPAP is the expiratory baseline, and inspiratory assistance is IPAP minus EPAP. Compare the old and new differences, not IPAP alone.",
+  three: "At a fixed flow and volume target, pressure can change when mechanics change. At a fixed pressure and inspiratory time, delivered volume can change. Compare peak and plateau when distinguishing resistance from compliance.",
+  four: "Triggering starts assistance; cycling ends it. Weak efforts can be missed, and leaks or condensate can mimic effort. Pure spontaneous assistance depends on the patient initiating breaths.",
+  volume: "In volume control, check whether the selected volume is still being delivered and what pressure it takes. A rise in peak alone suggests added resistance; a rise in plateau can point to reduced compliance.",
+  pressure: "In pressure control, pressure and inspiratory time are targeted. Check exhaled volume when mechanics or effort change.",
+  spontaneous: "Pressure support adds inspiratory assistance above baseline. Distinguish missed efforts from breaths triggered without effort, and recognize when spontaneous drive is no longer reliable."
+};
+
+const bank = {
+  one: [
+    ["A timer starts a breath before the patient makes an effort. Which event is time-based?",
+      "Trigger", "Cycle", "Baseline",
+      "The timer initiates inspiration; it does not end it."],
+    ["Volume is the delivery target after a patient effort starts inspiration. What does volume describe here?",
+      "Control variable", "Trigger variable", "Expiratory baseline",
+      "Control describes what is targeted during delivery."],
+    ["The monitor shows 6 cm H₂O between breaths and flow falling to a threshold just before expiration. Which finding identifies cycling?",
+      "Flow reaching its threshold", "Pressure between breaths", "The initial patient effort",
+      "The threshold marks the transition out of inspiration."],
+    ["Patient effort starts a full preset breath. What can you conclude?",
+      "The breath is patient-triggered", "The breath is flow-cycled", "The breath is pressure-supported",
+      "How the breath starts does not establish how it is delivered or ended."]
+  ],
+  two: [
+    ["A patient breathes spontaneously at one continuous pressure. Which mode is described?",
+      "CPAP", "Bilevel NIV", "Pressure control",
+      "CPAP uses a single continuous pressure."],
+    ["At bilevel {I}/{E} cm H₂O, what is the pressure support?",
+      "{D} cm H₂O", "{A} cm H₂O", "{I} cm H₂O",
+      "Pressure support is the inspiratory-to-expiratory pressure difference."],
+    ["IPAP stays at {I} and EPAP rises from {E} to {F}. How does inspiratory assistance change?",
+      "It decreases", "It increases", "It stays unchanged",
+      "Raising EPAP alone narrows the pressure difference."],
+    ["A patient needs more inspiratory assistance without changing the expiratory baseline in the simulation. Which change matches?",
+      "Increase IPAP alone", "Increase EPAP alone", "Increase both equally",
+      "Increasing IPAP alone widens the difference without changing EPAP."]
+  ],
+  three: [
+    ["With otherwise unchanged settings, a volume-targeted breath needs more pressure after compliance falls. Which value changed?",
+      "Delivered airway pressure", "Set tidal volume", "Set inspiratory flow",
+      "The volume and flow targets did not change; poorer compliance increases the pressure needed."],
+    ["In pressure control, patient effort and inspiratory time are stable but compliance falls. What should you compare with baseline?",
+      "Exhaled tidal volume", "Selected pressure target", "Selected inspiratory time",
+      "Delivered volume can fall despite the same selected pressure and time."],
+    ["At unchanged volume and flow, peak pressure rises but plateau is stable. Which explanation fits?",
+      "Greater airway resistance", "Lower lung compliance", "Higher expiratory baseline",
+      "The peak-to-plateau gap increased while plateau did not."],
+    ["Peak and plateau both rise at unchanged volume, flow and PEEP. Which change best fits?",
+      "Lower respiratory-system compliance", "Isolated increase in airway resistance", "Lower set inspiratory flow",
+      "A higher plateau at unchanged volume and PEEP suggests less compliance."]
+  ],
+  four: [
+    ["What does pressure support add during a spontaneous breath?",
+      "Inspiratory pressure above baseline", "A fixed tidal volume", "A fixed mandatory rate",
+      "Pressure support is inspiratory assistance, not a guaranteed volume or rate."],
+    ["Some visible inspiratory efforts never start a ventilator breath. What pattern is present?",
+      "Ineffective triggering", "Auto-triggering", "Early cycling",
+      "Ineffective triggering means an effort does not start a supported breath."],
+    ["A circuit leak coincides with extra breaths and no matching effort. Which explanation best fits?",
+      "Auto-triggering", "Missed triggering", "Low compliance alone",
+      "Leak-related flow can be mistaken for inspiratory effort."],
+    ["A patient loses spontaneous drive on a mode without backup breaths. Which capability is missing?",
+      "Mandatory breath delivery", "Expiratory baseline pressure", "Flow sensing",
+      "Without patient effort or a backup, spontaneous pressure support cannot supply a breath."]
+  ]
+};
+
+const topic = { volume: "three", pressure: "three", spontaneous: "four" };
+
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+groups.forEach(g => {
+  const key = g.dataset.patient || g.dataset.station;
+  const base = [...g.querySelectorAll("[data-q]")];
+  const rows = bank[topic[key] || key];
+  let attempt = 0;
+  let reviewed = false;
+  let submitted = false;
+
+  const controls = document.createElement("div");
+  controls.innerHTML = `
+    <button type="button" data-submit>Submit section</button>
+    <button type="button" data-review>Review key concepts</button>
+    <button type="button" data-extra>Extra practice</button>
+    <button type="button" data-retry hidden>Try a new set</button>
+    <p role="status"></p>
+    <div data-notes hidden></div>
+    <div data-set hidden></div>
+    <div data-practice hidden></div>
+  `;
+  g.append(controls);
+
+  const get = selector => controls.querySelector(selector);
+  const status = get('[role="status"]');
+  const notes = get("[data-notes]");
+  const set = get("[data-set]");
+  const extra = get("[data-practice]");
+  const next = get("[data-retry]");
+  const mastered = () => base.every(q => state.correct.has(q.dataset.q));
+
+  function render(box, items, seed) {
+    box.replaceChildren();
+    box.hidden = false;
+    const E = 5 + (seed % 5);
+    const D = 6 + (seed % 4);
+    const values = { E, D, I: E + D, A: D + 2, F: E + 2 };
+    const format = str => str.replace(/\{([A-Z])\}/g, (_, k) => values[k]);
+
+    items.forEach(([stem, correct, wrong1, wrong2, rationale], i) => {
+      const field = document.createElement("fieldset");
+      const legend = document.createElement("legend");
+      legend.textContent = format(stem);
+      field.append(legend);
+
+      shuffle([correct, wrong1, wrong2].map((text, index) => ({
+        text, right: index === 0
+      }))).forEach(option => {
+        const label = document.createElement("label");
+        label.style.display = "block";
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `${key}-${box === extra ? "practice" : "retry"}-${i}`;
+        input.value = option.right ? "correct" : "incorrect";
+        label.append(input, " " + format(option.text));
+        field.append(label);
+      });
+
+      const feedback = document.createElement("p");
+      feedback.setAttribute("role", "status");
+      feedback.hidden = true;
+      field.append(feedback);
+      field.dataset.rationale = rationale;
+      box.append(field);
+    });
+  }
+
+  function grade(box) {
+    const fields = [...box.querySelectorAll("fieldset")];
+    const picks = fields.map(field => field.querySelector("input:checked"));
+    if (picks.some(pick => !pick)) return null;
+
+    fields.forEach((field, i) => {
+      const feedback = field.querySelector("p");
+      feedback.hidden = false;
+      feedback.textContent =
+        (picks[i].value === "correct" ? "Correct. " : "Not quite. ") +
+        field.dataset.rationale;
+      field.disabled = true;
+    });
+
+    return picks.every(pick => pick.value === "correct");
+  }
+
+  controls.addEventListener("click", e => {
+    const button = e.target.closest("button");
+    if (!button || g.closest("[data-station]").dataset.locked === "true") return;
+
+    if (button.hasAttribute("data-review")) {
+      notes.hidden = false;
+      notes.textContent = review[key];
+      reviewed = true;
+      if (submitted && !mastered()) next.hidden = false;
+      return;
+    }
+
+    if (button.hasAttribute("data-extra")) {
+      render(extra, rows.slice(0, 3), attempt + 3);
+      const check = document.createElement("button");
+      check.type = "button";
+      check.dataset.check = "1";
+      check.textContent = "Check extra practice";
+      extra.append(check);
+      return;
+    }
+
+    if (button.hasAttribute("data-check")) {
+      if (grade(extra) === null) {
+        status.textContent = "Answer all three practice questions first.";
+        return;
+      }
+      button.disabled = true;
+      status.textContent = "Extra practice does not change completion.";
+      return;
+    }
+
+    if (button === next) {
+      if (!reviewed || mastered()) return;
+      attempt++;
+      submitted = false;
+      reviewed = false;
+      next.hidden = true;
+      notes.hidden = true;
+      base.forEach(q => { q.hidden = true; });
+
+      const available = [0, 1, 2, 3].filter(i => i !== (attempt - 1) % 4);
+      let order = shuffle(available);
+      if (order.every((value, i) => value === available[i])) {
+        order = [order[1], order[2], order[0]];
+      }
+      render(set, order.map(i => rows[i]), attempt);
+      status.textContent = "Answer the new set, then submit.";
+      return;
+    }
+
+    if (!button.hasAttribute("data-submit")) return;
+    if (mastered()) {
+      status.textContent = "This section is already mastered.";
+      return;
+    }
+    if (submitted) return;
+
+    let pass;
+    if (attempt > 0) {
+      pass = grade(set);
+      if (pass === null) {
+        status.textContent = "Answer every question before submitting.";
+        return;
+      }
+    } else {
+      const pending = base.filter(q => !state.correct.has(q.dataset.q));
+      const picks = pending.map(q => q.querySelector('[aria-pressed="true"]'));
+      if (picks.some(pick => !pick)) {
+        status.textContent = "Answer every question before submitting.";
+        return;
+      }
+
+      pending.forEach((q, i) => {
+        const pick = picks[i];
+        const options = [...q.querySelectorAll(".option")];
+        const good = pick.dataset.correct === "true";
+        const feedback = q.querySelector(".feedback");
+        const rationale = RATIONALES[q.dataset.q]?.[options.indexOf(pick)] || "";
+        pick.classList.add(good ? "correct" : "incorrect");
+        options.forEach(option => {
+          option.disabled = true;
+          option.style.outline = "";
+        });
+        feedback.className = "feedback show " + (good ? "ok" : "bad");
+        feedback.textContent =
+          (good ? "Correct. " : "Not quite. ") + rationale.replace(/^Correct\.\s*/, "");
+      });
+
+      pass = picks.every(pick => pick.dataset.correct === "true");
+    }
+
+    submitted = true;
+    reviewed = false;
+    notes.hidden = true;
+
+    if (pass) {
+      base.forEach(q => state.correct.add(q.dataset.q));
+      save();
+      unlock();
+      progress();
+      next.hidden = true;
+      status.textContent = "Section mastered.";
+    } else {
+      status.textContent = "Review key concepts to unlock another attempt.";
+    }
+  });
+});
+
+document.addEventListener("click", e => {
+  const tab = e.target.closest(".tab");
+  if (tab) {
+    state.active = tab.dataset.tab;
+    save();
+    restore();
+    return;
+  }
+
+  const button = e.target.closest(".option");
+  const q = button?.closest("[data-q]");
+  if (!q || button.disabled || q.closest("[data-station]").dataset.locked === "true") return;
+
+  q.querySelectorAll(".option").forEach(option => {
+    option.setAttribute("aria-pressed", String(option === button));
+    option.style.outline = option === button ? "2px solid #137c81" : "";
+  });
+});
+
+restore();
 document.addEventListener("DOMContentLoaded",()=>{for(const item of window.PULMO_LESSON.interactions){const el=document.querySelector(`[data-activity-id="${item.id}"]`);if(!el)continue;el.dataset.activityName=item.title||item.id;el.dataset.activityType=item.type;el.dataset.estimatedMinutes=String(item.estimatedMinutes||"");el.dataset.required=String(Boolean(item.required));el.dataset.competencies=(item.competencyIds||[]).join(" ");el.dataset.rteSections=(item.rteSections||[]).join(" ");el.dataset.clinicalJudgment=(item.clinicalJudgment||[]).join("|");el.dataset.rteTags=(item.rteTags||[]).join(" ");}});
 </script>
 <script type="module" src="/assets/activity-progress-tracker.js"></script>
