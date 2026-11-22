@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PulmoLearn · First Reassessment</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#081522;color:#edf6fb;font:14px/1.4 system-ui,sans-serif}main{max-width:1250px;margin:auto;padding:12px}h1,h2,p{margin:0 0 7px}h1{font-size:24px}h2{font-size:18px}small,.muted{color:#b7cbd8}.tag{color:#79e6d6;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}nav,.row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.spread{justify-content:space-between}nav{margin:8px 0}button{font:inherit;color:inherit;background:#173147;border:1px solid #57788d;border-radius:7px;padding:6px 9px;cursor:pointer}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible{outline:3px solid #ffd27b;outline-offset:2px}.primary,[aria-current=step]{background:#7ce8d7;color:#082629;font-weight:800}.vitals,.readouts,.gases{display:grid;gap:5px}.vitals{grid-template-columns:2fr repeat(3,1fr);padding:7px;background:#102b38;border-radius:8px;margin-bottom:8px}.vitals b,.tile b{display:block;font-size:16px}.layout{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(275px,1fr);gap:10px;align-items:start}.monitor,.coach{background:#13283b;border:1px solid #35536a;border-radius:11px;padding:10px;min-width:0}.coach{position:sticky;top:8px;border-color:#75d8cb;background:#12313d;box-shadow:0 6px 24px #0004}.cue{background:#092130;border-radius:6px;padding:7px;margin:7px 0;color:#b6f4ea;font-weight:700}.body{display:grid;grid-template-columns:minmax(0,1fr) 125px;gap:8px}.plot,.dial,.tile,.gas{background:#091a28;border:1px solid #29485b;border-radius:6px;padding:4px 6px;margin:3px 0}.plot svg{display:block;width:100%;height:42px}.dial{text-align:center}.dial output{display:inline-grid;place-items:center;border:2px solid #5ebcb4;border-radius:50%;min-width:38px;height:35px;font-weight:850}.dial button{padding:2px 6px}.readouts{grid-template-columns:repeat(5,minmax(0,1fr))}.gases{grid-template-columns:1fr 1fr}.gas b{display:block}.spot{outline:2px solid #ffd27b;outline-offset:1px}.opts{margin:7px 0;border:0;padding:0}.opts legend{font-weight:700}.opts label{display:block;padding:3px 0}input{accent-color:#7ce8d7}footer{font-size:12px;color:#b7cbd8;margin-top:7px}@media(max-width:770px){.layout{grid-template-columns:1fr}.coach{grid-row:1;z-index:2}.coach p{margin-bottom:4px}}@media(max-width:440px){main{padding:7px}.body{grid-template-columns:minmax(0,1fr) 105px}.readouts{grid-template-columns:repeat(3,1fr)}.vitals{grid-template-columns:repeat(3,1fr)}.patient{grid-column:1/-1}}
+</style>
+<main>
+<div class="tag">PulmoLearn · Mechanical Ventilation 1.4</div>
+<h1>First Reassessment</h1>
+<nav id="nav" aria-label="Simulation stages"><button data-i="0">1 · Learn</button><button data-i="1">2 · Explore</button><button data-i="2">3 · Assess</button></nav>
+<div class="vitals"><div class="patient"><small>Scenario patient</small><b id="patient"></b></div><div><small>HR · bpm</small><b id="hr"></b></div><div><small>BP · mm Hg</small><b id="bp"></b></div><div><small>SpO₂</small><b id="spo"></b></div></div>
+<div class="layout">
+<section class="monitor" aria-label="Ventilator monitor">
+<div class="row spread"><div><span class="tag">Ventilator</span> · <strong>Volume assist-control</strong></div><button id="play" aria-pressed="false">Play waveforms</button></div>
+<div class="body"><div id="plots"></div><div id="settings"><div class="tag">Proposed settings</div>
+<div class="dial" id="rate"><small>Rate · breaths/min</small><div><button id="rDown" aria-label="Decrease rate">−</button> <output id="rVal"></output> <button id="rUp" aria-label="Increase rate">+</button></div></div>
+<div class="dial" id="vt"><small>VT · mL</small><div><button id="vDown" aria-label="Decrease tidal volume">−</button> <output id="vVal"></output> <button id="vUp" aria-label="Increase tidal volume">+</button></div></div>
+<div class="dial"><small>FiO₂</small> <b>0.35</b><br><small>PEEP</small> <b>5 cm H₂O</b><br><small>Fixed in these cases</small></div>
+<button class="primary" id="apply" style="width:100%">Apply</button></div></div>
+<small id="key">12 s · Dashed horizontal line = zero flow</small>
+<div class="readouts" id="readouts"></div>
+<div class="gases"><div id="initial" class="gas"><small>Initial ABG · pH / PaCO₂ / PaO₂</small><b id="gas0"></b></div><div id="repeat" class="gas"><small>30-minute ABG · pH / PaCO₂ / PaO₂</small><b id="gas1"></b></div></div>
+</section>
+<aside class="coach" aria-label="On-screen coach"><div class="row spread"><span class="tag" id="stage"></span><button id="reset">Restart</button></div>
+<div id="message" aria-live="polite"><h2 id="title"></h2><div class="cue" id="cue"></div><p id="copy"></p></div>
+<div id="actions"></div>
+</aside></div>
+<footer>The patient is not initiating any breaths. All breaths are time-triggered by the ventilator, so total rate equals set rate. Fictional training cases; waveforms are schematic and outcomes are scripted. Gas pressures are in mm Hg.</footer>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const cases=[
+ {name:"Morgan · 70 kg PBW",r:[12,18],v:[420],tau:.48,b:[12,420,23,"7.26",60,92,96,"118/72",97],out:{"18,420":[23,"7.44",40,98,88,"120/73",98]}},
+ {name:"Jordan · 70 kg PBW",r:[12,16],v:[350,420],tau:1.45,b:[12,350,25,"7.31",60,78,104,"112/68",94],out:{"16,350":[30,"7.32",59,78,110,"106/65",94],"12,420":[27,"7.38",50,82,96,"114/70",95],"16,420":[33,"7.32",59,77,114,"102/62",93]}},
+ {name:"Taylor · 60 kg PBW",r:[10,13,16],v:[360,450],tau:.53,b:[10,360,22,"7.23",64,89,102,"118/74",96],out:{"13,360":[22,"7.35",49,94,96,"118/74",97],"16,360":[22,"7.44",40,98,90,"118/74",98],"10,450":[26,"7.35",49,94,96,"116/73",97],"13,450":[26,"7.44",40,98,91,"116/73",98],"16,450":[26,"7.53",32,100,90,"115/72",98]}}
+];
+const lines=[["Pressure · cm H₂O","#ffd386"],["Flow · L/min","#6be9d8"],["Volume · mL","#93c9ff"]];
+$("plots").innerHTML=lines.map(([label,color],i)=>`<div class="plot" id="plot${i}"><small style="color:${color}">${label}</small><svg viewBox="0 0 600 60" preserveAspectRatio="none" role="img" aria-label="${label} waveform"><defs><pattern id="grid${i}" width="50" height="15" patternUnits="userSpaceOnUse"><path d="M50 0H0V15" fill="none" stroke="#28485c"/></pattern></defs><rect width="600" height="60" fill="url(#grid${i})"/>${i===1?'<path d="M0 29H600" stroke="#a0b4c0" stroke-dasharray="4 4"/>':''}<path id="old${i}" fill="none" stroke="#aebdca" opacity=".6" stroke-dasharray="4 4"/><path id="wave${i}" fill="none" stroke="${color}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>`).join("");
+let stage=0,step=0,r,v,active,after,locked,phase=0,playing=false,frame,last=0,seen;
+function traces(s,k){
+ const [rr,vol,pip]=s,T=60/rr,tau=cases[stage].tau,z=Math.exp(-(T-1)/tau);
+ return Array.from({length:401},(_,x)=>{
+  const t=(x*.03+phase+.18)%T,f=Math.exp(-Math.max(0,t-1)/tau);
+  const p=t<1?5+(pip-5)*(.42+.58*t):5;
+  const flow=t<1?vol*.06:-vol*.06*f/(tau*(1-z));
+  const volume=t<1?vol*t:vol*(f-z)/(1-z);
+  return `${x?"L":"M"}${x*1.5} ${[55-p*1.36,29-flow*.65,55-volume*.108][k].toFixed(1)}`;
+ }).join(" ");
+}
+function wave(){lines.forEach((_,i)=>{$("wave"+i).setAttribute("d",traces(active,i));$("old"+i).setAttribute("d",after?traces(cases[stage].b,i):"");});}
+function controls(){
+ const c=cases[stage];$("rVal").textContent=r;$("vVal").textContent=v;
+ for(const [id,value,a,end] of [["rDown",r,c.r,0],["rUp",r,c.r,c.r.length-1],["vDown",v,c.v,0],["vUp",v,c.v,c.v.length-1]])$(id).disabled=locked||(stage===0&&step!==1)||value===a[end];
+ $("apply").disabled=locked||(stage===0&&step!==1);
+}
+function render(){
+ const c=cases[stage],[rr,vol,pip,,,,hr,bp,spo]=active, [br,bv,bp0]=c.b;
+ $("patient").textContent=c.name;$("hr").textContent=hr;$("bp").textContent=bp;$("spo").textContent=spo+"%";
+ $("gas0").textContent=c.b.slice(3,6).join(" / ");$("gas1").textContent=after?active.slice(3,6).join(" / "):"Pending";
+ const data=[["Total RR",rr,br,"/min"],["VTe",vol,bv,"mL"],["PIP",pip,bp0,"cm H₂O"],["V̇E",(rr*vol/1000).toFixed(2),(br*bv/1000).toFixed(2),"L/min"],["Exp. time",(60/rr-1).toFixed(2),(60/br-1).toFixed(2),"s"]];
+ $("readouts").innerHTML=data.map(([x,y,z,u])=>`<div class="tile"><small>${x} · ${u}</small><b>${y}</b>${after?`<small>Was ${z}</small>`:""}</div>`).join("");
+ $("key").textContent=after?"12 s · Color: reassessment · Gray: baseline · Dashed horizontal: zero flow":"12 s · Dashed horizontal line: zero flow";
+ controls();wave();
+}
+function coach(title,cue,copy,targets){
+ $("title").textContent=title;$("cue").textContent=cue;$("copy").textContent=copy;
+ document.querySelectorAll(".spot").forEach(e=>e.classList.remove("spot"));
+ targets.forEach(id=>$(id).classList.add("spot"));
+}
+function options(name,title,items){return `<fieldset class="opts"><legend>${title}</legend>${items.map(([value,label])=>`<label><input type="radio" name="${name}" value="${value}"> ${label}</label>`).join("")}</fieldset>`;}
+const pick=n=>document.querySelector(`input[name="${n}"]:checked`)?.value;
+const prediction=()=>options("prediction","Predict the PaCO₂ response",[["down","Meaningful decrease"],["same","Little or no change"],["up","Increase"]]);
+function nextButton(label,fn){$("actions").innerHTML=`<button class="primary" id="next">${label}</button>`;$("next").onclick=fn;}
+function enter(n){
+ stage=n;step=0;locked=false;after=false;phase=0;seen=new Set();active=cases[n].b;[r,v]=active;
+ document.querySelectorAll("[data-i]").forEach(b=>{if(+b.dataset.i===n)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+ $("stage").textContent=["Learn","Explore","Assess"][n];$("apply").textContent=n===2?"Submit":"Apply";
+ if(n===0){
+  coach("1 · Read the first ABG","Look at: Initial ABG","The pH is low and PaCO₂ is elevated. This case is about correcting acute respiratory acidosis. Next, decide which setting to change.",["initial"]);
+  nextButton("Next: choose a setting →",()=>{
+   step=1;coach("2 · Change rate, keep VT","Use: Rate dial → Apply","VT is already 6 mL/kg PBW and the flow trace reaches zero before the next breath. For this exercise: 12 × (60 ÷ 40) = 18/min. Set rate to 18 and leave VT at 420 mL.",["rate","plot1"]);$("actions").innerHTML="";controls();$("rUp").focus();
+  });
+ }else if(n===1){
+  coach("Run two separate trials","Look at: Flow near the next breath","This patient has obstructive mechanics and a documented baseline PaCO₂ of 50. First raise rate alone. Then return the proposed rate to baseline and raise VT alone. Each trial compares with the original settings.",["plot1","settings"]);
+  $("actions").innerHTML=prediction();
+ }else{
+  coach("Make and defend one change","Use: Initial ABG, measured values, and waveforms","The case goal is PaCO₂ near 40. Choose one adjustment, then commit to your prediction, evidence, and reassessment plan.",[]);
+  $("actions").innerHTML=prediction()+options("reason","Which finding best supports your choice?",[["pip","Peak pressure alone identifies the setting to change."],["vt","VT/PBW is appropriate and the flow trace shows time to exhale."],["o","PaO₂ determines which setting clears more CO₂."]])+options("verify","How will you verify the response?",[["ve","Use displayed minute ventilation alone."],["spo","Check oxygen saturation and peak pressure alone."],["abg","Check delivered VT and flow, then compare repeat pH and PaCO₂."]]);
+ }
+ render();
+}
+for(const [id,type,d] of [["rDown","r",-1],["rUp","r",1],["vDown","v",-1],["vUp","v",1]])$(id).onclick=()=>{const c=cases[stage],a=c[type],i=a.indexOf(type==="r"?r:v),nv=a[i+d];if(nv===undefined)return;if(type==="r")r=nv;else v=nv;document.querySelectorAll('[name="prediction"]').forEach(e=>e.checked=false);controls();};
+$("apply").onclick=()=>{
+ const c=cases[stage],id=r+","+v,p=pick("prediction"),reason=pick("reason"),verify=pick("verify");
+ if(stage===0&&r!==18){coach("Set the new rate first","Use: Rate dial","Set 18/min, keep VT at 420 mL, then apply.",["rate"]);return;}
+ if(stage>0&&(!p||(stage===2&&(!reason||!verify)))){coach("Complete your reasoning first","Use: Prompts in this coach","Choose a prediction and complete any remaining prompts before applying settings.",[]);$("actions").querySelector("input")?.focus();return;}
+ active=[r,v,...(c.out[id]??c.b.slice(2))];after=true;
+ if(stage===0){
+  locked=true;
+  coach("3 · Verify the response","Compare: 30-minute ABG, VTe and PIP","PaCO₂ fell from 60 to 40 in this case. The pressure and volume readouts show that PIP and VTe stayed the same; the colored traces show the closer breath spacing.",["repeat","readouts"]);
+  nextButton("Next: explore a different case →",()=>enter(1));
+ }else if(stage===1){
+  seen.add(id);const match=p===(active[4]<c.b[4]-2?"down":"same");
+  const note=r===16?"The next breath starts before expiratory flow reaches zero. Here, displayed V̇E rises but PaCO₂ barely changes.":v===420?"VTe rises without shortening expiration. PaCO₂ approaches the patient’s documented baseline.":"No setting changed, so this branch matches baseline.";
+  coach(match?"Prediction matched":"Compare your prediction","Look at: Flow trace and repeat ABG",note+(seen.has("16,350")&&seen.has("12,420")?" Both trials are complete. Which change improved ventilation without shortening expiration?":""),["plot1","repeat"]);
+  $("actions").innerHTML=prediction();
+  if(seen.has("16,350")&&seen.has("12,420")){$("actions").insertAdjacentHTML("beforeend",'<button id="assess">Try the assessment →</button>');$("assess").onclick=()=>enter(2);}
+ }else{
+  locked=true;
+  const checks=[[id==="16,360","Setting: 10 × (64 ÷ 40) = 16/min; hold VT at 360 mL."],[p==="down","Prediction: the target change is a meaningful fall in PaCO₂."],[reason==="vt","Evidence: appropriate VT/PBW and enough time to exhale support the rate-only change."],[verify==="abg","Verification: check the delivered breath and the repeat pH and PaCO₂."]];
+  coach(`Reasoning check · ${checks.filter(x=>x[0]).length}/4`,"Compare: Your result and the original ABG","The monitor shows the outcome of the settings you actually submitted.",["initial","repeat","readouts"]);
+  $("actions").innerHTML=`<ul>${checks.map(([ok,s])=>`<li><b>${ok?"Met":"Review"}:</b> ${s}</li>`).join("")}</ul>`;
+ }
+ render();
+};
+$("nav").onclick=e=>{const b=e.target.closest("[data-i]");if(b)enter(+b.dataset.i);};$("reset").onclick=()=>enter(stage);
+function tick(t){if(!playing)return;if(!last||t-last>=32){phase+=last?Math.min((t-last)/1000,.1):0;last=t;wave();}frame=requestAnimationFrame(tick);}
+function play(on){playing=on;last=0;cancelAnimationFrame(frame);$("play").textContent=on?"Freeze waveforms":"Play waveforms";$("play").setAttribute("aria-pressed",String(on));if(on)frame=requestAnimationFrame(tick);}
+$("play").onclick=()=>play(!playing);
+enter(0);play(!matchMedia("(prefers-reduced-motion: reduce)").matches);
+</script>
+</html>
