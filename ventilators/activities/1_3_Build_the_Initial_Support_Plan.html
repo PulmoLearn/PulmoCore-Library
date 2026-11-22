@@ -163,14 +163,55 @@ const groups = stations.flatMap(s =>
 );
 
 const review = {
-  one: "Use height-based PBW for a prescribed PBW-based tidal volume. Keep the quick IBW estimate separate. Multiply PBW by the selected mL/kg, then round.",
-  two: "Convert mL to liters before multiplying by total respiratory rate. A calculated rate can meet the arithmetic target without leaving enough time for exhalation.",
-  three: "Volume control targets VT. Pressure control targets pressure, so measure exhaled VT. In obstruction, consider how much of the breath cycle is available for exhalation.",
-  four: "Calculate IPAP minus EPAP for each pair. Compare that pressure difference and EPAP separately.",
-  five: "Use the measured baseline and the specific alarm rule given in the exercise. Broad defaults are not the same as calculated patient-specific limits.",
-  ards: "Calculate the intended VT from PBW. Then verify delivered VT and assess oxygenation separately.",
-  copd: "Check VT against PBW, then use the expiratory waveform to judge whether the selected timing allows exhalation.",
-  niv: "EPAP is the expiratory baseline. Pressure support is IPAP minus EPAP. Raising both by the same amount preserves pressure support."
+  one: [
+    "Choose the method from the wording. If asked for the course’s quick IBW estimate, convert height to inches, subtract 60, multiply by 2, and add 50. Apply the final adjustment once: +2 kg for males or −2 kg for females.",
+    "Worked example: A 5 ft 8 in male is 68 inches tall. Quick estimated IBW = 50 + 2 × (68 − 60) + 2 = 68 kg. Leaving off the final +2 gives 66 kg.",
+    "Exact PBW is a separate calculation: male = 50 + 2.3 × (inches − 60); female = 45.5 + 2.3 × (inches − 60). The same 68-inch male has an exact PBW of 68.4 kg.",
+    "For a VT target stated in mL/kg PBW, use PBW, not scale weight or the quick IBW estimate. For example, at 66 kg PBW, a stated range of 6–8 mL/kg gives 396–528 mL."
+  ].join("\n\n"),
+
+  two: [
+    "Measured minute ventilation: convert exhaled VT to liters, then multiply by total RR. If VTe is 350 mL, set RR is 14/min, and total RR is 24/min, measured V̇E is 0.35 × 24 = 8.4 L/min. Using set RR would miss the additional breaths.",
+    "To solve in the other direction, divide target V̇E by the selected VT in liters. A target of 7.5 L/min with 500 mL gives a calculated rate of 7.5 ÷ 0.50 = 15/min.",
+    "The calculation gives a candidate rate, not proof that the timing fits. In the obstructive simulation, if expiratory flow is still present when the next breath starts, check time for exhalation before accepting a higher rate."
+  ].join("\n\n"),
+
+  three: [
+    "Start with the delivery goal. If the case requires mandatory support and a selected volume target, look for a volume-control plan. If the goal is a selected inspiratory pressure, look for a pressure-control plan and check the exhaled VT it actually delivers.",
+    "Work through timing: at 450 mL and 15 breaths/min, each cycle is 4 seconds. In a constant-flow example with no inspiratory pause, delivering 450 mL at 30 L/min takes 0.9 seconds; at 60 L/min it takes 0.45 seconds. RR is unchanged, so the shorter inspiration leaves more time to exhale.",
+    "Compare complete plans by the problem each one addresses. In the restrictive hypoxemia case, check the PBW-based VT and whether the plan addresses oxygenation. In the obstructive case, check PBW-based VT and whether the timing leaves room for exhalation."
+  ].join("\n\n"),
+
+  four: [
+    "Write down two values for every bilevel pair: EPAP and pressure support (IPAP − EPAP). Start at 15/7: EPAP is 7 and pressure support is 8 cm H₂O.",
+    "Compare the goals in the exercise: 18/7 raises pressure support to 11 and keeps EPAP at 7. Changing to 17/9 raises EPAP to 9 and keeps pressure support at 8. Changing to 19/9 raises EPAP to 9 and pressure support to 10.",
+    "Common mistake: seeing a higher IPAP and assuming support increased. If IPAP and EPAP rise equally, the pressure difference stays the same. Calculate it before comparing the options."
+  ].join("\n\n"),
+
+  five: [
+    "Identify whether the exercise asks for a calculated limit or recognition of a broad default. For a calculated limit, start from the stable measured value and apply the rule specified in the question.",
+    "Worked examples: if stable PIP is 25 and the rule is +10, the high limit is 35 cm H₂O. At a measured V̇E of 8 L/min, a low limit 15% below baseline is 8 × 0.85 = 6.8 L/min. At a total RR of 26/min, a ±10 window gives 16–36/min.",
+    "A broad default is a starting guardrail, not the result of one of those calculations. If the question supplies a stable measurement and a margin, use them rather than substituting a familiar default.",
+    "Positioning is a separate safety decision. In the course case, the newly intubated patient is stable and has no spinal, procedural, or hemodynamic contraindication. That is why the head-of-bed elevation option fits the scenario. Reconsider the position when those assumptions change."
+  ].join("\n\n"),
+
+  ards: [
+    "Build the plan in order: convert height to inches, calculate exact PBW, then multiply by the VT target stated in the case. For a 5 ft 9 in male, PBW is 50 + 2.3 × 9 = 70.7 kg. At a stated 6 mL/kg target, the calculated VT is about 424 mL.",
+    "Then compare the whole plan. Confirm it provides the required mandatory support and matches the calculated VT. Separately check whether the plan addresses the stated hypoxemia and includes reassessment of delivered VT and oxygenation.",
+    "Common mistake: choosing a plan because its VT is close while overlooking that it leaves the oxygenation problem unaddressed."
+  ].join("\n\n"),
+
+  copd: [
+    "Use height-based PBW even when actual weight is much higher. Then check VT, total rate, and the time available to exhale as separate parts of the plan.",
+    "Example: At PBW 65 kg, 390 mL × 20/min and 520 mL × 15/min both give 7.8 L/min. The volumes are 6 and 8 mL/kg, respectively. The breath cycles are 3 and 4 seconds, respectively. Neither product tells you the actual expiratory time; inspiratory time uses part of each cycle.",
+    "Use the waveform to verify the timing. Persistent expiratory flow at the next breath is a cue to reconsider the plan, even when its calculated V̇E matches the target."
+  ].join("\n\n"),
+
+  niv: [
+    "Track the baseline and the pressure difference after each step. On 13/5, EPAP is 5 and pressure support is 8 cm H₂O.",
+    "If the first exercise goal is more inspiratory assistance at the same EPAP, 16/5 increases the difference to 11. If the next goal is EPAP 7 while preserving that new difference, add 11 to 7: the new pair is 18/7.",
+    "Common mistake: preserving the original difference of 8 instead of the current difference of 11. Recalculate from the most recent effective pair."
+  ].join("\n\n")
 };
 
 const bank = {
@@ -226,7 +267,56 @@ const bank = {
   ]
 };
 
-const topic = { ards: "one", copd: "two", niv: "four" };
+const topic = {};
+
+bank.five.push(
+  ["In the course’s routine positioning case, the intubated patient is stable and has no positioning contraindication. Which option fits the case?",
+    "Elevate the head of the bed", "Keep the head and torso flat", "Position the head below the torso",
+    "The case describes a stable patient with no reason to avoid routine head-of-bed elevation."],
+  ["Why would a broad adult alarm default differ from a patient-specific calculated limit?",
+    "A calculated limit uses the patient’s stable measurement", "A calculated limit uses the same number for each adult", "A calculated limit is based on the alarm’s factory setting",
+    "The measured baseline and the margin specified in the question determine the calculated limit."]
+);
+
+bank.ards = [
+  ["The case gives a male height of 70 inches. Using 50 + 2.3 × (height − 60), what is the PBW?",
+    "73 kg", "70 kg", "77.6 kg",
+    "There are 10 inches above 60. Add 23 to 50."],
+  ["A simulated ARDS case gives PBW 67 kg and a target of 6 mL/kg. Which starting volume is closest?",
+    "400 mL", "470 mL", "535 mL",
+    "67 × 6 = 402 mL, which is closest to 400 mL."],
+  ["A simulated patient needs full mandatory support, has a calculated VT near 400 mL, and remains markedly hypoxemic. Which plan best matches all three requirements?",
+    "Use mandatory volume control near 400 mL and address oxygenation with an FiO₂/PEEP plan",
+    "Use mandatory volume control near 400 mL and defer the oxygenation plan",
+    "Use spontaneous pressure support near 400 mL and reassess oxygenation",
+    "Only the first plan combines mandatory support, the specified volume target, and an oxygenation plan."]
+];
+
+bank.copd = [
+  ["Using 45.5 + 2.3 × (height − 60), what is PBW for a 68-inch female who weighs 118 kg?",
+    "63.9 kg", "68.4 kg", "118.0 kg",
+    "45.5 + 2.3 × 8 = 63.9. The scale weight does not enter the formula."],
+  ["The ventilation exercise gives PBW 64 kg and a target near 6 mL/kg. Which usable VT is closest?",
+    "385 mL", "450 mL", "510 mL",
+    "64 × 6 = 384 mL."],
+  ["In an obstructive simulation, the current plan leaves expiratory flow at the start of the next breath. Which revised plan best addresses the stated goals?",
+    "Keep VT near the PBW target, allow more time to exhale, and recheck the flow waveform",
+    "Keep VT near the PBW target, shorten the breath cycle, and recheck minute ventilation",
+    "Raise VT above the PBW target, keep the timing unchanged, and recheck peak pressure",
+    "This plan preserves the stated VT target, addresses incomplete exhalation, and checks whether the timing change worked."]
+];
+
+bank.niv = [
+  ["On bilevel 16/5, what is the initial pressure support?",
+    "11 cm H₂O", "5 cm H₂O", "16 cm H₂O",
+    "Subtract EPAP from IPAP: 16 − 5 = 11."],
+  ["Starting at 16/5, the simulation asks for 3 more cm H₂O of pressure support without changing EPAP. Which pair fits?",
+    "19/5", "19/8", "16/8",
+    "Keep EPAP at 5. The new pressure difference is 14, so IPAP is 19."],
+  ["A simulated patient now has effective ventilation on 19/5. Which next pair raises EPAP to 7 and preserves the current pressure support?",
+    "21/7", "19/7", "21/5",
+    "The current difference is 14. Add it to the new EPAP of 7 to get IPAP 21."]
+];
 
 const applied = {
   one: ["A patient weighs 104 kg, has PBW 55 kg, and receives 440 mL. The simulated plan calls for 6 rather than 8 mL/kg PBW. Which change matches?",
@@ -353,6 +443,7 @@ groups.forEach(g => {
     if (button.hasAttribute("data-review")) {
       notes.hidden = false;
       notes.textContent = review[key];
+      notes.style.whiteSpace = "pre-line";
       reviewed = true;
       if (submitted && !mastered()) next.hidden = false;
       return;
@@ -387,10 +478,14 @@ groups.forEach(g => {
       notes.hidden = true;
       base.forEach(q => { q.hidden = true; });
 
-      const available = [0, 1, 2, 3].filter(i => i !== (attempt - 1) % 4);
+      const allItems = rows.map((_, i) => i);
+      const coverAll = ["five", "ards", "copd", "niv"].includes(key);
+      const available = coverAll
+        ? allItems
+        : allItems.filter(i => i !== (attempt - 1) % allItems.length);
       let order = shuffle(available);
       if (order.every((value, i) => value === available[i])) {
-        order = [order[1], order[2], order[0]];
+        order = [...order.slice(1), order[0]];
       }
       render(set, order.map(i => rows[i]), attempt);
       status.textContent = "Answer the new set, then submit.";
