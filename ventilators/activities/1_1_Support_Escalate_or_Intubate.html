@@ -285,7 +285,7 @@ document.addEventListener("click",e=>{const tab=e.target.closest(".tab");if(tab)
 })();
 </script>
 <script type="text/plain" src="/assets/activity-progress-tracker.js"></script>
-<script type="text/plain">
+<script type="module">
 import{ supabase }from'/assets/auth.js';const params=new URLSearchParams(location.search),isLti=params.get('lti')==='1',resource=window.PULMO_LESSON.ltiResourceId;let busy=false,sent=false;async function passback(reason){if(!isLti||busy||sent||!resource)return;const{data:{session}}=await supabase.auth.getSession();if(!session?.access_token)return;const key=`pulmolearn-lti-passback:${session.user.id}:${resource}`;try{if(sessionStorage.getItem(key)==='sent'){sent=true;return}}catch(e){}busy=true;try{const r=await fetch('/api/lti/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({access_token:session.access_token,lesson_id:resource,completed:true})}),j=await r.json().catch(()=>({}));if(r.ok&&j?.ok&&j?.passed_back){sent=true;try{sessionStorage.setItem(key,'sent')}catch(e){}}else console.error('PulmoLearn Activity 1.1 passback failed',j,reason)}catch(e){console.error('PulmoLearn Activity 1.1 passback error',e)}finally{busy=false}}function done(e){const d=e.detail||{};if(d.completed===true||Number(d.percent)>=100)passback(e.type)}['pulmolearn:complete','pulmolearn:activity-progress-report','pulmolearn:activity-complete','pulmolearn:progress','pulmolearn:activity-progress'].forEach(n=>addEventListener(n,done));setTimeout(()=>{if(parseFloat(document.getElementById('progressText')?.textContent)>=100)passback('restored')},900);
 </script>
 
